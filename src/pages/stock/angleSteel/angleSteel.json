@@ -46,7 +46,6 @@
         {
             "title": "理想库存长(mm)",
             "dataIndex": "idealRepertoryLength",
-            "type": "number",
             "rules": [
                 {
                     "required": true,

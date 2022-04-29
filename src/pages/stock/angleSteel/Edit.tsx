@@ -37,7 +37,7 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
                 ...baseData,
                 // materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
-                width: `${baseData.widthMin}~${baseData.widthMax}`
+                width: `${baseData.widthMin}~${baseData.widthMax}`,
             }) : ({
                 ...baseData,
                 // materialTextureIds: baseData.materialTextureIds.join(","),
@@ -57,7 +57,7 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
         } else {
             const thickness = data.thickness.split("~")
             const width = data.width.split("~")
-            baseForm.setFieldsValue({ data, widthMin: width[0], widthMax: width[1], thicknessMin: thickness[0], thicknessMax: thickness[1] })
+            baseForm.setFieldsValue({ data, widthMin: width[0], widthMax: width[1], thicknessMin: thickness[0], thicknessMax: thickness[1]})
         }
 
     }, [JSON.stringify(data), type])

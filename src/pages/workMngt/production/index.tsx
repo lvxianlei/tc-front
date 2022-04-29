@@ -19,7 +19,10 @@ export default function Invoicing() {
     const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const [detailOver, setDetailOver] = useState<boolean>(false);
     const [loftingState, setLoftingState] = useState<number>(0);
-    const [filterValue, setFilterValue] = useState<object>(history.location.state as object);
+    const [filterValue, setFilterValue] = useState<object>({
+        ...history.location.state as object,
+        loftingId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
+    });
     const { loading, run: saveRun } = useRequest<any[]>((id: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredients?materialTaskCode=${id}&productCategoryName=${productCategoryName}`)

@@ -19,7 +19,7 @@
             "type": "number"
         },
         {
-            "title": "单重",
+            "title": "单重(kg)",
             "dataIndex": "weight"
         },
         {
@@ -27,7 +27,7 @@
             "dataIndex": "num"
         },
         {
-            "title": "汇总重量",
+            "title": "汇总重量(kg)",
             "dataIndex": "totalWeight"
         }
     ],

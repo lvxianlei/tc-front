@@ -37,7 +37,10 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
             title: '批次号',
             width: 100,
             fixed: "left",
-            dataIndex: 'productionBatchNo'
+            dataIndex: 'productionBatchNo',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             key: 'issuedNumber',
@@ -109,7 +112,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
         {
             key: 'totalWeight',
             title: '技术下达重量（t）',
-            width: 100,
+            width: 150,
             dataIndex: 'totalWeight'
         },
         {
@@ -148,552 +151,19 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
             width: 100,
             dataIndex: 'processMaterialDescription'
         },
-        // {
-        //     title: '放样',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '角钢加工',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '厚钢板加工',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '薄钢板加工',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '组焊加工',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '附件加工',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '附件焊接',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '黑件试装',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '白件试装',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '大锅镀锌',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '连板镀锌',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '角钢包装',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // },
-        // {
-        //     title: '连板包装',
-        //     children: [
-        //         {
-        //             key: 'description',
-        //             title: '下发日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '计划完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         }, 
-        //         {
-        //             key: 'description',
-        //             title: '完成进度',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '实际完成日期',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '状态',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //         {
-        //             key: 'description',
-        //             title: '执行单元',
-        //             width: 100,
-        //             dataIndex: 'description'
-        //         },
-        //     ]
-        // }
     ]
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
-        const totalHoles = selectedRows.reduce((pre,cur)=>{
-			return pre + cur.totalHolesNum
-		},0)
-        const totalNumber = selectedRows.reduce((pre,cur)=>{
-			return pre + cur.totalProcessNum
-		},0)
-        const totalWeight = selectedRows.reduce((pre,cur)=>{
-			return parseFloat(pre) + parseFloat(cur.totalWeight)
-		},0)
+        const totalHoles = selectedRows.reduce((pre: any,cur: { totalHolesNum: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalHolesNum!==null?cur.totalHolesNum:0) 
+        },0)
+        const totalNumber = selectedRows.reduce((pre: any,cur: { totalProcessNum: any; })=>{
+            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalProcessNum!==null?cur.totalProcessNum:0 )
+        },0)
+        const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+        },0)
         setDetail({
             totalHoles,
             totalNumber,
@@ -706,6 +176,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 await RequestUtil.post(`/tower-aps/cyclePlan/issueOrder`,selectedRows.map((item:any)=>{
                     return{
                         ...item,
+                        issueOrderId: item.id,
                         cyclePlanId: params.id,
                     }
                 })).then(()=>{
@@ -731,9 +202,9 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 requestData={{
                     configId: params?.configId
                 }}
-                
+                sourceKey='planBoards'
                 tableProps={{
-                    rowKey:'index',
+                    rowKey:(record: any,index) => `${record.id}-${index}`,
                     pagination:false,
                     rowSelection: {
                         type: "checkbox",
@@ -741,8 +212,8 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         onChange: SelectChange
                     }
                 }}
+                
                 columns={columns}
-                sourceKey='planBoards'
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>

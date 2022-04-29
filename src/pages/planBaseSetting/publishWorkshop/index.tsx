@@ -42,8 +42,9 @@ export default () => {
     }), { manual: true })
 
     const handleAuto = async () => {
-        await run(selectedRowKeys)
-        if (data?.length) {
+        const result = await run(selectedRowKeys)
+        console.log(result)
+        if (result?.length) {
             Modal.warn({
                 title: "快速分配车间",
                 icon: null,

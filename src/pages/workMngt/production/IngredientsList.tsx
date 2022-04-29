@@ -61,7 +61,7 @@ export default function IngredientsList(): React.ReactNode {
         { key: "fast", value: "快速配料" },
         { key: "programme", value: "已配方案" },
         { key: "save", value: "保存" },
-        { key: "generate", value: "生成配料" },
+        { key: "generate", value: "生成配料方案" },
         { key: "batchingStrategy", value: "配料策略设置" },
         { key: "goback", value: "返回", type: "default" }
     ]
@@ -111,6 +111,8 @@ export default function IngredientsList(): React.ReactNode {
     const [selectedScheme, setSelectedScheme] = useState<any[]>([]);
     // 存储仓库id
     const [warehouseId, setWarehouseId] = useState<any>([]);
+    // 过滤
+    const [sort, setSort] = useState<string>("");
     let [count, setCount] = useState<number>(0);
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
@@ -137,20 +139,12 @@ export default function IngredientsList(): React.ReactNode {
                     message.error("请您先进行方案对比!");
                     return false;
                 }
-                if (panes[0].selectedScheme.length < 1) {
-                    message.error("请您先配料！");
-                    return false;
-                }
                 handleSaveData(1);
                 break;
             case "generate":
                 const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
                 if (result.length !== 1) {
                     message.error("请您先进行方案对比!");
-                    return false;
-                }
-                if (result[0].selectedScheme.length < 1) {
-                    message.error("请您先配料！");
                     return false;
                 }
                 handleSaveData(2);
@@ -441,10 +435,10 @@ export default function IngredientsList(): React.ReactNode {
             // 添加构建分类map
             if (map.has(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`)) {
                 const result = map.get(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`) || 0;
-                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, result + num);
             } else {
-                let num = (schemeData[i].num1 || 0) + (schemeData[i].num2 || 0) + (schemeData[i].num3 || 0) + (schemeData[i].num4 || 0)
+                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, num);
             }
         }
@@ -486,9 +480,9 @@ export default function IngredientsList(): React.ReactNode {
             if (map.has(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(`${sort[ix].structureTexture}_${sort[ix].structureSpec}`) || 0;
-                sort[ix].noIngredients = sort[ix].totalNum - num;
+                sort[ix].notConfigured = sort[ix].totalNum - num;
             } else {
-                sort[ix].noIngredients = sort[ix].totalNum;
+                sort[ix].notConfigured = sort[ix].totalNum;
             }
         }
         setConstructionClassification(sort.slice(0))
@@ -659,10 +653,6 @@ export default function IngredientsList(): React.ReactNode {
             message.error("请您先进行方案对比!");
             return false;
         }
-        if (panes[0].selectedScheme.length < 1) {
-            message.error("请您先配料！");
-            return false;
-        }
         panes[0].batchingStrategy = serarchForm.getFieldsValue();
         setActiveSort(options);
         setActiveKey("fangan1");
@@ -685,6 +675,8 @@ export default function IngredientsList(): React.ReactNode {
                 ...result[0].batchingStrategy
             })
         }
+        setCount(++count);
+        setAlternativeData([])
     }
 
     // 初始获取数据
@@ -827,6 +819,7 @@ export default function IngredientsList(): React.ReactNode {
             });
             console.log(result, "构建分类明细")
             setSortDetailList((result as any) || [])
+            setCount(++count)
             resole(result)
         } catch (error) {
             reject(error)
@@ -868,8 +861,12 @@ export default function IngredientsList(): React.ReactNode {
     }), { manual: true })
 
     // 手动配料
-    const { run: getScheme } = useRequest<{ [key: string]: any }>((sort: string = "") => new Promise(async (resole, reject) => {
+    const { run: getScheme } = useRequest<{ [key: string]: any }>((code: number = 1, sorts: string = "") => new Promise(async (resole, reject) => {
+        setAlternativeData([]);
         try {
+            if (code === 1) {
+                setSort("");
+            }
             const serarchData = await serarchForm.validateFields();
             console.log(serarchData, "==========>>>")
             if (selectedRowCheck.length < 1) {
@@ -901,7 +898,7 @@ export default function IngredientsList(): React.ReactNode {
                 structureSpec: activeSort.split("_")[1], // 规格
                 structureTexture: activeSort.split("_")[0], // 材质
                 useStock: false, // 是否使用实际库存
-                sort: sort ? +sort : ""
+                sort: code === 1 ? "" : sorts
             });
             console.log(result, "手动配料")
             if (result.length < 1) {
@@ -952,15 +949,15 @@ export default function IngredientsList(): React.ReactNode {
                 </Descriptions>
                 {
                     constructionClassification.length > 0 && <div className='content_wrapper'>
-                        <div className='contentWrapperLeft'>
+                        <div className='contentWrapperLeft' style={{maxHeight: document.documentElement.clientHeight - 240, overflow: "auto"}}>
                             {/* 构建list */}
                             {
                                 constructionClassification?.map((item: any) => {
                                     const flag = activeSort === `${item.structureTexture}_${item.structureSpec}`;
                                     return <div className={`contentWrapperLeftlist ${flag ? "active" : ""}`} onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`)}>
                                         <div className='color' style={{
-                                            backgroundColor: item.noIngredients === item.totalNum ? "#EE483C"
-                                                : item.noIngredients === 0 ? "#13C519" : "#FFB631"
+                                            backgroundColor: item.notConfigured === item.totalNum ? "#EE483C"
+                                                : item.notConfigured === 0 ? "#13C519" : "#FFB631"
                                         }}></div>
                                         <div className='structure_wrapper'>
                                             <p>{ item.structureTexture }</p>
@@ -1135,7 +1132,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme()}>手动配料</Button>
+                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <Table
                                                                 size="small"
@@ -1160,7 +1157,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     <span className='textLabel'>总利用率：</span><span className='textValue'>{ item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).calculation : 0}%</span>
                                                                 </div>
                                                             </div>
-                                                            <div style={{width: document.documentElement.clientWidth - 1000}}>
+                                                            <div style={{width: document.documentElement.clientWidth - 1020}} className="alternativeWrapper">
                                                                 <CommonTable
                                                                     size="small"
                                                                     columns={[
@@ -1184,14 +1181,15 @@ export default function IngredientsList(): React.ReactNode {
                                                                     scroll={{ x: 1200, y: 200 }}
                                                                 />
                                                             </div>
-                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 1018}}>
+                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 1028}}>
                                                                 <div>备选方案</div>
                                                                 <div>
                                                                     <span>排序</span>
-                                                                    <Select placeholder="请选择" style={{ width: 150 }} onChange={(res) => {
-                                                                        getScheme(res);
+                                                                    <Select placeholder="请选择" value={sort} style={{ width: 150 }} onChange={(res) => {
+                                                                        setSort(res);
+                                                                        getScheme(2, res);
                                                                     }}>
-                                                                        <Select.Option value="">全部</Select.Option>
+                                                                        <Select.Option value="">默认排序</Select.Option>
                                                                         <Select.Option value="1">完全下料优先</Select.Option>
                                                                         <Select.Option value="2">利用率<ArrowDownOutlined /></Select.Option>
                                                                         <Select.Option value="4">余料长度<ArrowDownOutlined /></Select.Option>
@@ -1199,7 +1197,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     </Select>
                                                                 </div>
                                                             </div>
-                                                            <div style={{width: document.documentElement.clientWidth - 1000}}>
+                                                            <div style={{width: document.documentElement.clientWidth - 1020}} className="alternativeWrapper">
                                                                 <CommonTable
                                                                     size="small"
                                                                     columns={[

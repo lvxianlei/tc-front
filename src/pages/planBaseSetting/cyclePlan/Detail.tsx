@@ -146,25 +146,34 @@ export default function CyclePlanDetail(): React.ReactNode {
             dataIndex: 'plateWeight'
         },
         {
-            key: 'description',
+            key: 'storageMaterialDescription',
             title: '库存备料',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'storageMaterialDescription',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
-            key: 'description',
+            key: 'processMaterialDescription',
             title: '生产备料',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'processMaterialDescription',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             key: 'description',
             title: '周期计划备注',
             width: 100,
             fixed: "right",
-            dataIndex: 'description'
+            dataIndex: 'description',
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             title: "操作",
@@ -280,14 +289,14 @@ export default function CyclePlanDetail(): React.ReactNode {
                         await run()
                     }}>保存</Button>
                     <Button type="primary" ghost onClick={async () => {
-                            await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
+                            await RequestUtil.get(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
                     }}>备料确认</Button>
                     <Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
-                            await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
+                            await RequestUtil.post(`/tower-aps/cyclePlan/issue/${params.id}`)
                             message.success("下发成功！")
                             await run()
                         }}
@@ -365,13 +374,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                             setSelectedKeys(selectedKeys);
                             setSelectedRows(selectedRows);
                             const totalHoles = selectedRows.reduce((pre: any,cur: { totalHolesNum: any; })=>{
-                                return pre + cur.totalHolesNum
+                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalHolesNum!==null?cur.totalHolesNum:0) 
                             },0)
                             const totalNumber = selectedRows.reduce((pre: any,cur: { totalProcessNum: any; })=>{
-                                return pre + cur.totalProcessNum
+                                return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalProcessNum!==null?cur.totalProcessNum:0 )
                             },0)
-                            const totalWeight = selectedRows.reduce((pre: string,cur: { totalWeight: string; })=>{
-                                return parseFloat(pre) + parseFloat(cur.totalWeight)
+                            const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
                             },0)
                             setDetail({
                                 ...detail,
