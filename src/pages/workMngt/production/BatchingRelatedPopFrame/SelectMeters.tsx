@@ -35,7 +35,6 @@ export default function SelectMeters(props: EditProps): JSX.Element {
             for (let i = 0; i < result.length; i += 1) {
                 v.push(result[i].id);
             }
-            console.log(v, "v=====")
             setSelectedRowKeysCheck(v);
             resole(result)
         } catch (error) {
