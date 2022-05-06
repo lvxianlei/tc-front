@@ -84,7 +84,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "materialName"]} initialValue={_} rules={[{
                     required: true,
-                    message: '请输入构件编号'
+                    message: '请输入材料名称'
                 }, {
                     pattern: /^[0-9a-zA-Z\u4e00-\u9fa5]*$/,
                     message: '仅可输入数字/字母/汉字',
