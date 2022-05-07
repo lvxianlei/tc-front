@@ -137,7 +137,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                             plannedDeliveryTime: record.plannedDeliveryTime?moment(record.plannedDeliveryTime):''
                         })
                         setVisible(true); 
-                    }} disabled={ record.status !== 2 }>指派</Button>
+                    }} disabled={ record.status !== 2 && record.status !== 3  }>指派</Button>
                     <Button type='link' onClick={()=>history.push(`/taskMngt/ConfirmTaskMngt/ConfirmDetail/${record.id}`)} disabled={ record.status < 4 }>明细</Button>
                     <Popconfirm
                         title="确认提交任务?"
