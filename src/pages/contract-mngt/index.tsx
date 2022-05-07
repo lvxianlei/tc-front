@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { DatePicker, Select, Input, Button, Modal, message, Form, Space, Popconfirm } from 'antd'
-import { IntgSelect, Page } from "../common"
+import { IntgSelect, SearchTable as Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
 import { contract } from "./contract.json"

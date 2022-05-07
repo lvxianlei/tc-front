@@ -93,6 +93,24 @@
             ]
         },
         {
+            "title": "备料确认",
+            "dataIndex": "materialConfirmWorkBatchVO",
+            "path": "工作管理-备料确认",
+            "workbenchItemVos": [
+                {
+                    "title": "待完成",
+                    "dataIndex": "confirmedNum",
+                    "path": {
+                        "pathname": "/ingredients/materialPreparationConfirmation",
+                        "state": {
+                            "taskStatus": 1
+                        }
+                    },
+                    "authority": "workbench_data4"
+                }
+            ]
+        },
+        {
             "title": "塔型配料",
             "dataIndex": "purchaseIngredientsWorkBenchVo",
             "col": 2,
