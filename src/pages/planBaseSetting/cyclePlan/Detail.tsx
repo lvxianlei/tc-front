@@ -239,9 +239,10 @@ export default function CyclePlanDetail(): React.ReactNode {
                     message.success('备注添加成功！')
                 })
                 setVisible(false)
+                formRef.resetFields()
                 await run()
             } } onCancel={ ()=>{
-                form.resetFields()
+                formRef.resetFields()
                 setVisible(false)
             } }>
                 <Form form={ formRef } { ...formItemLayout }>
