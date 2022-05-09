@@ -3,25 +3,61 @@
  * author: mschange
  * time: 2022/05/06
  */
-import React, { useState } from 'react';
-import { Modal, Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Modal, Button, Spin } from 'antd';
 import { CommonTable } from '../../common';
 import {
-    Detail
+    Details
 } from "./materialPreparation";
 import {
     tableColumns
 } from "./buyBurdening.json";
 import MaterialPreparationFeedback from "./MaterialPreparationFeedback";
 import "./OverView.less"
-export default function OverViewDetail(props: Detail): JSX.Element {
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
+export default function OverViewDetail(props: Details): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
+    const [batcherId, setBatcherId] = useState<string>("");
+    const [code, setCode] = useState<string>("1");
+    console.log(props, "=====>>")
     // 关闭回调
     const handleCallBack = () => {
         setVisible(false);
+        run();
     }
+
+    useEffect(() => {
+        if (props.visible) {
+            run()
+        }
+    }, [props.visible])
+
+    // 获取详情数据
+    const { loading, run, data } = useRequest(() => new Promise(async (resolve, reject) => {
+        try {
+            const result = await RequestUtil.get(`/tower-supply/materialConfirm/detail/${props.chooseId}`)
+            resolve(result || []);
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    // 确认反馈
+    const { loading: materialConfirmLoading, run: materialConfirmRun } = useRequest(() => new Promise(async (resolve, reject) => {
+        try {
+            const result = await RequestUtil.put(`/tower-supply/materialConfirm/confirm/finish/${props.chooseId}`)
+            if (result) {
+                props?.handleCallBack();
+            }
+            resolve(result || []);
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     return (
-        <>
+        <Spin spinning={materialConfirmLoading || loading}>
             <Modal
                 title={'备料任务详情'}
                 visible={props.visible}
@@ -33,16 +69,18 @@ export default function OverViewDetail(props: Detail): JSX.Element {
                     <Button key="back" style={{marginRight: 16}} onClick={props?.handleCallBack}>
                         返回
                     </Button>,
-                    <Button type="primary" onClick={props?.handleCallBack}>
+                    <Button type="primary" onClick={() => {
+                        materialConfirmRun();
+                    }}>
                         确认反馈
                     </Button>
                 ]}
             >
                 <div className='titleWrapper'>
                     <span className='text'>合计：总件数：</span>
-                    <span className='value'>4566</span>
+                    <span className='value'>{ props?.totalNum }</span>
                     <span className='text'>总重量（kg）：</span>
-                    <span className='value'>22020.32</span>
+                    <span className='value'>{ props?.totalWeight }</span>
                 </div>
                 <CommonTable
                     columns={
@@ -62,27 +100,43 @@ export default function OverViewDetail(props: Detail): JSX.Element {
                                 dataIndex: 'operation',
                                 render: (_: any, records: any) => (
                                     <>
-                                        <Button type="link" className='btn-operation-link' onClick={() => {
-                                            setVisible(true);
-                                        }}>反馈</Button>
-                                        <Button type="link" className='btn-operation-link' onClick={() => {
-                                            setVisible(true);
-                                        }}>查看</Button>
+                                        <Button
+                                            type="link"
+                                            className='btn-operation-link'
+                                            onClick={() => {
+                                                setBatcherId(records?.id)
+                                                setVisible(true);
+                                                setCode("1");
+                                            }}
+                                            disabled={records?.feedStatus !== 1}
+                                        >反馈</Button>
+                                        <Button
+                                            type="link"
+                                            className='btn-operation-link'
+                                            onClick={() => {
+                                                setBatcherId(records?.id)
+                                                setVisible(true);
+                                                setCode("2");
+                                            }}
+                                            disabled={records?.feedStatus !== 2}
+                                        >查看</Button>
                                     </>
                                 )
                             }
                         ]
                     }
                     key="id"
-                    dataSource={[{batchNumber: "ewrrew"}]}
+                    dataSource={data as any}
                     pagination={false}
                 />
             </Modal>
             <MaterialPreparationFeedback
                 visible={visible}
+                batcherId={batcherId}
+                code={code}
                 handleCallBack={handleCallBack}
             />
-        </>
+        </Spin>
         
     )
 }

@@ -21,8 +21,8 @@
             "dataIndex": "signingTime"
         },
         {
-            "title": "交货时间---待确认字段",
-            "dataIndex": "signingTime"
+            "title": "交货时间",
+            "dataIndex": "arrivalTime"
         },
         {
             "title": "经办人",
@@ -400,8 +400,8 @@
             ]
         },
         {
-            "title": "交货时间---待确认字段",
-            "dataIndex": "signingTime",
+            "title": "交货时间",
+            "dataIndex": "arrivalTime",
             "type": "date",
             "rules": [
                 {
@@ -508,8 +508,8 @@
             "type": "select"
         },
         {
-            "title": "交货时间---待确认",
-            "dataIndex": "signingTime",
+            "title": "交货时间",
+            "dataIndex": "arrivalTime",
             "type": "date"
         },
         {

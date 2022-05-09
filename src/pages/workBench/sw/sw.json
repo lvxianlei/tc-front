@@ -98,12 +98,12 @@
             "path": "工作管理-备料确认",
             "workbenchItemVos": [
                 {
-                    "title": "待完成",
-                    "dataIndex": "confirmedNum",
+                    "title": "待反馈",
+                    "dataIndex": "toBeCompleteNum",
                     "path": {
                         "pathname": "/ingredients/materialPreparationConfirmation",
                         "state": {
-                            "taskStatus": 1
+                            "materialConfirmStatus": "0"
                         }
                     },
                     "authority": "workbench_data4"

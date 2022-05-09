@@ -15,21 +15,26 @@ export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseId, setChooseId] = useState<string>("")
+    const [totalWeight, setTotalWeight] = useState<number>(0)
+    const [totalNum, setTotalNum] = useState<number>(0)
     const [filterValue, setFilterValue] = useState<object>({
-        ...history.location.state as object,
-        batcherId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
+        ...history.location.state as object
     });
     const onFilterSubmit = (value: any) => {
         // 最新状态变更时间
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
-            value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
+            value.planStartTime = formatDate[0] + ' 00:00:00';
+            value.planCompleteTime = formatDate[1] + ' 23:59:59';
+        }
+        if (value.startBatcheUpdateTime) {
+            const formatDate = value.startBatcheUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateStartTime = formatDate[0] + ' 00:00:00';
+            value.updateEndTime = formatDate[1] + ' 23:59:59';
         }
         // 配料人
         if (value.batcherId) {
-            value.batcherDeptId = value.batcherId.first
-            value.batcherId = value.batcherId.second
+            value.feedbackUser = value.batcherId.second
         }
         setFilterValue(value)
         return value
@@ -42,8 +47,8 @@ export default function EnquiryList(): React.ReactNode {
 
     return <>
         <Page
-            path="/tower-supply/purchaseTaskTower"
-            exportPath={`/tower-supply/purchaseTaskTower`}
+            path="/tower-supply/materialConfirm"
+            exportPath={`/tower-supply/materialConfirm`}
             columns={[
                 {
                     title: "序号",
@@ -60,6 +65,9 @@ export default function EnquiryList(): React.ReactNode {
                     render: (_: any, records: any) => (
                         <>
                             <Button type="link" className='btn-operation-link' onClick={() => {
+                                setChooseId(records.id);
+                                setTotalWeight(records.totalWeight || 0);
+                                setTotalNum(records.totalNum || 0);
                                 setVisible(true);
                             }}>详情</Button>
                         </>
@@ -75,12 +83,12 @@ export default function EnquiryList(): React.ReactNode {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'batcheTaskStatus',
+                    name: 'materialConfirmStatus',
                     label: '任务状态',
                     children: <Select style={{ width: "100px" }} defaultValue="">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="1">待完成</Select.Option>
-                        <Select.Option value="3">已完成</Select.Option>
+                        <Select.Option value="0">待反馈</Select.Option>
+                        <Select.Option value="1">已反馈</Select.Option>
                     </Select>
                 },
                 {
@@ -89,17 +97,17 @@ export default function EnquiryList(): React.ReactNode {
                     children: <IntgSelect width={400} />
                 },
                 {
-                    name: 'startBatcheStatusUpdateTime1',
+                    name: 'startBatcheUpdateTime',
                     label: '最新状态变更时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="批次号/计划号/周期计划号" maxLength={200} />
+                    children: <Input placeholder="周期计划号" maxLength={200} />
                 }
             ]}
         />
-        <Overview visible={visible} handleCallBack={ handleCallBack } />
+        <Overview totalWeight={totalWeight} totalNum={totalNum} visible={visible} chooseId={chooseId} handleCallBack={ handleCallBack } />
     </>
 }

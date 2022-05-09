@@ -125,7 +125,7 @@ export default function BatchingScheme(): React.ReactNode {
                 current={1}
                 size={(IngredientData as any).length}
                 total={(IngredientData as any).length}
-                url={status === 1 ? `/tower-supply/purchaseBatchingScheme/batcher/summary` : `/tower-supply/produceIngredients/programme/${params.id}`}
+                url={status === 1 ? `/tower-supply/produceIngredients/getLoftingSchemeStatistics` : `/tower-supply/produceIngredients/programme/${params.id}`}
                 serchObj={status === 1 ? {produceId: params.id} : {}}
                 closeExportList={() => { setIsExportStoreList(false) }}
             /> : null}

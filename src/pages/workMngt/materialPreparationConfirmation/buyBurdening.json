@@ -2,93 +2,93 @@
     "baseInfo": [
         {
             "title": "周计划号",
-            "dataIndex": "batchNumber",
+            "dataIndex": "weekPlanNumber",
             "width": 200,
             "type": "string"
         },
         {
             "title": "周计划类型",
-            "dataIndex": "planNumber",
+            "dataIndex": "weekPlanType",
             "width": 200,
             "type": "string"
         },
         {
             "title": "计划开始日期",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "planStartTime",
             "width": 100,
             "type": "number"
         },
         {
             "title": "计划完成日期",
-            "dataIndex": "productNum",
+            "dataIndex": "planCompleteTime",
             "width": 100,
             "type": "number"
         },
         {
             "title": "任务状态",
-            "dataIndex": "totalWeight",
+            "dataIndex": "materialConfirmStatusName",
             "width": 200,
             "type": "string"
         },
         {
             "title": "反馈负责人",
-            "dataIndex": "batcher",
+            "dataIndex": "feedbackUser",
             "width": 100,
             "type": "string"
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "batcheStatusUpdateTime",
+            "dataIndex": "updateTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         }
     ],
     "tableColumns": [
         {
-            "title": "下单单号",
-            "dataIndex": "batchNumber",
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
             "width": 200,
             "type": "string"
         },
         {
             "title": "批次号",
-            "dataIndex": "planNumber",
+            "dataIndex": "productionBatchNo",
             "width": 200,
             "type": "string"
         },
         {
             "title": "计划号",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "planNumber",
             "width": 100,
             "type": "number"
         },
         {
             "title": "塔型",
-            "dataIndex": "productNum",
+            "dataIndex": "productCategoryName",
             "width": 100,
             "type": "number"
         },
         {
             "title": "反馈状态",
-            "dataIndex": "totalWeight",
+            "dataIndex": "feedStatusName",
             "width": 200,
             "type": "string"
         },
         {
             "title": "配料负责人",
-            "dataIndex": "batcher",
+            "dataIndex": "batcherName",
             "width": 100,
             "type": "string"
         },
         {
             "title": "反馈人",
-            "dataIndex": "batcher",
+            "dataIndex": "feedbackUser",
             "width": 100,
             "type": "string"
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "batcheStatusUpdateTime",
+            "dataIndex": "updateTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         }
@@ -96,35 +96,35 @@
     "MaterialPreparationColumns": [
         {
             "title": "品名",
-            "dataIndex": "batchNumber"
+            "dataIndex": "materialName"
         },
         {
             "title": "标准",
-            "dataIndex": "planNumber"
+            "dataIndex": "standardName"
         },
         {
             "title": "材质",
-            "dataIndex": "productCategoryName"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
-            "dataIndex": "productNum"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "原材料长度（mm）",
-            "dataIndex": "totalWeight",
+            "dataIndex": "length",
             "width": 200,
             "type": "string"
         },
         {
             "title": "需求数量",
-            "dataIndex": "batcher",
+            "dataIndex": "num",
             "width": 100,
             "type": "string"
         },
         {
             "title": "库存情况",
-            "dataIndex": "batcher",
+            "dataIndex": "stockType",
             "width": 100,
             "type": "string"
         }
