@@ -82,7 +82,7 @@ const AngleSteel = () => {
         }
     }
     return <DetailContent>
-        <Modal destroyOnClose visible={visible} width={1011} title="创建" onOk={handleModalOk} onCancel={() => {
+        <Modal destroyOnClose visible={visible} width={1100} title="创建" onOk={handleModalOk} onCancel={() => {
             setVisible(false)
             setMaterialData({})
         }}>
@@ -94,7 +94,7 @@ const AngleSteel = () => {
         }}>
             <BaseInfo form={baseInfoForm} columns={baseInfo} dataSource={{}} edit />
         </Modal>
-        <DetailTitle title="配料基础配置" />
+        <DetailTitle title="通用策略配置" />
         <CommonTable
             loading={loading}
             columns={[
@@ -120,7 +120,7 @@ const AngleSteel = () => {
             ]}
             dataSource={data?.ingredientsConfigVos || []}
         />
-        <DetailTitle title="材质配料设定" operation={[
+        <DetailTitle style={{marginTop: "12px"}} title="具体策略设置" operation={[
             <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
                 setVisible(true)
                 setType("new")
@@ -145,12 +145,12 @@ const AngleSteel = () => {
                 title: "操作",
                 dataIndex: "opration",
                 render: (_: any, records: any) => <>
-                    <Button type="link" onClick={() => {
+                    <Button type="link" className='btn-operation-link' onClick={() => {
                         setType("edit")
                         setMaterialData(records)
                         setVisible(true)
                     }}>编辑</Button>
-                    <Button type="link" loading={deleteLoading} onClick={() => deleteItem(records.id)}>删除</Button>
+                    <Button type="link" loading={deleteLoading} className="btn-operation-link" onClick={() => deleteItem(records.id)}>删除</Button>
                 </>
             }]}
             dataSource={data?.ingredientsMaterialConfigVos || []} />

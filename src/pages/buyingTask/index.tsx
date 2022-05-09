@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
-import { Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, Page } from '../common'
+import { Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, SearchTable as Page } from '../common'
 import { buyingTask, setting, spec, productInfo } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
@@ -13,7 +13,10 @@ interface TaskAssignRef {
 export default function RawMaterial() {
     const history = useHistory();
     const [detailId, setDetailId] = useState<string>("")
-    const [filterValue, setFilterValue] = useState<object>(history.location.state as object)
+    const [filterValue, setFilterValue] = useState<object>({
+        ...history.location.state as object,
+        inquirer: history.location.state ? sessionStorage.getItem('USER_ID') : "",
+    })
     const tarkRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { } })
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalVisible1, setIsModalVisible1] = useState(false);
@@ -148,6 +151,7 @@ export default function RawMaterial() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
+                        width: 250,
                         render: (_: any, records: any) => <>
                             <Button type="link" className="btn-operation-link" onClick={() => { detail(records.id) }}>任务详情</Button>
                             <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>

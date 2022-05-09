@@ -42,8 +42,9 @@ export default () => {
     }), { manual: true })
 
     const handleAuto = async () => {
-        await run(selectedRowKeys)
-        if (data?.length) {
+        const result = await run(selectedRowKeys)
+        console.log(result, "----")
+        if (result?.code === 405) {
             Modal.warn({
                 title: "快速分配车间",
                 icon: null,
@@ -51,10 +52,11 @@ export default () => {
                 content: <nav>
                     <h6>以下下达单未匹配到生产车间</h6>
                     <ul>
-                        { }
+                        {result.message.split("/").map((item: string) => <li>{item}</li>)}
                     </ul>
                     <Row><h6>请配置分配规则</h6></Row>
-                </nav>
+                </nav>,
+                onOk: () => history.go(0)
             })
         } else {
             await message.success("快速分配车间完成")

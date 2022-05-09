@@ -3,6 +3,7 @@ import React from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { Page } from '../../common';
+import { FixedType } from 'rc-table/lib/interface';
 
 export default function BoltCheck(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -45,6 +46,7 @@ export default function BoltCheck(): React.ReactNode {
             title: '操作',
             width: 120,
             dataIndex: 'operation',
+            fixed: 'right' as FixedType,
             render: (text: any, item: any) => {
                 return (
                     <div className='operation'>

@@ -715,9 +715,48 @@ export default function PackingListNew(): React.ReactNode {
                 columns={[
                     ...chooseColumns.map((item: any) => {
                         if (item.dataIndex === 'code') {
+                            if (!showParts) {
+                                return ({
+                                    ...item,
+                                    sorter: (a: any, b: any) => a.code.replace(/[^0-9]/ig, '') - b.code.replace(/[^0-9]/ig, ''),
+                                    render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                })
+                            } else {
+                                return ({
+                                    ...item,
+                                    render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                })
+                            }
+
+                        }
+                        if (item.dataIndex === 'segmentName' && !showParts) {
                             return ({
                                 ...item,
-                                render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                sorter: (a: any, b: any) => a.segmentName - b.segmentName
+                            })
+                        }
+                        if (item.dataIndex === 'totalWeight' && !showParts) {
+                            return ({
+                                ...item,
+                                sorter: (a: any, b: any) => a.totalWeight - b.totalWeight
+                            })
+                        }
+                        if (item.dataIndex === 'length' && !showParts) {
+                            return ({
+                                ...item,
+                                sorter: (a: any, b: any) => a.length - b.length
+                            })
+                        }
+                        if (item.dataIndex === 'structureSpec' && !showParts) {
+                            return ({
+                                ...item,
+                                sorter: (a: any, b: any) => (a.structureSpec.split('*')[0].replace(/[^0-9]/ig, '') - b.structureSpec.split('*')[0].replace(/[^0-9]/ig, ''))
+                            })
+                        }
+                        if (item.dataIndex === 'structureSpec' && !showParts) {
+                            return ({
+                                ...item,
+                                sorter: (a: any, b: any) => a.structureSpec.length-b.structureSpec.length
                             })
                         }
                         return item

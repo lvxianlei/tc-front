@@ -16,7 +16,10 @@ export default function Invoicing() {
     const [visible, setVisible] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>();
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState<any>(history.location.state)
+    const [filterValue, setFilterValue] = useState<any>({
+        ...history.location.state as object,
+        purchaserId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
+    })
     const [id, setId] = useState<string>();
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {

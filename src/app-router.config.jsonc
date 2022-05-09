@@ -2,7 +2,7 @@
  * @author Cory(coryisbest0728#gmail.com)
  * @copyright © 2021 Cory. All rights reserved
  */
- { // 路由配置
+{ // 路由配置
   "globalRouters": [
     {
       "name": "首页",
@@ -321,7 +321,7 @@
     { // 原材料管理
       "name": "原材料管理",
       "path": "/config/configList/material",
-      "module": "./pages/system-mngt/material/MaterialMngt",
+      "module": "./pages/system-mngt/materialMngt/MaterialMngt",
       "exact": true,
       "authority": "material_management"
     },
@@ -841,21 +841,21 @@
     },
     { // 确认任务
       "name": "确认任务",
-      "path": "/confirmTask/ConfirmTaskMngt",
+      "path": "/taskMngt/ConfirmTaskMngt",
       "module": "./pages/confirmTask/ConfirmTaskMngt",
       "exact": true,
       "authority": "rd_draw"
     },
     { // 确认任务详情
       "name": "确认任务详情",
-      "path": "/confirmTask/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
       "module": "./pages/confirmTask/ConfirmTaskDetail",
       "exact": true,
       "authority": "rd_draw"
     },
     { // 确认任务明细
       "name": "确认任务明细",
-      "path": "/confirmTask/ConfirmTaskMngt/ConfirmDetail/:id",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmDetail/:id",
       "module": "./pages/confirmTask/ConfirmDetail",
       "exact": true,
       "authority": "rd_draw"
@@ -897,14 +897,14 @@
     },
     { // 评估任务
       "name": "评估任务",
-      "path": "/assessmentTask/assessmentTaskList",
+      "path": "/taskMngt/assessmentTaskList",
       "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
       "authority": "rd_assess_task_management"
     },
     { // 评估任务详情
       "name": "评估任务详情",
-      "path": "/assessmentTask/assessmentTaskList/assessmentTaskDetail/:id",
+      "path": "/taskMngt/assessmentTaskList/assessmentTaskDetail/:id",
       "module": "./pages/assessmentTask/AssessmentTaskDetail",
       "exact": true,
       "authority": "rd_assess_task_management"
@@ -1028,10 +1028,17 @@
       "exact": true,
       "authority": "work_management_production_ingredients"
     },
-    { // 工作管理-生产配料-构件明细
-      "name": "构件明细",
-      "path": "/ingredients/production/detailed/:id/:materialTaskCode/:productCategoryName/:loftingState",
-      "module": "./pages/workMngt/production/Overview",
+    { // 工作管理-生产配料-生产配料
+      "name": "生产配料",
+      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName",
+      "module": "./pages/workMngt/production/IngredientsList",
+      "exact": true,
+      "authority": "sw_work_management_production_ingredients_component_details"
+    },
+    { // 工作管理-生产配料-配料单
+      "name": "配料单",
+      "path": "/ingredients/production/batchingScheme/:id",
+      "module": "./pages/workMngt/production/BatchingScheme",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"
     },
@@ -1093,35 +1100,35 @@
     },
     { // 放样任务
       "name": "放样任务",
-      "path": "/setOutTask/setOutTaskList",
+      "path": "/taskMngt/setOutTaskList",
       "module": "./pages/setOutTask/SetOutTaskList",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务详情
       "name": "放样任务详情",
-      "path": "/setOutTask/setOutTaskList/setOutTaskDetail/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskDetail/:id",
       "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-塔型
       "name": "塔型",
-      "path": "/setOutTask/setOutTaskList/setOutTaskTower/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskTower/:id",
       "module": "./pages/setOutTask/SetOutTaskTower",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 放样任务-杆塔
       "name": "杆塔",
-      "path": "/setOutTask/setOutTaskList/setOutTaskPole/:id",
+      "path": "/taskMngt/setOutTaskList/setOutTaskPole/:id",
       "module": "./pages/setOutTask/SetOutTaskPole",
       "exact": true,
       "authority": "rd_lofting_task"
     },
     { // 提料任务
       "name": "提料任务",
-      "path": "/materialTask/materialTaskList",
+      "path": "/taskMngt/materialTaskList",
       "module": "./pages/materialTask/MaterialTaskList",
       "exact": true,
       "authority": "rd_lofting_task"
@@ -1420,19 +1427,19 @@
       "exact": true,
       "authority": "work_management_purchase_ingredients"
     },
-    { // 工作管理-采购配料
-      "name": "采购配料详情",
-      "path": "/ingredients/buyBurdening/detail/:id",
-      "module": "./pages/workMngt/buyBurdening/Overview",
-      "exact": true,
-      "authority": "buy_burdening_overview"
-    },
-    { // 工作管理-采购配料
+    { // 工作管理-采购配料重写
       "name": "配料明细",
-      "path": "/ingredients/buyBurdening/component/:id/:status",
-      "module": "./pages/workMngt/buyBurdening/Detail",
+      "path": "/ingredients/buyBurdening/ingredientsList/:id/:status/:batchNumber/:productCategoryName/:materialStandardName",
+      "module": "./pages/workMngt/buyBurdening/IngredientsList",
       "exact": true,
       "authority": "buy_burdening_detail"
+    },
+    { // 工作管理-采购配料-配料方案
+      "name": "配料方案",
+      "path": "/ingredients/buyBurdening/batchingScheme/:id/:batcheTaskStatus",
+      "module": "./pages/workMngt/buyBurdening/BatchingScheme",
+      "exact": true,
+      "authority": "work_management_purchase_ingredients"
     },
     { // 问题单
       "name": "问题单列表",
@@ -1807,6 +1814,41 @@
       "name": "手动分配车间",
       "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-周期计划
+      "name": "周期计划",
+      "path": "/planProd/cyclePlan",
+      "module": "./pages/planBaseSetting/cyclePlan/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-周期计划-详情
+      "name": "详情",
+      "path": "/planProd/cyclePlan/detail/:id/:configId",
+      "module": "./pages/planBaseSetting/cyclePlan/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-车间计划基础配置-周期计划类型配置
+      "name": "周期计划类型配置管理",
+      "path": "/workshopPlanBasic/cyclePlanConfig",
+      "module": "./pages/planBaseSetting/configMngt/CyclePlanConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-车间计划基础配置-计划看板配置
+      "name": "计划看板配置管理",
+      "path": "/workshopPlanBasic/kanBanPlanConfig",
+      "module": "./pages/planBaseSetting/configMngt/KanBanPlanConfig",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-计划看板
+      "name": "计划看板",
+      "path": "/planProd/planPanal",
+      "module": "./pages/planBaseSetting/planPanal/index",
       "exact": true,
       "authority": "approvalm"
     },

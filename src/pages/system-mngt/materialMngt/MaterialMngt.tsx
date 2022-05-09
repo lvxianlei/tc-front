@@ -125,10 +125,10 @@ export default function MaterialMngt(): React.ReactNode {
 
     const close = () => {
         setVisible(false);
-        setMaterialList([]);
+        // setMaterialList([]);
         setDetailData({});
         form.resetFields();
-        setCode('');
+        // setCode('');
     }
 
     const save = () => {
@@ -159,6 +159,7 @@ export default function MaterialMngt(): React.ReactNode {
                         message.success('保存成功');
                     })
                 }
+                history.go(0)
             })
         }
     }
