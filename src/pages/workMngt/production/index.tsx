@@ -3,7 +3,6 @@ import { Button, Input, DatePicker, Select, Modal, Form, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./productionData.json"
-import Overview from "./Edit"
 import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "../../../utils/RequestUtil";
 import AuthUtil from "../../../utils/AuthUtil"
@@ -75,15 +74,6 @@ export default function Invoicing() {
         history.go(0)
     }
     return <>
-        <Modal
-            title="配料方案"
-            visible={visible}
-            width={1011}
-            onOk={() => setVisible(false)}
-            destroyOnClose
-            onCancel={() => setVisible(false)}>
-            <Overview id={detailId} />
-        </Modal>
         <Modal title="生成数据" visible={generaterVisible} onCancel={() => {
             form.resetFields()
             setGenerteVisible((false))
@@ -141,36 +131,16 @@ export default function Invoicing() {
                                 className="btn-operation-link" 
                                 disabled={userId !== record.batcherId || record.loftingState !== 2}
                             >
-                                {/* <Link to={`/ingredients/production/detailed/${record.id}/${record.materialTaskCode}/${record.productCategoryName}/${record.loftingState}/${record.productionBatchNo}`}>配料</Link> */}
                                 <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.productionBatchNo}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
                             </Button>
-                            {/* <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId || record.loftingState !== 3}
-                                onClick={() => {
-                                    setDetailId(record.id)
-                                    setVisible(true)
-                                }}>配料单</Button> */}
                             <Button type="link" className='btn-operation-link'
                                  disabled={userId !== record.batcherId || record.loftingState !== 3}
                             >
                                 <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
                             </Button>
-                            {/* <Button type="link" disabled={userId !== record.batcherId}
-                                onClick={async () => {
-                                    await getLoftingRun(record.productionBatch)
-                                    message.success("成功生成放样构件...")
-                                }}>生成放样构件</Button>
-                            <Button type="link" disabled={userId !== record.batcherId}
-                                onClick={async () => {
-                                    await loftingRun(record.productCategoryName, record.materialTaskId, record.productionBatch)
-                                    message.warning("成功生成差异列表...")
-                                }}>生成差异列表</Button> */}
                         </>
                     }
                 }]}
-            // extraOperation={<>
-            //     <Button type="primary" ghost>导出</Button>
-            //     {/* <Button type="primary" loading={loading} ghost onClick={() => setGenerteVisible(true)}>临时生成生产数据</Button> */}
-            // </>}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
