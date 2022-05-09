@@ -168,8 +168,8 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                           </Select>
                         </Form.Item>
                         {
-                    [...workmanship|| []]?.map((items: any, index: number) => {
-                        return <Card style={{width:'50%'}}>
+                    workmanship?.map((items: any, index: number) => {
+                        return <Card>
                                 <Form.Item name={["productSegmentListDTOList", index, "segmentName"]} label='工艺'>
                                     <Input maxLength={2} placeholder="请输入"  />
                                 </Form.Item>
@@ -182,7 +182,12 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                 }]}>
                                     <Input maxLength={2} placeholder="请输入"  />
                                 </Form.Item>
-                                <Button>添加</Button>
+                                <Button onClick={()=>{
+                                    workmanship.push({
+                                        productSegmentListDTOList:''
+                                    })
+                                    console.log(workmanship)
+                                }}>添加</Button>
                         </Card>
                     })
                 }

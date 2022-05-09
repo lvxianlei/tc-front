@@ -1076,26 +1076,17 @@
                 ]
             },
             {
-                "label": "工序配置",
-                "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
-                "appName": "QMS",
-                "path": "/processConfiguration",
-                "authority": "approvalm",
-                "items": [
-                    {
-                        "label": "工序配置列表",
-                        "path": "/processConfiguration/list",
-                        "authority": "approvalm"
-                    }
-                ]
-            },
-            {
                 "label": "不合格项目金额配置",
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "QMS",
                 "path": "/unqualifiedAmount",
                 "authority": "approvalm",
                 "items": [
+                    {
+                        "label": "工序配置列表",
+                        "path": "/unqualifiedAmount/processConfiguration/list",
+                        "authority": "approvalm"
+                    },
                     {
                         "label": "不合格项目金额配置列表",
                         "path": "/unqualifiedAmount/list",

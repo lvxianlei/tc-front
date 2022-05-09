@@ -2548,7 +2548,7 @@
     },
     { // 工序配置
       "name": "工序配置列表",
-      "path": "/processConfiguration/list",
+      "path": "/unqualifiedAmount/processConfiguration/list",
       "module": "./pages/processConfiguration/ProcessConfigurationList",
       "exact": true,
       "authority": "home_page_person_center"
