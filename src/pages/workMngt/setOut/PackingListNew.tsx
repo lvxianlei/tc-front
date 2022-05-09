@@ -750,7 +750,13 @@ export default function PackingListNew(): React.ReactNode {
                         if (item.dataIndex === 'structureSpec' && !showParts) {
                             return ({
                                 ...item,
-                                sorter: (a: any, b: any) => a.structureSpec.length - b.structureSpec.length
+                                sorter: (a: any, b: any) => (a.structureSpec.split('*')[0].replace(/[^0-9]/ig, '') - b.structureSpec.split('*')[0].replace(/[^0-9]/ig, ''))
+                            })
+                        }
+                        if (item.dataIndex === 'structureSpec' && !showParts) {
+                            return ({
+                                ...item,
+                                sorter: (a: any, b: any) => a.structureSpec.length-b.structureSpec.length
                             })
                         }
                         return item
