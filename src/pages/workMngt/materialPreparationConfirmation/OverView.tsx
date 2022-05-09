@@ -95,7 +95,7 @@ export default function OverViewDetail(props: Details): JSX.Element {
                             ...tableColumns,
                             {
                                 title: '操作',
-                                width: 120,
+                                width: 80,
                                 fixed: "right",
                                 dataIndex: 'operation',
                                 render: (_: any, records: any) => (

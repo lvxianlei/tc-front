@@ -59,7 +59,7 @@ export default function EnquiryList(): React.ReactNode {
                 ...baseInfo as any,
                 {
                     title: '操作',
-                    width: 60,
+                    width: 40,
                     fixed: "right",
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (
