@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Select, Form, Popconfirm, Modal, Row, Card } from 'antd'
+import { Space, Input, DatePicker, Button, Select, Form, Popconfirm, Modal, Row, Card, Col } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../common'
@@ -8,6 +8,7 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import AuthUtil from '../../utils/AuthUtil';
+import { PlusOutlined } from '@ant-design/icons';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
 
 export default function UnqualifiedAmountList(): React.ReactNode {
@@ -19,9 +20,14 @@ export default function UnqualifiedAmountList(): React.ReactNode {
     const [edit, setEdit] = useState<string>('添加');
     const [editValue, setEditValue] = useState<any>({});
     const [form] = Form.useForm();
-    const [workmanship, setWorkmanship] = useState<any[]>([{},{}]);
+    const [workmanship, setWorkmanship] = useState<any[]>([{productSegmentListDTOListChild:[{}]}]);
+    const [workmanshipChild, setWorkmanshipChild] = useState<any[]>([{}]);
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
+        console.log(workmanship)
+        form.setFieldsValue({
+            productSegmentListDTOList: workmanship
+        })
         resole(data)
     }), {})
     const confirmLeader: any = data?.records || [];
@@ -138,11 +144,9 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             footer={
                 <Space>
                     <Button type='primary' ghost onClick={()=>{
-                        
+                        form.validateFields()
+                        console.log(form.getFieldsValue(true))
                     }} >保存</Button>
-                    <Button type='primary' ghost onClick={()=>{
-
-                    }}>添加工艺</Button>
                     {/* {<Button type='primary' onClick={onSubmit}>解锁</Button>} */}
                     <Button onClick={()=>{
                         setVisible(false)
@@ -158,36 +162,88 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             }}  width={ '80%' }
         >
                 <Form form={form} {...formItemLayout}>
-                      <Form.Item name="pattern" label="生产环节">
-                            <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                              { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                  return <Select.Option key={ index } value={ id }>
-                                      { name }
-                                  </Select.Option>
-                              }) }
-                          </Select>
-                        </Form.Item>
-                        {
-                    workmanship?.map((items: any, index: number) => {
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="pattern" label="生产单元" labelCol={{span:4}}>
+                                <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={ index } value={ id }>
+                                        { name }
+                                    </Select.Option>
+                                }) }
+                            </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="pattern" label="生产环节">
+                                <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={ index } value={ id }>
+                                        { name }
+                                    </Select.Option>
+                                }) }
+                            </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    {workmanship?.map((items: any, index: number) => {
                         return <Card>
-                                <Form.Item name={["productSegmentListDTOList", index, "segmentName"]} label='工艺'>
-                                    <Input maxLength={2} placeholder="请输入"  />
-                                </Form.Item>
-                                <Form.Item name={["productSegmentListDTOList", index, "count"]} label={`工序${index+1}`} initialValue={items.count} rules={[{
-                                    required: true,
-                                    message: '请输入段数 '
-                                }, {
-                                    pattern: /^[0-9]*$/,
-                                    message: '仅可输入数字',
-                                }]}>
-                                    <Input maxLength={2} placeholder="请输入"  />
-                                </Form.Item>
-                                <Button onClick={()=>{
-                                    workmanship.push({
-                                        productSegmentListDTOList:''
-                                    })
-                                    console.log(workmanship)
-                                }}>添加</Button>
+                                <Row>
+                                    <Col span={6}>
+                                        <Form.Item name={["productSegmentListDTOList", index, "segmentName"]} label='工艺' >
+                                            <Input maxLength={2} placeholder="请输入"  />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Form.List name={["productSegmentListDTOList", index, "productSegmentListDTOListChild"]}>
+                                        {
+                                            ( fields , { add, remove }) => fields.map(
+                                                (field:any,index:number )=> (
+                                                <>
+                                                    <Col span={6}>
+                                                        <Form.Item name={[field.name,'count']} label={`工序${index+1}`} >
+                                                            <Input maxLength={2} placeholder="请输入"/>
+                                                        </Form.Item>
+                                                    </Col>
+                                                    
+                                                    <Col span={2}>
+                                                            {index === fields.length-1&&<Button type='link' onClick={()=>{
+                                                                add()
+                                                            }} style={{padding:'0px'}}>添加 </Button>}
+                                                            <Button type='link' onClick={()=>{
+                                                                remove(index)
+                                                            }} style={{padding:'0px'}}> 删除</Button>
+                                                    </Col>
+                                                </>
+                                                )
+                                            )
+                                        }
+                                    </Form.List> 
+                                </Row>
+                                <Space>
+                                    {workmanship.length-1===index && <Button type='primary' onClick={()=>{
+                                        const value = form.getFieldsValue(true).productSegmentListDTOList
+                                        console.log(value)
+                                        value.push({
+                                            segmentName:'',
+                                            productSegmentListDTOListChild:[{}]
+                                        })
+                                        form.setFieldsValue({
+                                            productSegmentListDTOList: [...value]
+                                        })
+                                        setWorkmanship([...value])
+                                        console.log(workmanship)
+                                    }}>添加工艺</Button>}
+                                    {workmanship.length > 1 && <Button type='primary' ghost onClick={()=>{
+                                        workmanship.splice(index,1)
+                                        form.setFieldsValue({
+                                            productSegmentListDTOList: [...workmanship]
+                                        })
+                                        setWorkmanship([...workmanship])
+                                    }}>删除</Button>}
+                                </Space>
+                                
                         </Card>
                     })
                 }
