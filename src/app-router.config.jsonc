@@ -1441,6 +1441,13 @@
       "exact": true,
       "authority": "work_management_purchase_ingredients"
     },
+    { // 工作管理-备料确认
+      "name": "备料确认",
+      "path": "/ingredients/materialPreparationConfirmation",
+      "module": "./pages/workMngt/materialPreparationConfirmation/index",
+      "exact": true,
+      "authority": "work_management_production_ingredients"
+    },
     { // 问题单
       "name": "问题单列表",
       "path": "/question/questionMngt",
