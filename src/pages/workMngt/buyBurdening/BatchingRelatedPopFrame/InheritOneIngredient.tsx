@@ -48,7 +48,6 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
                     key="submit"
                     type="primary"
                     onClick={() => {
-                        console.log("dsdsdsd")
                         props?.hanleInheritSure({
                             code: true,
                             // data为传递回的数据

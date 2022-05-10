@@ -20,7 +20,6 @@ export default function SelectWarehouse(props: EditProps): JSX.Element {
     const rowSelectionCheck = {
         selectedRowKeys: selectedRowKeysCheck,
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
-            console.log(selectedRowKeys, "selectedRowKeys")
             setSelectedRowKeysCheck(selectedRowKeys)
         },
         getCheckboxProps: (record: any) => ({
@@ -42,7 +41,6 @@ export default function SelectWarehouse(props: EditProps): JSX.Element {
             for (let i = 0; i < result.length; i += 1) {
                 v.push(result[i].id);
             }
-            console.log(v, "v=====")
             setSelectedRowKeysCheck(v);
             resole(result)
         } catch (error) {
@@ -76,7 +74,6 @@ export default function SelectWarehouse(props: EditProps): JSX.Element {
                     key="submit"
                     type="primary"
                     onClick={() => {
-                        console.log("dsdsdsd")
                         if (inventory) {
                             if (!inventoryTime) {
                                 message.error("请您选择在途库存最晚到货时间！");
