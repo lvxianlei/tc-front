@@ -8,11 +8,17 @@
  import { Input, DatePicker, Select, Form, Spin } from 'antd';
  import { Page } from '../../common';
  import { FixedType } from 'rc-table/lib/interface';
- import { Link, useLocation } from 'react-router-dom';
+ import { Link } from 'react-router-dom';
  import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../../utils/RequestUtil';
  
  export default function SetOutList(): React.ReactNode {
+    const [productUnitData, setProductUnitData] = useState<any[]>([])
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get<any[]>(`/tower-aps/productionUnit?size=10000`);
+        setProductUnitData(data?.records)
+        resole(data)
+    }), {})
      const columns = [
          {
              key: 'index',
@@ -24,7 +30,7 @@
          },
          {
              key: 'taskNum',
-             title: '编号',
+             title: '处置单单号',
              width: 150,
              dataIndex: 'taskNum'
          },
@@ -113,20 +119,20 @@
              fixed: 'right' as FixedType,
              width: 200,
              render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                     <Link to={`/workMngt/setOutList/setOutInformation/${record.id}`}>放样信息</Link>
+                     <Link to={`/qualityInspection/disposition/detail/${record.id}`}>查看详情</Link>
              )
          }
      ]
 
  
      return <Page
-             path=""
+             path="/tower-quality/rework"
              columns={columns}
              headTabs={[]}
              searchFormItems={[
                 {
-                    name: 'fuzzyMsg',
-                    label: '编号',
+                    name: 'reworkNum',
+                    label: '处置单单号',
                     children: <Input placeholder="请输入" />
                 },
                  {
@@ -135,45 +141,50 @@
                      children: <DatePicker.RangePicker /> 
                  },
                  {
-                     name: 'fuzzyMsg',
+                     name: 'createUserName',
                      label: '质检员',
                      children: <Input placeholder="请输入" />
                  },
 
                  {
-                     name: 'status',
+                     name: 'processType',
                      label: '处理类型',
-                     children: <Form.Item name="status" initialValue={''}>
+                     children: <Form.Item name="processType" initialValue={''}>
                          <Select style={{ width: '120px' }} placeholder="请选择">
-                             <Select.Option value="" key="6">全部</Select.Option>
-                             <Select.Option value={1} key="1">返工</Select.Option>
-                             <Select.Option value={2} key="2">返修</Select.Option>
-                             <Select.Option value={3} key="3">报废</Select.Option>
+                                <Select.Option value="" key="6">全部</Select.Option>
+                                <Select.Option value={1} key={1}>返修</Select.Option>
+                                <Select.Option value={2} key={2}>返镀</Select.Option>
+                                <Select.Option value={3} key={3}>报废</Select.Option>
+                                <Select.Option value={4} key={4}>退货</Select.Option>
                          </Select>
                      </Form.Item>
                  },
                  {
-                     name: 'fuzzyMsg',
+                     name: 'planNumber',
                      label: '计划号',
                      children: <Input placeholder="请输入" />
                  },
                  {
-                     name: 'fuzzyMsg',
+                     name: 'projectName',
                      label: '工程名称',
                      children: <Input placeholder="请输入" />
                  },
                  {
-                     name: 'fuzzyMsg',
+                     name: 'productCategory',
                      label: '塔型',
                      children: <Input placeholder="请输入" />
                  },
                  {
-                     name: 'fuzzyMsg',
-                     label: '责任单位',
-                     children: <Input placeholder="请输入" />
+                     name: 'workUnit',
+                     label: '生产单元',
+                     children: <Select style={{ width: "100px" }}>
+                        {productUnitData?.map((item: any) => {
+                            return <Select.Option key={item.name} value={item.name}>{item.name}</Select.Option>
+                        })}
+                    </Select>
                  },
                  {
-                     name: 'fuzzyMsg',
+                     name: 'createUserName',
                      label: '责任人',
                      children: <Input placeholder="请输入" />
                  }
@@ -181,8 +192,8 @@
              onFilterSubmit={(values: Record<string, any>) => {
                  if (values.updateStatusTime) {
                      const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+                     values.startCreateTime = formatDate[0] + ' 00:00:00';
+                     values.endCreateTime = formatDate[1] + ' 23:59:59';
                  }
                  return values;
              }}

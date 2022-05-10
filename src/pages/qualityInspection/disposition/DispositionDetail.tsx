@@ -14,7 +14,7 @@ import useRequest from '@ahooksjs/use-request';
 const specialColums = [
     {
         "dataIndex": "materialSandard",
-        "title": "编号"
+        "title": "处置单单号"
     },
     {
         "dataIndex": "materialDemand",
@@ -54,7 +54,7 @@ const specialColums = [
     },
     {
         "dataIndex": "description",
-        "title": "责任单位",
+        "title": "生产单元",
         "type": "textarea"
     },
     {
@@ -130,7 +130,7 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
     const params = useParams<{ id: string }>();
     
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get(``, {  })
+        const data = await RequestUtil.get(`/tower-quality/rework/${params.id}`)
         resole(data)
     }), {})
     const detailData: any = data;

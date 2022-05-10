@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Select, Form, Popconfirm, Modal, Row, Card, Col } from 'antd'
+import { Space, Input, DatePicker, Button, Select, Form, Popconfirm, Modal, Row, Card, Col, message } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../common'
@@ -20,17 +20,21 @@ export default function UnqualifiedAmountList(): React.ReactNode {
     const [edit, setEdit] = useState<string>('添加');
     const [editValue, setEditValue] = useState<any>({});
     const [form] = Form.useForm();
-    const [workmanship, setWorkmanship] = useState<any[]>([{productSegmentListDTOListChild:[{}]}]);
+    const [workmanship, setWorkmanship] = useState<any[]>([{workProList:[{}]}]);
     const [workmanshipChild, setWorkmanshipChild] = useState<any[]>([{}]);
+    const [prodLinkList, setProdLinkList] = useState<any[]>([])
+    const [productUnitData, setProductUnitData] = useState<any[]>([])
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
+        const data: any = await RequestUtil.get<SelectDataNode[]>(`/tower-aps/productionUnit?size=10000`);
+        const prodLinkList: any = await RequestUtil.get(`/tower-aps/productionLink?current=1&size=10000`)
+        setProdLinkList(prodLinkList?.records)
+        setProductUnitData(data?.records)
         console.log(workmanship)
         form.setFieldsValue({
-            productSegmentListDTOList: workmanship
+            craftNameDTOS: workmanship
         })
         resole(data)
     }), {})
-    const confirmLeader: any = data?.records || [];
     const columns = [
         {
             key: 'index',
@@ -40,22 +44,22 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'contractName',
+            key: 'workUnit',
             title: '生产单元',
             width: 100,
-            dataIndex: 'contractName'
+            dataIndex: 'workUnit'
         },
         {
-            key: 'plannedDeliveryTime',
+            key: 'craftName',
             title: '工艺',
             width: 200,
-            dataIndex: 'plannedDeliveryTime'
+            dataIndex: 'craftName'
         },
         {
-            key: 'confirmName',
+            key: 'workPro',
             title: '工序',
             width: 200,
-            dataIndex: 'confirmName'
+            dataIndex: 'workPro'
         },
         {
             key: 'operation',
@@ -72,19 +76,19 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                             ...record
                         })
                         setVisible(true)
-                    }} disabled={AuthUtil.getUserId() !== record.confirmId}>编辑</Button>
+                    }}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
-                            RequestUtil.delete(`/tower-system/notice?ids=${record.id}`).then(res => {
-                                setRefresh(!refresh);
+                            RequestUtil.delete(`/tower-quality/workAllocation/${record.id}`).then(res => {
+                                message.success("删除成功！")
+                                history.go(0)
                             });
                         }}
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.state === 1}
                     >
-                        <Button type="link" disabled={record.state === 1}>删除</Button>
+                        <Button type="link" >删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -102,10 +106,10 @@ export default function UnqualifiedAmountList(): React.ReactNode {
     return (
         <>
         <Page
-            path="/tower-science/drawProductDetail"
+            path="/tower-quality/workAllocation"
             columns={columns}
             filterValue={filterValue}
-            exportPath="/tower-science/drawProductDetail"
+            // exportPath="/tower-science/drawProductDetail"
             refresh={refresh}
             extraOperation={<Button type='primary' ghost onClick={()=>{
                 setEdit('添加')
@@ -115,25 +119,21 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'status',
-                    label: '车间',
-                    children: <Form.Item name="status" initialValue={location.state?.state}>
+                    name: 'workUnit',
+                    label: '生产单元',
+                    children: <Form.Item name="workUnit" >
                         <Select style={{ width: "100px" }}>
-                            <Select.Option value={''} key={''}>全部</Select.Option>
-                            <Select.Option value={3} key={3}>待完成</Select.Option>
-                            <Select.Option value={4} key={4}>已完成</Select.Option>
+                            {productUnitData?.map((item: any) => {
+                                return <Select.Option key={item.name} value={item.name}>{item.name}</Select.Option>
+                            })}
                         </Select>
                     </Form.Item>
                 },
                 {
-                    name: 'status',
+                    name: 'craftName',
                     label: '工艺',
-                    children: <Form.Item name="status" initialValue={location.state?.state}>
-                        <Select style={{ width: "100px" }}>
-                            <Select.Option value={''} key={''}>全部</Select.Option>
-                            <Select.Option value={3} key={3}>待完成</Select.Option>
-                            <Select.Option value={4} key={4}>已完成</Select.Option>
-                        </Select>
+                    children: <Form.Item name="craftName">
+                        <Input/>
                     </Form.Item>
                 }
             ]}
@@ -143,9 +143,29 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             title={edit} 
             footer={
                 <Space>
-                    <Button type='primary' ghost onClick={()=>{
-                        form.validateFields()
-                        console.log(form.getFieldsValue(true))
+                    <Button type='primary' ghost onClick={async ()=>{
+                        await form.validateFields();
+                        const value = form.getFieldsValue(true)
+                        const submitData = {
+                            craftNameDTOS: value?.craftNameDTOS.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    workProList: item?.workProList.length>0?item?.workProList.map((itemList:any)=>{
+                                        return itemList?.count
+                                    }):[]
+                                }
+                            }),
+                            workUnit: value?.unit.split(',')[1],
+                            workUnitId: value?.unit.split(',')[0],
+                            linkName: value?.link.split(',')[1],
+                            linkId: value?.link.split(',')[0],
+                        }
+                        await RequestUtil.post(`/tower-quality/workAllocation`, submitData).then(res => {
+                            message.success('添加成功！')
+                            form.resetFields()
+                            setVisible(false)
+                            history.go(0)
+                        });
                     }} >保存</Button>
                     {/* {<Button type='primary' onClick={onSubmit}>解锁</Button>} */}
                     <Button onClick={()=>{
@@ -164,24 +184,26 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                 <Form form={form} {...formItemLayout}>
                     <Row>
                         <Col span={12}>
-                            <Form.Item name="pattern" label="生产单元" labelCol={{span:4}}>
-                                <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                                { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={ index } value={ id }>
-                                        { name }
-                                    </Select.Option>
-                                }) }
-                            </Select>
+                            <Form.Item name="unit" label="生产单元" labelCol={{span:4}} rules={[{
+                                required:true,
+                                message:'请选择生产单元'
+                            }]}>
+                                <Select placeholder="请选择">
+                                    {productUnitData?.map((item: any) => {
+                                        return <Select.Option key={item.id} value={item.id+','+item.name}>{item.name}</Select.Option>
+                                    })}
+                                </Select>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="pattern" label="生产环节">
+                            <Form.Item name="link" label="生产环节" rules={[{
+                                required:true,
+                                message:'请选择生产环节'
+                            }]}>
                                 <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
-                                { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                    return <Select.Option key={ index } value={ id }>
-                                        { name }
-                                    </Select.Option>
-                                }) }
+                                    { prodLinkList && prodLinkList.map((item:any)=>{
+                                        return <Select.Option key={item.userId} value={item.id+','+item.name}>{item.name}</Select.Option>
+                                    }) }
                             </Select>
                             </Form.Item>
                         </Col>
@@ -190,13 +212,13 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         return <Card>
                                 <Row>
                                     <Col span={6}>
-                                        <Form.Item name={["productSegmentListDTOList", index, "segmentName"]} label='工艺' >
+                                        <Form.Item name={["craftNameDTOS", index, "craftName"]} label='工艺' >
                                             <Input maxLength={2} placeholder="请输入"  />
                                         </Form.Item>
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <Form.List name={["productSegmentListDTOList", index, "productSegmentListDTOListChild"]}>
+                                    <Form.List name={["craftNameDTOS", index, "workProList"]}>
                                         {
                                             ( fields , { add, remove }) => fields.map(
                                                 (field:any,index:number )=> (
@@ -211,9 +233,9 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                                             {index === fields.length-1&&<Button type='link' onClick={()=>{
                                                                 add()
                                                             }} style={{padding:'0px'}}>添加 </Button>}
-                                                            <Button type='link' onClick={()=>{
+                                                            {fields.length>1 && <Button type='link' onClick={()=>{
                                                                 remove(index)
-                                                            }} style={{padding:'0px'}}> 删除</Button>
+                                                            }} style={{padding:'0px'}}> 删除</Button>}
                                                     </Col>
                                                 </>
                                                 )
@@ -223,14 +245,14 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                 </Row>
                                 <Space>
                                     {workmanship.length-1===index && <Button type='primary' onClick={()=>{
-                                        const value = form.getFieldsValue(true).productSegmentListDTOList
+                                        const value = form.getFieldsValue(true).craftNameDTOS
                                         console.log(value)
                                         value.push({
                                             segmentName:'',
-                                            productSegmentListDTOListChild:[{}]
+                                            workProList:[{}]
                                         })
                                         form.setFieldsValue({
-                                            productSegmentListDTOList: [...value]
+                                            craftNameDTOS: [...value]
                                         })
                                         setWorkmanship([...value])
                                         console.log(workmanship)
@@ -238,7 +260,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                     {workmanship.length > 1 && <Button type='primary' ghost onClick={()=>{
                                         workmanship.splice(index,1)
                                         form.setFieldsValue({
-                                            productSegmentListDTOList: [...workmanship]
+                                            craftNameDTOS: [...workmanship]
                                         })
                                         setWorkmanship([...workmanship])
                                     }}>删除</Button>}
