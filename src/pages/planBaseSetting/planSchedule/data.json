@@ -84,13 +84,13 @@
             "dataIndex": "description"
         },
         {
-            "title": "放样下发时间",
+            "title": "下发放样时间",
             "dataIndex": "loftingIssueTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         },
         {
-            "title": "放样下发人",
+            "title": "下发人",
             "dataIndex": "loftingIssueUserName"
         },
         {
