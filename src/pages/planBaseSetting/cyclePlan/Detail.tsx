@@ -33,7 +33,6 @@ export default function CyclePlanDetail(): React.ReactNode {
         form.setFieldsValue({
             ...data,
             date:[moment(data?.startTime),moment(data?.endTime)],
-            status: data?.status===1?'未下发':data?.status===2?'已下发':data?.status===3?'已反馈':"-"
 
         })
         resole(data)
@@ -294,7 +293,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                             await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
-                    }}>备料确认</Button>
+                    }} disabled={detail?.status===2}>备料确认</Button>
                     <Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
