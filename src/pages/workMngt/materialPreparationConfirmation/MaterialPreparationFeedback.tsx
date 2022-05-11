@@ -66,7 +66,10 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
             footer={[
                 props?.code === "1" ? 
                     <>
-                        <Button key="back" style={{marginRight: 16}} onClick={props?.handleCallBack}>
+                        <Button key="back" style={{ marginRight: 16 }} onClick={() => {
+                            setTextValue("");
+                            props?.handleCallBack()
+                        }}>
                             取消
                         </Button>,
                         <Button type="primary" onClick={() => {
@@ -75,6 +78,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                                 return false;
                             }
                             materialConfirmRun();
+                            setTextValue("");
                         }}>
                             确认反馈
                         </Button>
@@ -102,7 +106,20 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                             fixed: "left",
                             render: (_: any, _a: any, index) => <>{index + 1}</>
                         },
-                        ...MaterialPreparationColumns
+                        ...MaterialPreparationColumns.map((item: any) => {
+                            if (item.dataIndex === "stockType") {
+                                return ({
+                                    title: item.title,
+                                    dataIndex: item.dataIndex,
+                                    width: 120,
+                                    render: (_: any, record: any): React.ReactNode => {
+                                        return (
+                                            <span>{ record.stockType > 0 ? "库存充足" : "库存缺料" }</span>)
+                                    }
+                                })
+                            }
+                            return item;
+                        })
                     ]
                 }
                 dataSource={(data as any)?.materialConfirmInfoDetails || []}

@@ -4,7 +4,7 @@
  * time: 2022/05/06
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Spin } from 'antd';
+import { Modal, Button, Spin, message } from 'antd';
 import { CommonTable } from '../../common';
 import {
     Details
@@ -33,6 +33,35 @@ export default function OverViewDetail(props: Details): JSX.Element {
         }
     }, [props.visible])
 
+    // 返回
+    const backClick = () => {
+        console.log("==========>>>")
+        if ((data as any).length < 1) {
+            props?.handleCallBack();
+            return false;
+        }
+        let flag = false;
+        for (let i = 0; i < (data as any).length; i += 1) {
+            if ((data as any)[i].feedStatus != 2) {
+                flag = true;
+            }
+        }
+        if (flag) {
+            props?.handleCallBack();
+            return false;
+        }
+        Modal.confirm({
+            title: '反馈提醒',
+            content: "所有下达单均已反馈，是否进行确认反馈？",
+            onOk() {
+                materialConfirmRun();
+            },
+            onCancel() {
+                props?.handleCallBack();
+            },
+        });
+    }
+
     // 获取详情数据
     const { loading, run, data } = useRequest(() => new Promise(async (resolve, reject) => {
         try {
@@ -47,9 +76,8 @@ export default function OverViewDetail(props: Details): JSX.Element {
     const { loading: materialConfirmLoading, run: materialConfirmRun } = useRequest(() => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.put(`/tower-supply/materialConfirm/confirm/finish/${props.chooseId}`)
-            if (result) {
-                props?.handleCallBack();
-            }
+            message.success("反馈成功！")
+            props?.handleCallBack();
             resolve(result || []);
         } catch (error) {
             reject(error)
@@ -65,16 +93,21 @@ export default function OverViewDetail(props: Details): JSX.Element {
                 maskClosable={false}
                 width={1100}
                 className="OverViewDetail"
-                footer={[
-                    <Button key="back" style={{marginRight: 16}} onClick={props?.handleCallBack}>
+                footer={props?.materialConfirmStatus !== 0 ?
+                    [<Button key="back" style={{ marginRight: 16 }} onClick={() => props?.handleCallBack()} >
+                        关闭
+                    </Button>] :
+                    [<Button key="back" style={{ marginRight: 16 }} onClick={() => {
+                        backClick()
+                    }}>
                         返回
                     </Button>,
                     <Button type="primary" onClick={() => {
                         materialConfirmRun();
                     }}>
                         确认反馈
-                    </Button>
-                ]}
+                    </Button>]
+                }
             >
                 <div className='titleWrapper'>
                     <span className='text'>合计：总件数：</span>
