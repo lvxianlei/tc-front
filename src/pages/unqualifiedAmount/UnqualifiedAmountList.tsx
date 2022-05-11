@@ -248,13 +248,13 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                             history.go(0)
                         }else{
                             setLock('锁定')
-                            const submitData = {
-                                ...value,
-                                id: edit==='编辑'?editValue.id:'',
-                                locking: 1
-                            }
-                            await RequestUtil.post(`/tower-quality/projectAllocation`,submitData)
-                            message.success(`解锁成功！`)
+                            // const submitData = {
+                            //     ...value,
+                            //     id: edit==='编辑'?editValue.id:'',
+                            //     locking: 1
+                            // }
+                            // await RequestUtil.post(`/tower-quality/projectAllocation`,submitData)
+                            // message.success(`解锁成功！`)
                         }
                        
                     }}>{lock}</Button>
@@ -262,7 +262,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                     <Button onClick={()=>{
                         setVisible(false)
                         edit==='编辑'&& setEdit(`添加`)
-                        edit==='编辑'&& lock === '锁定'&& history.go(0)
+                        // edit==='编辑'&& lock === '锁定'&& history.go(0)
                         form.resetFields()
                     }}>关闭</Button>
                 </Space>
