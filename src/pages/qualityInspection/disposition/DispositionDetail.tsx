@@ -13,16 +13,16 @@ import useRequest from '@ahooksjs/use-request';
 
 const specialColums = [
     {
-        "dataIndex": "issuedNumber",
+        "dataIndex": "reworkNum",
         "title": "处置单单号"
     },
     {
-        "dataIndex": "checkDate",
+        "dataIndex": "createTime",
         "title": "开单日期"
     },
     {
-        "dataIndex": "weldingDemand",
-        "title": "发现环节"
+        "dataIndex": "linkName",
+        "title": "生产环节"
     },
     {
         "dataIndex": "planNumber",
@@ -33,12 +33,12 @@ const specialColums = [
         "title": "生产下达单号"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "materialName",
         "title": "产品类型",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "projectName",
         "title": "工程名称",
         "type": "textarea"
     },
@@ -68,7 +68,7 @@ const specialColums = [
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "createUserName",
         "title": "质检员",
         "type": "textarea"
     },

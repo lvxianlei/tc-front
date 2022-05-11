@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Button, Select, Form, Popconfirm, Modal, Row, Card, Col, message } from 'antd'
+import { Space, Input, DatePicker, Button, Select, Form, Popconfirm, Modal, Row, Card, Col, message, Upload } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../common'
@@ -69,11 +69,18 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={() => { 
+                    <Button type='link' onClick={async () => { 
                         setEditValue(record)
+                        const data: any = await RequestUtil.get<SelectDataNode[]>(`/tower-quality/workAllocation/${record?.id}`);
+
                         setEdit('编辑') 
                         form.setFieldsValue({
-                            ...record
+                            link: data?.linkId+','+data?.linkName,
+                            unit: data?.workUnitId+','+data?.workUnit,
+                            craftNameDTOS: [{
+                                craftName: data?.craftName,
+                                workProList: data?.workProList
+                            }]
                         })
                         setVisible(true)
                     }}>编辑</Button>
@@ -111,10 +118,38 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             filterValue={filterValue}
             // exportPath="/tower-science/drawProductDetail"
             refresh={refresh}
-            extraOperation={<Button type='primary' ghost onClick={()=>{
+            extraOperation={<Space>
+                <Upload
+                    accept=".xls,.xlsx"
+                    action={() => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl + '/tower-quality/workAllocation/import'
+                    }}
+                    headers={
+                        {
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={false}
+                    onChange={(info) => {
+                        if (info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        } else if (info.file.response && info.file.response?.success) {
+                                message.success('导入成功！');
+                                history.go(0)
+                                setRefresh(!refresh);
+                        }
+                    }}
+                >
+                    <Button type="primary" ghost >上传文件</Button>
+                </Upload>
+                <Button type='primary' ghost onClick={()=>{
                 setEdit('添加')
                 setVisible(true)
-            }}>新增</Button>}
+            }}>新增</Button>
+            </Space>}
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
@@ -146,26 +181,46 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                     <Button type='primary' ghost onClick={async ()=>{
                         await form.validateFields();
                         const value = form.getFieldsValue(true)
-                        const submitData = {
-                            craftNameDTOS: value?.craftNameDTOS.map((item:any)=>{
-                                return {
-                                    ...item,
-                                    workProList: item?.workProList.length>0?item?.workProList.map((itemList:any)=>{
-                                        return itemList?.count
-                                    }):[]
-                                }
-                            }),
-                            workUnit: value?.unit.split(',')[1],
-                            workUnitId: value?.unit.split(',')[0],
-                            linkName: value?.link.split(',')[1],
-                            linkId: value?.link.split(',')[0],
+                        if(edit==='编辑'){
+                            const submitData = {
+                                craftNameDTOS: value?.craftNameDTOS.map((item:any)=>{
+                                    return {
+                                        ...item,
+                                        workProList: item?.workProList
+                                    }
+                                }),
+                                workUnit: value?.unit.split(',')[1],
+                                workUnitId: value?.unit.split(',')[0],
+                                linkName: value?.link.split(',')[1],
+                                linkId: value?.link.split(',')[0],
+                                id: editValue?.id
+                            }
+                            await RequestUtil.put(`/tower-quality/workAllocation`, submitData).then(res => {
+                                message.success('保存成功！')
+                                form.resetFields()
+                                setVisible(false)
+                                history.go(0)
+                            });
+                        }else{
+                            const submitData = {
+                                craftNameDTOS: value?.craftNameDTOS.map((item:any)=>{
+                                    return {
+                                        ...item,
+                                        workProList: item?.workProList
+                                    }
+                                }),
+                                workUnit: value?.unit.split(',')[1],
+                                workUnitId: value?.unit.split(',')[0],
+                                linkName: value?.link.split(',')[1],
+                                linkId: value?.link.split(',')[0],
+                            }
+                            await RequestUtil.post(`/tower-quality/workAllocation`, submitData).then(res => {
+                                message.success('保存成功！')
+                                form.resetFields()
+                                setVisible(false)
+                                history.go(0)
+                            });
                         }
-                        await RequestUtil.post(`/tower-quality/workAllocation`, submitData).then(res => {
-                            message.success('添加成功！')
-                            form.resetFields()
-                            setVisible(false)
-                            history.go(0)
-                        });
                     }} >保存</Button>
                     {/* {<Button type='primary' onClick={onSubmit}>解锁</Button>} */}
                     <Button onClick={()=>{
@@ -212,7 +267,10 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         return <Card>
                                 <Row>
                                     <Col span={6}>
-                                        <Form.Item name={["craftNameDTOS", index, "craftName"]} label='工艺' >
+                                        <Form.Item name={["craftNameDTOS", index, "craftName"]} label='工艺' rules={[{
+                                            required:true,
+                                            message:'请输入工艺'
+                                        }]}>
                                             <Input maxLength={2} placeholder="请输入"  />
                                         </Form.Item>
                                     </Col>
@@ -224,7 +282,10 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                                 (field:any,index:number )=> (
                                                 <>
                                                     <Col span={6}>
-                                                        <Form.Item name={[field.name,'count']} label={`工序${index+1}`} >
+                                                        <Form.Item name={[field.name,'name']} label={`工序${index+1}`} rules={[{
+                                                            required:true,
+                                                            message:`请输入工序${index+1}`
+                                                        }]}>
                                                             <Input maxLength={2} placeholder="请输入"/>
                                                         </Form.Item>
                                                     </Col>
@@ -244,11 +305,11 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                     </Form.List> 
                                 </Row>
                                 <Space>
-                                    {workmanship.length-1===index && <Button type='primary' onClick={()=>{
+                                    {workmanship.length-1===index && edit!=='编辑' &&<Button type='primary' onClick={()=>{
                                         const value = form.getFieldsValue(true).craftNameDTOS
                                         console.log(value)
                                         value.push({
-                                            segmentName:'',
+                                            craftName:'',
                                             workProList:[{}]
                                         })
                                         form.setFieldsValue({

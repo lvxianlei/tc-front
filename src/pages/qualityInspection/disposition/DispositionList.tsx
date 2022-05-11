@@ -29,88 +29,88 @@
              render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
          },
          {
-             key: 'taskNum',
+             key: 'reworkNum',
              title: '处置单单号',
              width: 150,
-             dataIndex: 'taskNum'
+             dataIndex: 'reworkNum'
          },
          {
-             key: 'planNumber',
+             key: 'createTime',
              title: '开单日期',
              width: 150,
-             dataIndex: 'planNumber'
+             dataIndex: 'createTime'
          },
          {
-             key: 'internalNumber',
+             key: 'linkName',
              title: '生产环节',
-             dataIndex: 'internalNumber',
+             dataIndex: 'linkName',
              width: 120
          },
          {
-             key: 'name',
+             key: 'planNumber',
              title: '计划号',
              width: 200,
-             dataIndex: 'name'
+             dataIndex: 'planNumber'
          },
          {
-             key: 'num',
+             key: 'issuedNumber',
              title: '生产下达单号',
              width: 150,
-             dataIndex: 'num',
+             dataIndex: 'issuedNumber',
          },
          {
-             key: 'voltageGradeName',
+             key: 'materialName',
              title: '产品类型',
              width: 150,
-             dataIndex: 'voltageGradeName',
+             dataIndex: 'materialName',
          },
          {
-             key: 'plannedDeliveryTime',
+             key: 'projectName',
              title: '工程名称',
-             dataIndex: 'plannedDeliveryTime',
+             dataIndex: 'projectName',
              width: 200,
          },
          {
-             key: 'patternName',
+             key: 'productCategory',
              title: '塔型',
              width: 200,
-             dataIndex: 'patternName'
+             dataIndex: 'productCategory'
          },
          {
-             key: 'loftingLeaderName',
+             key: 'workPro',
              title: '责任工序',
              width: 200,
-             dataIndex: 'loftingLeaderName'
+             dataIndex: 'workPro'
          },
          {
-             key: 'statusName',
+             key: 'workUnit',
              title: '生产单元',
              width: 200,
-             dataIndex: 'statusName'
+             dataIndex: 'workUnit'
          },
          {
-             key: 'updateStatusTime',
+             key: 'responsibleTeamName',
              title: '责任班组',
              width: 200,
-             dataIndex: 'updateStatusTime'
+             dataIndex: 'responsibleTeamName'
          },
          {
-             key: 'updateStatusTime',
+             key: 'responsibleUser',
              title: '责任人',
              width: 200,
-             dataIndex: 'updateStatusTime'
+             dataIndex: 'responsibleUser'
          },
          {
-             key: 'updateStatusTime',
+             key: 'processTypeName',
              title: '处理类型',
              width: 200,
-             dataIndex: 'updateStatusTime'
+             dataIndex: 'processTypeName'
          },
          {
-             key: 'updateStatusTime',
+             key: 'createUserName',
              title: '质检员',
              width: 200,
-             dataIndex: 'updateStatusTime'
+             dataIndex: 'createUserName'
          },
          {
              key: 'operation',
@@ -189,6 +189,7 @@
                      children: <Input placeholder="请输入" />
                  }
              ]}
+             requestData={{approveStatus:2}}
              onFilterSubmit={(values: Record<string, any>) => {
                  if (values.updateStatusTime) {
                      const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));

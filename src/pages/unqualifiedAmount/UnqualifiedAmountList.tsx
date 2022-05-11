@@ -114,7 +114,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                     <Button type='link' onClick={() => { 
                         setEditValue(record)
                         setEdit('编辑') 
-                        setLock('解锁')
+                        setLock(record?.locking===2?'解锁':'锁定')
                         form.setFieldsValue({
                             ...record
                         })
@@ -125,13 +125,14 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         onConfirm={() => {
                             RequestUtil.delete(`/tower-quality/projectAllocation/${record.id}`).then(res => {
                                 setRefresh(!refresh);
+                                history.go(0)
                             });
                         }}
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.state === 1}
+                        disabled={record?.locking !== 1}
                     >
-                        <Button type="link" disabled={record.state === 1}>删除</Button>
+                        <Button type="link" disabled={record?.locking !== 1}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -144,19 +145,13 @@ export default function UnqualifiedAmountList(): React.ReactNode {
     const onSubmit = async ()=> {
         await form.validateFields();
         const value = form.getFieldsValue(true)
-        if(edit==='编辑'){
-            RequestUtil.put(``,)
-            message.success(`编辑成功！`)
-            setVisible(false)
-            form.resetFields()
-            setRefresh(!refresh)
-        }else{
-            RequestUtil.put(``,)
-            message.success(`新增成功！`)
-            setVisible(false)
-            form.resetFields()
-            setRefresh(!refresh)
+        const submitData = {
+            ...value,
+            id: edit==='编辑'?editValue.id:'',
+            locking: lock==='解锁'?2:1
         }
+        await RequestUtil.post(`/tower-quality/projectAllocation`,submitData)
+        message.success(`保存成功！`)
     }
 
     const formItemLayout = {
@@ -231,20 +226,43 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         await form.validateFields();
                         const value = form.getFieldsValue(true)
                         if(edit==='添加'&& lock==='锁定'){
-                            await RequestUtil.post(`/tower-quality/projectAllocation`,value)
+                            const submitData ={
+                                ...value,
+                                locking: 2
+                            }
+                            await RequestUtil.post(`/tower-quality/projectAllocation`,submitData)
                             message.success(`锁定成功！`)
                             setVisible(false)
                             form.resetFields()
-                            // history.go(0)
+                            history.go(0)
+                        }else if(edit==='编辑' && lock==='锁定'){
+                            const submitData = {
+                                ...value,
+                                id: edit==='编辑'?editValue.id:'',
+                                locking: 2
+                            }
+                            await RequestUtil.post(`/tower-quality/projectAllocation`,submitData)
+                            message.success(`锁定成功！`)
+                            setVisible(false)
+                            form.resetFields()
+                            history.go(0)
                         }else{
-                            setLock('解锁')
+                            setLock('锁定')
+                            const submitData = {
+                                ...value,
+                                id: edit==='编辑'?editValue.id:'',
+                                locking: 1
+                            }
+                            await RequestUtil.post(`/tower-quality/projectAllocation`,submitData)
+                            message.success(`解锁成功！`)
                         }
-                        
+                       
                     }}>{lock}</Button>
                     {/* {<Button type='primary' onClick={onSubmit}>解锁</Button>} */}
                     <Button onClick={()=>{
                         setVisible(false)
                         edit==='编辑'&& setEdit(`添加`)
+                        edit==='编辑'&& lock === '锁定'&& history.go(0)
                         form.resetFields()
                     }}>关闭</Button>
                 </Space>
