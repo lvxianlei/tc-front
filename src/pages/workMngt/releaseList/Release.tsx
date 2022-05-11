@@ -189,7 +189,7 @@ export default function Release(): React.ReactNode {
                     <DetailTitle title='基础信息'/>
                     <CommonTable columns={[
                             {
-                                title: "塔形",
+                                title: "塔型",
                                 dataIndex: "name",
                                 width: 50,
                             },
