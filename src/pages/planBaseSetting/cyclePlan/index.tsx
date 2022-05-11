@@ -9,7 +9,9 @@ export default () => {
     const history = useHistory()
     const [isAdd, setIsAdd] = useState<boolean>(false)
     const [refresh, setRefresh] = useState<boolean>(false)
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
+        status:1
+    });
     const [form] = Form.useForm();
     const [cyclePlanType,setCyclePlanType] = useState<any[]>([]);
     const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
@@ -193,10 +195,12 @@ export default () => {
                 {
                     name: "status",
                     label: "周期计划状态",
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                        <Select.Option value={1}>未下发</Select.Option>
-                        <Select.Option value={2}>已下发</Select.Option>
-                    </Select>
+                    children: <Form.Item name='status' initialValue={1}>
+                        <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                            <Select.Option value={1}>未下发</Select.Option>
+                            <Select.Option value={2}>已下发</Select.Option>
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: "startDate",
@@ -223,6 +227,7 @@ export default () => {
                     values.completedEndTime = formatDate[1] + ' 23:59:59';
                     delete values.endDate
                 }
+                setFilterValue(values)
                 return values;
             }}
         />
