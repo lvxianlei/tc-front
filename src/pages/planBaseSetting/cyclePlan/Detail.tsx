@@ -346,7 +346,11 @@ export default function CyclePlanDetail(): React.ReactNode {
                         </Col>
                         <Col span={12}>
                             <Form.Item name="status" label="备料状态" >
-                                <Input maxLength={100} disabled/>
+                                <Select placeholder="请选择" style={{ width: "100%" }} disabled>
+                                    <Select.Option value={1} key="1">未下发</Select.Option>
+                                    <Select.Option value={2} key="2">已下发</Select.Option>
+                                    <Select.Option value={3} key="3">已反馈</Select.Option>
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>
