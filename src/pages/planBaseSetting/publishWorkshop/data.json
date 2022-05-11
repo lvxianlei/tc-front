@@ -100,7 +100,7 @@
         },
         {
             "title": "调整后加工车间",
-            "dataIndex": "newWeldingWorkshop",
+            "dataIndex": "newProcessWorkshop",
             "width": 200
         }
     ],
@@ -176,7 +176,7 @@
             }
         },
         {
-            "title": "调整后加工车间",
+            "title": "调整后组焊车间",
             "dataIndex": "newWeldingWorkshop",
             "width": 100,
             "features": {

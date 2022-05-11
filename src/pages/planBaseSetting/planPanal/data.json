@@ -96,7 +96,7 @@
         },
         {
             "title": "计划完成日期",
-            "code": "loftingCompleteTime"
+            "code": "planCompleteTime"
         },
         {
             "title": "实际完成日期",

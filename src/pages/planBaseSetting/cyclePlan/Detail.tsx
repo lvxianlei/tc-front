@@ -290,7 +290,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                         await run()
                     }}>保存</Button>
                     <Button type="primary" ghost onClick={async () => {
-                            await RequestUtil.get(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
+                            await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
                     }}>备料确认</Button>
