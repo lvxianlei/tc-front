@@ -13,11 +13,11 @@ import useRequest from '@ahooksjs/use-request';
 
 const specialColums = [
     {
-        "dataIndex": "materialSandard",
+        "dataIndex": "issuedNumber",
         "title": "处置单单号"
     },
     {
-        "dataIndex": "materialDemand",
+        "dataIndex": "checkDate",
         "title": "开单日期"
     },
     {
@@ -25,11 +25,11 @@ const specialColums = [
         "title": "发现环节"
     },
     {
-        "dataIndex": "packDemand",
+        "dataIndex": "planNumber",
         "title": "计划号"
     },
     {
-        "dataIndex": "galvanizeDemand",
+        "dataIndex": "issuedNumber",
         "title": "生产下达单号"
     },
     {
@@ -43,33 +43,28 @@ const specialColums = [
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "productCategory",
         "title": "塔型",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "workPro",
         "title": "责任工序",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "workUnit",
         "title": "生产单元",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "responsibleTeamName",
         "title": "责任班组",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "responsibleUser",
         "title": "责任人",
-        "type": "textarea"
-    },
-    {
-        "dataIndex": "description",
-        "title": "处理类型",
         "type": "textarea"
     },
     {
@@ -78,47 +73,47 @@ const specialColums = [
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "pieceCode",
         "title": "构件号",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "processTypeName",
         "title": "处理类型",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "checkDate",
         "title": "检测时间",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "recheckUnqualifiedNum",
         "title": "数量",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "fineMoney",
         "title": "罚款金额",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "unqualifiedProject",
         "title": "不合格检测项",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "recheckStatusName",
         "title": "复检结果",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "questionDesc",
         "title": "问题描述",
         "type": "textarea"
     },
     {
-        "dataIndex": "description",
+        "dataIndex": "handleDesc",
         "title": "处理建议",
         "type": "textarea"
     }
