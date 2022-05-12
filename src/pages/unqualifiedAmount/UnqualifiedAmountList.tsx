@@ -281,7 +281,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         <Form.Item name="workPro" label="责任工序" >
                             <Select style={{ width: '100%' }} disabled={lock==='解锁'}>
                               { workPro && workPro.map(({ id, workPro }, index) => {
-                                  return <Select.Option key={ index } value={ id }>
+                                  return <Select.Option key={ index } value={ workPro }>
                                       { workPro }
                                   </Select.Option>
                               }) }
