@@ -273,7 +273,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                             required:true,
                                             message:'请输入工艺'
                                         }]}>
-                                            <Input maxLength={2} placeholder="请输入"  />
+                                            <Input  placeholder="请输入"  />
                                         </Form.Item>
                                     </Col>
                                 </Row>
