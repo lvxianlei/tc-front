@@ -293,7 +293,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                             await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
-                    }} disabled={detail?.status===2}>备料确认</Button>
+                    }} disabled={detail?.materialStatus===2}>备料确认</Button>
                     <Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
@@ -344,7 +344,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="status" label="备料状态" >
+                            <Form.Item name="materialStatus" label="备料状态" >
                                 <Select placeholder="请选择" style={{ width: "100%" }} disabled>
                                     <Select.Option value={1} key="1">未下发</Select.Option>
                                     <Select.Option value={2} key="2">已下发</Select.Option>
