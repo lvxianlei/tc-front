@@ -183,12 +183,14 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         const value = form.getFieldsValue(true)
                         if(edit==='编辑'){
                             const submitData = {
-                                craftNameDTOS: value?.craftNameDTOS.map((item:any)=>{
-                                    return {
-                                        ...item,
-                                        workProList: item?.workProList
-                                    }
-                                }),
+                                // craftNameDTOS: value?.craftNameDTOS.map((item:any)=>{
+                                //     return {
+                                //         ...item,
+                                //         workProList: item?.workProList
+                                //     }
+                                // }),
+                                craftName: value?.craftNameDTOS[0]?.craftName,
+                                workProList: value?.craftNameDTOS[0]?.workProList,
                                 workUnit: value?.unit.split(',')[1],
                                 workUnitId: value?.unit.split(',')[0],
                                 linkName: value?.link.split(',')[1],
@@ -286,7 +288,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                                             required:true,
                                                             message:`请输入工序${index+1}`
                                                         }]}>
-                                                            <Input maxLength={2} placeholder="请输入"/>
+                                                            <Input  placeholder="请输入"/>
                                                         </Form.Item>
                                                     </Col>
                                                     

@@ -24,11 +24,13 @@ export default function UnqualifiedAmountList(): React.ReactNode {
     const [form] = Form.useForm();
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-quality/projectAllocation`);
+        const res = new Map();
+        const value = data.length>0?data?.filter((item:any) => !res.has(item?.unProject) && res.set(item?.unProject, 1)):[]
         const workPro: any = await RequestUtil.get(`/tower-quality/workAllocation/list`);
         setWorkPro(workPro)
-        resole(data)
+        resole(value)
     }), {})
-    const unProject: any = data?.records || [];
+    const unProject: any = data || [];
     const columns = [
         // {
         //     key: 'index',
@@ -262,8 +264,9 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                     <Button onClick={()=>{
                         setVisible(false)
                         edit==='编辑'&& setEdit(`添加`)
-                        // edit==='编辑'&& lock === '锁定'&& history.go(0)
+                        // edit==='编辑'&& lock === '锁定'&& 
                         form.resetFields()
+                        history.go(0)
                     }}>关闭</Button>
                 </Space>
             }
@@ -271,6 +274,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                 setVisible(false)
                 edit==='编辑'&& setEdit(`添加`)
                 form.resetFields()
+                history.go(0)
             }}  width={ 800 }
         >
                 <Form form={form} {...formItemLayout}>
