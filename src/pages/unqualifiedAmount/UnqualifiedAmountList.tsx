@@ -262,8 +262,9 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                     <Button onClick={()=>{
                         setVisible(false)
                         edit==='编辑'&& setEdit(`添加`)
-                        // edit==='编辑'&& lock === '锁定'&& history.go(0)
+                        // edit==='编辑'&& lock === '锁定'&& 
                         form.resetFields()
+                        history.go(0)
                     }}>关闭</Button>
                 </Space>
             }
@@ -271,6 +272,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                 setVisible(false)
                 edit==='编辑'&& setEdit(`添加`)
                 form.resetFields()
+                history.go(0)
             }}  width={ 800 }
         >
                 <Form form={form} {...formItemLayout}>
