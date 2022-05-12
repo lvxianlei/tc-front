@@ -1073,6 +1073,16 @@
                         "label": "计划看板配置管理",
                         "path": "/workshopPlanBasic/kanBanPlanConfig",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "生产单元分组管理",
+                        "path": "/workshopPlanBasic/workUnit",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "组焊单元配置管理",
+                        "path": "/workshopPlanBasic/assemblyWeld",
+                        "authority": "approvalm"
                     }
                 ]
             },
