@@ -218,7 +218,7 @@ export default function StaffNew(): React.ReactNode {
             dataIndex: 'businessWxUserId',
             width: 150,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["list", index, "number"]} key={index} initialValue={_}>
+                <Form.Item name={["list", index, "businessWxUserId"]} key={index} initialValue={_}>
                     <Input maxLength={50} />
                 </Form.Item>
             )

@@ -86,8 +86,8 @@ export default function Invoicing() {
                     <Input />
                 </Form.Item>
                 <Form.Item rules={[
-                    { required: true, message: "请输入塔形..." }
-                ]} name="productCategoryName" label="塔形">
+                    { required: true, message: "请输入塔型..." }
+                ]} name="productCategoryName" label="塔型">
                     <Input />
                 </Form.Item>
             </Form>
