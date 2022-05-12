@@ -33,7 +33,6 @@ export default function CyclePlanDetail(): React.ReactNode {
         form.setFieldsValue({
             ...data,
             date:[moment(data?.startTime),moment(data?.endTime)],
-            status: data?.status===1?'未下发':data?.status===2?'已下发':data?.status===3?'已反馈':"-"
 
         })
         resole(data)
@@ -190,8 +189,9 @@ export default function CyclePlanDetail(): React.ReactNode {
                     }}
                     okText="确认"
                     cancelText="取消"
+                    disabled={record?.status===2}
                 >
-                    <Button type="link" >删除</Button>
+                    <Button type="link" disabled={record?.status===2}>删除</Button>
                 </Popconfirm>
         }
     ]
@@ -293,7 +293,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                             await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
-                    }}>备料确认</Button>
+                    }} disabled={detail?.materialStatus===2}>备料确认</Button>
                     <Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
@@ -344,8 +344,12 @@ export default function CyclePlanDetail(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col span={12}>
-                            <Form.Item name="status" label="备料状态" >
-                                <Input maxLength={100} disabled/>
+                            <Form.Item name="materialStatus" label="备料状态" >
+                                <Select placeholder="请选择" style={{ width: "100%" }} disabled>
+                                    <Select.Option value={1} key="1">未下发</Select.Option>
+                                    <Select.Option value={2} key="2">已下发</Select.Option>
+                                    <Select.Option value={3} key="3">已反馈</Select.Option>
+                                </Select>
                             </Form.Item>
                         </Col>
                     </Row>

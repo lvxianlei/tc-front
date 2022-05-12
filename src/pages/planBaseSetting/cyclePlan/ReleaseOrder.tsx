@@ -234,7 +234,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         children: <Input placeholder="请输入塔型" style={{ width: 150 }} />
                     },
                     {
-                        name: "issuedNumber",
+                        name: "issueNumber",
                         label: "下达单号",
                         children: <Input placeholder="请输入下达单号" style={{ width: 150 }} />
                     },
