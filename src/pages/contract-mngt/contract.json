@@ -21,6 +21,10 @@
             "dataIndex": "signingTime"
         },
         {
+            "title": "交货时间",
+            "dataIndex": "arrivalTime"
+        },
+        {
             "title": "经办人",
             "dataIndex": "operatorName"
         },
@@ -396,6 +400,17 @@
             ]
         },
         {
+            "title": "交货时间",
+            "dataIndex": "arrivalTime",
+            "type": "date",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择交货时间..."
+                }
+            ]
+        },
+        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
@@ -491,6 +506,11 @@
             "title": "运输方式",
             "dataIndex": "transportMethod",
             "type": "select"
+        },
+        {
+            "title": "交货时间",
+            "dataIndex": "arrivalTime",
+            "type": "date"
         },
         {
             "title": "备注",
