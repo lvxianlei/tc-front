@@ -30,6 +30,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
     const { loading, run, data } = useRequest(() => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.get(`/tower-supply/materialConfirm/issuedNumber/${props.batcherId}`)
+            setTextValue((result as any)?.description || "");
             resolve(result || {});
         } catch (error) {
             reject(error)
@@ -38,7 +39,6 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
 
     // 确认反馈
     const { loading: materialConfirmLoding, run: materialConfirmRun } = useRequest(() => new Promise(async (resolve, reject) => {
-        console.log(textValue, "textValue")
         try {
             const v = {
                 description: textValue,

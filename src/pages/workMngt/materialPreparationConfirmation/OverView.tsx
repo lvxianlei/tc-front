@@ -35,7 +35,6 @@ export default function OverViewDetail(props: Details): JSX.Element {
 
     // 返回
     const backClick = () => {
-        console.log("==========>>>")
         if ((data as any).length < 1) {
             props?.handleCallBack();
             return false;
@@ -48,6 +47,33 @@ export default function OverViewDetail(props: Details): JSX.Element {
         }
         if (flag) {
             props?.handleCallBack();
+            return false;
+        }
+        Modal.confirm({
+            title: '反馈提醒',
+            content: "所有下达单均已反馈，是否进行确认反馈？",
+            onOk() {
+                materialConfirmRun();
+            },
+            onCancel() {
+                props?.handleCallBack();
+            },
+        });
+    }
+
+    const sureClick = () => {
+        if ((data as any).length < 1) {
+            message.error("暂无反馈项！")
+            return false;
+        }
+        let flag = false;
+        for (let i = 0; i < (data as any).length; i += 1) {
+            if ((data as any)[i].feedStatus != 2) {
+                flag = true;
+            }
+        }
+        if (flag) {
+            message.error("请全部反馈后进行确认反馈！")
             return false;
         }
         Modal.confirm({
@@ -103,7 +129,7 @@ export default function OverViewDetail(props: Details): JSX.Element {
                         返回
                     </Button>,
                     <Button type="primary" onClick={() => {
-                        materialConfirmRun();
+                        sureClick();
                     }}>
                         确认反馈
                     </Button>]

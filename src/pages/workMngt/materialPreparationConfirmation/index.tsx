@@ -44,6 +44,7 @@ export default function EnquiryList(): React.ReactNode {
     // 关闭回调
     const handleCallBack = () => {
         setVisible(false);
+        history.go(0);
     }
 
     return <>
