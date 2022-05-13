@@ -140,6 +140,7 @@ export default function ContractMngt(): JSX.Element {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
+                                    style={{padding: "0px"}}
                                     disabled={records.isReceiptRef === 1}
                                 >删除</Button>
                             </Popconfirm>
