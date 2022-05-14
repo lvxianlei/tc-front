@@ -71,7 +71,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...baseColumn,
+                    ...(baseColumn as any),
                     {
                         title: '操作',
                         dataIndex: 'key',
@@ -79,7 +79,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
-                                <Link className='btn-operation-link' to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>详情</Link>
+                                <Link className='btn-operation-link' to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>明细</Link>
                                 <Button className='btn-operation-link' type="link" onClick={() => {
                                     setVisible(true);
                                     setId(record.id);
@@ -88,8 +88,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     }
                 ]}
-                onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
+                onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
                         name: 'startRefundTime',

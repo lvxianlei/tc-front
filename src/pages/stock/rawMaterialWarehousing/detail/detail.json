@@ -1,13 +1,23 @@
 {
     "baseColumn": [
         {
-            "title": "材质名称",
+            "title": "收货状态---新增",
+            "dataIndex": "materialName",
+            "width": 120
+        },
+        {
+            "title": "品名--新增",
             "dataIndex": "materialName",
             "width": 120
         },
         {
             "title": "标准",
             "dataIndex": "standardName",
+            "width": 120
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialName",
             "width": 120
         },
         {
@@ -36,60 +46,27 @@
             "width": 120
         },
         {
-            "title": "合同单价(元/吨)",
-            "dataIndex": "contractUnitPrice",
-            "width": 120
-        },
-        {
-            "title": "价税合计(元)",
-            "dataIndex": "price",
-            "width": 120
-        },
-        {
             "title": "重量(吨)",
             "dataIndex": "weight",
             "width": 120
         },
         {
-            "title": "采购状态",
-            "dataIndex": "receiveDetailStatusName",
+            "title": "供应商--新增",
+            "dataIndex": "weight",
+            "width": 120
+        },
+        
+        {
+            "title": "到货日期--新增",
+            "dataIndex": "weight",
             "width": 120
         },
         {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
-            "width": 120
-        },
-        {
-            "title": "操作人",
-            "dataIndex": "operatorMan",
-            "width": 120
-        },
-        {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber",
-            "width": 120
-        },
-        {
-            "title": "批号",
-            "dataIndex": "batchNumber",
-            "width": 120
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber",
-            "width": 120
-        },
-        {
-            "title": "轧制批号",
-            "dataIndex": "rollingNumber",
-            "width": 120
-        },
-        {
-            "title": "仓库",
+            "title": "所在仓库",
             "dataIndex": "warehouse",
             "width": 120
         },
+        
         {
             "title": "库区",
             "dataIndex": "reservoirArea",
@@ -101,18 +78,13 @@
             "width": 120
         },
         {
-            "title": "收货批次",
-            "dataIndex": "receiveBatchNumber",
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
             "width": 120
         },
         {
-            "title": "备注",
-            "dataIndex": "remark",
-            "width": 120
-        },
-        {
-            "title": "拒收原因",
-            "dataIndex": "refuseDes",
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
             "width": 120
         }
     ]

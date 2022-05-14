@@ -11,7 +11,7 @@
             "width": 120
         },
         {
-            "title": "车牌号",
+            "title": "结算方式---新增",
             "dataIndex": "carNumber",
             "width": 120
         },
@@ -47,7 +47,7 @@
             "width": 120
         },
         {
-            "title": "约定到货时间",
+            "title": "到货时间",
             "dataIndex": "receiveTime",
             "width": 120
         },

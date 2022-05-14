@@ -777,7 +777,7 @@
       "authority": "inventory_management_warehousing"
     },
     { // 库存管理-原材料入库-详情
-      "name": "原材料入库详情",
+      "name": "原材料入库明细",
       "path": "/stock/rawMaterialWarehousing/detail/:id",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
@@ -822,6 +822,13 @@
       "name": "安全库存配置",
       "path": "/config/configList/securitySetting",
       "module": "./pages/stock/securitySetting/securitySetting",
+      "exact": true,
+      "authority": "sw_configuration_management_safety_stock_configuration"
+    },
+    { // 配置管理-税率参数配置
+      "name": "税率参数配置",
+      "path": "/config/configList/taxRate",
+      "module": "./pages/stock/taxRate",
       "exact": true,
       "authority": "sw_configuration_management_safety_stock_configuration"
     },

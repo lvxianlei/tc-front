@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -82,7 +82,7 @@ export default function Invoicing() {
                         width: 40,
                         render: (_: any, _a: any, index: number) => <>{index + 1}</>
                     },
-                    ...baseInfoList.map(item => {
+                    ...baseInfoList.map((item: any) => {
                         switch (item.dataIndex) {
                             case "roundSteelTotal":
                                 return ({ ...item, render: (_: any, record: any) => `${record.roundSteelArrival} / ${record.roundSteelTotal}` })
@@ -98,7 +98,7 @@ export default function Invoicing() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 100,
+                        width: 300,
                         render: (_: any, record: any) => {
                             return <>
                                 <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link>

@@ -1,0 +1,16 @@
+{
+    "baseColumn": [
+        {
+            "title": "名称",
+            "dataIndex": "receiveNumber"
+        },
+        {
+            "title": "参数",
+            "dataIndex": "paperNumber"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "carNumber"
+        }
+    ]
+}
