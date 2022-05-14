@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 // 引入编辑采购计划
 import EditPurchasePlan from './EditPurchasePlan';
+import CreatePlan from "./CreatePlan";
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -21,6 +22,7 @@ export default function Invoicing() {
         purchaserId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     })
     const [id, setId] = useState<string>();
+    const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
@@ -70,6 +72,11 @@ export default function Invoicing() {
         }
     })
 
+    // 创建采购计划关闭
+    const handleCreate = () => {
+        setIsOpenId(false);
+    }
+
     return (
         <>
             <Page
@@ -112,7 +119,7 @@ export default function Invoicing() {
                         }
                     }]}
                 extraOperation={<>
-                    <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
+                    <Button type="primary" ghost onClick={() => setIsOpenId(true)}>创建采购计划</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
@@ -171,6 +178,10 @@ export default function Invoicing() {
             >
                 <EditPurchasePlan ref={addRef} id={id} />
             </Modal>
+            <CreatePlan
+                visible={isOpenId}
+                handleCreate={handleCreate}
+            />
         </>
     )
 }

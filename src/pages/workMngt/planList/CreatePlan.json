@@ -1,0 +1,52 @@
+{
+    "applicationdetails": [
+        {
+            "title": "品名",
+            "dataIndex": "productCategoryName",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "productNum",
+            "type": "select",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "purchaseNumber",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "angleSteelTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "steelPlateTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "string"
+        }
+    ]
+}
