@@ -446,7 +446,7 @@
     },
     { // 编辑开票申请
       "name": "编辑开票申请",
-      "path": "/project/billList/invoicing/edit/:id",
+      "path": "/project/invoicing/edit/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,
       "authority": "project"
