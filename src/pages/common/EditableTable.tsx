@@ -108,7 +108,7 @@ export default function EditableTable({
         form={form}
         onValuesChange={onFormChange}
     >
-        <Space size={16} style={{ height: 32, margin: "0 16px 16px 0" }}>{haveNewButton && <Button
+        {(haveNewButton || opration) && <Space size={16} style={{ height: 32, margin: "0 16px 16px 0" }}>{haveNewButton && <Button
             onClick={async () => {
                 try {
                     form && await form.validateFields();
@@ -122,7 +122,7 @@ export default function EditableTable({
             type="primary"
         >{newButtonTitle}</Button>}
             {opration}
-        </Space>
+        </Space>}
         <AliTable
             size="small"
             className="edit"

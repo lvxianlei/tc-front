@@ -446,7 +446,7 @@
     },
     { // 编辑开票申请
       "name": "编辑开票申请",
-      "path": "/project/billList/invoicing/edit/:id",
+      "path": "/project/invoicing/edit/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,
       "authority": "project"
@@ -1051,21 +1051,21 @@
     },
     { // 工作管理-收货列表
       "name": "收货列表",
-      "path": "/ingredients/receiving",
+      "path": "/stock/receiving",
       "module": "./pages/workMngt/receivingList/index",
       "exact": true,
       "authority": "work_management_receiving_list"
     },
     { // 工作管理-收获列表-详情
       "name": "收货列表明细",
-      "path": "/ingredients/receiving/detail/:id",
+      "path": "/stock/receiving/detail/:id",
       "module": "./pages/workMngt/receivingList/Overview",
       "exact": true,
       "authority": "sw_work_management_receiving_list_details"
     },
     { // 工作管理-收获列表-编辑
       "name": "收货列表编辑",
-      "path": "/ingredients/receiving/edit/:id",
+      "path": "/stock/receiving/edit/:id",
       "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
       "authority": "sw_work_management_receiving_list_edits"
