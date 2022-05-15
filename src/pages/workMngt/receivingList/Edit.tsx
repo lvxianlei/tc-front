@@ -1,11 +1,11 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
 import { Button, Form, message, Spin, Modal, InputNumber, Row, Col, Input, Select } from 'antd'
-import { DetailTitle, BaseInfo, CommonTable, formatData } from '../../common'
+import { DetailTitle, BaseInfo, CommonTable, formatData, EditableTable } from '../../common'
 import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { materialStandardTypeOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
-import { changeTwoDecimal_f, doNumber } from "../../../utils/KeepDecimals";
+import { materialStandardTypeOptions, materialTextureOptions, unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
+import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
 interface ChooseModalProps {
     id: string,
     initChooseList: any[],
@@ -130,6 +130,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
     }
 
     const handleModalOk = () => oprationType === "select" ? handleSelect(currentId) : handleRemove(currentId)
+
     useImperativeHandle(ref, () => ({ dataSource: chooseList, resetFields }), [ref, JSON.stringify(chooseList), resetFields])
 
     // 模糊搜索
@@ -215,6 +216,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             setSelectList(waitingArea.slice(0));
         }
     }
+
     return <Spin spinning={loading}>
         <Modal title="选定数量"
             visible={visible}
@@ -358,14 +360,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [cargoData, setCargoData] = useState<any[]>([])
     const [contractId, setContractId] = useState<string>("")
     let [number, setNumber] = useState<number>(0);
-    const [columns, setColumns] = useState<object[]>(BasicInformation.map(item => {
-        if (["contractNumber", "supplierName"].includes(item.dataIndex)) {
-            return ({ ...item, disabled: type === "edit" })
-        }
-        return item
-    }))
     const [form] = Form.useForm()
-
+    const [editForm] = Form.useForm()
+    const { loading: warehouseLoading, data: warehouseData } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get("/tower-storage/warehouse/getWarehouses")
+            resole(result?.map((item: any) => ({ value: item.id, label: item.name })))
+        } catch (error) {
+            reject(error)
+        }
+    }))
     // 运费信息
     const [freightInformation, setFreightInformation] = useState<Freight>({
         transportBear: "",
@@ -385,7 +389,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         let quantity: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
-            console.log(item, "============>>>>")
             const postData = {
                 ...item,
                 id: item.id || item.id,
@@ -438,13 +441,28 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         })
     }
 
+
+
+    const { loading: supplierLoading, data: supplierData, run: getSupplier } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-supply/supplier/${id}`)
+            resole(result?.map((item: any) => ({ value: item.id, label: item.name })))
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
             form.setFieldsValue({
                 ...formatData(BasicInformation, result),
                 supplierName: { id: result.supplierId, value: result.supplierName },
-                contractNumber: { id: result.contractId, value: result.contractNumber }
+                contractNumber: { id: result.contractId, value: result.contractNumber },
+                unloadUsersName: {
+                    value: result.unloadUsersName,
+                    records: result.unloadUsers.split(",").map((id: any) => ({ id }))
+                }
             })
             let v = [];
             if (result.lists) {
@@ -516,7 +534,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
 
-    const handleBaseInfoChange = (fields: any) => {
+    const handleBaseInfoChange = async (fields: any) => {
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
 
@@ -548,26 +566,26 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setCargoData([])
             modalRef.current?.resetFields()
         }
-        if (fields.supplierName) {
-            const supplierData = fields.supplierName.records[0]
-            setColumns(columns.map((item: any) => {
-                if (item.dataIndex === "contractNumber") {
-                    return ({
-                        ...item,
-                        path: `/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
-                    })
-                }
-                return item
-            }))
-            form.setFieldsValue({
-                contractNumber: "",
-                contactsUser: supplierData.contactMan,
-                contactsPhone: supplierData.contactManTel
-            })
-        }
+        // if (fields.supplierName) {
+        //     const supplierData = fields.supplierName.records[0]
+        //     setColumns(columns.map((item: any) => {
+        //         if (item.dataIndex === "contractNumber") {
+        //             return ({
+        //                 ...item,
+        //                 path: `/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
+        //             })
+        //         }
+        //         return item
+        //     }))
+        //     form.setFieldsValue({
+        //         contractNumber: "",
+        //         contactsUser: supplierData.contactMan,
+        //         contactsPhone: supplierData.contactManTel
+        //     })
+        // }
     }
 
-    return <Spin spinning={loading}>
+    return <Spin spinning={loading && warehouseLoading}>
         <Modal
             width={1011}
             visible={visible}
@@ -583,20 +601,42 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         </Modal>
         <DetailTitle title="收货单基础信息" />
         <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={
-            columns.map((item: any) => {
-                if (item.dataIndex === "paperNumber") {
-                    return ({
-                        ...item,
-                        maxLength: 20,
-                        rules: [
-                            {
-                                pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
-                                message: "请输入正确的纸质单号"
-                            }
-                        ]
-                    })
+            BasicInformation.map(item => {
+                switch (item.dataIndex) {
+                    case "paperNumber":
+                        return ({
+                            ...item,
+                            maxLength: 20,
+                            rules: [
+                                {
+                                    pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
+                                    message: "请输入正确的纸质单号"
+                                }
+                            ]
+                        })
+                    case "contractNumber":
+                        return ({
+                            ...item,
+                            disabled: type === "edit"
+                        })
+                    case "unloadMode":
+                        return ({
+                            ...item,
+                            enum: unloadModeOptions?.map((item: any) => ({ value: item.id, label: item.name }))
+                        })
+                    case "settlementMode":
+                        return ({
+                            ...item,
+                            enum: settlementModeOptions?.map((item: any) => ({ value: item.id, label: item.name }))
+                        })
+                    case "warehouseId":
+                        return ({
+                            ...item,
+                            enum: warehouseData || []
+                        })
+                    default:
+                        return item
                 }
-                return item;
             })
         } dataSource={{}} edit />
         <DetailTitle title="运费信息" />
@@ -612,6 +652,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
                 setVisible(true)
             }}>选择</Button>]} />
-        <CommonTable haveIndex rowKey="id" columns={editCargoDetails} dataSource={cargoData} />
+        <EditableTable
+            haveIndex
+            form={editForm}
+            haveNewButton={false}
+            columns={editCargoDetails}
+            dataSource={cargoData} />
     </Spin>
 })

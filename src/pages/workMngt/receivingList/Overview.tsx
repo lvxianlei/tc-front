@@ -1,5 +1,5 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react"
-import { Button, message, Modal, Form, DatePicker, Select, Spin } from 'antd'
+import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
+import { Button, message, Modal, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, Attachment, AttachmentRef } from '../../common'
 import { CargoDetails } from "./receivingListData.json"
@@ -11,6 +11,7 @@ interface ReceiveStrokAttachProps {
     type: 1 | 2
     id: string
 }
+
 const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, ref): JSX.Element => {
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
@@ -46,18 +47,49 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
     useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
 
     return <Spin spinning={loading}>
-        <Attachment title={false} dataSource={data} edit ref={attachRef} style={{margin: "0px"}} marginTop={false} />
+        <Attachment title={false} dataSource={data} edit ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
     </Spin>
 })
+
 export default function Overview() {
     const receiveRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [selectedRows, setSelectedRows] = useState<any[]>([])
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ receiveStockId: params.id })
     const [attchType, setAttachType] = useState<1 | 2>(1)
     const [detailId, setDetailId] = useState<string>("")
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
+
+    // 批量收货
+    const { loading, run } = useRequest<{ [key: string]: any }>((params: any[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/batchSaveReceiveStock`, params)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    // 收货
+    const { loading: receiveLoading, run: receiveRun } = useRequest<{ [key: string]: any }>((params: any[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/batchSaveReceiveStock`, params)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+    // 拒绝收货
+    const { loading: refuseLoading, run: refuseRun } = useRequest<{ [key: string]: any }>((params: any[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/refuse`, params)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     // 统计数量
     const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -73,6 +105,7 @@ export default function Overview() {
             reject(error)
         }
     }), { refreshDeps: [params.id] })
+
     const handleAttachOk = async () => {
         setSaveLoading(true)
         await receiveRef.current.onSubmit()
@@ -80,6 +113,7 @@ export default function Overview() {
         message.success("保存成功...")
         setVisible(false)
     }
+
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
@@ -92,6 +126,18 @@ export default function Overview() {
         setFilterValue({ ...value, receiveStockId: params.id })
         return value
     }
+
+    const handleSelectChange = (_ids: any, selectedRows: any[]) => setSelectedRows(selectedRows)
+
+    const handleRecive = async () => {
+        await run(selectedRows.map((item: any) => ({
+            id: item.id,
+            locatorId: item.locatorId,
+            reservoirId: item.reservoirId,
+            warehouseId: item.warehouseId
+        })))
+    }
+
     return <DetailContent>
         <Modal
             destroyOnClose
@@ -115,25 +161,31 @@ export default function Overview() {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             searchFormItems={[
-                {
-                    name: 'startStatusUpdateTime',
-                    label: "最新状态变更时间",
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
-                    name: 'receiveDetailStatus',
-                    label: '采购状态',
-                    children: <Form.Item name="receiveDetailStatus">
-                        <Select defaultValue="全部" style={{ width: 150 }}>
-                            <Select.Option value="">全部</Select.Option>
-                            <Select.Option value={0}>待收货</Select.Option>
-                            <Select.Option value={1}>已收货</Select.Option>
-                            <Select.Option value={2}>已拒绝</Select.Option>
-                        </Select>
-                    </Form.Item>
-                }
+                // {
+                //     name: 'startStatusUpdateTime',
+                //     label: "最新状态变更时间",
+                //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                // },
+                // {
+                //     name: 'receiveDetailStatus',
+                //     label: '采购状态',
+                //     children: <Form.Item name="receiveDetailStatus">
+                //         <Select defaultValue="全部" style={{ width: 150 }}>
+                //             <Select.Option value="">全部</Select.Option>
+                //             <Select.Option value={0}>待收货</Select.Option>
+                //             <Select.Option value={1}>已收货</Select.Option>
+                //             <Select.Option value={2}>已拒绝</Select.Option>
+                //         </Select>
+                //     </Form.Item>
+                // }
             ]}
             extraOperation={<>
+                <Button type="primary"
+                    ghost
+                    disabled={!(selectedRows.length > 0)}
+                    loading={loading}
+                    onClick={handleRecive}
+                >批量收货</Button>
                 <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} >申请质检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
@@ -143,9 +195,36 @@ export default function Overview() {
                     价税合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}</span>
                 </span>
             </>}
+            tableProps={{
+                rowSelection: {
+                    selectedRowKeys: selectedRows.map((item: any) => item.id),
+                    onChange: handleSelectChange
+                }
+            }}
             columns={[
                 ...CargoDetails,
                 {
+                    title: "操作",
+                    dataIndex: "opration",
+                    fixed: "right",
+                    width: 100,
+                    render: (_: any, records: any) => <>
+                        <a
+                            style={{ marginRight: 12 }}
+                            onClick={() => {
+                                setAttachType(1)
+                                setDetailId(records.id)
+                                setVisible(true)
+                            }}>收货</a>
+                        <a
+                            style={{ marginRight: 12 }}
+                            onClick={() => { }}
+                        >拒收</a>
+                    </>
+                }
+            ]}
+        />
+        {/* {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
@@ -161,21 +240,7 @@ export default function Overview() {
                             setDetailId(records.id)
                             setVisible(true)
                         }}>质检单</a>
-                        {/* <Button type="link" onClick={() => message.warning("功能开发中...")}>质检单</Button> */}
                     </>
-                }]}
-        />
-        {/* <CommonTable loading={loading} haveIndex columns={[...CargoDetails, {
-            title: "操作",
-            dataIndex: "opration",
-            render: (_: any, records: any) => <>
-                <a style={{marginRight: 12}} onClick={() => {
-                    setAttachType(1)
-                    setDetailId(records.id)
-                    setVisible(true)
-                }}>质保单</a>
-                <Button type="link" onClick={() => message.warning("功能开发中...")}>质检单</Button>
-            </>
-        }]} dataSource={data?.receiveStockDetailPage?.records || []} /> */}
+                } */}
     </DetailContent>
 }
