@@ -68,7 +68,7 @@ export default function Invoicing() {
             reject(false)
         }
     })
-    
+
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -91,7 +91,8 @@ export default function Invoicing() {
             visible={visible}
             width={1011}
             title={type === "new" ? "创建" : "编辑"}
-            onOk={handleModalOk} onCancel={() => {
+            onOk={handleModalOk}
+            onCancel={() => {
                 setVisible(false)
                 editRef.current?.resetFields()
                 setMaterialData({})

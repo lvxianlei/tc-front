@@ -441,12 +441,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         })
     }
 
-
-
-    const { loading: supplierLoading, data: supplierData, run: getSupplier } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
+    const { run: getSupplier } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-supply/supplier/${id}`)
-            resole(result?.map((item: any) => ({ value: item.id, label: item.name })))
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -497,8 +495,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const path: string = type === "new" ? `/tower-storage/receiveStock/receiveStock` : `/tower-storage/receiveStock`
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](path, type === "new" ? data : ({ ...data, id }))
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](
+                `/tower-storage/receiveStock`,
+                type === "new" ? data : ({ ...data, id })
+            )
             resole(result)
         } catch (error) {
             reject(error)
@@ -537,7 +537,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const handleBaseInfoChange = async (fields: any) => {
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
-
+            const supplierData: any = await getSupplier(fields.contractNumber.records[0].supplierId)
             // 设置运费信息以及装卸费信息
             let transportPriceCount = "0",
                 unloadPriceCount = "0",
@@ -565,24 +565,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })
             setCargoData([])
             modalRef.current?.resetFields()
+            form.setFieldsValue({
+                supplierName: supplierData.supplierName,
+                contactsUser: supplierData.contactMan,
+                contactsPhone: supplierData.contactManTel
+            })
         }
-        // if (fields.supplierName) {
-        //     const supplierData = fields.supplierName.records[0]
-        //     setColumns(columns.map((item: any) => {
-        //         if (item.dataIndex === "contractNumber") {
-        //             return ({
-        //                 ...item,
-        //                 path: `/tower-supply/materialContract?contractStatus=1&supplierId=${fields.supplierName.id}`
-        //             })
-        //         }
-        //         return item
-        //     }))
-        //     form.setFieldsValue({
-        //         contractNumber: "",
-        //         contactsUser: supplierData.contactMan,
-        //         contactsPhone: supplierData.contactManTel
-        //     })
-        // }
+    }
+
+    const handleEditableChange = (data: any, allValues: any) => {
+        console.log(data, allValues)
     }
 
     return <Spin spinning={loading && warehouseLoading}>
@@ -600,8 +592,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} numberStatus={number} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
-        <BaseInfo col={2} form={form} onChange={handleBaseInfoChange} columns={
-            BasicInformation.map(item => {
+        <BaseInfo
+            col={2}
+            form={form}
+            edit
+            onChange={handleBaseInfoChange}
+            columns={BasicInformation.map(item => {
                 switch (item.dataIndex) {
                     case "paperNumber":
                         return ({
@@ -637,14 +633,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     default:
                         return item
                 }
-            })
-        } dataSource={{}} edit />
+            })}
+            dataSource={{}} />
         <DetailTitle title="运费信息" />
         <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
         <BaseInfo col={2} columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
-        <DetailTitle title="货物明细" operation={[<Button
-            type="primary" key="choose" ghost
+        <DetailTitle title="货物明细" operation={[<Button type="primary" key="choose" ghost
             onClick={() => {
                 if (!contractId) {
                     message.warning("请先选择合同编号...")
@@ -655,6 +650,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <EditableTable
             haveIndex
             form={editForm}
+            onChange={handleEditableChange}
             haveNewButton={false}
             columns={editCargoDetails}
             dataSource={cargoData} />
