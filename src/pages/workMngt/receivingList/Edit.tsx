@@ -470,11 +470,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
             form.setFieldsValue({
                 ...formatData(BasicInformation, result),
-                supplierName: { id: result.supplierId, value: result.supplierName },
+                supplierName: result.supplierName,
                 contractNumber: { id: result.contractId, value: result.contractNumber },
                 unloadUsersName: {
                     value: result.unloadUsersName,
-                    records: result.unloadUsers.split(",").map((id: any) => ({ id }))
+                    records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
                 }
             })
             let v = [];
@@ -488,7 +488,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             }
 
             setContractId(result?.contractId)
-            setContractId(result?.supplierId)
+            setSupplierId(result?.supplierId)
             setCargoData(v || [])
             // 编辑回显
             setFreightInformation({
@@ -537,7 +537,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 lists: cargoData,
                 quantity: baseFormData.quantity,
                 unloadUsersName: baseFormData.unloadUsersName.value,
-                unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.id).join(","),
+                unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
             })
             resole(true)
         } catch (error) {
@@ -598,11 +598,17 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         if (data.submit[data.submit.length - 1].ponderationWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
             const ponderationWeight = data.submit[data.submit.length - 1]?.ponderationWeight
-            const newFields = allValues.submit.map((item: any, index: number) => index === data.submit.length - 1 ? ({
-                ...item,
-                totalTaxPrice: meteringMode === 2 && ((ponderationWeight * item.quantity) * item.quantity * item.taxPrice).toFixed(2),
-                totalUnTaxPrice: meteringMode === 2 && ((ponderationWeight * item.quantity) * item.quantity * item.price).toFixed(2)
-            }) : item)
+            const newFields = allValues.submit.map((item: any, index: number) => {
+                if ((index === data.submit.length - 1) && meteringMode === 2) {
+                    const totalTaxPrice = (ponderationWeight * item.quantity) * item.quantity * item.taxPrice
+                    return ({
+                        ...item,
+                        totalTaxPrice: totalTaxPrice.toFixed(2),
+                        totalUnTaxPrice: (totalTaxPrice - totalTaxPrice * materialData!.taxVal).toFixed(2)
+                    })
+                }
+                return item
+            })
             form.setFieldsValue({
                 submit: newFields
             })
