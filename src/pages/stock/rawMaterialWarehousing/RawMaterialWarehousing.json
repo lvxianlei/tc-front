@@ -11,8 +11,8 @@
             "width": 120
         },
         {
-            "title": "结算方式---新增",
-            "dataIndex": "carNumber",
+            "title": "结算方式",
+            "dataIndex": "settlementModeName",
             "width": 120
         },
         {

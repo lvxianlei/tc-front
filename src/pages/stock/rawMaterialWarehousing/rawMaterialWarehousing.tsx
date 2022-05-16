@@ -60,8 +60,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     return (
         <>
             <Page
-                path="/tower-storage/receiveStock"
-                exportPath={"/tower-storage/receiveStock"}
+                path="/tower-storage/warehousingEntry"
+                exportPath={"/tower-storage/warehousingEntry"}
                 columns={[
                     {
                         key: 'index',

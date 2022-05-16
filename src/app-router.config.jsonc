@@ -830,7 +830,7 @@
       "path": "/config/configList/taxRate",
       "module": "./pages/stock/taxRate",
       "exact": true,
-      "authority": "sw_configuration_management_safety_stock_configuration"
+      "authority": "configuration_management_lists"
     },
     { // 配置管理-角钢配料策略
       "name": "角钢配料策略",
