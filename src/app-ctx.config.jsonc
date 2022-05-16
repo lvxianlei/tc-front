@@ -630,7 +630,7 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "下发技术",
+                        "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
                         "authority": "approvalm"
                     },

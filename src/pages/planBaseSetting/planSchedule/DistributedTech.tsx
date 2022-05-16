@@ -108,7 +108,7 @@ export default function DistributedTech(): React.ReactNode {
             format: "YYYY-MM-DD"
         },
         {
-            title: '下发技术备注',
+            title: '技术派工备注',
             dataIndex: 'issueDescription'
         }
     ]
@@ -200,12 +200,12 @@ export default function DistributedTech(): React.ReactNode {
 
     const techDescription = () => {
         Modal.confirm({
-            title: "下发技术备注",
+            title: "技术派工备注",
             icon: null,
             content: <Form form={modalForm} style={{ marginTop: 16 }}>
-                <Form.Item label="下发技术备注" name="issueDescription" rules={[{
+                <Form.Item label="技术派工备注" name="issueDescription" rules={[{
                     required: true,
-                    message: '请输入下发技术备注'
+                    message: '请输入技术派工备注'
                 },
                 {
                     pattern: /^[^\s]*$/,
@@ -221,7 +221,7 @@ export default function DistributedTech(): React.ReactNode {
 
     return (<Spin spinning={loading}>
         <DetailContent operation={[
-            <Button style={{ marginRight: 16 }} type="primary" key="tech" onClick={issue}>下发技术</Button>,
+            <Button style={{ marginRight: 16 }} type="primary" key="tech" onClick={issue}>技术派工</Button>,
             <Button key="close" onClick={() => history.goBack()}>关闭</Button>
         ]}>
             <BaseInfo form={form} columns={baseColumns} col={4} dataSource={{}} edit />
@@ -233,7 +233,7 @@ export default function DistributedTech(): React.ReactNode {
                 <Button
                     type="primary"
                     disabled={selectedKeys.length <= 0}
-                    onClick={techDescription} >下发技术备注</Button>
+                    onClick={techDescription} >技术派工备注</Button>
             </Space>
             <CommonAliTable
                 dataSource={dataSource}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Button, Modal, Form, message, Select } from 'antd';
+import { Space, Button, Modal, Form, message, Select, DatePicker } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
@@ -14,6 +14,7 @@ export default function SampleDraw(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [form] = Form.useForm();
     const [factoryForm] = Form.useForm();
+    const [dateForm] = Form.useForm();
     const { run } = useRequest((option) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-aps/productionPlan/factory`, option);
@@ -56,6 +57,16 @@ export default function SampleDraw(): React.ReactNode {
     }
     const columns = [
         {
+            key: 'planNumber',
+            title: '计划号',
+            dataIndex: 'planNumber'
+        },
+        {
+            key: 'productCategoryName',
+            title: '塔型',
+            dataIndex: 'productCategoryName'
+        },
+        {
             key: 'productionBatch',
             title: '批次',
             dataIndex: 'productionBatch'
@@ -66,14 +77,14 @@ export default function SampleDraw(): React.ReactNode {
             dataIndex: 'productionBatchNo'
         },
         {
-            key: 'productCategoryName',
-            title: '塔型',
-            dataIndex: 'productCategoryName'
-        },
-        {
             key: 'productNumber',
             title: '杆塔号',
             dataIndex: 'productNumber'
+        },
+        {
+            key: 'planDeliveryTime',
+            title: '客户交货日期',
+            dataIndex: 'planDeliveryTime'
         },
         {
             key: 'planDeliveryTime',
@@ -311,6 +322,42 @@ export default function SampleDraw(): React.ReactNode {
             onCancel: () => form.resetFields()
         })
     }
+
+    const useDate = () => {
+        Modal.confirm({
+            title: "设置计划交货期",
+            icon: null,
+            content: <Form form={dateForm}>
+                <Form.Item
+                    label="计划交货日期"
+                    name="plannedDate"
+                    rules={[{ required: true, message: '请选择计划交货日期' }]}>
+                    <DatePicker format='YYYY-MM-DD'/>
+                </Form.Item>
+            </Form>,
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    const factoryId = await dateForm.validateFields()
+                    await run(selectedRows.map((item: any) => ({
+                        id: item.id,
+                        productionBatchNo: item.productionBatchNo,
+                        factoryId: factoryId.factoryId
+                    })))
+                    await message.success("已成功设置计划交货日期！")
+                    setSelectedKeys([])
+                    setSelectedRows([])
+                    dateForm.resetFields()
+                    history.go(0)
+                    resove(true)
+                } catch (error) {
+                    reject(false)
+                }
+            }),
+            onCancel() {
+                dateForm.resetFields()
+            }
+        })
+    }
     return <Page
         path={`tower-aps/productionPlan/batchNo/${params.id}`}
         columns={columns}
@@ -326,8 +373,9 @@ export default function SampleDraw(): React.ReactNode {
         }}
         extraOperation={
             <Space>
-                <Button type="primary" onClick={settingBatch} disabled={!(selectedKeys.length !== 0)}>设置批次</Button>
-                <Button type="primary" onClick={finishBatch} disabled={!(selectedKeys.length !== 0)}>完成批次设置</Button>
+                <Button type="primary" onClick={useDate} disabled={!(selectedKeys.length !== 0)}>设置计划交货期</Button>
+                <Button type="primary" onClick={settingBatch} disabled={!(selectedKeys.length !== 0)}>拆分批次</Button>
+                {/* <Button type="primary" onClick={finishBatch} disabled={!(selectedKeys.length !== 0)}>下发批次/分组</Button> */}
                 <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配生产单元组</Button>
                 {/* <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配厂区</Button>
                 <Button type="primary" onClick={cancelFactory} disabled={!(selectedKeys.length !== 0)}>取消分配厂区</Button> */}
