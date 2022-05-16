@@ -2,7 +2,7 @@
     "applicationdetails": [
         {
             "title": "品名",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "materialName",
             "width": 100,
             "type": "string"
         },
@@ -20,7 +20,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "roundSteelTotal",
+            "dataIndex": "structureSpec",
             "width": 100,
             "type": "string"
         },
@@ -44,9 +44,93 @@
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "roundSteelTotal",
+            "dataIndex": "singleWeight",
             "width": 100,
             "type": "string"
         }
-    ]
+    ],
+    "material": [
+        {
+            "title": "材料名称",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "standard"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "materialTextureId"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "spec"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "含税单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）合计",
+            "dataIndex": "taxTotalAmount"
+        },
+        {
+            "title": "不含税单价",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税单价（元）合计",
+            "dataIndex": "totalAmount"
+        }
+    ],
+    
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-system/material",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": [
+            {
+                "title": "编号",
+                "dataIndex": "materialCode",
+                "search": true
+            },
+            {
+                "title": "类别",
+                "dataIndex": "materialTypeName",
+                "search": true
+            },
+            {
+                "title": "类型",
+                "dataIndex": "materialCategoryName"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            }
+        ]
+    }
 }

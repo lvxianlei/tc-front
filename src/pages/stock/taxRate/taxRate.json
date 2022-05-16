@@ -2,15 +2,15 @@
     "baseColumn": [
         {
             "title": "名称",
-            "dataIndex": "receiveNumber"
+            "dataIndex": "modeName"
         },
         {
             "title": "参数",
-            "dataIndex": "paperNumber"
+            "dataIndex": "taxVal"
         },
         {
             "title": "说明",
-            "dataIndex": "carNumber"
+            "dataIndex": "description"
         }
     ]
 }

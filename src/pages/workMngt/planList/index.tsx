@@ -73,7 +73,10 @@ export default function Invoicing() {
     })
 
     // 创建采购计划关闭
-    const handleCreate = () => {
+    const handleCreate = (options: any) => {
+        if (options?.code === 1) {
+            history.go(0);
+        }
         setIsOpenId(false);
     }
 

@@ -4,7 +4,7 @@
  * 时间：2022/05/14
  */
  import React, { useState, useEffect, useRef } from 'react';
- import { SearchTable as Page } from '../../common';
+ import { CommonTable, SearchTable as Page } from '../../common';
  import { FixedType } from 'rc-table/lib/interface'
 import { useHistory } from 'react-router-dom';
 import { Button, message, Modal } from 'antd';
@@ -12,6 +12,8 @@ import AddTaxRateModal from "./AddTaxRateModal";
 import {
     baseColumn
 } from "./taxRate.json";
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -23,11 +25,22 @@ interface EditRefProps {
     const [visible, setVisible] = useState<boolean>(false);
     const [id, setId] = useState<string>();
     const addRef = useRef<EditRefProps>();
+    
+    // 税率列表
+    const { data: statisticsData, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax`)
+            resole(result || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), {  })
+
     // 新增回调
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await addRef.current?.onSubmit()
-            message.success("完善纸质单号成功...")
+            message.success("修改税率成功...")
             setVisible(false)
             history.go(0)
             resove(true)
@@ -35,10 +48,11 @@ interface EditRefProps {
             reject(false)
         }
     })
+
+
      return (
         <>
-            <Page
-                path="/tower-storage/receiveStock"
+            <CommonTable
                 columns={[
                     {
                         key: 'index',
@@ -64,7 +78,8 @@ interface EditRefProps {
                         )
                     }
                 ]}
-                searchFormItems={[]}
+                dataSource={(statisticsData as any)}
+                pagination={false}
             />
             <Modal
                 title={'设置材料税率'}

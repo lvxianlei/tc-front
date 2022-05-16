@@ -35,8 +35,8 @@
             "type": "string"
         },
         {
-            "title": "创建日期----新增字段",
-            "dataIndex": "purchaserName",
+            "title": "创建日期",
+            "dataIndex": "createTime",
             "type": "string"
         },
         {
@@ -130,7 +130,7 @@
         },
         {
             "title": "单个重量(吨)",
-            "dataIndex": "singleWeight",
+            "dataIndex": "weight",
             "type": "number"
         },
         {
