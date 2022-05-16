@@ -37,7 +37,7 @@
             "dataIndex": "productTypeName"
         },
         {
-            "title": "厂区",
+            "title": "生产单元组",
             "dataIndex": "factoryName"
         },
         {

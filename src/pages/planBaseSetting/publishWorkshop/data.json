@@ -35,11 +35,11 @@
             "dataIndex": "productTypeName"
         },
         {
-            "title": "组焊车间",
+            "title": "组焊单元",
             "dataIndex": "weldingWorkshop"
         },
         {
-            "title": "加工车间",
+            "title": "加工单元",
             "dataIndex": "processWorkshop"
         },
         {
@@ -94,12 +94,17 @@
             "width": 100
         },
         {
-            "title": " 加工车间",
+            "title": " 工艺",
+            "dataIndex": "craft",
+            "width": 200
+        },
+        {
+            "title": " 生产单元",
             "dataIndex": "processWorkshop",
             "width": 200
         },
         {
-            "title": "调整后加工车间",
+            "title": "调整后生产单元",
             "dataIndex": "newProcessWorkshop",
             "width": 200
         }
@@ -167,7 +172,7 @@
             "width": 100
         },
         {
-            "title": "组焊车间",
+            "title": "生产单元",
             "dataIndex": "weldingWorkshop",
             "width": 100,
             "features": {
@@ -176,13 +181,35 @@
             }
         },
         {
-            "title": "调整后组焊车间",
+            "title": "调整后生产单元",
             "dataIndex": "newWeldingWorkshop",
             "width": 100,
             "features": {
                 "autoRowSpan": true,
                 "sortable": true
             }
+        }
+    ],
+    "componentdetails": [
+        {
+            "title": "下达单",
+            "dataIndex": "issuedNumber"
+        },
+        {
+            "title": "零件号",
+            "dataIndex": "code"
+        },
+        {
+            "title": "材料",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "工艺",
+            "dataIndex": "craft"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
         }
     ]
 }
