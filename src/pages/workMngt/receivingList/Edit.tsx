@@ -16,7 +16,7 @@ interface ChooseModalProps {
  * 纸质单号，原材料税款合计，车辆牌照
  */
 const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
-    const [chooseList, setChooseList] = useState<any[]>(initChooseList)
+    const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({ ...item, materialStandardName: item.standardName })))
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [currentId, setCurrentId] = useState<string>("")
