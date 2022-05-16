@@ -407,7 +407,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 id: item.id || item.id,
                 productName: item.materialName,
                 standard: item.materialStandard,
-                materialStandardName: item.materialStandardName,
+                standardName: item.materialStandardName,
                 num: item.quantity,
                 contractUnitPrice: item.taxPrice,
                 quantity: item.quantity ? item.quantity : 0,
@@ -524,6 +524,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const onSubmit = () => new Promise(async (resole, reject) => {
         try {
             const baseFormData = await form.validateFields()
+            const listsFormData = await editForm.validateFields()
             await saveRun({
                 ...baseFormData,
                 ...freightInformation,
@@ -534,7 +535,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierName: baseFormData.supplierName,
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
-                lists: cargoData,
+                lists: listsFormData.submit.map((item: any, index: number) => ({ ...cargoData[index], ...item })),
                 quantity: baseFormData.quantity,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
@@ -558,7 +559,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setContractId(fields.contractNumber.id);
             setSupplierId(fields.contractNumber.records[0].supplierId)
             const supplierData: any = await getSupplier(fields.contractNumber.records[0].supplierId)
-            console.log(allFields)
             // 设置运费信息以及装卸费信息
             let transportPriceCount = "0",
                 unloadPriceCount = "0",
