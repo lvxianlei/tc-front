@@ -6,6 +6,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { materialStandardTypeOptions, materialTextureOptions, unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
 import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
+import moment from "moment"
 interface ChooseModalProps {
     id: string,
     initChooseList: any[],
@@ -359,9 +360,20 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [visible, setVisible] = useState<boolean>(false)
     const [cargoData, setCargoData] = useState<any[]>([])
     const [contractId, setContractId] = useState<string>("")
+    const [supplierId, setSupplierId] = useState<string>("")
     let [number, setNumber] = useState<number>(0);
     const [form] = Form.useForm()
     const [editForm] = Form.useForm()
+
+    const { loading: materialLoading, data: materialData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
     const { loading: warehouseLoading, data: warehouseData } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get("/tower-storage/warehouse/getWarehouses")
@@ -386,6 +398,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     });
 
     const handleModalOk = () => {
+        const meteringMode = form.getFieldValue("meteringMode")
         let quantity: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
@@ -398,13 +411,20 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 num: item.quantity,
                 contractUnitPrice: item.taxPrice,
                 quantity: item.quantity ? item.quantity : 0,
-                weight: (item.weight * item.quantity).toFixed(4),
+                /** 理算重量 */
+                weight: item.weight,
+                /** 理算总重量 */
+                totalWeight: (item.weight * item.quantity).toFixed(4),
                 /***
                  * 计算价税合计 
                  *      总重 = 单个重量 * 数量
                  *      价税合计 = 总重 * 数量 * 合同单价
                  */
-                price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
+                // price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
+                taxPrice: item.taxPrice,
+                totalTaxPrice: meteringMode === 1 && ((item.weight * item.quantity) * item.quantity * item.taxPrice).toFixed(2),
+                unTaxPrice: item.price,
+                totalUnTaxPrice: meteringMode === 1 && ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2)
             }
             delete postData.id
             return postData
@@ -433,11 +453,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         setHandlingCharges({
             ...handlingCharges,
             unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
-        })
-        form.setFieldsValue({
-            quantity: parseFloat(quantity),
-            weight: weightAll.toFixed(4),
-            price: priceAll
         })
     }
 
@@ -473,6 +488,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             }
 
             setContractId(result?.contractId)
+            setContractId(result?.supplierId)
             setCargoData(v || [])
             // 编辑回显
             setFreightInformation({
@@ -514,15 +530,18 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...handlingCharges,
                 transportBear: freightInformation?.transportBear,
                 unloadBear: handlingCharges.unloadBear,
-                supplierId: baseFormData.supplierName.id,
-                supplierName: baseFormData.supplierName.value,
+                supplierId,
+                supplierName: baseFormData.supplierName,
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
                 lists: cargoData,
-                quantity: baseFormData.quantity
+                quantity: baseFormData.quantity,
+                unloadUsersName: baseFormData.unloadUsersName.value,
+                unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.id).join(","),
             })
             resole(true)
         } catch (error) {
+            console.log(error)
             reject(false)
         }
     })
@@ -534,10 +553,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
 
-    const handleBaseInfoChange = async (fields: any) => {
+    const handleBaseInfoChange = async (fields: any, allFields: any) => {
         if (fields.contractNumber) {
             setContractId(fields.contractNumber.id);
+            setSupplierId(fields.contractNumber.records[0].supplierId)
             const supplierData: any = await getSupplier(fields.contractNumber.records[0].supplierId)
+            console.log(allFields)
             // 设置运费信息以及装卸费信息
             let transportPriceCount = "0",
                 unloadPriceCount = "0",
@@ -574,15 +595,25 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }
 
     const handleEditableChange = (data: any, allValues: any) => {
-        console.log(data, allValues)
+        if (data.submit[data.submit.length - 1].ponderationWeight) {
+            const meteringMode = form.getFieldValue("meteringMode")
+            const ponderationWeight = data.submit[data.submit.length - 1]?.ponderationWeight
+            const newFields = allValues.submit.map((item: any, index: number) => index === data.submit.length - 1 ? ({
+                ...item,
+                totalTaxPrice: meteringMode === 2 && ((ponderationWeight * item.quantity) * item.quantity * item.taxPrice).toFixed(2),
+                totalUnTaxPrice: meteringMode === 2 && ((ponderationWeight * item.quantity) * item.quantity * item.price).toFixed(2)
+            }) : item)
+            form.setFieldsValue({
+                submit: newFields
+            })
+        }
     }
 
-    return <Spin spinning={loading && warehouseLoading}>
+    return <Spin spinning={loading && warehouseLoading && materialLoading}>
         <Modal
             width={1011}
             visible={visible}
             title="选择货物明细"
-            // destroyOnClose
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)
@@ -634,7 +665,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return item
                 }
             })}
-            dataSource={{}} />
+            dataSource={{ meteringMode: 1, receiveTime: moment() }} />
         <DetailTitle title="运费信息" />
         <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />
@@ -650,6 +681,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <EditableTable
             haveIndex
             form={editForm}
+            haveOpration={false}
             onChange={handleEditableChange}
             haveNewButton={false}
             columns={editCargoDetails}

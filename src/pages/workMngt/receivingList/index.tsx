@@ -16,7 +16,6 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("");
     const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
-    const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/receiveStock?receiveStockById=${id}`)
@@ -95,7 +94,6 @@ export default function Invoicing() {
             onCancel={() => {
                 setVisible(false)
                 editRef.current?.resetFields()
-                setMaterialData({})
             }}>
             <Edit ref={editRef} id={detailId} type={type} />
         </Modal>

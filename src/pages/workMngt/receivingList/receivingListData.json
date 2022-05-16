@@ -218,7 +218,8 @@
             "title": "卸货方式",
             "dataIndex": "unloadMode",
             "type": "select",
-            "enum": []
+            "enum": [],
+            "required": true
         },
         {
             "title": "卸车人员",
@@ -284,19 +285,22 @@
                     "label": "过磅",
                     "value": 2
                 }
-            ]
+            ],
+            "required": true
         },
         {
             "title": "结算方式",
             "dataIndex": "settlementMode",
             "type": "select",
-            "enum": []
+            "enum": [],
+            "required": true
         },
         {
             "title": "到货去向",
             "dataIndex": "warehouseId",
             "type": "select",
-            "enum": []
+            "enum": [],
+            "required": true
         },
         {
             "title": "备注",
@@ -395,7 +399,7 @@
             "width": 100
         },
         {
-            "title": "外观检验效果",
+            "title": "外观检验结果",
             "dataIndex": "appearance",
             "width": 130
         }
@@ -409,7 +413,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standardName",
+            "dataIndex": "materialStandardName",
             "type": "string",
             "disabled": true
         },
@@ -426,7 +430,7 @@
             "disabled": true
         },
         {
-            "title": "长度",
+            "title": "长度（mm）",
             "dataIndex": "length",
             "type": "number",
             "disabled": true
@@ -434,7 +438,8 @@
         {
             "title": "宽度（mm）",
             "dataIndex": "width",
-            "type": "number"
+            "type": "number",
+            "disabled": true
         },
         {
             "title": "数量",
@@ -449,7 +454,8 @@
         },
         {
             "title": "过磅重量（吨）",
-            "dataIndex": "ponderationWeight"
+            "dataIndex": "ponderationWeight",
+            "type": "number"
         },
         {
             "title": "含税单价（元/吨）",
@@ -484,8 +490,19 @@
             "dataIndex": "rollingNumber"
         },
         {
-            "title": "外观检验效果",
-            "dataIndex": "appearance"
+            "title": "外观检验结果",
+            "dataIndex": "appearance",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "合格",
+                    "value": 1
+                },
+                {
+                    "label": "不合格",
+                    "value": 2
+                }
+            ]
         }
     ],
     "SelectedArea": [

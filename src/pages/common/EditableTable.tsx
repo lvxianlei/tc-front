@@ -127,7 +127,7 @@ export default function EditableTable({
             size="small"
             className="edit"
             primaryKey={rowKey || "id"}
-            style={{ overflow: 'auto', minHeight: 400 }}
+            style={{ overflow: 'auto', paddingBottom: 20 }}
             defaultColumnWidth={150}
             columns={haveOpration ? [
                 ...eidtableColumns,
