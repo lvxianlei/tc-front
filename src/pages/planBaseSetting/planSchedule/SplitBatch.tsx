@@ -35,6 +35,11 @@ export default function SampleDraw(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { data: workUnitList } = useRequest<{ groupId: string, groupName: string }[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`tower-aps/group/unit/config/list?size=1000`);
+        resole(data?.records)
+    }), {})
+
     const handleModalOk = async () => {
         try {
             const splitData = await form.validateFields()
@@ -131,10 +136,10 @@ export default function SampleDraw(): React.ReactNode {
                     name="factoryId"
                     rules={[{ required: true, message: '请选择分组名称' }]}>
                     <Select>
-                        {factoryTypeOptions?.map((item: any) => <Select.Option
-                            key={item.id}
-                            value={item.id}>
-                            {item.name}
+                        {workUnitList?.map((item: any) => <Select.Option
+                            key={item.groupId}
+                            value={item.groupId}>
+                            {item.groupName}
                         </Select.Option>)}
                     </Select>
                 </Form.Item>
