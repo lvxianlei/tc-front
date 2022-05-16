@@ -16,7 +16,6 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("");
     const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
-    const [materialData, setMaterialData] = useState<{ [key: string]: any }>({});
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/receiveStock?receiveStockById=${id}`)
@@ -54,6 +53,7 @@ export default function Invoicing() {
         setFilterValue(value)
         return value
     }
+
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             const isClose = await editRef.current?.onSubmit()
@@ -67,6 +67,7 @@ export default function Invoicing() {
             reject(false)
         }
     })
+
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -84,11 +85,16 @@ export default function Invoicing() {
     }
 
     return <>
-        <Modal destroyOnClose visible={visible} width={1011} title={type === "new" ? "创建" : "编辑"} onOk={handleModalOk} onCancel={() => {
-            setVisible(false)
-            editRef.current?.resetFields()
-            setMaterialData({})
-        }}>
+        <Modal
+            destroyOnClose
+            visible={visible}
+            width={1011}
+            title={type === "new" ? "创建" : "编辑"}
+            onOk={handleModalOk}
+            onCancel={() => {
+                setVisible(false)
+                editRef.current?.resetFields()
+            }}>
             <Edit ref={editRef} id={detailId} type={type} />
         </Modal>
         {/* 详情 */}
@@ -115,7 +121,7 @@ export default function Invoicing() {
                 width: 100,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link className="btn-operation-link" to={`/ingredients/receiving/detail/${record.id}`}>明细</Link>
+                        <Link className="btn-operation-link" to={`/stock/receiving/detail/${record.id}`}>明细</Link>
                         <Button
                             type="link"
                             className="btn-operation-link"
@@ -132,7 +138,7 @@ export default function Invoicing() {
                         <Popconfirm
                             title="确定删除此收货单信息吗？"
                             disabled={record.lists && record.lists.length !== 0}
-                            onConfirm={async() => {
+                            onConfirm={async () => {
                                 await deleteRun(record?.id)
                                 message.success("删除成功...")
                                 history.go(0)

@@ -1,13 +1,13 @@
 {
     "baseInfo": [
         {
-            "title": "周计划号",
+            "title": "周期计划号",
             "dataIndex": "weekPlanNumber",
             "width": 200,
             "type": "string"
         },
         {
-            "title": "周计划类型",
+            "title": "周期计划类型",
             "dataIndex": "weekPlanType",
             "width": 200,
             "type": "string"
@@ -32,7 +32,7 @@
         },
         {
             "title": "反馈负责人",
-            "dataIndex": "feedbackUser",
+            "dataIndex": "feedbackUserName",
             "width": 100,
             "type": "string"
         },
@@ -82,7 +82,7 @@
         },
         {
             "title": "反馈人",
-            "dataIndex": "feedbackUser",
+            "dataIndex": "feedbackUserName",
             "width": 100,
             "type": "string"
         },

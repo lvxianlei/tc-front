@@ -17,6 +17,7 @@ export default function EnquiryList(): React.ReactNode {
     const [chooseId, setChooseId] = useState<string>("")
     const [totalWeight, setTotalWeight] = useState<number>(0)
     const [totalNum, setTotalNum] = useState<number>(0)
+    const [materialConfirmStatus, setMaterialConfirmStatus] = useState<number>(0);
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object
     });
@@ -43,6 +44,7 @@ export default function EnquiryList(): React.ReactNode {
     // 关闭回调
     const handleCallBack = () => {
         setVisible(false);
+        history.go(0);
     }
 
     return <>
@@ -59,7 +61,7 @@ export default function EnquiryList(): React.ReactNode {
                 ...baseInfo as any,
                 {
                     title: '操作',
-                    width: 60,
+                    width: 40,
                     fixed: "right",
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (
@@ -68,6 +70,7 @@ export default function EnquiryList(): React.ReactNode {
                                 setChooseId(records.id);
                                 setTotalWeight(records.totalWeight || 0);
                                 setTotalNum(records.totalNum || 0);
+                                setMaterialConfirmStatus(records.materialConfirmStatus || 0)
                                 setVisible(true);
                             }}>详情</Button>
                         </>
@@ -108,6 +111,6 @@ export default function EnquiryList(): React.ReactNode {
                 }
             ]}
         />
-        <Overview totalWeight={totalWeight} totalNum={totalNum} visible={visible} chooseId={chooseId} handleCallBack={ handleCallBack } />
+        <Overview totalWeight={totalWeight} totalNum={totalNum} visible={visible} chooseId={chooseId} materialConfirmStatus={materialConfirmStatus} handleCallBack={ handleCallBack } />
     </>
 }

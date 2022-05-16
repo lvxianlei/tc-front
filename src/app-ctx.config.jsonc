@@ -319,6 +319,11 @@
                         "authority": "inventory_management_raw_material"
                     },
                     {
+                        "label": "原材料收货单",
+                        "path": "/stock/receiving",
+                        "authority": "work_management_receiving_list"
+                    },
+                    {
                         "label": "原材料入库",
                         "path": "/stock/rawMaterialWarehousing",
                         "authority": "inventory_management_warehousing"
@@ -534,11 +539,6 @@
                         "label": "备料确认",
                         "path": "/ingredients/materialPreparationConfirmation",
                         "authority": "work_management_production_ingredients"
-                    },
-                    {
-                        "label": "收货列表",
-                        "path": "/ingredients/receiving",
-                        "authority": "work_management_receiving_list"
                     },
                     {
                         "label": "差异列表",

@@ -3,6 +3,7 @@ export interface Details {
     chooseId: string
     totalNum: number
     totalWeight: number
+    materialConfirmStatus: number
     handleCallBack: () => void
 }
 

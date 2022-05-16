@@ -7,12 +7,6 @@
             "type": "string"
         },
         {
-            "title": "原材料任务编号",
-            "dataIndex": "purchaseNumber",
-            "width": 200,
-            "type": "string"
-        },
-        {
             "title": "计划号",
             "dataIndex": "planNumber",
             "width": 200,
@@ -161,12 +155,12 @@
         },
         {
             "title": "单重（kg）",
-            "dataIndex": "singleWeight",
+            "dataIndex": "weight",
             "type": "number"
         },
         {
             "title": "汇总重量（kg）",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "type": "number"
         },
         {
