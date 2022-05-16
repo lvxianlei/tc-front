@@ -180,7 +180,7 @@ export default function ManualDistribute(): ReactElement {
                     </Form.Item>
                 </Col>
                 <Col>
-                    <Form.Item name="processWorkshop" label="加工车间">
+                    <Form.Item name="processWorkshop" label="生产单元">
                         <Input />
                     </Form.Item>
                 </Col>
