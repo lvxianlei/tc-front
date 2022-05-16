@@ -167,8 +167,9 @@ export default function Overview() {
         try {
             const result = await receiveRef.current?.onSubmit()
             setSaveLoading(false)
-            message.success("保存成功...")
+            message.success(`${attchType === 1 ? "收货" : "拒收"}成功...`)
             setVisible(false)
+            history.go(0)
         } catch (error) {
             setSaveLoading(false)
         }
@@ -280,7 +281,7 @@ export default function Overview() {
                             onClick={() => {
                                 setAttachType(2)
                                 setDetailId([records.id])
-                                setDetailId(records.receiveStockId)
+                                setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
                             }}
                         >拒收</a>
