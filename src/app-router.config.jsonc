@@ -1866,6 +1866,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-试装计划
+      "name": "试装计划",
+      "path": "/planProd/planTrial",
+      "module": "./pages/planBaseSetting/planTrial/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-镀锌包装计划
+      "name": "镀锌包装计划",
+      "path": "/planProd/planGalvanizedPack",
+      "module": "./pages/planBaseSetting/planGalvanizedPack/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-加工任务面板
       "name": "包装计划列表",
       "path": "/packagingWorkshop/processingTask",

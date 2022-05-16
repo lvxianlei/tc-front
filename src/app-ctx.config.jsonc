@@ -635,7 +635,7 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "分配车间",
+                        "label": "分配生产单元",
                         "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
                     },
@@ -647,6 +647,16 @@
                     {
                         "label": "计划看板",
                         "path": "/planProd/planPanal",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "试装计划",
+                        "path": "/planProd/planTrial",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "镀锌包装计划",
+                        "path": "/planProd/planGalvanizedPack",
                         "authority": "approvalm"
                     }
                 ]

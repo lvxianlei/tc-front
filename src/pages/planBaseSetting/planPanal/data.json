@@ -69,7 +69,7 @@
             "dataIndex": "steelTotalWeight"
         },
         {
-            "title": "连扳重量（t）",
+            "title": "钢板重量（t）",
             "dataIndex": "platTotalWeight"
         },
         {
