@@ -41,24 +41,32 @@ export default function SampleDraw(): React.ReactNode {
     }), {})
 
     const handleModalOk = async () => {
-        try {
-            const splitData = await form.validateFields()
-            const submitData = selectedRows.map((item: any) => {
-                return {
-                    id: item.id,
-                    productionBatch: splitData?.productionBatch
+        await form.validateFields()
+        Modal.confirm({
+            title: "确认后不可取消，是否确认？",
+            onOk: async () => new Promise(async (resove, reject) => {
+                try {
+                    const splitData = await form.validateFields()
+                    const submitData = selectedRows.map((item: any) => {
+                        return {
+                            id: item.id,
+                            productionBatch: splitData?.productionBatch
+                        }
+                    })
+                    await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, submitData).then(() => {
+                        message.success('提交成功！')
+                        form.resetFields()
+                        setSelectedKeys([])
+                        setSelectedRows([])
+                        history.go(0)
+                    })
+                } catch (error) {
+                    console.log(error)
                 }
-            })
-            await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, submitData).then(() => {
-                message.success('提交成功！')
-                form.resetFields()
-                setSelectedKeys([])
-                setSelectedRows([])
-                history.go(0)
-            })
-        } catch (error) {
-            console.log(error)
-        }
+            }),
+            onCancel: () => form.resetFields()
+        })
+        
     }
     const columns = [
         {
@@ -126,6 +134,32 @@ export default function SampleDraw(): React.ReactNode {
             })
         })
     }
+    const useFactoryOk  = async () => {
+        await factoryForm.validateFields()
+        Modal.confirm({
+            title: "确认后不可取消，是否确认？",
+            onOk: async () => new Promise(async (resove, reject) => {
+                try {
+                    const factoryId = await factoryForm.validateFields()
+                    await run(selectedRows.map((item: any) => ({
+                        id: item.id,
+                        productionBatchNo: item.productionBatchNo,
+                        factoryId: factoryId.factoryId
+                    })))
+                    await message.success("已成功分配生产单元组！")
+                    setSelectedKeys([])
+                    setSelectedRows([])
+                    factoryForm.resetFields()
+                    history.go(0)
+                    resove(true)
+                } catch (error) {
+                    reject(false)
+                }
+            }),
+            onCancel: () => factoryForm.resetFields()
+        })
+        
+    }
     const useFactory = () => {
         Modal.confirm({
             title: "分配生产单元组",
@@ -144,24 +178,7 @@ export default function SampleDraw(): React.ReactNode {
                     </Select>
                 </Form.Item>
             </Form>,
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    const factoryId = await factoryForm.validateFields()
-                    await run(selectedRows.map((item: any) => ({
-                        id: item.id,
-                        productionBatchNo: item.productionBatchNo,
-                        factoryId: factoryId.factoryId
-                    })))
-                    await message.success("已成功分配生产单元组！")
-                    setSelectedKeys([])
-                    setSelectedRows([])
-                    factoryForm.resetFields()
-                    history.go(0)
-                    resove(true)
-                } catch (error) {
-                    reject(false)
-                }
-            }),
+            onOk: useFactoryOk,
             onCancel() {
                 factoryForm.resetFields()
             }
@@ -195,7 +212,7 @@ export default function SampleDraw(): React.ReactNode {
 
     const settingBatch = () => {
         Modal.confirm({
-            title: "设置批次",
+            title: "拆分批次",
             icon: null,
             content: <Form form={form}>
                 <Form.Item name='productionBatch' rules={[{ required: true, message: '请选择批次' }]} label='批次'>
@@ -337,7 +354,7 @@ export default function SampleDraw(): React.ReactNode {
                     label="计划交货日期"
                     name="plannedDate"
                     rules={[{ required: true, message: '请选择计划交货日期' }]}>
-                    <DatePicker format='YYYY-MM-DD'/>
+                    <DatePicker format='YYYY-MM-DD' placeholder='请选择'/>
                 </Form.Item>
             </Form>,
             onOk: () => new Promise(async (resove, reject) => {
