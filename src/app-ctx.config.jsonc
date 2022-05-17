@@ -635,7 +635,7 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "分配车间",
+                        "label": "分配生产单元",
                         "path": "/planProd/publishWorkshop",
                         "authority": "approvalm"
                     },
@@ -1059,11 +1059,11 @@
                         "path": "/workshopPlanBasic/workCenterMngt",
                         "authority": "approvalm"
                     },
-                    {
-                        "label": "分配车间配置管理",
-                        "path": "/workshopPlanBasic/publishWorkshopMngt",
-                        "authority": "approvalm"
-                    },
+                    // {
+                    //     "label": "分配车间配置管理",
+                    //     "path": "/workshopPlanBasic/publishWorkshopMngt",
+                    //     "authority": "approvalm"
+                    // },
                     {
                         "label": "周期计划类型配置管理",
                         "path": "/workshopPlanBasic/cyclePlanConfig",
