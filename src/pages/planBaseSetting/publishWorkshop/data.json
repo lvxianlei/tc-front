@@ -130,7 +130,7 @@
         },
         {
             "title": "加工组数",
-            "dataIndex": "segmentGroupNum",
+            "dataIndex": "totalProcessNum",
             "width": 100,
             "features": {
                 "autoRowSpan": true,
