@@ -64,7 +64,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度（mm）",
