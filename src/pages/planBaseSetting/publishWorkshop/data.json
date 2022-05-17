@@ -94,12 +94,12 @@
             "width": 100
         },
         {
-            "title": " 工艺",
-            "dataIndex": "craft",
+            "title": "工艺",
+            "dataIndex": "crafts",
             "width": 200
         },
         {
-            "title": " 生产单元",
+            "title": "生产单元",
             "dataIndex": "processWorkshop",
             "width": 200
         },
