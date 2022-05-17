@@ -79,38 +79,47 @@ export default function KanbanPlanConfig(): React.ReactNode {
 
     return (
         <>
-            <Modal visible={ visible } title={DetailTitle} okText="确认" onOk={ async ()=>{
-                await form.validateFields()
-                const value = form.getFieldsValue(true)
-                if(title==='新增'){
-                    const submitData={
-                        productionLinkIds: value?.productionLinkIds.join(','),
-                        productTypeId:value?.productType.split(',')[0],
-                        productType:value?.productType.split(',')[1]
-                    }
-                    await RequestUtil.post(`/tower-aps/workshop/config/planBoard`,submitData).then(()=>{
-                        message.success('添加成功！')
-                    })
-                }else{
-                    const submitData = {
-                        ...value,
-                        productionLinkIds: value?.productionLinkIds.join(','),
-                        productTypeId:value?.productType.split(',')[0],
-                        productType:value?.productType.split(',')[1],
-                        id: selectedValue.productTypeId
-                    }
-                    await RequestUtil.post(`/tower-aps/workshop/config/planBoard`,submitData).then(()=>{
-                        message.success('编辑成功！')
-                    })
-                }
-                form.resetFields()
-                setVisible(false)
-                setRefresh(!refresh)
-            } } onCancel={ ()=>{
-                form.resetFields()
-                setVisible(false)
-                setTitle('新增')
-            } }>
+            <Modal visible={ visible } title={title} footer={
+                <Space>
+                    <Button type='primary' ghost onClick={async ()=>{
+                        await form.validateFields()
+                        const value = form.getFieldsValue(true)
+                        if(title==='新增'){
+                            const submitData={
+                                productionLinkIds: value?.productionLinkIds.join(','),
+                                productTypeId:value?.productType.split(',')[0],
+                                productType:value?.productType.split(',')[1]
+                            }
+                            await RequestUtil.post(`/tower-aps/workshop/config/planBoard`,submitData).then(()=>{
+                                message.success('添加成功！')
+                            })
+                        }else{
+                            const submitData = {
+                                ...value,
+                                productionLinkIds: value?.productionLinkIds.join(','),
+                                productTypeId:value?.productType.split(',')[0],
+                                productType:value?.productType.split(',')[1],
+                                id: selectedValue.productTypeId
+                            }
+                            await RequestUtil.post(`/tower-aps/workshop/config/planBoard`,submitData).then(()=>{
+                                message.success('编辑成功！')
+                            })
+                        }
+                        form.resetFields()
+                        setVisible(false)
+                        setRefresh(!refresh)
+                    }} >保存</Button>
+                <Button onClick={() => {
+                    setVisible(false)
+                    title === '编辑' && setTitle(`添加`)
+                    form.resetFields()
+                }}>关闭</Button>
+                    </Space>
+                } onCancel={ ()=>{
+                    form.resetFields()
+                    setVisible(false)
+                    setTitle('新增')
+                } }>
                 <Form form={ form } { ...formItemLayout }>
                     <Form.Item name="productType" label="产品类型" rules={[
                         {
