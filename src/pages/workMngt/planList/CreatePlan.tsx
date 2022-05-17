@@ -178,20 +178,20 @@ import RequestUtil from '../../../utils/RequestUtil';
             <Button type='primary' ghost onClick={() => setMaterialList([])}>清空</Button>
         </div>
         <CommonTable
-            rowKey={(records: any) => `${records.materialName}${records.spec}${records.length}`}
+            rowKey={"id"}
             style={{ padding: "0" }}
             columns={[
                 ...material.map((item: any) => {
                     if (["planPurchaseNum", "taxPrice", "price"].includes(item.dataIndex)) {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 0} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 0} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                         })
                     }
                     if (item.dataIndex === "standard") {
