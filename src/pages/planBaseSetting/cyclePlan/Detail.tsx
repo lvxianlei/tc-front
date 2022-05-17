@@ -26,6 +26,7 @@ export default function CyclePlanDetail(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
+    const [dateForm] = Form.useForm();
     const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-aps/cyclePlan/${params.id}`)
         setDataSource(data?.issueOrderList)
@@ -155,6 +156,12 @@ export default function CyclePlanDetail(): React.ReactNode {
             )
         },
         {
+            key: 'plateWeight',
+            title: '计划完成日期',
+            width: 100,
+            dataIndex: 'plateWeight'
+        },
+        {
             key: 'processMaterialDescription',
             title: '生产备料',
             width: 100,
@@ -223,6 +230,43 @@ export default function CyclePlanDetail(): React.ReactNode {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
+
+
+    const useDate = () => {
+        Modal.confirm({
+            title: "设置计划完成日期",
+            icon: null,
+            content: <Form form={dateForm}>
+                <Form.Item
+                    label="计划完成日期"
+                    name="plannedDate"
+                    rules={[{ required: true, message: '请选择计划完成日期' }]}>
+                    <DatePicker format='YYYY-MM-DD' placeholder='请选择'/>
+                </Form.Item>
+            </Form>,
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    const factoryId = await dateForm.validateFields()
+                    // await run(selectedRows.map((item: any) => ({
+                    //     id: item.id,
+                    //     productionBatchNo: item.productionBatchNo,
+                    //     factoryId: factoryId.factoryId
+                    // })))
+                    await message.success("已成功设置计划完成日期！")
+                    setSelectedKeys([])
+                    setSelectedRows([])
+                    dateForm.resetFields()
+                    history.go(0)
+                    resove(true)
+                } catch (error) {
+                    reject(false)
+                }
+            }),
+            onCancel() {
+                dateForm.resetFields()
+            }
+        })
+    }
     return <>
         <Spin spinning={loading}>
         <Modal visible={ visible } title='周期计划备注' okText="确认" onOk={ async ()=>{
@@ -357,6 +401,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <DetailTitle title="周期计划下达单"/>
                 <Space>
                     <ReleaseOrder run={run} data={detail}/>
+                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length !== 0)}>设置计划交货期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>

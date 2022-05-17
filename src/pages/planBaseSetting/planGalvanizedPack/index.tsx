@@ -17,20 +17,24 @@ export default function PlanScheduleMngt(): React.ReactNode {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         console.log(selectedRows)
-        const totalHoles = selectedRows.reduce((pre: any,cur: { totalHoles: any;totalNumber: number })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalHoles!==null?cur.totalHoles:0) 
+        const totalAngleWeight = selectedRows.reduce((pre: any,cur: { angleWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0) 
         },0)
-        const totalNumber = selectedRows.reduce((pre: any,cur: { totalNumber: any; })=>{
-            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalNumber!==null?cur.totalNumber:0 )
+        const totalPlateWeight = selectedRows.reduce((pre: any,cur: { plateWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )
         },0)
-        const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+        const totalAngleNumber = selectedRows.reduce((pre: any,cur: { angleNumber: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)
+        },0)
+        const totalPlateNumber = selectedRows.reduce((pre: any,cur: { plateNumber: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)
         },0)
         setSum({
             ...sum,
-            totalHoles,
-            totalNumber,
-            totalWeight
+            totalAngleWeight,
+            totalPlateWeight,
+            totalAngleNumber,
+            totalPlateNumber
         })
     }
     const [sum, setSum] = useState<any>({})
@@ -47,13 +51,23 @@ export default function PlanScheduleMngt(): React.ReactNode {
         }
     }))
     return (<Page
-        path="/tower-aps/productionPlan"
+        path="/tower-aps/galvanizedPackage/page"
         columns={(planSchedule as any).map((item: any) => {
-            if (item.dataIndex === "loftingFeedBackTime") {
+            if (item.dataIndex === "packageCompleteRealTime") {
                 return ({
                     ...item,
                     getCellProps(value: any, record: any) {
-                        if (moment(record.loftingCompleteTime).isBefore(moment(value), "day")) {
+                        if (moment(record.packageCompleteRealTime).isBefore(moment(record.packageCompleteTime), "day")) {
+                            return { style: { background: "#F9A1A1", color: 'white', fontWeight: 'bold' } }
+                        }
+                    }
+                })
+            }
+            if (item.dataIndex === "galvanizedCompleteRealTime") {
+                return ({
+                    ...item,
+                    getCellProps(value: any, record: any) {
+                        if (moment(record.packageCompleteRealTime).isBefore(moment(record.galvanizedCompleteTime), "day")) {
                             return { style: { background: "#F9A1A1", color: 'white', fontWeight: 'bold' } }
                         }
                     }
@@ -65,10 +79,10 @@ export default function PlanScheduleMngt(): React.ReactNode {
         extraOperation={<Space>
             <Space>
                 <span>合计：</span>
-                <span>角钢重量（t）：{sum?.totalNumber}</span>
-                <span>钢板重量（t）：{sum?.totalHoles}</span>
-                <span>角钢总件数：{sum?.totalWeight}</span>
-                <span>钢板总件数：{sum?.totalWeight}</span>
+                <span>角钢重量（t）：{sum?.totalAngleWeight}</span>
+                <span>钢板重量（t）：{sum?.totalPlateWeight}</span>
+                <span>角钢总件数：{sum?.totalAngleNumber}</span>
+                <span>钢板总件数：{sum?.totalPlateNumber}</span>
             </Space>
             <Link to={`/planProd/planGalvanizedPack/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>镀锌包装下发</Button></Link>
         </Space>}
@@ -83,7 +97,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户" />
+                children: <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户/批次号" />
             },
             {
                 name: 'productType',
@@ -97,20 +111,20 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 </Select>
             },
             {
-                name: 'productUnit',
+                name: 'galvanizedUnitName',
                 label: '镀锌生产单元',
                 children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
                     { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
                     }) }
                 </Select>
             },
             {
-                name: 'productUnit',
+                name: 'packageUnitName',
                 label: '包装生产单元',
                 children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
                     { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
                     }) }
                 </Select>
             },
@@ -137,8 +151,8 @@ export default function PlanScheduleMngt(): React.ReactNode {
         onFilterSubmit={(values: any) => {
             if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-                values.startTime = formatDate[0] + ' 00:00:00';
-                values.endTime = formatDate[1] + ' 23:59:59';
+                values.planDeliveryStartTime = formatDate[0] + ' 00:00:00';
+                values.planDeliveryEndTime = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;

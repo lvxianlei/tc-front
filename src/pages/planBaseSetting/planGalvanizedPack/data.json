@@ -2,7 +2,7 @@
     "planSchedule": [
         {
             "title": "批次号",
-            "dataIndex": "productionBatchNo",
+            "dataIndex": "batchNo",
             "fixed": "left"
         },
         {
@@ -12,12 +12,12 @@
         },
         {
             "title": "塔型",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "productCategory",
             "fixed": "left"
         },
         {
             "title": "产品类型",
-            "dataIndex": "productTypeName"
+            "dataIndex": "productType"
         },
         {
             "title": "客户",
@@ -29,11 +29,11 @@
         },
         {
             "title": "基数",
-            "dataIndex": "productNum"
+            "dataIndex": "number"
         },
         {
             "title": "生产单元组",
-            "dataIndex": "productNum"
+            "dataIndex": "groupName"
         },
         {
             "title": "业务经理",
@@ -50,63 +50,63 @@
         },
         {
             "title": "角钢重量（t）",
-            "dataIndex": "steelTotalWeight"
+            "dataIndex": "angleWeight"
         },
         {
             "title": "钢板重量（t）",
-            "dataIndex": "platTotalWeight"
+            "dataIndex": "plateWeight"
         },
         {
             "title": "角钢总件数",
-            "dataIndex": "totalProcessNum"
+            "dataIndex": "angleNumber"
         },
         {
             "title": "钢板总件数",
-            "dataIndex": "totalHolesNum"
+            "dataIndex": "plateNumber"
         },
         {
             "title": "开始转运日期",
-            "dataIndex": "approvalTime"
+            "dataIndex": "transferStartTime"
         },
         {
             "title": "完成转运日期",
-            "dataIndex": "approvalTime"
+            "dataIndex": "transferEndTime"
         },
         {
             "title": "镀锌生产单元",
-            "dataIndex": "approvalTime"
+            "dataIndex": "galvanizedUnitName"
         },
         {
             "title": "镀锌计划完成日期",
-            "dataIndex": "approvalTime"
+            "dataIndex": "galvanizedCompleteTime"
         },
         {
             "title": "镀锌备注",
-            "dataIndex": "approvalTime"
+            "dataIndex": "galvanizedDescription"
         },
         {
             "title": "包装生产单元",
-            "dataIndex": "approvalTime"
+            "dataIndex": "packageUnitName"
         },
         {
             "title": "包装计划完成日期",
-            "dataIndex": "approvalTime"
+            "dataIndex": "packageCompleteTime"
         },
         {
             "title": "包装备注",
-            "dataIndex": "approvalTime"
+            "dataIndex": "packageDescription"
         },
         {
             "title": "报补件日期",
-            "dataIndex": "approvalTime"
+            "dataIndex": "reportTime"
         },
         {
             "title": "入库日期",
-            "dataIndex": "approvalTime"
+            "dataIndex": "storageTime"
         },
         {
             "title": "状态",
-            "dataIndex": "loftingStatus",
+            "dataIndex": "status",
             "type": "select",
             "enum": [
                 {
@@ -129,29 +129,23 @@
         },
         {
             "title": "下发日期",
-            "dataIndex": "loftingIssueTime",
+            "dataIndex": "issueTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "下发人",
-            "dataIndex": "loftingIssueUserName"
+            "dataIndex": "issueUserName"
         },
         {
-            "title": "放样计划完成时间",
-            "dataIndex": "loftingCompleteTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
-            "title": "放样反馈完成时间",
-            "dataIndex": "loftingFeedBackTime",
+            "title": "镀锌实际完成时间",
+            "dataIndex": "galvanizedCompleteRealTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         },
         {
-            "title": "资料实际完成时间",
-            "dataIndex": "loftingCompleteRealTime",
+            "title": "包装实际完成时间",
+            "dataIndex": "packageCompleteRealTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         }
