@@ -118,10 +118,10 @@ export default function ManualDistribute(): ReactElement {
 
     const handleClick = () => {
         Modal.confirm({
-            title: "手动分配车间",
+            title: "手动分配生产单元",
             icon: null,
             content: <Form form={workshopForm}>
-                <Form.Item name="workshopId" label="生产/组焊车间" rules={[{ required: true, message: "请选择生产/组焊车间..." }]}>
+                <Form.Item name="workshopId" label="生产单元" rules={[{ required: true, message: "请选择生产单元..." }]}>
                     <Select>
                         {listData.map((item: any) => <Select.Option
                             key={item.id}
@@ -142,7 +142,7 @@ export default function ManualDistribute(): ReactElement {
                         type: status
                     })))
                     resove(true)
-                    await message.success("手动分配车间完成...")
+                    await message.success("手动分配生产单元完成...")
                     setSelectedRowKeys([])
                     workshopForm.resetFields()
                     history.go(0)
@@ -209,7 +209,7 @@ export default function ManualDistribute(): ReactElement {
                 <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
             </Radio.Group>
-            <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配车间</Button>
+            <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配单元</Button>
         </Space>
         <Row style={{ paddingLeft: 20 }}>
             <Space>

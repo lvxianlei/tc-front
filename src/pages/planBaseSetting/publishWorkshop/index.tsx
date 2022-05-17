@@ -124,7 +124,7 @@ export default () => {
                                 }
                             })
                             RequestUtil.post(`/tower-aps/workshopOrder/distribute/productionUnit`,submitValue).then(()=>{
-                                message.success("快速分配车间完成")
+                                message.success("快速分配单元完成")
                                 history.go(0)
                             })
                         }
@@ -135,12 +135,12 @@ export default () => {
                     }
                 })
             }else{
-                await message.success("快速分配车间完成")
+                await message.success("快速分配单元完成")
                 history.go(0)
             }
             
         } else {
-            await message.success("快速分配车间完成")
+            await message.success("快速分配单元完成")
             history.go(0)
         }
     }
@@ -219,7 +219,7 @@ export default () => {
                 </Radio.Group>
                 {status === 1 && <>
                     {/* <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleWeldingClick}>电焊分配车间</Button> */}
-                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>快速分配车间</Button>
+                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>快速分配单元</Button>
                 </>}
             </>
         }
