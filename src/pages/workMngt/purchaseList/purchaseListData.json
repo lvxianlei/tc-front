@@ -155,12 +155,12 @@
         },
         {
             "title": "单重（kg）",
-            "dataIndex": "singleWeight",
+            "dataIndex": "weight",
             "type": "number"
         },
         {
             "title": "汇总重量（kg）",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "type": "number"
         },
         {
