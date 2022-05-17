@@ -211,7 +211,10 @@ export default function ManualDistribute(): ReactElement {
         }} size={12}>
             <Radio.Group
                 value={status}
-                onChange={(event) => setStatus(event.target.value)}
+                onChange={(event) => {
+                    setStatus(event.target.value)
+                    setPagenation({ ...pagenation, current: 1 })
+                }}
             >
                 <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
