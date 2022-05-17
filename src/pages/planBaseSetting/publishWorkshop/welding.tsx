@@ -14,22 +14,24 @@ export default function Welding(): ReactElement {
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const formValue = await form.getFieldsValue()
-            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/welding`, {
+            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/weldingStat`, {
                 issueOrderId: params.id,
                 ...formValue,
                 current: pagenation.current,
                 size: pagenation.pageSize
             })
-            const groupRecords = groupBy(result.recordDate.records, (t: any) => t.segmentName)
+            const records = result.recordDate.records.reduce((count: any[], item: any) => {
+                const components = item.weldingStructureVOList.reduce((cCount: any[], cItem: any[]) => {
+                    delete item.weldingStructureVOList
+                    return cCount.concat({ ...cItem, ...item })
+                }, [])
+                return count.concat(components)
+            }, [])
             resole({
                 ...result,
                 recordDate: {
                     ...result.recordDate,
-                    records: Object.values(groupRecords).reduce((count: any[], item: any[]) => {
-                        const componentIds = groupBy(item, (t: any) => t.componentId)
-                        const components = Object.values(componentIds).reduce((cCount: any[], cItem: any[]) => cCount.concat(cItem), [])
-                        return count.concat(components)
-                    }, [])
+                    records: records.map((item: any, index: number) => ({ ...item, index }))
                 }
             })
         } catch (error) {
@@ -88,13 +90,23 @@ export default function Welding(): ReactElement {
             </Space>
         </Row>
         <CommonAliTable
+            rowKey={(records: any) => `${records.id}-${records.index}`}
             columns={welding.map((item: any) => {
-                if (item.dataIndex === "segmentGroupNum") {
+                if (item.dataIndex === "totalProcessNum") {
                     return ({
                         ...item,
                         features: {
                             ...item.features,
-                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.componentId === row2.componentId
+                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.id + row1.componentId === row2.id + row2.componentId
+                        }
+                    })
+                }
+                if (item.dataIndex === "segmentName") {
+                    return ({
+                        ...item,
+                        features: {
+                            ...item.features,
+                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.id + row1.segmentName === row2.id + row2.segmentName
                         }
                     })
                 }
