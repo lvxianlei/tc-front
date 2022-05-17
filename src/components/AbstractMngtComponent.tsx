@@ -233,7 +233,7 @@ export default abstract class AbstractMngtComponent<P extends RouteComponentProp
                         <Form.Item>
                             <Button onClick={async() => {
                                 await (this.getForm() as any).resetFields();
-                                this.onFilterSubmit({})
+                                this.onFilterSubmit(this.getForm()?.getFieldsValue(true))
                             }}>重置</Button>
                         </Form.Item>
                     </Col>
