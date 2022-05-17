@@ -5,6 +5,8 @@ import { planSchedule } from "./data.json"
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 export interface TechnicalIssuePropsRefProps {
     onSubmit: () => void
     resetFields: () => void
@@ -36,6 +38,14 @@ export default function PlanScheduleMngt(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const history = useHistory();
+    const { data: productUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit?size=10000`);
+            resole(result?.records)
+        } catch (error) {
+            reject(error)
+        }
+    }))
     return (<Page
         path="/tower-aps/productionPlan"
         columns={(planSchedule as any).map((item: any) => {
@@ -44,7 +54,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     ...item,
                     getCellProps(value: any, record: any) {
                         if (moment(record.loftingCompleteTime).isBefore(moment(value), "day")) {
-                            return { style: { background: "red", color: 'white', fontWeight: 'bold' } }
+                            return { style: { background: "#F9A1A1", color: 'white', fontWeight: 'bold' } }
                         }
                     }
                 })
@@ -84,6 +94,24 @@ export default function PlanScheduleMngt(): React.ReactNode {
                             {name}
                         </Select.Option>
                     })}
+                </Select>
+            },
+            {
+                name: 'productUnit',
+                label: '镀锌生产单元',
+                children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    { productUnitData?.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                    }) }
+                </Select>
+            },
+            {
+                name: 'productUnit',
+                label: '包装生产单元',
+                children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    { productUnitData?.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.name }</Select.Option>
+                    }) }
                 </Select>
             },
             {
