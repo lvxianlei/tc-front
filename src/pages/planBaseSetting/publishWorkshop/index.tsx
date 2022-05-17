@@ -89,7 +89,7 @@ export default () => {
             result?.data&&result?.data?.needUpdateList&&result?.data?.needUpdateList.length>0&&form.setFieldsValue({
                 list: result?.data?.needUpdateList
             })
-            if((result?.data&&result?.data?.needUpdateList&&result?.data?.needUpdateList.length>0)||(result?.data&&result?.data?.needUpdateList&&result?.data?.needUpdateList.length>0)){
+            if((result?.data&&result?.data?.needUpdateList&&result?.data?.needUpdateList.length>0)||(result?.data&&result?.data?.notMatchList&&result?.data?.notMatchList.length>0)){
                 Modal.confirm({
                     title: "分配生产单元提示",
                     icon: null,
