@@ -186,6 +186,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 setSelectedRows([])
                 setVisible(false)
                 await run()
+                history.go(0)
             }
             else{
                 message.error('未选择下达单！')
