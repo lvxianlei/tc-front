@@ -94,6 +94,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             return item
         })
         setMaterialList(newData)
+        setPopDataList(newData)
     }
 
     const lengthChange = (value: number, id: string) => {
@@ -108,6 +109,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             return item
         })
         setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
     }
 
     const handleCreateClick = async() => {
