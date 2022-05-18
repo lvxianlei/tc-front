@@ -16,7 +16,11 @@ interface ChooseModalProps {
  * 纸质单号，原材料税款合计，车辆牌照
  */
 const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
-    const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({ ...item, materialStandardName: item.standardName })))
+    const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({
+        ...item,
+        materialStandardName: item.standardName,
+        price: item.unTaxPrice
+    })))
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [currentId, setCurrentId] = useState<string>("")
@@ -423,6 +427,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 // price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
                 taxPrice: item.taxPrice,
                 totalTaxPrice: meteringMode === 1 && ((item.weight * item.quantity) * item.quantity * item.taxPrice).toFixed(2),
+
                 unTaxPrice: item.price,
                 totalUnTaxPrice: meteringMode === 1 && ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2)
             }

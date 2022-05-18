@@ -216,7 +216,7 @@
         },
         {
             "title": "外观检验效果",
-            "dataIndex": "appearance"
+            "dataIndex": "appearanceName"
         }
     ]
 }

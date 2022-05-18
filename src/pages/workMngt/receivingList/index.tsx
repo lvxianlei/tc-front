@@ -15,6 +15,7 @@ export default function Invoicing() {
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("");
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
@@ -65,15 +66,17 @@ export default function Invoicing() {
     }
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
+        setConfirmLoading(true)
         try {
             const isClose = await editRef.current?.onSubmit()
             if (isClose) {
                 message.success("材质配料设定成功...")
                 setVisible(false)
-                resove(true)
+                setConfirmLoading(false)
                 history.go(0)
             }
         } catch (error) {
+            setConfirmLoading(false)
             reject(false)
         }
     })
@@ -99,6 +102,7 @@ export default function Invoicing() {
             destroyOnClose
             visible={visible}
             width={1011}
+            confirmLoading={confirmLoading}
             title={type === "new" ? "创建" : "编辑"}
             onOk={handleModalOk}
             onCancel={() => {
