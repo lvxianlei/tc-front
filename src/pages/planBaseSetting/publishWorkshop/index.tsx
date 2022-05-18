@@ -86,7 +86,7 @@ export default () => {
     const handleAuto = async () => {
         const result = await run(selectedRowKeys)
         console.log(result, "----") 
-        if((result&&result?.needUpdateList&&result?.needUpdateList.length>0)||(result&&result?.needUpdateList&&result?.needUpdateList.length>0)){
+        if((result&&result?.needUpdateList&&result?.needUpdateList.length>0)||(result&&result?.notMatchList&&result?.notMatchList.length>0)){
 
             Modal.confirm({
                 title: "分配生产单元提示",
