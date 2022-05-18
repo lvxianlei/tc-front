@@ -147,7 +147,11 @@ export default function ManualDistribute(): ReactElement {
                     </Select>
                 </Form.Item>
             </Form>,
-            onOk: async () => new Promise(async (resove, reject) => {
+            onOk: async () => new Promise(async (resove, reject) => { 
+                const value = workshopForm.getFieldsValue(true)
+                if(JSON.stringify(value) == "{}"){
+                    reject(false)
+                }
                 const workshop = await workshopForm.validateFields()
                 try {
                     await weldingRun(selectedRowKeys.map((item: any) => ({
