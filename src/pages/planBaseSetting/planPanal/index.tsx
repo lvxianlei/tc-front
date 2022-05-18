@@ -124,7 +124,7 @@ export default () => {
                             <span style={{ fontWeight: 600 }}>合计：</span>
                             <span>总件数：</span>{countObj.totalProcessNum}
                             <span>总孔数：</span>{countObj.totalHolesNum}
-                            <span>总重量：</span>{countObj.totalWeight}
+                            <span>总重量（t）：</span>{countObj.totalWeight}
                         </Space>
                     </Row>
                 </>
@@ -146,6 +146,11 @@ export default () => {
                     children: <Input placeholder="批次号" style={{ width: 150 }} />
                 },
                 {
+                    name: "issueOrderNumber",
+                    label: "下达单号",
+                    children: <Input placeholder="下达单号" style={{ width: 150 }} />
+                },
+                {
                     name: "voltageGradeName",
                     label: "电压等级",
                     children: <Input placeholder="电压等级" style={{ width: 150 }} />
@@ -165,11 +170,11 @@ export default () => {
                     label: "计划交货日期",
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
-                {
-                    name: "customerDeliveryStartTime",
-                    label: "客户交货日期",
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                }
+                // {
+                //     name: "customerDeliveryStartTime",
+                //     label: "客户交货日期",
+                //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                // }
             ]}
             onFilterSubmit={(values: any) => {
                 if (values.planDeliveryStartTime) {

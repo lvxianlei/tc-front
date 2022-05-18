@@ -106,7 +106,7 @@
             "format": "YYYY-MM-DD HH:mm"
         },
         {
-            "title": "放样实际完成时间",
+            "title": "资料实际完成时间",
             "dataIndex": "loftingCompleteRealTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"

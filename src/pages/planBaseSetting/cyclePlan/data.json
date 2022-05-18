@@ -99,6 +99,10 @@
             "code": "planCompleteTime"
         },
         {
+            "title": "完成进度",
+            "code": "status"
+        },
+        {
             "title": "实际完成日期",
             "code": "completeTime"
         },

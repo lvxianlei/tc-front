@@ -635,7 +635,7 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "下发技术",
+                        "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
                         "authority": "approvalm"
                     },
@@ -652,6 +652,16 @@
                     {
                         "label": "计划看板",
                         "path": "/planProd/planPanal",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "试装计划",
+                        "path": "/planProd/planTrial",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "镀锌包装计划",
+                        "path": "/planProd/planGalvanizedPack",
                         "authority": "approvalm"
                     }
                 ]

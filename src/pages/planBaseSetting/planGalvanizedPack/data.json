@@ -1,0 +1,149 @@
+{
+    "planGalvanizedPack": [
+        {
+            "title": "批次号",
+            "dataIndex": "productionBatchNo",
+            "fixed": "left"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "fixed": "left"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategory",
+            "fixed": "left"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productType"
+        },
+        {
+            "title": "客户",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "线路名称",
+            "dataIndex": "lineName"
+        },
+        {
+            "title": "生产单元组",
+            "dataIndex": "groupName"
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "businessManagerName"
+        },
+        {
+            "title": "电压等级（kv）",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "title": "计划交货日期",
+            "dataIndex": "planDeliveryTime",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "角钢重量（t）",
+            "dataIndex": "angleWeight"
+        },
+        {
+            "title": "钢板重量（t）",
+            "dataIndex": "plateWeight"
+        },
+        {
+            "title": "角钢总件数",
+            "dataIndex": "angleNumber"
+        },
+        {
+            "title": "钢板总件数",
+            "dataIndex": "plateNumber"
+        },
+        {
+            "title": "开始转运日期",
+            "dataIndex": "transferStartTime"
+        },
+        {
+            "title": "完成转运日期",
+            "dataIndex": "transferEndTime"
+        },
+        {
+            "title": "镀锌生产单元",
+            "dataIndex": "galvanizedUnitName"
+        },
+        {
+            "title": "镀锌计划完成日期",
+            "dataIndex": "galvanizedCompleteTime"
+        },
+        {
+            "title": "镀锌备注",
+            "dataIndex": "galvanizedDescription"
+        },
+        {
+            "title": "包装生产单元",
+            "dataIndex": "packageUnitName"
+        },
+        {
+            "title": "包装计划完成日期",
+            "dataIndex": "packageCompleteTime"
+        },
+        {
+            "title": "包装备注",
+            "dataIndex": "packageDescription"
+        },
+        {
+            "title": "报补件日期",
+            "dataIndex": "reportTime"
+        },
+        {
+            "title": "入库日期",
+            "dataIndex": "storageTime"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "镀锌已完成"
+                },
+                {
+                    "value": 3,
+                    "label": "包装已完成"
+                }
+            ]
+        },
+        {
+            "title": "下发日期",
+            "dataIndex": "issueTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
+        },
+        {
+            "title": "下发人",
+            "dataIndex": "issueUserName"
+        },
+        {
+            "title": "镀锌实际完成时间",
+            "dataIndex": "galvanizedCompleteRealTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
+        },
+        {
+            "title": "包装实际完成时间",
+            "dataIndex": "packageCompleteRealTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm"
+        }
+    ]
+}
