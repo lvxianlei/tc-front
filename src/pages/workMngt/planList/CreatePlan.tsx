@@ -3,11 +3,12 @@
  */
  import React, { useRef, useState } from 'react';
  import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
-import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
+import { BaseInfo, CommonTable, DetailTitle } from '../../common';
 import {
     material,
     addMaterial
 } from "./CreatePlan.json";
+import { PopTableContent } from "./ComparesModal"
 import { deliverywayOptions, materialStandardOptions, materialTextureOptions, transportationTypeOptions } from "../../../configuration/DictionaryOptions"
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
@@ -51,6 +52,22 @@ import RequestUtil from '../../../utils/RequestUtil';
                 totalAmount: (num * price).toFixed(2)
             })
         })])
+        setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
+            const num = parseFloat(item.planPurchaseNum || "1")
+            const taxPrice = parseFloat(item.taxOffer || "1.00")
+            const price = parseFloat(item.offer || "1.00")
+            return ({
+                ...item,
+                planPurchaseNum: num,
+                taxPrice,
+                price,
+                width: formatSpec(item.structureSpec).width,
+                // length: formatSpec(item.structureSpec).length,
+                weight: item.weight || "1.00",
+                taxTotalAmount: (num * taxPrice).toFixed(2),
+                totalAmount: (num * price).toFixed(2)
+            })
+        })])
         setVisible(false)
     }
 
@@ -78,6 +95,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             return item
         })
         setMaterialList(newData)
+        setPopDataList(newData)
     }
 
     const lengthChange = (value: number, id: string) => {
@@ -86,12 +104,13 @@ import RequestUtil from '../../../utils/RequestUtil';
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
+                    weight: ((item.proportion * value) / 1000).toFixed(3)
                 })
             }
             return item
         })
-        setMaterialList(list);
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
     }
 
     const handleCreateClick = async() => {
@@ -165,7 +184,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                     ],
                     "enum": [
                         {
-                            "value": 1,
+                            "value": 2,
                             "label": "库存采购"
                         }
                     ]
@@ -191,7 +210,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                         })
                     }
                     if (item.dataIndex === "standard") {
@@ -249,7 +268,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={materialList} />
+            dataSource={popDataList} />
         <Modal width={1100} title={`选择原材料明细`} destroyOnClose
             visible={visible}
             onOk={handleAddModalOk}
@@ -273,12 +292,13 @@ import RequestUtil from '../../../utils/RequestUtil';
                 }}
                 value={{
                     id: "",
-                    records: materialList,
+                    records: popDataList,
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
-                    setPopDataList(fields.map((item: any) => ({
+                    setMaterialList(fields.map((item: any) => ({
                         ...item,
+                        planPurchaseNum: item.planPurchaseNum || "1",
                         spec: item.structureSpec,
                         source: 2,
                         materialTextureId: item.structureTexture,
@@ -290,8 +310,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
                         weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
-                    })))
-                    setMaterialList(fields || [])
+                    })) || [])
                 }}
             />
         </Modal>
