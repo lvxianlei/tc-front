@@ -88,7 +88,7 @@ export default () => {
         console.log(result, "----") 
         if((result&&result?.needUpdateList&&result?.needUpdateList.length>0)||(result&&result?.notMatchList&&result?.notMatchList.length>0)){
 
-            Modal.confirm({
+            Modal.warn({
                 title: "分配生产单元提示",
                 icon: null,
                 okText: "确定",
@@ -107,7 +107,7 @@ export default () => {
                     </>}
                     {result&&result?.notMatchList&&result?.notMatchList.length>0&&<>
                         <DetailTitle  title='构件未匹配到生产单元，请配置分配规则'/>
-                        <CommonTable columns={componentdetails} dataSource={result?.notMatchList|| []} />
+                        <CommonTable columns={componentdetails} dataSource={result?.notMatchList|| []} pagination={false}/>
                     </>}
                 </>,
                 onOk: async () => {
@@ -204,7 +204,7 @@ export default () => {
                     value={status}
                     onChange={(event) => {
                         setStatus(event.target.value)
-                        setFilterValue({ ...filterValue, status: event.target.value })
+                        setFilterValue({ ...filterValue, status: event.target.value, current: 1 })
                     }}
                 >
                     <Radio.Button value={1}>待分配下达单</Radio.Button>
