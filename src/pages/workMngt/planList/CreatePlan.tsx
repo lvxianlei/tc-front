@@ -3,11 +3,12 @@
  */
  import React, { useRef, useState } from 'react';
  import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
-import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
+import { BaseInfo, CommonTable, DetailTitle } from '../../common';
 import {
     material,
     addMaterial
 } from "./CreatePlan.json";
+import { PopTableContent } from "./ComparesModal"
 import { deliverywayOptions, materialStandardOptions, materialTextureOptions, transportationTypeOptions } from "../../../configuration/DictionaryOptions"
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
