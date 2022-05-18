@@ -107,7 +107,7 @@ export default () => {
                     </>}
                     {result&&result?.notMatchList&&result?.notMatchList.length>0&&<>
                         <DetailTitle  title='构件未匹配到生产单元，请配置分配规则'/>
-                        <CommonTable columns={componentdetails} dataSource={result?.notMatchList|| []} />
+                        <CommonTable columns={componentdetails} dataSource={result?.notMatchList|| []} pagination={false}/>
                     </>}
                 </>,
                 onOk: async () => {
