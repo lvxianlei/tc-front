@@ -26,6 +26,11 @@
             "width": 100
         },
         {
+            "title": "供应商",
+            "dataIndex": "supplierName",
+            "width": 100
+        },
+        {
             "title": "到货时间",
             "dataIndex": "receiveTime",
             "width": 100
@@ -215,7 +220,7 @@
             ]
         },
         {
-            "title": "卸货方式",
+            "title": "卸车方式",
             "dataIndex": "unloadMode",
             "type": "select",
             "enum": [],
