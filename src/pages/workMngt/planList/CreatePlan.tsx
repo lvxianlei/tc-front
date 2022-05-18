@@ -74,28 +74,19 @@ import RequestUtil from '../../../utils/RequestUtil';
     // 移除
     const handleRemove = (id: string) => setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
     
-    const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
-        const newData = materialList.map((item: any) => {
-            if (item.materialCode === materialCode) {
-                const allData: any = {
-                    planPurchaseNum: parseFloat(item.planPurchaseNum || "1"),
-                    taxPrice: parseFloat(item.taxPrice || "1.00"),
-                    price: parseFloat(item.price || "1.00"),
-                    weight: (item.weight && item.weight >= 0) ? parseFloat(item.weight) : parseFloat("0")
-                }
-                allData[dataIndex] = value
+    const handleNumChange = (value: number, id: string) => {
+        const list = materialList.map((item: any) => {
+            if (item.id === id) {
                 return ({
                     ...item,
-                    taxTotalAmount: (allData.planPurchaseNum * allData.taxPrice * allData.weight).toFixed(2),
-                    totalAmount: (allData.planPurchaseNum * allData.price * allData.weight).toFixed(2),
-                    totalWeight: (allData.planPurchaseNum * allData.weight).toFixed(3),
-                    [dataIndex]: value
+                    planPurchaseNum: value,
+                    weight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
                 })
             }
             return item
         })
-        setMaterialList(newData)
-        setPopDataList(newData)
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
     }
 
     const lengthChange = (value: number, id: string) => {
@@ -104,7 +95,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                 return ({
                     ...item,
                     length: value,
-                    weight: ((item.proportion * value) / 1000).toFixed(3)
+                    weight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3)
                 })
             }
             return item
@@ -201,10 +192,10 @@ import RequestUtil from '../../../utils/RequestUtil';
             style={{ padding: "0" }}
             columns={[
                 ...material.map((item: any) => {
-                    if (["planPurchaseNum", "taxPrice", "price"].includes(item.dataIndex)) {
+                    if (["planPurchaseNum"].includes(item.dataIndex)) {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                         })
                     }
                     if (item.dataIndex === "length") {

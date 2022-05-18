@@ -55,6 +55,10 @@
             "dataIndex": "materialName"
         },
         {
+            "title": "品名",
+            "dataIndex": "materialCategoryName"
+        },
+        {
             "title": "标准",
             "dataIndex": "standard"
         },
@@ -81,22 +85,6 @@
         {
             "title": "数量",
             "dataIndex": "planPurchaseNum"
-        },
-        {
-            "title": "含税单价",
-            "dataIndex": "taxPrice"
-        },
-        {
-            "title": "含税金额（元）合计",
-            "dataIndex": "taxTotalAmount"
-        },
-        {
-            "title": "不含税单价",
-            "dataIndex": "price"
-        },
-        {
-            "title": "不含税单价（元）合计",
-            "dataIndex": "totalAmount"
         }
     ],
     
