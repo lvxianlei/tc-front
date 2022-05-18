@@ -26,7 +26,7 @@
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "length",
             "width": 100,
             "type": "number"
         },
@@ -44,7 +44,7 @@
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "singleWeight",
+            "dataIndex": "weight",
             "width": 100,
             "type": "string"
         }
@@ -76,7 +76,7 @@
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "totalWeight"
+            "dataIndex": "weight"
         },
         {
             "title": "数量",
