@@ -671,7 +671,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return item
                 }
             })}
-            dataSource={{ meteringMode: 1, receiveTime: moment() }} />
+            dataSource={{
+                meteringMode: 1,
+                receiveTime: moment()
+            }} />
         <DetailTitle title="运费信息" />
         <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />

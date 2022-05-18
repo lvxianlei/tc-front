@@ -35,7 +35,7 @@
             "dataIndex": "carNumber"
         },
         {
-            "title": "卸货方式",
+            "title": "卸车方式",
             "dataIndex": "unloadMode",
             "type": "select"
         },
