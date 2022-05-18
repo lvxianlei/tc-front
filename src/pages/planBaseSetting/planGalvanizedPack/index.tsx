@@ -51,7 +51,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
         }
     }))
     return (<Page
-        path="/tower-aps/galvanizedPackage/page"
+        path="/tower-aps/galvanizedPackage"
         columns={(planSchedule as any).map((item: any) => {
             if (item.dataIndex === "packageCompleteRealTime") {
                 return ({
@@ -100,7 +100,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                 children: <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户/批次号" />
             },
             {
-                name: 'productType',
+                name: 'productTypeId',
                 label: '产品类型',
                 children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {

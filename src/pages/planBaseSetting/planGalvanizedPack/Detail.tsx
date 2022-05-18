@@ -15,7 +15,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-science/drawTask/getList?drawTaskId=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-aps/galvanizedPackage/detail`,params.id.indexOf(',')>-1?params?.id.split(','):[params.id])
+        form.setFieldsValue({
+            packagePlanVOList: data?.packagePlanVOList,
+            galvanizedPlanVOList: data?.galvanizedPlanVOList
+        })
         resole(data)
     }), {})
     const { data: productUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -46,55 +50,55 @@ export default function GalvanizedPackDetail(): React.ReactNode {
 
     const galvanizedColumns=[
         {
-            key: 'lineName',
+            key: 'planNumber',
             title: '计划号',
             width: 100,
-            dataIndex: 'lineName'
-        },
-        {
-            key: 'name',
-            title: '塔型',
-            width: 100,
-            dataIndex: 'name'
+            dataIndex: 'planNumber'
         },
         {
             key: 'productCategory',
-            title: '批次号',
+            title: '塔型',
             width: 100,
             dataIndex: 'productCategory'
         },
         {
-            key: 'steelProductShape',
+            key: 'batchNo',
+            title: '批次号',
+            width: 100,
+            dataIndex: 'batchNo'
+        },
+        {
+            key: 'angleWeight',
             title: '角钢重量（t）',
             width: 100,
-            dataIndex: 'steelProductShape'
+            dataIndex: 'angleWeight'
         },
         {
-            key: 'productType',
+            key: 'plateWeight',
             title: '钢板重量（t）',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'plateWeight',
         },
         {
-            key: 'productType',
+            key: 'angleNumber',
             title: '角钢总件数',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'angleNumber',
         },
         {
-            key: 'productType',
+            key: 'plateNumber',
             title: '钢板总件数',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'plateNumber',
         },
         {
-            key: 'productType',
+            key: 'transferStartTime',
             title: '* 转运开始日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'transferStartTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "A"]}
+                    name={['packagePlanVOList', index, "transferStartTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -106,13 +110,13 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'transferEndTime',
             title: '* 转运结束日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'transferEndTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "A"]}
+                    name={['packagePlanVOList', index, "transferEndTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -124,17 +128,17 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'galvanizedFirstUnitId',
             title: '* 镀锌单元',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'galvanizedFirstUnitId',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "code"]}
+                    name={['packagePlanVOList', index, "galvanizedFirstUnitId"]}
                     initialValue={_}
                     rules={[{
                         required: true,
-                        message: '请选择试装单元'
+                        message: '请选择镀锌单元'
                     }]}
                     // initialValue={ record.pattern }
                 >
@@ -149,17 +153,17 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'galvanizedFirstCompleteTime',
             title: '* 计划完成日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'galvanizedFirstCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "A"]}
-                    initialValue={record.segmentName}
+                    name={['packagePlanVOList', index, "galvanizedFirstCompleteTime"]}
+                    initialValue={_}
                     rules={[{
                         required: true,
-                        message: '请选择开始转运日期'
+                        message: '请选择计划完成日期'
                     }]}
                 >
                     <DatePicker format='YYYY-MM-DD' />
@@ -167,13 +171,13 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'galvanizedSecondUnitId',
             title: '镀锌单元',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'galvanizedSecondUnitId',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "code"]}
+                    name={['packagePlanVOList', index, "galvanizedSecondUnitId"]}
                     initialValue={_}
                     // initialValue={ record.pattern }
                 >
@@ -188,27 +192,27 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'galvanizedSecondCompleteTime',
             title: '计划完成日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'galvanizedSecondCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "A"]}
-                    initialValue={record.segmentName}
+                    name={['packagePlanVOList', index, "galvanizedSecondCompleteTime"]}
+                    initialValue={_}
                 >
                     <DatePicker format='YYYY-MM-DD' />
                 </Form.Item>
             )
         },
         {
-            key: 'productType',
+            key: 'galvanizedThirdUnitId',
             title: '镀锌单元',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'galvanizedThirdUnitId',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "code"]}
+                    name={['packagePlanVOList', index, "galvanizedThirdUnitId"]}
                     initialValue={_}
                     // initialValue={ record.pattern }
                 >
@@ -223,27 +227,27 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'galvanizedThirdCompleteTime',
             title: '计划完成日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'galvanizedThirdCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "A"]}
-                    initialValue={record.segmentName}
+                    name={['packagePlanVOList', index, "galvanizedThirdCompleteTime"]}
+                    initialValue={_}
                 >
                     <DatePicker format='YYYY-MM-DD' />
                 </Form.Item>
             )
         },
         {
-            key: 'productType',
+            key: 'galvanizedDescription',
             title: '镀锌备注',
             width: 100,
             dataIndex: 'productType',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['galvanizedList', index, "cyclePlan"]}
+                    name={['packagePlanVOList', index, "galvanizedDescription"]}
                     initialValue={_}
                 >
                     <TextArea
@@ -260,55 +264,55 @@ export default function GalvanizedPackDetail(): React.ReactNode {
 
     const packColumns=[
         {
-            key: 'lineName',
+            key: 'planNumber',
             title: '计划号',
             width: 100,
-            dataIndex: 'lineName'
-        },
-        {
-            key: 'name',
-            title: '塔型',
-            width: 100,
-            dataIndex: 'name'
+            dataIndex: 'planNumber'
         },
         {
             key: 'productCategory',
-            title: '批次号',
+            title: '塔型',
             width: 100,
             dataIndex: 'productCategory'
         },
         {
-            key: 'steelProductShape',
+            key: 'batchNo',
+            title: '批次号',
+            width: 100,
+            dataIndex: 'batchNo'
+        },
+        {
+            key: 'angleWeight',
             title: '角钢重量（t）',
             width: 100,
-            dataIndex: 'steelProductShape'
+            dataIndex: 'angleWeight'
         },
         {
-            key: 'productType',
+            key: 'plateWeight',
             title: '钢板重量（t）',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'plateWeight',
         },
         {
-            key: 'productType',
+            key: 'angleNumber',
             title: '角钢总件数',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'angleNumber',
         },
         {
-            key: 'productType',
+            key: 'plateNumber',
             title: '钢板总件数',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'plateNumber',
         },
         {
-            key: 'productType',
+            key: 'packageFirstUnitId',
             title: '* 包装单元',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'packageFirstUnitId',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "code"]}
+                    name={['packagePlanVOList', index, "packageFirstUnitId"]}
                     initialValue={_}
                     rules={[{
                         required: true,
@@ -327,13 +331,13 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'packageFirstCompleteTime',
             title: '* 计划开始日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'packageFirstCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "A"]}
+                    name={['packagePlanVOList', index, "packageFirstCompleteTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -348,10 +352,10 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             key: 'productType',
             title: '包装单元',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'packageSecondUnitId',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "code"]}
+                    name={['packagePlanVOList', index, "packageSecondUnitId"]}
                     initialValue={_}
                     // initialValue={ record.pattern }
                 >
@@ -366,13 +370,13 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'packageSecondCompleteTime',
             title: '计划开始日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'packageSecondCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "A"]}
+                    name={['packagePlanVOList', index, "packageSecondCompleteTime"]}
                     initialValue={record.segmentName}
                 >
                     <DatePicker format='YYYY-MM-DD' />
@@ -386,7 +390,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             dataIndex: 'productType',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "A"]}
+                    name={['packagePlanVOList', index, "A"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -398,13 +402,13 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'reportTime',
             title: '* 报补件日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'reportTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "A"]}
+                    name={['packagePlanVOList', index, "reportTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -416,13 +420,13 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'storageTime',
             title: '* 入库日期',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'storageTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "A"]}
+                    name={['packagePlanVOList', index, "storageTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -434,13 +438,13 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             )
         },
         {
-            key: 'productType',
+            key: 'packageDescription',
             title: '包装备注',
             width: 100,
-            dataIndex: 'productType',
+            dataIndex: 'packageDescription',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packList', index, "cyclePlan"]}
+                    name={['packagePlanVOList', index, "packageDescription"]}
                     initialValue={_}
                 >
                     <TextArea
@@ -457,8 +461,9 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
-                <Button type='primary' onClick={() => {
-                    console.log(form.getFieldsValue(true))
+                <Button type='primary' onClick={async () => {
+                    await form.validateFields()
+                    const value = form.getFieldsValue(true)
                 }}>保存</Button>
                 <Button type='primary' onClick={handleIssue}>镀锌包装下发</Button>
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
@@ -468,14 +473,14 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     <DetailTitle title="镀锌计划"/>
                     <Space>
                         <span>合计：</span>
-                        <span>角钢重量（t）：{detailData?.totalNumber}</span>
-                        <span>钢板重量（t）：{detailData?.totalHoles}</span>
-                        <span>角钢总件数：{detailData?.totalHoles}</span>
-                        <span>钢板总件数：{detailData?.totalHoles}</span>
+                        <span>角钢重量（t）：{detailData?.totalAngleWeight}</span>
+                        <span>钢板重量（t）：{detailData?.totalPlateWeight}</span>
+                        <span>角钢总件数：{detailData?.totalAngleNumber}</span>
+                        <span>钢板总件数：{detailData?.totalPlateNumber}</span>
                     </Space>
-                    <CommonTable columns={galvanizedColumns} dataSource={[{}]} pagination={false}/>
+                    <CommonTable columns={galvanizedColumns} dataSource={[...detailData?.galvanizedPlanVOList]} pagination={false}/>
                     <DetailTitle title="包装计划"/>
-                    <CommonTable columns={packColumns} dataSource={[{}]} pagination={false}/>
+                    <CommonTable columns={packColumns} dataSource={[...detailData?.packagePlanVOList]} pagination={false}/>
                 </Form>
            
             </DetailContent>

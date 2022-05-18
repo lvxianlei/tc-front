@@ -28,10 +28,6 @@
             "dataIndex": "lineName"
         },
         {
-            "title": "基数",
-            "dataIndex": "number"
-        },
-        {
             "title": "生产单元组",
             "dataIndex": "groupName"
         },
@@ -44,7 +40,7 @@
             "dataIndex": "voltageGradeName"
         },
         {
-            "title": "计划交货期",
+            "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
             "format": "YYYY-MM-DD"
         },
