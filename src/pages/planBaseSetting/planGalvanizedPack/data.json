@@ -1,8 +1,8 @@
 {
-    "planSchedule": [
+    "planGalvanizedPack": [
         {
             "title": "批次号",
-            "dataIndex": "batchNo",
+            "dataIndex": "productionBatchNo",
             "fixed": "left"
         },
         {

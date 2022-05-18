@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input, Button, Select, DatePicker, Space, message, Form } from 'antd';
 import { SearchTable as Page } from '../../common';
-import { planSchedule } from "./data.json"
+import { planGalvanizedPack } from "./data.json"
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { Link, useHistory } from 'react-router-dom';
 import moment from 'moment';
@@ -12,7 +12,7 @@ export interface TechnicalIssuePropsRefProps {
     resetFields: () => void
 }
 
-export default function PlanScheduleMngt(): React.ReactNode {
+export default function PlanGalvanizedPackMngt(): React.ReactNode {
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
@@ -52,7 +52,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
     }))
     return (<Page
         path="/tower-aps/galvanizedPackage"
-        columns={(planSchedule as any).map((item: any) => {
+        columns={(planGalvanizedPack as any).map((item: any) => {
             if (item.dataIndex === "packageCompleteRealTime") {
                 return ({
                     ...item,
@@ -90,7 +90,10 @@ export default function PlanScheduleMngt(): React.ReactNode {
             rowSelection: {
                 type: "checkbox",
                 selectedRowKeys: selectedKeys,
-                onChange: SelectChange
+                onChange: SelectChange,
+                getCheckboxProps: (record: any) => ({
+                    disabled: record.status === 2, //已下发不可再次下发
+                }),
             }
         }}
         searchFormItems={[
