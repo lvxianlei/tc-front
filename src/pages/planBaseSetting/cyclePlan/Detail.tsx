@@ -8,6 +8,7 @@ import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'r
 import { MenuOutlined } from '@ant-design/icons';
 import ReleaseOrder from './ReleaseOrder';
 import moment from 'moment';
+import zhCN from 'antd/es/date-picker/locale/zh_CN';
 const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
 const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
 
@@ -239,24 +240,44 @@ export default function CyclePlanDetail(): React.ReactNode {
             content: <Form form={dateForm}>
                 <Form.Item
                     label="计划完成日期"
-                    name="plannedDate"
+                    name="planCompleteTime"
                     rules={[{ required: true, message: '请选择计划完成日期' }]}>
-                    <DatePicker format='YYYY-MM-DD' placeholder='请选择'/>
+                    <DatePicker 
+                        format='YYYY-MM-DD' 
+                        placeholder='请选择'
+                        locale={zhCN} 
+                        disabledDate={
+                            current => { 
+                                const value = form.getFieldsValue(true)
+                                const formatDate = value.date.map((item: any) => item.format("YYYY-MM-DD"))
+                                value.startTime = formatDate[0];
+                                value.endTime = formatDate[1];
+                                return current && (current < moment(formatDate[0]) || current > moment(formatDate[1]).add(1, 'days'))
+                                
+                            }
+                        }
+                    />
                 </Form.Item>
             </Form>,
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const factoryId = await dateForm.validateFields()
-                    // await run(selectedRows.map((item: any) => ({
-                    //     id: item.id,
-                    //     productionBatchNo: item.productionBatchNo,
-                    //     factoryId: factoryId.factoryId
-                    // })))
+                    const value = dateForm.getFieldsValue(true)
+                    if(JSON.stringify(value) == "{}"){
+                        reject(false)
+                    }
+                    await dateForm.validateFields()
+                    const submitValue = selectedKeys.map((item:any)=>{
+                        return {
+                            id:item,
+                            planCompleteTime: value?.planCompleteTime
+                        }
+                    })
+                    RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
                     await message.success("已成功设置计划完成日期！")
                     setSelectedKeys([])
                     setSelectedRows([])
                     dateForm.resetFields()
-                    history.go(0)
+                    await run()
                     resove(true)
                 } catch (error) {
                     reject(false)
@@ -264,6 +285,7 @@ export default function CyclePlanDetail(): React.ReactNode {
             }),
             onCancel() {
                 dateForm.resetFields()
+                // history.go(0)
             }
         })
     }
@@ -401,7 +423,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <DetailTitle title="周期计划下达单"/>
                 <Space>
                     <ReleaseOrder run={run} data={detail}/>
-                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length !== 0)}>设置计划交货期</Button>
+                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>设置计划交货期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
