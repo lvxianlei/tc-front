@@ -19,7 +19,7 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${receiveStockId}`)
-            const warehouseData: any[] = type === 1 ? await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: result.warehouseId, type: 0 }) : []
+            const warehouseData: any[] = type === 1 ? await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: result.warehouseId, type: 1 }) : []
             resole({
                 warehouseName: result.warehouseName,
                 warehouseId: result.warehouseId,
@@ -33,7 +33,7 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     //库位
     const { data: locatorData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: data?.warehouseId, type: 1 })
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: data?.warehouseId, type: 2 })
             resole(result.map((item: any) => ({ label: item.name, value: item.id })))
         } catch (error) {
             reject(error)

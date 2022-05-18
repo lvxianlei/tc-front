@@ -405,7 +405,7 @@
         },
         {
             "title": "外观检验结果",
-            "dataIndex": "appearance",
+            "dataIndex": "appearanceName",
             "width": 130
         }
     ],
@@ -454,7 +454,7 @@
         },
         {
             "title": "理算重量（吨）",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "disabled": true
         },
         {
@@ -484,15 +484,18 @@
         },
         {
             "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber"
+            "dataIndex": "furnaceBatchNumber",
+            "maxLength": 30
         },
         {
             "title": "质保书号",
-            "dataIndex": "warrantyNumber"
+            "dataIndex": "warrantyNumber",
+            "maxLength": 30
         },
         {
             "title": "轧制批号",
-            "dataIndex": "rollingNumber"
+            "dataIndex": "rollingNumber",
+            "maxLength": 30
         },
         {
             "title": "外观检验结果",
