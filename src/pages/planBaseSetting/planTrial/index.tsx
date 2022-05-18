@@ -63,7 +63,7 @@ export default function PlanTrialList(): React.ReactNode {
                         message: '请选择开始转运日期'
                     }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
                 </Form.Item>
             )
         },
@@ -83,7 +83,7 @@ export default function PlanTrialList(): React.ReactNode {
                         message: '请选择完成转运日期'
                     }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
                 </Form.Item>
             )
         },
@@ -103,7 +103,7 @@ export default function PlanTrialList(): React.ReactNode {
                         message: '请选择计划完成日期'
                     }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
                 </Form.Item>
             )
         },
@@ -124,7 +124,7 @@ export default function PlanTrialList(): React.ReactNode {
                     }]}
                     // initialValue={ record.pattern }
                 >
-                    <Select onChange={ () => rowChange(index) }>
+                    <Select onChange={ () => rowChange(index) } disabled={record?.status===2}>
                         { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
                         return <Select.Option key={ index } value={ id }>
                             { name }
@@ -152,6 +152,7 @@ export default function PlanTrialList(): React.ReactNode {
                         showCount
                         maxLength={300}
                         onChange={() => rowChange(index)}
+                        disabled={record?.status===2}
                     />
                 </Form.Item>
             )
@@ -363,10 +364,13 @@ export default function PlanTrialList(): React.ReactNode {
             tableProps={{
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
-                    onChange: SelectChange
+                    onChange: SelectChange,
+                    getCheckboxProps: (record: any) => ({
+                        disabled: record.status === 2, //已下发不可再次下发
+                    }),
                 }
             }}
-            
+           
             filterValue={filterValue}
             extraOperation={
                 <Space direction="horizontal" size="small">
