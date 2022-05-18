@@ -165,7 +165,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                     ],
                     "enum": [
                         {
-                            "value": 1,
+                            "value": 2,
                             "label": "库存采购"
                         }
                     ]
@@ -277,8 +277,10 @@ import RequestUtil from '../../../utils/RequestUtil';
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
+                    console.log(fields, "====>>>")
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
+                        planPurchaseNum: item.planPurchaseNum || "1",
                         spec: item.structureSpec,
                         source: 2,
                         materialTextureId: item.structureTexture,
@@ -291,7 +293,21 @@ import RequestUtil from '../../../utils/RequestUtil';
                         totalAmount: item.totalAmount || 1.00,
                         weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
                     })))
-                    setMaterialList(fields || [])
+                    setMaterialList(fields.map((item: any) => ({
+                        ...item,
+                        planPurchaseNum: item.planPurchaseNum || "1",
+                        spec: item.structureSpec,
+                        source: 2,
+                        materialTextureId: item.structureTexture,
+                        standardName: item.standardName,
+                        length: item.length || 1,
+                        standard: item.standard,
+                        taxPrice: item.taxPrice || 1.00,
+                        price: item.price || 1.00,
+                        taxTotalAmount: item.taxTotalAmount || 1.00,
+                        totalAmount: item.totalAmount || 1.00,
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
+                    })) || [])
                 }}
             />
         </Modal>
