@@ -32,13 +32,20 @@ export default function ManualDistribute(): ReactElement {
 
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
+            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=10000`);
             resole(result.records || [])
         } catch (error) {
             reject(error)
         }
     }))
-
+    const { data: weldinglistData } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-aps/welding/config/weldingList?size=10000`);
+            resole(result.records || [])
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.put(`/tower-aps/workshopOrder/manualDistribute`, params);
@@ -130,9 +137,13 @@ export default function ManualDistribute(): ReactElement {
             content: <Form form={workshopForm}>
                 <Form.Item name="workshopId" label="生产单元" rules={[{ required: true, message: "请选择生产单元..." }]}>
                     <Select>
-                        {listData.map((item: any) => <Select.Option
+                        {status===1&&listData.map((item: any) => <Select.Option
                             key={item.id}
                             value={item.id}>{item.name}</Select.Option>)}
+                        {status===2&&weldinglistData.map((item: any) => <Select.Option
+                            key={item.unitId}
+                            value={item.unitId}>{item.unitName}</Select.Option>)}
+                            
                     </Select>
                 </Form.Item>
             </Form>,
@@ -141,6 +152,7 @@ export default function ManualDistribute(): ReactElement {
                 try {
                     await weldingRun(selectedRowKeys.map((item: any) => ({
                         id: item.id,
+                        ids: item.ids,
                         workshopId: workshop.workshopId,
                         weldingId: item.weldingId,
                         componentId: item.componentId,
@@ -211,7 +223,10 @@ export default function ManualDistribute(): ReactElement {
         }} size={12}>
             <Radio.Group
                 value={status}
-                onChange={(event) => setStatus(event.target.value)}
+                onChange={(event) => {
+                    setStatus(event.target.value)
+                    setPagenation({ ...pagenation, current: 1 })
+                }}
             >
                 <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
