@@ -259,10 +259,21 @@ export default function CyclePlanDetail(): React.ReactNode {
                     />
                 </Form.Item>
             </Form>,
-            onOk: () => new Promise(async (resove, reject) => {
+            onOk: handleModalOk,
+            onCancel() {
+                dateForm.resetFields()
+                // history.go(0)
+            }
+        })
+    }
+    const handleModalOk = async () => {
+        await dateForm.validateFields()
+        Modal.confirm({
+            title: "计划起止日期将同步保存！",
+            onOk: async () => new Promise(async (resove, reject) => {
                 try {
-                    const value = dateForm.getFieldsValue(true)
-                    if(JSON.stringify(value) == "{}"){
+                    const valueDate = dateForm.getFieldsValue(true)
+                    if(JSON.stringify(valueDate) == "{}"){
                         reject(false)
                     }
                     await dateForm.validateFields()
@@ -274,20 +285,36 @@ export default function CyclePlanDetail(): React.ReactNode {
                     })
                     RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
                     await message.success("已成功设置计划完成日期！")
-                    setSelectedKeys([])
-                    setSelectedRows([])
                     dateForm.resetFields()
-                    await run()
+                    const value = form.getFieldsValue(true)
+                    if (value.date) {
+                        const formatDate = value.date.map((item: any) => item.format("YYYY-MM-DD"))
+                        value.startTime = formatDate[0] + ' 00:00:00';
+                        value.endTime = formatDate[1] + ' 23:59:59';
+                        delete value.date
+                    }
+                    const submitData = {
+                        configId: detail?.configId,
+                        id: params.id,
+                        configName: detail?.configName,
+                        startTime: value?.startTime,
+                        endTime: value?.endTime,
+                        deleteIdList: deleteIdList,
+                        issueOrderDTOList: dataSource 
+                    }
+                    await RequestUtil.put(`/tower-aps/cyclePlan`,submitData)
+                    setSelectedKeys([])
+                    setDeleteIdList([])
+                    setSelectedRows([])
                     resove(true)
+                    await run()
                 } catch (error) {
-                    reject(false)
+                    console.log(error)
                 }
             }),
-            onCancel() {
-                dateForm.resetFields()
-                // history.go(0)
-            }
+            onCancel: () => dateForm.resetFields()
         })
+        
     }
     return <>
         <Spin spinning={loading}>
@@ -423,7 +450,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <DetailTitle title="周期计划下达单"/>
                 <Space>
                     <ReleaseOrder run={run} data={detail}/>
-                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>设置计划交货期</Button>
+                    <Button type="primary" ghost onClick={useDate} >设置计划交货期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
