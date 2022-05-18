@@ -88,7 +88,7 @@ export default () => {
         console.log(result, "----") 
         if((result&&result?.needUpdateList&&result?.needUpdateList.length>0)||(result&&result?.notMatchList&&result?.notMatchList.length>0)){
 
-            Modal.confirm({
+            Modal.warn({
                 title: "分配生产单元提示",
                 icon: null,
                 okText: "确定",
