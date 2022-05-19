@@ -35,7 +35,15 @@ import RequestUtil from '../../../utils/RequestUtil';
         })
     }
     const handleAddModalOk = () => {
-        const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        for (let i = 0; i < popDataList.length; i += 1) {
+            for (let p = 0; p < materialList.length; p += 1) {
+                if (popDataList[i].id === materialList[p].id) {
+                    materialList[p].materialTextureId = popDataList[i].materialTextureId;
+                    materialList[p].materialTexture = popDataList[i].materialTexture;
+                }
+            }
+        }
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
@@ -72,7 +80,10 @@ import RequestUtil from '../../../utils/RequestUtil';
     }
 
     // 移除
-    const handleRemove = (id: string) => setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
+    const handleRemove = (id: string) => {
+        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
+        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+    }
     
     const handleNumChange = (value: number, id: string) => {
         const list = materialList.map((item: any) => {
@@ -187,7 +198,10 @@ import RequestUtil from '../../../utils/RequestUtil';
         <DetailTitle title="原材料明细" />
         <div className='btnWrapper'>
             <Button type='primary' ghost style={{marginRight: 8}}  onClick={() => setVisible(true)}>添加</Button>
-            <Button type='primary' ghost onClick={() => setMaterialList([])}>清空</Button>
+            <Button type='primary' ghost onClick={() => {
+                setMaterialList([]);
+                setPopDataList([]);
+            }}>清空</Button>
         </div>
         <CommonTable
             rowKey={"id"}
@@ -211,9 +225,9 @@ import RequestUtil from '../../../utils/RequestUtil';
                             ...item,
                             render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
                                 style={{ width: '150px' }}
-                                value={materialList[key]?.standard && materialList[key]?.standard + ',' + materialList[key]?.materialStandardName}
+                                value={popDataList[key]?.standard && popDataList[key]?.standard + ',' + popDataList[key]?.materialStandardName}
                                 onChange={(e: string) => {
-                                    const newData = materialList.map((item: any, index: number) => {
+                                    const newData = popDataList.map((item: any, index: number) => {
                                         if (index === key) {
                                             return {
                                                 ...item,
@@ -223,7 +237,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                                         }
                                         return item
                                     })
-                                    setMaterialList(newData)
+                                    setPopDataList(newData)
                                 }}>
                                 {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
@@ -234,9 +248,9 @@ import RequestUtil from '../../../utils/RequestUtil';
                             ...item,
                             render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
                                 style={{ width: '150px' }}
-                                value={materialList[key]?.materialTextureId && materialList[key]?.materialTextureId + ',' + materialList[key]?.materialTexture}
+                                value={popDataList[key]?.materialTextureId && popDataList[key]?.materialTextureId + ',' + popDataList[key]?.materialTexture}
                                 onChange={(e: string) => {
-                                    const newData = materialList.map((item: any, index: number) => {
+                                    const newData = popDataList.map((item: any, index: number) => {
                                         if (index === key) {
                                             return {
                                                 ...item,
@@ -246,7 +260,7 @@ import RequestUtil from '../../../utils/RequestUtil';
                                         }
                                         return item
                                     })
-                                    setMaterialList(newData)
+                                    setPopDataList(newData)
                                 }}>
                                 {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
