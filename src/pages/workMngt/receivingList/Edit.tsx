@@ -1,4 +1,4 @@
-import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
+import React, { useState, useRef, forwardRef, useImperativeHandle, useEffect } from "react"
 import { Button, Form, message, Spin, Modal, InputNumber, Row, Col, Input, Select } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable, formatData, EditableTable } from '../../common'
 import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
@@ -426,10 +426,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                  */
                 // price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
                 taxPrice: item.taxPrice,
-                totalTaxPrice: meteringMode === 1 && ((item.weight * item.quantity) * item.quantity * item.taxPrice).toFixed(2),
+                totalTaxPrice: meteringMode === 1 ? ((item.weight * item.quantity) * item.taxPrice).toFixed(2)
+                    : ((item.ponderationWeight || 0) * item.quantity * item.taxPrice).toFixed(2),
 
                 unTaxPrice: item.price,
-                totalUnTaxPrice: meteringMode === 1 && ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2)
+                totalUnTaxPrice: meteringMode === 1 ? ((item.weight * item.quantity) * item.price).toFixed(2)
+                    : ((item.ponderationWeight || 0) * item.price).toFixed(2),
+                appearance: item.appearance || 1
             }
             delete postData.id
             return postData
@@ -597,7 +600,48 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contactsPhone: supplierData.contactManTel
             })
         }
+        if (fields.meteringMode) {
+            let quantity: string = "0.00"
+            const dataSource: any[] = cargoData.map((item: any) => {
+                quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
+                const postData = {
+                    ...item,
+                    id: item.id || item.id,
+                    productName: item.materialName,
+                    standard: item.materialStandard,
+                    standardName: item.materialStandardName,
+                    num: item.quantity,
+                    contractUnitPrice: item.taxPrice,
+                    quantity: item.quantity ? item.quantity : 0,
+                    /** 理算重量 */
+                    weight: item.weight,
+                    /** 理算总重量 */
+                    totalWeight: (item.weight * item.quantity).toFixed(4),
+                    /***
+                     * 计算价税合计 
+                     *      总重 = 单个重量 * 数量
+                     *      价税合计 = 总重 * 数量 * 合同单价
+                     */
+                    // price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
+                    taxPrice: item.taxPrice,
+                    totalTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * item.taxPrice).toFixed(2)
+                        : ((item.ponderationWeight || 0) * item.quantity * item.taxPrice).toFixed(2),
+
+                    unTaxPrice: item.price,
+                    totalUnTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * item.price).toFixed(2)
+                        : ((item.ponderationWeight || 0) * item.price).toFixed(2),
+                    appearance: item.appearance || 1
+                }
+                delete postData.id
+                return postData
+            })
+            setCargoData(dataSource)
+        }
     }
+
+    useEffect(() => {
+        type === "new" && form.setFieldsValue({ meteringMode: 1, receiveTime: moment() })
+    }, [type])
 
     const handleEditableChange = (data: any, allValues: any) => {
         if (data.submit[data.submit.length - 1].ponderationWeight) {
@@ -605,18 +649,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const ponderationWeight = data.submit[data.submit.length - 1]?.ponderationWeight
             const newFields = allValues.submit.map((item: any, index: number) => {
                 if ((index === data.submit.length - 1) && meteringMode === 2) {
-                    const totalTaxPrice = (ponderationWeight * item.quantity) * item.quantity * item.taxPrice
+                    const totalTaxPrice = (ponderationWeight * item.quantity) * item.taxPrice
                     return ({
                         ...item,
                         totalTaxPrice: totalTaxPrice.toFixed(2),
-                        totalUnTaxPrice: (totalTaxPrice - totalTaxPrice * materialData!.taxVal).toFixed(2)
+                        totalUnTaxPrice: (totalTaxPrice - totalTaxPrice * (materialData!.taxVal / 100)).toFixed(2)
                     })
                 }
                 return item
             })
-            form.setFieldsValue({
-                submit: newFields
-            })
+            editForm.setFieldsValue({ submit: newFields })
         }
     }
 
@@ -676,10 +718,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return item
                 }
             })}
-            dataSource={{
-                meteringMode: 1,
-                receiveTime: moment()
-            }} />
+            dataSource={{}} />
         <DetailTitle title="运费信息" />
         <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
         <DetailTitle title="装卸费信息" />

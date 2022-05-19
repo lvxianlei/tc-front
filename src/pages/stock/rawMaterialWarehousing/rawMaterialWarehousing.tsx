@@ -75,15 +75,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         title: '操作',
                         dataIndex: 'key',
-                        width: 160,
+                        width: 80,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
                                 <Link className='btn-operation-link' to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>明细</Link>
-                                <Button className='btn-operation-link' type="link" onClick={() => {
+                                {/* <Button className='btn-operation-link' type="link" onClick={() => {
                                     setVisible(true);
                                     setId(record.id);
-                                }}>纸质单号</Button>
+                                }}>纸质单号</Button> */}
                             </>
                         )
                     }

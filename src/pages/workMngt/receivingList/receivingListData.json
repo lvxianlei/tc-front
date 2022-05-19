@@ -460,7 +460,8 @@
         {
             "title": "过磅重量（吨）",
             "dataIndex": "ponderationWeight",
-            "type": "number"
+            "type": "number",
+            "required": true
         },
         {
             "title": "含税单价（元/吨）",
