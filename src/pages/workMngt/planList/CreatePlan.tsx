@@ -80,7 +80,8 @@ import RequestUtil from '../../../utils/RequestUtil';
                 return ({
                     ...item,
                     planPurchaseNum: value,
-                    weight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
+                    weight: ((item.proportion * (item.length || 1)) / 1000).toFixed(3),
+                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
                 })
             }
             return item
@@ -95,7 +96,8 @@ import RequestUtil from '../../../utils/RequestUtil';
                 return ({
                     ...item,
                     length: value,
-                    weight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3)
+                    weight: ((item.proportion * value) / 1000).toFixed(3),
+                    totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3)
                 })
             }
             return item
@@ -300,7 +302,8 @@ import RequestUtil from '../../../utils/RequestUtil';
                         price: item.price || 1.00,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
-                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
+                        totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })) || [])
                 }}
             />
