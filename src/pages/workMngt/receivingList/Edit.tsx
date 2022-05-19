@@ -601,41 +601,22 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })
         }
         if (fields.meteringMode) {
-            let quantity: string = "0.00"
-            const dataSource: any[] = cargoData.map((item: any) => {
-                quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
-                const postData = {
-                    ...item,
-                    id: item.id || item.id,
-                    productName: item.materialName,
-                    standard: item.materialStandard,
-                    standardName: item.materialStandardName,
-                    num: item.quantity,
-                    contractUnitPrice: item.taxPrice,
-                    quantity: item.quantity ? item.quantity : 0,
-                    /** 理算重量 */
-                    weight: item.weight,
-                    /** 理算总重量 */
-                    totalWeight: (item.weight * item.quantity).toFixed(4),
-                    /***
-                     * 计算价税合计 
-                     *      总重 = 单个重量 * 数量
-                     *      价税合计 = 总重 * 数量 * 合同单价
-                     */
-                    // price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
-                    taxPrice: item.taxPrice,
-                    totalTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * item.taxPrice).toFixed(2)
-                        : ((item.ponderationWeight || 0) * item.quantity * item.taxPrice).toFixed(2),
-
-                    unTaxPrice: item.price,
-                    totalUnTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * item.price).toFixed(2)
-                        : ((item.ponderationWeight || 0) * item.price).toFixed(2),
-                    appearance: item.appearance || 1
-                }
-                delete postData.id
-                return postData
-            })
-            setCargoData(dataSource)
+            // let quantity: string = "0.00"
+            // const dataSource: any[] = cargoData.map((item: any) => {
+            //     console.log(item.weight, item.quantity, item.taxPrice, item.price, item.ponderationWeight)
+            //     quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
+            //     const postData = {
+            //         ...item,
+            //         // taxPrice: item.taxPrice,
+            //         totalTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * item.taxPrice).toFixed(2)
+            //             : ((item.ponderationWeight || 0) * item.quantity * item.taxPrice).toFixed(2),
+            //         // unTaxPrice: item.price,
+            //         totalUnTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * (item.price || "0")).toFixed(2)
+            //             : ((item.ponderationWeight || 0) * (item.price || "0")).toFixed(2),
+            //     }
+            //     return postData
+            // })
+            // setCargoData(dataSource)
         }
     }
 
