@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { SearchTable as Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -37,6 +37,10 @@ export default function Invoicing() {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.purchaserId) {
+            value.purchaserDeptId = value.purchaserId.first
+            value.purchaserId = value.purchaserId.second
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -145,10 +149,15 @@ export default function Invoicing() {
                         name: 'purchaseType',
                         label: '采购类型',
                         children: <Select style={{ width: 200 }}>
-                            <Select.Option value="1">外部</Select.Option>
-                            <Select.Option value="2">内部</Select.Option>
-                            <Select.Option value="3">缺料</Select.Option>
+                            <Select.Option value="1">配料采购</Select.Option>
+                            <Select.Option value="2">库存采购</Select.Option>
+                            <Select.Option value="3">缺料采购</Select.Option>
                         </Select>
+                    },
+                    {
+                        name: 'purchaserId',
+                        label: '采购人',
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'purchasePlanCode',
