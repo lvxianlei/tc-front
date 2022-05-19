@@ -175,7 +175,7 @@
         },
         {
             "title": "理算重量（吨）",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "disabled": true
         },
         {
