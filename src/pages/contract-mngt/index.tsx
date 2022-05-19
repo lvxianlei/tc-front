@@ -1,7 +1,7 @@
 // 合同管理-原材料合同管理
 import React, { useState, useRef } from 'react'
-import { Link, useHistory } from 'react-router-dom'
-import { DatePicker, Select, Input, Button, Modal, message, Form, Space, Popconfirm } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { DatePicker, Select, Input, Button, Modal, message, Popconfirm } from 'antd'
 import { IntgSelect, SearchTable as Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
@@ -53,7 +53,7 @@ export default function ContractMngt(): JSX.Element {
         setFilterValue(value)
         return value
     }
-    
+
     return (
         <>
             <Modal
@@ -95,6 +95,7 @@ export default function ContractMngt(): JSX.Element {
                     {
                         title: "序号",
                         dataIndex: "index",
+                        width: 50,
                         fixed: "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
@@ -128,7 +129,7 @@ export default function ContractMngt(): JSX.Element {
                             <Popconfirm
                                 title="确定删除此合同吗？"
                                 disabled={records.isReceiptRef === 1}
-                                onConfirm={async() => {
+                                onConfirm={async () => {
                                     await deleteRun(records?.id)
                                     message.success("删除成功...")
                                     history.go(0)
@@ -140,7 +141,7 @@ export default function ContractMngt(): JSX.Element {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
-                                    style={{padding: "0px"}}
+                                    style={{ padding: "0px" }}
                                     disabled={records.isReceiptRef === 1}
                                 >删除</Button>
                             </Popconfirm>
