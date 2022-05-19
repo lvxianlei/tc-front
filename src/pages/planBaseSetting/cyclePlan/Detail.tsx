@@ -277,14 +277,15 @@ export default function CyclePlanDetail(): React.ReactNode {
                         reject(false)
                     }
                     await dateForm.validateFields()
+                    console.log(valueDate)
                     const submitValue = selectedKeys.map((item:any)=>{
                         return {
                             id:item,
-                            planCompleteTime: value?.planCompleteTime
+                            planCompleteTime: moment(valueDate?.planCompleteTime).format('YYYY-MM-DD')
                         }
                     })
                     RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
-                    await message.success("已成功设置计划完成日期！")
+                    message.success("已成功设置计划完成日期！")
                     dateForm.resetFields()
                     const value = form.getFieldsValue(true)
                     if (value.date) {
@@ -303,16 +304,31 @@ export default function CyclePlanDetail(): React.ReactNode {
                         issueOrderDTOList: dataSource 
                     }
                     await RequestUtil.put(`/tower-aps/cyclePlan`,submitData)
+                    resove(true)
+                    await run()
                     setSelectedKeys([])
                     setDeleteIdList([])
                     setSelectedRows([])
-                    resove(true)
-                    await run()
+                    history.go(0)
                 } catch (error) {
                     console.log(error)
                 }
             }),
-            onCancel: () => dateForm.resetFields()
+            onCancel: async () => {
+                const valueDate = dateForm.getFieldsValue(true)
+                await dateForm.validateFields()
+                console.log(valueDate)
+                const submitValue = selectedKeys.map((item:any)=>{
+                    return {
+                        id:item,
+                        planCompleteTime: moment(valueDate?.planCompleteTime).format('YYYY-MM-DD')
+                    }
+                })
+                RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
+                message.success("已成功设置计划完成日期！")
+                dateForm.resetFields()
+                history.go(0)
+            }
         })
         
     }
