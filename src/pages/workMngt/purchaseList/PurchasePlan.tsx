@@ -46,7 +46,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
             await saveRun({
-                purchaseType: 2,
+                purchaseType: 1,
                 purchaserTaskTowerIds: ids.join(","),
                 lists: dataSource
             })
