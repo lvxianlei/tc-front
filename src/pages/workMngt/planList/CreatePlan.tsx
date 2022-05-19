@@ -139,8 +139,8 @@ import RequestUtil from '../../../utils/RequestUtil';
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan`, data)
             message.success("创建成功！");
-            props?.handleCreate({code: 1})
-            resove(result)
+            // props?.handleCreate({code: 1})
+            // resove(result)
         } catch (error) {
             reject(error)
         }
@@ -305,6 +305,9 @@ import RequestUtil from '../../../utils/RequestUtil';
                 onChange={(fields: any[]) => {
                     setMaterialList(fields.map((item: any) => ({
                         ...item,
+                        materialId: item.id,
+                        code: item.materialCode,
+                        materialCategoryId: item.materialCategory,
                         planPurchaseNum: item.planPurchaseNum || "1",
                         spec: item.structureSpec,
                         source: 2,
