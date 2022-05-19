@@ -450,7 +450,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <DetailTitle title="周期计划下达单"/>
                 <Space>
                     <ReleaseOrder run={run} data={detail}/>
-                    <Button type="primary" ghost onClick={useDate} >设置计划交货期</Button>
+                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>设置计划交货期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
