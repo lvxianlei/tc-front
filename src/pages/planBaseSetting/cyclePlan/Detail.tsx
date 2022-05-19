@@ -157,10 +157,10 @@ export default function CyclePlanDetail(): React.ReactNode {
             )
         },
         {
-            key: 'plateWeight',
+            key: 'planCompleteTime',
             title: '计划完成日期',
             width: 100,
-            dataIndex: 'plateWeight'
+            dataIndex: 'planCompleteTime'
         },
         {
             key: 'processMaterialDescription',
