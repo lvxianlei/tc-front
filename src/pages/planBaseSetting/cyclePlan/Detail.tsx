@@ -269,7 +269,7 @@ export default function CyclePlanDetail(): React.ReactNode {
     const handleModalOk = async () => {
         await dateForm.validateFields()
         Modal.confirm({
-            title: "计划起止日期将同步保存！",
+            title: "周期计划计划开始日期~计划完成日期未保存，是否保存？",
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
                     const valueDate = dateForm.getFieldsValue(true)
