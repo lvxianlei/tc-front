@@ -262,7 +262,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         onChange: SelectChange
                     }
                 }}
-                
+                pagination={false}
                 columns={columns}
                 extraOperation={(data: any) => {
                     return <>
