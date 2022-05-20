@@ -114,8 +114,8 @@ export default function ManualDistribute(): ReactElement {
                 const dataSegmentResult = data?.recordDate.records.filter((dataItem: any) => dataItem.segmentName === item.segmentName)
                 return result.concat(dataSegmentResult)
             }, [])
-            const newCounts = selectRows.reduce((result: CountProps, item: any) => ({
-                totalGroupNum: result.totalGroupNum + parseFloat(item.segmentGroupNum || "0"),
+            const newCounts = selectRows.reduce((result: CountProps, item: any, index: number) => ({
+                totalGroupNum: item.id === selectRows[index - 1]?.id ? result.totalGroupNum || "0" : result.totalGroupNum + parseFloat(item.totalProcessNum || "0"),
                 totalWeight_w: Number((parseFloat(result.totalWeight_w) + parseFloat(item.singleGroupWeight || "0"))).toFixed(4)
             }), {
                 totalNumber: 0,
@@ -125,7 +125,7 @@ export default function ManualDistribute(): ReactElement {
                 totalHolesNum: 0
             })
             setSelectedRowKeys(selectedRowKeys)
-            setCounts(newCounts)
+            setCounts({ ...newCounts, })
             return
         }
     }
@@ -137,19 +137,19 @@ export default function ManualDistribute(): ReactElement {
             content: <Form form={workshopForm}>
                 <Form.Item name="workshopId" label="生产单元" rules={[{ required: true, message: "请选择生产单元..." }]}>
                     <Select>
-                        {status===1&&listData.map((item: any) => <Select.Option
+                        {status === 1 && listData.map((item: any) => <Select.Option
                             key={item.id}
                             value={item.id}>{item.name}</Select.Option>)}
-                        {status===2&&weldinglistData.map((item: any) => <Select.Option
+                        {status === 2 && weldinglistData.map((item: any) => <Select.Option
                             key={item.unitId}
                             value={item.unitId}>{item.unitName}</Select.Option>)}
-                            
+
                     </Select>
                 </Form.Item>
             </Form>,
-            onOk: async () => new Promise(async (resove, reject) => { 
+            onOk: async () => new Promise(async (resove, reject) => {
                 const value = workshopForm.getFieldsValue(true)
-                if(JSON.stringify(value) == "{}"){
+                if (JSON.stringify(value) == "{}") {
                     reject(false)
                 }
                 const workshop = await workshopForm.validateFields()
