@@ -531,6 +531,11 @@
                         "authority": "work_management_production_ingredients"
                     },
                     {
+                        "label": "备料确认",
+                        "path": "/ingredients/materialPreparationConfirmation",
+                        "authority": "work_management_production_ingredients"
+                    },
+                    {
                         "label": "收货列表",
                         "path": "/ingredients/receiving",
                         "authority": "work_management_receiving_list"
