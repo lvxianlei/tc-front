@@ -1,8 +1,8 @@
 import React, { Key, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { Button, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from "antd"
-import { SearchTable as Page } from "../../common"
-import { pageTable, workShopOrder } from "./data.json"
+import { CommonTable, DetailTitle, SearchTable as Page } from "../../common"
+import { pageTable, workShopOrder, componentdetails } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 import { productTypeOptions } from "../../../configuration/DictionaryOptions"
@@ -10,13 +10,55 @@ import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 export default () => {
     const history = useHistory()
     const [weldingForm] = Form.useForm()
+    const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ status: 1 });
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
     const [status, setStatus] = useState<number>(1)
+    const tableColumns = [
+        {
+            title: '零件号',
+            dataIndex: 'code',
+            width: 150,
+        },
+        {
+            title: '生产环节',
+            dataIndex: 'linkName',
+            width: 150,
+        },
+        {
+
+            title: "生产单元",
+            dataIndex: 'unitNames',
+            width: 150,
+        },
+        {
+            title: '操作',
+            dataIndex: 'unit',
+            width: 180,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["dataList", index, "unit"]} key={index} initialValue={_} rules={[{
+                    "required": true,
+                    "message": "请选择生产单元"
+                }]}>
+                    <Select>
+                        {record?.unitVOList && record?.unitVOList.map(({ id, name }:any, index:number) => {
+                            return <Select.Option key={index} value={id+','+name}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+            )
+        }
+    ]
+
     const { data, run } = useRequest<any>((params: string[]) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-aps/workshopOrder/autoDistribute`, params);
+            form.setFieldsValue({
+                dataList: result?.needUpdateList||[]
+            })
             resole(result)
         } catch (error) {
             reject(error)
@@ -43,23 +85,56 @@ export default () => {
 
     const handleAuto = async () => {
         const result = await run(selectedRowKeys)
-        console.log(result, "----")
-        if (result?.code === 405) {
+        console.log(result, "----") 
+        if((result&&result?.needUpdateList&&result?.needUpdateList.length>0)||(result&&result?.notMatchList&&result?.notMatchList.length>0)){
+
             Modal.warn({
-                title: "快速分配车间",
+                title: "分配生产单元提示",
                 icon: null,
                 okText: "确定",
-                content: <nav>
-                    <h6>以下下达单未匹配到生产车间</h6>
-                    <ul>
-                        {result.message.split("/").map((item: string) => <li>{item}</li>)}
-                    </ul>
-                    <Row><h6>请配置分配规则</h6></Row>
-                </nav>,
-                onOk: () => history.go(0)
+                width:'80%',
+                content: <>
+                    {result&&result?.needUpdateList&&result?.needUpdateList.length>0&&<>
+                        <DetailTitle  title='构件匹配到多个生产单元，请选择生产单元'/>
+                        <Form form={form}>
+                            <CommonTable
+                                // rowKey="id"
+                                dataSource={[...result?.needUpdateList]}
+                                pagination={false}
+                                columns={ tableColumns }
+                            />
+                        </Form>
+                    </>}
+                    {result&&result?.notMatchList&&result?.notMatchList.length>0&&<>
+                        <DetailTitle  title='构件未匹配到生产单元，请配置分配规则'/>
+                        <CommonTable columns={componentdetails} dataSource={result?.notMatchList|| []} pagination={false}/>
+                    </>}
+                </>,
+                onOk: async () => {
+                    if(result&&result?.needUpdateList&&result?.needUpdateList.length>0){
+                        await form.validateFields()
+                        const value = form.getFieldsValue(true)?.dataList
+                        const submitValue = value.map((item:any,index:number)=>{
+                            return {
+                                unitId: item.unit.split(',')[0],
+                                unitName: item.unit.split(',')[1],
+                                structureCycleIds: result?.needUpdateList[index]?.structureCycleIds,
+                                issueOrderId:result?.needUpdateList[index]?.issueOrderId
+                            }
+                        })
+                        RequestUtil.post(`/tower-aps/workshopOrder/distribute/productionUnit`,submitValue).then(()=>{
+                            message.success("快速分配单元完成")
+                            history.go(0)
+                        })
+                    }
+                    else{
+                        history.go(0)
+                    }
+                    
+                }
             })
-        } else {
-            await message.success("快速分配车间完成")
+        }else{
+            await message.success("快速分配单元完成")
             history.go(0)
         }
     }
@@ -122,7 +197,7 @@ export default () => {
                 dataIndex: "opration",
                 render: (_, record: any) => <Link
                     to={`/planProd/publishWorkshop/manual/${record.id}/${record.issuedNumber}/${record.productCategory}`}
-                >手动分配车间</Link>
+                >手动分配生产单元</Link>
             }]}
         extraOperation={
             <>
@@ -130,15 +205,15 @@ export default () => {
                     value={status}
                     onChange={(event) => {
                         setStatus(event.target.value)
-                        setFilterValue({ ...filterValue, status: event.target.value })
+                        setFilterValue({ ...filterValue, status: event.target.value, current: 1 })
                     }}
                 >
                     <Radio.Button value={1}>待分配下达单</Radio.Button>
                     <Radio.Button value={2}>已分配下达单</Radio.Button>
                 </Radio.Group>
                 {status === 1 && <>
-                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleWeldingClick}>电焊分配车间</Button>
-                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>快速分配车间</Button>
+                    {/* <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleWeldingClick}>电焊分配车间</Button> */}
+                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>快速分配单元</Button>
                 </>}
             </>
         }

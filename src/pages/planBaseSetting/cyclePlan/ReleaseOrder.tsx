@@ -186,6 +186,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 setSelectedRows([])
                 setVisible(false)
                 await run()
+                history.go(0)
             }
             else{
                 message.error('未选择下达单！')
@@ -200,7 +201,8 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 path="/tower-aps/planBoard/issue/list"
                 filterValue={filterValue}
                 requestData={{
-                    configId: params?.configId
+                    configId: params?.configId,
+                    cyclePlanId: params.id,
                 }}
                 sourceKey='planBoards'
                 tableProps={{
@@ -255,6 +257,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 ]}
                 onFilterSubmit={(values: any) => {
                     values.configId = params?.configId
+                    values.cyclePlanId = params.id
                     setFilterValue(values)
                     return values;
                 }}
