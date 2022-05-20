@@ -160,6 +160,7 @@ export default function CyclePlanDetail(): React.ReactNode {
             key: 'planCompleteTime',
             title: '计划完成日期',
             width: 100,
+            fixed: "right",
             dataIndex: 'planCompleteTime'
         },
         {
