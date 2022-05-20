@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Space, Spin, Modal, Input, message, DatePicker } from 'antd';
+import { Button, Form, Space, Spin, Modal, Input, message, DatePicker, Select } from 'antd';
 import { BaseInfo, CommonAliTable, DetailContent } from '../../common';
 import { ILink, IPlanSchedule, IUnit } from './IPlanSchedule';
 import { useHistory, useParams } from 'react-router-dom';
@@ -224,7 +224,24 @@ export default function DistributedTech(): React.ReactNode {
             <Button style={{ marginRight: 16 }} type="primary" key="tech" onClick={issue}>技术派工</Button>,
             <Button key="close" onClick={() => history.goBack()}>关闭</Button>
         ]}>
-            <BaseInfo form={form} columns={baseColumns} col={4} dataSource={{}} edit />
+            <BaseInfo form={form} columns={baseColumns.map((item: any) => {
+                if (item.dataIndex === "unitId") {
+                    return ({
+                        ...item,
+                        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Form.Item name="unitId" style={{ width: '100%' }}>
+                                <Select getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e: string) => unitChange(e)} style={{ width: "70%" }}>
+                                    {data && data.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={id}>
+                                            {name}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>)
+                    })
+                }
+                return item
+            })} col={4} dataSource={{}} edit />
             <Space size={16} style={{ marginBottom: '6px' }}>
                 <Button
                     type="primary"

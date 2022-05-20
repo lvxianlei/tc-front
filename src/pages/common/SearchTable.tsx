@@ -6,6 +6,8 @@ import CommonAliTable, { columnsProps } from "./CommonAliTable"
 import { Button, Col, Form, Pagination, Row, Space } from "antd"
 import styles from "./CommonTable.module.less"
 import { stringify } from "querystring"
+import ExportList from "../../components/export/list"
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom"
 
 interface SearchFormItemsProps {
     name: string
@@ -24,6 +26,8 @@ interface SearchTableProps {
     extraOperation?: React.ReactNode | React.ReactNode[]
     tableProps?: { [i: string]: any }
     pagination?: boolean
+    readonly exportPath?: string; //导出接口
+    exportObject?: { [key: string]: any }, // 导出可能会包含的id等
     [key: string]: any
 }
 
@@ -43,9 +47,15 @@ export default function SearchTable({
     filterValue = {},
     tableProps,
     pagination,
+    exportPath,
+    exportObject = {},
     ...props }: SearchTableProps): JSX.Element {
     const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
+    const [isExport, setIsExport] = useState<boolean>(false);
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
+    const history = useHistory()
     const { loading, data, run } = useRequest<{ [key: string]: any }>((params: { [key: string]: any } = {}) => new Promise(async (resole, reject) => {
         try {
             if (pagination !== false) {
@@ -100,6 +110,15 @@ export default function SearchTable({
             marginBottom: 12,
             paddingLeft: 12
         }} size={12}>{extraOperation}</Space>
+        {
+            exportPath && (
+                <Space direction="horizontal" size="middle" style={{ width: "100%", marginBottom: "12px" }}>
+                    {exportPath && <Button type="primary" ghost onClick={() => {
+                        setIsExport(true)
+                    }}>导出</Button>}
+                </Space>
+            )
+        }
         <CommonAliTable
             columns={columns}
             rowKey={rowKey || ((record: any) => record.id)}
@@ -121,6 +140,29 @@ export default function SearchTable({
                 />
             </footer>
         }
+        {isExport ? <ExportList
+                    history={history}
+                    location={location}
+                    match={match}
+                    columnsKey={() => {
+                        const keys = [...columns]
+                        if (!keys[keys.length - 1].isExport) {
+                            keys.pop()
+                        }
+                        return keys
+                    }}
+                    current={pagenationParams.current || 1}
+                    size={pagenationParams.pageSize || 10}
+                    total={data?.total || 0}
+                    url={exportPath}
+                    serchObj={{
+                        ...JSON.parse(JSON.stringify(filterValue || {})),
+                        ...JSON.parse(JSON.stringify(exportObject || {}))
+                    }}
+                    closeExportList={() => {
+                        setIsExport(false)
+                    }}
+                /> : null}
     </>
 }
 

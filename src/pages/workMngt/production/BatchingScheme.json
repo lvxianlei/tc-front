@@ -24,7 +24,7 @@
         },
         {
             "title": "汇总数量",
-            "dataIndex": "num"
+            "dataIndex": "totalNum"
         },
         {
             "title": "汇总重量(kg)",

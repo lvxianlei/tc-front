@@ -2,7 +2,7 @@
 import React, { useState, useRef } from 'react'
 import { Link, useHistory } from 'react-router-dom'
 import { DatePicker, Select, Input, Button, Modal, message, Form, Space, Popconfirm } from 'antd'
-import { IntgSelect, Page } from "../common"
+import { IntgSelect, SearchTable as Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
 import { contract } from "./contract.json"
@@ -140,6 +140,7 @@ export default function ContractMngt(): JSX.Element {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
+                                    style={{padding: "0px"}}
                                     disabled={records.isReceiptRef === 1}
                                 >删除</Button>
                             </Popconfirm>
