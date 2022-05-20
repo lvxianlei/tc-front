@@ -340,7 +340,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                         size="small"
                         rows={1}
                         showCount
-                        maxLength={300}
+                        maxLength={200}
                     />
                 </Form.Item>
             )
@@ -553,7 +553,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                         size="small"
                         rows={1}
                         showCount
-                        maxLength={300}
+                        maxLength={200}
                     />
                 </Form.Item>
             )
