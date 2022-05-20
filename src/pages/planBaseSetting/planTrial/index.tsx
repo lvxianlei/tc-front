@@ -24,7 +24,10 @@ export default function PlanTrialList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({status:1});
     const [refresh, setRefresh] = useState<boolean>(false);
     const [editorLock, setEditorLock] = useState('编辑');
-    const [sum, setSum] = useState<any>({})
+    const [sum, setSum] = useState<any>({
+        totalWeight:0.00,
+        totalHoles:0
+    })
     const [formRef] = Form.useForm();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);

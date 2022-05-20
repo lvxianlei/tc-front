@@ -37,7 +37,12 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
             totalPlateNumber
         })
     }
-    const [sum, setSum] = useState<any>({})
+    const [sum, setSum] = useState<any>({
+        totalAngleWeight:0.00,
+        totalPlateWeight:0.00,
+        totalAngleNumber:0,
+        totalPlateNumber:0,
+    })
     const [filterValue, setFilterValue] = useState({status:1});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
