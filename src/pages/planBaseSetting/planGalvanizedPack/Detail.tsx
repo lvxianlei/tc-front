@@ -8,6 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { FixedType } from 'rc-table/lib/interface';
+import moment from 'moment';
 
 
 
@@ -15,14 +16,33 @@ export default function GalvanizedPackDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const data: any = await RequestUtil.get(`/tower-aps/galvanizedPackage/detail`,params.id.indexOf(',')>-1?params?.id.split(','):[params.id])
-        // form.setFieldsValue({
-        //     packagePlanVOList: data?.packagePlanVOList,
-        //     galvanizedPlanVOList: data?.galvanizedPlanVOList
-        // })
+        const data: any = await RequestUtil.post(`/tower-aps/galvanizedPackage/detail`,params?.id.indexOf(',')>-1?params?.id.split(','):[params.id])
         form.setFieldsValue({
-            packagePlanVOList: [{}],
-            galvanizedPlanVOList: [{}]
+            packagePlanDTOList: data?.packagePlanDTOList&&data?.packagePlanDTOList.length>0&&data?.packagePlanDTOList.map((item:any)=>{
+                return {
+                    ...item,
+                    packageFirst: item?.packageFirstUnitId&&item?.packageFirstUnitName?item?.packageFirstUnitId+','+item?.packageFirstUnitName:'',
+                    packageSecond: item?.packageSecondUnitId&&item?.packageSecondUnitName?item?.packageSecondUnitId+','+item?.packageSecondUnitName:'',
+                    storageTime: item?.storageTime?moment(item?.storageTime):'',
+                    reportTime: item?.reportTime?moment(item?.reportTime):'',
+                    packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime):'',
+                    packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime):'',
+                    packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime):'',
+                }
+            })||[],
+            galvanizedPlanVOList: data?.galvanizedPlanVOList&&data?.galvanizedPlanVOList.length>0&&data?.galvanizedPlanVOList.map((item:any)=>{
+                return {
+                    ...item,
+                    galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
+                    galvanizedSecond: item?.galvanizedSecondUnitId&&item?.galvanizedSecondUnitName?item?.galvanizedSecondUnitId+','+item?.galvanizedSecondUnitName:'',
+                    galvanizedThird: item?.galvanizedThirdUnitId&&item?.galvanizedThirdUnitName?item?.galvanizedThirdUnitId+','+item?.galvanizedThirdUnitName:'',
+                    transferStartTime: item?.storageTime?moment(item?.storageTime):'',
+                    transferEndTime: item?.reportTime?moment(item?.reportTime):'',
+                    galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime):'',
+                    galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime):'',
+                    galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime):'',
+                }
+            })||[],
         })
         resole(data)
     }), {})
@@ -53,6 +73,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                             galvanizedSecondUnitName:item?.galvanizedSecond.split(',')[1],
                             galvanizedThirdUnitId:item?.galvanizedThird.split(',')[0],
                             galvanizedThirdUnitName:item?.galvanizedThird.split(',')[1],
+                            transferStartTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
+                            transferEndTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
+                            galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime).format('YYYY-MM-DD'):'',
+                            galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime).format('YYYY-MM-DD'):'',
+                            galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime).format('YYYY-MM-DD'):'',
                         }
                     }),
                     packagePlanDTOList:  value?.packagePlanDTOList.map((item:any,index:number)=>{
@@ -63,6 +88,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                             packageFirstUnitName:item?.packageFirst.split(',')[1],
                             packageSecondUnitId:item?.packageSecond.split(',')[0],
                             packageSecondUnitName:item?.packageSecond.split(',')[1],
+                            storageTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
+                            reportTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
+                            packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime).format('YYYY-MM-DD'):'',
+                            packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime).format('YYYY-MM-DD'):'',
+                            packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime).format('YYYY-MM-DD'):'',
                         }
                     }),
                 }
@@ -120,7 +150,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'transferStartTime',
             title: '* 转运开始日期',
-            width: 100,
+            width: 150,
             dataIndex: 'transferStartTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -138,7 +168,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'transferEndTime',
             title: '* 转运结束日期',
-            width: 100,
+            width: 150,
             dataIndex: 'transferEndTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -156,7 +186,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'galvanizedFirst',
             title: '* 镀锌单元',
-            width: 100,
+            width: 150,
             dataIndex: 'galvanizedFirst',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -181,7 +211,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'galvanizedFirstCompleteTime',
             title: '* 计划完成日期',
-            width: 100,
+            width: 150,
             dataIndex: 'galvanizedFirstCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -199,7 +229,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'galvanizedSecond',
             title: '镀锌单元',
-            width: 100,
+            width: 150,
             dataIndex: 'galvanizedSecond',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -220,7 +250,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'galvanizedSecondCompleteTime',
             title: '计划完成日期',
-            width: 100,
+            width: 150,
             dataIndex: 'galvanizedSecondCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -249,7 +279,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'galvanizedThird',
             title: '镀锌单元',
-            width: 100,
+            width: 150,
             dataIndex: 'galvanizedThird',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -270,7 +300,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'galvanizedThirdCompleteTime',
             title: '计划完成日期',
-            width: 100,
+            width: 150,
             dataIndex: 'galvanizedThirdCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -299,7 +329,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'galvanizedDescription',
             title: '镀锌备注',
-            width: 100,
+            width: 150,
             dataIndex: 'productType',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
@@ -364,11 +394,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'packageFirst',
             title: '* 包装单元',
-            width: 100,
+            width: 150,
             dataIndex: 'packageFirst',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "packageFirst"]}
+                    name={['packagePlanDTOList', index, "packageFirst"]}
                     initialValue={_}
                     rules={[{
                         required: true,
@@ -389,11 +419,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'packageFirstStartTime',
             title: '* 计划开始日期',
-            width: 100,
+            width: 150,
             dataIndex: 'packageFirstStartTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "packageFirstStartTime"]}
+                    name={['packagePlanDTOList', index, "packageFirstStartTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -407,11 +437,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'packageSecond',
             title: '包装单元',
-            width: 100,
+            width: 150,
             dataIndex: 'packageSecond',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "packageSecond"]}
+                    name={['packagePlanDTOList', index, "packageSecond"]}
                     initialValue={_}
                    
                     // initialValue={ record.pattern }
@@ -429,11 +459,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'packageSecondStartTime',
             title: '计划开始日期',
-            width: 100,
+            width: 150,
             dataIndex: 'packageSecondStartTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "packageSecondStartTime"]}
+                    name={['packagePlanDTOList', index, "packageSecondStartTime"]}
                     initialValue={_}
                     rules={[{
                         required: true,
@@ -441,7 +471,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                             if (value) {
                                 callback()
                             } else {
-                                if(form.getFieldsValue(true)?.packagePlanVOList[index]?.packageSecond){
+                                if(form.getFieldsValue(true)?.packagePlanDTOList&&form.getFieldsValue(true)?.packagePlanDTOList[index]?.packageSecond){
                                     callback('请选择计划开始日期')
                                 }else{
                                     callback()
@@ -458,11 +488,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'packageCompleteTime',
             title: '* 计划完成日期',
-            width: 100,
+            width: 150,
             dataIndex: 'packageCompleteTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "packageCompleteTime"]}
+                    name={['packagePlanDTOList', index, "packageCompleteTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -476,11 +506,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'reportTime',
             title: '* 报补件日期',
-            width: 100,
+            width: 150,
             dataIndex: 'reportTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "reportTime"]}
+                    name={['packagePlanDTOList', index, "reportTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -494,11 +524,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'storageTime',
             title: '* 入库日期',
-            width: 100,
+            width: 150,
             dataIndex: 'storageTime',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "storageTime"]}
+                    name={['packagePlanDTOList', index, "storageTime"]}
                     initialValue={record.segmentName}
                     rules={[{
                         required: true,
@@ -512,11 +542,11 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         {
             key: 'packageDescription',
             title: '包装备注',
-            width: 100,
+            width: 150,
             dataIndex: 'packageDescription',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['packagePlanVOList', index, "packageDescription"]}
+                    name={['packagePlanDTOList', index, "packageDescription"]}
                     initialValue={_}
                 >
                     <TextArea
@@ -536,27 +566,38 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                 <Button type='primary' onClick={async () => {
                     await form.validateFields()
                     const value = form.getFieldsValue(true)
+                    console.log(value)
                     const submitData = {
                         galvanizedPlanDTOList: value?.galvanizedPlanDTOList.map((item:any,index:number)=>{
                             return {
-                                ...detailData?.galvanizedPlanDTOList[index]?.id,
+                                ...detailData?.galvanizedPlanDTOList[index],
                                 ...item,
                                 galvanizedFirstUnitId:item?.galvanizedFirst.split(',')[0],
                                 galvanizedFirstUnitName:item?.galvanizedFirst.split(',')[1],
-                                galvanizedSecondUnitId:item?.galvanizedSecond.split(',')[0],
-                                galvanizedSecondUnitName:item?.galvanizedSecond.split(',')[1],
-                                galvanizedThirdUnitId:item?.galvanizedThird.split(',')[0],
-                                galvanizedThirdUnitName:item?.galvanizedThird.split(',')[1],
+                                galvanizedSecondUnitId:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[0]:"",
+                                galvanizedSecondUnitName:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[1]:"",
+                                galvanizedThirdUnitId:item?.galvanizedThird?item?.galvanizedThird.split(',')[0]:"",
+                                galvanizedThirdUnitName:item?.galvanizedThird?item?.galvanizedThird.split(',')[1]:'',
+                                transferStartTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
+                                transferEndTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
+                                galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime).format('YYYY-MM-DD'):'',
+                                galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime).format('YYYY-MM-DD'):'',
+                                galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime).format('YYYY-MM-DD'):'',
                             }
                         }),
-                        packagePlanDTOList:  value?.packagePlanDTOList.map((item:any,index:number)=>{
+                        packagePlanDTOList:  value?.packagePlanDTOList&& value?.packagePlanDTOList.length>0 &&value?.packagePlanDTOList.map((item:any,index:number)=>{
                             return {
                                 ...detailData?.packagePlanDTOList[index],
                                 ...item,
                                 packageFirstUnitId:item?.packageFirst.split(',')[0],
                                 packageFirstUnitName:item?.packageFirst.split(',')[1],
-                                packageSecondUnitId:item?.packageSecond.split(',')[0],
-                                packageSecondUnitName:item?.packageSecond.split(',')[1],
+                                packageSecondUnitId:item?.packageSecond?item?.packageSecond.split(',')[0]:"",
+                                packageSecondUnitName:item?.packageSecond?item?.packageSecond.split(',')[1]:'',
+                                storageTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
+                                reportTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
+                                packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime).format('YYYY-MM-DD'):'',
+                                packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime).format('YYYY-MM-DD'):'',
+                                packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime).format('YYYY-MM-DD'):'',
                             }
                         }),
                     }
