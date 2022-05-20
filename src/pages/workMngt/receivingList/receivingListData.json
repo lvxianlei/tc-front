@@ -461,6 +461,7 @@
             "title": "过磅重量（吨）",
             "dataIndex": "ponderationWeight",
             "type": "number",
+            "max": 99999.99,
             "required": true
         },
         {

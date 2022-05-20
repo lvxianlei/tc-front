@@ -406,12 +406,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         let quantity: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
+            const totalTaxPrice = ((item.ponderationWeight || "0") * item.quantity) * item.taxPrice
+            const totalPrice = ((item.weight || "0") * item.quantity) * item.taxPrice
             const postData = {
                 ...item,
-                id: item.id || item.id,
-                productName: item.materialName,
-                standard: item.materialStandard,
-                standardName: item.materialStandardName,
+                id: item.id,
+                productName: item.materialName || item.productName,
+                standard: item.materialStandard || item.standard,
+                standardName: item.materialStandardName || item.standardName,
                 num: item.quantity,
                 contractUnitPrice: item.taxPrice,
                 quantity: item.quantity ? item.quantity : 0,
@@ -426,12 +428,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                  */
                 // price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
                 taxPrice: item.taxPrice,
-                totalTaxPrice: meteringMode === 1 ? ((item.weight * item.quantity) * item.taxPrice).toFixed(2)
-                    : ((item.ponderationWeight || 0) * item.quantity * item.taxPrice).toFixed(2),
-
+                totalTaxPrice: meteringMode === 1 ? totalPrice.toFixed(2) : totalTaxPrice.toFixed(2),
+                totalUnTaxPrice: meteringMode === 1 ? (totalPrice - totalPrice * (materialData!.taxVal / 100)).toFixed(2)
+                    : (totalTaxPrice - totalTaxPrice * (materialData!.taxVal / 100)).toFixed(2),
                 unTaxPrice: item.price,
-                totalUnTaxPrice: meteringMode === 1 ? ((item.weight * item.quantity) * item.price).toFixed(2)
-                    : ((item.ponderationWeight || 0) * item.price).toFixed(2),
                 appearance: item.appearance || 1
             }
             delete postData.id
@@ -543,7 +543,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierName: baseFormData.supplierName,
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
-                lists: listsFormData.submit.map((item: any, index: number) => ({ ...cargoData[index], ...item })),
+                lists: listsFormData.submit?.map((item: any, index: number) => ({ ...cargoData[index], ...item })),
                 quantity: baseFormData.quantity,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
@@ -601,22 +601,22 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })
         }
         if (fields.meteringMode) {
-            // let quantity: string = "0.00"
-            // const dataSource: any[] = cargoData.map((item: any) => {
-            //     console.log(item.weight, item.quantity, item.taxPrice, item.price, item.ponderationWeight)
-            //     quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
-            //     const postData = {
-            //         ...item,
-            //         // taxPrice: item.taxPrice,
-            //         totalTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * item.taxPrice).toFixed(2)
-            //             : ((item.ponderationWeight || 0) * item.quantity * item.taxPrice).toFixed(2),
-            //         // unTaxPrice: item.price,
-            //         totalUnTaxPrice: fields.meteringMode === 1 ? ((item.weight * item.quantity) * (item.price || "0")).toFixed(2)
-            //             : ((item.ponderationWeight || 0) * (item.price || "0")).toFixed(2),
-            //     }
-            //     return postData
-            // })
-            // setCargoData(dataSource)
+            const editData = editForm.getFieldsValue().submit
+            const dataSource: any[] = cargoData.map((item: any, index: number) => {
+                //过磅
+                const totalTaxPrice = ((editData[index].ponderationWeight || "0") * item.quantity) * item.taxPrice
+                //理算
+                const totalPrice = ((item.weight || "0") * item.quantity) * item.taxPrice
+                const postData = {
+                    ...item,
+                    ...editData[index],
+                    totalTaxPrice: fields.meteringMode === 1 ? totalPrice.toFixed(2) : totalTaxPrice.toFixed(2),
+                    totalUnTaxPrice: fields.meteringMode === 1 ? (totalPrice - totalPrice * (materialData!.taxVal / 100)).toFixed(2)
+                        : (totalTaxPrice - totalTaxPrice * (materialData!.taxVal / 100)).toFixed(2),
+                }
+                return postData
+            })
+            setCargoData(dataSource)
         }
     }
 
