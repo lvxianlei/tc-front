@@ -333,7 +333,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
                     price: parseFloat(item.price || "1.00"),
-                    weight: (item.weight && item.weight >= 0) ? parseFloat(item.weight) : parseFloat("0")
+                    weight: ((item.proportion * (item.length || 1)) / 1000).toFixed(3),
+                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
                 }
                 allData[dataIndex] = value
                 return ({
@@ -355,7 +356,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
+                    totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3) : null
                 })
             }
             return item
@@ -458,7 +460,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price || 1.00,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
-                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
+                        totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })))
                     setMaterialList(fields || [])
                 }} />

@@ -305,6 +305,9 @@ import RequestUtil from '../../../utils/RequestUtil';
                 onChange={(fields: any[]) => {
                     setMaterialList(fields.map((item: any) => ({
                         ...item,
+                        materialId: item.id,
+                        code: item.materialCode,
+                        materialCategoryId: item.materialCategory,
                         planPurchaseNum: item.planPurchaseNum || "1",
                         spec: item.structureSpec,
                         source: 2,
