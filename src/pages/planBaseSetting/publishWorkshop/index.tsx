@@ -118,8 +118,8 @@ export default () => {
                             return {
                                 unitId: item.unit.split(',')[0],
                                 unitName: item.unit.split(',')[1],
-                                structureCycleIds: result[index]?.structureCycleIds,
-                                issueOrderId:result[index]?.issueOrderId
+                                structureCycleIds: result?.needUpdateList[index]?.structureCycleIds,
+                                issueOrderId:result?.needUpdateList[index]?.issueOrderId
                             }
                         })
                         RequestUtil.post(`/tower-aps/workshopOrder/distribute/productionUnit`,submitValue).then(()=>{
