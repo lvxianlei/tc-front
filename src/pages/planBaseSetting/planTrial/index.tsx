@@ -459,7 +459,7 @@ export default function PlanTrialList(): React.ReactNode {
                 },
                 {
                     name: 'productUnitName',
-                    label: '生产单元',
+                    label: '试装单元',
                     children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
                         { productUnitData?.map((item: any) => {
                             return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
