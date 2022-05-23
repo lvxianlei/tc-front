@@ -47,6 +47,8 @@ export enum DictionaryEnums {
     CONTRACT_FORM = 1218,
     PACKAGE_TYPE = 1220,
     TENDER_DELIVERY_METHOD = 1219,
+    UNLOAD_MODE_TYPE = 12001,
+    SETTLEMENT_MODE_TYPE = 12002,
 }
 
 let productType: IDict[] | undefined = [];
@@ -93,6 +95,9 @@ let compoundType: IDict[] | undefined = [];
 let factoryType: IDict[] | undefined = [];
 let componentType: IDict[] | undefined = [];
 
+let unloadMode: IDict[] | undefined = [];
+let settlementMode: IDict[] | undefined = [];
+
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
@@ -138,6 +143,8 @@ if (dictionary) {
     compoundType = dictionary[DictionaryEnums.COMPOUND_TYPE];
     factoryType = dictionary[DictionaryEnums.FACTORY_TYPE];
     componentType = dictionary[DictionaryEnums.COMPONENT_TYPE];
+    unloadMode = dictionary[DictionaryEnums.UNLOAD_MODE_TYPE];
+    settlementMode = dictionary[DictionaryEnums.SETTLEMENT_MODE_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -183,3 +190,5 @@ export const tenderDeliveryMethodOptions = tenderDeliveryMethod; // 标书投递
 export const compoundTypeOptions = compoundType; // 组焊类型
 export const factoryTypeOptions = factoryType; // 厂区名称
 export const componentTypeOptions = componentType; // 零件类型
+export const unloadModeOptions = unloadMode; // 卸货方式
+export const settlementModeOptions = settlementMode; // 结算方式

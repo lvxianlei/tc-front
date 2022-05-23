@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 // 引入编辑采购计划
 import EditPurchasePlan from './EditPurchasePlan';
+import CreatePlan from "./CreatePlan";
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -21,6 +22,7 @@ export default function Invoicing() {
         purchaserId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     })
     const [id, setId] = useState<string>();
+    const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
@@ -35,6 +37,10 @@ export default function Invoicing() {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.purchaserId) {
+            value.purchaserDeptId = value.purchaserId.first
+            value.purchaserId = value.purchaserId.second
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -70,6 +76,14 @@ export default function Invoicing() {
         }
     })
 
+    // 创建采购计划关闭
+    const handleCreate = (options: any) => {
+        if (options?.code === 1) {
+            history.go(0);
+        }
+        setIsOpenId(false);
+    }
+
     return (
         <>
             <Page
@@ -82,7 +96,7 @@ export default function Invoicing() {
                         width: 40,
                         render: (_: any, _a: any, index: number) => <>{index + 1}</>
                     },
-                    ...baseInfoList.map(item => {
+                    ...baseInfoList.map((item: any) => {
                         switch (item.dataIndex) {
                             case "roundSteelTotal":
                                 return ({ ...item, render: (_: any, record: any) => `${record.roundSteelArrival} / ${record.roundSteelTotal}` })
@@ -98,7 +112,7 @@ export default function Invoicing() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 100,
+                        width: 300,
                         render: (_: any, record: any) => {
                             return <>
                                 <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link>
@@ -112,7 +126,7 @@ export default function Invoicing() {
                         }
                     }]}
                 extraOperation={<>
-                    <Button type="primary" ghost onClick={() => message.warning("预留按钮,暂无功能...")}>创建采购计划</Button>
+                    <Button type="primary" ghost onClick={() => setIsOpenId(true)}>创建采购计划</Button>
                 </>}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
@@ -135,10 +149,15 @@ export default function Invoicing() {
                         name: 'purchaseType',
                         label: '采购类型',
                         children: <Select style={{ width: 200 }}>
-                            <Select.Option value="1">外部</Select.Option>
-                            <Select.Option value="2">内部</Select.Option>
-                            <Select.Option value="3">缺料</Select.Option>
+                            <Select.Option value="1">配料采购</Select.Option>
+                            <Select.Option value="2">库存采购</Select.Option>
+                            <Select.Option value="3">缺料采购</Select.Option>
                         </Select>
+                    },
+                    {
+                        name: 'purchaserId',
+                        label: '采购人',
+                        children: <IntgSelect width={400} />
                     },
                     {
                         name: 'purchasePlanCode',
@@ -171,6 +190,10 @@ export default function Invoicing() {
             >
                 <EditPurchasePlan ref={addRef} id={id} />
             </Modal>
+            <CreatePlan
+                visible={isOpenId}
+                handleCreate={handleCreate}
+            />
         </>
     )
 }

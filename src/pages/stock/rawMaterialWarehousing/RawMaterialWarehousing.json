@@ -11,8 +11,8 @@
             "width": 120
         },
         {
-            "title": "车牌号",
-            "dataIndex": "carNumber",
+            "title": "结算方式",
+            "dataIndex": "settlementModeName",
             "width": 120
         },
         {
@@ -47,7 +47,7 @@
             "width": 120
         },
         {
-            "title": "约定到货时间",
+            "title": "到货时间",
             "dataIndex": "receiveTime",
             "width": 120
         },
