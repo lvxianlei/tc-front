@@ -5,7 +5,7 @@ import { SearchTable as Page, BaseInfo, DetailTitle, EditTable, Attachment, Atta
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
-import { bondBaseInfo, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone, auditHead } from "./approval.json"
+import { bondBaseInfo, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone, auditHead, guaranteeInfo } from "./approval.json"
 import RequestUtil from '../../utils/RequestUtil'
 import { currencyTypeOptions, paymentCategoryOptions } from '../../configuration/DictionaryOptions'
 const auditEnum: any = {
@@ -13,7 +13,8 @@ const auditEnum: any = {
     "drawing_handover": "图纸交接申请",
     "drawing_confirmation": "图纸交接确认申请",
     "bidding_evaluation": "招标评审申请",
-    "out_factory": "出厂价申请"
+    "out_factory": "出厂价申请",
+    "guarantee": "保函申请"
 }
 export default function Information(): React.ReactNode {
     const currencyTypeEnum = currencyTypeOptions?.map((item: { id: string, name: string }) => ({
@@ -33,10 +34,12 @@ export default function Information(): React.ReactNode {
     const [drawingCofirmVisible, setDrawingCofirmVisible] = useState<boolean>(false)
     const [bidingVisible, setBidingVisible] = useState<boolean>(false)
     const [outFactoryVisible, setOutFactoryVisible] = useState<boolean>(false)
+    const [guarantee, setGuarantee] = useState<boolean>(false);
     const [currentView, setCurrentView] = useState<string>("performance_bond")
     const [currentViewId, setCurrentViewId] = useState<string>("")
     const [viewVisible, setViewVisible] = useState<boolean>(false)
     const [performanceBondForm] = Form.useForm()
+    const [guaranteeForm] = Form.useForm()
     const [drawHForm] = Form.useForm()
     const [drawingCofirmForm] = Form.useForm()
     const [bidingForm] = Form.useForm()
@@ -87,6 +90,10 @@ export default function Information(): React.ReactNode {
             case "out_factory":
                 setOutFactoryVisible(true)
                 break
+            case "guarantee":
+                // 保函申请
+                setGuarantee(true);
+                break;
             default:
                 break
         }
@@ -339,6 +346,39 @@ export default function Information(): React.ReactNode {
                 }
                 return item
             })} dataSource={{}} edit col={2} />
+        </Modal>
+        <Modal
+            title="保函申请审批"
+            width={1011}
+            visible={guarantee}
+            okText="申请"
+            onCancel={() => {
+                setGuarantee(false)
+                handleCancel()
+            }}
+            onOk={performanceBondOk}
+            destroyOnClose
+            confirmLoading={loading}
+        >
+            <DetailTitle title="基本信息" />
+            <BaseInfo form={guaranteeForm} onChange={performanceBondChange} columns={guaranteeInfo.map((item: any) => {
+                if (item.dataIndex === "currencyType") {
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: currencyTypeEnum
+                    })
+                }
+                if (item.dataIndex === "paymentCategory") {
+                    return ({
+                        ...item,
+                        type: "select",
+                        enum: paymentCategoryEnum
+                    })
+                }
+                return item
+            })} dataSource={{}} edit col={2} />
+            <Attachment title="保函申请相关附件" edit ref={attachRef} />
         </Modal>
         <Modal
             title="图纸交接申请"

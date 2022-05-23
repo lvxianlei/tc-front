@@ -1,0 +1,109 @@
+{
+    "baseInfo": [
+        {
+            "title": "保函编号",
+            "dataIndex": "guaranteeNumber"
+        },
+        {
+            "title": "申请编号",
+            "dataIndex": "applyNumber"
+        },
+        {
+            "title": "申请日期",
+            "dataIndex": "applyTime"
+        },
+        {
+            "title": "申请部门",
+            "dataIndex": "applyDeptName"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "受益人名称",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "合同总价（元）",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "保函所占比(%)",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "保函类型",
+            "dataIndex": "guaranteeType",
+            "type": "select",
+            "enum": [
+                { "value": "1", "label": "履约保函" },
+                { "value": "2", "label": "投标保函" },
+                { "value": "3", "label": "质保金保函" },
+                { "value": "4", "label": "预付款保函" }
+            ]
+        },
+        {
+            "title": "保函金额",
+            "dataIndex": "guaranteePrice"
+        },
+        {
+            "title": "业务归属",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "beneficiaryName"
+        },
+        {
+            "title": "保函有效截止期",
+            "dataIndex": "issuanceTime"
+        },
+        {
+            "title": "承诺交回日期",
+            "dataIndex": "requiredReturnTime"
+        },
+        {
+            "title": "保函交回日期",
+            "dataIndex": "guaranteeReturnTime"
+        },
+        {
+            "title": "保函保障期间",
+            "dataIndex": "beneficiaryName"
+        }
+    ],
+    "guaranteInfo": [
+        {
+            "dataIndex": "guaranteeNumber",
+            "title": "履约保函金额（元）"
+        },
+        {
+            "dataIndex": "applyNumber",
+            "title": "保函保证金"
+        },
+        {
+            "dataIndex": "applyTime",
+            "title": "每季手续费"
+        },
+        {
+            "dataIndex": "applyDeptId",
+            "title": "后续费"
+        },
+        {
+            "dataIndex": "projectName",
+            "title": "保证金+手续费"
+        },
+        {
+            "dataIndex": "beneficiaryName",
+            "title": "付款金额（元）"
+        }
+    ]
+}

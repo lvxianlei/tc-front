@@ -5,7 +5,9 @@ import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import {
     bondBaseInfoView, drawH, drawingCofirm,
-    baseInfo, auditIdRecord, outFactoryHead, applicationdetails
+    baseInfo, auditIdRecord, outFactoryHead, applicationdetails,
+    guarantBaseInfoColumns,
+    guarantColumns
 } from "./approval.json"
 import "./wrapperChecked.less";
 const paths: any = {
@@ -13,7 +15,8 @@ const paths: any = {
     "图纸交接申请": "/tower-market/drawingHandover/",
     "图纸交接确认申请": "/tower-market/drawingConfirmation/",
     "招标评审申请": "/tower-market/biddingEvaluation/",
-    "出厂价申请": "/tower-market/OutFactory/"
+    "出厂价申请": "/tower-market/OutFactory/",
+    "保函申请": "", // 还未添加
 }
 interface ApprovalTypesViewProps {
     id: string
@@ -79,6 +82,20 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
                 <CommonTable columns={applicationdetails} dataSource={data?.auditOutInfoVOList || []} />
             </>}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
+        </DetailContent>,
+        "保函申请": <DetailContent>
+            <Radio.Group defaultValue={radioValue} onChange={(event: any) => radioOnchange(event.target.value)} style={{ marginBottom: 16 }}>
+                <Radio.Button value="base">基本信息</Radio.Button>
+                <Radio.Button value="records">审批记录</Radio.Button>
+                <Radio.Button value="attachVos">附件信息</Radio.Button>
+            </Radio.Group>
+            {radioValue === "base" && <>
+                <BaseInfo columns={guarantBaseInfoColumns} dataSource={(data?.biddingEvaluation) || {}} col={2} />
+                <DetailTitle title="保函信息" />
+                <BaseInfo columns={guarantColumns} dataSource={(data?.biddingEvaluation) || {}} col={2} />
+            </>}
+            {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
+            {radioValue === "attachVos" && <Attachment title={false} dataSource={data?.attachVos} />}
         </DetailContent>
     }
     return <Spin spinning={loading}>

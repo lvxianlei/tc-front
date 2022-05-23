@@ -346,6 +346,167 @@
             "type": "textarea"
         }
     ],
+    "guaranteeInfo": [
+        {
+            "title": "项目名称",
+            "dataIndex": "projectId",
+            "type": "popTable",
+            "path": "/tower-market/projectInfo",
+            "width": 1011,
+            "value": "projectName",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "项目名称",
+                    "dataIndex": "projectName",
+                    "search": true
+                },
+                {
+                    "title": "项目编码",
+                    "dataIndex": "projectNumber",
+                    "search": true
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择项目名称..."
+                }
+            ]
+        },
+        {
+            "title": "受益人名称",
+            "dataIndex": "projectNumber",
+            "disabled": true
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "projectId1",
+            "type": "popTable",
+            "path": "/tower-market/projectInfo",
+            "width": 1011,
+            "value": "projectName1",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "项目名称",
+                    "dataIndex": "projectName",
+                    "search": true
+                },
+                {
+                    "title": "项目编码",
+                    "dataIndex": "projectNumber",
+                    "search": true
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择项目名称..."
+                }
+            ]
+        },
+        {
+            "title": "项目编码",
+            "dataIndex": "requestFundsUser",
+            "disabled": true
+        },
+        {
+            "title": "合同总价（元）",
+            "dataIndex": "requestFundsUser",
+            "disabled": true
+        },
+        {
+            "title": "保函所占比（%）",
+            "dataIndex": "requestFundsUser",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保函所占比..."
+                }
+            ]
+        },
+        {
+            "title": "保函类型",
+            "dataIndex": "paymentType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "履约保函"
+                },
+                {
+                    "value": 2,
+                    "label": "投标保函"
+                },
+                {
+                    "value": 3,
+                    "label": "质保金保函"
+                },
+                {
+                    "value": 4,
+                    "label": "预付款保函"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择保函类型..."
+                }
+            ]
+        },
+        {
+            "title": "保函金额（元）",
+            "dataIndex": "requestFundsUser",
+            "disabled": true
+        },
+        {
+            "title": "业务归属",
+            "dataIndex": "requestFundsUser",
+            "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "requestFundsUser",
+            "maxlength": 50
+        },
+        {
+            "title": "保函有效截止期",
+            "dataIndex": "paymentTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择保函有效截止期..."
+                }
+            ]
+        },
+        {
+            "title": "承诺交回日期",
+            "dataIndex": "paymentTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择承诺交回日期..."
+                }
+            ]
+        },
+        {
+            "title": "保函保障期间",
+            "dataIndex": "payee",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保函保障期间..."
+                }
+            ]
+        }
+    ],
     "bondBaseInfoView": [
         {
             "title": "项目名称",
@@ -1066,6 +1227,92 @@
             "title": "上传时间",
             "dataIndex": "fileUploadTime",
             "type": "date"
+        }
+    ],
+    "guarantBaseInfoColumns": [
+        {
+            "title": "项目名称",
+            "dataIndex": "businessNumber"
+        },
+        {
+            "title": "受益人姓名",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "招标编号",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "合同总价（元）",
+            "dataIndex": "internalNumber",
+            "type": "string"
+        },
+        {
+            "title": "保函所占比（%）",
+            "dataIndex": "processName"
+        },
+        {
+            "title": "保函类型",
+            "dataIndex": "auditStatus"
+        },
+        {
+            "title": "保函金额",
+            "dataIndex": "startTime",
+            "type": "date"
+        },
+        {
+            "title": "业务归属",
+            "dataIndex": "description"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "保函有效截止期",
+            "dataIndex": "createTime",
+            "type": "date"
+        },
+        {
+            "title": "承诺交回日期",
+            "dataIndex": "createTime",
+            "type": "date"
+        },
+        {
+            "title": "保函保障期间",
+            "dataIndex": "createTime",
+            "type": "date"
+        }
+    ],
+    "guarantColumns": [
+        {
+            "title": "履约保函金额（元）",
+            "dataIndex": "businessNumber"
+        },
+        {
+            "title": "保函保证金",
+            "dataIndex": "projectNumber"
+        },
+        {
+            "title": "每季手续费",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "手续费",
+            "dataIndex": "biddingPerson"
+        },
+        {
+            "title": "保证金+手续费",
+            "dataIndex": "internalNumber",
+            "type": "string"
+        },
+        {
+            "title": "付款金额（元）",
+            "dataIndex": "processName"
         }
     ]
 }

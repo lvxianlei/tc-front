@@ -17,6 +17,7 @@ import RecoveryGuaranteeLayer from './recoveryGuarantee';
 import SeeGuarantee from './seeGuarantee';
 // 引入interface类型
 import { EditRefProps } from './application';
+import OverView from "./OverView";
 
 export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
@@ -26,6 +27,7 @@ export default function ApplicationColunm(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
+    const [visibleOverView, setVisibleOverView] = useState<boolean>(false);
     const [id, setId] = useState<string>();
     const [requiredReturnTime, setRequiredReturnTime] = useState<string>("");
     const addRef = useRef<EditRefProps>();
@@ -182,8 +184,13 @@ export default function ApplicationColunm(): React.ReactNode {
                                     <Button type="link"
                                         className="btn-operation-link"
                                         onClick={() => {
-                                            getUser(record.id)
-                                            setId(record.id);
+                                            if (acceptStatus === 1) {
+                                                setId(record.id);
+                                                setVisibleOverView(true)
+                                            } else {
+                                                getUser(record.id)
+                                                setId(record.id);
+                                            }
                                         }}
                                     >查看</Button>
                                     {acceptStatus === 1 && <Button
@@ -321,6 +328,13 @@ export default function ApplicationColunm(): React.ReactNode {
                 acceptStatus={acceptStatus}
                 onCancel={() => setVisibleSee(false)}
                 onOk={() => setVisibleSee(false)}
+            />
+            <OverView
+                visible={visibleOverView}
+                id={id}
+                acceptStatus={acceptStatus}
+                onCancel={() => setVisibleOverView(false)}
+                onOk={() => setVisibleOverView(false)}
             />
         </>
     )
