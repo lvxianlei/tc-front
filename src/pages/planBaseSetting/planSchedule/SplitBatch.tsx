@@ -151,7 +151,7 @@ export default function SampleDraw(): React.ReactNode {
             title: "确认后不可取消，是否确认？",
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
-                    const factoryId = await factoryForm.validateFields()
+                    const factoryId = await factoryForm.getFieldsValue(true)
                     await run(selectedRows.map((item: any) => ({
                         id: item.id,
                         productionBatchNo: item.productionBatchNo,
