@@ -334,7 +334,8 @@ export default function PlanTrialList(): React.ReactNode {
                 values.endTime = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
-            return values;
+            setRefresh(!refresh)
+            // return values;
     }
     const rowChange = (index: number) => {
         rowChangeList.push(index);
@@ -360,6 +361,47 @@ export default function PlanTrialList(): React.ReactNode {
     }
 
     return <>
+    <Form 
+        layout="inline" 
+        style={{margin:'20px'}} 
+        onFinish={ onFilterSubmit }
+    >
+        <Form.Item label='模糊查询项' name='fuzzyMsg'>
+            <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户/批次号" />
+        </Form.Item>
+        <Form.Item label='产品类型' name='productTypeId'>
+            <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "100px" }}>
+                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    return <Select.Option key={index} value={id}>
+                        {name}
+                    </Select.Option>
+                })}
+            </Select>
+        </Form.Item>
+        <Form.Item label='试装单元' name='productUnitName'>
+            <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                { productUnitData?.map((item: any) => {
+                    return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                }) }
+            </Select>
+        </Form.Item>
+        <Form.Item label='状态' name='status' initialValue={1}>
+            <Select placeholder="请选择" style={{ width: "100px" }}>
+                <Select.Option value={1} key="1">未下发</Select.Option>
+                <Select.Option value={2} key="2">已下发</Select.Option>
+                <Select.Option value={3} key="3">已完成</Select.Option>
+            </Select>
+        </Form.Item>
+        <Form.Item label='计划交货日期' name='time'>
+            <DatePicker.RangePicker />
+        </Form.Item>
+        <Form.Item>
+            <Button type="primary" htmlType="submit">查询</Button>
+        </Form.Item>
+        <Form.Item>
+            <Button htmlType="reset">重置</Button>
+        </Form.Item>
+    </Form>
      <Form form={formRef} className={styles.descripForm}>
         <Page
             path="/tower-aps/trialAssemble/page"
@@ -440,51 +482,9 @@ export default function PlanTrialList(): React.ReactNode {
                     </Popconfirm>
                 </Space>
             }
-            searchFormItems={[
-                {
-                    name: 'fuzzyMsg',
-                    label: '模糊查询项',
-                    children: <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户/批次号" />
-                },
-                {
-                    name: 'productTypeId',
-                    label: '产品类型',
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
-                            </Select.Option>
-                        })}
-                    </Select>
-                },
-                {
-                    name: 'productUnitName',
-                    label: '试装单元',
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                        { productUnitData?.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                        }) }
-                    </Select>
-                },
-                {
-                    name: 'status',
-                    label: '状态',
-                    children: <Form.Item name='status' initialValue={1}>
-                        <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option value={1} key="1">未下发</Select.Option>
-                            <Select.Option value={2} key="2">已下发</Select.Option>
-                            <Select.Option value={3} key="3">已完成</Select.Option>
-                        </Select>
-                    </Form.Item>
-                },
-                {
-                    name: 'time',
-                    label: '计划交货日期',
-                    children: <DatePicker.RangePicker />
-                },
-                
-            ]}
-            onFilterSubmit={onFilterSubmit}
+            refresh={refresh}
+            searchFormItems={[]}
+            // onFilterSubmit={onFilterSubmit}
         />
      </Form>   
         

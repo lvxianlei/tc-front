@@ -1769,7 +1769,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-技术下发
-      "name": "下发技术",
+      "name": "技术派工",
       "path": "/planProd/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/index",
       "exact": true,
@@ -1783,7 +1783,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-下发技术
-      "name": "下发技术",
+      "name": "技术派工",
       "path": "/planProd/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
