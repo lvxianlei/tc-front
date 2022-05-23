@@ -192,6 +192,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleAddModalOk = () => {
         const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        console.log(newMaterialList, "newMaterialList")
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
@@ -201,6 +202,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 num,
                 taxPrice,
                 price,
+                spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
@@ -313,6 +315,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num,
                     taxPrice,
                     price,
+                    spec: item.structureSpec,
                     // 之前从规格拿宽度，后续添加了width字段
                     // width: formatSpec(item.structureSpec).width,
                     materialTexture: name,
@@ -448,6 +451,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 value: ""
             }}
                 onChange={(fields: any[]) => {
+                    fields.map((element: any, index: number) => {
+                        element["spec"] = element.structureSpec
+                    });
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
                         spec: item.structureSpec,
