@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import moment from 'moment';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -372,7 +373,7 @@ export default function SampleDraw(): React.ReactNode {
                     const value = await dateForm.validateFields()
                     await runDate(selectedRows.map((item: any) => ({
                         id: item.id,
-                        planDeliveryTime: value?.planDeliveryTime,
+                        planDeliveryTime: moment(value?.planDeliveryTime).format('YYYY-MM-DD'),
                     })))
                     await message.success("已成功设置计划交货日期！")
                     setSelectedKeys([])
