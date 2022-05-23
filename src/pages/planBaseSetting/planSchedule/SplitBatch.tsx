@@ -57,7 +57,7 @@ export default function SampleDraw(): React.ReactNode {
             title: "确认后不可取消，是否确认？",
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
-                    const splitData = await form.validateFields()
+                    const splitData = await form.getFieldsValue(true)
                     const submitData = selectedRows.map((item: any) => {
                         return {
                             id: item.id,
