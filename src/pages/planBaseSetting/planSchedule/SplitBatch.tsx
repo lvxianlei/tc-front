@@ -34,6 +34,11 @@ export default function SampleDraw(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { data: workUnitList } = useRequest<{ groupId: string, groupName: string }[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`tower-aps/group/unit/config/list?size=1000`);
+        resole(data?.records)
+    }), {})
+
     const handleModalOk = async () => {
         try {
             const splitData = await form.validateFields()
@@ -81,7 +86,7 @@ export default function SampleDraw(): React.ReactNode {
             dataIndex: 'planDeliveryTime'
         },
         {
-            title: '厂区名',
+            title: '生产单元组',
             dataIndex: 'factoryName'
         }
     ]
@@ -112,18 +117,18 @@ export default function SampleDraw(): React.ReactNode {
     }
     const useFactory = () => {
         Modal.confirm({
-            title: "分配厂区",
+            title: "分配生产单元组",
             icon: null,
             content: <Form form={factoryForm}>
                 <Form.Item
-                    label="厂区名"
+                    label="分组名称"
                     name="factoryId"
-                    rules={[{ required: true, message: '请选择厂区名' }]}>
+                    rules={[{ required: true, message: '请选择分组名称' }]}>
                     <Select>
-                        {factoryTypeOptions?.map((item: any) => <Select.Option
-                            key={item.id}
-                            value={item.id}>
-                            {item.name}
+                        {workUnitList?.map((item: any) => <Select.Option
+                            key={item.groupId}
+                            value={item.groupId}>
+                            {item.groupName}
                         </Select.Option>)}
                     </Select>
                 </Form.Item>
@@ -136,7 +141,7 @@ export default function SampleDraw(): React.ReactNode {
                         productionBatchNo: item.productionBatchNo,
                         factoryId: factoryId.factoryId
                     })))
-                    await message.success("已成功分配厂区")
+                    await message.success("已成功分配生产单元组！")
                     setSelectedKeys([])
                     setSelectedRows([])
                     factoryForm.resetFields()
@@ -152,30 +157,30 @@ export default function SampleDraw(): React.ReactNode {
         })
     }
 
-    const cancelFactory = () => {
-        if (!selectedRows.some((item: any) => item.factoryName)) {
-            message.error(`杆塔${selectedRows[0].productCategoryName}未分配厂区，不可以取消分配厂区`)
-            return
-        }
-        Modal.confirm({
-            title: "取消分配厂区",
-            content: "是否取消分配厂区？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    await run(selectedRows.map((item: any) => ({
-                        id: item.id,
-                        productionBatchNo: item.productionBatchNo
-                    })))
-                    setSelectedKeys([])
-                    setSelectedRows([])
-                    history.go(0)
-                    resove(true)
-                } catch (error) {
-                    reject(false)
-                }
-            })
-        })
-    }
+    // const cancelFactory = () => {
+    //     if (!selectedRows.some((item: any) => item.factoryName)) {
+    //         message.error(`杆塔${selectedRows[0].productCategoryName}未分配厂区，不可以取消分配厂区`)
+    //         return
+    //     }
+    //     Modal.confirm({
+    //         title: "取消分配厂区",
+    //         content: "是否取消分配厂区？",
+    //         onOk: () => new Promise(async (resove, reject) => {
+    //             try {
+    //                 await run(selectedRows.map((item: any) => ({
+    //                     id: item.id,
+    //                     productionBatchNo: item.productionBatchNo
+    //                 })))
+    //                 setSelectedKeys([])
+    //                 setSelectedRows([])
+    //                 history.go(0)
+    //                 resove(true)
+    //             } catch (error) {
+    //                 reject(false)
+    //             }
+    //         })
+    //     })
+    // }
 
     const settingBatch = () => {
         Modal.confirm({
@@ -328,8 +333,9 @@ export default function SampleDraw(): React.ReactNode {
             <Space>
                 <Button type="primary" onClick={settingBatch} disabled={!(selectedKeys.length !== 0)}>设置批次</Button>
                 <Button type="primary" onClick={finishBatch} disabled={!(selectedKeys.length !== 0)}>完成批次设置</Button>
-                <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配厂区</Button>
-                <Button type="primary" onClick={cancelFactory} disabled={!(selectedKeys.length !== 0)}>取消分配厂区</Button>
+                <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配生产单元组</Button>
+                {/* <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配厂区</Button>
+                <Button type="primary" onClick={cancelFactory} disabled={!(selectedKeys.length !== 0)}>取消分配厂区</Button> */}
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
         }

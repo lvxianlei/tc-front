@@ -6,7 +6,6 @@ import { useHistory, useParams } from "react-router"
 import { Button, Col, Form, Input, message, Modal, Pagination, Radio, Row, Select, Space } from "antd"
 import { CommonAliTable } from "../../common"
 import styles from "../../common/CommonTable.module.less"
-import { groupBy } from "ali-react-table"
 interface CountProps {
     totalNumber: number
     totalGroupNum: number
@@ -33,13 +32,20 @@ export default function ManualDistribute(): ReactElement {
 
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=1000`);
+            const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=10000`);
             resole(result.records || [])
         } catch (error) {
             reject(error)
         }
     }))
-
+    const { data: weldinglistData } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-aps/welding/config/weldingList?size=10000`);
+            resole(result.records || [])
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.put(`/tower-aps/workshopOrder/manualDistribute`, params);
@@ -52,28 +58,36 @@ export default function ManualDistribute(): ReactElement {
     const { loading, data, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const formValue = await form.getFieldsValue()
-            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/${status === 1 ? "structure" : "welding"}`, {
+            const result: any = await RequestUtil.get(`/tower-aps/workshopOrder/${status === 1 ? "structure" : "weldingStat"}`, {
                 issueOrderId: params.id,
                 ...formValue,
                 current: pagenation.current,
                 size: pagenation.pageSize
             })
             if (status === 2) {
-                const groupRecords = groupBy(result.recordDate.records, (t: any) => t.segmentName)
+                const records = result.recordDate.records.reduce((count: any[], item: any) => {
+                    const components = item.weldingStructureVOList.reduce((cCount: any[], cItem: any[]) => {
+                        delete item.weldingStructureVOList
+                        return cCount.concat({ ...cItem, ...item })
+                    }, [])
+                    return count.concat(components)
+                }, [])
                 resole({
                     ...result,
                     recordDate: {
                         ...result.recordDate,
-                        records: Object.values(groupRecords).reduce((count: any[], item: any[]) => {
-                            const componentIds = groupBy(item, (t: any) => t.componentId)
-                            const components = Object.values(componentIds).reduce((cCount: any[], cItem: any[]) => cCount.concat(cItem), [])
-                            return count.concat(components)
-                        }, [])
+                        records: records.map((item: any, index: number) => ({ ...item, index }))
                     }
                 })
                 return
             }
-            resole(result)
+            resole({
+                ...result,
+                recordDate: {
+                    ...result.recordDate,
+                    records: result.recordDate.records.map((item: any, index: number) => ({ ...item, index }))
+                }
+            })
         } catch (error) {
             reject(false)
         }
@@ -100,8 +114,8 @@ export default function ManualDistribute(): ReactElement {
                 const dataSegmentResult = data?.recordDate.records.filter((dataItem: any) => dataItem.segmentName === item.segmentName)
                 return result.concat(dataSegmentResult)
             }, [])
-            const newCounts = selectRows.reduce((result: CountProps, item: any) => ({
-                totalGroupNum: result.totalGroupNum + parseFloat(item.segmentGroupNum || "0"),
+            const newCounts = selectRows.reduce((result: CountProps, item: any, index: number) => ({
+                totalGroupNum: item.id === selectRows[index - 1]?.id ? result.totalGroupNum || "0" : result.totalGroupNum + parseFloat(item.totalProcessNum || "0"),
                 totalWeight_w: Number((parseFloat(result.totalWeight_w) + parseFloat(item.singleGroupWeight || "0"))).toFixed(4)
             }), {
                 totalNumber: 0,
@@ -111,29 +125,38 @@ export default function ManualDistribute(): ReactElement {
                 totalHolesNum: 0
             })
             setSelectedRowKeys(selectedRowKeys)
-            setCounts(newCounts)
+            setCounts({ ...newCounts, })
             return
         }
     }
 
     const handleClick = () => {
         Modal.confirm({
-            title: "手动分配车间",
+            title: "手动分配生产单元",
             icon: null,
             content: <Form form={workshopForm}>
-                <Form.Item name="workshopId" label="生产/组焊车间" rules={[{ required: true, message: "请选择生产/组焊车间..." }]}>
+                <Form.Item name="workshopId" label="生产单元" rules={[{ required: true, message: "请选择生产单元..." }]}>
                     <Select>
-                        {listData.map((item: any) => <Select.Option
+                        {status === 1 && listData.map((item: any) => <Select.Option
                             key={item.id}
                             value={item.id}>{item.name}</Select.Option>)}
+                        {status === 2 && weldinglistData.map((item: any) => <Select.Option
+                            key={item.unitId}
+                            value={item.unitId}>{item.unitName}</Select.Option>)}
+
                     </Select>
                 </Form.Item>
             </Form>,
             onOk: async () => new Promise(async (resove, reject) => {
+                const value = workshopForm.getFieldsValue(true)
+                if (JSON.stringify(value) == "{}") {
+                    reject(false)
+                }
                 const workshop = await workshopForm.validateFields()
                 try {
                     await weldingRun(selectedRowKeys.map((item: any) => ({
                         id: item.id,
+                        ids: item.ids,
                         workshopId: workshop.workshopId,
                         weldingId: item.weldingId,
                         componentId: item.componentId,
@@ -142,7 +165,7 @@ export default function ManualDistribute(): ReactElement {
                         type: status
                     })))
                     resove(true)
-                    await message.success("手动分配车间完成...")
+                    await message.success("手动分配生产单元完成...")
                     setSelectedRowKeys([])
                     workshopForm.resetFields()
                     history.go(0)
@@ -180,7 +203,7 @@ export default function ManualDistribute(): ReactElement {
                     </Form.Item>
                 </Col>
                 <Col>
-                    <Form.Item name="processWorkshop" label="加工车间">
+                    <Form.Item name="processWorkshop" label="生产单元">
                         <Input />
                     </Form.Item>
                 </Col>
@@ -204,12 +227,15 @@ export default function ManualDistribute(): ReactElement {
         }} size={12}>
             <Radio.Group
                 value={status}
-                onChange={(event) => setStatus(event.target.value)}
+                onChange={(event) => {
+                    setStatus(event.target.value)
+                    setPagenation({ ...pagenation, current: 1 })
+                }}
             >
                 <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
             </Radio.Group>
-            <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配车间</Button>
+            <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配单元</Button>
         </Space>
         <Row style={{ paddingLeft: 20 }}>
             <Space>
@@ -231,12 +257,21 @@ export default function ManualDistribute(): ReactElement {
                 }
                 return item
             }) : welding.map((item: any) => {
-                if (item.dataIndex === "segmentGroupNum") {
+                if (item.dataIndex === "totalProcessNum") {
                     return ({
                         ...item,
                         features: {
                             ...item.features,
-                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.componentId === row2.componentId
+                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.id + row1.componentId === row2.id + row2.componentId
+                        }
+                    })
+                }
+                if (item.dataIndex === "segmentName") {
+                    return ({
+                        ...item,
+                        features: {
+                            ...item.features,
+                            autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.id + row1.segmentName === row2.id + row2.segmentName
                         }
                     })
                 }
@@ -245,12 +280,13 @@ export default function ManualDistribute(): ReactElement {
             size="small"
             className={status === 1 ? "" : "bordered"}
             isLoading={loading}
+            rowKey={(records: any) => `${records.id}-${records.index}`}
             rowSelection={{
-                selectedRowKeys: selectedRowKeys.map((item: any) => item.id),
+                selectedRowKeys: selectedRowKeys.map((item: any) => `${item.id}-${item.index}`),
                 onChange: onSelectChange,
                 checkboxColumn: status === 2 ? {
                     features: {
-                        autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.segmentName === row2.segmentName,
+                        autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.id === row2.id,
                         sortable: true
                     }
                 } : {}

@@ -124,7 +124,7 @@ export default () => {
                             <span style={{ fontWeight: 600 }}>合计：</span>
                             <span>总件数：</span>{countObj.totalProcessNum}
                             <span>总孔数：</span>{countObj.totalHolesNum}
-                            <span>总重量：</span>{countObj.totalWeight}
+                            <span>总重量（t）：</span>{countObj.totalWeight}
                         </Space>
                     </Row>
                 </>
