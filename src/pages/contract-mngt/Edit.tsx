@@ -360,7 +360,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     ...item,
                     length: value,
                     totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3) : null
+                    // weight:  ((item.proportion * value) / 1000).toFixed(3)
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
                 })
             }
             return item
@@ -451,8 +452,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 value: ""
             }}
                 onChange={(fields: any[]) => {
+                    console.log(fields, materialList)
                     fields.map((element: any, index: number) => {
-                        element["spec"] = element.structureSpec
+                        if (element.structureSpec) {
+                            element["spec"] = element.structureSpec;
+                            element["weight"]  = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
+                            element["totalWeight"]  = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
+                        }
                     });
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
@@ -546,13 +552,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (["num", "taxPrice", "price"].includes(item.dataIndex)) {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 0} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 0} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                         })
                     }
                     if (item.dataIndex === "materialStandard") {
