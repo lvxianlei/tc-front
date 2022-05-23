@@ -105,9 +105,9 @@ export default function SampleDraw(): React.ReactNode {
             dataIndex: 'productNumber'
         },
         {
-            key: 'planDeliveryTime',
+            key: 'customerDeliveryTime',
             title: '客户交货日期',
-            dataIndex: 'planDeliveryTime'
+            dataIndex: 'customerDeliveryTime'
         },
         {
             key: 'planDeliveryTime',
