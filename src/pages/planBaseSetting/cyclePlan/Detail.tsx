@@ -285,7 +285,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                             planCompleteTime: moment(valueDate?.planCompleteTime).format('YYYY-MM-DD')
                         }
                     })
-                    RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
+                    await RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
                     message.success("已成功设置计划完成日期！")
                     dateForm.resetFields()
                     const value = form.getFieldsValue(true)
@@ -467,7 +467,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <DetailTitle title="周期计划下达单"/>
                 <Space>
                     <ReleaseOrder run={run} data={detail}/>
-                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>设置计划交货期</Button>
+                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>计划完成日期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
