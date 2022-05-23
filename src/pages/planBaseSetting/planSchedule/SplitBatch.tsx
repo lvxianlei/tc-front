@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import moment from 'moment';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -56,7 +57,7 @@ export default function SampleDraw(): React.ReactNode {
             title: "确认后不可取消，是否确认？",
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
-                    const splitData = await form.validateFields()
+                    const splitData = await form.getFieldsValue(true)
                     const submitData = selectedRows.map((item: any) => {
                         return {
                             id: item.id,
@@ -150,7 +151,7 @@ export default function SampleDraw(): React.ReactNode {
             title: "确认后不可取消，是否确认？",
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
-                    const factoryId = await factoryForm.validateFields()
+                    const factoryId = await factoryForm.getFieldsValue(true)
                     await run(selectedRows.map((item: any) => ({
                         id: item.id,
                         productionBatchNo: item.productionBatchNo,
@@ -372,7 +373,7 @@ export default function SampleDraw(): React.ReactNode {
                     const value = await dateForm.validateFields()
                     await runDate(selectedRows.map((item: any) => ({
                         id: item.id,
-                        planDeliveryTime: value?.planDeliveryTime,
+                        planDeliveryTime: moment(value?.planDeliveryTime).format('YYYY-MM-DD'),
                     })))
                     await message.success("已成功设置计划交货日期！")
                     setSelectedKeys([])

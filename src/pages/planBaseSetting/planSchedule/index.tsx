@@ -52,7 +52,7 @@ export default function PlanScheduleMngt(): React.ReactNode {
                     history.push(`/planProd/planScheduleMngt/distributedTech/${selectedKeys.join(',')}`);
                     tip = []
                 } else {
-                    message.warning('技术派工前，请先设置计划交货期和拆分批次')
+                    message.warning('技术派工前，请先设置拆分批次')
                     tip = []
                 }
             }}>技术派工</Button>
