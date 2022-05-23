@@ -24,6 +24,16 @@ export default function SampleDraw(): React.ReactNode {
             reject(error)
         }
     }), { manual: true })
+    
+    const { run: runDate } = useRequest((option) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/tower-aps/productionPlan/batch/delivery/time`, option);
+            resole(result)
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    }), { manual: true })
 
     const { run: completeBatchRun } = useRequest(() => new Promise(async (resole, reject) => {
         try {
@@ -352,18 +362,17 @@ export default function SampleDraw(): React.ReactNode {
             content: <Form form={dateForm}>
                 <Form.Item
                     label="计划交货日期"
-                    name="plannedDate"
+                    name="planDeliveryTime"
                     rules={[{ required: true, message: '请选择计划交货日期' }]}>
                     <DatePicker format='YYYY-MM-DD' placeholder='请选择'/>
                 </Form.Item>
             </Form>,
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const factoryId = await dateForm.validateFields()
-                    await run(selectedRows.map((item: any) => ({
+                    const value = await dateForm.validateFields()
+                    await runDate(selectedRows.map((item: any) => ({
                         id: item.id,
-                        productionBatchNo: item.productionBatchNo,
-                        factoryId: factoryId.factoryId
+                        planDeliveryTime: value?.planDeliveryTime,
                     })))
                     await message.success("已成功设置计划交货日期！")
                     setSelectedKeys([])
