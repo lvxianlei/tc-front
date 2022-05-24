@@ -6,6 +6,7 @@ import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import moment from 'moment';
+import zhCN from 'antd/es/date-picker/locale/zh_CN';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -365,7 +366,7 @@ export default function SampleDraw(): React.ReactNode {
                     label="计划交货日期"
                     name="planDeliveryTime"
                     rules={[{ required: true, message: '请选择计划交货日期' }]}>
-                    <DatePicker format='YYYY-MM-DD' placeholder='请选择'/>
+                    <DatePicker format='YYYY-MM-DD' placeholder='请选择' locale={zhCN}/>
                 </Form.Item>
             </Form>,
             onOk: () => new Promise(async (resove, reject) => {
