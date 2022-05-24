@@ -407,6 +407,7 @@ export default function PlanTrialList(): React.ReactNode {
             path="/tower-aps/trialAssemble/page"
             columns={[...tableColumns as any]}
             tableProps={{
+                rowKey:'issueOrderId',
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,
