@@ -1804,7 +1804,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
-      "name": "分配车间",
+      "name": "分配生产单元",
       "path": "/planProd/publishWorkshop",
       "module": "./pages/planBaseSetting/publishWorkshop/index",
       "exact": true,
@@ -1825,7 +1825,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
-      "name": "手动分配车间",
+      "name": "手动分配生产单元",
       "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
