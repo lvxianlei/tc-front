@@ -282,9 +282,16 @@ export default function PlanTrialList(): React.ReactNode {
             dataIndex: "status",
             editable: true,
             width:120,
-            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_}</span>
-            )
+            render: (status: number): React.ReactNode => {
+                switch (status) {
+                    case 1:
+                        return '未下发';
+                    case 2:
+                        return '已下发';
+                    case 3:
+                        return '已完成';
+                }
+            }
         },
         {
             title: "下发日期",
