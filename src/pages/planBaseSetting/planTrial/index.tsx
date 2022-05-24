@@ -461,18 +461,14 @@ export default function PlanTrialList(): React.ReactNode {
                     <Popconfirm
                         title="下发后不可取消，是否下发试装计划？"
                         onConfirm={async () => {
-                            if (selectedKeys.length > 0)
-                                if (!(selectedKeys.length > 100)) {
-                                    await RequestUtil.post(`/tower-science/trialAssemble/distribute`,{
-                                        issueOrderIds: selectedKeys
-                                    }).then(() => {
-                                        message.success('下发成功！');
-                                        setRefresh(!refresh);
-                                        history.go(0)
-                                    })
-                                }
-                            else {
-                                message.warning('请选择要下发的数据')
+                            if (selectedKeys.length > 0){
+                                await RequestUtil.post(`/tower-aps/trialAssemble/distribute`,
+                                    selectedKeys
+                                ).then(() => {
+                                    message.success('下发成功！');
+                                    setRefresh(!refresh);
+                                    history.go(0)
+                                })
                             }
                         }}
                         okText="提交"
