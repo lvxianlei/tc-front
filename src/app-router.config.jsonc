@@ -2636,6 +2636,34 @@
       "module": "./pages/changePassword",
       "exact": true,
       "authority": "home_page_person_center"
+    },
+    { // 工序配置
+      "name": "工序配置列表",
+      "path": "/unqualifiedAmount/processConfiguration/list",
+      "module": "./pages/processConfiguration/ProcessConfigurationList",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 不合格项目金额配置
+      "name": "不合格项目金额配置列表",
+      "path": "/unqualifiedAmount/list",
+      "module": "./pages/unqualifiedAmount/UnqualifiedAmountList",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 处置单列表
+      "name": "处置单列表",
+      "path": "/qualityInspection/disposition",
+      "module": "./pages/qualityInspection/disposition/DispositionList",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 处置单详情
+      "name": "详情",
+      "path": "/qualityInspection/disposition/detail/:id",
+      "module": "./pages/qualityInspection/disposition/DispositionDetail",
+      "exact": true,
+      "authority": "home_page_person_center"
     }
   ]
 }
