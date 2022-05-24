@@ -216,7 +216,7 @@ export default function PlanTrialList(): React.ReactNode {
         },
         {
             title: "产品类型",
-            dataIndex: "productType",
+            dataIndex: "productTypeName",
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
