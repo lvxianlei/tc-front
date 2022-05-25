@@ -21,7 +21,35 @@ export default function GalvanizedPackDetail(): React.ReactNode {
     })
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.post(`/tower-aps/galvanizedPackage/detail`,params?.id.indexOf(',')>-1?params?.id.split(','):[params.id])
-        setDetailData(data)
+        const detailData = {
+            ...data,
+            packagePlanVOList:data?.packagePlanVOList&&data?.packagePlanVOList.length>0&&data?.packagePlanVOList.map((item:any)=>{
+                return {
+                    ...item,
+                    packageFirst: item?.packageFirstUnitId&&item?.packageFirstUnitName?item?.packageFirstUnitId+','+item?.packageFirstUnitName:'',
+                    packageSecond: item?.packageSecondUnitId&&item?.packageSecondUnitName?item?.packageSecondUnitId+','+item?.packageSecondUnitName:'',
+                    storageTime: item?.storageTime?moment(item?.storageTime):'',
+                    reportTime: item?.reportTime?moment(item?.reportTime):'',
+                    packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime):'',
+                    packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime):'',
+                    packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime):'',
+                }
+            })||[],
+            galvanizedPlanVOList: data?.galvanizedPlanVOList&&data?.galvanizedPlanVOList.length>0&&data?.galvanizedPlanVOList.map((item:any)=>{
+                return {
+                    ...item,
+                    galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
+                    galvanizedSecond: item?.galvanizedSecondUnitId&&item?.galvanizedSecondUnitName?item?.galvanizedSecondUnitId+','+item?.galvanizedSecondUnitName:'',
+                    galvanizedThird: item?.galvanizedThirdUnitId&&item?.galvanizedThirdUnitName?item?.galvanizedThirdUnitId+','+item?.galvanizedThirdUnitName:'',
+                    transferStartTime: item?.storageTime?moment(item?.storageTime):'',
+                    transferEndTime: item?.reportTime?moment(item?.reportTime):'',
+                    galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime):'',
+                    galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime):'',
+                    galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime):'',
+                }
+            })||[],
+        }
+        setDetailData(detailData)
         form.setFieldsValue({
             packagePlanDTOList: data?.packagePlanVOList&&data?.packagePlanVOList.length>0&&data?.packagePlanVOList.map((item:any)=>{
                 return {
@@ -100,7 +128,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                         }
                     }),
                 }
-                RequestUtil.post(`/tower-aps/galvanizedPackage/issue`,submitData).then(async ()=>{
+                RequestUtil.put(`/tower-aps/galvanizedPackage/issue`,submitData).then(async ()=>{
                     await message.success('下发成功！')
                     history.goBack()
                 })
