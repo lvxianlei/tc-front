@@ -50,6 +50,12 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             dataIndex: 'workUnit'
         },
         {
+            key: 'linkName',
+            title: '生产环节',
+            width: 100,
+            dataIndex: 'linkName'
+        },
+        {
             key: 'craftName',
             title: '工艺',
             width: 200,

@@ -2639,7 +2639,7 @@
     },
     { // 工序配置
       "name": "工序配置列表",
-      "path": "/unqualifiedAmount/processConfiguration/list",
+      "path": "/unqualifiedAmount/processConfigurationList",
       "module": "./pages/processConfiguration/ProcessConfigurationList",
       "exact": true,
       "authority": "home_page_person_center"
