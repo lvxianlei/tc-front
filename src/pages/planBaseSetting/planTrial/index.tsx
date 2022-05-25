@@ -9,6 +9,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../../utils/AuthUtil';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
+import moment from 'moment';
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
@@ -33,8 +34,8 @@ export default function PlanTrialList(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const { data: productUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit?size=10000`);
-            resole(result?.records)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit/trial`);
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -46,9 +47,13 @@ export default function PlanTrialList(): React.ReactNode {
             editable: true,
             width:120,
             fixed:'left',
-            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_}</span>
-            )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<><span>{_}</span><Form.Item name={['data', index, "issueOrderId"]} initialValue={record?.issueOrderId} style={{ display: "none" }}>
+                <Input size="small" onChange={() => rowChange(index)} />
+            </Form.Item><Form.Item name={['data', index, "planId"]} initialValue={record?.planId} style={{ display: "none" }}>
+                <Input size="small" onChange={() => rowChange(index)} />
+            </Form.Item><Form.Item name={['data', index, "productCategoryId"]} initialValue={record?.productCategoryId} style={{ display: "none" }}>
+                <Input size="small" onChange={() => rowChange(index)} />
+            </Form.Item></>)
         },
         {
             key: 'startTransferTime',
@@ -438,6 +443,14 @@ export default function PlanTrialList(): React.ReactNode {
                             if (values && values.length > 0 && newRowChangeList.length > 0) {
                                 let changeValues = values.filter((item: any, index: number) => {
                                     return newRowChangeList.indexOf(index) !== -1;
+                                }).map((item:any)=>{
+                                    return {
+                                        ...item,
+                                        endTransferTime: moment(item?.endTransferTime).format('YYYY-MM-DD'),
+                                        planCompleteTime: moment(item?.planCompleteTime).format('YYYY-MM-DD'),
+                                        startTransferTime: moment(item?.startTransferTime).format('YYYY-MM-DD'),
+
+                                    }
                                 })
                                 RequestUtil.post(`/tower-aps/trialAssemble/save`, [...changeValues]).then(res => {
                                     setColumns(columnsSetting);
