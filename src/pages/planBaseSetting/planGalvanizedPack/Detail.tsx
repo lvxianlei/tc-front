@@ -100,7 +100,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                         }
                     }),
                 }
-                RequestUtil.post(`/tower-aps/galvanizedPackage/issue`,submitData).then(async ()=>{
+                RequestUtil.put(`/tower-aps/galvanizedPackage/issue`,submitData).then(async ()=>{
                     await message.success('下发成功！')
                     history.goBack()
                 })
