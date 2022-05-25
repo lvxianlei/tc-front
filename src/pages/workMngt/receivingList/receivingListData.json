@@ -26,6 +26,11 @@
             "width": 100
         },
         {
+            "title": "供应商",
+            "dataIndex": "supplierName",
+            "width": 100
+        },
+        {
             "title": "到货时间",
             "dataIndex": "receiveTime",
             "width": 100
@@ -215,7 +220,7 @@
             ]
         },
         {
-            "title": "卸货方式",
+            "title": "卸车方式",
             "dataIndex": "unloadMode",
             "type": "select",
             "enum": [],
@@ -355,7 +360,7 @@
         },
         {
             "title": "理算重量（吨）",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "width": 100
         },
         {
@@ -400,7 +405,7 @@
         },
         {
             "title": "外观检验结果",
-            "dataIndex": "appearance",
+            "dataIndex": "appearanceName",
             "width": 130
         }
     ],
@@ -449,13 +454,15 @@
         },
         {
             "title": "理算重量（吨）",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "disabled": true
         },
         {
             "title": "过磅重量（吨）",
             "dataIndex": "ponderationWeight",
-            "type": "number"
+            "type": "number",
+            "max": 99999.99,
+            "required": true
         },
         {
             "title": "含税单价（元/吨）",
@@ -479,15 +486,18 @@
         },
         {
             "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber"
+            "dataIndex": "furnaceBatchNumber",
+            "maxLength": 30
         },
         {
             "title": "质保书号",
-            "dataIndex": "warrantyNumber"
+            "dataIndex": "warrantyNumber",
+            "maxLength": 30
         },
         {
             "title": "轧制批号",
-            "dataIndex": "rollingNumber"
+            "dataIndex": "rollingNumber",
+            "maxLength": 30
         },
         {
             "title": "外观检验结果",

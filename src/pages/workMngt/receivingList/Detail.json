@@ -35,8 +35,9 @@
             "dataIndex": "carNumber"
         },
         {
-            "title": "卸货方式",
-            "dataIndex": "unloadModeName"
+            "title": "卸车方式",
+            "dataIndex": "unloadMode",
+            "type": "select"
         },
         {
             "title": "卸车人员",
@@ -44,15 +45,27 @@
         },
         {
             "title": "计量方式",
-            "dataIndex": "meteringMode"
+            "dataIndex": "meteringMode",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "理重",
+                    "value": 1
+                },
+                {
+                    "label": "过磅",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "结算方式",
-            "dataIndex": "settlementMode"
+            "dataIndex": "settlementMode",
+            "type": "select"
         },
         {
             "title": "到货去向",
-            "dataIndex": "warehouseId"
+            "dataIndex": "warehouseName"
         },
         {
             "title": "备注",
@@ -162,7 +175,7 @@
         },
         {
             "title": "理算重量（吨）",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "disabled": true
         },
         {
@@ -203,7 +216,7 @@
         },
         {
             "title": "外观检验效果",
-            "dataIndex": "appearance"
+            "dataIndex": "appearanceName"
         }
     ]
 }

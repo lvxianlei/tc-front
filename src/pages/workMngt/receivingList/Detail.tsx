@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button } from 'antd';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil';
+import { unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
 import { BaseInfo, DetailTitle, CommonTable } from '../../common';
 import { baseInfo, freightInfo, handlingChargesInfo, goodsDetail } from './Detail.json';
 interface OverViewProps {
@@ -54,7 +55,22 @@ export default function Detail(props: OverViewProps): JSX.Element {
                 form={addCollectionForm}
                 dataSource={baseInfomation}
                 col={2}
-                columns={[...baseInfo]}
+                columns={baseInfo.map((item: any) => {
+                    switch (item.dataIndex) {
+                        case "unloadMode":
+                            return ({
+                                ...item,
+                                enum: unloadModeOptions?.map((item: any) => ({ value: item.id, label: item.name }))
+                            })
+                        case "settlementMode":
+                            return ({
+                                ...item,
+                                enum: settlementModeOptions?.map((item: any) => ({ value: item.id, label: item.name }))
+                            })
+                        default:
+                            return item
+                    }
+                })}
             />
             <DetailTitle title="运费信息" />
             <BaseInfo

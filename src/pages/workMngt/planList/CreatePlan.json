@@ -26,7 +26,7 @@
         },
         {
             "title": "长度（mm）",
-            "dataIndex": "angleSteelTotal",
+            "dataIndex": "length",
             "width": 100,
             "type": "number"
         },
@@ -44,7 +44,7 @@
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "singleWeight",
+            "dataIndex": "weight",
             "width": 100,
             "type": "string"
         }
@@ -53,6 +53,10 @@
         {
             "title": "材料名称",
             "dataIndex": "materialName"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialCategoryName"
         },
         {
             "title": "标准",
@@ -64,7 +68,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度（mm）",
@@ -81,22 +85,6 @@
         {
             "title": "数量",
             "dataIndex": "planPurchaseNum"
-        },
-        {
-            "title": "含税单价",
-            "dataIndex": "taxPrice"
-        },
-        {
-            "title": "含税金额（元）合计",
-            "dataIndex": "taxTotalAmount"
-        },
-        {
-            "title": "不含税单价",
-            "dataIndex": "price"
-        },
-        {
-            "title": "不含税单价（元）合计",
-            "dataIndex": "totalAmount"
         }
     ],
     

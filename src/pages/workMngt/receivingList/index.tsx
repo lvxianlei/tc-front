@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Spin } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { IntgSelect, Page } from '../../common'
 import { baseInfo } from "./receivingListData.json"
@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import Edit from "./Edit"
 import Detail from './Detail';
+import { settlementModeOptions } from "../../../configuration/DictionaryOptions"
 
 export default function Invoicing() {
     const history = useHistory()
@@ -14,8 +15,18 @@ export default function Invoicing() {
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("");
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
+    const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-supply/supplier/list`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/receiveStock?receiveStockById=${id}`)
@@ -55,15 +66,17 @@ export default function Invoicing() {
     }
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
+        setConfirmLoading(true)
         try {
             const isClose = await editRef.current?.onSubmit()
             if (isClose) {
                 message.success("材质配料设定成功...")
                 setVisible(false)
-                resove(true)
+                setConfirmLoading(false)
                 history.go(0)
             }
         } catch (error) {
+            setConfirmLoading(false)
             reject(false)
         }
     })
@@ -89,6 +102,7 @@ export default function Invoicing() {
             destroyOnClose
             visible={visible}
             width={1011}
+            confirmLoading={confirmLoading}
             title={type === "new" ? "创建" : "编辑"}
             onOk={handleModalOk}
             onCancel={() => {
@@ -104,99 +118,114 @@ export default function Invoicing() {
             onCancel={() => setVisibleSee(false)}
             onOk={() => setVisibleSee(false)}
         />
-        <Page
-            path="/tower-storage/receiveStock"
-            exportPath={"/tower-storage/receiveStock"}
-            columns={[{
-                title: "序号",
-                dataIndex: "index",
-                width: 40,
-                render: (_: any, _a: any, index: number) => <>{index + 1}</>
-            },
-            ...baseInfo,
-            {
-                title: "操作",
-                dataIndex: "opration",
-                fixed: "right",
-                width: 100,
-                render: (_: any, record: any) => {
-                    return <>
-                        <Link className="btn-operation-link" to={`/stock/receiving/detail/${record.id}`}>明细</Link>
-                        <Button
-                            type="link"
-                            className="btn-operation-link"
-                            disabled={record.receiveStatus === 1}
-                            onClick={() => {
-                                setDetailId(record.id)
-                                setType("edit")
-                                setVisible(true)
-                            }}>编辑</Button>
-                        <Button type="link" className="btn-operation-link" onClick={() => {
-                            setVisibleSee(true);
-                            setDetailId(record.id);
-                        }}>详情</Button>
-                        <Popconfirm
-                            title="确定删除此收货单信息吗？"
-                            disabled={record.lists && record.lists.length !== 0}
-                            onConfirm={async () => {
-                                await deleteRun(record?.id)
-                                message.success("删除成功...")
-                                history.go(0)
-                            }}
-                            okText="确认"
-                            cancelText="取消"
-                        >
+        <Spin spinning={loading}>
+            <Page
+                path="/tower-storage/receiveStock"
+                exportPath={"/tower-storage/receiveStock"}
+                columns={[{
+                    title: "序号",
+                    dataIndex: "index",
+                    width: 40,
+                    render: (_: any, _a: any, index: number) => <>{index + 1}</>
+                },
+                ...baseInfo,
+                {
+                    title: "操作",
+                    dataIndex: "opration",
+                    fixed: "right",
+                    width: 100,
+                    render: (_: any, record: any) => {
+                        return <>
+                            <Link className="btn-operation-link" to={`/stock/receiving/detail/${record.id}`}>明细</Link>
                             <Button
                                 type="link"
-                                size="small"
                                 className="btn-operation-link"
+                                disabled={record.receiveStatus === 1}
+                                onClick={() => {
+                                    setDetailId(record.id)
+                                    setType("edit")
+                                    setVisible(true)
+                                }}>编辑</Button>
+                            <Button type="link" className="btn-operation-link" onClick={() => {
+                                setVisibleSee(true);
+                                setDetailId(record.id);
+                            }}>详情</Button>
+                            <Popconfirm
+                                title="确定删除此收货单信息吗？"
                                 disabled={record.lists && record.lists.length !== 0}
-                            >删除</Button>
-                        </Popconfirm>
-                    </>
-                }
-            }]}
-            filterValue={filterValue}
-            extraOperation={<>
-                {/* <Button type="primary" ghost>导出</Button> */}
-                <Button type="primary" ghost onClick={() => {
-                    setType("new")
-                    setVisible(true)
-                }}>创建</Button>
-            </>}
-            onFilterSubmit={onFilterSubmit}
-            searchFormItems={[
-
-                {
-                    name: 'startStatusUpdateTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
-                    name: 'receiveStatus',
-                    label: '收货单状态',
-                    children: <Select style={{ width: 200 }} defaultValue="全部">
-                        <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="0">待完成</Select.Option>
-                        <Select.Option value="1">已完成</Select.Option>
-                    </Select>
-                },
-                {
-                    name: 'startReceiveTime',
-                    label: '约定到货时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
-                    name: "createUserDeptId",
-                    label: "创建人",
-                    children: <IntgSelect width={400} />
-                },
-                {
-                    name: 'fuzzyQuery',
-                    label: "模糊查询项",
-                    children: <Input placeholder="供应商/联系人/收货单号/联系电话/纸质单号/车牌号" style={{ width: 300 }} />
-                }
-            ]}
-        />
+                                onConfirm={async () => {
+                                    await deleteRun(record?.id)
+                                    message.success("删除成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    className="btn-operation-link"
+                                    disabled={record.lists && record.lists.length !== 0}
+                                >删除</Button>
+                            </Popconfirm>
+                        </>
+                    }
+                }]}
+                filterValue={filterValue}
+                extraOperation={<>
+                    {/* <Button type="primary" ghost>导出</Button> */}
+                    <Button type="primary" ghost onClick={() => {
+                        setType("new")
+                        setVisible(true)
+                    }}>创建</Button>
+                </>}
+                onFilterSubmit={onFilterSubmit}
+                searchFormItems={[
+                    {
+                        name: "supplierId",
+                        label: "供应商",
+                        children: <Select style={{ width: 200 }}>
+                            {data?.map((item: any) => <Select.Option key={item.id} value={item.id}>{item.supplierName}</Select.Option>)}
+                        </Select>
+                    },
+                    {
+                        name: 'startReceiveTime',
+                        label: '到货时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'receiveStatus',
+                        label: '状态',
+                        children: <Select style={{ width: 200 }} defaultValue="全部">
+                            <Select.Option value="">全部</Select.Option>
+                            <Select.Option value="0">待完成</Select.Option>
+                            <Select.Option value="1">已完成</Select.Option>
+                        </Select>
+                    },
+                    {
+                        name: 'fuzzyQuery',
+                        label: "模糊查询项",
+                        children: <Input placeholder="供应商/联系人/收货单号/联系电话/纸质单号/车牌号" style={{ width: 300 }} />
+                    },
+                    {
+                        name: "createUserDeptId",
+                        label: "制单人",
+                        children: <IntgSelect width={400} />
+                    },
+                    {
+                        name: 'startStatusUpdateTime',
+                        label: '最新状态变更时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: "settlementMode",
+                        label: "结算方式",
+                        children: <Select style={{ width: 200 }}>
+                            {settlementModeOptions?.map((item: any) => <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>)}
+                        </Select>
+                    }
+                ]}
+            />
+        </Spin>
     </>
 }

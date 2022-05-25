@@ -53,6 +53,7 @@
     const handleWarehousingClick = async() => {
         if (selectedRowKeys.length < 1) {
             message.error("请选择原材料");
+            return false;
         }
         const result: any = [];
         for (let i = 0; i < selectedRowKeys.length; i += 1) {

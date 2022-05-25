@@ -19,7 +19,7 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${receiveStockId}`)
-            const warehouseData: any[] = type === 1 ? await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: result.warehouseId, type: 0 }) : []
+            const warehouseData: any[] = type === 1 ? await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: result.warehouseId, type: 1 }) : []
             resole({
                 warehouseName: result.warehouseName,
                 warehouseId: result.warehouseId,
@@ -33,7 +33,8 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     //库位
     const { data: locatorData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: data?.warehouseId, type: 1 })
+            const warehouseId = await form.getFieldValue("reservoirId")
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: warehouseId, type: 2 })
             resole(result.map((item: any) => ({ label: item.name, value: item.id })))
         } catch (error) {
             reject(error)
@@ -248,9 +249,9 @@ export default function Overview() {
                 <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} >申请质检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
-                    已收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}</span>
+                    已收货：重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}</span>
                     含税金额合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}</span>
-                    待收货：重量(支)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight === -1 ? 0 : userData?.waitWeight}</span>
+                    待收货：重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight === -1 ? 0 : userData?.waitWeight}</span>
                     含税金额合计(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}</span>
                 </span>
             </>}
