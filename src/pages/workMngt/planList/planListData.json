@@ -12,38 +12,31 @@
             "width": 100
         },
         {
-            "title": "塔型（个）",
-            "dataIndex": "productCategoryNum",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "杆塔（基）",
-            "dataIndex": "productNum",
-            "width": 100,
-            "type": "string"
-        },
-        {
             "title": "圆钢收货量（吨）/总重（吨）",
             "dataIndex": "roundSteelTotal",
-            "width": 100,
+            "width": 200,
             "type": "number"
         },
         {
             "title": "角钢收货量（吨）/总重（吨）",
             "dataIndex": "angleSteelTotal",
-            "width": 100,
+            "width": 200,
             "type": "number"
         },
         {
             "title": "钢板收货量（吨）/总重（吨）",
             "dataIndex": "steelPlateTotal",
-            "width": 100,
+            "width": 200,
             "type": "number"
         },
         {
             "title": "采购人",
             "dataIndex": "purchaserName",
+            "type": "string"
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
             "type": "string"
         },
         {
@@ -137,7 +130,7 @@
         },
         {
             "title": "单个重量(吨)",
-            "dataIndex": "singleWeight",
+            "dataIndex": "weight",
             "type": "number"
         },
         {

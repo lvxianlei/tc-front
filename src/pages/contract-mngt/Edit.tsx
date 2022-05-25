@@ -192,6 +192,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleAddModalOk = () => {
         const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        console.log(newMaterialList, "newMaterialList")
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
@@ -201,6 +202,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 num,
                 taxPrice,
                 price,
+                spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
@@ -313,6 +315,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num,
                     taxPrice,
                     price,
+                    // spec: item.structureSpec,
                     // 之前从规格拿宽度，后续添加了width字段
                     // width: formatSpec(item.structureSpec).width,
                     materialTexture: name,
@@ -333,7 +336,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
                     price: parseFloat(item.price || "1.00"),
-                    weight: (item.weight && item.weight >= 0) ? parseFloat(item.weight) : parseFloat("0")
+                    weight: ((item.proportion * (item.length || 1)) / 1000).toFixed(3),
+                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
                 }
                 allData[dataIndex] = value
                 return ({
@@ -355,6 +359,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
+                    totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
+                    // weight:  ((item.proportion * value) / 1000).toFixed(3)
                     weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
                 })
             }
@@ -446,6 +452,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 value: ""
             }}
                 onChange={(fields: any[]) => {
+                    console.log(fields, materialList)
+                    fields.map((element: any, index: number) => {
+                        if (element.structureSpec) {
+                            element["spec"] = element.structureSpec;
+                            element["weight"]  = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
+                            element["totalWeight"]  = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
+                        }
+                    });
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
                         spec: item.structureSpec,
@@ -458,7 +472,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price || 1.00,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
-                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3)
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
+                        totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })))
                     setMaterialList(fields || [])
                 }} />
@@ -537,13 +552,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (["num", "taxPrice", "price"].includes(item.dataIndex)) {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 0} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 0} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                         })
                     }
                     if (item.dataIndex === "materialStandard") {
