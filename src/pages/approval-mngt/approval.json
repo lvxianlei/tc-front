@@ -388,6 +388,7 @@
             "width": 1011,
             "value": "contractName",
             "dependencies": true,
+            "disabled": true,
             "readOnly": true,
             "columns": [
                 {
@@ -467,7 +468,7 @@
         },
         {
             "title": "业务归属",
-            "dataIndex": "saleman",
+            "dataIndex": "salesman",
             "disabled": true
         },
         {

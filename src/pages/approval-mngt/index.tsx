@@ -45,6 +45,7 @@ export default function Information(): React.ReactNode {
     const [bidingForm] = Form.useForm()
     const [outFactoryForm] = Form.useForm()
     const [outFactoryTableForm] = Form.useForm()
+    const [guaranteeInfoColumn, setGuaranteeInfoColumn] = useState<any[]>(guaranteeInfo)
     const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.post(postData.path, postData.data)
@@ -260,7 +261,21 @@ export default function Information(): React.ReactNode {
                 projectName: fields.projectId.id,
                 biddingPerson: result.biddingPerson, // 受益人姓名
                 projectNumber: result.projectNumber, // 项目编码
-                saleman: result.saleman, // 业务归属
+            })
+            // 
+            const v = guaranteeInfoColumn;
+            const val = v.filter((item: any) => item.dataIndex === "contractId")
+            const index = v.findIndex((item: any) => item.dataIndex === "contractId")
+            console.log(index, "index")
+            v[index].path = `/tower-market/contract?projectId=${fields.projectId.id}`
+            v[index].disabled = false;
+            setGuaranteeInfoColumn(v.slice(0));
+            guaranteeForm.setFieldsValue({
+                contractName: "",
+                contractId: "",
+                contractAmount: "", // 合同总价
+                salesman: "", // 业务归属
+                guaranteePrice: ""
             })
         }
         if (fields.contractId) {
@@ -269,6 +284,7 @@ export default function Information(): React.ReactNode {
             guaranteeForm.setFieldsValue({
                 contractName: fields.contractId.id,
                 contractAmount: result.contractAmount, // 合同总价
+                salesman: result.salesman, // 业务归属
             })
             if (allFields.guaranteeRate) {
                 let money = ((result.contractAmount * allFields.guaranteeRate) / 100).toFixed(2);
@@ -418,9 +434,7 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={guaranteeForm} onChange={handGuaranteChange} columns={guaranteeInfo.map((item: any) => {
-                return item
-            })} dataSource={{}} edit col={2} />
+            <BaseInfo form={guaranteeForm} onChange={handGuaranteChange} columns={guaranteeInfoColumn} dataSource={{}} edit col={2} />
             <Attachment title="保函申请相关附件" edit ref={attachRef} />
         </Modal>
         <Modal
@@ -487,7 +501,21 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={outFactoryForm} onChange={handleOutFactoryChange} columns={outFactoryHead} dataSource={{}} edit col={3} />
+            <BaseInfo 
+                form={outFactoryForm}
+                onChange={handleOutFactoryChange}
+                columns={outFactoryHead.map(async(item: any) => {
+                    if (item.dataIndex === "contractId") {
+                        const postData = await guaranteeForm.validateFields();
+                        console.log("1111111111111")
+                        if (postData.projectId?.id) {
+                            return ({ ...item, disabled: false, path: `${item.path}?projectId=${postData.projectId?.id}` })
+                        }
+                        return ({ ...item, path: `${item.path}?projectId=${postData.projectId?.id}` })
+                    }
+                    return item
+                })}
+                dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
             <EditTable haveNewButton={false} form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
         </Modal>
