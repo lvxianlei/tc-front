@@ -79,10 +79,18 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         })
         resole(data)
     }), {})
-    const { data: productUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { data: productGalvanizeUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit?size=10000`);
-            resole(result?.records)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit/trial/galvanize`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }))
+    const { data: productPackUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit/trial/packaging`);
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -231,7 +239,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     // initialValue={ record.pattern }
                 >
                     <Select style={{width:'100%'}}>
-                        { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
+                        { productGalvanizeUnitData && productGalvanizeUnitData.map(({ id, name }:any, index:number) => {
                         return <Select.Option key={ index } value={ id+','+name   }>
                             { name }
                             </Select.Option>
@@ -270,7 +278,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     // initialValue={ record.pattern }
                 >
                     <Select style={{width:'100%'}}>
-                        { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
+                        { productGalvanizeUnitData && productGalvanizeUnitData.map(({ id, name }:any, index:number) => {
                         return <Select.Option key={ index } value={ id+','+name }>
                             { name }
                             </Select.Option>
@@ -320,7 +328,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     // initialValue={ record.pattern }
                 >
                     <Select style={{width:'100%'}}>
-                        { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
+                        { productGalvanizeUnitData && productGalvanizeUnitData.map(({ id, name }:any, index:number) => {
                         return <Select.Option key={ index } value={ id+','+name   }>
                             { name }
                             </Select.Option>
@@ -439,7 +447,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     // initialValue={ record.pattern }
                 >
                     <Select style={{width:'100%'}}>
-                        { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
+                        { productPackUnitData && productPackUnitData.map(({ id, name }:any, index:number) => {
                         return <Select.Option key={ index } value={ id+','+name  }>
                             { name }
                             </Select.Option>
@@ -479,8 +487,8 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     // initialValue={ record.pattern }
                 >
                     <Select style={{width:'100%'}}>
-                        { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
-                        return <Select.Option key={ index } value={ id+','+name   }>
+                        { productPackUnitData && productPackUnitData.map(({ id, name }:any, index:number) => {
+                        return <Select.Option key={ index } value={ id+','+name}>
                             { name }
                             </Select.Option>
                         }) }
