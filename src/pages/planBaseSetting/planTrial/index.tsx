@@ -282,16 +282,9 @@ export default function PlanTrialList(): React.ReactNode {
             dataIndex: "status",
             editable: true,
             width:120,
-            render: (status: number): React.ReactNode => {
-                switch (status) {
-                    case 1:
-                        return '未下发';
-                    case 2:
-                        return '已下发';
-                    case 3:
-                        return '已完成';
-                }
-            }
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+            )
         },
         {
             title: "下发日期",
@@ -470,7 +463,7 @@ export default function PlanTrialList(): React.ReactNode {
                         onConfirm={async () => {
                             if (selectedKeys.length > 0){
                                 await RequestUtil.post(`/tower-aps/trialAssemble/distribute`,
-                                    selectedKeys
+                                    selectedRows
                                 ).then(() => {
                                     message.success('下发成功！');
                                     setRefresh(!refresh);
