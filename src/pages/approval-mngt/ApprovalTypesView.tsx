@@ -16,7 +16,7 @@ const paths: any = {
     "图纸交接确认申请": "/tower-market/drawingConfirmation/",
     "招标评审申请": "/tower-market/biddingEvaluation/",
     "出厂价申请": "/tower-market/OutFactory/",
-    "保函申请": "", // 还未添加
+    "保函申请": "/tower-market/Guarantee/", // 还未添加
 }
 interface ApprovalTypesViewProps {
     id: string
@@ -90,7 +90,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
                 <Radio.Button value="attachVos">附件信息</Radio.Button>
             </Radio.Group>
             {radioValue === "base" && <>
-                <BaseInfo columns={guarantBaseInfoColumns} dataSource={(data?.biddingEvaluation) || {}} col={2} />
+                <BaseInfo columns={guarantBaseInfoColumns} dataSource={data || {}} col={2} />
                 <DetailTitle title="保函信息" />
                 <BaseInfo columns={guarantColumns} dataSource={(data?.biddingEvaluation) || {}} col={2} />
             </>}

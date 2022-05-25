@@ -113,6 +113,25 @@ export default function Information(): React.ReactNode {
         }
     }
 
+    // 提交保函
+    const handGuaranteOk = async() => {
+        const postData = await guaranteeForm.validateFields();
+        console.log(postData, "看看数据");
+        postData.contractId = postData.contractId?.id || "";
+        postData.projectId = postData.projectId?.id || "";
+        postData.effectiveTime = `${postData.effectiveTime} 00:00:00`
+        postData.promisedReturnDate = `${postData.promisedReturnDate} 00:00:00`
+        postData.fileIds = attachRef.current?.getDataSource().map(item => item.id)
+        const result = await run({ path: "/tower-market/Guarantee/submitAudit", data: postData })
+        if (result) {
+            message.success("成功创建申请...")
+            setPerformanceBondVisible(false)
+            history.go(0)
+        } else {
+            message.error(`创建申请失败！原因：${result}`)
+        }
+    }
+
     const drawHOk = async () => {
         const postData = await drawHForm.validateFields()
         postData.contractId = postData.contractId?.id || ""
@@ -228,6 +247,44 @@ export default function Information(): React.ReactNode {
         if (Object.keys(fields)[0] === "projectId") {
             const { projectName, projectNumber } = fields.projectId.records[0]
             performanceBondForm.setFieldsValue({ projectName, projectNumber })
+        }
+    }
+
+    // 保函
+    const handGuaranteChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        console.log(fields, "====", allFields)
+        if (fields.projectId) {
+            // 选择了项目
+            const result = fields.projectId.records[0];
+            guaranteeForm.setFieldsValue({
+                projectName: fields.projectId.id,
+                biddingPerson: result.biddingPerson, // 受益人姓名
+                projectNumber: result.projectNumber, // 项目编码
+                saleman: result.saleman, // 业务归属
+            })
+        }
+        if (fields.contractId) {
+            // 合同编号
+            const result = fields.contractId.records[0];
+            guaranteeForm.setFieldsValue({
+                contractName: fields.contractId.id,
+                contractAmount: result.contractAmount, // 合同总价
+            })
+            if (allFields.guaranteeRate) {
+                let money = ((result.contractAmount * allFields.guaranteeRate) / 100).toFixed(2);
+                guaranteeForm.setFieldsValue({
+                    guaranteePrice: money
+                })
+            }
+        }
+        if (fields.guaranteeRate) {
+            // 保函所占比
+            if (allFields.contractAmount) {
+                let money = ((allFields.contractAmount * fields.guaranteeRate) / 100).toFixed(2);
+                guaranteeForm.setFieldsValue({
+                    guaranteePrice: money
+                })
+            }
         }
     }
 
@@ -356,26 +413,12 @@ export default function Information(): React.ReactNode {
                 setGuarantee(false)
                 handleCancel()
             }}
-            onOk={performanceBondOk}
+            onOk={handGuaranteOk}
             destroyOnClose
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={guaranteeForm} onChange={performanceBondChange} columns={guaranteeInfo.map((item: any) => {
-                if (item.dataIndex === "currencyType") {
-                    return ({
-                        ...item,
-                        type: "select",
-                        enum: currencyTypeEnum
-                    })
-                }
-                if (item.dataIndex === "paymentCategory") {
-                    return ({
-                        ...item,
-                        type: "select",
-                        enum: paymentCategoryEnum
-                    })
-                }
+            <BaseInfo form={guaranteeForm} onChange={handGuaranteChange} columns={guaranteeInfo.map((item: any) => {
                 return item
             })} dataSource={{}} edit col={2} />
             <Attachment title="保函申请相关附件" edit ref={attachRef} />

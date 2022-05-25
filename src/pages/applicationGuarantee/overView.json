@@ -26,19 +26,19 @@
         },
         {
             "title": "合同编号",
-            "dataIndex": "beneficiaryName"
+            "dataIndex": "contractNumber"
         },
         {
             "title": "项目编码",
-            "dataIndex": "beneficiaryName"
+            "dataIndex": "projectNumber"
         },
         {
             "title": "合同总价（元）",
-            "dataIndex": "beneficiaryName"
+            "dataIndex": "contractPrice"
         },
         {
             "title": "保函所占比(%)",
-            "dataIndex": "beneficiaryName"
+            "dataIndex": "guaranteeProportion"
         },
         {
             "title": "保函类型",
@@ -57,53 +57,41 @@
         },
         {
             "title": "业务归属",
-            "dataIndex": "beneficiaryName"
+            "dataIndex": "businessManagerName"
         },
         {
             "title": "备注",
-            "dataIndex": "beneficiaryName"
+            "dataIndex": "description"
         },
         {
             "title": "保函有效截止期",
-            "dataIndex": "issuanceTime"
+            "dataIndex": "effectiveTime"
         },
         {
             "title": "承诺交回日期",
             "dataIndex": "requiredReturnTime"
         },
         {
-            "title": "保函交回日期",
-            "dataIndex": "guaranteeReturnTime"
-        },
-        {
             "title": "保函保障期间",
-            "dataIndex": "beneficiaryName"
+            "dataIndex": "guaranteeTime"
         }
     ],
     "guaranteInfo": [
         {
-            "dataIndex": "guaranteeNumber",
-            "title": "履约保函金额（元）"
-        },
-        {
-            "dataIndex": "applyNumber",
-            "title": "保函保证金"
-        },
-        {
-            "dataIndex": "applyTime",
+            "dataIndex": "seasonProportionMoney",
             "title": "每季手续费"
         },
         {
-            "dataIndex": "applyDeptId",
-            "title": "后续费"
+            "dataIndex": "bondProportionMoney",
+            "title": "保函保证金"
         },
         {
-            "dataIndex": "projectName",
+            "dataIndex": "bondServiceCharge",
             "title": "保证金+手续费"
         },
         {
-            "dataIndex": "beneficiaryName",
-            "title": "付款金额（元）"
+            "dataIndex": "serviceCharge",
+            "title": "手续费"
         }
     ]
 }

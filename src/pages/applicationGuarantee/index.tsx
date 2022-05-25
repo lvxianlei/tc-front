@@ -29,6 +29,8 @@ export default function ApplicationColunm(): React.ReactNode {
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
     const [visibleOverView, setVisibleOverView] = useState<boolean>(false);
     const [id, setId] = useState<string>();
+    const [guaranteePrice, setGuaranteePrice] = useState<number>(0);
+    const [effectiveTime, setEffectiveTime] = useState<string>("");
     const [requiredReturnTime, setRequiredReturnTime] = useState<string>("");
     const addRef = useRef<EditRefProps>();
     const addRecoveryRef = useRef<EditRefProps>()
@@ -197,6 +199,8 @@ export default function ApplicationColunm(): React.ReactNode {
                                         type="link"
                                         className="btn-operation-link"
                                         onClick={() => {
+                                            setGuaranteePrice(record?.guaranteePrice || 0);
+                                            setEffectiveTime(record?.effectiveTime || "");
                                             setVisible(true);
                                             setId(record.id);
                                         }}
@@ -287,7 +291,7 @@ export default function ApplicationColunm(): React.ReactNode {
                     </Button>
                 ]}
             >
-                <FillGuaranteeInformation ref={addRef} id={id} />
+                <FillGuaranteeInformation ref={addRef} id={id} effectiveTime={effectiveTime} guaranteePrice={guaranteePrice} />
             </Modal>
             {/* 回收保函弹框 */}
             <Modal
