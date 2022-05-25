@@ -70,8 +70,24 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             }
         },
         {
+            key: 'fineType',
+            title: '罚款类别',
+            width: 200,
+            dataIndex: 'fineType',
+            render:(text:number)=>{
+                switch (text) {
+                    case 1:
+                        return '数量';
+                    case 2:
+                        return '重量';
+                    case 3:
+                        return '次数';
+                }
+            }
+        },
+        {
             key: 'fineMoney',
-            title: '罚款类别（元）',
+            title: '罚款系数（元）',
             width: 200,
             dataIndex: 'fineMoney'
         },

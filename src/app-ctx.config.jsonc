@@ -1118,7 +1118,7 @@
                 "items": [
                     {
                         "label": "工序配置列表",
-                        "path": "/unqualifiedAmount/processConfiguration/list",
+                        "path": "/unqualifiedAmount/processConfigurationList",
                         "authority": "approvalm"
                     },
                     {
