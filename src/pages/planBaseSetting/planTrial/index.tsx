@@ -34,7 +34,7 @@ export default function PlanTrialList(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const { data: productUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit/trial`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit/trial/trialAssembly`);
             resole(result)
         } catch (error) {
             reject(error)
