@@ -97,7 +97,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 selectedRowKeys: selectedKeys,
                 onChange: SelectChange,
                 getCheckboxProps: (record: any) => ({
-                    disabled: record.status == 2, //已下发不可再次下发
+                    disabled: record?.status == 2, //已下发不可再次下发
                 }),
             }
         }}

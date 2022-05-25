@@ -65,7 +65,7 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "startTransferTime"]}
-                    initialValue={record.segmentName}
+                    initialValue={record.startTransferTime}
                     rules={[{
                         required: true,
                         message: '请选择开始转运日期'
@@ -85,7 +85,7 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "endTransferTime"]}
-                    initialValue={record.segmentName}
+                    initialValue={record.endTransferTime}
                     rules={[{
                         required: true,
                         message: '请选择完成转运日期'
@@ -105,7 +105,7 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "planCompleteTime"]}
-                    initialValue={record.segmentName}
+                    initialValue={record.planCompleteTime}
                     rules={[{
                         required: true,
                         message: '请选择计划完成日期'
@@ -323,6 +323,14 @@ export default function PlanTrialList(): React.ReactNode {
     const columnsSetting: Column[] = columns.map((col: any) => {
         if (!col.editable) {
             return col;
+        }
+        if(col.dataIndex==='status'){
+            return{
+                ...col,
+                render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                    <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+                )
+            }
         }
         return {
             ...col,
