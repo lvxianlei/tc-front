@@ -122,7 +122,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         cancelText="取消"
                         disabled={record?.locking !== 1}
                     >
-                        <Button type="link" disabled={record?.locking !== 1}>删除</Button>
+                        <Button type="link" disabled={record?.locking !== 1||AuthUtil.getUserId() !== record.createUser}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
