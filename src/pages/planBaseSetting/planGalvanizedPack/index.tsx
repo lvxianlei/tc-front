@@ -18,16 +18,16 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         setSelectedRows(selectedRows);
         console.log(selectedRows)
         const totalAngleWeight = selectedRows.reduce((pre: any,cur: { angleWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0) 
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0)).toFixed(4) 
         },0)
         const totalPlateWeight = selectedRows.reduce((pre: any,cur: { plateWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )).toFixed(4)
         },0)
         const totalAngleNumber = selectedRows.reduce((pre: any,cur: { angleNumber: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)).toFixed(4)
         },0)
         const totalPlateNumber = selectedRows.reduce((pre: any,cur: { plateNumber: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)).toFixed(4)
         },0)
         setSum({
             ...sum,
