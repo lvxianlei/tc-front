@@ -150,10 +150,10 @@ export default function GalvanizedPackDetail(): React.ReactNode {
             dataIndex: 'productCategory'
         },
         {
-            key: 'batchNo',
+            key: 'productionBatchNo',
             title: '批次号',
             width: 100,
-            dataIndex: 'batchNo'
+            dataIndex: 'productionBatchNo'
         },
         {
             key: 'angleWeight',
