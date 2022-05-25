@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Spin, Space, message, Modal, Form, Select, DatePicker} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment } from '../../common';
@@ -15,10 +15,15 @@ import moment from 'moment';
 export default function GalvanizedPackDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
+    const [detailData, setDetailData] = useState<any>({
+        galvanizedPlanVOList:[],
+        packagePlanVOList:[]
+    })
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.post(`/tower-aps/galvanizedPackage/detail`,params?.id.indexOf(',')>-1?params?.id.split(','):[params.id])
+        setDetailData(data)
         form.setFieldsValue({
-            packagePlanDTOList: data?.packagePlanDTOList&&data?.packagePlanDTOList.length>0&&data?.packagePlanDTOList.map((item:any)=>{
+            packagePlanDTOList: data?.packagePlanVOList&&data?.packagePlanVOList.length>0&&data?.packagePlanVOList.map((item:any)=>{
                 return {
                     ...item,
                     packageFirst: item?.packageFirstUnitId&&item?.packageFirstUnitName?item?.packageFirstUnitId+','+item?.packageFirstUnitName:'',
@@ -30,7 +35,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime):'',
                 }
             })||[],
-            galvanizedPlanVOList: data?.galvanizedPlanVOList&&data?.galvanizedPlanVOList.length>0&&data?.galvanizedPlanVOList.map((item:any)=>{
+            galvanizedPlanDTOList: data?.galvanizedPlanVOList&&data?.galvanizedPlanVOList.length>0&&data?.galvanizedPlanVOList.map((item:any)=>{
                 return {
                     ...item,
                     galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
@@ -55,7 +60,6 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         }
     }))
     const [form] = Form.useForm();
-    const detailData: any = data;
     const handleIssue = () => {
         Modal.confirm({
             title: "下发后不可取消，是否下发镀锌包装计划？",
@@ -619,9 +623,9 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                         <span>角钢总件数：{detailData?.totalAngleNumber}</span>
                         <span>钢板总件数：{detailData?.totalPlateNumber}</span>
                     </Space>
-                    <CommonTable columns={galvanizedColumns} dataSource={[...detailData?.galvanizedPlanVOList]} pagination={false}/>
+                    <CommonTable columns={galvanizedColumns} dataSource={[...detailData?.galvanizedPlanVOList]||[]} pagination={false}/>
                     <DetailTitle title="包装计划"/>
-                    <CommonTable columns={packColumns} dataSource={[...detailData?.packagePlanVOList]} pagination={false}/>
+                    <CommonTable columns={packColumns} dataSource={[...detailData?.packagePlanVOList]||[]} pagination={false}/>
                 </Form>
            
             </DetailContent>
