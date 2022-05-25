@@ -71,7 +71,7 @@ export default function PlanTrialList(): React.ReactNode {
                         message: '请选择开始转运日期'
                     }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
             )
         },
@@ -91,7 +91,7 @@ export default function PlanTrialList(): React.ReactNode {
                         message: '请选择完成转运日期'
                     }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
             )
         },
@@ -111,7 +111,7 @@ export default function PlanTrialList(): React.ReactNode {
                         message: '请选择计划完成日期'
                     }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
             )
         },
@@ -132,7 +132,7 @@ export default function PlanTrialList(): React.ReactNode {
                     }]}
                     // initialValue={ record.pattern }
                 >
-                    <Select onChange={ () => rowChange(index) } disabled={record?.status===2}>
+                    <Select onChange={ () => rowChange(index) } disabled={record?.status!==1}>
                         { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
                         return <Select.Option key={ index } value={ id }>
                             { name }
@@ -160,7 +160,7 @@ export default function PlanTrialList(): React.ReactNode {
                         showCount
                         maxLength={300}
                         onChange={() => rowChange(index)}
-                        disabled={record?.status===2}
+                        disabled={record?.status!==1}
                     />
                 </Form.Item>
             )
