@@ -302,7 +302,12 @@ export default function CyclePlanDetail(): React.ReactNode {
                         startTime: value?.startTime,
                         endTime: value?.endTime,
                         deleteIdList: deleteIdList,
-                        issueOrderDTOList: dataSource 
+                        issueOrderDTOList: dataSource.map((item:any)=>{
+                            return{
+                                ...item,
+                                planCompleteTime: selectedKeys.includes(item.id)?moment(valueDate?.planCompleteTime).format('YYYY-MM-DD'):item?.planCompleteTime
+                            }
+                        }) 
                     }
                     await RequestUtil.put(`/tower-aps/cyclePlan`,submitData)
                     resove(true)

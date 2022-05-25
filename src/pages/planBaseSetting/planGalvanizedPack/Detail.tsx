@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Spin, Space, message, Modal, Form, Select, DatePicker} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment } from '../../common';
@@ -15,10 +15,15 @@ import moment from 'moment';
 export default function GalvanizedPackDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string }>()
+    const [detailData, setDetailData] = useState<any>({
+        galvanizedPlanVOList:[],
+        packagePlanVOList:[]
+    })
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.post(`/tower-aps/galvanizedPackage/detail`,params?.id.indexOf(',')>-1?params?.id.split(','):[params.id])
+        setDetailData(data)
         form.setFieldsValue({
-            packagePlanDTOList: data?.packagePlanDTOList&&data?.packagePlanDTOList.length>0&&data?.packagePlanDTOList.map((item:any)=>{
+            packagePlanDTOList: data?.packagePlanVOList&&data?.packagePlanVOList.length>0&&data?.packagePlanVOList.map((item:any)=>{
                 return {
                     ...item,
                     packageFirst: item?.packageFirstUnitId&&item?.packageFirstUnitName?item?.packageFirstUnitId+','+item?.packageFirstUnitName:'',
@@ -30,7 +35,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime):'',
                 }
             })||[],
-            galvanizedPlanVOList: data?.galvanizedPlanVOList&&data?.galvanizedPlanVOList.length>0&&data?.galvanizedPlanVOList.map((item:any)=>{
+            galvanizedPlanDTOList: data?.galvanizedPlanVOList&&data?.galvanizedPlanVOList.length>0&&data?.galvanizedPlanVOList.map((item:any)=>{
                 return {
                     ...item,
                     galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
@@ -55,7 +60,6 @@ export default function GalvanizedPackDetail(): React.ReactNode {
         }
     }))
     const [form] = Form.useForm();
-    const detailData: any = data;
     const handleIssue = () => {
         Modal.confirm({
             title: "下发后不可取消，是否下发镀锌包装计划？",
@@ -65,14 +69,14 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                 const submitData = {
                     galvanizedPlanDTOList: value?.galvanizedPlanDTOList.map((item:any,index:number)=>{
                         return {
-                            ...detailData?.galvanizedPlanDTOList[index]?.id,
+                            ...detailData?.galvanizedPlanVOList[index]?.id,
                             ...item,
                             galvanizedFirstUnitId:item?.galvanizedFirst.split(',')[0],
                             galvanizedFirstUnitName:item?.galvanizedFirst.split(',')[1],
-                            galvanizedSecondUnitId:item?.galvanizedSecond.split(',')[0],
-                            galvanizedSecondUnitName:item?.galvanizedSecond.split(',')[1],
-                            galvanizedThirdUnitId:item?.galvanizedThird.split(',')[0],
-                            galvanizedThirdUnitName:item?.galvanizedThird.split(',')[1],
+                            galvanizedSecondUnitId:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[0]:'',
+                            galvanizedSecondUnitName:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[1]:'',
+                            galvanizedThirdUnitId:item?.galvanizedThird?item?.galvanizedThird.split(',')[0]:"",
+                            galvanizedThirdUnitName:item?.galvanizedThird?item?.galvanizedThird.split(',')[1]:'',
                             transferStartTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
                             transferEndTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
                             galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime).format('YYYY-MM-DD'):'',
@@ -82,12 +86,12 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     }),
                     packagePlanDTOList:  value?.packagePlanDTOList.map((item:any,index:number)=>{
                         return {
-                            ...detailData?.packagePlanDTOList[index],
+                            ...detailData?.packagePlanVOList[index],
                             ...item,
                             packageFirstUnitId:item?.packageFirst.split(',')[0],
                             packageFirstUnitName:item?.packageFirst.split(',')[1],
-                            packageSecondUnitId:item?.packageSecond.split(',')[0],
-                            packageSecondUnitName:item?.packageSecond.split(',')[1],
+                            packageSecondUnitId:item?.packageSecond?item?.packageSecond.split(',')[0]:'',
+                            packageSecondUnitName:item?.packageSecond?item?.packageSecond.split(',')[1]:'',
                             storageTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
                             reportTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
                             packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime).format('YYYY-MM-DD'):'',
@@ -570,7 +574,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     const submitData = {
                         galvanizedPlanDTOList: value?.galvanizedPlanDTOList.map((item:any,index:number)=>{
                             return {
-                                ...detailData?.galvanizedPlanDTOList[index],
+                                ...detailData?.galvanizedPlanVOList[index],
                                 ...item,
                                 galvanizedFirstUnitId:item?.galvanizedFirst.split(',')[0],
                                 galvanizedFirstUnitName:item?.galvanizedFirst.split(',')[1],
@@ -587,7 +591,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                         }),
                         packagePlanDTOList:  value?.packagePlanDTOList&& value?.packagePlanDTOList.length>0 &&value?.packagePlanDTOList.map((item:any,index:number)=>{
                             return {
-                                ...detailData?.packagePlanDTOList[index],
+                                ...detailData?.packagePlanVOList[index],
                                 ...item,
                                 packageFirstUnitId:item?.packageFirst.split(',')[0],
                                 packageFirstUnitName:item?.packageFirst.split(',')[1],
@@ -619,9 +623,9 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                         <span>角钢总件数：{detailData?.totalAngleNumber}</span>
                         <span>钢板总件数：{detailData?.totalPlateNumber}</span>
                     </Space>
-                    <CommonTable columns={galvanizedColumns} dataSource={[{}]} pagination={false}/>
+                    <CommonTable columns={galvanizedColumns} dataSource={[...detailData?.galvanizedPlanVOList]||[]} pagination={false}/>
                     <DetailTitle title="包装计划"/>
-                    <CommonTable columns={packColumns} dataSource={[{}]} pagination={false}/>
+                    <CommonTable columns={packColumns} dataSource={[...detailData?.packagePlanVOList]||[]} pagination={false}/>
                 </Form>
            
             </DetailContent>
