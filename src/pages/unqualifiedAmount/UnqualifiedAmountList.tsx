@@ -52,38 +52,16 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             dataIndex: 'workPro'
         },
         {
-            key: 'processType',
+            key: 'processTypeName',
             title: '处理类型',
             width: 200,
-            dataIndex: 'processType',
-            render:(text:number)=>{
-                switch (text) {
-                    case 1:
-                        return '返修';
-                    case 2:
-                        return '返镀';
-                    case 3:
-                        return '报废';
-                    case 4:
-                        return '退货';
-                }
-            }
+            dataIndex: 'processTypeName'
         },
         {
-            key: 'fineType',
+            key: 'fineTypeName',
             title: '罚款类别',
             width: 200,
-            dataIndex: 'fineType',
-            render:(text:number)=>{
-                switch (text) {
-                    case 1:
-                        return '数量';
-                    case 2:
-                        return '重量';
-                    case 3:
-                        return '次数';
-                }
-            }
+            dataIndex: 'fineTypeName',
         },
         {
             key: 'fineMoney',
@@ -104,22 +82,16 @@ export default function UnqualifiedAmountList(): React.ReactNode {
             dataIndex: 'createUserName'
         },
         {
-            key: 'valid',
+            key: 'validName',
             title: '是否有效',
             width: 200,
-            dataIndex: 'valid',
-            render:(text:number)=>{
-                return text===1?'是':text===2?'否':'-'
-            }
+            dataIndex: 'validName',
         },
         {
-            key: 'locking',
+            key: 'lockingName',
             title: '是否锁定',
             width: 200,
-            dataIndex: 'locking',
-            render:(text:number)=>{
-                return text===1?'否':text===2?'是':'-'
-            }
+            dataIndex: 'lockingName'
         },
         {
             key: 'operation',
