@@ -109,7 +109,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                             ...record
                         })
                         setVisible(true)
-                    }}>编辑</Button>
+                    }} disabled={AuthUtil.getUserId() !== record.createUser}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
