@@ -198,9 +198,9 @@ export default function CyclePlanDetail(): React.ReactNode {
                     }}
                     okText="确认"
                     cancelText="取消"
-                    disabled={record?.status===2||detail?.materialStatus===2}
+                    disabled={record?.status===2||detail?.status===2}
                 >
-                    <Button type="link" disabled={record?.status===2||detail?.materialStatus===2}>删除</Button>
+                    <Button type="link" disabled={record?.status===2||detail?.status===2}>删除</Button>
                 </Popconfirm>
         }
     ]
@@ -378,7 +378,7 @@ export default function CyclePlanDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Space>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                    {detail?.materialStatus!==2&&<Button type="primary" ghost onClick={async () =>{
+                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () =>{
                         await form.validateFields()
                         const value = form.getFieldsValue(true)
                         console.log(value)
@@ -404,12 +404,12 @@ export default function CyclePlanDetail(): React.ReactNode {
                         setSelectedRows([])
                         await run()
                     }}>保存</Button>}
-                    {detail?.materialStatus!==2&&<Button type="primary" ghost onClick={async () => {
+                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
-                    }} disabled={detail?.materialStatus===2}>备料确认</Button>}
-                    {detail?.materialStatus!==2&&<Popconfirm
+                    }} disabled={detail?.status===2}>备料确认</Button>}
+                    {detail?.status!==2&&<Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/issue/${params.id}`)
@@ -470,7 +470,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                     </Row>
                 </Form>
                 <DetailTitle title="周期计划下达单"/>
-                {detail?.materialStatus!==2&&<Space>
+                {detail?.status!==2&&<Space>
                     <ReleaseOrder run={run} data={detail}/>
                     <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>计划完成日期</Button>
                     <Button type="primary" ghost onClick={() => {
