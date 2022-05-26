@@ -65,11 +65,11 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "startTransferTime"]}
-                    initialValue={record.startTransferTime}
-                    rules={[{
-                        required: true,
-                        message: '请选择开始转运日期'
-                    }]}
+                    initialValue={moment(record.startTransferTime)}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择开始转运日期'
+                    // }]}
                 >
                     <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
@@ -85,11 +85,11 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "endTransferTime"]}
-                    initialValue={record.endTransferTime}
-                    rules={[{
-                        required: true,
-                        message: '请选择完成转运日期'
-                    }]}
+                    initialValue={moment(record.endTransferTime)}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择完成转运日期'
+                    // }]}
                 >
                     <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
@@ -105,31 +105,31 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "planCompleteTime"]}
-                    initialValue={record.planCompleteTime}
-                    rules={[{
-                        required: true,
-                        message: '请选择计划完成日期'
-                    }]}
+                    initialValue={moment(record.planCompleteTime)}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择计划完成日期'
+                    // }]}
                 >
                     <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
             )
         },
         {
-            key: 'trialAssembleUnitId',
+            key: 'trialAssembleUnitName',
             title: '试装单元',
-            dataIndex: 'trialAssembleUnitId',
+            dataIndex: 'trialAssembleUnitName',
             width: 120,
             fixed:'left',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "trialAssembleUnitId"]}
-                    initialValue={_}
-                    rules={[{
-                        required: true,
-                        message: '请选择试装单元'
-                    }]}
+                    initialValue={record?.trialAssembleUnitId}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择试装单元'
+                    // }]}
                     // initialValue={ record.pattern }
                 >
                     <Select onChange={ () => rowChange(index) } disabled={record?.status!==1}>
