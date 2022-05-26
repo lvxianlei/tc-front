@@ -65,7 +65,7 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "startTransferTime"]}
-                    initialValue={moment(record.startTransferTime)}
+                    initialValue={record.startTransferTime?moment(record.startTransferTime):''}
                     // rules={[{
                     //     required: true,
                     //     message: '请选择开始转运日期'
@@ -85,7 +85,7 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "endTransferTime"]}
-                    initialValue={moment(record.endTransferTime)}
+                    initialValue={record?.endTransferTime?moment(record.endTransferTime):''}
                     // rules={[{
                     //     required: true,
                     //     message: '请选择完成转运日期'
@@ -105,7 +105,7 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "planCompleteTime"]}
-                    initialValue={moment(record.planCompleteTime)}
+                    initialValue={record?.planCompleteTime?moment(record.planCompleteTime):''}
                     // rules={[{
                     //     required: true,
                     //     message: '请选择计划完成日期'
