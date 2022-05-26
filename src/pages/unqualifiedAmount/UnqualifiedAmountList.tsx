@@ -109,7 +109,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                             ...record
                         })
                         setVisible(true)
-                    }} disabled={AuthUtil.getUserId() !== record.createUser}>编辑</Button>
+                    }} disabled={record?.locking === 1?AuthUtil.getUserId() !== record.createUser:false}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
@@ -122,7 +122,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         cancelText="取消"
                         disabled={record?.locking !== 1}
                     >
-                        <Button type="link" disabled={record?.locking !== 1||AuthUtil.getUserId() !== record.createUser}>删除</Button>
+                        <Button type="link" disabled={record?.locking !== 1}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -297,7 +297,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                             <InputNumber min={0} precision={2} disabled={lock==='解锁'}/>
                         </Form.Item>
                         <Form.Item name="description" label="说明">
-                            <TextArea rows={1} showCount maxLength={100} disabled={lock==='解锁'}/>
+                            <TextArea rows={2} showCount maxLength={100} disabled={lock==='解锁'}/>
                         </Form.Item>
                         <Form.Item name="fineType" label="罚款类别" rules={[{
                             "required": true,
