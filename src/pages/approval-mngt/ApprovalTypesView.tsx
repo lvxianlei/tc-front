@@ -92,7 +92,7 @@ const ViewDetail: React.FC<ApprovalTypesViewProps> = ({ id, path, title }) => {
             {radioValue === "base" && <>
                 <BaseInfo columns={guarantBaseInfoColumns} dataSource={data || {}} col={2} />
                 <DetailTitle title="保函信息" />
-                <BaseInfo columns={guarantColumns} dataSource={(data?.biddingEvaluation) || {}} col={2} />
+                <BaseInfo columns={guarantColumns} dataSource={data || {}} col={2} />
             </>}
             {radioValue === "records" && <CommonTable columns={auditIdRecord} dataSource={data?.records || []} />}
             {radioValue === "attachVos" && <Attachment title={false} dataSource={data?.attachVos} />}
