@@ -258,8 +258,8 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
                     galvanizedSecond: item?.galvanizedSecondUnitId&&item?.galvanizedSecondUnitName?item?.galvanizedSecondUnitId+','+item?.galvanizedSecondUnitName:'',
                     galvanizedThird: item?.galvanizedThirdUnitId&&item?.galvanizedThirdUnitName?item?.galvanizedThirdUnitId+','+item?.galvanizedThirdUnitName:'',
-                    transferStartTime: item?.storageTime?moment(item?.storageTime):'',
-                    transferEndTime: item?.reportTime?moment(item?.reportTime):'',
+                    transferStartTime: item?.transferStartTime?moment(item?.transferStartTime):'',
+                    transferEndTime: item?.transferEndTime?moment(item?.transferEndTime):'',
                     galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime):'',
                     galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime):'',
                     galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime):'',
@@ -837,6 +837,33 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                             history.go(0)
                         })
                     }else{
+                        form.setFieldsValue({
+                            packagePlanDTOList: detailData?.packagePlanVOList&&detailData?.packagePlanVOList.length>0&&detailData?.packagePlanVOList.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    packageFirst: item?.packageFirstUnitId&&item?.packageFirstUnitName?item?.packageFirstUnitId+','+item?.packageFirstUnitName:'',
+                                    packageSecond: item?.packageSecondUnitId&&item?.packageSecondUnitName?item?.packageSecondUnitId+','+item?.packageSecondUnitName:'',
+                                    storageTime: item?.storageTime?moment(item?.storageTime):'',
+                                    reportTime: item?.reportTime?moment(item?.reportTime):'',
+                                    packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime):'',
+                                    packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime):'',
+                                    packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime):'',
+                                }
+                            })||[],
+                            galvanizedPlanDTOList: detailData?.galvanizedPlanVOList&&detailData?.galvanizedPlanVOList.length>0&&detailData?.galvanizedPlanVOList.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
+                                    galvanizedSecond: item?.galvanizedSecondUnitId&&item?.galvanizedSecondUnitName?item?.galvanizedSecondUnitId+','+item?.galvanizedSecondUnitName:'',
+                                    galvanizedThird: item?.galvanizedThirdUnitId&&item?.galvanizedThirdUnitName?item?.galvanizedThirdUnitId+','+item?.galvanizedThirdUnitName:'',
+                                    transferStartTime: item?.transferStartTime?moment(item?.transferStartTime):'',
+                                    transferEndTime: item?.transferEndTime?moment(item?.transferEndTime):'',
+                                    galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime):'',
+                                    galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime):'',
+                                    galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime):'',
+                                }
+                            })||[],
+                        })
                         setLock('保存')
                     }
                     
