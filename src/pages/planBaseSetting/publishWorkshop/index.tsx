@@ -205,7 +205,7 @@ export default () => {
                     value={status}
                     onChange={(event) => {
                         setStatus(event.target.value)
-                        setFilterValue({ ...filterValue, status: event.target.value, current: 1 })
+                        setFilterValue({ ...filterValue, status: event.target.value })
                     }}
                 >
                     <Radio.Button value={1}>待分配下达单</Radio.Button>

@@ -18,16 +18,16 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         setSelectedRows(selectedRows);
         console.log(selectedRows)
         const totalAngleWeight = selectedRows.reduce((pre: any,cur: { angleWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0) 
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0)).toFixed(4) 
         },0)
         const totalPlateWeight = selectedRows.reduce((pre: any,cur: { plateWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )).toFixed(4)
         },0)
         const totalAngleNumber = selectedRows.reduce((pre: any,cur: { angleNumber: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)).toFixed(4)
         },0)
         const totalPlateNumber = selectedRows.reduce((pre: any,cur: { plateNumber: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)).toFixed(4)
         },0)
         setSum({
             ...sum,
@@ -121,20 +121,22 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
             {
                 name: 'galvanizedUnitName',
                 label: '镀锌生产单元',
-                children: <Select placeholder="请选择"  style={{ width: "150px" }}>
-                    { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                    }) }
-                </Select>
+                children: <Input style={{ width: "200px" }} placeholder="请输入" />
+                // children: <Select placeholder="请选择"  style={{ width: "150px" }}>
+                //     { productUnitData?.map((item: any) => {
+                //         return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                //     }) }
+                // </Select>
             },
             {
                 name: 'packageUnitName',
                 label: '包装生产单元',
-                children: <Select placeholder="请选择"  style={{ width: "150px" }}>
-                    { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                    }) }
-                </Select>
+                children: <Input style={{ width: "200px" }} placeholder="请输入" />
+                // children: <Select placeholder="请选择"  style={{ width: "150px" }}>
+                //     { productUnitData?.map((item: any) => {
+                //         return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                //     }) }
+                // </Select>
             },
             {
                 name: 'status',
