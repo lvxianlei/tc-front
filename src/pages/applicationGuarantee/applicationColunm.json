@@ -89,24 +89,12 @@
             ]
         },
         {
-            "dataIndex": "requiredReturnTime",
-            "title": "要求交回日期",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "placeholder": "请选择要求交回日期",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择要求交回日期"
-                }
-            ]
-        },
-        {
             "dataIndex": "effectiveTime",
             "title": "保函有效截止期",
             "type": "date",
             "format": "YYYY-MM-DD",
             "placeholder": "请选择保函有效截止期",
+            "disabled": true,
             "rules": [
                 {
                     "required": true,
@@ -116,9 +104,91 @@
         },
         {
             "dataIndex": "guaranteeDescription",
-            "title": "保函信息备注",
+            "title": "备注",
             "placeholder": "请输入保函信息备注",
             "type": "textarea"
+        },
+        {
+            "dataIndex": "guaranteePrice",
+            "title": "履约保函金额（元）",
+            "placeholder": "请输入履约保函金额（元）",
+            "disabled": true
+        },
+        {
+            "dataIndex": "bondProportion",
+            "title": "保证保函金占比（%）",
+            "placeholder": "请输入保证保函金占比（%）",
+            "type": "number",
+            "max": 100,
+            "min": 1,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保证保函金占比（%）"
+                }
+            ]
+        },
+        {
+            "dataIndex": "bondProportionMoney",
+            "title": "保证保函金",
+            "placeholder": "请输入保证保函金",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保证保函金"
+                }
+            ]
+        },
+        {
+            "dataIndex": "seasonProportion",
+            "title": "每季手续费占比（%）",
+            "placeholder": "请输入每季手续费占比（%）",
+            "type": "number",
+            "max": 100,
+            "min": 1,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入每季手续费占比（%）"
+                }
+            ]
+        },
+        {
+            "dataIndex": "seasonProportionMoney",
+            "title": "每季手续费",
+            "placeholder": "请输入每季手续费",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入每季手续费"
+                }
+            ]
+        },
+        {
+            "dataIndex": "serviceCharge",
+            "title": "手续费",
+            "placeholder": "请输入手续费",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入手续费"
+                }
+            ]
+        },
+        {
+            "dataIndex": "bondServiceCharge",
+            "title": "保证金+手续费",
+            "placeholder": "请输入保证金+手续费",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保证金+手续费"
+                }
+            ]
         }
     ],
     "enclosure": [
