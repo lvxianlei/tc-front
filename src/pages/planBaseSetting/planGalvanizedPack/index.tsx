@@ -121,20 +121,22 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
             {
                 name: 'galvanizedUnitName',
                 label: '镀锌生产单元',
-                children: <Select placeholder="请选择"  style={{ width: "150px" }}>
-                    { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                    }) }
-                </Select>
+                children: <Input style={{ width: "200px" }} placeholder="请输入" />
+                // children: <Select placeholder="请选择"  style={{ width: "150px" }}>
+                //     { productUnitData?.map((item: any) => {
+                //         return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                //     }) }
+                // </Select>
             },
             {
                 name: 'packageUnitName',
                 label: '包装生产单元',
-                children: <Select placeholder="请选择"  style={{ width: "150px" }}>
-                    { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                    }) }
-                </Select>
+                children: <Input style={{ width: "200px" }} placeholder="请输入" />
+                // children: <Select placeholder="请选择"  style={{ width: "150px" }}>
+                //     { productUnitData?.map((item: any) => {
+                //         return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                //     }) }
+                // </Select>
             },
             {
                 name: 'status',
