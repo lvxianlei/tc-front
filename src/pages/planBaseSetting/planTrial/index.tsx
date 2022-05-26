@@ -454,9 +454,9 @@ export default function PlanTrialList(): React.ReactNode {
                                 }).map((item:any)=>{
                                     return {
                                         ...item,
-                                        endTransferTime: moment(item?.endTransferTime).format('YYYY-MM-DD'),
-                                        planCompleteTime: moment(item?.planCompleteTime).format('YYYY-MM-DD'),
-                                        startTransferTime: moment(item?.startTransferTime).format('YYYY-MM-DD'),
+                                        endTransferTime: item?.endTransferTime?moment(item?.endTransferTime).format('YYYY-MM-DD'):'',
+                                        planCompleteTime: item?.planCompleteTime?moment(item?.planCompleteTime).format('YYYY-MM-DD'):'',
+                                        startTransferTime: item?.startTransferTime?moment(item?.startTransferTime).format('YYYY-MM-DD'):'',
 
                                     }
                                 })
