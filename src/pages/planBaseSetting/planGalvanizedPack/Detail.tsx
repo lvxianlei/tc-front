@@ -63,6 +63,8 @@ const pack=[
         title: '* 计划开始日期',
         width: 150,
         dataIndex: 'packageFirstStartTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'packageSecondUnitName',
@@ -75,24 +77,32 @@ const pack=[
         title: '计划开始日期',
         width: 150,
         dataIndex: 'packageSecondStartTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'packageCompleteTime',
         title: '* 计划完成日期',
         width: 150,
         dataIndex: 'packageCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'reportTime',
         title: '* 报补件日期',
         width: 150,
         dataIndex: 'reportTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'storageTime',
         title: '* 入库日期',
         width: 150,
         dataIndex: 'storageTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'packageDescription',
@@ -148,13 +158,17 @@ const galvanized=[
         key: 'transferStartTime',
         title: '* 转运开始日期',
         width: 150,
-        dataIndex: 'transferStartTime'
+        dataIndex: 'transferStartTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'transferEndTime',
         title: '* 转运结束日期',
         width: 150,
-        dataIndex: 'transferEndTime'
+        dataIndex: 'transferEndTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedFirstUnitName',
@@ -166,7 +180,9 @@ const galvanized=[
         key: 'galvanizedFirstCompleteTime',
         title: '* 计划完成日期',
         width: 150,
-        dataIndex: 'galvanizedFirstCompleteTime'
+        dataIndex: 'galvanizedFirstCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedSecondUnitName',
@@ -179,6 +195,8 @@ const galvanized=[
         title: '计划完成日期',
         width: 150,
         dataIndex: 'galvanizedSecondCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedThirdUnitName',
@@ -191,6 +209,8 @@ const galvanized=[
         title: '计划完成日期',
         width: 150,
         dataIndex: 'galvanizedThirdCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedDescription',
