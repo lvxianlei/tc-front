@@ -201,6 +201,21 @@
             "type": "number"
         },
         {
+            "title": "是否入围",
+            "dataIndex": "---------------",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "是",
+                    "value": 1
+                },
+                {
+                    "label": "否",
+                    "value": 0
+                }
+            ]
+        },
+        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"

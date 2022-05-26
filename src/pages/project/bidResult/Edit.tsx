@@ -90,12 +90,13 @@ export default function BidResultEdit(): JSX.Element {
             let flag = false;
             map.forEach((value: any) => {
                 if (+value !== 100) flag = true;
-            })
-            console.log(map, "================>>>>>>>>>>>>>>>")
+            }) 
+
             if (flag) {
                 message.error("相同包名称的中标比例必须等于100！");
                 return false;
             }
+
             const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
                 const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
                     ...formItem,
