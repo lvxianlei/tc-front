@@ -77,12 +77,16 @@
         {
             "title": "开始转运日期",
             "width":150,
-            "dataIndex": "transferStartTime"
+            "dataIndex": "transferStartTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "title": "完成转运日期",
             "width":150,
-            "dataIndex": "transferEndTime"
+            "dataIndex": "transferEndTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "title": "镀锌生产单元",
@@ -92,7 +96,9 @@
         {
             "title": "镀锌计划完成日期",
             "width":150,
-            "dataIndex": "galvanizedCompleteTime"
+            "dataIndex": "galvanizedCompleteTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "title": "镀锌备注",
@@ -107,7 +113,9 @@
         {
             "title": "包装计划完成日期",
             "width":150,
-            "dataIndex": "packageCompleteTime"
+            "dataIndex": "packageCompleteTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "title": "包装备注",
@@ -117,12 +125,16 @@
         {
             "title": "报补件日期",
             "width":150,
-            "dataIndex": "reportTime"
+            "dataIndex": "reportTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "title": "入库日期",
             "width":150,
-            "dataIndex": "storageTime"
+            "dataIndex": "storageTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
         },
         {
             "title": "状态",
@@ -153,7 +165,7 @@
             "dataIndex": "issueTime",
             "type": "date",
             "width":150,
-            "format": "YYYY-MM-DD HH:mm"
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "下发人",
@@ -165,14 +177,14 @@
             "dataIndex": "galvanizedCompleteRealTime",
             "width":150,
             "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "包装实际完成时间",
             "dataIndex": "packageCompleteRealTime",
             "width":150,
             "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "format": "YYYY-MM-DD"
         }
     ]
 }
