@@ -1769,7 +1769,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-技术下发
-      "name": "下发技术",
+      "name": "技术派工",
       "path": "/planProd/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/index",
       "exact": true,
@@ -1783,7 +1783,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-下发技术
-      "name": "下发技术",
+      "name": "技术派工",
       "path": "/planProd/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
@@ -1804,7 +1804,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
-      "name": "分配车间",
+      "name": "分配生产单元",
       "path": "/planProd/publishWorkshop",
       "module": "./pages/planBaseSetting/publishWorkshop/index",
       "exact": true,
@@ -1825,7 +1825,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
-      "name": "手动分配车间",
+      "name": "手动分配生产单元",
       "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
@@ -1877,6 +1877,27 @@
       "name": "计划看板",
       "path": "/planProd/planPanal",
       "module": "./pages/planBaseSetting/planPanal/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-试装计划
+      "name": "试装计划",
+      "path": "/planProd/planTrial",
+      "module": "./pages/planBaseSetting/planTrial/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-镀锌包装计划
+      "name": "镀锌包装计划",
+      "path": "/planProd/planGalvanizedPack",
+      "module": "./pages/planBaseSetting/planGalvanizedPack/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-镀锌包装计划-下发
+      "name": "镀锌包装下发",
+      "path": "/planProd/planGalvanizedPack/:id",
+      "module": "./pages/planBaseSetting/planGalvanizedPack/Detail",
       "exact": true,
       "authority": "approvalm"
     },

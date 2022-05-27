@@ -247,11 +247,11 @@ export default function DistributedTech(): React.ReactNode {
                     </Form>
                 </Modal>
                 <Space>
-                    <Button
+                    {/* <Button
                         type="primary"
                         disabled={selectedKeys.length <= 0 || selectedRows.some((res) => !!res.planDeliveryTime)}
                         onClick={() => setVisible(true)} style={{ marginBottom: '6px' }}
-                    >批量设置交货期</Button>
+                    >批量设置交货期</Button> */}
                     <Button type="primary" disabled={selectedKeys.length <= 0 || selectedRows.some((res) => {
                         if (!res.planDeliveryTime) return true;
                     })} onClick={
