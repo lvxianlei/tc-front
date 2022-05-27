@@ -88,7 +88,7 @@ const specialColums = [
         "type": "textarea"
     },
     {
-        "dataIndex": "recheckUnqualifiedNum",
+        "dataIndex": "sumNum",
         "title": "数量",
         "type": "textarea"
     },
