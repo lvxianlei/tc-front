@@ -26,7 +26,7 @@ export default function PlanTrialList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [editorLock, setEditorLock] = useState('编辑');
     const [sum, setSum] = useState<any>({
-        totalWeight:0.00,
+        totalWeight:0.0000,
         totalHoles:0
     })
     const [formRef] = Form.useForm();

@@ -51,8 +51,7 @@
         {
             "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
-            "width":150,
-            "format": "YYYY-MM-DD"
+            "width":150
         },
         {
             "title": "角钢重量（t）",
@@ -96,9 +95,7 @@
         {
             "title": "镀锌计划完成日期",
             "width":150,
-            "dataIndex": "galvanizedCompleteTime",
-            "type":"date",
-            "format":"YYYY-MM-DD"
+            "dataIndex": "galvanizedCompleteTime"
         },
         {
             "title": "镀锌备注",
@@ -113,9 +110,7 @@
         {
             "title": "包装计划完成日期",
             "width":150,
-            "dataIndex": "packageCompleteTime",
-            "type":"date",
-            "format":"YYYY-MM-DD"
+            "dataIndex": "packageCompleteTime"
         },
         {
             "title": "包装备注",
