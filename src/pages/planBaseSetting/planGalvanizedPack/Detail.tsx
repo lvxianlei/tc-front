@@ -63,6 +63,8 @@ const pack=[
         title: '* 计划开始日期',
         width: 150,
         dataIndex: 'packageFirstStartTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'packageSecondUnitName',
@@ -75,24 +77,32 @@ const pack=[
         title: '计划开始日期',
         width: 150,
         dataIndex: 'packageSecondStartTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'packageCompleteTime',
         title: '* 计划完成日期',
         width: 150,
         dataIndex: 'packageCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'reportTime',
         title: '* 报补件日期',
         width: 150,
         dataIndex: 'reportTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'storageTime',
         title: '* 入库日期',
         width: 150,
         dataIndex: 'storageTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'packageDescription',
@@ -148,13 +158,17 @@ const galvanized=[
         key: 'transferStartTime',
         title: '* 转运开始日期',
         width: 150,
-        dataIndex: 'transferStartTime'
+        dataIndex: 'transferStartTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'transferEndTime',
         title: '* 转运结束日期',
         width: 150,
-        dataIndex: 'transferEndTime'
+        dataIndex: 'transferEndTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedFirstUnitName',
@@ -166,7 +180,9 @@ const galvanized=[
         key: 'galvanizedFirstCompleteTime',
         title: '* 计划完成日期',
         width: 150,
-        dataIndex: 'galvanizedFirstCompleteTime'
+        dataIndex: 'galvanizedFirstCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedSecondUnitName',
@@ -179,6 +195,8 @@ const galvanized=[
         title: '计划完成日期',
         width: 150,
         dataIndex: 'galvanizedSecondCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedThirdUnitName',
@@ -191,6 +209,8 @@ const galvanized=[
         title: '计划完成日期',
         width: 150,
         dataIndex: 'galvanizedThirdCompleteTime',
+        type:'date',
+        format:'YYYY-MM-DD'
     },
     {
         key: 'galvanizedDescription',
@@ -258,8 +278,8 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                     galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
                     galvanizedSecond: item?.galvanizedSecondUnitId&&item?.galvanizedSecondUnitName?item?.galvanizedSecondUnitId+','+item?.galvanizedSecondUnitName:'',
                     galvanizedThird: item?.galvanizedThirdUnitId&&item?.galvanizedThirdUnitName?item?.galvanizedThirdUnitId+','+item?.galvanizedThirdUnitName:'',
-                    transferStartTime: item?.storageTime?moment(item?.storageTime):'',
-                    transferEndTime: item?.reportTime?moment(item?.reportTime):'',
+                    transferStartTime: item?.transferStartTime?moment(item?.transferStartTime):'',
+                    transferEndTime: item?.transferEndTime?moment(item?.transferEndTime):'',
                     galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime):'',
                     galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime):'',
                     galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime):'',
@@ -837,6 +857,33 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                             history.go(0)
                         })
                     }else{
+                        form.setFieldsValue({
+                            packagePlanDTOList: detailData?.packagePlanVOList&&detailData?.packagePlanVOList.length>0&&detailData?.packagePlanVOList.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    packageFirst: item?.packageFirstUnitId&&item?.packageFirstUnitName?item?.packageFirstUnitId+','+item?.packageFirstUnitName:'',
+                                    packageSecond: item?.packageSecondUnitId&&item?.packageSecondUnitName?item?.packageSecondUnitId+','+item?.packageSecondUnitName:'',
+                                    storageTime: item?.storageTime?moment(item?.storageTime):'',
+                                    reportTime: item?.reportTime?moment(item?.reportTime):'',
+                                    packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime):'',
+                                    packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime):'',
+                                    packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime):'',
+                                }
+                            })||[],
+                            galvanizedPlanDTOList: detailData?.galvanizedPlanVOList&&detailData?.galvanizedPlanVOList.length>0&&detailData?.galvanizedPlanVOList.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    galvanizedFirst: item?.galvanizedFirstUnitId&&item?.galvanizedFirstUnitName?item?.galvanizedFirstUnitId+','+item?.galvanizedFirstUnitName:'',
+                                    galvanizedSecond: item?.galvanizedSecondUnitId&&item?.galvanizedSecondUnitName?item?.galvanizedSecondUnitId+','+item?.galvanizedSecondUnitName:'',
+                                    galvanizedThird: item?.galvanizedThirdUnitId&&item?.galvanizedThirdUnitName?item?.galvanizedThirdUnitId+','+item?.galvanizedThirdUnitName:'',
+                                    transferStartTime: item?.transferStartTime?moment(item?.transferStartTime):'',
+                                    transferEndTime: item?.transferEndTime?moment(item?.transferEndTime):'',
+                                    galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime):'',
+                                    galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime):'',
+                                    galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime):'',
+                                }
+                            })||[],
+                        })
                         setLock('保存')
                     }
                     

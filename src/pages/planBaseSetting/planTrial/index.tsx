@@ -26,7 +26,7 @@ export default function PlanTrialList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [editorLock, setEditorLock] = useState('编辑');
     const [sum, setSum] = useState<any>({
-        totalWeight:0.00,
+        totalWeight:0.0000,
         totalHoles:0
     })
     const [formRef] = Form.useForm();
@@ -361,10 +361,10 @@ export default function PlanTrialList(): React.ReactNode {
         setSelectedRows(selectedRows);
         console.log(selectedRows)
         const totalHoles = selectedRows.reduce((pre: any,cur: { trialAssembleSegment: any;})=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleSegment!==null?cur.trialAssembleSegment:0) 
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleSegment!==null?cur.trialAssembleSegment:0)).toFixed(4)
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { trialAssembleWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleWeight!==null?cur.trialAssembleWeight:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleWeight!==null?cur.trialAssembleWeight:0)).toFixed(4)
         },0)
         setSum({
             ...sum,
