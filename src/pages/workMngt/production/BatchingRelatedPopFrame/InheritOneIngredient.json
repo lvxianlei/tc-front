@@ -2,19 +2,19 @@
     "InheritOneIngredientCloumn": [
         {
             "title": "原批次号",
-            "dataIndex": "length"
+            "dataIndex": "batchNumber"
         },
         {
             "title": "原杆塔",
-            "dataIndex": "quantity"
+            "dataIndex": "batchProductNumber"
         },
         {
             "title": "下达单杆塔",
-            "dataIndex": "utilizationRate"
+            "dataIndex": "issuedProductNumber"
         },
         {
             "title": "杆塔匹配度",
-            "dataIndex": "plannedSurplusLength"
+            "dataIndex": "matchingScore"
         }
     ],
     "AllocatedSchemeCloumn": [

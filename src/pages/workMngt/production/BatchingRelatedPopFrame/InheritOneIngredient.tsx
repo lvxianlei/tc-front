@@ -95,7 +95,7 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
                     ...rowSelectionCheck,
                 }}
                 pagination={false}
-                haveIndex columns={InheritOneIngredientCloumn} dataSource={props?.inheritScheme || []} />
+                haveIndex columns={InheritOneIngredientCloumn} dataSource={(batchingStrategy as any) || []} />
         </Modal>
     )
 }
