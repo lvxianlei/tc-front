@@ -4,7 +4,6 @@ import { BaseInfo } from '../../common'
 import { angleConfigStrategy } from "./angleSteel.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { materialTextureOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     data?: { [key: string]: any }
@@ -12,10 +11,6 @@ interface EditProps {
 }
 
 export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
-    const materialTextureEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
     const [baseForm] = Form.useForm()
 
     const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
@@ -33,16 +28,19 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields();
+            console.log(baseData)
             await saveRun(type === "new" ? ({
                 ...baseData,
                 // materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
                 width: `${baseData.widthMin}~${baseData.widthMax}`,
+                openNumber: baseData.openNumber.join(",")
             }) : ({
                 ...baseData,
                 // materialTextureIds: baseData.materialTextureIds.join(","),
                 thickness: `${baseData.thicknessMin}~${baseData.thicknessMax}`,
                 width: `${baseData.widthMin}~${baseData.widthMax}`,
+                openNumber: baseData.openNumber.join(","),
                 id: data?.id
             }))
             resolve(true)
@@ -57,7 +55,14 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
         } else {
             const thickness = data.thickness.split("~")
             const width = data.width.split("~")
-            baseForm.setFieldsValue({ data, widthMin: width[0], widthMax: width[1], thicknessMin: thickness[0], thicknessMax: thickness[1]})
+            baseForm.setFieldsValue({
+                data,
+                widthMin: width[0],
+                widthMax: width[1],
+                thicknessMin: thickness[0],
+                thicknessMax: thickness[1],
+                openNumber: data.openNumber.split(",")
+            })
         }
 
     }, [JSON.stringify(data), type])

@@ -1,7 +1,7 @@
 //收货单看板
 import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal } from 'antd'
-import { Link, useHistory, } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Page } from '../../common'
 import { receiveColumns } from "./receiveTask.json"
 import PrepareOverview from "../../financial/prepares/Overview"
@@ -26,25 +26,17 @@ export default function ViewReceivingNote(): React.ReactNode {
         <Modal
             destroyOnClose
             visible={prepareVisible} width={1011}
-            footer={<Button type="primary" onClick={() => {
-                setPrepareVisible(false)
-            }}>确认</Button>}
+            footer={<Button type="primary" onClick={() => setPrepareVisible(false)}>确认</Button>}
             title="详情"
-            onCancel={() => {
-                setPrepareVisible(false)
-            }}>
+            onCancel={() => setPrepareVisible(false)}>
             <PrepareOverview id={detailId} />
         </Modal>
         <Modal
             destroyOnClose
             visible={billVisible} width={1011}
-            footer={<Button type="primary" onClick={() => {
-                setBillVisible(false)
-            }}>确认</Button>}
+            footer={<Button type="primary" onClick={() => setBillVisible(false)}>确认</Button>}
             title="详情"
-            onCancel={() => {
-                setBillVisible(false)
-            }}>
+            onCancel={() => setBillVisible(false)}>
             <BillOverview id={detailId} />
         </Modal>
         <Page
