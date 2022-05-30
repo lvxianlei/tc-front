@@ -27,8 +27,8 @@ export default function EnquiryList(): React.ReactNode {
 
     return <>
         <Page
-            path="/tower-supply/purchaseTaskTower"
-            exportPath={`/tower-supply/purchaseTaskTower`}
+            path="/tower-supply/task/purchase/batcher"
+            exportPath="/tower-supply/task/purchase/batcher"
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo as any,
