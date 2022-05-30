@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { Button, Input, Select,  Modal, message, Form} from 'antd';
+import React, { useCallback, useState } from 'react'
+import { Button, Input, Select,  Modal, message, Form, Dropdown, Menu} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { tableHeader, commonHeader } from "./data.json"
+import style from "./index.module.less"
+import { DownOutlined } from "@ant-design/icons"
 export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React.ReactElement {
     const history = useHistory()
     const params = useParams<{ id: string, configId:string }>()
@@ -14,144 +17,146 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     const [ detail, setDetail ] = useState<any>({totalHoles: 0 ,totalNumber:0 , totalWeight:'0'});
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
         productTypeId: productTypeOptions && productTypeOptions.length>0 && productTypeOptions[0].id,
-        configId: params?.configId
+        configId: params?.configId,
+        cyclePlanId: params?.id,
     });
-    
-    const columns : any =[
-        {
-            key: 'planNumber',
-            title: '计划号',
-            width: 100,
-            fixed: "left",
-            dataIndex: 'planNumber'
-        },
-        {
-            key: 'productCategoryName',
-            title: '塔型',
-            width: 100,
-            fixed: "left",
-            dataIndex: 'productCategoryName'
-        },
-        {
-            key: 'productionBatchNo',
-            title: '批次号',
-            width: 100,
-            fixed: "left",
-            dataIndex: 'productionBatchNo',
-            render: (_: string, record: any): React.ReactNode => (
-                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
-            )
-        },
-        {
-            key: 'issuedNumber',
-            title: '下达单号',
-            width: 100,
-            fixed: "left",
-            dataIndex: 'issuedNumber'
-        },
-        {
-            key: 'number',
-            title: '基数',
-            width: 100,
-            dataIndex: 'number'
-        },
-        {
-            key: 'voltageGradeName',
-            title: '电压等级（Kv）',
-            width: 150,
-            dataIndex: 'voltageGradeName'
-        },
-        {
-            key: 'orderProjectName',
-            title: '工程名称',
-            width: 100,
-            dataIndex: 'orderProjectName'
-        },
-        {
-            key: 'businessManagerName',
-            title: '业务经理',
-            width: 100,
-            dataIndex: 'businessManagerName'
-        },
-        {
-            key: 'productTypeName',
-            title: '产品类型',
-            width: 100,
-            dataIndex: 'productTypeName'
-        },
-        {
-            key: 'factoryName',
-            title: '厂区',
-            width: 100,
-            dataIndex: 'factoryName'
-        },
-        {
-            key: 'approvalTime',
-            title: '审批日期',
-            width: 100,
-            dataIndex: 'approvalTime'
-        },
-        {
-            key: 'customerDeliveryTime',
-            title: '客户交货日期',
-            width: 100,
-            dataIndex: 'customerDeliveryTime'
-        },
-        {
-            key: 'planDeliveryTime',
-            title: '计划交货日期',
-            width: 100,
-            dataIndex: 'planDeliveryTime'
-        },
-        {
-            key: 'trialAssemble',
-            title: '试装类型',
-            width: 100,
-            dataIndex: 'trialAssemble'
-        },
-        {
-            key: 'totalWeight',
-            title: '技术下达重量（t）',
-            width: 150,
-            dataIndex: 'totalWeight'
-        },
-        {
-            key: 'steelTotalWeight',
-            title: '角钢重量（t）',
-            width: 100,
-            dataIndex: 'steelTotalWeight'
-        },
-        {
-            key: 'platTotalWeight',
-            title: '连板重量（t）',
-            width: 100,
-            dataIndex: 'platTotalWeight'
-        },
-        {
-            key: 'totalProcessNum',
-            title: '总件数',
-            width: 100,
-            dataIndex: 'totalProcessNum'
-        },
-        {
-            key: 'totalHolesNum',
-            title: '总孔数',
-            width: 100,
-            dataIndex: 'totalHolesNum'
-        },
-        {
-            key: 'storageMaterialDescription',
-            title: '库存备料',
-            width: 100,
-            dataIndex: 'storageMaterialDescription'
-        },
-        {
-            key: 'processMaterialDescription',
-            title: '生产备料',
-            width: 100,
-            dataIndex: 'processMaterialDescription'
-        },
-    ]
+    const [columns, setColumns] = useState<any[]>(tableHeader)
+    const [filterStatus, setFilterStatus] = useState<{ [key: string]: any }>({})
+    // const columns : any =[
+    //     {
+    //         key: 'planNumber',
+    //         title: '计划号',
+    //         width: 100,
+    //         fixed: "left",
+    //         dataIndex: 'planNumber'
+    //     },
+    //     {
+    //         key: 'productCategoryName',
+    //         title: '塔型',
+    //         width: 100,
+    //         fixed: "left",
+    //         dataIndex: 'productCategoryName'
+    //     },
+    //     {
+    //         key: 'productionBatchNo',
+    //         title: '批次号',
+    //         width: 100,
+    //         fixed: "left",
+    //         dataIndex: 'productionBatchNo',
+    //         render: (_: string, record: any): React.ReactNode => (
+    //             <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+    //         )
+    //     },
+    //     {
+    //         key: 'issuedNumber',
+    //         title: '下达单号',
+    //         width: 100,
+    //         fixed: "left",
+    //         dataIndex: 'issuedNumber'
+    //     },
+    //     {
+    //         key: 'number',
+    //         title: '基数',
+    //         width: 100,
+    //         dataIndex: 'number'
+    //     },
+    //     {
+    //         key: 'voltageGradeName',
+    //         title: '电压等级（Kv）',
+    //         width: 150,
+    //         dataIndex: 'voltageGradeName'
+    //     },
+    //     {
+    //         key: 'orderProjectName',
+    //         title: '工程名称',
+    //         width: 100,
+    //         dataIndex: 'orderProjectName'
+    //     },
+    //     {
+    //         key: 'businessManagerName',
+    //         title: '业务经理',
+    //         width: 100,
+    //         dataIndex: 'businessManagerName'
+    //     },
+    //     {
+    //         key: 'productTypeName',
+    //         title: '产品类型',
+    //         width: 100,
+    //         dataIndex: 'productTypeName'
+    //     },
+    //     {
+    //         key: 'factoryName',
+    //         title: '厂区',
+    //         width: 100,
+    //         dataIndex: 'factoryName'
+    //     },
+    //     {
+    //         key: 'approvalTime',
+    //         title: '审批日期',
+    //         width: 100,
+    //         dataIndex: 'approvalTime'
+    //     },
+    //     {
+    //         key: 'customerDeliveryTime',
+    //         title: '客户交货日期',
+    //         width: 100,
+    //         dataIndex: 'customerDeliveryTime'
+    //     },
+    //     {
+    //         key: 'planDeliveryTime',
+    //         title: '计划交货日期',
+    //         width: 100,
+    //         dataIndex: 'planDeliveryTime'
+    //     },
+    //     {
+    //         key: 'trialAssemble',
+    //         title: '试装类型',
+    //         width: 100,
+    //         dataIndex: 'trialAssemble'
+    //     },
+    //     {
+    //         key: 'totalWeight',
+    //         title: '技术下达重量（t）',
+    //         width: 150,
+    //         dataIndex: 'totalWeight'
+    //     },
+    //     {
+    //         key: 'steelTotalWeight',
+    //         title: '角钢重量（t）',
+    //         width: 100,
+    //         dataIndex: 'steelTotalWeight'
+    //     },
+    //     {
+    //         key: 'platTotalWeight',
+    //         title: '连板重量（t）',
+    //         width: 100,
+    //         dataIndex: 'platTotalWeight'
+    //     },
+    //     {
+    //         key: 'totalProcessNum',
+    //         title: '总件数',
+    //         width: 100,
+    //         dataIndex: 'totalProcessNum'
+    //     },
+    //     {
+    //         key: 'totalHolesNum',
+    //         title: '总孔数',
+    //         width: 100,
+    //         dataIndex: 'totalHolesNum'
+    //     },
+    //     {
+    //         key: 'storageMaterialDescription',
+    //         title: '库存备料',
+    //         width: 100,
+    //         dataIndex: 'storageMaterialDescription'
+    //     },
+    //     {
+    //         key: 'processMaterialDescription',
+    //         title: '生产备料',
+    //         width: 100,
+    //         dataIndex: 'processMaterialDescription'
+    //     },
+    // ]
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -170,6 +175,11 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
             totalWeight
         })
     }
+    const handleChange = useCallback((data: string | number, name: string) => {
+        const newfilterStatus = { ...filterStatus, [name]: data }
+        setFilterValue({ ...filterValue, status: Object.keys(newfilterStatus).map((item: string) => `${item}-${newfilterStatus[item]}`).join(",") })
+        setFilterStatus(newfilterStatus)
+    }, [filterStatus, filterValue, setFilterValue, setFilterStatus])
     return <>
         <Modal visible={ visible } title='添加下达单' okText="确认" onOk={ async ()=>{
             if(selectedKeys.length>0){
@@ -202,11 +212,50 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 filterValue={filterValue}
                 requestData={{
                     configId: params?.configId,
-                    cyclePlanId: params.id,
+                    cyclePlanId: params?.id,
+                }}
+                transformResult={(dataSource: any) => {
+                    setColumns([...tableHeader, ...dataSource.header.map(((item: any) => ({
+                        title: item.productionLinks,
+                        align: "center",
+                        children: commonHeader.map((head: any) => {
+                            if (head.code === "status") {
+                                return ({
+                                    ...head,
+                                    title: <Dropdown
+                                        overlay={(<Menu selectable onClick={({ key }) => handleChange(key, item.productionLinkIds)}>
+                                            <Menu.Item key={3}>已下发</Menu.Item>
+                                            <Menu.Item key={5} >已完成</Menu.Item>
+                                            <Menu.Item key={6} >取消</Menu.Item>
+                                            <Menu.Item key={7} >暂停</Menu.Item>
+                                        </Menu>)}>
+                                        <div className={style.dropdown}>
+                                            <span>{head.title}</span>
+                                            <DownOutlined />
+                                        </div>
+                                    </Dropdown>,
+                                    code: `${item.productionLinkIds}-${head.code}`,
+                                    render: (value: any, records: any) => records.unitData[item.productionLinkIds]?.[head.code] || ""
+                                })
+                            }
+                            return ({
+                                ...head,
+                                code: `${item.productionLinkIds}-${head.code}`,
+                                render: (value: any, records: any) => records.unitData[item.productionLinkIds]?.[head.code] || ""
+                            })
+                        })
+                    })))])
+                    return ({
+                        ...dataSource.planBoards,
+                        records: dataSource.planBoards.map((item: any, index: number) => ({
+                            ...item,
+                            onlyId: `${item.id}-${index}`
+                        }))
+                    })
                 }}
                 sourceKey='planBoards'
                 tableProps={{
-                    rowKey:(record: any,index) => `${record.id}-${index}`,
+                    rowKey:(record: any,index: number) => `${record.id}-${index}`,
                     pagination:false,
                     rowSelection: {
                         type: "checkbox",
@@ -214,7 +263,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         onChange: SelectChange
                     }
                 }}
-                
+                pagination={false}
                 columns={columns}
                 extraOperation={(data: any) => {
                     return <>
@@ -257,7 +306,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 ]}
                 onFilterSubmit={(values: any) => {
                     values.configId = params?.configId
-                    values.cyclePlanId = params.id
+                    values.cyclePlanId = params?.id
                     setFilterValue(values)
                     return values;
                 }}

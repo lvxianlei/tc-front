@@ -8,6 +8,7 @@ import { arrayMove, SortableContainer, SortableElement, SortableHandle } from 'r
 import { MenuOutlined } from '@ant-design/icons';
 import ReleaseOrder from './ReleaseOrder';
 import moment from 'moment';
+import zhCN from 'antd/es/date-picker/locale/zh_CN';
 const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
 const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
 
@@ -26,6 +27,7 @@ export default function CyclePlanDetail(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
+    const [dateForm] = Form.useForm();
     const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-aps/cyclePlan/${params.id}`)
         setDataSource(data?.issueOrderList)
@@ -155,6 +157,13 @@ export default function CyclePlanDetail(): React.ReactNode {
             )
         },
         {
+            key: 'planCompleteTime',
+            title: '计划完成日期',
+            width: 100,
+            fixed: "right",
+            dataIndex: 'planCompleteTime'
+        },
+        {
             key: 'processMaterialDescription',
             title: '生产备料',
             width: 100,
@@ -189,9 +198,9 @@ export default function CyclePlanDetail(): React.ReactNode {
                     }}
                     okText="确认"
                     cancelText="取消"
-                    disabled={record?.status===2}
+                    disabled={record?.status===2||detail?.status===2}
                 >
-                    <Button type="link" disabled={record?.status===2}>删除</Button>
+                    <Button type="link" disabled={record?.status===2||detail?.status===2}>删除</Button>
                 </Popconfirm>
         }
     ]
@@ -223,6 +232,112 @@ export default function CyclePlanDetail(): React.ReactNode {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
+
+
+    const useDate = () => {
+        Modal.confirm({
+            title: "设置计划完成日期",
+            icon: null,
+            content: <Form form={dateForm}>
+                <Form.Item
+                    label="计划完成日期"
+                    name="planCompleteTime"
+                    rules={[{ required: true, message: '请选择计划完成日期' }]}>
+                    <DatePicker 
+                        format='YYYY-MM-DD' 
+                        placeholder='请选择'
+                        locale={zhCN} 
+                        disabledDate={
+                            current => { 
+                                const value = form.getFieldsValue(true)
+                                const formatDate = value.date.map((item: any) => item.format("YYYY-MM-DD"))
+                                value.startTime = formatDate[0];
+                                value.endTime = formatDate[1];
+                                return current && (current < moment(formatDate[0]) || current > moment(formatDate[1]).add(1, 'days'))
+                                
+                            }
+                        }
+                    />
+                </Form.Item>
+            </Form>,
+            onOk: handleModalOk,
+            onCancel() {
+                dateForm.resetFields()
+                // history.go(0)
+            }
+        })
+    }
+    const handleModalOk = async () => {
+        await dateForm.validateFields()
+        Modal.confirm({
+            title: "周期计划计划开始日期~计划完成日期未保存，是否保存？",
+            onOk: async () => new Promise(async (resove, reject) => {
+                try {
+                    const valueDate = dateForm.getFieldsValue(true)
+                    if(JSON.stringify(valueDate) == "{}"){
+                        reject(false)
+                    }
+                    await dateForm.validateFields()
+                    console.log(valueDate)
+                    const submitValue = selectedKeys.map((item:any)=>{
+                        return {
+                            id:item,
+                            planCompleteTime: moment(valueDate?.planCompleteTime).format('YYYY-MM-DD')
+                        }
+                    })
+                    await RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
+                    message.success("已成功设置计划完成日期！")
+                    dateForm.resetFields()
+                    const value = form.getFieldsValue(true)
+                    if (value.date) {
+                        const formatDate = value.date.map((item: any) => item.format("YYYY-MM-DD"))
+                        value.startTime = formatDate[0] + ' 00:00:00';
+                        value.endTime = formatDate[1] + ' 23:59:59';
+                        delete value.date
+                    }
+                    const submitData = {
+                        configId: detail?.configId,
+                        id: params.id,
+                        configName: detail?.configName,
+                        startTime: value?.startTime,
+                        endTime: value?.endTime,
+                        deleteIdList: deleteIdList,
+                        issueOrderDTOList: dataSource.map((item:any)=>{
+                            return{
+                                ...item,
+                                planCompleteTime: selectedKeys.includes(item.id)?moment(valueDate?.planCompleteTime).format('YYYY-MM-DD'):item?.planCompleteTime
+                            }
+                        }) 
+                    }
+                    await RequestUtil.put(`/tower-aps/cyclePlan`,submitData)
+                    resove(true)
+                    await run()
+                    setSelectedKeys([])
+                    setDeleteIdList([])
+                    setSelectedRows([])
+                    history.go(0)
+                } catch (error) {
+                    console.log(error)
+                }
+            }),
+            onCancel: async () => {
+                const valueDate = dateForm.getFieldsValue(true)
+                await dateForm.validateFields()
+                console.log(valueDate)
+                const submitValue = selectedKeys.map((item:any)=>{
+                    return {
+                        id:item,
+                        planCompleteTime: moment(valueDate?.planCompleteTime).format('YYYY-MM-DD')
+                    }
+                })
+                RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
+                message.success("已成功设置计划完成日期！")
+                dateForm.resetFields()
+                history.go(0)
+            }
+        })
+        
+    }
     return <>
         <Spin spinning={loading}>
         <Modal visible={ visible } title='周期计划备注' okText="确认" onOk={ async ()=>{
@@ -263,7 +378,7 @@ export default function CyclePlanDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Space>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                    <Button type="primary" ghost onClick={async () =>{
+                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () =>{
                         await form.validateFields()
                         const value = form.getFieldsValue(true)
                         console.log(value)
@@ -288,13 +403,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                         setDeleteIdList([])
                         setSelectedRows([])
                         await run()
-                    }}>保存</Button>
-                    <Button type="primary" ghost onClick={async () => {
+                    }}>保存</Button>}
+                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
-                    }} disabled={detail?.materialStatus===2}>备料确认</Button>
-                    <Popconfirm
+                    }} disabled={detail?.status===2}>备料确认</Button>}
+                    {detail?.status!==2&&<Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/issue/${params.id}`)
@@ -305,7 +420,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                         cancelText="取消"
                     >
                         <Button type="primary" ghost >周期计划下发</Button>
-                    </Popconfirm>
+                    </Popconfirm>}
                 </Space>
             ]}>
                 <DetailTitle title="基础信息"/>
@@ -355,12 +470,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                     </Row>
                 </Form>
                 <DetailTitle title="周期计划下达单"/>
-                <Space>
+                {detail?.status!==2&&<Space>
                     <ReleaseOrder run={run} data={detail}/>
+                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>计划完成日期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
-                </Space>
+                </Space>}
                 <div>
                     <Space>
                         <span>合计：</span>
