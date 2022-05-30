@@ -1,6 +1,7 @@
 .ingredientsListWrapper {
     width: 100%;
     overflow: hidden;
+
     .content_wrapper {
         width: 100%;
         display: flex;
@@ -8,6 +9,7 @@
         justify-content: space-between;
         margin-top: 14px;
         overflow: hidden;
+
         .contentWrapperLeft {
             min-width: 76px;
             overflow: auto;
@@ -15,6 +17,7 @@
             margin-right: 20px;
             flex-shrink: 0;
             height: 100%;
+
             .contentWrapperLeftlist {
                 width: 100%;
                 padding: 4px 4px 6px 4px;
@@ -24,6 +27,7 @@
                 border-bottom: 1px solid #eee;
                 color: #181818;
                 cursor: pointer;
+
                 .color {
                     width: 4px;
                     height: 10px;
@@ -33,6 +37,7 @@
                     top: 4px;
                     left: 2px;
                 }
+
                 .structure_wrapper {
                     p {
                         font-size: 12px;
@@ -42,59 +47,72 @@
                     }
                 }
             }
+
             .active {
                 background-color: #FF8C00;
                 color: #fff;
             }
         }
+
         .content_wrapper_ringht {
             width: 100%;
             display: flex;
             flex-wrap: nowrap;
             position: relative;
+
             .operation_button {
                 position: absolute;
                 top: 0px;
-                right: 94px;
+                right: 17px;
             }
+
             // 配料相关
             .ingredients_content_wrapper {
                 width: 100%;
                 display: flex;
                 flex-wrap: nowrap;
+
                 .ingredients_content_wrapper_left {
                     width: 360px;
                     margin-right: 14px;
+
                     .ant-form-item {
                         margin-bottom: 8px !important;
                     }
+
                     .ant-empty-normal {
                         margin: 84px 0 !important;
                     }
                 }
+
                 .ingredients_content_wrapper_right {
                     width: 100%;
                     display: flex;
                     flex-wrap: nowrap;
+
                     .ingredients_content_wrapper_right_detail {
-                        width: 330px;
+                        width: 270px;
                         margin-right: 12px;
                         flex-shrink: 0;
+
                         .ant-table-tbody {
                             // margin: 500px 0 !important;
                             // overflow: hidden;
                             min-height: 562px;
                         }
                     }
+
                     .ingredients_content_wrapper_right_programme {
                         width: 99%;
                         overflow: hidden;
+
                         // flex-shrink: 0;
                         .ant-table-tbody {
                             // margin: 500px 0 !important;
                             // overflow: hidden;
                             // height: 216px;
                         }
+
                         .title_wrapper {
                             width: 100%;
                             display: flex;
@@ -102,11 +120,13 @@
                             justify-content: space-between;
                             margin-top: 18px;
                             margin-bottom: 6px;
+
                             div:nth-of-type(1) {
                                 font-size: 16px;
                                 font-family: PingFangSC-Medium, PingFang SC;
                                 font-weight: bold;
                                 color: #181818;
+
                                 .textLabel {
                                     font-size: 12px;
                                     font-family: PingFangSC-Semibold, PingFang SC;
@@ -114,6 +134,7 @@
                                     color: #222222;
                                     margin-left: 6px;
                                 }
+
                                 .textValue {
                                     font-size: 12px;
                                     font-family: PingFangSC-Semibold, PingFang SC;
@@ -122,6 +143,7 @@
                                     margin-left: 6px;
                                 }
                             }
+
                             div:nth-of-type(2) {
                                 span {
                                     margin-right: 14px;
@@ -132,10 +154,12 @@
                                 }
                             }
                         }
+
                         .marginTop {
                             margin-top: 0px;
                             margin-bottom: 15px;
                         }
+
                         .alternativeWrapper {
                             .ant-table-cell {
                                 padding: 8px 0px !important;
@@ -143,6 +167,27 @@
                             }
                         }
                     }
+                }
+            }
+
+            .topStrategyWrapper {
+                width: 100%;
+                margin-bottom: 8px;
+
+                .texts {
+                    font-size: 12px;
+                    font-family: PingFangSC-Semibold, PingFang SC;
+                    font-weight: 600;
+                    color: #222222;
+                    margin-left: 6px;
+                }
+
+                .values {
+                    font-size: 12px;
+                    font-family: PingFangSC-Semibold, PingFang SC;
+                    font-weight: 600;
+                    color: #FF8C00;
+                    margin-left: 6px;
                 }
             }
         }

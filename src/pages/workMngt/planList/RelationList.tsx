@@ -21,7 +21,7 @@ export default function RelationList() {
     }
 
     return <Page
-        path="/tower-supply/purchaseTaskTower/purchaser"
+        path="/tower-supply/task/purchase/purchaser"
         columns={baseInfo}
         onFilterSubmit={onFilterSubmit}
         filterValue={{ purchasePlanId: params.id }}
