@@ -170,12 +170,6 @@ export default function WorkCenterSetting(): React.ReactNode{
             "title": "工作时间",
             "dataIndex": "time",
             "type": "string",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择开始工作时间"
-                }
-            ]
         },
         {
             "title": "关联设备",
