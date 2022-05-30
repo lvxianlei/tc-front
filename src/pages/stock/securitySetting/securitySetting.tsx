@@ -11,29 +11,23 @@ const SecuritySetting = (): React.ReactNode => {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            render: (text, item, index) => {
-                return <span>{index + 1}</span>
-            }
+            render: (_a, _b, index) => <span>{index + 1}</span>
         },
         {
-            key: 'productName',
             title: '品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName'
         },
         {
-            key: 'standard',
             title: '标准',
-            dataIndex: 'standard'
+            dataIndex: 'materialStandard'
         },
         {
-            key: 'spec',
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec'
         },
         {
-            key: 'materialTexture',
             title: '材质',
-            dataIndex: 'materialTexture'
+            dataIndex: 'structureTexture'
         },
         {
             key: 'safetyStock',

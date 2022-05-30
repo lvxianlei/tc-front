@@ -73,15 +73,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         },
         {
             title: '标准',
-            dataIndex: 'standardName',
+            dataIndex: 'structureTextureName',
             width: 120,
         }, {
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
             width: 120,
         }, {
             title: '材质',
-            dataIndex: 'materialTexture',
+            dataIndex: 'structureTexture',
             width: 160,
         }, {
             title: '长度',

@@ -184,22 +184,22 @@
     "safetyStock": [
         {
             "title": "品名",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "type": "string"
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "type": "string"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type": "string"
         },
         {
