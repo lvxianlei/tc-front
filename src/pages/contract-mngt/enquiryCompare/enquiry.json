@@ -52,7 +52,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "材质",
@@ -107,7 +107,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "宽度（mm）",
@@ -158,7 +158,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "宽度（mm）",

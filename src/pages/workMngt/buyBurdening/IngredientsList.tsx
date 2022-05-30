@@ -635,7 +635,7 @@ export default function IngredientsList(): React.ReactNode {
     // 获取配料策略-刀口、端口、余量等数据
     const { run: getIngredient, data: IngredientData } = useRequest<{ [key: string]: any }>((spec: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredient`, { spec });
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredientConfigList`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -870,7 +870,7 @@ export default function IngredientsList(): React.ReactNode {
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
-                                                            <DetailTitle key={"detail"} title="构件明细" operation={[
+                                                            <DetailTitle key="detail" title="构件明细" operation={[
                                                                 <Button type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
@@ -891,7 +891,7 @@ export default function IngredientsList(): React.ReactNode {
                                                             />
                                                         </div>
                                                         <div className='ingredients_content_wrapper_right_programme'>
-                                                            <div className='title_wrapper marginTop' style={{ width: document.documentElement.clientWidth - 1000 }}>
+                                                            <div className='title_wrapper marginTop' style={{ width: document.documentElement.clientWidth - 660 }}>
                                                                 <div>已选方案
                                                                     <span className='textLabel'>已选米数：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).meterNumber : 0}</span>
                                                                     <span className='textLabel'>总数量：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).numberAll : 0}</span>
@@ -900,7 +900,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     <span className='textLabel'>总利用率：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).calculation : 0}%</span>
                                                                 </div>
                                                             </div>
-                                                            <div style={{ width: document.documentElement.clientWidth - 1020 }} className="alternativeWrapper">
+                                                            <div style={{ width: document.documentElement.clientWidth - 660 }} className="alternativeWrapper">
                                                                 <CommonTable
                                                                     size="small"
                                                                     columns={[
@@ -924,7 +924,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     scroll={{ x: 1200, y: 200 }}
                                                                 />
                                                             </div>
-                                                            <div className='title_wrapper' style={{ width: document.documentElement.clientWidth - 1028 }}>
+                                                            <div className='title_wrapper' style={{ width: document.documentElement.clientWidth - 676 }}>
                                                                 <div>备选方案</div>
                                                                 <div>
                                                                     <span>排序</span>
@@ -940,7 +940,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     </Select>
                                                                 </div>
                                                             </div>
-                                                            <div style={{ width: document.documentElement.clientWidth - 1020 }} className="alternativeWrapper">
+                                                            <div style={{ width: document.documentElement.clientWidth - 660 }} className="alternativeWrapper">
                                                                 <CommonTable
                                                                     size="small"
                                                                     columns={[
@@ -1029,9 +1029,7 @@ export default function IngredientsList(): React.ReactNode {
                 visible={angleConfigVisible}
                 width={400}
                 maskClosable={false}
-                onCancel={() => {
-                    setAngleConfigVisible(false)
-                }}
+                onCancel={() => setAngleConfigVisible(false)}
                 footer={[
                     <Button
                         key="back"
@@ -1165,59 +1163,55 @@ export default function IngredientsList(): React.ReactNode {
                         </Select>
                     </Form.Item>
                 </Form>
-                <DetailTitle title="原材料米数" key={"strategy"} operation={[
-                    <Button></Button>
+                <DetailTitle title="原材料米数" key="strategy" operation={[
+                    <Button key="button"></Button>
                 ]} />
-                {
-                    value === "2" && <>
-                        <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                            <Row>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="6000">6000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="6500">6500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="7000">7000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="7500">7500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="8000">8000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="8500">8500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="9000">9000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="9500">9500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="10000">10000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="10500">10500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="11000">11000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="11500">11500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="12000">12000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{ marginBottom: 8 }}>
-                                    <Checkbox value="12500">12500</Checkbox>
-                                </Col>
-                            </Row>
-                        </Checkbox.Group>
-                    </>
-                }
+                <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
+                    <Row>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="6000">6000</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="6500">6500</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="7000">7000</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="7500">7500</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="8000">8000</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="8500">8500</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="9000">9000</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="9500">9500</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="10000">10000</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="10500">10500</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="11000">11000</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="11500">11500</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="12000">12000</Checkbox>
+                        </Col>
+                        <Col span={8} style={{ marginBottom: 8 }}>
+                            <Checkbox value="12500">12500</Checkbox>
+                        </Col>
+                    </Row>
+                </Checkbox.Group>
             </Modal>
             {/* 继承一次方案 */}
             <InheritOneIngredient visible={visible} hanleInheritSure={(res) => {
