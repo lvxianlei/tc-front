@@ -68,7 +68,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "材质",
@@ -76,7 +76,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度（mm）",
@@ -126,7 +126,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度（mm）",

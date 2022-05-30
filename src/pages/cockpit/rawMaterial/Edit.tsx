@@ -1,75 +1,19 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
-import { Spin, Button, Modal, Form, message, Input } from "antd"
+import { Spin, Form } from "antd"
 import { materialInfo, priceInfo } from "./rawMaterial.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { BaseInfo, DetailTitle, PopTableContent } from "../../common"
+import { BaseInfo, DetailTitle } from "../../common"
 import { PopTable } from './LayerModal';
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 
-interface priceSourceEnumData {
-    label: string
-    value: string
-}
 interface EditProps {
     id: string
     type: "new" | "edit",
     priceSourceEnum: { [key: string]: any } | undefined
 }
 
-const materialList = {
-    "title": "原材料",
-    "dataIndex": "materialName",
-    "type": "popTable",
-    "path": "/tower-system/material",
-    "width": 1011,
-    "value": "materialName",
-    "dependencies": true,
-    "readOnly": true,
-    "columns": [
-        {
-            "title": "类别",
-            "dataIndex": "bigCategoryName",
-            "search": true
-        },
-        {
-            "title": "类型",
-            "dataIndex": "materialCategoryName"
-        },
-        {
-            "title": "物料编号",
-            "dataIndex": "materialCode",
-            "search": true
-        },
-        {
-            "title": "品名",
-            "dataIndex": "materialName"
-        },
-        {
-            "title": "快捷码",
-            "dataIndex": "shortcutCode"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "standardName"
-        },
-        {
-            "title": "材料",
-            "dataIndex": "rowMaterial"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec"
-        }
-    ]
-}
-
 export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps, ref): JSX.Element {
-    const [visible, setVisible] = useState<boolean>(false)
     const [popContent, setPopContent] = useState<{ id: string, records: any }>({ id: "", records: {} })
     const [materialForm] = Form.useForm()
     const [priceInfoForm] = Form.useForm();
@@ -112,19 +56,6 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
         }
     }), { manual: true })
 
-    const handleOk = () => {
-        materialForm.setFieldsValue({
-            materialName: popContent.records.materialName,
-            materialSpec: popContent.records.structureSpec,
-            materialCategoryName: popContent.records.materialCategoryName,
-            materialStandard: popContent.records.standardName
-        })
-        setVisible(false)
-    }
-    const handleChange = (event: any) => {
-        setPopContent({ id: event[0].id, records: event[0] })
-    }
-
     const onSubmit = async () => new Promise(async (resove, reject) => {
         const materialData = await materialForm.validateFields()
         const priceInfoData = await priceInfoForm.validateFields()
@@ -164,15 +95,6 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                 materialCategoryName: fields.materialName.records[0].materialCategoryName, // 原材料类型
             })
             setPopContent({ id: fields.id, records: fields.materialName.records[0] })
-        }
-    }
-    const handleTest = async (fields: any) => {
-        if (fields.materialName) {
-            materialForm.setFieldsValue({
-                purchasePlanCode: fields.records[0].materialName, // 原材料名称
-                materialSpec: fields.records[0].structureSpec, // 原材料规格
-                materialCategoryName: fields.records[0].materialCategoryName, // 原材料类型
-            })
         }
     }
 

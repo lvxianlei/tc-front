@@ -452,7 +452,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 value: ""
             }}
                 onChange={(fields: any[]) => {
-                    console.log(fields, materialList)
                     fields.map((element: any, index: number) => {
                         if (element.structureSpec) {
                             element["spec"] = element.structureSpec;

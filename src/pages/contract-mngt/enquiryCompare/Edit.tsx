@@ -38,7 +38,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         } catch (error) {
             reject(error)
         }
-    }), {refreshDeps: [pagenation.current]})
+    }), { refreshDeps: [pagenation.current] })
 
     useImperativeHandle(ref, () => ({ selectRows }), [JSON.stringify(selectRows)])
 
@@ -166,7 +166,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     useEffect(() => {
-        const newMaterialList = list.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         setMaterialList([...list.map((item: any) => ({
             ...item,
             num: item.num || "0",
@@ -244,7 +243,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value)/1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value)/1000).toFixed(3) : null,
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null,
                     totalWeight: (parseFloat(item.weight || "0.00") * item.num).toFixed(3)
                 })
             }
@@ -255,11 +254,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     return <Spin spinning={loading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
-            onOk={handleAddModalOk} onCancel={() => {
-                const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-                setVisible(false)
-                // setMaterialList([])
-            }}>
+            onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
                 ...(addMaterial as any),
                 columns: (addMaterial as any).columns.map((item: any) => {
@@ -273,11 +268,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }}
-            value={{
-                id: "",
-                records: materialList,
-                value: ""
-            }}
+                value={{
+                    id: "",
+                    records: materialList,
+                    value: ""
+                }}
                 onChange={(fields: any[]) => {
                     setPopDataList(fields.map((item: any) => ({
                         ...item,
@@ -288,15 +283,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         materialStandard: item.standard,
                         proportion: item.proportion == -1 ? 0 : item.proportion
                     })))
-                    // setMaterialList(fields.map((item: any) => ({
-                    //     ...item,
-                    //     spec: item.structureSpec,
-                    //     source: 2,
-                    //     materialTexture: item.structureTexture,
-                    //     standardName: item.standardName,
-                    //     materialStandard: item.standard,
-                    //     proportion: item.proportion == -1 ? 0 : item.proportion
-                    // })))
                 }}
             />
         </Modal>
@@ -313,7 +299,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         ]} />
         <CommonTable
             haveIndex
-            style={{padding: "0",}}
+            style={{ padding: "0", }}
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {
                     if (item.dataIndex === "num") {
