@@ -67,9 +67,10 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
                 </Button>
             ]}
         >
+            <p>查询到批次已发生变更，请手动选择要继承的批次</p>
             <CommonTable
                 rowSelection={{
-                    type: "checkbox",
+                    type: "radio",
                     ...rowSelectionCheck,
                 }}
                 pagination={false}
