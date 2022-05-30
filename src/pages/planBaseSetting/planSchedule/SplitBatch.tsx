@@ -26,6 +26,18 @@ export default function SampleDraw(): React.ReactNode {
             reject(error)
         }
     }), { manual: true })
+
+    const { run: splitBatchRun } = useRequest((option) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, option);
+            console.log(result)
+            resole(result)
+        } catch (error) {
+            console.log(error)
+            reject(error)
+            // resole(error)
+        }
+    }), { manual: true })
     
     const { run: runDate } = useRequest((option) => new Promise(async (resole, reject) => {
         try {
@@ -59,21 +71,18 @@ export default function SampleDraw(): React.ReactNode {
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
                     const splitData = await form.getFieldsValue(true)
-                    const submitData = selectedRows.map((item: any) => {
-                        return {
+                    await splitBatchRun(selectedRows.map((item: any) => ({
                             id: item.id,
                             productionBatch: splitData?.productionBatch
-                        }
-                    })
-                    await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, submitData).then(() => {
-                        message.success('提交成功！')
-                        form.resetFields()
-                        setSelectedKeys([])
-                        setSelectedRows([])
-                        history.go(0)
-                    })
+                    })))
+                    await message.success("提交成功！")
+                    setSelectedKeys([])
+                    setSelectedRows([])
+                    form.resetFields()
+                    history.go(0)
+                    resove(true)
                 } catch (error) {
-                    console.log(error)
+                    reject(false)
                 }
             }),
             onCancel: () => form.resetFields()
