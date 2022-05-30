@@ -3,11 +3,13 @@
  * author: mschange
  * time: 2022/4/21
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal, Spin, Table } from 'antd';
 import { EditProps } from "./index"
 import { InheritOneIngredientCloumn } from "./InheritOneIngredient.json";
 import { CommonTable } from '../../../common';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../../utils/RequestUtil';
 
 
 export default function InheritOneIngredient(props: EditProps): JSX.Element {
@@ -24,6 +26,25 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
             name: record.name,
         }),
     };
+
+    useEffect(() => {
+      if (props.visible) {
+        getBatchingStrategy();
+      }
+    }, [props.visible])
+
+    // 获取数据
+    const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/produce/matchingScore`, {
+                produceId: props.id
+            });
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     return (
         <Modal
             title={'一次配料方案'}

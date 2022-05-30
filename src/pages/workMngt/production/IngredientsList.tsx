@@ -3,7 +3,7 @@
  * author: mschange
  * time: 2022/4/21
  */
-import { Button, Checkbox, Col, Descriptions, Divider, Form, message, Modal, Radio, Row, Select, Table, Tabs } from 'antd';
+import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, message, Modal, Radio, Row, Select, Table, Tabs } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -20,6 +20,7 @@ import "./ingredientsList.less"
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
+import layoutStyles from '../../../layout/Layout.module.less';
 
 interface Panes {
     title?: string
@@ -118,8 +119,8 @@ export default function IngredientsList(): React.ReactNode {
                 history.go(-1);
                 break;
             case "inherit":
-                getPurchaseBatchingSchemeList(params?.productionBatchNo, activeSort.split("_")[0], activeSort.split("_")[1]);
-                // setVisible(true);
+                // getPurchaseBatchingSchemeList(params?.productionBatchNo, activeSort.split("_")[0], activeSort.split("_")[1]);
+                setVisible(true);
                 break;
             case "programme":
                 handleAllocatedScheme();
@@ -694,10 +695,10 @@ export default function IngredientsList(): React.ReactNode {
         }
     }), { manual: true })
     
-    // 获取配料策略-刀口、端口、余量等数据
+    // 获取配料策略-刀口、端口、余量等数据 list
     const { run: getIngredient, data: IngredientData } = useRequest<{ [key: string]: any }>((spec: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredient`, {spec});
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/angleConfigStrategy/IngredientConfigList`, {spec});
             resole(result)
         } catch (error) {
             reject(error)
@@ -718,6 +719,7 @@ export default function IngredientsList(): React.ReactNode {
     const { run: getSort, data: SortData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${id}`);
+            // const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/component/${id}/material`);
             // 获取页面配料方案
             const schemeResult: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/programme/getLoftingSchemesByProduceId`, {
                 produceId: params.id
@@ -897,7 +899,6 @@ export default function IngredientsList(): React.ReactNode {
                 element["num"] = `${element.quantity}`
             });
             setInheritScheme((result) || [])
-            setVisible(true);
             resole(result)
         } catch (error) {
             reject(error)
@@ -962,7 +963,7 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='texts'>利用率：</span>
                                                     <span className='values'>96.6%</span>
                                                     <span className='texts'>原材料米数：</span>
-                                                    <span className='values'>7000、8000</span>
+                                                    <span className='values' title='7000/8000'>7000、8000</span>
                                                 </div>
                                                 <div className='ingredients_content_wrapper'>
                                                     {/* <div className='ingredients_content_wrapper_left'> */}
@@ -1158,7 +1159,7 @@ export default function IngredientsList(): React.ReactNode {
                 
             </DetailContent>
             {/* 继承一次方案 */}
-            <InheritOneIngredient visible={visible} inheritScheme={inheritScheme} hanleInheritSure={(res) => {
+            <InheritOneIngredient visible={visible} id={params.id} inheritScheme={inheritScheme} hanleInheritSure={(res) => {
                 if (res.code) {
                     handleInheritClick(res.data.selectedRowsCheck);
                 }
@@ -1266,13 +1267,11 @@ export default function IngredientsList(): React.ReactNode {
                             }
                         ]}
                     >
-                        <Select placeholder="请选择刀口">
-                            {
-                                IngredientData?.edgeLossList.map((item: any, index: number) => {
-                                    return <Select.Option value={item} key={ `${ item }_${ index }` }>{ item }</Select.Option>
-                                })
-                            }
-                        </Select>
+                        <InputNumber
+                            stringMode={false}
+                            min="0"
+                            className={layoutStyles.width100}
+                        />
                     </Form.Item>
                     <Form.Item
                         label="端头"
@@ -1285,13 +1284,11 @@ export default function IngredientsList(): React.ReactNode {
                             }
                         ]}
                     >
-                            <Select placeholder="请选择端头">
-                                {
-                                    IngredientData?.clampLossList.map((item: any, index: number) => {
-                                        return <Select.Option value={item} key={ `${ item }_${ index }` }>{ item }</Select.Option>
-                                    })
-                                }
-                            </Select>
+                        <InputNumber
+                            stringMode={false}
+                            min="0"
+                            className={layoutStyles.width100}
+                        />
                     </Form.Item>
                     <Form.Item
                         label="余量"
@@ -1304,13 +1301,11 @@ export default function IngredientsList(): React.ReactNode {
                             }
                         ]}
                     >
-                            <Select placeholder="请选择余量">
-                                {
-                                    IngredientData?.marginList.map((item: any, index: number) => {
-                                        return <Select.Option value={item} key={ `${ item }_${ index }` }>{ item }</Select.Option>
-                                    })
-                                }
-                            </Select>
+                        <InputNumber
+                            stringMode={false}
+                            min="0"
+                            className={layoutStyles.width100}
+                        />
                     </Form.Item>
                     <Form.Item
                         name="utilizationRate"
@@ -1322,13 +1317,13 @@ export default function IngredientsList(): React.ReactNode {
                             }
                         ]}
                     >
-                        <Select placeholder="请选择">
-                            {
-                                batchingStrategy?.utilizationRate?.policyDetailed.map((item: any, index: number) => {
-                                    return <Select.Option value={item} key={ `${item}_${ index }` }>{ item }%</Select.Option>
-                                })
-                            }
-                        </Select>
+                        <InputNumber
+                            stringMode={false}
+                            min="0"
+                            step="0.01"
+                            className={layoutStyles.width100}
+                            precision={2}
+                        />
                     </Form.Item>
                 </Form>
                 <DetailTitle title="原材料米数" key={"strategy"}  operation={[
@@ -1342,21 +1337,13 @@ export default function IngredientsList(): React.ReactNode {
                     value === "1" && <>
                         <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
                             <Row>
-                                <Col span={12} style={{marginBottom: 8}}>
-                                    <Checkbox value="9000">9000 可用数量：3678</Checkbox>
-                                </Col>
-                                <Col span={12} style={{marginBottom: 8}}>
-                                    <Checkbox value="8000">8000 可用数量：3678</Checkbox>
-                                </Col>
-                                <Col span={12} style={{marginBottom: 8}}>
-                                    <Checkbox value="7000">7000 可用数量：3678</Checkbox>
-                                </Col>
-                                <Col span={12} style={{marginBottom: 8}}>
-                                    <Checkbox value="6000">6000 可用数量：3678</Checkbox>
-                                </Col>
-                                <Col span={12} style={{marginBottom: 8}}>
-                                    <Checkbox value="5000">5000 可用数量：3678</Checkbox>
-                                </Col>
+                                {
+                                    AvailableInventoryData?.map((item: any) => {
+                                        return <Col span={12} style={{marginBottom: 8}}>
+                                            <Checkbox value="9000">{item.length} 可用数量：{ item?.totalNum - item?.alreadyNum }</Checkbox>
+                                        </Col>
+                                    })
+                                }
                             </Row>
                         </Checkbox.Group>
                     </>
