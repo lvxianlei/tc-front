@@ -146,12 +146,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return {
                         ...item,
                         id: '',
-                        materialTexture: item.source === 1 ? item.materialTextureId : item.materialTexture,
-                        materialTextureId: item.source === 1 ? '' : item.materialTextureId,
-                        materialStandard: item.source === 1 ? item.materialStandardName : item.materialStandard,
-                        materialStandardName: item.source === 1 ? item.materialStandard : item.materialStandardName,
+                        materialTexture: item.materialTexture,
+                        materialTextureId: item.materialTextureId,
+                        materialStandard: item.materialStandard,
+                        materialStandardName: item.materialStandardName
                     }
-                    // delete item.id
                 })
             })
             resove(true)
