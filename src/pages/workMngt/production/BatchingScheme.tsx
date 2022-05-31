@@ -26,7 +26,7 @@ export default function BatchingScheme(): React.ReactNode {
     // 查看配料方案
     const { run: getIngredient, data: IngredientData, loading } = useRequest<{ [key: string]: any }>((spec: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/programme/${params.id}`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/scheme/detail/${params.id}`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -36,9 +36,7 @@ export default function BatchingScheme(): React.ReactNode {
     // 材料汇总
     const { run: getPurchaseBatchingScheme, data: PurchaseBatchingSchemeData, loading: lodingPurchaseBatchingScheme } = useRequest<{ [key: string]: any }>((spec: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/getLoftingSchemeStatistics`, {
-                produceId: params.id
-            });
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/scheme/summary/${params.id}`);
             resole(result?.records || [])
         } catch (error) {
             reject(error)

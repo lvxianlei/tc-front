@@ -22,7 +22,7 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
     // 获取详情数据
     const { run: getDetail, data: detailData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/getProduceIngredientsDetails?produceId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/produce/detail?produceId=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
