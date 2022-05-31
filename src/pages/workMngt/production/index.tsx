@@ -104,8 +104,8 @@ export default function Invoicing() {
             onCancel={() => setDetailOver(false)}
         />
         <Page
-            path="/tower-supply/produceIngredients"
-            exportPath={"/tower-supply/produceIngredients"}
+            path="/tower-supply/task/produce"
+            exportPath={"/tower-supply/task/produce"}
             columns={[
                 {
                     title: "序号",
@@ -124,17 +124,18 @@ export default function Invoicing() {
                             <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId} onClick={() => {
                                 setDetailId(record.id)
                                 setDetailOver(true)
-                                setLoftingState(record.loftingState)
+                                setLoftingState(record.batcheTaskStatus)
                             }}>详情</Button>
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                disabled={userId !== record.batcherId || record.loftingState !== 2}
+                                // disabled={userId !== record.batcherId || record.batcheTaskStatus !== 2}
+                                disabled={record.batcheTaskStatus !== 1}
                             >
-                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.productionBatchNo}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
+                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.productionBatchNo || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'
-                                 disabled={userId !== record.batcherId || record.loftingState !== 3}
+                                 disabled={userId !== record.batcherId || record.batcheTaskStatus !== 3}
                             >
                                 <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
                             </Button>
@@ -159,9 +160,9 @@ export default function Invoicing() {
                     label: '状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="2">待完成</Select.Option>
+                        <Select.Option value="1">待完成</Select.Option>
                         <Select.Option value="3">已完成</Select.Option>
-                        <Select.Option value="1">待确认</Select.Option>
+                        <Select.Option value="0">待确认</Select.Option>
                     </Select>
                 },
                 {

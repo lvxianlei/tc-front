@@ -192,7 +192,7 @@ export default function RawMaterialStock(): React.ReactNode {
 
     // 获取详情数据
     const getDetail = async (id: any) => {
-        const data: any = await RequestUtil.get(`/tower-storage/receiveStock/excess/${id}`);
+        const data: any = await RequestUtil.get(`/tower-storage/surplusMaterial/excess/${id}`);
         setSupplierListdata([data]);
         setWarehousingListdata([data]);
         setIsDetailModal(true)
@@ -228,7 +228,7 @@ export default function RawMaterialStock(): React.ReactNode {
             message.error('实收余料不得大于应收余料')
             return
         }
-        const data: any = await RequestUtil.put(`/tower-storage/receiveStock/excess`, {
+        const data: any = await RequestUtil.put(`/tower-storage/surplusMaterial/excess`, {
             id: ListID,
             length: collect,
             locatorId: locatorId
@@ -279,7 +279,7 @@ export default function RawMaterialStock(): React.ReactNode {
     return (
         <>
             <Page
-                path="/tower-storage/receiveStock/excess"
+                path="/tower-storage/surplusMaterial/excess"
                 searchFormItems={[
                     {
                         name: "updateTime",

@@ -112,6 +112,13 @@ export default function IngredientsList(): React.ReactNode {
     let [count, setCount] = useState<number>(0);
     // 配料策略
     const [strategyVisible, setStrategyVisible] = useState<boolean>(false);
+
+    // 存储配料策略的list
+    const [angleConfigStrategy, setAngleConfigStrategy] = useState<any[]>([]);
+
+    // 存储当前的配料策略
+    const [nowIngre, setNowIngre] = useState<{[key: string]: any}>({});
+
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
         switch (options.key) {
@@ -166,8 +173,8 @@ export default function IngredientsList(): React.ReactNode {
             return false;
         }
         const res = {
-            produceId: params.id,
-            schemeDtos: v
+            batchingTaskId: params.id,
+            schemeList: v
         }
         if (code === 1) {
             getPurchaseBatchingScheme(res)
@@ -380,51 +387,51 @@ export default function IngredientsList(): React.ReactNode {
             if (schemeData[i].component1) {
                 if (map.has(schemeData[i].component1)) {
                     const result: number = map.get(schemeData[i].component1) || 0;
-                    map.set(schemeData[i].component1, result + schemeData[i].num1 * schemeData[i].quantity);
+                    map.set(schemeData[i].component1, result + schemeData[i].num1 * schemeData[i].num);
                 } else {
-                    map.set(schemeData[i].component1, schemeData[i].num1 * schemeData[i].quantity);
+                    map.set(schemeData[i].component1, schemeData[i].num1 * schemeData[i].num);
                 }
             }
             if (schemeData[i].component2) {
                 if (map.has(schemeData[i].component2)) {
                     const result: number = map.get(schemeData[i].component2) || 0;
-                    map.set(schemeData[i].component2, result + schemeData[i].num2 * schemeData[i].quantity);
+                    map.set(schemeData[i].component2, result + schemeData[i].num2 * schemeData[i].num);
                 } else {
-                    map.set(schemeData[i].component2, schemeData[i].num2 * schemeData[i].quantity);
+                    map.set(schemeData[i].component2, schemeData[i].num2 * schemeData[i].num);
                 }
             }
             if (schemeData[i].component3) {
                 if (map.has(schemeData[i].component3)) {
                     const result: number = map.get(schemeData[i].component3) || 0;
-                    map.set(schemeData[i].component3, result + schemeData[i].num3 * schemeData[i].quantity);
+                    map.set(schemeData[i].component3, result + schemeData[i].num3 * schemeData[i].num);
                 } else {
-                    map.set(schemeData[i].component3, schemeData[i].num3 * schemeData[i].quantity);
+                    map.set(schemeData[i].component3, schemeData[i].num3 * schemeData[i].num);
                 }
             }
             if (schemeData[i].component4) {
                 if (map.has(schemeData[i].component4)) {
                     const result: number = map.get(schemeData[i].component4) || 0;
-                    map.set(schemeData[i].component4, result + schemeData[i].num4 * schemeData[i].quantity);
+                    map.set(schemeData[i].component4, result + schemeData[i].num4 * schemeData[i].num);
                 } else {
-                    map.set(schemeData[i].component4, schemeData[i].num4 * schemeData[i].quantity);
+                    map.set(schemeData[i].component4, schemeData[i].num4 * schemeData[i].num);
                 }
             }
             // 根据原材料长度
             if (schemeData[i].length) {
                 if (map.has(schemeData[i].length)) {
                     const result = map.get(schemeData[i].length);
-                    map.set(schemeData[i].length, result + schemeData[i].quantity);
+                    map.set(schemeData[i].length, result + schemeData[i].num);
                 } else {
-                    map.set(schemeData[i].length, schemeData[i].quantity);
+                    map.set(schemeData[i].length, schemeData[i].num);
                 }
             }
             // 添加构建分类map
             if (map.has(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`)) {
                 const result = map.get(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`) || 0;
-                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
+                let num = (schemeData[i].num1 || 0) * schemeData[i].num + (schemeData[i].num2 || 0) * schemeData[i].num + (schemeData[i].num3 || 0) * schemeData[i].num + (schemeData[i].num4 || 0) * schemeData[i].num
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, result + num);
             } else {
-                let num = (schemeData[i].num1 || 0) * schemeData[i].quantity + (schemeData[i].num2 || 0) * schemeData[i].quantity + (schemeData[i].num3 || 0) * schemeData[i].quantity + (schemeData[i].num4 || 0) * schemeData[i].quantity
+                let num = (schemeData[i].num1 || 0) * schemeData[i].num + (schemeData[i].num2 || 0) * schemeData[i].num + (schemeData[i].num3 || 0) * schemeData[i].num + (schemeData[i].num4 || 0) * schemeData[i].num
                 map.set(`${schemeData[i].structureTexture}_${schemeData[i].structureSpec}`, num);
             }
         }
@@ -537,9 +544,9 @@ export default function IngredientsList(): React.ReactNode {
             if (meterNumber.indexOf(options[i].length) === -1) {
                 meterNumber.push(options[i].length);
             }
-            numberAll = numberAll + options[i].quantity;
-            surplusMaaterial = surplusMaaterial + (options[i].plannedSurplusLength * options[i].quantity);
-            totalUtilization = totalUtilization + (options[i].utilizationRate * options[i].quantity);
+            numberAll = numberAll + options[i].num;
+            surplusMaaterial = surplusMaaterial + (options[i].plannedSurplusLength * options[i].num);
+            totalUtilization = totalUtilization + (options[i].utilizationRate * options[i].num);
             if (options[i].component1) {
                 if (map.has(options[i].component1)) {
                     const result = map.get(options[i].component1) || 0;
@@ -643,8 +650,8 @@ export default function IngredientsList(): React.ReactNode {
             sortChildren: v
         })
         const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === options)[0].children;
-        // 重新调用
-        getIngredient(options.split("_")[1]);
+        // 获取新的配料策略
+        handleAnge(angleConfigStrategy, +activeSort.split("_")[1].split("∠")[1].split("*")[0]);
         // 获取构建分类明细
         getSortDetail(params.id, options.split("_")[1], options.split("_")[0]);
         // 获取库存
@@ -668,10 +675,55 @@ export default function IngredientsList(): React.ReactNode {
         getSort(params.id);
     }, [])
 
+    // 配料策略弹框回调
+    const handleModalSure = async() => {
+        // 修改当前的配料策略
+        const baseData = await serarchForm.validateFields();
+        console.log(baseData, "========>>>>")
+        setNowIngre({
+            ...baseData,
+            idealRepertoryLengthList: value === "1" ? baseData.available : baseData.idealRepertoryLengthList
+        });
+        // 调整整个配料策略数据
+        let result = angleConfigStrategy;
+        const v = activeSort.split("_")[1].split("∠")[1].split("*")[0];
+        const index = angleConfigStrategy.findIndex((item: any) => v > item?.width.split("~")[0] && v < item?.width.split("~")[1]);
+        console.log(index, angleConfigStrategy, v)
+        if (value === "1") {
+            result[index] = {
+                ...result[index],
+                ...baseData
+            }
+        } else {
+            result[index] ={
+                ...result[index],
+                ...baseData,
+                idealRepertoryLengthList: baseData.idealRepertoryLengthList
+            }
+        }
+        setAngleConfigStrategy(result.slice(0));
+        setStrategyVisible(false)
+    }
+
+    // 对配料策略进行处理
+    const handleAnge = (options: any[], key: number) => {
+        console.log(options, "接受到的数据", key)
+        for (let i = 0; i < options.length; i += 1) {
+            const result = options[i].width.split("~");
+            if ((key >= result[0] * 1) && (key <= result[1] * 1)) {
+                console.log(options[i], "==============================>>>")
+                setNowIngre({
+                    ...options[i],
+                    utilizationRate: options[i]?.utilizationRate || 96.5
+                });
+            }
+        }
+    }
+
     // 保存操作
     const { run: getPurchaseBatchingScheme } = useRequest<{ [key: string]: any }>((options: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/produceIngredients/programme`, options);
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/task/scheme`, options);
             if (result) {
                 message.success("保存成功！");
             }
@@ -684,7 +736,7 @@ export default function IngredientsList(): React.ReactNode {
     // 生成配料
     const { run: getFinish } = useRequest<{ [key: string]: any }>((options: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/produceIngredients/programme/create`, options);
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/task/scheme/finish`, options);
             if (result) {
                 message.success("生成配料成功！");
                 history.go(-1);
@@ -698,7 +750,9 @@ export default function IngredientsList(): React.ReactNode {
     // 获取配料策略-刀口、端口、余量等数据 list
     const { run: getIngredient, data: IngredientData } = useRequest<{ [key: string]: any }>((spec: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/angleConfigStrategy/IngredientConfigList`, {spec});
+            const result: any = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredientConfigList`);
+            setAngleConfigStrategy((result as any) || [])
+            handleAnge(result, +spec.split("∠")[1].split("*")[0])
             resole(result)
         } catch (error) {
             reject(error)
@@ -718,12 +772,10 @@ export default function IngredientsList(): React.ReactNode {
     // 获取构建分类
     const { run: getSort, data: SortData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${id}`);
-            // const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/component/${id}/material`);
+            // const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${id}`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/component/${id}/material`);
             // 获取页面配料方案
-            const schemeResult: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/programme/getLoftingSchemesByProduceId`, {
-                produceId: params.id
-            });
+            const schemeResult: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/scheme/info/${params.id}`);
             result?.map((element: any, index: number) => {
                 element["key"] = `${element.structureTexture}_${index}`
             });
@@ -760,22 +812,22 @@ export default function IngredientsList(): React.ReactNode {
                     }
                     v.sortChildren.push(data);
                 }
-                if (schemeResult?.loftingComponentMaterialVOS.length > 0) {
+                if (schemeResult?.length > 0) {
                     // 存在配料方案，合并处理
-                    for (let i = 0; i < schemeResult?.loftingComponentMaterialVOS.length; i += 1) {
+                    for (let i = 0; i < schemeResult?.length; i += 1) {
                         for (let p = 0; p < v.sortChildren.length; p += 1) {
-                            if (`${schemeResult?.loftingComponentMaterialVOS[i].structureTexture}_${schemeResult?.loftingComponentMaterialVOS[i].structureSpec}` === v.sortChildren[p].key) {
-                                // 添加已选方案数量quantity
-                                schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeVOS?.map((element: any, index: number) => {
-                                    element["quantity"] = `${element.num}`
+                            if (`${schemeResult[i].structureTexture}_${schemeResult[i].structureSpec}` === v.sortChildren[p].key) {
+                                // 添加已选方案数量num
+                                schemeResult[i].details?.map((element: any, index: number) => {
+                                    element["num"] = `${element.num}`
                                 });
-                                v.sortChildren[p].children[0].selectedScheme = schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeVOS;
+                                v.sortChildren[p].children[0].selectedScheme = schemeResult[i].details;
                                 v.sortChildren[p].children[0].selectedSchemeSummary = [{
-                                    numberAll: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.quantity || 0,
-                                    calculation: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.utilizationRate || 0,
-                                    surplusMaaterial: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.plannedSurplusLength || 0,
-                                    disassemblyNumber: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.disassemblyNum || 0,
-                                    meterNumber: schemeResult?.loftingComponentMaterialVOS[i].loftingSchemeStatisticsListVO.meterRange || 0
+                                    numberAll: schemeResult[i].statisticsVo.num || 0,
+                                    calculation: schemeResult[i].statisticsVo.utilizationRate || 0,
+                                    surplusMaaterial: schemeResult[i].statisticsVo.plannedSurplusLength || 0,
+                                    disassemblyNumber: schemeResult[i].statisticsVo.disassemblyNum || 0,
+                                    meterNumber: schemeResult[i].statisticsVo.meterRange || 0
                                 }]
                             }
                         }
@@ -791,7 +843,7 @@ export default function IngredientsList(): React.ReactNode {
     // 获取构建分类明细
     const { run: getSortDetail } = useRequest<{ [key: string]: any }>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/loftingScheme/${purchaseTowerId}/${spec}/${texture}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/component/${purchaseTowerId}/${spec}/${texture}`)
             result?.map((element: any, index: number) => {
                 element["key"] = `${element.id}`
             });
@@ -866,14 +918,39 @@ export default function IngredientsList(): React.ReactNode {
                     })
                 }
             }
-            const result: any[] = await RequestUtil.post(`/tower-supply/produceIngredients/batcher/scheme`, {
+            let res = [];
+            if (value !== "1") {
+                for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
+                    const v = {
+                        length: nowIngre?.idealRepertoryLengthList[i]
+                    }
+                    res.push(v);
+                }
+            }
+            let data = [];
+            if (value === "1") {
+                for (let i = 0; i < nowIngre?.idealRepertoryLengthList?.length; i += 1) {
+                    for (let p = 0; p < availableInventoryData.length; p += 1) {
+                        if (nowIngre?.idealRepertoryLengthList[i] === availableInventoryData[p].length) {
+                            const v = {
+                                ...availableInventoryData[p],
+                                usableNum: availableInventoryData[p].alreadyNum
+                            }
+                            data.push(v);
+                        }
+                    }
+                }
+            }
+            const result: any[] = await RequestUtil.post(`/tower-supply/task/scheme/manual`, {
                 ...serarchData,
+                ...nowIngre,
+                openNumber: nowIngre?.openNumberList,
                 components: comp, // 构建明细分类
                 produceId: params.id, // 采购塔型的id
-                stockDetails: availableInventoryData, // 库存信息
                 structureSpec: activeSort.split("_")[1], // 规格
                 structureTexture: activeSort.split("_")[0], // 材质
-                useStock: false, // 是否使用实际库存
+                useStock: value === "1" ? true : false, // 是否使用实际库存
+                stockDetails: value === "1" ? data : res,
                 sort: code === 1 ? "" : sorts
             });
             if (result.length < 1) {
@@ -882,7 +959,7 @@ export default function IngredientsList(): React.ReactNode {
             }
             const v: any[] = [];
             result.map((item: any) => {
-                v.push(Object.assign(item, { num: item.quantity }))
+                v.push(Object.assign(item, { num: item.num }))
             })
             setAlternativeData(v || []);
             resole(result)
@@ -896,7 +973,7 @@ export default function IngredientsList(): React.ReactNode {
         try {
             const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/${productionBatchNo}/${spec}/${texture}`)
             result?.map((element: any, index: number) => {
-                element["num"] = `${element.quantity}`
+                element["num"] = `${element.num}`
             });
             setInheritScheme((result) || [])
             resole(result)
@@ -904,7 +981,7 @@ export default function IngredientsList(): React.ReactNode {
             reject(error)
         }
     }), { manual: true })
-
+    console.log(constructionClassification, "constructionClassification")
     return (
         <div className='ingredientsListWrapper'>
             <DetailContent operation={
@@ -951,56 +1028,32 @@ export default function IngredientsList(): React.ReactNode {
                                         globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0]?.children?.map((item: Panes) => {
                                             return <TabPane tab={item.title} key={item.key} closable={item.closable} style={{position: "relative"}}>
                                                 <div className='topStrategyWrapper'>
-                                                    <Button type='primary' onClick={() => setStrategyVisible(true)}>配料策略设置</Button>
+                                                    <Button type='primary' onClick={() => {
+                                                        let v = [];
+                                                        for (let i = 0; i < availableInventoryData.length; i += 1) {
+                                                            v.push(availableInventoryData[i].length)
+                                                        }
+                                                        console.log(availableInventoryData, "availableInventoryData")
+                                                        setStrategyVisible(true)
+                                                        serarchForm.setFieldsValue({
+                                                            ...nowIngre,
+                                                            available: nowIngre?.available || v
+                                                        })
+                                                    }}>配料策略设置</Button>
                                                     <span className='texts'>开数：</span>
-                                                    <span className='values'>2、3</span>
+                                                    <span className='values'>{nowIngre?.openNumberList?.join("、")}</span>
                                                     <span className='texts'>刀口：</span>
-                                                    <span className='values'>12</span>
+                                                    <span className='values'>{nowIngre.edgeLoss}</span>
                                                     <span className='texts'> 端口：</span>
-                                                    <span className='values'>9</span>
+                                                    <span className='values'>{nowIngre.clampLoss}</span>
                                                     <span className='texts'>余料长：</span>
-                                                    <span className='values'>574mm</span>
+                                                    <span className='values'>{nowIngre.margin}mm</span>
                                                     <span className='texts'>利用率：</span>
-                                                    <span className='values'>96.6%</span>
+                                                    <span className='values'>{nowIngre.utilizationRate}%</span>
                                                     <span className='texts'>原材料米数：</span>
-                                                    <span className='values' title='7000/8000'>7000、8000</span>
+                                                    <span className='values' title='7000/8000'>{value === "1" ? nowIngre?.available?.join("、") : nowIngre?.idealRepertoryLengthList?.join("、")}</span>
                                                 </div>
                                                 <div className='ingredients_content_wrapper'>
-                                                    {/* <div className='ingredients_content_wrapper_left'> */}
-                                                        {/* 
-                                                        
-                                                        <DetailTitle title="库存" key={"stock"} operation={[
-                                                            <Button disabled={value === "1"} type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => setVisibleSelectWarehouse(true)}>选择仓库</Button>,
-                                                            <Button disabled={warehouseId.length < 1} type="primary" ghost key="choose" onClick={() => setVisibleSelectMeters(true)}>选择米数</Button>
-                                                        ]} />
-                                                        <Radio.Group onChange={onRaioChange} value={value} style={{marginBottom: 8}}>
-                                                            {/* <Radio value={"1"}>理想库存</Radio> */}
-                                                            {/* <Radio value={"2"}>可用库存</Radio>
-                                                        </Radio.Group> */}
-                                                        {/* <Table
-                                                            size="small"
-                                                            columns={[
-                                                                ...StockColumn.map((item: any) => {
-                                                                    if (item.dataIndex === "surplus") {
-                                                                        return ({
-                                                                            title: item.title,
-                                                                            dataIndex: item.dataIndex,
-                                                                            render: (_: any, record: any): React.ReactNode => {
-                                                                                return (
-                                                                                    <span>
-                                                                                        { record?.totalNum - record?.alreadyNum }
-                                                                                    </span>)
-                                                                            }
-                                                                        })
-                                                                    }
-                                                                    return item;
-                                                                })
-                                                            ]}
-                                                            dataSource={availableInventoryData}
-                                                            pagination={false}
-                                                            scroll={{ y: 250 }}
-                                                        />
-                                                    </div> */}
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
                                                             <DetailTitle key={"detail"} title="构件明细" operation={[
@@ -1211,9 +1264,7 @@ export default function IngredientsList(): React.ReactNode {
                     <Button
                         key="submit"
                         type="primary"
-                        onClick={() => {
-                            
-                        }}
+                        onClick={() => handleModalSure()}
                     >
                         确认
                     </Button>
@@ -1221,7 +1272,7 @@ export default function IngredientsList(): React.ReactNode {
             >
                 <Form {...formItemLayout} form={serarchForm} style={{marginBottom: 18}}>
                     <Form.Item
-                        name="openNumber"
+                        name="openNumberList"
                         label="开数"
                         style={{marginBottom: 8}}
                         rules={[
@@ -1234,22 +1285,22 @@ export default function IngredientsList(): React.ReactNode {
                         <Checkbox.Group>
                             <Row>
                                 <Col span={6}>
-                                    <Checkbox value="1" style={{ lineHeight: '32px' }}>
+                                    <Checkbox value={1} style={{ lineHeight: '32px' }}>
                                         1
                                     </Checkbox>
                                 </Col>
                                 <Col span={6}>
-                                    <Checkbox value="2" style={{ lineHeight: '32px' }}>
+                                    <Checkbox value={2} style={{ lineHeight: '32px' }}>
                                         2
                                     </Checkbox>
                                 </Col>
                                 <Col span={6}>
-                                    <Checkbox value="3" style={{ lineHeight: '32px' }}>
+                                    <Checkbox value={3} style={{ lineHeight: '32px' }}>
                                         3
                                     </Checkbox>
                                 </Col>
                                 <Col span={6}>
-                                    <Checkbox value="4" style={{ lineHeight: '32px' }}>
+                                    <Checkbox value={4} style={{ lineHeight: '32px' }}>
                                     4
                                     </Checkbox>
                                 </Col>
@@ -1325,7 +1376,7 @@ export default function IngredientsList(): React.ReactNode {
                             precision={2}
                         />
                     </Form.Item>
-                </Form>
+                
                 <DetailTitle title="原材料米数" key={"strategy"}  operation={[
                     <Button></Button>
                 ]}/>
@@ -1335,69 +1386,90 @@ export default function IngredientsList(): React.ReactNode {
                 </Radio.Group>
                 {
                     value === "1" && <>
-                        <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                            <Row>
+                        <Form.Item
+                            name="available"
+                            rules={[
                                 {
-                                    AvailableInventoryData?.map((item: any) => {
-                                        return <Col span={12} style={{marginBottom: 8}}>
-                                            <Checkbox value="9000">{item.length} 可用数量：{ item?.totalNum - item?.alreadyNum }</Checkbox>
-                                        </Col>
-                                    })
+                                    "required": true,
+                                    "message": "请选择可用库存"
                                 }
-                            </Row>
-                        </Checkbox.Group>
+                            ]}
+                        >
+                            <Checkbox.Group style={{ width: '100%' }}>
+                                <Row>
+                                    {
+                                        AvailableInventoryData?.map((item: any) => {
+                                            return <Col span={12} style={{marginBottom: 8}}>
+                                                <Checkbox value={item.length}>{item.length} 可用数量：{ item?.totalNum - item?.alreadyNum }</Checkbox>
+                                            </Col>
+                                        })
+                                    }
+                                </Row>
+                            </Checkbox.Group>
+                        </Form.Item>
                     </>
                 }
                 {
                     value === "2" && <>
-                        <Checkbox.Group style={{ width: '100%' }} onChange={onChange}>
-                            <Row>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="6000">6000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="6500">6500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="7000">7000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="7500">7500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="8000">8000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="8500">8500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="9000">9000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="9500">9500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="10000">10000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="10500">10500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="11000">11000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="11500">11500</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="12000">12000</Checkbox>
-                                </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
-                                    <Checkbox value="12500">12500</Checkbox>
-                                </Col>
-                            </Row>
-                        </Checkbox.Group>
+                        <Form.Item
+                            name="idealRepertoryLengthList"
+                            rules={[
+                                {
+                                    "required": true,
+                                    "message": "请选择理想库存"
+                                }
+                            ]}
+                        >
+                            <Checkbox.Group style={{ width: '100%' }}>
+                                <Row>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="6000">6000</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="6500">6500</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="7000">7000</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="7500">7500</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="8000">8000</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="8500">8500</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="9000">9000</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="9500">9500</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="10000">10000</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="10500">10500</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="11000">11000</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="11500">11500</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="12000">12000</Checkbox>
+                                    </Col>
+                                    <Col span={8} style={{marginBottom: 8}}>
+                                        <Checkbox value="12500">12500</Checkbox>
+                                    </Col>
+                                </Row>
+                            </Checkbox.Group>
+                        </Form.Item>
                     </>
                 }
+                </Form>
             </Modal>
         </div>
     )
