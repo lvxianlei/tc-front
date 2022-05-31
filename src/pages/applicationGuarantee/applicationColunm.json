@@ -116,7 +116,7 @@
         },
         {
             "dataIndex": "bondProportion",
-            "title": "保证保函金占比（%）",
+            "title": "保函保证金占比（%）",
             "placeholder": "请输入保证保函金占比（%）",
             "type": "number",
             "max": 100,
@@ -130,7 +130,7 @@
         },
         {
             "dataIndex": "bondProportionMoney",
-            "title": "保证保函金",
+            "title": "保函保证金",
             "placeholder": "请输入保证保函金",
             "disabled": true,
             "rules": [
