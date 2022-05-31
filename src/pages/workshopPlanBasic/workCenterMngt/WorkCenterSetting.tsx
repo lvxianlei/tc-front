@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, forwardRef, useState } from "react"
 import { Spin, Form, Select, InputNumber, Popconfirm, Space, Button, TimePicker, Table, message } from 'antd'
-import { DetailTitle, BaseInfo } from '../../common'
+import { DetailTitle, BaseInfo, DetailContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import styles from './WorkCenterMngt.module.less';
@@ -8,23 +8,26 @@ import { IWorkCenterMngt } from "../IWorkshopPlanBasic";
 import { FixedType } from 'rc-table/lib/interface';
 import { materialTextureOptions } from "../../../configuration/DictionaryOptions";
 import moment from "moment"
+import { useHistory, useParams } from "react-router-dom"
 
 interface EditProps {
     type: "new" | "edit",
     id: string
 }
 
-export default forwardRef(function Edit({ type, id }: EditProps, ref) {
+export default function WorkCenterSetting(): React.ReactNode{
 
     const [baseForm] = Form.useForm();
     const [form] = Form.useForm();
+    const history = useHistory()
+    const params = useParams<{ id: string }>();
     const [workCenterRelationsList, setWorkCenterRelationsList] = useState<IWorkCenterMngt[]>([]);
     // const [allMaterialList, setAllMaterialList] = useState<any>([]);
     const [specifications, setSpecifications] = useState<any>({});
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/${params?.id}`)
             baseForm.setFieldsValue({
                 ...result,
                 time: [moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')],
@@ -36,7 +39,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [id] })
+    }), { manual: params?.id?false:true, refreshDeps: [params?.id] })
 
     const { data: materialList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -55,7 +58,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=1000&operatingStatus=0`);
             const resultData: { [key: string]: any } = await RequestUtil.get(`/tower-equipment/device?size=1000&operatingStatus=1`);
-            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${id}`);
+            const list: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/equipment?workCenterInfoId=${params?.id?params?.id:''}`);
             const data = [...result?.records, ...resultData?.records]?.filter((item: any) => !list.some((ele: any) => ele === item.id));
             resole(data)
         } catch (error) {
@@ -63,6 +66,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     }))
 
+    const { data: codeList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const data: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit?current=1&size=10000`);
+            resole(data?.records)
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const { data: processList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/product/process?size=1000`);
@@ -159,12 +170,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             "title": "工作时间",
             "dataIndex": "time",
             "type": "string",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择开始工作时间"
-                }
-            ]
         },
         {
             "title": "关联设备",
@@ -295,7 +300,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     ]
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     const addRow = () => {
         let workCenterListValues = form.getFieldsValue(true).workCenterRelations || [];
@@ -312,43 +316,76 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         setWorkCenterRelationsList([...workCenterListValues]);
         form.setFieldsValue({ workCenterRelations: [...workCenterListValues] })
     }
-
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await onSubmit()
+            message.success(`工作中心${params?.id ? "编辑" : "新增"}成功...`)
+            history.push(`/workshopPlanBasic/workCenterMngt`)
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
     return <Spin spinning={loading}>
-        <DetailTitle title="基本信息" style={{ padding: '0 0 8px' }} />
-        <BaseInfo form={baseForm} columns={baseColumns.map((item: any) => {
-            if (item.dataIndex === "time") {
-                return ({
-                    ...item, type: 'date',
-                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{ width: '100%' }}><TimePicker.RangePicker style={{ width: '100%' }} format="HH" /></Form.Item>)
-                })
-            }
-            if (item.dataIndex === "equipmentId") {
-                return ({
-                    ...item, type: 'select',
-                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                        <Form.Item name="equipmentId" style={{ width: '100%' }}>
-                            <Select mode="multiple">
-                                {equipmentList?.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.id}>{item.deviceName}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    )
-                })
-            }
-            return item
-        })} col={2} dataSource={{}} edit />
-        <DetailTitle title="产能矩阵" operation={[<Space size="small">
-            <Button type="primary" onClick={addRow}>新增</Button>
-        </Space>]} />
-        <Form form={form}>
-            <Table
-                scroll={{ x: 500 }}
-                rowKey="id"
-                dataSource={[...workCenterRelationsList]}
-                pagination={false}
-                columns={tableColumns}
-                className={styles.addModal} />
-        </Form>
+        <DetailContent operation={[<Space>
+            <Button  onClick={()=>
+                history.goBack()
+            }>返回</Button>
+            <Button type='primary' onClick={()=>
+                handleModalOk()
+            }>确定</Button>
+           
+        </Space>]}>
+            <DetailTitle title="基本信息" style={{ padding: '0 0 8px' }} />
+            <BaseInfo form={baseForm} columns={baseColumns.map((item: any) => {
+                if (item.dataIndex === "time") {
+                    return ({
+                        ...item, type: 'date',
+                        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Form.Item name="time" style={{ width: '100%' }}><TimePicker.RangePicker style={{ width: '100%' }} format="HH" /></Form.Item>)
+                    })
+                }
+                if (item.dataIndex === "equipmentId") {
+                    return ({
+                        ...item, type: 'select',
+                        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Form.Item name="equipmentId" style={{ width: '100%' }}>
+                                <Select mode="multiple">
+                                    {equipmentList?.map((item: any) => {
+                                        return <Select.Option key={item.id} value={item.id}>{item.deviceName}</Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        )
+                    })
+                }
+                if (item.dataIndex === "code") {
+                    return ({
+                        ...item, type: 'select',
+                        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Form.Item name="code" style={{ width: '100%' }}>
+                                <Select>
+                                    {codeList?.map((item: any) => {
+                                        return <Select.Option key={item.id} value={item.productUnitCode}>{item.productUnitCode}</Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        )
+                    })
+                }
+                return item
+            })} col={2} dataSource={{}} edit />
+            <DetailTitle title="产能矩阵" operation={[<Space size="small">
+                <Button type="primary" onClick={addRow}>新增</Button>
+            </Space>]} />
+            <Form form={form}>
+                <Table
+                    scroll={{ x: 500 }}
+                    rowKey="id"
+                    dataSource={[...workCenterRelationsList]}
+                    pagination={false}
+                    columns={tableColumns}
+                    className={styles.addModal} />
+            </Form>
+        </DetailContent>
     </Spin>
-})
+}

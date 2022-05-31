@@ -47,6 +47,7 @@ export default function SearchTable({
     filterValue = {},
     tableProps,
     pagination,
+    modal = false,
     exportPath,
     exportObject = {},
     ...props }: SearchTableProps): JSX.Element {
@@ -132,7 +133,7 @@ export default function SearchTable({
             {...props}
         />
         {
-            pagination !== false && <footer className={styles.pagenationWarp}>
+            pagination !== false && <footer className={modal?styles.pagenationWarpModal:styles.pagenationWarp}>
                 <Pagination
                     className={styles.pagination}
                     total={data?.total}

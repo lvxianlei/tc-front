@@ -377,7 +377,7 @@ const ProdUnitAdd = (props: any) => {
                                 <Select
                                     className='input'
                                     placeholder='请选择'
-                                    mode='multiple'
+                                    // mode='multiple'
                                     maxTagCount={10}
                                     searchValue=''
                                     // onChange={(value) => {

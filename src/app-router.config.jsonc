@@ -2609,6 +2609,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 工作中心管理-新增
+      "name": "新增",
+      "path": "/workshopPlanBasic/workCenterMngt/add",
+      "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterSetting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作中心管理-编辑
+      "name": "编辑",
+      "path": "/workshopPlanBasic/workCenterMngt/edit/:id",
+      "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterSetting",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 工作中心管理
       "name": "分配车间配置管理",
       "path": "/workshopPlanBasic/publishWorkshopMngt",
