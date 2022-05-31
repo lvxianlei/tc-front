@@ -6,7 +6,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "materialSpec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "材质",

@@ -77,7 +77,7 @@ export default function PackingListNew(): React.ReactNode {
             pieceCode: record.code,
             description: record.description,
             length: record.length,
-            materialSpec: record.structureSpec,
+            structureSpec: record.structureSpec,
             productCategoryId: detailData.productCategoryId,
             productId: detailData.productId,
             structureCount: record.structureRemainingNum,
@@ -88,7 +88,7 @@ export default function PackingListNew(): React.ReactNode {
                     pieceCode: res.code,
                     description: res.description,
                     length: res.length,
-                    materialSpec: res.structureSpec,
+                    structureSpec: res.structureSpec,
                     productCategoryId: detailData.productCategoryId,
                     productId: detailData.productId,
                     structureCount: res.structureRemainingNum,
@@ -140,7 +140,7 @@ export default function PackingListNew(): React.ReactNode {
                     description: res.description,
                     length: res.length,
                     pieceCode: res.code,
-                    materialSpec: res.structureSpec,
+                    structureSpec: res.structureSpec,
                     productCategoryId: detailData.productCategoryId,
                     productId: detailData.productId,
                     structureCount: res.structureRemainingNum,
@@ -152,7 +152,7 @@ export default function PackingListNew(): React.ReactNode {
                             description: item.description,
                             length: item.length,
                             pieceCode: item.code,
-                            materialSpec: item.structureSpec,
+                            structureSpec: item.structureSpec,
                             productCategoryId: detailData.productCategoryId,
                             productId: detailData.productId,
                             structureCount: item.structureRemainingNum,
@@ -756,7 +756,7 @@ export default function PackingListNew(): React.ReactNode {
                         if (item.dataIndex === 'structureSpec' && !showParts) {
                             return ({
                                 ...item,
-                                sorter: (a: any, b: any) => a.structureSpec.length-b.structureSpec.length
+                                sorter: (a: any, b: any) => a.structureSpec.length - b.structureSpec.length
                             })
                         }
                         return item
