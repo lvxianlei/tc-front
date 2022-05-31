@@ -56,7 +56,7 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "长度（mm）",
@@ -103,7 +103,7 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialTextureId"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
@@ -154,7 +154,7 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",

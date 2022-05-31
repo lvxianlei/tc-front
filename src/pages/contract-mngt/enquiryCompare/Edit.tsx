@@ -112,12 +112,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
-                    materialTextureId: res.source === 1 ? res.materialTexture : res.materialTextureId,
-                    materialStandardName: res.source === 1 ? res.materialStandard : res.materialStandardName,
-                    materialStandard: res.source === 1 ? res.materialStandardName : res.materialStandard
+                    structureTexture: res.materialTexture,
+                    materialStandardName: res.materialStandardName,
+                    materialStandard: res.materialStandard
                 }
             })
-            // setMaterialList(comparisonPriceDetailVos || [])
             setList(comparisonPriceDetailVos || [])
             resole(result)
         } catch (error) {
@@ -146,8 +145,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return {
                         ...item,
                         id: '',
-                        materialTexture: item.materialTexture,
-                        materialTextureId: item.materialTextureId,
+                        structureTexture: item.structureTexture,
+                        structureTextureId: item.structureTextureId,
                         materialStandard: item.materialStandard,
                         materialStandardName: item.materialStandardName
                     }
@@ -214,7 +213,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             // weight: item.singleWeight || 0,
             source: 1,
             // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
-            materialTextureId: item.structureTexture,
+            structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
@@ -277,9 +276,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         ...item,
                         spec: item.structureSpec,
                         source: 2,
-                        materialTexture: item.structureTexture,
-                        standardName: item.standardName,
-                        materialStandard: item.standard,
+                        structureTexture: item.structureTexture,
+                        materialStandardName: item.materialStandardName,
+                        materialStandard: item.materialStandard,
                         proportion: item.proportion == -1 ? 0 : item.proportion
                     })))
                 }}
