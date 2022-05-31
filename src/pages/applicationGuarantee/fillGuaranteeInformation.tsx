@@ -80,7 +80,7 @@ import moment from 'moment';
                     return false;
                 }
                 if (allFields.seasonProportionMoney) {
-                    const result = +((time / 90) * allFields.seasonProportionMoney).toFixed(2);
+                    const result = +((+time / 90) * (+allFields.seasonProportionMoney)).toFixed(2);
                     addCollectionForm.setFieldsValue({
                         serviceCharge: result,
                         bondServiceCharge: (result + (+allFields.bondProportionMoney || 0)).toFixed(2)
@@ -91,7 +91,7 @@ import moment from 'moment';
         if (fields.seasonProportion) {
             // 手续费占比
             addCollectionForm.setFieldsValue({
-                seasonProportionMoney: ((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2)
+                seasonProportionMoney: +((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) >= 500 ? ((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) : 500
             })
             // 出具日期存在
             if (allFields.issuanceTime) {
@@ -103,7 +103,7 @@ import moment from 'moment';
                     })
                     return false;
                 }
-                const result = +((time / 90) * allFields.seasonProportionMoney).toFixed(2);
+                const result = +((+time / 90) * ((allFields.guaranteePrice * fields.seasonProportion) / 100)).toFixed(2);
                 addCollectionForm.setFieldsValue({
                     serviceCharge: result,
                     bondServiceCharge: (result + (+allFields.bondProportionMoney || 0)).toFixed(2)
