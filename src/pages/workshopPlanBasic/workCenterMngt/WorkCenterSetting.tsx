@@ -175,12 +175,6 @@ export default function WorkCenterSetting(): React.ReactNode{
             "title": "关联设备",
             "dataIndex": "equipmentId",
             "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择关联设备"
-                }
-            ]
         }
     ]
 
