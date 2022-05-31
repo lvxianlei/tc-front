@@ -50,7 +50,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "quantity"
+            "dataIndex": "num"
         },
         {
             "title": "零件1",

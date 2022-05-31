@@ -37,7 +37,7 @@
         },
         {
             "title": "计划交付时间",
-            "dataIndex": "planDeliverTime",
+            "dataIndex": "planDeliveryTime",
             "type": "string"
         },
         {
