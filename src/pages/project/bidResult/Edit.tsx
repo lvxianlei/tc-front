@@ -90,7 +90,7 @@ export default function BidResultEdit(): JSX.Element {
             let flag = false;
             map.forEach((value: any) => {
                 if (+value !== 100) flag = true;
-            }) 
+            })
 
             if (flag) {
                 message.error("相同包名称的中标比例必须等于100！");
@@ -131,9 +131,7 @@ export default function BidResultEdit(): JSX.Element {
         })
     }
 
-    const handleTabsCanEditChange = (removeKey: string, removeItem: any) => {
-        setBidOpenRecordVos(bidOpenRecordVos.filter((bid: any) => bid.round !== parseFloat(removeKey)))
-    }
+    const handleTabsCanEditChange = (removeKey: string) => setBidOpenRecordVos(bidOpenRecordVos.filter((bid: any) => bid.round !== parseFloat(removeKey)))
 
     const generateFormatEditData = (column: any, data: any) => {
         let value: any = ""
@@ -223,10 +221,14 @@ export default function BidResultEdit(): JSX.Element {
                                         editForm.setFieldsValue({ submit: values.concat(uploadData) })
                                     }} />,
                                     <Button
-                                        type="link"
-                                        onClick={() => {
-                                            exportDown("/tower-market/bidBase/export", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "开标信息导入模板")
-                                        }}
+                                        type="link" 
+                                        onClick={() => exportDown(
+                                            "/tower-market/bidBase/export",
+                                            "POST",
+                                            {},
+                                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                            "开标信息导入模板"
+                                        )}
                                         style={{ marginRight: 16 }}
                                     >下载导入模板</Button>
                                 ]}
