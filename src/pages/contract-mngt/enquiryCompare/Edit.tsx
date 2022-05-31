@@ -209,16 +209,16 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList(chooseData[0]?.materials.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
-            spec: item.structureSpec,
+            structureSpec: item.structureSpec,
             // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
             // weight: item.singleWeight || 0,
             source: 1,
             // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
             materialTextureId: item.structureTexture,
-            materialStandard: item.standardName,
-            materialStandardName: item.standard,
-            materialCode: item.code
+            materialStandard: item.materialStandard,
+            materialStandardName: item.materialStandardName,
+            materialCode: item.materialCode
         })))
         setChooseVisible(false)
     }
