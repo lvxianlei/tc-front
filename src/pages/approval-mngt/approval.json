@@ -1261,7 +1261,26 @@
         },
         {
             "title": "保函类型",
-            "dataIndex": "guaranteeType"
+            "dataIndex": "guaranteeType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "履约保函"
+                },
+                {
+                    "value": 2,
+                    "label": "投标保函"
+                },
+                {
+                    "value": 3,
+                    "label": "质保金保函"
+                },
+                {
+                    "value": 4,
+                    "label": "预付款保函"
+                }
+            ]
         },
         {
             "title": "保函金额",
