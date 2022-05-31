@@ -105,7 +105,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standardName",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {
