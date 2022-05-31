@@ -245,9 +245,16 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                             })
                         })
                     })))])
+                    // return ({
+                    //     ...dataSource.planBoards,
+                    //     records: dataSource.planBoards.map((item: any, index: number) => ({
+                    //         ...item,
+                    //         onlyId: `${item.id}-${index}`
+                    //     }))
+                    // })
                     return ({
                         ...dataSource.planBoards,
-                        records: dataSource.planBoards.map((item: any, index: number) => ({
+                        records: dataSource.planBoards.records.map((item: any, index: number) => ({
                             ...item,
                             onlyId: `${item.id}-${index}`
                         }))
