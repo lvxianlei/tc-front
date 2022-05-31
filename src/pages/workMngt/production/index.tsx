@@ -129,13 +129,12 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                // disabled={userId !== record.batcherId || record.batcheTaskStatus !== 2}
                                 disabled={userId !== record.batcherId || record.batcheTaskStatus !== 1}
                             >
                                 <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'
-                                //  disabled={userId !== record.batcherId || record.batcheTaskStatus !== 3}
+                                 disabled={userId !== record.batcherId || record.batcheTaskStatus !== 3}
                             >
                                 <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
                             </Button>

@@ -37,7 +37,7 @@
      const { run: getPurchaseBatchingScheme, data: PurchaseBatchingSchemeData, loading: lodingPurchaseBatchingScheme } = useRequest<{ [key: string]: any }>((spec: string) => new Promise(async (resole, reject) => {
          try {
              const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/scheme/summary/${params.id}`);
-             resole(result?.records || [])
+             resole(result || [])
          } catch (error) {
              reject(error)
          }
