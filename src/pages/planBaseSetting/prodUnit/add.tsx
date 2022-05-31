@@ -85,7 +85,7 @@ const ProdUnitAdd = (props: any) => {
             productUnitCode:value.productUnitCode,
             productionLinkDTOList: [
                 {
-                    productionLinkId: value.productionLinkDTOList,
+                    productionLinkId: props.id ? value.productionLinkDTOList[0]: value.productionLinkDTOList,
                     productionUnitId: props.id,
                 }
             ],
