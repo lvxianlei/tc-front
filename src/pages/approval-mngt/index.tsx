@@ -504,17 +504,7 @@ export default function Information(): React.ReactNode {
             <BaseInfo 
                 form={outFactoryForm}
                 onChange={handleOutFactoryChange}
-                columns={outFactoryHead.map(async(item: any) => {
-                    if (item.dataIndex === "contractId") {
-                        const postData = await guaranteeForm.validateFields();
-                        console.log("1111111111111")
-                        if (postData.projectId?.id) {
-                            return ({ ...item, disabled: false, path: `${item.path}?projectId=${postData.projectId?.id}` })
-                        }
-                        return ({ ...item, path: `${item.path}?projectId=${postData.projectId?.id}` })
-                    }
-                    return item
-                })}
+                columns={outFactoryHead}
                 dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
             <EditTable haveNewButton={false} form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
