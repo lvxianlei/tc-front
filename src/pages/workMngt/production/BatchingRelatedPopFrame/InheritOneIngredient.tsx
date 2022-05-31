@@ -4,7 +4,7 @@
  * time: 2022/4/21
  */
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal, Spin, Table } from 'antd';
+import { Button, Form, message, Modal, Spin, Table } from 'antd';
 import { EditProps } from "./index"
 import { InheritOneIngredientCloumn } from "./InheritOneIngredient.json";
 import { CommonTable } from '../../../common';
@@ -73,6 +73,10 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
                     key="submit"
                     type="primary"
                     onClick={() => {
+                        if (selectedRowKeysCheck.length < 1) {
+                            message.error("请您选择匹配度！");
+                            return false;
+                        }
                         props?.hanleInheritSure({
                             code: true,
                             data: {
@@ -90,6 +94,7 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
         >
             <p>查询到批次已发生变更，请手动选择要继承的批次</p>
             <CommonTable
+                rowKey={"batchNumber"}
                 rowSelection={{
                     type: "radio",
                     ...rowSelectionCheck,
