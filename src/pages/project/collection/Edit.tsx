@@ -152,7 +152,7 @@ export default function Edit() {
                                         type={item.type}
                                         data={{
                                             ...item,
-                                            path: item.path + contractInfosForm.getFieldsValue().submit[key].id,
+                                            path: item.path + contractInfosForm?.getFieldsValue()?.submit[key]?.id,
                                             getCheckboxProps
                                         }}
                                     />
