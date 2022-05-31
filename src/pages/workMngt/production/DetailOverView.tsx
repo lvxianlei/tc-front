@@ -5,6 +5,7 @@ import { BaseInfo, DetailTitle, OperationRecord } from '../../common';
 import { baseInfo } from './DetailOverView.json';
 import { OverViewProps } from './DetailOverViewInface';
 import RequestUtil from '../../../utils/RequestUtil';
+import { idText } from 'typescript';
 export default function DetailOverView(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     // 取消
@@ -32,7 +33,7 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
     // 接受
     const { run: runProduceIngredients, data: produceIngredientsData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/receive?produceId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/task/produce/receive?produceId=${id}`)
             resole(result);
             if (result) {
                 props.onOk();
