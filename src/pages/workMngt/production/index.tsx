@@ -56,7 +56,7 @@ export default function Invoicing() {
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.orderTimeUpdateTime) {
-            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            const formatDate = value.orderTimeUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startLoftingBatchTime = formatDate[0] + " 00:00:00"
             value.endLoftingBatchTime = formatDate[1] + " 23:59:59"
         }
@@ -132,7 +132,7 @@ export default function Invoicing() {
                                 // disabled={userId !== record.batcherId || record.batcheTaskStatus !== 2}
                                 disabled={record.batcheTaskStatus !== 1}
                             >
-                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.productionBatchNo || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
+                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'
                                  disabled={userId !== record.batcherId || record.batcheTaskStatus !== 3}
@@ -173,7 +173,7 @@ export default function Invoicing() {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="方案编号/生产批次/塔型" style={{ width: 300 }} />
+                    children: <Input placeholder="方案编号/生产批次/塔型/下达单号" style={{ width: 300 }} />
                 }
             ]}
         />

@@ -58,7 +58,7 @@ export default function IngredientsList(): React.ReactNode {
         { key: "programme", value: "已配方案" },
         { key: "save", value: "保存" },
         { key: "generate", value: "生成配料方案" },
-        { key: "batchingStrategy", value: "配料策略设置" },
+        // { key: "batchingStrategy", value: "配料策略设置" },
         { key: "goback", value: "返回", type: "default" }
     ]
 
@@ -118,6 +118,9 @@ export default function IngredientsList(): React.ReactNode {
 
     // 存储当前的配料策略
     const [nowIngre, setNowIngre] = useState<{[key: string]: any}>({});
+
+    // 初始米数
+    const [miter, setMiter] = useState<any[]>([]);
 
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
@@ -202,39 +205,50 @@ export default function IngredientsList(): React.ReactNode {
     }
 
     // 继承一次方案的回调
-    const handleInheritClick = (options: any) => {
-        let v = globallyStoredData?.sortChildren;
-        const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
-        const index = globallyStoredData?.sortChildren?.findIndex((item: any) => item.key === activeSort);
-        // 全局存储已选方案
-        const programme = panes.filter((item: any) => item.key === activeKey);
-        const index2 = panes.findIndex((item: any) => item.key === activeKey);
-        // selectedScheme
-        panes[index2].selectedScheme = options || []
-        // 页面存储已选方案，计算
-        const {
-            meterNumber,
-            numberAll,
-            surplusMaaterial,
-            disassemblyNumber,
-            calculation
-        } = calculationStatistics(panes[index2].selectedScheme);
-        panes[index2].selectedSchemeSummary = [{
-            meterNumber,
-            numberAll,
-            surplusMaaterial,
-            disassemblyNumber,
-            calculation
-        }]
-        v[index].children = panes;
-        setGloballyStoredData({
-            id: params.id,
-            sortChildren: v
-        })
-        // 清空备选方案
-        setAlternativeData([]);
-        // 展示的已选方案
-        setSelectedScheme(panes[index2].selectedScheme);
+    const handleInheritClick = async(options: any) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/scheme/produce/inheritScheme`, {
+                produceId: params.id,
+                productionBatchNo: options[0].batchNumber
+            });
+            let v = globallyStoredData?.sortChildren;
+            for (let i = 0; i < v.length; i += 1) {
+                for (let p = 0; p < result.length; p += 1) {
+                    if (v[i].key === `${result[p].structureSpec}_${result[p].structureTexture}`) {
+                        const {
+                            meterNumber,
+                            numberAll,
+                            surplusMaaterial,
+                            disassemblyNumber,
+                            calculation
+                        } = calculationStatistics(result[p].batchingTaskSchemes);
+                        v[i].children = [{
+                            selectedScheme: result[p].batchingTaskSchemes, // 已选方案
+                            batchingStrategy: {},
+                            closable: false,
+                            key: "fangan1",
+                            title: "方案1",
+                            selectedSchemeSummary: [{
+                                meterNumber,
+                                numberAll,
+                                surplusMaaterial,
+                                disassemblyNumber,
+                                calculation
+                            }]
+                        }]
+                    }
+                }
+            }
+            console.log(v, "继承方案后的数据=======>>>>")
+            setGloballyStoredData({
+                id: params.id,
+                sortChildren: v
+            })
+            // 清空备选方案
+            setAlternativeData([]);
+        } catch (error) {
+            // reject(error)
+        }
     }
 
     // 新增tab
@@ -443,7 +457,7 @@ export default function IngredientsList(): React.ReactNode {
             if (map.has(result[i].code)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(result[i]?.code) || 0;
-                result[i].noIngredients = result[i].num - num;
+                result[i].noIngredients = (result[i].num - num > 0 ? (result[i].num - num) : "0");
             } else {
                 result[i].noIngredients = result[i].num;
             }
@@ -874,11 +888,14 @@ export default function IngredientsList(): React.ReactNode {
                 inRoadInventory, // 是否使用在途库存（1:使用 2:不使用）
             });
             let v: any[] = [];
+            let s: any[] = [];
             for (let i = 0; i < result.length; i += 1) {
                 v.push({
                     meterNumber: result[i].length
                 })
+                s.push(result[i].length)
             }
+            setMiter(s);
             setAvailableInventoryData(result || []);
             // 获取米数
             setMeterNumber(v);
@@ -968,20 +985,6 @@ export default function IngredientsList(): React.ReactNode {
         }
     }), { manual: true })
 
-    // 继承一次配料方案
-    const { run: getPurchaseBatchingSchemeList } = useRequest<{ [key: string]: any }>((productionBatchNo: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/${productionBatchNo}/${spec}/${texture}`)
-            result?.map((element: any, index: number) => {
-                element["num"] = `${element.num}`
-            });
-            setInheritScheme((result) || [])
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-    console.log(constructionClassification, "constructionClassification")
     return (
         <div className='ingredientsListWrapper'>
             <DetailContent operation={
@@ -1033,7 +1036,6 @@ export default function IngredientsList(): React.ReactNode {
                                                         for (let i = 0; i < availableInventoryData.length; i += 1) {
                                                             v.push(availableInventoryData[i].length)
                                                         }
-                                                        console.log(availableInventoryData, "availableInventoryData")
                                                         setStrategyVisible(true)
                                                         serarchForm.setFieldsValue({
                                                             ...nowIngre,
@@ -1051,7 +1053,10 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='texts'>利用率：</span>
                                                     <span className='values'>{nowIngre.utilizationRate}%</span>
                                                     <span className='texts'>原材料米数：</span>
-                                                    <span className='values' title='7000/8000'>{value === "1" ? nowIngre?.available?.join("、") : nowIngre?.idealRepertoryLengthList?.join("、")}</span>
+                                                    <span className='values'
+                                                        title={value === "1" ? ((nowIngre.available && nowIngre.available.length > 0) ? nowIngre?.available?.join("、") : miter.join("、")) : nowIngre?.idealRepertoryLengthList?.join("、")}>
+                                                        {value === "1" ? ((nowIngre.available && nowIngre.available.length > 0) ? nowIngre?.available?.join("、") : miter.join("、")) : nowIngre?.idealRepertoryLengthList?.join("、")}
+                                                    </span>
                                                 </div>
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_right'>
@@ -1110,7 +1115,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     scroll={{ x: 1200, y: 200 }}
                                                                 />
                                                             </div>
-                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 676}}>
+                                                            <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 678}}>
                                                                 <div>备选方案</div>
                                                                 <div>
                                                                     <span>排序</span>
