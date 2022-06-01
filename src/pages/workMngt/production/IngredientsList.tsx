@@ -678,6 +678,7 @@ export default function IngredientsList(): React.ReactNode {
             })
         }
         setCount(++count);
+        setValue("1");
         setAlternativeData([])
     }
 
@@ -721,18 +722,24 @@ export default function IngredientsList(): React.ReactNode {
 
     // 对配料策略进行处理
     const handleAnge = (options: any[], key: number) => {
-        console.log(options, "接受到的数据", key)
+        console.log(options, "接受到的数据=====", key, miter)
         for (let i = 0; i < options.length; i += 1) {
             const result = options[i].width.split("~");
             if ((key >= result[0] * 1) && (key <= result[1] * 1)) {
-                console.log(options[i], "==============================>>>")
                 setNowIngre({
                     ...options[i],
+                    available: miter,
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 });
             }
         }
     }
+
+    useEffect(() => {
+        if (angleConfigStrategy.length > 0 && activeSort) {
+            handleAnge(angleConfigStrategy, +activeSort.split("_")[1].split("∠")[1].split("*")[0]);
+        }
+    }, [miter])
 
     // 保存操作
     const { run: getPurchaseBatchingScheme } = useRequest<{ [key: string]: any }>((options: any) => new Promise(async (resole, reject) => {
@@ -946,12 +953,13 @@ export default function IngredientsList(): React.ReactNode {
             }
             let data = [];
             if (value === "1") {
+                console.log(nowIngre, availableInventoryData)
                 for (let i = 0; i < nowIngre?.idealRepertoryLengthList?.length; i += 1) {
                     for (let p = 0; p < availableInventoryData.length; p += 1) {
                         if (nowIngre?.idealRepertoryLengthList[i] === availableInventoryData[p].length) {
                             const v = {
                                 ...availableInventoryData[p],
-                                usableNum: availableInventoryData[p].noIngredients
+                                usableNum: availableInventoryData[p].totalNum - availableInventoryData[p].alreadyNum
                             }
                             data.push(v);
                         }
@@ -1055,7 +1063,13 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='texts'>原材料米数：</span>
                                                     <span className='values'
                                                         title={value === "1" ? ((nowIngre.available && nowIngre.available.length > 0) ? nowIngre?.available?.join("、") : miter.join("、")) : nowIngre?.idealRepertoryLengthList?.join("、")}>
-                                                        {value === "1" ? ((nowIngre.available && nowIngre.available.length > 0) ? nowIngre?.available?.join("、") : miter.join("、")) : nowIngre?.idealRepertoryLengthList?.join("、")}
+                                                        {
+                                                            value === "1" ?
+                                                                ((nowIngre.available && nowIngre.available.length > 0) ?
+                                                                    nowIngre?.available.length > 2 ? `${nowIngre?.available[0]}、${nowIngre?.available[1]}...` : nowIngre?.available?.join("、")
+                                                                    : miter.length > 2 ? `${miter[0]}、${miter[1]}...` : miter.join("、"))
+                                                            : nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")
+                                                        }
                                                     </span>
                                                 </div>
                                                 <div className='ingredients_content_wrapper'>
