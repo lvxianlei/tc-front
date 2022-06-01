@@ -31,7 +31,7 @@ export default function WorkCenterSetting(): React.ReactNode{
             baseForm.setFieldsValue({
                 ...result,
                 time: [moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')],
-                equipmentId: result?.equipmentId && result?.equipmentId.split(',')
+                equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[]
             })
             form.setFieldsValue({ workCenterRelations: [...result?.workCenterRelations] });
             setWorkCenterRelationsList(result?.workCenterRelations);
@@ -94,15 +94,16 @@ export default function WorkCenterSetting(): React.ReactNode{
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const baseData = await baseForm.validateFields();
+            await baseForm.validateFields();
             if (form.getFieldsValue(true).workCenterRelations && form.getFieldsValue(true).workCenterRelations.length > 0) {
                 const data = await form.validateFields();
+                const baseData = await baseForm.getFieldsValue(true);
                 await saveRun({
                     ...baseData,
                     workStartTime: baseData.time[0].format('HH:mm'),
                     workEndTime: baseData.time[1].format('HH:mm'),
                     workCenterRelations: [...data?.workCenterRelations],
-                    equipmentId: baseData.equipmentId.join(',')
+                    equipmentId: baseData?.equipmentId?baseData.equipmentId.join(','):''
                 })
                 resolve(true);
             } else {
@@ -175,12 +176,6 @@ export default function WorkCenterSetting(): React.ReactNode{
             "title": "关联设备",
             "dataIndex": "equipmentId",
             "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择关联设备"
-                }
-            ]
         }
     ]
 
