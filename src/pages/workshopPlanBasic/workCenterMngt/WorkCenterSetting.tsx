@@ -98,12 +98,13 @@ export default function WorkCenterSetting(): React.ReactNode{
             if (form.getFieldsValue(true).workCenterRelations && form.getFieldsValue(true).workCenterRelations.length > 0) {
                 const data = await form.validateFields();
                 const baseData = await baseForm.getFieldsValue(true);
+                console.log(baseData)
                 await saveRun({
                     ...baseData,
-                    workStartTime: baseData.time[0].format('HH:mm'),
-                    workEndTime: baseData.time[1].format('HH:mm'),
+                    workStartTime: baseData?.time?baseData.time[0].format('HH:mm'):"",
+                    workEndTime:  baseData?.time?baseData.time[1].format('HH:mm'):"",
                     workCenterRelations: [...data?.workCenterRelations],
-                    equipmentId: baseData?.equipmentId?baseData.equipmentId.join(','):''
+                    equipmentId: baseData&&baseData?.equipmentId&&baseData?.equipmentId.length>0?baseData.equipmentId.join(','):''
                 })
                 resolve(true);
             } else {
