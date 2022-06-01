@@ -112,7 +112,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
-                    structureTexture: res.materialTexture,
+                    structureTexture: res.structureTexture,
+                    structureTextureId: res.structureTextureId,
                     materialStandardName: res.materialStandardName,
                     materialStandard: res.materialStandard
                 }
@@ -213,6 +214,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             // weight: item.singleWeight || 0,
             source: 1,
             // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
             materialStandardName: item.materialStandardName,
@@ -338,16 +340,16 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             </Select>
                         })
                     }
-                    if (item.dataIndex === "materialTextureId") {
+                    if (item.dataIndex === "structureTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={materialList[key].materialTextureId && materialList[key].materialTextureId + ',' + materialList[key].materialTexture} onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <Select style={{ width: '150px' }} value={materialList[key].structureTextureId && materialList[key].structureTextureId + ',' + materialList[key].structureTexture} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if (index === key) {
                                         return {
                                             ...item,
-                                            materialTextureId: e.split(',')[0],
-                                            materialTexture: e.split(',')[1]
+                                            structureTextureId: e.split(',')[0],
+                                            structureTexture: e.split(',')[1]
                                         }
                                     }
                                     return item
