@@ -467,12 +467,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         materialStandard: item.materialStandard,
                         taxPrice: item.taxPrice || 1.00,
                         price: item.price || 1.00,
+                        width:item.width || 0,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
                         weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
                         totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })))
-                    setMaterialList(fields || [])
+                    // setMaterialList(fields || [])
                 }} />
         </Modal>
         <DetailTitle title="合同基本信息" />
