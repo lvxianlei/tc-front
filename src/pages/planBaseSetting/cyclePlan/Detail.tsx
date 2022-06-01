@@ -191,7 +191,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={async () => {
-                        await RequestUtil.delete(`/tower-aps/cyclePlanOrder/${record.id}`)
+                        await RequestUtil.delete(`/tower-aps/cyclePlan/cyclePlanOrder/${record.id}`)
                         message.success('删除成功！')
                         history.go(0)
                     }}
