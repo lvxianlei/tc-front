@@ -1,12 +1,12 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
-import { Button, Input, Select, Form, Row, Modal, message, Spin } from 'antd';
+import { Input, Select, Form, Row, Modal, message, Spin } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"
 import '../StockPublicStyle.less';
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
-import { Attachment, AttachmentRef, Page } from '../../common';
+import { Attachment, AttachmentRef, SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 interface ReceiveStrokAttachProps {
     type: 1 | 2
@@ -100,11 +100,10 @@ export default function RawMaterialStock(): React.ReactNode {
                 exportPath={`/tower-storage/materialStock`}
                 columns={[{
                     title: '序号',
-                    dataIndex: 'id',
+                    dataIndex: 'index',
                     width: 50,
-                    render: (text: any, item: any, index: any) => {
-                        return <span>{index + 1}</span>
-                    }
+                    fixed: "left",
+                    render: (text: any, item: any, index: any) => <span>{index + 1}</span>
                 },
                 ...listPage,
                 {
