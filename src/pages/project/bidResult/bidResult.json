@@ -1,9 +1,10 @@
 {
     "bidInfoColumns": [
         {
-            "title": "是否中标",
+            "title": "投标结果",
             "dataIndex": "isBid",
             "type": "select",
+            "width": 100,
             "enum": [
                 {
                     "value": -1,
@@ -11,11 +12,19 @@
                 },
                 {
                     "value": 1,
-                    "label": "是"
+                    "label": "中标"
                 },
                 {
                     "value": 2,
-                    "label": "否"
+                    "label": "未中标"
+                },
+                {
+                    "value": 3,
+                    "label": "流标"
+                },
+                {
+                    "value": 4,
+                    "label": "废标"
                 }
             ],
             "required": true,
@@ -30,6 +39,7 @@
             "title": "分标编号",
             "dataIndex": "bidCode",
             "required": true,
+            "width": 100,
             "rules": [
                 {
                     "required": true,
@@ -40,6 +50,7 @@
         {
             "title": "物资资别",
             "dataIndex": "cargoType",
+            "width": 100,
             "required": true,
             "rules": [
                 {
@@ -51,6 +62,7 @@
         {
             "title": "电压等级",
             "dataIndex": "vgrade",
+            "width": 100,
             "required": true,
             "rules": [
                 {
@@ -62,6 +74,7 @@
         {
             "title": "包名称",
             "dataIndex": "packageCode",
+            "width": 100,
             "required": true,
             "rules": [
                 {
@@ -73,6 +86,7 @@
         {
             "title": "项目单位",
             "dataIndex": "projectCompany",
+            "width": 100,
             "required": true,
             "rules": [
                 {
@@ -84,6 +98,7 @@
         {
             "title": "投标人名称",
             "dataIndex": "bidName",
+            "width": 120,
             "required": true,
             "rules": [
                 {
@@ -95,6 +110,7 @@
         {
             "title": "单价（元）",
             "dataIndex": "unitPrice",
+            "width": 120,
             "type": "number",
             "required": true,
             "rules": [
@@ -107,6 +123,7 @@
         {
             "title": "总价（元）",
             "dataIndex": "money",
+            "width": 100,
             "type": "number",
             "required": true,
             "decimal": "4",
@@ -120,6 +137,7 @@
         {
             "title": "重量（吨）",
             "dataIndex": "weight",
+            "width": 100,
             "type": "number",
             "decimal": "3",
             "required": true,
@@ -133,6 +151,7 @@
         {
             "title": "中标比例（%）",
             "dataIndex": "bidPro",
+            "width": 150,
             "type": "number",
             "decimal": "3",
             "precision": 2,
@@ -149,11 +168,10 @@
     ],
     "overview": [
         {
-            "title": "年份",
+            "title": "公示时间",
             "dataIndex": "date",
             "type": "date",
-            "format": "YYYY",
-            "picker": "year"
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "批次",
@@ -161,7 +179,7 @@
             "type": "number"
         },
         {
-            "title": "是否中标",
+            "title": "投标结果",
             "dataIndex": "isBid",
             "type": "select",
             "enum": [
@@ -170,12 +188,20 @@
                     "label": "未公布"
                 },
                 {
-                    "value": 0,
-                    "label": "是"
+                    "value": 1,
+                    "label": "中标"
                 },
                 {
-                    "value": 1,
-                    "label": "否"
+                    "value": 2,
+                    "label": "未中标"
+                },
+                {
+                    "value": 3,
+                    "label": "流标"
+                },
+                {
+                    "value": 4,
+                    "label": "废标"
                 }
             ]
         },
@@ -196,8 +222,13 @@
             "dataIndex": "bidUnitPrice"
         },
         {
+            "title": "框架标套数",
+            "dataIndex": "bidFrameNumber"
+        },
+        {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "billingInformationStatistics": [
@@ -240,15 +271,14 @@
     ],
     "setting": [
         {
-            "title": "年份",
+            "title": "公示时间",
             "dataIndex": "date",
             "type": "date",
-            "format": "YYYY",
-            "picker": "year",
+            "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入年份..."
+                    "message": "请输入公示时间..."
                 }
             ]
         },
@@ -265,49 +295,63 @@
         {
             "title": "中标包名称",
             "dataIndex": "packageNum",
-            "disabled": "true"
+            "disabled": true
         },
         {
             "title": "中标价(元)",
             "dataIndex": "bidMoney",
-            "disabled": "true"
+            "disabled": true
         },
         {
             "title": "中标重量(吨)",
             "dataIndex": "bidWeight",
             "type": "number",
-            "disabled": "true"
+            "disabled": true
         },
         {
-            "title": "是否中标",
+            "title": "投标结果",
             "dataIndex": "isBid",
             "type": "select",
-            "disabled": "true",
+            "disabled": true,
             "enum": [
                 {
                     "value": -1,
                     "label": "未公布"
                 },
                 {
-                    "value": 0,
-                    "label": "是"
+                    "value": 1,
+                    "label": "中标"
                 },
                 {
-                    "value": 1,
-                    "label": "否"
+                    "value": 2,
+                    "label": "未中标"
+                },
+                {
+                    "value": 3,
+                    "label": "流标"
+                },
+                {
+                    "value": 4,
+                    "label": "废标"
                 }
-            ],
-            "disable": true
+            ]
         },
         {
             "title": "中标单价(元)",
             "dataIndex": "bidUnitPrice",
             "type": "number",
-            "disabled": "true"
+            "disabled": true
+        },
+        {
+            "title": "框架标套数",
+            "dataIndex": "bidFrameNumber",
+            "type": "number",
+            "disabled": true
         },
         {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ]
 }

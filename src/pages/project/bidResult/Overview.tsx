@@ -38,15 +38,15 @@ export default function Overview({ id }: OverviewProps) {
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
             <BaseInfo columns={overview} dataSource={data?.result || {}} col={2} />
-            <DetailTitle title="开标信息"  operation={[
-                <Button type="primary" ghost onClick={() => {
+            <DetailTitle title="开标信息" operation={[
+                <Button type="primary" key="bidInfo" ghost onClick={() => {
                     exportDown("/tower-market/bidBase/exportBidOpen", "POST", {
                         bidBaseId: data?.result.id,
                         round: round === 0 ? data?.result?.bidOpenRecordListVos[0].round : round
                     }, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "开标信息")
-                    
+
                 }}>导出</Button>
-            ]}/>
+            ]} />
             <Tabs onChange={handleChange}>
                 {data?.result?.bidOpenRecordListVos?.length > 0 && data?.result?.bidOpenRecordListVos.map((item: any, index: number) => <Tabs.TabPane key={index}
                     tab={item.roundName}>
@@ -58,10 +58,10 @@ export default function Overview({ id }: OverviewProps) {
                 </Tabs.TabPane>}
             </Tabs>
             <DetailTitle title="开标信息统计" operation={[
-                <Button type="primary" ghost onClick={() => setIsExportStoreList(true)}>导出</Button>
+                <Button type="primary" key="export" ghost onClick={() => setIsExportStoreList(true)}>导出</Button>
             ]} />
             <CommonTable columns={billingInformationStatistics} dataSource={data?.statistics || []} />
-            {isExport?<ExportList
+            {isExport ? <ExportList
                 history={history}
                 location={location}
                 match={match}
@@ -75,7 +75,7 @@ export default function Overview({ id }: OverviewProps) {
                 url={`/tower-market/bidBase/statistics/${id}`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}
-            />:null}
+            /> : null}
         </Spin>
     </DetailContent>
 }

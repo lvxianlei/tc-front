@@ -144,6 +144,71 @@ export default function BidResultEdit(): JSX.Element {
         }
         return value
     }
+    // 新增一轮
+    const handleAddNew = () => {
+        const tabsData = (ref.current as any).getData().map((item: any) => {
+            const { refFun, title: roundName, key: round } = item
+            if (refFun?.getForm()) {
+                const fdata = refFun?.getForm().getFieldsValue()
+                return ({ round, roundName, bidOpenRecordVos: fdata?.submit })
+            } else {
+                return ({ round, roundName, bidOpenRecordVos: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
+            }
+        })
+        setBidOpenRecordVos([
+            {
+                round: bidOpenRecordVos.length + 1,
+                roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
+                bidOpenRecordVos: tabsData[0]?.bidOpenRecordVos || []
+            },
+            ...bidOpenRecordVos
+        ])
+    }
+
+    const handleEditableChange = (fields: any, allFields: any, itemKey: any) => {
+        const changeFileds = fields.submit[fields.submit.length - 1]
+        const changeRow = allFields.submit[fields.submit.length - 1]
+        const tabsRef: any = (ref.current as any).getData().find((item: any) => item.key === itemKey)?.refFun?.getForm()
+        const prevData: any = bidOpenRecordVos.find((item: any) => item.round === itemKey)
+        console.log(prevData)
+        if (changeFileds.isBid) {
+            switch (changeFileds.isBid) {
+                case (1 || -1 || 2):
+                    console.log("------prev-------")
+                    break
+                case 3:
+                    console.log("---流标--")
+                    tabsRef?.setFieldsValue({
+                        submit: allFields.submit.map((item: any) => {
+                            if (item.projectCompany === changeRow.projectCompany) {
+                                return ({ ...item, isBid: changeFileds.isBid })
+                            }
+                            return item
+                        })
+                    })
+                    break
+                case 4:
+                    console.log("---废标--")
+                    tabsRef?.setFieldsValue({
+                        submit: allFields.submit.map((item: any) => {
+                            if (item.bidName === changeRow.bidName) {
+                                return ({ ...item, isBid: changeFileds.isBid })
+                            }
+                            return item
+                        })
+                    })
+                    break
+                default:
+                    break
+            }
+        }
+        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+            if (item.round === itemKey) {
+                return ({ ...item, bidOpenRecordVos: allFields.submit })
+            }
+            return item
+        }))
+    }
 
     return (<>
         <ManagementDetailTabsTitle />
@@ -162,14 +227,7 @@ export default function BidResultEdit(): JSX.Element {
                 <BaseInfo form={baseInfoForm} edit columns={setting} dataSource={data || {}} />
                 <DetailTitle title="开标信息" operation={[<Button key="new"
                     type="primary"
-                    onClick={() => setBidOpenRecordVos([
-                        {
-                            round: bidOpenRecordVos.length + 1,
-                            roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
-                            bidOpenRecordVos: []
-                        },
-                        ...bidOpenRecordVos
-                    ])}>新增一轮报价</Button>]} />
+                    onClick={handleAddNew}>新增一轮报价</Button>]} />
                 <TabsCanEdit
                     ref={ref}
                     canEdit={true}
@@ -186,8 +244,8 @@ export default function BidResultEdit(): JSX.Element {
                             <EditTableHasForm
                                 columns={bidInfoColumns}
                                 dataSource={data}
+                                onChange={(changeFileds, allFields) => handleEditableChange(changeFileds, allFields, item.key)}
                                 opration={[
-
                                     <UploadXLS key="xlxs" readEnd={async (_data) => {
                                         const vilidateCols = ["包名称", "投标人名称", "分标编号", "物资资别", "项目单位", "总价（元）", "重量（吨）", "电压等级"]
                                         if (_data.length <= 0) {
@@ -221,7 +279,8 @@ export default function BidResultEdit(): JSX.Element {
                                         editForm.setFieldsValue({ submit: values.concat(uploadData) })
                                     }} />,
                                     <Button
-                                        type="link" 
+                                        type="link"
+                                        key="export"
                                         onClick={() => exportDown(
                                             "/tower-market/bidBase/export",
                                             "POST",
