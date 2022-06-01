@@ -502,7 +502,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                                 return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalNumber!==null?cur.totalNumber:0 )
                             },0)
                             const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
-                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+                                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(3)
                             },0)
                             setDetail({
                                 ...detail,
