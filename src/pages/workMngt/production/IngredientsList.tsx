@@ -951,7 +951,7 @@ export default function IngredientsList(): React.ReactNode {
                         if (nowIngre?.idealRepertoryLengthList[i] === availableInventoryData[p].length) {
                             const v = {
                                 ...availableInventoryData[p],
-                                usableNum: availableInventoryData[p].alreadyNum
+                                usableNum: availableInventoryData[p].noIngredients
                             }
                             data.push(v);
                         }
