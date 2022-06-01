@@ -2,7 +2,8 @@
     "contract": [
         {
             "title": "合同编号",
-            "dataIndex": "contractNumber"
+            "dataIndex": "contractNumber",
+            "width": 200
         },
         {
             "title": "关联采购计划",
@@ -58,7 +59,8 @@
         },
         {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "width": 200
         }
     ],
     "material": [
