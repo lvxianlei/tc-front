@@ -12,17 +12,17 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standardName",
+            "dataIndex": "materialStandardName",
             "width": 120
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "width": 120
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "width": 120
         },
         {
@@ -37,7 +37,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "quantity",
+            "dataIndex": "num",
             "width": 120
         },
         {
@@ -50,7 +50,6 @@
             "dataIndex": "supplierName",
             "width": 120
         },
-        
         {
             "title": "到货日期",
             "dataIndex": "receiveTime",
@@ -61,7 +60,6 @@
             "dataIndex": "warehouseName",
             "width": 120
         },
-        
         {
             "title": "库区",
             "dataIndex": "reservoirName",

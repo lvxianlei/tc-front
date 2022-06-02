@@ -3,77 +3,77 @@
         {
             "title": "所在仓库",
             "dataIndex": "warehouseName",
-            "width": 120
+            "width": 80
         },
         {
             "title": "收货批次",
             "dataIndex": "receiveBatchNumber",
-            "width": 120
+            "width": 80
         },
         {
             "title": "库位",
             "dataIndex": "locatorName",
-            "width": 120
+            "width": 60
         },
         {
             "title": "区位",
             "dataIndex": "reservoirName",
-            "width": 120
+            "width": 60
         },
         {
             "title": "供应商",
             "dataIndex": "supplierName",
-            "width": 120
+            "width": 80
         },
         {
             "title": "物料编码",
             "dataIndex": "materialCode",
-            "width": 120
+            "width": 80
         },
         {
             "title": "分类",
             "dataIndex": "classify",
-            "width": 120
+            "width": 60
         },
         {
             "title": "标准",
-            "dataIndex": "standardName",
-            "width": 120
+            "dataIndex": "materialStandardName",
+            "width": 80
         },
         {
             "title": "品名",
             "dataIndex": "materialName",
-            "width": 120
+            "width": 50
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
-            "width": 120
+            "dataIndex": "structureTexture",
+            "width": 50
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
-            "width": 120
+            "dataIndex": "structureSpec",
+            "width": 50
         },
         {
             "title": "长度(mm)",
             "dataIndex": "length",
-            "width": 120
+            "width": 80
         },
         {
             "title": "宽度(mm)",
             "dataIndex": "width",
-            "width": 120
+            "width": 80
         },
         {
             "title": "数量",
-            "dataIndex": "quantity",
-            "width": 120
+            "dataIndex": "num",
+            "width": 50
         },
         {
             "title": "重量",
             "dataIndex": "weight",
-            "width": 120
+            "width": 50
         }
     ]
 }

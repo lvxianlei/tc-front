@@ -1,82 +1,20 @@
 {
     "InheritOneIngredientCloumn": [
         {
-            "title": "原材料长度",
-            "dataIndex": "length"
+            "title": "原批次号",
+            "dataIndex": "batchNumber"
         },
         {
-            "title": "数量",
-            "dataIndex": "quantity"
+            "title": "原杆塔",
+            "dataIndex": "batchProductNumber"
         },
         {
-            "title": "利用率",
-            "dataIndex": "utilizationRate"
+            "title": "下达单杆塔",
+            "dataIndex": "issuedProductNumber"
         },
         {
-            "title": "余料长度",
-            "dataIndex": "plannedSurplusLength"
-        },
-        {
-            "title": "零件1",
-            "dataIndex": "component1",
-            "width": 100,
-            "type": "number"
-        },
-        {
-            "title": "长度1（mm）",
-            "dataIndex": "len1",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "数量1",
-            "width": 100,
-            "dataIndex": "num1"
-        },
-        {
-            "title": "零件2",
-            "width": 100,
-            "dataIndex": "component2"
-        },
-        {
-            "title": "长度2（mm）",
-            "width": 100,
-            "dataIndex": "len2"
-        },
-        {
-            "title": "数量2",
-            "width": 100,
-            "dataIndex": "num2"
-        },
-        {
-            "title": "零件3",
-            "width": 100,
-            "dataIndex": "component3"
-        },
-        {
-            "title": "长度3（mm）",
-            "width": 100,
-            "dataIndex": "len3"
-        },
-        {
-            "title": "数量3",
-            "width": 100,
-            "dataIndex": "num3"
-        },
-        {
-            "title": "零件4",
-            "width": 100,
-            "dataIndex": "component4"
-        },
-        {
-            "title": "长度4（mm）",
-            "width": 100,
-            "dataIndex": "len4"
-        },
-        {
-            "title": "数量4",
-            "width": 100,
-            "dataIndex": "num4"
+            "title": "杆塔匹配度",
+            "dataIndex": "matchingScore"
         }
     ],
     "AllocatedSchemeCloumn": [

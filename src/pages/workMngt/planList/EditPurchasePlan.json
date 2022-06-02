@@ -46,7 +46,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "materialStandard",
             "type": "select",
             "width": 100
         },
