@@ -30,7 +30,7 @@ export default function WorkCenterSetting(): React.ReactNode{
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/${params?.id}`)
             baseForm.setFieldsValue({
                 ...result,
-                time: [moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')],
+                time: result.workStartTime&&result.workEndTime?[moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')]:'',
                 equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[]
             })
             form.setFieldsValue({ workCenterRelations: [...result?.workCenterRelations] });
