@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import { Button, Form, message, Modal, Spin } from "antd"
+import { Button, DatePicker, Form, message, Modal, Spin } from "antd"
 import moment from "moment"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable, FormItemType } from "../../common"
 import useRequest from '@ahooksjs/use-request'
@@ -24,10 +24,14 @@ export default function SalesPlanEdit() {
     const [cargoDtoForm] = Form.useForm()
     const [productDetailsForm] = Form.useForm()
     const [deliveryTimeForm] = Form.useForm()
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } :any= useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
-            baseInfoForm.setFieldsValue(result)
+            
+            baseInfoForm.setFieldsValue({
+                ...result,
+                issueTime: result?.issueTime?moment(result?.issueTime):''
+            })
             cargoDtoForm.setFieldsValue(result)
             setSaleOrderId(result.saleOrderId)
             setContractId(result.contractId)
@@ -279,10 +283,25 @@ export default function SalesPlanEdit() {
             <BaseInfo
                 form={baseInfoForm}
                 onChange={handleBaseInfoChange}
-                columns={taskNoticeEditBaseInfo.map((item: any) => item.dataIndex === "saleOrderNumber" ? ({
-                    ...item,
-                    path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
-                }) : item)} dataSource={data || {}} edit col={3} />
+                columns={taskNoticeEditBaseInfo.map((item: any) =>{
+                    if(item.dataIndex === "saleOrderNumber"){
+                        return ({
+                            ...item,
+                            path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
+                        }) 
+                    }
+                    if(item.dataIndex === "issueTime"){
+                        return ({
+                            ...item,
+                            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name="issueTime" style={{ width: '100%' }}>
+                                    <DatePicker format={'YYYY-MM-DD'} defaultValue={moment(new Date())}/>
+                                </Form.Item>
+                            )
+                        }) 
+                    }
+                    return item
+                })} dataSource={data || {}} edit col={3} />
             <DetailTitle title="特殊要求" />
             <BaseInfo form={cargoDtoForm}
                 columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
