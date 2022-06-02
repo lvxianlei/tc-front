@@ -121,6 +121,8 @@ export default () => {
                                 structureCycleIds: result?.needUpdateList[index]?.structureCycleIds,
                                 issueOrderId:result?.needUpdateList[index]?.issueOrderId,
                                 isNotMatch: result?.needUpdateList[index]?.isNotMatch,
+                                structureIds: result?.needUpdateList[index]?.structureIds,
+                                unitType: result?.needUpdateList[index]?.unitType,
                             }
                         })
                         RequestUtil.post(`/tower-aps/workshopOrder/distribute/productionUnit`,submitValue).then(()=>{
