@@ -424,9 +424,9 @@ export default function PlanTrialList(): React.ReactNode {
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,
-                    getCheckboxProps: (record: any) => ({
-                        disabled: record.status === 2, //已下发不可再次下发
-                    }),
+                    // getCheckboxProps: (record: any) => ({
+                    //     disabled: record.status === 2, //已下发不可再次下发
+                    // }),
                 }
             }}
            
@@ -482,7 +482,17 @@ export default function PlanTrialList(): React.ReactNode {
                     <Popconfirm
                         title="下发后不可取消，是否下发试装计划？"
                         onConfirm={async () => {
+                           
                             if (selectedKeys.length > 0){
+                                let error:boolean = false;
+                                selectedRows.map((item:any)=>{
+                                    if(item.status ===2 ){
+                                        error = true
+                                    }
+                                })
+                                if(error){
+                                    return message.error('已下发，不可再次下发！')
+                                }
                                 await RequestUtil.post(`/tower-aps/trialAssemble/distribute`,
                                     selectedRows
                                 ).then(() => {
