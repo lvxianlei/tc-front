@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react"
+import React, { Fragment, memo, useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, message, Spin, Modal } from "antd"
-import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData } from "../../common"
+import { Button, Form, message, Spin, Modal, Select, Row, Col } from "antd"
+import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData, Page } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { bidInfoColumns, setting } from './bidResult.json'
+import { bidInfoColumns, setting, partBidNumber } from './bidResult.json'
 import { EditTableHasForm, TabsCanEdit, UploadXLS } from "./EditTabs"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
@@ -169,13 +169,19 @@ export default function BidResultEdit(): JSX.Element {
         const changeFileds = fields.submit[fields.submit.length - 1]
         const changeRow = allFields.submit[fields.submit.length - 1]
         const tabsRef: any = (ref.current as any).getData().find((item: any) => item.key === itemKey)?.refFun?.getForm()
-        const prevData: any = bidOpenRecordVos.find((item: any) => item.round === itemKey)
-        console.log(prevData)
+        const prevData: any = bidOpenRecordVos.find((item: any) => item.round === itemKey)?.bidOpenRecordVos
+        if (changeFileds.id) {
+            setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                if (item.round === itemKey) {
+                    return ({ ...item, bidOpenRecordVos: allFields.submit.map((item: any) => item.id === changeFileds.id ? ({ ...item, isBid: -1 }) : item) })
+                }
+                return item
+            }))
+            return
+        }
+
         if (changeFileds.isBid) {
             switch (changeFileds.isBid) {
-                case (1 || -1 || 2):
-                    console.log("------prev-------")
-                    break
                 case 3:
                     console.log("---流标--")
                     tabsRef?.setFieldsValue({
@@ -199,6 +205,20 @@ export default function BidResultEdit(): JSX.Element {
                     })
                     break
                 default:
+                    const prevIsBid = prevData.find((item: any) => item.id === changeRow.id)?.isBid
+                    if ([3, 4].includes(prevIsBid)) {
+                        tabsRef?.setFieldsValue({
+                            submit: allFields.submit.map((item: any) => {
+                                if ((prevIsBid === 4) && (item.bidName === changeRow.bidName)) {
+                                    return ({ ...item, isBid: -1 })
+                                }
+                                if ((prevIsBid === 3) && (item.projectCompany === changeRow.projectCompany)) {
+                                    return ({ ...item, isBid: -1 })
+                                }
+                                return item
+                            })
+                        })
+                    }
                     break
             }
         }
@@ -225,6 +245,7 @@ export default function BidResultEdit(): JSX.Element {
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo form={baseInfoForm} edit columns={setting} dataSource={data || {}} />
+                <PartBidInfo id={params.id} />
                 <DetailTitle title="开标信息" operation={[<Button key="new"
                     type="primary"
                     onClick={handleAddNew}>新增一轮报价</Button>]} />
@@ -300,3 +321,25 @@ export default function BidResultEdit(): JSX.Element {
         </DetailContent>
     </>)
 }
+
+const PartBidInfo = memo(({ id }: { id: string }) => {
+    const [isSign, setIsSign] = useState("")
+    return <>
+        <DetailTitle title="中标信息" operation={[<Fragment key="right">
+            <span style={{ fontSize: 14 }}>合同状态：</span>
+            <Select
+                defaultValue={""}
+                onChange={(value) => setIsSign(value)}
+                style={{ width: 100, fontWeight: 500, color: "#333", textAlign: "left" }}>
+                <Select.Option value="">全部</Select.Option>
+                <Select.Option value={1}>未签完</Select.Option>
+                <Select.Option value={2}>已签完</Select.Option>
+            </Select></Fragment>]
+        } />
+        < Page
+            columns={partBidNumber}
+            path={`/tower-market/bidBase/partBidNumber`}
+            filterValue={{ id, isSign }}
+            searchFormItems={[]} />
+    </>
+}) 

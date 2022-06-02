@@ -27,98 +27,50 @@
                     "label": "废标"
                 }
             ],
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择是否中标..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "分标编号",
             "dataIndex": "bidCode",
             "required": true,
-            "width": 100,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入分标编码..."
-                }
-            ]
+            "width": 100
         },
         {
             "title": "物资资别",
             "dataIndex": "cargoType",
             "width": 100,
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入物资资别..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "电压等级",
             "dataIndex": "vgrade",
             "width": 100,
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入电压等级..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "包名称",
             "dataIndex": "packageCode",
             "width": 100,
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入包名称..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "项目单位",
             "dataIndex": "projectCompany",
             "width": 100,
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入项目单位..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "投标人名称",
             "dataIndex": "bidName",
             "width": 120,
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入投标人名称..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "单价（元）",
             "dataIndex": "unitPrice",
             "width": 120,
             "type": "number",
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入单价（元）..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "总价（元）",
@@ -126,13 +78,7 @@
             "width": 100,
             "type": "number",
             "required": true,
-            "decimal": "4",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入总价（元）..."
-                }
-            ]
+            "decimal": "4"
         },
         {
             "title": "重量（吨）",
@@ -140,13 +86,7 @@
             "width": 100,
             "type": "number",
             "decimal": "3",
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入重量（吨）..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "中标比例（%）",
@@ -157,13 +97,7 @@
             "precision": 2,
             "min": 0,
             "max": 100,
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入中标比例..."
-                }
-            ]
+            "required": true
         }
     ],
     "overview": [
@@ -352,6 +286,43 @@
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
+        }
+    ],
+    "partBidNumber": [
+        {
+            "title": "分标编号",
+            "dataIndex": "bidCode"
+        },
+        {
+            "title": "中标包名称",
+            "dataIndex": "packageCode"
+        },
+        {
+            "title": "中标重量",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "中标套数",
+            "dataIndex": "---"
+        },
+        {
+            "title": "平均单价（元）",
+            "dataIndex": "unitPrice"
+        },
+        {
+            "title": "合同已签完",
+            "dataIndex": "isSign",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "未签"
+                },
+                {
+                    "value": 2,
+                    "label": "已签"
+                }
+            ]
         }
     ]
 }
