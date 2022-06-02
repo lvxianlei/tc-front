@@ -486,12 +486,12 @@ export default function PlanTrialList(): React.ReactNode {
                             if (selectedKeys.length > 0){
                                 let error:boolean = false;
                                 selectedRows.map((item:any)=>{
-                                    if(item.status ===2 ){
+                                    if(item.status !==1 ){
                                         error = true
                                     }
                                 })
                                 if(error){
-                                    return message.error('已下发，不可再次下发！')
+                                    return message.error('已下发、已完成，不可再次下发！')
                                 }
                                 await RequestUtil.post(`/tower-aps/trialAssemble/distribute`,
                                     selectedRows
