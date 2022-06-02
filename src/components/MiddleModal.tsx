@@ -57,7 +57,7 @@
      public async getTable(filterValues: Record<string, any>, pagination: TablePaginationConfig = {}, flag: boolean = true) {
          const searchValues = flag ? filterValues : {};
          const resData: IResponseData = await RequestUtil.get<IResponseData>('/tower-market/bidBase/partBidNumber', {
-             projectId: this.props.projectId,
+             id: this.props.projectId,
              ...searchValues,
              current: pagination.current || this.state.tablePagination.current,
              size: pagination.pageSize || this.state.tablePagination.pageSize
@@ -116,6 +116,18 @@
  
      public getTableColumns(): ColumnType<object>[] {
          return [{
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: '5%',
+            render: (_a: any, _b: any, index: number): React.ReactNode => {
+                return (
+                    <span>
+                        {index + 1}
+                    </span>
+                )
+            }
+        },{
              key: 'bidCode',
              title: '分标编号',
              dataIndex: 'bidCode',
@@ -134,7 +146,7 @@
             key: 'bidFrameNumber',
             title: '中标套数',
             dataIndex: 'bidFrameNumber',
-            width: '20%',
+            width: '15%',
         }, {
             key: 'unitPrice',
             title: '平均单价（元）',
