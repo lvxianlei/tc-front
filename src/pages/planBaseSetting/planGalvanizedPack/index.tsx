@@ -92,12 +92,12 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
             <Button type="primary" disabled={selectedKeys.length <= 0} onClick={()=>{
                 let error:boolean = false;
                 selectedRows.map((item:any)=>{
-                    if(item.status ===2 ){
+                    if(item.status !==1 ){
                         error = true
                     }
                 })
                 if(error){
-                    return message.error('已下发，不可再次镀锌包装下发！')
+                    return message.error('已下发、已完成，不可再次镀锌包装下发！')
                 }
                 history.push(`/planProd/planGalvanizedPack/${selectedKeys.join(',')}`)
             }}>镀锌包装下发</Button>
