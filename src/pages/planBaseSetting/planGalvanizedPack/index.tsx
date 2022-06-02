@@ -89,16 +89,27 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 <span>角钢总件数：{sum?.totalAngleNumber}</span>
                 <span>钢板总件数：{sum?.totalPlateNumber}</span>
             </Space>
-            <Link to={`/planProd/planGalvanizedPack/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>镀锌包装下发</Button></Link>
+            <Button type="primary" disabled={selectedKeys.length <= 0} onClick={()=>{
+                let error:boolean = false;
+                selectedRows.map((item:any)=>{
+                    if(item.status !==1 ){
+                        error = true
+                    }
+                })
+                if(error){
+                    return message.error('已下发、已完成，不可再次镀锌包装下发！')
+                }
+                history.push(`/planProd/planGalvanizedPack/${selectedKeys.join(',')}`)
+            }}>镀锌包装下发</Button>
         </Space>}
         tableProps={{
             rowSelection: {
                 type: "checkbox",
                 selectedRowKeys: selectedKeys,
                 onChange: SelectChange,
-                getCheckboxProps: (record: any) => ({
-                    disabled: record?.status == 2, //已下发不可再次下发
-                }),
+                // getCheckboxProps: (record: any) => ({
+                //     disabled: record?.status == 2, //已下发不可再次下发
+                // }),
             }
         }}
         searchFormItems={[
