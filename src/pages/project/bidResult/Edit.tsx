@@ -1,6 +1,6 @@
 import React, { Fragment, memo, useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, message, Spin, Modal, Select, Row, Col } from "antd"
+import { Button, Form, message, Spin, Modal, Select, Row, Col, Checkbox } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData, Page } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { bidInfoColumns, setting, partBidNumber } from './bidResult.json'
@@ -324,6 +324,24 @@ export default function BidResultEdit(): JSX.Element {
 
 const PartBidInfo = memo(({ id }: { id: string }) => {
     const [isSign, setIsSign] = useState("")
+
+    const { run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/bidBase/partBidNumber`, postData)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleCheckedChange = async (e: any, checkId: string) => {
+        console.log(e)
+        await run({
+            id: checkId,
+            isSign: e.target.checked ? 2 : 1
+        })
+    }
+
     return <>
         <DetailTitle title="中标信息" operation={[<Fragment key="right">
             <span style={{ fontSize: 14 }}>合同状态：</span>
@@ -336,8 +354,17 @@ const PartBidInfo = memo(({ id }: { id: string }) => {
                 <Select.Option value={2}>已签完</Select.Option>
             </Select></Fragment>]
         } />
-        < Page
-            columns={partBidNumber}
+        <Page
+            columns={partBidNumber.map((item: any) => {
+                if (item.dataIndex === "isSign") {
+                    return ({
+                        ...item, render: (value, records: any) => <Checkbox
+                            onChange={(event: any) => handleCheckedChange(event, records.id)}
+                            checked={value === 2} />
+                    })
+                }
+                return item
+            })}
             path={`/tower-market/bidBase/partBidNumber`}
             filterValue={{ id, isSign }}
             searchFormItems={[]} />

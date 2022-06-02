@@ -21,7 +21,7 @@ export default function Overview({ id }: OverviewProps) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${id}`)
             const statistics: any = await RequestUtil.get(`/tower-market/bidBase/statistics/${id}`)
-            resole({ result, statistics: statistics || [] })
+            resole({ result, statistics: statistics.map(((item: any, index: number) => ({ ...item, key: index }))) || [] })
         } catch (error) {
             reject(error)
         }
@@ -60,7 +60,7 @@ export default function Overview({ id }: OverviewProps) {
             <DetailTitle title="开标信息统计" operation={[
                 <Button type="primary" key="export" ghost onClick={() => setIsExportStoreList(true)}>导出</Button>
             ]} />
-            <CommonTable columns={billingInformationStatistics} dataSource={data?.statistics || []} />
+            <CommonTable rowKey="key" columns={billingInformationStatistics} dataSource={data?.statistics || []} />
             {isExport ? <ExportList
                 history={history}
                 location={location}
