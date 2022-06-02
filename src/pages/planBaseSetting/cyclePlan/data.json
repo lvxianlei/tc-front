@@ -2,19 +2,23 @@
     "tableHeader": [
         {
             "title": "计划号",
-            "dataIndex": "planNumber"
+            "dataIndex": "planNumber",
+            "fixed": "left"
         },
         {
             "title": "塔型",
-            "dataIndex": "productCategoryName"
+            "dataIndex": "productCategoryName",
+            "fixed": "left"
         },
         {
             "title": "批次号",
-            "dataIndex": "productionBatchNo"
+            "dataIndex": "productionBatchNo",
+            "fixed": "left"
         },
         {
             "title": "下达单号",
-            "dataIndex": "issuedNumber"
+            "dataIndex": "issuedNumber",
+            "fixed": "left"
         },
         {
             "title": "基数",
@@ -85,7 +89,7 @@
             "dataIndex": "storageMaterialDescription"
         },
         {
-            "title": "确认备料",
+            "title": "生产备料",
             "dataIndex": "processMaterialDescription"
         }
     ],
@@ -97,6 +101,10 @@
         {
             "title": "计划完成日期",
             "code": "planCompleteTime"
+        },
+        {
+            "title": "完成进度",
+            "code": "status"
         },
         {
             "title": "实际完成日期",
