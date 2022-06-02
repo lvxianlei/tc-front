@@ -360,8 +360,8 @@ export default function PlanTrialList(): React.ReactNode {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         console.log(selectedRows)
-        const totalHoles = selectedRows.reduce((pre: any,cur: { trialAssembleSegment: any;})=>{
-            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleSegment!==null?cur.trialAssembleSegment:0)).toFixed(4)
+        const totalHoles = selectedRows.reduce((pre: any,cur: { segmentCount: any;})=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.segmentCount!==null?cur.segmentCount:0)).toFixed(4)
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { trialAssembleWeight: any; })=>{
             return (parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleWeight!==null?cur.trialAssembleWeight:0)).toFixed(4)
