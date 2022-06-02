@@ -61,7 +61,9 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
             isExport: false
         };
     }
-
+    componentWillUnmount() {
+        this.setState = () => false
+    }
     /**
      * 根据传递的sourceKey对数据结构进行处理
      * @param resData 
@@ -211,7 +213,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
         return {
             ...super.getTableProps(item),
             ...this.props.tableProps,
-            pagination: this.props.tableProps?.pagination=== false?false:{
+            pagination: this.props.tableProps?.pagination === false ? false : {
                 ...super.getTableProps(item).pagination,
                 ...this.props.tableProps?.pagination,
             }

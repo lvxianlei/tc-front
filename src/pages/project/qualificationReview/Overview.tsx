@@ -2,7 +2,7 @@ import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
-import { bidDocColumns } from "./bidDoc.json"
+import { bidDocColumns } from "./qualificat.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { bidTypeOptions, tenderDeliveryMethodOptions } from '../../../configuration/DictionaryOptions'
@@ -15,7 +15,7 @@ export default function Overview({ id }: OverviewProps) {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${id}`, { type: 1 })
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${id}`, { type: 2 })
             resole(result)
         } catch (error) {
             reject(error)
@@ -25,7 +25,7 @@ export default function Overview({ id }: OverviewProps) {
     return <DetailContent
         operation={[
             <Button key="edit" type="primary" style={{ marginRight: 16 }}
-                onClick={() => history.push(`/project/management/edit/bidDoc/${id}`)} >编辑</Button>,
+                onClick={() => history.push(`/project/management/edit/qualificationReview/${id}`)} >编辑</Button>,
             <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
         ]}>
         <Spin spinning={loading}>
