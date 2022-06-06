@@ -644,11 +644,14 @@ export default function IngredientsList(): React.ReactNode {
         for (let i = 0; i < options.length; i += 1) {
             const result = options[i].width.split("~");
             if ((key >= result[0] * 1) && (key <= result[1] * 1)) {
-                console.log(options[i], "==============================>>>")
                 setNowIngre({
                     ...options[i],
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 });
+                serarchForm.setFieldsValue({
+                    ...options[i],
+                    utilizationRate: options[i]?.utilizationRate || 96.5
+                })
             }
         }
     }
