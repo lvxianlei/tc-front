@@ -11,7 +11,13 @@ export interface EditProps {
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
     requiredReturnTime?: string
 }
-
+export interface EditPropsGurance {
+    id?: string
+    ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
+    requiredReturnTime?: string
+    guaranteePrice: number
+    effectiveTime: string
+}
 // 接口的返回类型
 export interface UserData {
     guaranteeInitVO?: object // 基本信息
