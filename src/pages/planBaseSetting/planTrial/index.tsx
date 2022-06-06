@@ -360,8 +360,8 @@ export default function PlanTrialList(): React.ReactNode {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         console.log(selectedRows)
-        const totalHoles = selectedRows.reduce((pre: any,cur: { trialAssembleSegment: any;})=>{
-            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleSegment!==null?cur.trialAssembleSegment:0)).toFixed(4)
+        const totalHoles = selectedRows.reduce((pre: any,cur: { segmentCount: any;})=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.segmentCount!==null?cur.segmentCount:0)).toFixed(4)
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { trialAssembleWeight: any; })=>{
             return (parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleWeight!==null?cur.trialAssembleWeight:0)).toFixed(4)
@@ -424,9 +424,9 @@ export default function PlanTrialList(): React.ReactNode {
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,
-                    getCheckboxProps: (record: any) => ({
-                        disabled: record.status === 2, //已下发不可再次下发
-                    }),
+                    // getCheckboxProps: (record: any) => ({
+                    //     disabled: record.status === 2, //已下发不可再次下发
+                    // }),
                 }
             }}
            
@@ -482,7 +482,17 @@ export default function PlanTrialList(): React.ReactNode {
                     <Popconfirm
                         title="下发后不可取消，是否下发试装计划？"
                         onConfirm={async () => {
+                           
                             if (selectedKeys.length > 0){
+                                let error:boolean = false;
+                                selectedRows.map((item:any)=>{
+                                    if(item.status !==1 ){
+                                        error = true
+                                    }
+                                })
+                                if(error){
+                                    return message.error('已下发、已完成，不可再次下发！')
+                                }
                                 await RequestUtil.post(`/tower-aps/trialAssemble/distribute`,
                                     selectedRows
                                 ).then(() => {

@@ -191,10 +191,9 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={async () => {
-                        deleteIdList.push(record.id)
-                        setDataSource(dataSource.filter((item:any)=>{
-                            return item.id!==record.id
-                        }))
+                        await RequestUtil.delete(`/tower-aps/cyclePlan/cyclePlanOrder/${record.id}`)
+                        message.success('删除成功！')
+                        history.go(0)
                     }}
                     okText="确认"
                     cancelText="取消"
@@ -344,10 +343,11 @@ export default function CyclePlanDetail(): React.ReactNode {
                 await formRef.validateFields()
                 const value = formRef.getFieldsValue(true)
 
-                const submitData = selectedKeys.map((item:any)=>{
+                const submitData = selectedRows.map((item:any,index)=>{
                     return {
-                        id: item,
-                        description: value?.description
+                        id: item?.id,
+                        description: value?.description,
+                        planCompleteTime: item?.planCompleteTime
                     }
                 })
                 await RequestUtil.post(`/tower-aps/cyclePlan/cycleDescription`,submitData).then(()=>{
@@ -502,7 +502,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                                 return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalNumber!==null?cur.totalNumber:0 )
                             },0)
                             const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
-                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+                                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(3)
                             },0)
                             setDetail({
                                 ...detail,
