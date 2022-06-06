@@ -14,7 +14,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const [baseInfoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${params.id}`, { type: 1 })
             if (result.bidType === -1) {
                 result.bidType = null
             }

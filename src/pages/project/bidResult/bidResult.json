@@ -89,6 +89,13 @@
             "required": true
         },
         {
+            "title": "框架标套数",
+            "dataIndex": "frameNumber",
+            "width": 100,
+            "type": "number",
+            "required": true
+        },
+        {
             "title": "中标比例（%）",
             "dataIndex": "bidPro",
             "width": 150,
