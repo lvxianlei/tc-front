@@ -285,6 +285,7 @@ export default function Information(): React.ReactNode {
                 contractName: fields.contractId.id,
                 contractAmount: result.contractAmount, // 合同总价
                 salesman: result.salesman, // 业务归属
+                // contractId: result.contractNumber
             })
             if (allFields.guaranteeRate) {
                 let money = ((result.contractAmount * allFields.guaranteeRate) / 100).toFixed(2);

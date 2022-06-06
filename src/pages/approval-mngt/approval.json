@@ -386,7 +386,7 @@
             "type": "popTable",
             "path": "/tower-market/contract",
             "width": 1011,
-            "value": "contractName",
+            "value": "contractNumber",
             "dependencies": true,
             "disabled": true,
             "readOnly": true,
