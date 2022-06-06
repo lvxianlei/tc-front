@@ -147,6 +147,22 @@ export default function CyclePlanDetail(): React.ReactNode {
             dataIndex: 'plateWeight'
         },
         {
+            title: "状态",
+            dataIndex: "status",
+            width:120,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+            )
+        },
+        {
+            title: "执行状态",
+            dataIndex: "status",
+            width:120,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
+            )
+        },
+        {
             key: 'storageMaterialDescription',
             title: '库存备料',
             width: 100,

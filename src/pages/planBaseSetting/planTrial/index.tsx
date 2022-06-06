@@ -292,6 +292,15 @@ export default function PlanTrialList(): React.ReactNode {
             )
         },
         {
+            title: "执行状态",
+            dataIndex: "status",
+            editable: true,
+            width:120,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
+            )
+        },
+        {
             title: "下发日期",
             dataIndex: "issueTime",
             editable: true,
@@ -329,6 +338,14 @@ export default function PlanTrialList(): React.ReactNode {
                 ...col,
                 render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                     <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+                )
+            }
+        }
+        if(col.dataIndex==='status'){
+            return{
+                ...col,
+                render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                    <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
                 )
             }
         }
@@ -407,6 +424,13 @@ export default function PlanTrialList(): React.ReactNode {
         </Form.Item>
         <Form.Item label='计划交货日期' name='time'>
             <DatePicker.RangePicker />
+        </Form.Item>
+        <Form.Item label='状态' name='status' initialValue={1}>
+            <Select placeholder="请选择" style={{ width: "150px" }}>
+                <Select.Option value={1} key="1">正常</Select.Option>
+                <Select.Option value={2} key="2">暂停</Select.Option>
+                <Select.Option value={3} key="3">取消</Select.Option>
+            </Select>
         </Form.Item>
         <Form.Item>
             <Button type="primary" htmlType="submit">查询</Button>

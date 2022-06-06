@@ -17,6 +17,26 @@
             "dataIndex": "productTypeName"
         },
         {
+            "title": "执行状态",
+            "dataIndex": "status",
+            "type": "select",
+            "width":150,
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "正常"
+                },
+                {
+                    "value": 2,
+                    "label": "暂停"
+                },
+                {
+                    "value": 3,
+                    "label": "取消"
+                }
+            ]
+        },
+        {
             "title": "生产下达时间",
             "dataIndex": "loftingBatchTime"
         }
@@ -41,6 +61,26 @@
         {
             "title": "加工单元",
             "dataIndex": "processWorkshop"
+        },
+        {
+            "title": "执行状态",
+            "dataIndex": "status",
+            "type": "select",
+            "width":150,
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "正常"
+                },
+                {
+                    "value": 2,
+                    "label": "暂停"
+                },
+                {
+                    "value": 3,
+                    "label": "取消"
+                }
+            ]
         },
         {
             "title": "生产下达时间",

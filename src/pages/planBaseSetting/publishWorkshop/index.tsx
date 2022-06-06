@@ -181,7 +181,7 @@ export default () => {
         path="/tower-aps/workshopOrder"
         filterValue={filterValue}
         columns={status === 1 ? [
-            ...pageTable,
+            ...pageTable  as any,
             {
                 title: "操作",
                 width: 160,
@@ -192,7 +192,7 @@ export default () => {
                     <Link to={`/planProd/publishWorkshop/welding/${record.id}/${record.issuedNumber}/${record.productCategory}`}><Button type="link" size="small">组焊明细</Button></Link>
                 </>
             }] : [
-            ...workShopOrder,
+            ...workShopOrder as any,
             {
                 title: "操作",
                 width: 100,
@@ -222,6 +222,11 @@ export default () => {
         }
         searchFormItems={[
             {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="计划号/塔型/下达单号" style={{ width: 300 }} />
+            },
+            {
                 name: 'productType',
                 label: '产品类型',
                 children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
@@ -233,15 +238,22 @@ export default () => {
                 </Select>
             },
             {
+                name: 'status',
+                label: '执行状态',
+                children: <Form.Item name='status' initialValue={1}>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                        <Select.Option value={1} key="1">正常</Select.Option>
+                        <Select.Option value={2} key="2">暂停</Select.Option>
+                        <Select.Option value={3} key="3">取消</Select.Option>
+                    </Select>
+                </Form.Item>
+            },
+            {
                 name: 'time',
                 label: '生产下达日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
-            {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="计划号/塔型/下达单号" style={{ width: 300 }} />
-            }
+            
         ]}
         tableProps={status === 1 ? {
             rowSelection: {
