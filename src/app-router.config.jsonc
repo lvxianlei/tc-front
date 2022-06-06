@@ -1894,6 +1894,20 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-计划变更
+      "name": "计划变更",
+      "path": "/planProd/planChange",
+      "module": "./pages/planBaseSetting/planChange/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-计划变更-明细
+      "name": "计划变更明细",
+      "path": "/planProd/planChange/:id/:status",
+      "module": "./pages/planBaseSetting/planChange/Detail",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 包装车间-加工任务面板
       "name": "包装计划列表",
       "path": "/packagingWorkshop/processingTask",

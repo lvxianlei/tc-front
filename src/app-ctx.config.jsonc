@@ -663,6 +663,11 @@
                         "label": "镀锌包装计划",
                         "path": "/planProd/planGalvanizedPack",
                         "authority": "approvalm"
+                    },
+                    {
+                        "label": "计划变更",
+                        "path": "/planProd/planChange",
+                        "authority": "approvalm"
                     }
                 ]
             },
