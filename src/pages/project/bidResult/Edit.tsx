@@ -173,7 +173,14 @@ export default function BidResultEdit(): JSX.Element {
         if (changeFileds.id) {
             setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
                 if (item.round === itemKey) {
-                    return ({ ...item, bidOpenRecordVos: allFields.submit.map((item: any) => item.id === changeFileds.id ? ({ ...item, isBid: -1 }) : item) })
+                    return ({
+                        ...item,
+                        bidOpenRecordVos: allFields.submit.map((item: any) => item.id === changeFileds.id ? ({
+                            ...item,
+                            frameNumber: 0,
+                            isBid: -1
+                        }) : item)
+                    })
                 }
                 return item
             }))
@@ -335,7 +342,6 @@ const PartBidInfo = memo(({ id }: { id: string }) => {
     }), { manual: true })
 
     const handleCheckedChange = async (e: any, checkId: string) => {
-        console.log(e)
         await run({
             id: checkId,
             isSign: e.target.checked ? 2 : 1
