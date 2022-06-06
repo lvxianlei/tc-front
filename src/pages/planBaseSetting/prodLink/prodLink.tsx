@@ -264,7 +264,7 @@ const ProdLink = (): React.ReactNode => {
                     </Row>
                     <Row>
                         <Col  span={24}>
-                            <Form.Item label="下发数据类型类型" rules={[{required:true,message:'请选择数据类型'}]} name='issuedType' >
+                            <Form.Item label="下发数据类型" rules={[{required:true,message:'请选择数据类型'}]} name='issuedType' >
                                 <Select
                                     placeholder='请选择'
                                    
