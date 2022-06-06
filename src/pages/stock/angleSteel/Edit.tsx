@@ -54,14 +54,14 @@ export default forwardRef(function Edit({ type, data = {} }: EditProps, ref) {
             baseForm.resetFields()
         } else {
             // const thickness = data.thickness.split("~")
-            const width = data.width.split("~")
+            const width = data.width.split("~") || []
             baseForm.setFieldsValue({
                 data,
-                widthMin: width[0],
-                widthMax: width[1],
+                widthMin: width?.[0] || "",
+                widthMax: width?.[1] || "",
                 // thicknessMin: thickness[0],
                 // thicknessMax: thickness[1],
-                openNumber: data.openNumber.split(",")
+                openNumber: data.openNumber?.split(",") || []
             })
         }
 
