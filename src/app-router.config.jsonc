@@ -777,7 +777,7 @@
       "authority": "inventory_management_warehousing"
     },
     { // 库存管理-原材料入库-详情
-      "name": "原材料入库详情",
+      "name": "原材料入库明细",
       "path": "/stock/rawMaterialWarehousing/detail/:id",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
@@ -824,6 +824,13 @@
       "module": "./pages/stock/securitySetting/securitySetting",
       "exact": true,
       "authority": "sw_configuration_management_safety_stock_configuration"
+    },
+    { // 配置管理-税率参数配置
+      "name": "税率参数配置",
+      "path": "/config/configList/taxRate",
+      "module": "./pages/stock/taxRate",
+      "exact": true,
+      "authority": "configuration_management_lists"
     },
     { // 配置管理-角钢配料策略
       "name": "角钢配料策略",
@@ -1044,21 +1051,21 @@
     },
     { // 工作管理-收货列表
       "name": "收货列表",
-      "path": "/ingredients/receiving",
+      "path": "/stock/receiving",
       "module": "./pages/workMngt/receivingList/index",
       "exact": true,
       "authority": "work_management_receiving_list"
     },
     { // 工作管理-收获列表-详情
       "name": "收货列表明细",
-      "path": "/ingredients/receiving/detail/:id",
+      "path": "/stock/receiving/detail/:id",
       "module": "./pages/workMngt/receivingList/Overview",
       "exact": true,
       "authority": "sw_work_management_receiving_list_details"
     },
     { // 工作管理-收获列表-编辑
       "name": "收货列表编辑",
-      "path": "/ingredients/receiving/edit/:id",
+      "path": "/stock/receiving/edit/:id",
       "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
       "authority": "sw_work_management_receiving_list_edits"
@@ -1762,7 +1769,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-技术下发
-      "name": "下发技术",
+      "name": "技术派工",
       "path": "/planProd/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/index",
       "exact": true,
@@ -1776,7 +1783,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-下发技术
-      "name": "下发技术",
+      "name": "技术派工",
       "path": "/planProd/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
@@ -1797,7 +1804,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
-      "name": "分配车间",
+      "name": "分配生产单元",
       "path": "/planProd/publishWorkshop",
       "module": "./pages/planBaseSetting/publishWorkshop/index",
       "exact": true,
@@ -1818,7 +1825,7 @@
       "authority": "approvalm"
     },
     { // 计划排产-分配车间
-      "name": "手动分配车间",
+      "name": "手动分配生产单元",
       "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
@@ -2613,6 +2620,20 @@
       "name": "工作中心管理",
       "path": "/workshopPlanBasic/workCenterMngt",
       "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterMngt",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作中心管理-新增
+      "name": "新增",
+      "path": "/workshopPlanBasic/workCenterMngt/add",
+      "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterSetting",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 工作中心管理-编辑
+      "name": "编辑",
+      "path": "/workshopPlanBasic/workCenterMngt/edit/:id",
+      "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterSetting",
       "exact": true,
       "authority": "approvalm"
     },

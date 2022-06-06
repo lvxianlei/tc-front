@@ -9,6 +9,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../../utils/AuthUtil';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
+import moment from 'moment';
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
@@ -25,7 +26,7 @@ export default function PlanTrialList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [editorLock, setEditorLock] = useState('编辑');
     const [sum, setSum] = useState<any>({
-        totalWeight:0.00,
+        totalWeight:0.0000,
         totalHoles:0
     })
     const [formRef] = Form.useForm();
@@ -33,8 +34,8 @@ export default function PlanTrialList(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const { data: productUnitData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit?size=10000`);
-            resole(result?.records)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/productionUnit/trial/trialAssembly`);
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -46,9 +47,13 @@ export default function PlanTrialList(): React.ReactNode {
             editable: true,
             width:120,
             fixed:'left',
-            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_}</span>
-            )
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<><span>{_}</span><Form.Item name={['data', index, "issueOrderId"]} initialValue={record?.issueOrderId} style={{ display: "none" }}>
+                <Input size="small" onChange={() => rowChange(index)} />
+            </Form.Item><Form.Item name={['data', index, "planId"]} initialValue={record?.planId} style={{ display: "none" }}>
+                <Input size="small" onChange={() => rowChange(index)} />
+            </Form.Item><Form.Item name={['data', index, "productCategoryId"]} initialValue={record?.productCategoryId} style={{ display: "none" }}>
+                <Input size="small" onChange={() => rowChange(index)} />
+            </Form.Item></>)
         },
         {
             key: 'startTransferTime',
@@ -60,13 +65,13 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "startTransferTime"]}
-                    initialValue={record.segmentName}
-                    rules={[{
-                        required: true,
-                        message: '请选择开始转运日期'
-                    }]}
+                    initialValue={record.startTransferTime?moment(record.startTransferTime):''}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择开始转运日期'
+                    // }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
             )
         },
@@ -80,13 +85,13 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "endTransferTime"]}
-                    initialValue={record.segmentName}
-                    rules={[{
-                        required: true,
-                        message: '请选择完成转运日期'
-                    }]}
+                    initialValue={record?.endTransferTime?moment(record.endTransferTime):''}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择完成转运日期'
+                    // }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
             )
         },
@@ -100,34 +105,34 @@ export default function PlanTrialList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "planCompleteTime"]}
-                    initialValue={record.segmentName}
-                    rules={[{
-                        required: true,
-                        message: '请选择计划完成日期'
-                    }]}
+                    initialValue={record?.planCompleteTime?moment(record.planCompleteTime):''}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择计划完成日期'
+                    // }]}
                 >
-                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status===2}/>
+                    <DatePicker format='YYYY-MM-DD' onChange={ () => rowChange(index)} disabled={record?.status!==1}/>
                 </Form.Item>
             )
         },
         {
-            key: 'trialAssembleUnitId',
+            key: 'trialAssembleUnitName',
             title: '试装单元',
-            dataIndex: 'trialAssembleUnitId',
+            dataIndex: 'trialAssembleUnitName',
             width: 120,
             fixed:'left',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "trialAssembleUnitId"]}
-                    initialValue={_}
-                    rules={[{
-                        required: true,
-                        message: '请选择试装单元'
-                    }]}
+                    initialValue={record?.trialAssembleUnitId}
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请选择试装单元'
+                    // }]}
                     // initialValue={ record.pattern }
                 >
-                    <Select onChange={ () => rowChange(index) } disabled={record?.status===2}>
+                    <Select onChange={ () => rowChange(index) } disabled={record?.status!==1}>
                         { productUnitData && productUnitData.map(({ id, name }:any, index:number) => {
                         return <Select.Option key={ index } value={ id }>
                             { name }
@@ -155,7 +160,7 @@ export default function PlanTrialList(): React.ReactNode {
                         showCount
                         maxLength={300}
                         onChange={() => rowChange(index)}
-                        disabled={record?.status===2}
+                        disabled={record?.status!==1}
                     />
                 </Form.Item>
             )
@@ -216,7 +221,7 @@ export default function PlanTrialList(): React.ReactNode {
         },
         {
             title: "产品类型",
-            dataIndex: "productType",
+            dataIndex: "productTypeName",
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
@@ -283,7 +288,7 @@ export default function PlanTrialList(): React.ReactNode {
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_}</span>
+                <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
             )
         },
         {
@@ -319,6 +324,14 @@ export default function PlanTrialList(): React.ReactNode {
         if (!col.editable) {
             return col;
         }
+        if(col.dataIndex==='status'){
+            return{
+                ...col,
+                render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                    <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+                )
+            }
+        }
         return {
             ...col,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
@@ -334,7 +347,8 @@ export default function PlanTrialList(): React.ReactNode {
                 values.endTime = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
-            return values;
+            setRefresh(!refresh)
+            // return values;
     }
     const rowChange = (index: number) => {
         rowChangeList.push(index);
@@ -346,11 +360,11 @@ export default function PlanTrialList(): React.ReactNode {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         console.log(selectedRows)
-        const totalHoles = selectedRows.reduce((pre: any,cur: { trialAssembleSegment: any;})=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleSegment!==null?cur.trialAssembleSegment:0) 
+        const totalHoles = selectedRows.reduce((pre: any,cur: { segmentCount: any;})=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.segmentCount!==null?cur.segmentCount:0)).toFixed(4)
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { trialAssembleWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleWeight!==null?cur.trialAssembleWeight:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.trialAssembleWeight!==null?cur.trialAssembleWeight:0)).toFixed(4)
         },0)
         setSum({
             ...sum,
@@ -360,17 +374,59 @@ export default function PlanTrialList(): React.ReactNode {
     }
 
     return <>
+    <Form 
+        layout="inline" 
+        style={{margin:'20px'}} 
+        onFinish={ onFilterSubmit }
+    >
+        <Form.Item label='模糊查询项' name='fuzzyMsg'>
+            <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户/批次号" />
+        </Form.Item>
+        <Form.Item label='产品类型' name='productTypeId'>
+            <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "100px" }}>
+                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    return <Select.Option key={index} value={id}>
+                        {name}
+                    </Select.Option>
+                })}
+            </Select>
+        </Form.Item>
+        <Form.Item label='试装单元' name='productUnitName'>
+            <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                { productUnitData?.map((item: any) => {
+                    return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                }) }
+            </Select>
+        </Form.Item>
+        <Form.Item label='状态' name='status' initialValue={1}>
+            <Select placeholder="请选择" style={{ width: "100px" }}>
+                <Select.Option value={1} key="1">未下发</Select.Option>
+                <Select.Option value={2} key="2">已下发</Select.Option>
+                <Select.Option value={3} key="3">已完成</Select.Option>
+            </Select>
+        </Form.Item>
+        <Form.Item label='计划交货日期' name='time'>
+            <DatePicker.RangePicker />
+        </Form.Item>
+        <Form.Item>
+            <Button type="primary" htmlType="submit">查询</Button>
+        </Form.Item>
+        <Form.Item>
+            <Button htmlType="reset">重置</Button>
+        </Form.Item>
+    </Form>
      <Form form={formRef} className={styles.descripForm}>
         <Page
             path="/tower-aps/trialAssemble/page"
             columns={[...tableColumns as any]}
             tableProps={{
+                rowKey:'issueOrderId',
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,
-                    getCheckboxProps: (record: any) => ({
-                        disabled: record.status === 2, //已下发不可再次下发
-                    }),
+                    // getCheckboxProps: (record: any) => ({
+                    //     disabled: record.status === 2, //已下发不可再次下发
+                    // }),
                 }
             }}
            
@@ -395,6 +451,14 @@ export default function PlanTrialList(): React.ReactNode {
                             if (values && values.length > 0 && newRowChangeList.length > 0) {
                                 let changeValues = values.filter((item: any, index: number) => {
                                     return newRowChangeList.indexOf(index) !== -1;
+                                }).map((item:any)=>{
+                                    return {
+                                        ...item,
+                                        endTransferTime: item?.endTransferTime?moment(item?.endTransferTime).format('YYYY-MM-DD'):'',
+                                        planCompleteTime: item?.planCompleteTime?moment(item?.planCompleteTime).format('YYYY-MM-DD'):'',
+                                        startTransferTime: item?.startTransferTime?moment(item?.startTransferTime).format('YYYY-MM-DD'):'',
+
+                                    }
                                 })
                                 RequestUtil.post(`/tower-aps/trialAssemble/save`, [...changeValues]).then(res => {
                                     setColumns(columnsSetting);
@@ -418,18 +482,24 @@ export default function PlanTrialList(): React.ReactNode {
                     <Popconfirm
                         title="下发后不可取消，是否下发试装计划？"
                         onConfirm={async () => {
-                            if (selectedKeys.length > 0)
-                                if (!(selectedKeys.length > 100)) {
-                                    await RequestUtil.post(`/tower-science/trialAssemble/distribute`,{
-                                        issueOrderIds: selectedKeys
-                                    }).then(() => {
-                                        message.success('下发成功！');
-                                        setRefresh(!refresh);
-                                        history.go(0)
-                                    })
+                           
+                            if (selectedKeys.length > 0){
+                                let error:boolean = false;
+                                selectedRows.map((item:any)=>{
+                                    if(item.status !==1 ){
+                                        error = true
+                                    }
+                                })
+                                if(error){
+                                    return message.error('已下发、已完成，不可再次下发！')
                                 }
-                            else {
-                                message.warning('请选择要下发的数据')
+                                await RequestUtil.post(`/tower-aps/trialAssemble/distribute`,
+                                    selectedRows
+                                ).then(() => {
+                                    message.success('下发成功！');
+                                    setRefresh(!refresh);
+                                    history.go(0)
+                                })
                             }
                         }}
                         okText="提交"
@@ -440,51 +510,9 @@ export default function PlanTrialList(): React.ReactNode {
                     </Popconfirm>
                 </Space>
             }
-            searchFormItems={[
-                {
-                    name: 'fuzzyMsg',
-                    label: '模糊查询项',
-                    children: <Input style={{ width: "200px" }} placeholder="计划号/塔型/业务经理/客户/批次号" />
-                },
-                {
-                    name: 'productTypeId',
-                    label: '产品类型',
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
-                            </Select.Option>
-                        })}
-                    </Select>
-                },
-                {
-                    name: 'productUnitName',
-                    label: '试装单元',
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                        { productUnitData?.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                        }) }
-                    </Select>
-                },
-                {
-                    name: 'status',
-                    label: '状态',
-                    children: <Form.Item name='status' initialValue={1}>
-                        <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option value={1} key="1">未下发</Select.Option>
-                            <Select.Option value={2} key="2">已下发</Select.Option>
-                            <Select.Option value={3} key="3">已完成</Select.Option>
-                        </Select>
-                    </Form.Item>
-                },
-                {
-                    name: 'time',
-                    label: '计划交货日期',
-                    children: <DatePicker.RangePicker />
-                },
-                
-            ]}
-            onFilterSubmit={onFilterSubmit}
+            refresh={refresh}
+            searchFormItems={[]}
+            // onFilterSubmit={onFilterSubmit}
         />
      </Form>   
         

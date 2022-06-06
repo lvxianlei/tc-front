@@ -5,6 +5,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import moment from 'moment';
+import zhCN from 'antd/es/date-picker/locale/zh_CN';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string }>()
@@ -18,6 +20,28 @@ export default function SampleDraw(): React.ReactNode {
     const { run } = useRequest((option) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-aps/productionPlan/factory`, option);
+            resole(result)
+        } catch (error) {
+            console.log(error)
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: splitBatchRun } = useRequest((option) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, option);
+            console.log(result)
+            resole(result)
+        } catch (error) {
+            console.log(error)
+            reject(error)
+            // resole(error)
+        }
+    }), { manual: true })
+    
+    const { run: runDate } = useRequest((option) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/tower-aps/productionPlan/batch/delivery/time`, option);
             resole(result)
         } catch (error) {
             console.log(error)
@@ -46,22 +70,19 @@ export default function SampleDraw(): React.ReactNode {
             title: "确认后不可取消，是否确认？",
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
-                    const splitData = await form.validateFields()
-                    const submitData = selectedRows.map((item: any) => {
-                        return {
+                    const splitData = await form.getFieldsValue(true)
+                    await splitBatchRun(selectedRows.map((item: any) => ({
                             id: item.id,
                             productionBatch: splitData?.productionBatch
-                        }
-                    })
-                    await RequestUtil.post(`/tower-aps/productionPlan/batchNo/${params.id}`, submitData).then(() => {
-                        message.success('提交成功！')
-                        form.resetFields()
-                        setSelectedKeys([])
-                        setSelectedRows([])
-                        history.go(0)
-                    })
+                    })))
+                    await message.success("提交成功！")
+                    setSelectedKeys([])
+                    setSelectedRows([])
+                    form.resetFields()
+                    history.go(0)
+                    resove(true)
                 } catch (error) {
-                    console.log(error)
+                    reject(false)
                 }
             }),
             onCancel: () => form.resetFields()
@@ -95,9 +116,9 @@ export default function SampleDraw(): React.ReactNode {
             dataIndex: 'productNumber'
         },
         {
-            key: 'planDeliveryTime',
+            key: 'customerDeliveryTime',
             title: '客户交货日期',
-            dataIndex: 'planDeliveryTime'
+            dataIndex: 'customerDeliveryTime'
         },
         {
             key: 'planDeliveryTime',
@@ -140,11 +161,12 @@ export default function SampleDraw(): React.ReactNode {
             title: "确认后不可取消，是否确认？",
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
-                    const factoryId = await factoryForm.validateFields()
+                    const factoryId = await factoryForm.getFieldsValue(true)
                     await run(selectedRows.map((item: any) => ({
                         id: item.id,
                         productionBatchNo: item.productionBatchNo,
-                        factoryId: factoryId.factoryId
+                        factoryId: factoryId.factoryId,
+                        productCategoryId: item.productCategoryId
                     })))
                     await message.success("已成功分配生产单元组！")
                     setSelectedKeys([])
@@ -352,18 +374,17 @@ export default function SampleDraw(): React.ReactNode {
             content: <Form form={dateForm}>
                 <Form.Item
                     label="计划交货日期"
-                    name="plannedDate"
+                    name="planDeliveryTime"
                     rules={[{ required: true, message: '请选择计划交货日期' }]}>
-                    <DatePicker format='YYYY-MM-DD' placeholder='请选择'/>
+                    <DatePicker format='YYYY-MM-DD' placeholder='请选择' locale={zhCN}/>
                 </Form.Item>
             </Form>,
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const factoryId = await dateForm.validateFields()
-                    await run(selectedRows.map((item: any) => ({
+                    const value = await dateForm.validateFields()
+                    await runDate(selectedRows.map((item: any) => ({
                         id: item.id,
-                        productionBatchNo: item.productionBatchNo,
-                        factoryId: factoryId.factoryId
+                        planDeliveryTime: moment(value?.planDeliveryTime).format('YYYY-MM-DD'),
                     })))
                     await message.success("已成功设置计划交货日期！")
                     setSelectedKeys([])

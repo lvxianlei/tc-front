@@ -83,13 +83,12 @@ const ProdUnitAdd = (props: any) => {
         const submitValue = {
             ...value,
             productUnitCode:value.productUnitCode,
-            productionLinkDTOList: value.productionLinkDTOList.map((item: string) => {
-                return {
-                    productionLinkId: item,
+            productionLinkDTOList: [
+                {
+                    productionLinkId: props.id ? value.productionLinkDTOList[0]: value.productionLinkDTOList,
                     productionUnitId: props.id,
-
                 }
-            }),
+            ],
            
         }
         await RequestUtil.post('/tower-aps/productionUnit', {
@@ -377,12 +376,13 @@ const ProdUnitAdd = (props: any) => {
                                 <Select
                                     className='input'
                                     placeholder='请选择'
-                                    mode='multiple'
+                                    // mode='multiple'
                                     maxTagCount={10}
                                     searchValue=''
                                     // onChange={(value) => {
                                     //     changeItemInfo(value, 'productionLinkDTOList')
                                     // }}
+                                    disabled={props.id?true:false}
                                 >
                                     {
                                         prodLinkList.map((item: any, index: number) => {

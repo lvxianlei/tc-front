@@ -47,6 +47,7 @@ export default function SearchTable({
     filterValue = {},
     tableProps,
     pagination,
+    modal = false,
     exportPath,
     exportObject = {},
     ...props }: SearchTableProps): JSX.Element {
@@ -109,16 +110,19 @@ export default function SearchTable({
         <Space style={{
             marginBottom: 12,
             paddingLeft: 12
-        }} size={12}>{extraOperation}</Space>
-        {
-            exportPath && (
-                <Space direction="horizontal" size="middle" style={{ width: "100%", marginBottom: "12px" }}>
-                    {exportPath && <Button type="primary" ghost onClick={() => {
-                        setIsExport(true)
-                    }}>导出</Button>}
-                </Space>
-            )
-        }
+        }} size={12}>
+            {
+                exportPath && (
+                    <Space direction="horizontal" size="middle" style={{ width: "100%" }}>
+                        {exportPath && <Button type="primary" ghost onClick={() => {
+                            setIsExport(true)
+                        }}>导出</Button>}
+                    </Space>
+                )
+            }
+            {extraOperation}
+        </Space>
+        
         <CommonAliTable
             columns={columns}
             rowKey={rowKey || ((record: any) => record.id)}
@@ -129,7 +133,7 @@ export default function SearchTable({
             {...props}
         />
         {
-            pagination !== false && <footer className={styles.pagenationWarp}>
+            pagination !== false && <footer className={modal?styles.pagenationWarpModal:styles.pagenationWarp}>
                 <Pagination
                     className={styles.pagination}
                     total={data?.total}

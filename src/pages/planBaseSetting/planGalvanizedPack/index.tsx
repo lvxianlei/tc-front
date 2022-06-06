@@ -18,16 +18,16 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         setSelectedRows(selectedRows);
         console.log(selectedRows)
         const totalAngleWeight = selectedRows.reduce((pre: any,cur: { angleWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0) 
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0)).toFixed(4) 
         },0)
         const totalPlateWeight = selectedRows.reduce((pre: any,cur: { plateWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )).toFixed(4)
         },0)
         const totalAngleNumber = selectedRows.reduce((pre: any,cur: { angleNumber: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)).toFixed(4)
         },0)
         const totalPlateNumber = selectedRows.reduce((pre: any,cur: { plateNumber: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)).toFixed(4)
         },0)
         setSum({
             ...sum,
@@ -89,16 +89,27 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 <span>角钢总件数：{sum?.totalAngleNumber}</span>
                 <span>钢板总件数：{sum?.totalPlateNumber}</span>
             </Space>
-            <Link to={`/planProd/planGalvanizedPack/${selectedKeys.join(',')}`}><Button type="primary" disabled={selectedKeys.length <= 0}>镀锌包装下发</Button></Link>
+            <Button type="primary" disabled={selectedKeys.length <= 0} onClick={()=>{
+                let error:boolean = false;
+                selectedRows.map((item:any)=>{
+                    if(item.status !==1 ){
+                        error = true
+                    }
+                })
+                if(error){
+                    return message.error('已下发、已完成，不可再次镀锌包装下发！')
+                }
+                history.push(`/planProd/planGalvanizedPack/${selectedKeys.join(',')}`)
+            }}>镀锌包装下发</Button>
         </Space>}
         tableProps={{
             rowSelection: {
                 type: "checkbox",
                 selectedRowKeys: selectedKeys,
                 onChange: SelectChange,
-                getCheckboxProps: (record: any) => ({
-                    disabled: record.status == 2, //已下发不可再次下发
-                }),
+                // getCheckboxProps: (record: any) => ({
+                //     disabled: record?.status == 2, //已下发不可再次下发
+                // }),
             }
         }}
         searchFormItems={[
@@ -110,7 +121,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
             {
                 name: 'productTypeId',
                 label: '产品类型',
-                children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                children: <Select placeholder="请选择" style={{ width: "150px" }}>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
@@ -121,20 +132,22 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
             {
                 name: 'galvanizedUnitName',
                 label: '镀锌生产单元',
-                children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                    { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                    }) }
-                </Select>
+                children: <Input style={{ width: "200px" }} placeholder="请输入" />
+                // children: <Select placeholder="请选择"  style={{ width: "150px" }}>
+                //     { productUnitData?.map((item: any) => {
+                //         return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                //     }) }
+                // </Select>
             },
             {
                 name: 'packageUnitName',
                 label: '包装生产单元',
-                children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                    { productUnitData?.map((item: any) => {
-                        return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
-                    }) }
-                </Select>
+                children: <Input style={{ width: "200px" }} placeholder="请输入" />
+                // children: <Select placeholder="请选择"  style={{ width: "150px" }}>
+                //     { productUnitData?.map((item: any) => {
+                //         return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
+                //     }) }
+                // </Select>
             },
             {
                 name: 'status',

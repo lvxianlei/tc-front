@@ -17,7 +17,8 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
     const [ detail, setDetail ] = useState<any>({totalHoles: 0 ,totalNumber:0 , totalWeight:'0'});
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
         productTypeId: productTypeOptions && productTypeOptions.length>0 && productTypeOptions[0].id,
-        configId: params?.configId
+        configId: params?.configId,
+        cyclePlanId: params?.id,
     });
     const [columns, setColumns] = useState<any[]>(tableHeader)
     const [filterStatus, setFilterStatus] = useState<{ [key: string]: any }>({})
@@ -211,7 +212,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 filterValue={filterValue}
                 requestData={{
                     configId: params?.configId,
-                    cyclePlanId: params.id,
+                    cyclePlanId: params?.id,
                 }}
                 transformResult={(dataSource: any) => {
                     setColumns([...tableHeader, ...dataSource.header.map(((item: any) => ({
@@ -244,9 +245,16 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                             })
                         })
                     })))])
+                    // return ({
+                    //     ...dataSource.planBoards,
+                    //     records: dataSource.planBoards.map((item: any, index: number) => ({
+                    //         ...item,
+                    //         onlyId: `${item.id}-${index}`
+                    //     }))
+                    // })
                     return ({
                         ...dataSource.planBoards,
-                        records: dataSource.planBoards.map((item: any, index: number) => ({
+                        records: dataSource.planBoards.records.map((item: any, index: number) => ({
                             ...item,
                             onlyId: `${item.id}-${index}`
                         }))
@@ -262,7 +270,8 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         onChange: SelectChange
                     }
                 }}
-                pagination={false}
+                // pagination={false}
+                modal={true}
                 columns={columns}
                 extraOperation={(data: any) => {
                     return <>
@@ -305,7 +314,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 ]}
                 onFilterSubmit={(values: any) => {
                     values.configId = params?.configId
-                    values.cyclePlanId = params.id
+                    values.cyclePlanId = params?.id
                     setFilterValue(values)
                     return values;
                 }}

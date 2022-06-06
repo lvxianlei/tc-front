@@ -191,16 +191,15 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={async () => {
-                        deleteIdList.push(record.id)
-                        setDataSource(dataSource.filter((item:any)=>{
-                            return item.id!==record.id
-                        }))
+                        await RequestUtil.delete(`/tower-aps/cyclePlan/cyclePlanOrder/${record.id}`)
+                        message.success('删除成功！')
+                        history.go(0)
                     }}
                     okText="确认"
                     cancelText="取消"
-                    disabled={record?.status===2}
+                    disabled={record?.status===2||detail?.status===2}
                 >
-                    <Button type="link" disabled={record?.status===2}>删除</Button>
+                    <Button type="link" disabled={record?.status===2||detail?.status===2}>删除</Button>
                 </Popconfirm>
         }
     ]
@@ -285,7 +284,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                             planCompleteTime: moment(valueDate?.planCompleteTime).format('YYYY-MM-DD')
                         }
                     })
-                    RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
+                    await RequestUtil.post(`/tower-aps/cyclePlan/cyclePlanCompleteTime`,submitValue)
                     message.success("已成功设置计划完成日期！")
                     dateForm.resetFields()
                     const value = form.getFieldsValue(true)
@@ -302,7 +301,12 @@ export default function CyclePlanDetail(): React.ReactNode {
                         startTime: value?.startTime,
                         endTime: value?.endTime,
                         deleteIdList: deleteIdList,
-                        issueOrderDTOList: dataSource 
+                        issueOrderDTOList: dataSource.map((item:any)=>{
+                            return{
+                                ...item,
+                                planCompleteTime: selectedKeys.includes(item.id)?moment(valueDate?.planCompleteTime).format('YYYY-MM-DD'):item?.planCompleteTime
+                            }
+                        }) 
                     }
                     await RequestUtil.put(`/tower-aps/cyclePlan`,submitData)
                     resove(true)
@@ -339,10 +343,11 @@ export default function CyclePlanDetail(): React.ReactNode {
                 await formRef.validateFields()
                 const value = formRef.getFieldsValue(true)
 
-                const submitData = selectedKeys.map((item:any)=>{
+                const submitData = selectedRows.map((item:any,index)=>{
                     return {
-                        id: item,
-                        description: value?.description
+                        id: item?.id,
+                        description: value?.description,
+                        planCompleteTime: item?.planCompleteTime
                     }
                 })
                 await RequestUtil.post(`/tower-aps/cyclePlan/cycleDescription`,submitData).then(()=>{
@@ -373,7 +378,7 @@ export default function CyclePlanDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Space>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                    <Button type="primary" ghost onClick={async () =>{
+                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () =>{
                         await form.validateFields()
                         const value = form.getFieldsValue(true)
                         console.log(value)
@@ -398,13 +403,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                         setDeleteIdList([])
                         setSelectedRows([])
                         await run()
-                    }}>保存</Button>
-                    <Button type="primary" ghost onClick={async () => {
+                    }}>保存</Button>}
+                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
-                    }} disabled={detail?.materialStatus===2}>备料确认</Button>
-                    <Popconfirm
+                    }} disabled={detail?.status===2}>备料确认</Button>}
+                    {detail?.status!==2&&<Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/issue/${params.id}`)
@@ -415,7 +420,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                         cancelText="取消"
                     >
                         <Button type="primary" ghost >周期计划下发</Button>
-                    </Popconfirm>
+                    </Popconfirm>}
                 </Space>
             ]}>
                 <DetailTitle title="基础信息"/>
@@ -465,13 +470,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                     </Row>
                 </Form>
                 <DetailTitle title="周期计划下达单"/>
-                <Space>
+                {detail?.status!==2&&<Space>
                     <ReleaseOrder run={run} data={detail}/>
-                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>设置计划交货期</Button>
+                    <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>计划完成日期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
-                </Space>
+                </Space>}
                 <div>
                     <Space>
                         <span>合计：</span>
@@ -497,7 +502,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                                 return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalNumber!==null?cur.totalNumber:0 )
                             },0)
                             const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
-                                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+                                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(3)
                             },0)
                             setDetail({
                                 ...detail,

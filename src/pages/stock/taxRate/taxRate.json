@@ -1,0 +1,16 @@
+{
+    "baseColumn": [
+        {
+            "title": "名称",
+            "dataIndex": "modeName"
+        },
+        {
+            "title": "参数",
+            "dataIndex": "taxVal"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "description"
+        }
+    ]
+}
