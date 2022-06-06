@@ -165,7 +165,8 @@ export default function SampleDraw(): React.ReactNode {
                     await run(selectedRows.map((item: any) => ({
                         id: item.id,
                         productionBatchNo: item.productionBatchNo,
-                        factoryId: factoryId.factoryId
+                        factoryId: factoryId.factoryId,
+                        productCategoryId: item.productCategoryId
                     })))
                     await message.success("已成功分配生产单元组！")
                     setSelectedKeys([])
