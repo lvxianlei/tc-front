@@ -731,6 +731,11 @@ export default function IngredientsList(): React.ReactNode {
                     available: miter,
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 });
+                serarchForm.setFieldsValue({
+                    ...options[i],
+                    available: miter,
+                    utilizationRate: options[i]?.utilizationRate || 96.5
+                })
             }
         }
     }
