@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Button } from 'antd'
 import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom'
-import { DetailContent, CommonTable, Page } from '../../common'
+import { DetailContent, CommonTable, CommonAliTable } from '../../common'
 import { PurchaseList, PurchaseTypeStatistics } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -13,25 +13,19 @@ interface PagenationProps {
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
-    const [filterValue, setFilterValue] = useState()
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
+    const [isEdit, setIsEdit] = useState(false)
+    console.log(location.search, "---")
     const [pagenation, setPagenation] = useState<PagenationProps>({
         current: 1,
         pageSize: 10
     })
+
     const paginationChange = (page: number, pageSize: number) => {
         run(page, pageSize)
     }
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }))
 
     const { loading: purchasePlanLoading, data: purchasePlanData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -43,7 +37,7 @@ export default function Edit() {
         }
     }))
 
-    const { loading: loadingTable, data: dataTable, run } = useRequest<{ [key: string]: any }>((current = 1, size = 10) => new Promise(async (resole, reject) => {
+    const { data: dataTable, run } = useRequest<{ [key: string]: any }>((current = 1, size = 10) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`, {
                 current: current,
@@ -55,18 +49,21 @@ export default function Edit() {
             reject(error)
         }
     }))
+
     return (
         <>
             <DetailContent title={[
-                <Button key="export" type="primary" ghost onClick={() => { setIsExportStoreList(true) }} style={{ marginBottom: 16 }}>导出</Button>
-            ]} operation={[<Button key="" type="ghost" onClick={() => history.goBack()}>返回</Button>]}>
-                {/* <Page
-                    path={`/tower-supply/materialPurchasePlan/list/${params.id}`}
-                    columns={PurchaseList}
-                    filterValue={filterValue}
-                    searchFormItems={[]}
-                /> */}
-                <CommonTable
+                <Button
+                    key="export" type="primary" ghost
+                    onClick={() => { setIsExportStoreList(true) }}
+                    style={{ marginBottom: 16 }}
+                >导出</Button>
+            ]}
+                operation={[
+                    <Button key="edit" type="ghost" onClick={() => history.goBack()}>编辑</Button>,
+                    <Button key="goback" type="ghost" onClick={() => history.goBack()}>返回</Button>
+                ]}>
+                {!isEdit && <CommonAliTable
                     loading={purchasePlanLoading}
                     columns={PurchaseList}
                     dataSource={dataTable?.records || []}
@@ -77,7 +74,20 @@ export default function Edit() {
                         current: pagenation.current,
                         total: dataTable?.total
                     }}
-                />
+                />}
+                {isEdit && <CommonTable
+                    loading={purchasePlanLoading}
+                    columns={PurchaseList}
+                    rowKey="rowId"
+                    dataSource={dataTable?.records.map((item: any, index: number) => ({ ...item, rowId: index })) || []}
+                    pagination={{
+                        size: "small",
+                        pageSize: pagenation.pageSize,
+                        onChange: paginationChange,
+                        current: pagenation.current,
+                        total: dataTable?.total
+                    }}
+                />}
                 <div style={{ marginBottom: 12 }}>
                     采购类型统计： 圆钢总重（t）：<span style={{ color: "#FF8C00" }}>{purchasePlanData?.total?.roundSteelTotal === -1 ? "0" : purchasePlanData?.total?.roundSteelTotal}</span>
                     <span style={{ margin: "0px 12px" }}>角钢总重（t）：<span style={{ color: "#FF8C00" }}>{purchasePlanData?.total?.angleSteelTotal === -1 ? "0" : purchasePlanData?.total?.angleSteelTotal}</span></span>
