@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, EditTable, PopTableContent, forma
 import { promotionalTourism, contractInformation, contract } from "./collection.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-type ReturnType = 1171 | 1172 | -1 | "-1" | undefined
+type ReturnType = 1171 | 1172 | 1173 | -1 | "-1" | undefined
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
@@ -40,7 +40,7 @@ export default function Edit() {
         try {
             const baseInfo = await baseForm.validateFields()
             const confirmBackMoneyInfoDTOList = await contractInfosForm.validateFields()
-            if (returnType === 1172) {
+            if (returnType === 1172 || returnType === 1173) {
                 if (confirmBackMoneyInfoDTOList?.submit?.length <= 0) {
                     message.warning("回款类型为合同应收款时，必须选择合同和回款计划")
                     return
@@ -137,7 +137,7 @@ export default function Edit() {
                 dataSource={data || {}}
                 edit
             />
-            {returnType === 1172 && <>
+            {(returnType === 1172 || returnType === 1173) && <>
                 <DetailTitle title="合同信息" operation={[<Button key="choose" type="primary" ghost onClick={() => setVisible(true)}>选择合同</Button>]} />
                 <EditTable
                     form={contractInfosForm}
@@ -152,7 +152,7 @@ export default function Edit() {
                                         type={item.type}
                                         data={{
                                             ...item,
-                                            path: item.path + contractInfosForm.getFieldsValue().submit[key].id,
+                                            path: item.path + contractInfosForm?.getFieldsValue()?.submit[key]?.id,
                                             getCheckboxProps
                                         }}
                                     />

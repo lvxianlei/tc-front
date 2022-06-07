@@ -83,13 +83,12 @@ const ProdUnitAdd = (props: any) => {
         const submitValue = {
             ...value,
             productUnitCode:value.productUnitCode,
-            productionLinkDTOList: value.productionLinkDTOList.map((item: string) => {
-                return {
-                    productionLinkId: item,
+            productionLinkDTOList: [
+                {
+                    productionLinkId: props.id ? value.productionLinkDTOList[0]: value.productionLinkDTOList,
                     productionUnitId: props.id,
-
                 }
-            }),
+            ],
            
         }
         await RequestUtil.post('/tower-aps/productionUnit', {
@@ -359,7 +358,7 @@ const ProdUnitAdd = (props: any) => {
                                     } */}
                                 {/* </Select>
                             </Form.Item> */}
-                            <Form.Item label="生产单元编码" rules={[{required:true,pattern: new RegExp(/[0-9a-z]{1,20}$/),message:'请输入数字与字母'},{max:20,message:"最多只能输入20个字符与数字"}]} name='productUnitCode'>
+                            <Form.Item label="生产单元编码" rules={[{required:true,pattern: new RegExp(/[0-9A-Za-z]{1,20}$/),message:'请输入数字与字母'},{max:20,message:"最多只能输入20个字符与数字"}]} name='productUnitCode'>
                                 <Input/>
                             </Form.Item>
                         </Col>
@@ -377,12 +376,13 @@ const ProdUnitAdd = (props: any) => {
                                 <Select
                                     className='input'
                                     placeholder='请选择'
-                                    mode='multiple'
+                                    // mode='multiple'
                                     maxTagCount={10}
                                     searchValue=''
                                     // onChange={(value) => {
                                     //     changeItemInfo(value, 'productionLinkDTOList')
                                     // }}
+                                    disabled={props.id?true:false}
                                 >
                                     {
                                         prodLinkList.map((item: any, index: number) => {
