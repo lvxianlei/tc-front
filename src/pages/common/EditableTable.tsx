@@ -112,9 +112,11 @@ export default function EditableTable({
             onClick={async () => {
                 try {
                     form && await form.validateFields();
-                    const addedEditDataSource = [{ id: (Math.random() * 1000000).toFixed(0) }, ...editableDataSource]
+                    const newRowData = { id: (Math.random() * 1000000).toFixed(0) }
+                    const addedEditDataSource = [newRowData, ...editableDataSource]
                     setEditableDataSource(addedEditDataSource)
                     form && form.setFieldsValue({ submit: addedEditDataSource })
+                    onFormChange && onFormChange({ submit: [newRowData] }, { submit: addedEditDataSource })
                 } catch (error) {
                     message.warning("所有数据校验通过才能继续新增...")
                 }

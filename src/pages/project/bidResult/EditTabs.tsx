@@ -1,7 +1,7 @@
 import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
 import { Button, Tabs, Upload, Tooltip, Form } from "antd"
 import { InfoCircleOutlined } from "@ant-design/icons"
-import { EditTable } from "../../common"
+import { EditableTable } from "../../common"
 import * as XLSX from "xlsx"
 import { EditTableProps } from "../../common/EditTable"
 
@@ -115,7 +115,7 @@ export const EditTableHasForm = forwardRef((props: EditTableProps, ref?: any) =>
   }, [props.dataSource])
 
   useImperativeHandle(ref, () => ({ getForm: () => form }), [form])
-  return <EditTable form={form} {...props} />
+  return <EditableTable form={form} {...props} />
 })
 
 interface TabsCanEditProps {
