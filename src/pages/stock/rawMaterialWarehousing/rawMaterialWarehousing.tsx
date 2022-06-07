@@ -3,7 +3,7 @@
  * 原文件地址当前目录：OriginalDocument.tsx
  * 时间：2022/01/06
  */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { Page } from '../../common';

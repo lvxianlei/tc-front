@@ -1,12 +1,12 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
-import { Button, Input, Select, Form, Row, Modal, message, Spin } from 'antd';
+import { Input, Select, Form, Row, Modal, message, Spin } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"
 import '../StockPublicStyle.less';
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
-import { Attachment, AttachmentRef, Page } from '../../common';
+import { Attachment, AttachmentRef, SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 interface ReceiveStrokAttachProps {
     type: 1 | 2
@@ -47,10 +47,10 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
     useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
 
     return <Spin spinning={loading}>
-        <Attachment title={false} dataSource={data} edit ref={attachRef} style={{margin: "0px"}} marginTop={false} />
+        <Attachment title={false} dataSource={data} edit ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
     </Spin>
 })
-    
+
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory()
     const [attchType, setAttachType] = useState<1 | 2>(1)
@@ -71,7 +71,7 @@ export default function RawMaterialStock(): React.ReactNode {
             reject(error)
         }
     }))
-    
+
     const handleAttachOk = async () => {
         setSaveLoading(true)
         await receiveRef.current.onSubmit()
@@ -94,18 +94,16 @@ export default function RawMaterialStock(): React.ReactNode {
                     setVisible(false)
                 }}>
                 <ReceiveStrokAttach type={attchType} id={detailId} ref={receiveRef} />
-
             </Modal>
             <Page
                 path={`/tower-storage/materialStock`}
                 exportPath={`/tower-storage/materialStock`}
                 columns={[{
                     title: '序号',
-                    dataIndex: 'id',
+                    dataIndex: 'index',
                     width: 50,
-                    render: (text: any, item: any, index: any) => {
-                        return <span>{index + 1}</span>
-                    }
+                    fixed: "left",
+                    render: (text: any, item: any, index: any) => <span>{index + 1}</span>
                 },
                 ...listPage,
                 {
@@ -129,7 +127,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     )
                 }]}
                 extraOperation={
-                    <div>数量合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{data?.quantity}</span> 重量合计：<span style={{marginRight: 12, color: "#FF8C00"}}>{data?.weight}</span></div>
+                    <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.quantity}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
                 }
                 filterValue={filterValue}
                 onFilterSubmit={(value: any) => {
@@ -154,7 +152,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'materialTexture',
+                        name: 'structureTexture',
                         label: '材质',
                         children: <Select style={{ width: "100px" }} defaultValue={""}>
                             <Select.Option value='' key={'aa'}>全部</Select.Option>
@@ -171,7 +169,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         children: <Input width={100} maxLength={200} placeholder="请输入品名" />
                     },
                     {
-                        name: 'standard',
+                        name: 'materialStandard',
                         label: '标准',
                         children: <Select style={{ width: "100px" }} defaultValue={""}>
                             <Select.Option value='' key={'aa'}>全部</Select.Option>

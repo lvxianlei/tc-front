@@ -1,13 +1,13 @@
 {
     "baseInfo": [
         {
-            "title": "下单单号",
+            "title": "下达单号",
             "dataIndex": "issuedNumber",
             "type": "string"
         },
         {
             "title": "批次号",
-            "dataIndex": "productionBatchNo",
+            "dataIndex": "batchNumber",
             "type": "string"
         },
         {
@@ -27,7 +27,7 @@
         },
         {
             "title": "总重量（kg）",
-            "dataIndex": "loftingWeightTotal",
+            "dataIndex": "totalWeight",
             "type": "number"
         },
         {
@@ -37,7 +37,7 @@
         },
         {
             "title": "计划交付时间",
-            "dataIndex": "deliverTime",
+            "dataIndex": "planDeliveryTime",
             "type": "string"
         },
         {
@@ -47,7 +47,7 @@
         },
         {
             "title": "配料状态",
-            "dataIndex": "loftingStateName"
+            "dataIndex": "batcheTaskStatusName"
         },
         {
             "title": "最新状态变更时间",
@@ -56,7 +56,7 @@
         },
         {
             "title": "方案编号",
-            "dataIndex": "programmeCode",
+            "dataIndex": "schemeNumber",
             "type": "string"
         }
     ],

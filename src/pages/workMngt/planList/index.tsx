@@ -5,8 +5,6 @@ import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-// 引入编辑采购计划
-import EditPurchasePlan from './EditPurchasePlan';
 import CreatePlan from "./CreatePlan";
 interface EditRefProps {
     id?: string

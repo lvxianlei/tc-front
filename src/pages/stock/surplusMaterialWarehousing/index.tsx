@@ -46,10 +46,7 @@ export default function RawMaterialStock(): React.ReactNode {
             title: '序号',
             dataIndex: 'id',
             width: 50,
-            render: (text: any, item: any, index: any) => {
-                console.log(item, 'item')
-                return <span>{index + 1}</span>
-            }
+            render: (_a: any, _b: any, index: any) => <span>{index + 1}</span>
         },
         {
             title: '余料入库编号',
@@ -72,24 +69,24 @@ export default function RawMaterialStock(): React.ReactNode {
             width: 130,
         }, {
             title: '材质',
-            dataIndex: 'materialTexture',
+            dataIndex: 'structureTexture',
             width: 120,
         }, {
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
             width: 120,
         }, {
             title: '应收余料长度',
             dataIndex: 'excessLength',
             width: 120,
-            render: (text: any, item: any, index: any) => {
+            render: (_a: any, item: any) => {
                 return <span>{item.excessLength == -1 ? '' : item.excessLength}</span>
             }
         }, {
             title: '实收余料长度',
             dataIndex: 'length',
             width: 120,
-            render: (text: any, item: any, index: any) => {
+            render: (_a: any, item: any) => {
                 return <span>{item.length == -1 ? '' : item.length}</span>
             }
         }, {
@@ -144,15 +141,15 @@ export default function RawMaterialStock(): React.ReactNode {
         },
         {
             title: '标准',
-            dataIndex: 'standardName',
+            dataIndex: 'materialStandardName',
             width: 120,
         }, {
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
             width: 120,
         }, {
             title: '材质',
-            dataIndex: 'materialTexture',
+            dataIndex: 'structureTexture',
             width: 160,
         }, {
             title: '长度',
@@ -195,7 +192,7 @@ export default function RawMaterialStock(): React.ReactNode {
 
     // 获取详情数据
     const getDetail = async (id: any) => {
-        const data: any = await RequestUtil.get(`/tower-storage/receiveStock/excess/${id}`);
+        const data: any = await RequestUtil.get(`/tower-storage/surplusMaterial/excess/${id}`);
         setSupplierListdata([data]);
         setWarehousingListdata([data]);
         setIsDetailModal(true)
@@ -231,7 +228,7 @@ export default function RawMaterialStock(): React.ReactNode {
             message.error('实收余料不得大于应收余料')
             return
         }
-        const data: any = await RequestUtil.put(`/tower-storage/receiveStock/excess`, {
+        const data: any = await RequestUtil.put(`/tower-storage/surplusMaterial/excess`, {
             id: ListID,
             length: collect,
             locatorId: locatorId
@@ -282,7 +279,7 @@ export default function RawMaterialStock(): React.ReactNode {
     return (
         <>
             <Page
-                path="/tower-storage/receiveStock/excess"
+                path="/tower-storage/surplusMaterial/excess"
                 searchFormItems={[
                     {
                         name: "updateTime",
@@ -478,14 +475,8 @@ export default function RawMaterialStock(): React.ReactNode {
                             columns={WarehousingColumns}
                             dataSource={WarehousingListdata}
                             size='small'
-                            rowClassName={(item, index) => {
-                                return index % 2 ? 'aaa' : ''
-                            }}
-                            scroll={
-                                {
-                                    y: 400
-                                }
-                            }
+                            rowClassName={(_a, index) => index % 2 ? 'aaa' : ''}
+                            scroll={{ y: 400 }}
                             pagination={false}
                         />
                     </div>

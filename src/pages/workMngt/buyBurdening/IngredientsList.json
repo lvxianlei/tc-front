@@ -34,7 +34,8 @@
         },
         {
             "title": "剩余",
-            "dataIndex": "notConfigured"
+            "dataIndex": "notConfigured",
+            "type": "string"
         }
     ],
     "BatchingScheme": [
@@ -47,7 +48,7 @@
         {
             "title": "数量",
             "width": 80,
-            "dataIndex": "quantity"
+            "dataIndex": "num"
         },
         {
             "title": "利用率",
