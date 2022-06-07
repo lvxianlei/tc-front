@@ -5,7 +5,7 @@ import { SearchTable as Page, BaseInfo, DetailTitle, EditTable, Attachment, Atta
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
 import useRequest from '@ahooksjs/use-request'
-import { bondBaseInfo, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone, auditHead } from "./approval.json"
+import { bondBaseInfo, drawH, drawingCofirm, baseInfo, outFactoryHead, addanewone, auditHead, guaranteeInfo } from "./approval.json"
 import RequestUtil from '../../utils/RequestUtil'
 import { currencyTypeOptions, paymentCategoryOptions } from '../../configuration/DictionaryOptions'
 const auditEnum: any = {
@@ -13,7 +13,8 @@ const auditEnum: any = {
     "drawing_handover": "图纸交接申请",
     "drawing_confirmation": "图纸交接确认申请",
     "bidding_evaluation": "招标评审申请",
-    "out_factory": "出厂价申请"
+    "out_factory": "出厂价申请",
+    "guarantee": "保函申请"
 }
 export default function Information(): React.ReactNode {
     const currencyTypeEnum = currencyTypeOptions?.map((item: { id: string, name: string }) => ({
@@ -33,15 +34,18 @@ export default function Information(): React.ReactNode {
     const [drawingCofirmVisible, setDrawingCofirmVisible] = useState<boolean>(false)
     const [bidingVisible, setBidingVisible] = useState<boolean>(false)
     const [outFactoryVisible, setOutFactoryVisible] = useState<boolean>(false)
+    const [guarantee, setGuarantee] = useState<boolean>(false);
     const [currentView, setCurrentView] = useState<string>("performance_bond")
     const [currentViewId, setCurrentViewId] = useState<string>("")
     const [viewVisible, setViewVisible] = useState<boolean>(false)
     const [performanceBondForm] = Form.useForm()
+    const [guaranteeForm] = Form.useForm()
     const [drawHForm] = Form.useForm()
     const [drawingCofirmForm] = Form.useForm()
     const [bidingForm] = Form.useForm()
     const [outFactoryForm] = Form.useForm()
     const [outFactoryTableForm] = Form.useForm()
+    const [guaranteeInfoColumn, setGuaranteeInfoColumn] = useState<any[]>(guaranteeInfo)
     const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
         try {
             const result = await RequestUtil.post(postData.path, postData.data)
@@ -87,6 +91,10 @@ export default function Information(): React.ReactNode {
             case "out_factory":
                 setOutFactoryVisible(true)
                 break
+            case "guarantee":
+                // 保函申请
+                setGuarantee(true);
+                break;
             default:
                 break
         }
@@ -97,6 +105,25 @@ export default function Information(): React.ReactNode {
         const postData = await performanceBondForm.validateFields()
         postData.projectId = postData.projectId?.id || ""
         const result = await run({ path: "/tower-market/performanceBond", data: postData })
+        if (result) {
+            message.success("成功创建申请...")
+            setPerformanceBondVisible(false)
+            history.go(0)
+        } else {
+            message.error(`创建申请失败！原因：${result}`)
+        }
+    }
+
+    // 提交保函
+    const handGuaranteOk = async() => {
+        const postData = await guaranteeForm.validateFields();
+        console.log(postData, "看看数据");
+        postData.contractId = postData.contractId?.id || "";
+        postData.projectId = postData.projectId?.id || "";
+        postData.effectiveTime = `${postData.effectiveTime} 00:00:00`
+        postData.promisedReturnDate = `${postData.promisedReturnDate} 00:00:00`
+        postData.fileIds = attachRef.current?.getDataSource().map(item => item.id)
+        const result = await run({ path: "/tower-market/Guarantee/submitAudit", data: postData })
         if (result) {
             message.success("成功创建申请...")
             setPerformanceBondVisible(false)
@@ -224,6 +251,60 @@ export default function Information(): React.ReactNode {
         }
     }
 
+    // 保函
+    const handGuaranteChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        console.log(fields, "====", allFields)
+        if (fields.projectId) {
+            // 选择了项目
+            const result = fields.projectId.records[0];
+            guaranteeForm.setFieldsValue({
+                projectName: fields.projectId.id,
+                biddingPerson: result.biddingPerson, // 受益人姓名
+                projectNumber: result.projectNumber, // 项目编码
+            })
+            // 
+            const v = guaranteeInfoColumn;
+            const val = v.filter((item: any) => item.dataIndex === "contractId")
+            const index = v.findIndex((item: any) => item.dataIndex === "contractId")
+            console.log(index, "index")
+            v[index].path = `/tower-market/contract?projectId=${fields.projectId.id}`
+            v[index].disabled = false;
+            setGuaranteeInfoColumn(v.slice(0));
+            guaranteeForm.setFieldsValue({
+                contractName: "",
+                contractId: "",
+                contractAmount: "", // 合同总价
+                salesman: "", // 业务归属
+                guaranteePrice: ""
+            })
+        }
+        if (fields.contractId) {
+            // 合同编号
+            const result = fields.contractId.records[0];
+            guaranteeForm.setFieldsValue({
+                contractName: fields.contractId.id,
+                contractAmount: result.contractAmount, // 合同总价
+                salesman: result.salesman, // 业务归属
+                // contractId: result.contractNumber
+            })
+            if (allFields.guaranteeRate) {
+                let money = ((result.contractAmount * allFields.guaranteeRate) / 100).toFixed(2);
+                guaranteeForm.setFieldsValue({
+                    guaranteePrice: money
+                })
+            }
+        }
+        if (fields.guaranteeRate) {
+            // 保函所占比
+            if (allFields.contractAmount) {
+                let money = ((allFields.contractAmount * fields.guaranteeRate) / 100).toFixed(2);
+                guaranteeForm.setFieldsValue({
+                    guaranteePrice: money
+                })
+            }
+        }
+    }
+
     const handleCancel = () => {
         performanceBondForm.resetFields()
         drawHForm.resetFields()
@@ -341,6 +422,23 @@ export default function Information(): React.ReactNode {
             })} dataSource={{}} edit col={2} />
         </Modal>
         <Modal
+            title="保函申请审批"
+            width={1011}
+            visible={guarantee}
+            okText="申请"
+            onCancel={() => {
+                setGuarantee(false)
+                handleCancel()
+            }}
+            onOk={handGuaranteOk}
+            destroyOnClose
+            confirmLoading={loading}
+        >
+            <DetailTitle title="基本信息" />
+            <BaseInfo form={guaranteeForm} onChange={handGuaranteChange} columns={guaranteeInfoColumn} dataSource={{}} edit col={2} />
+            <Attachment title="保函申请相关附件" edit ref={attachRef} />
+        </Modal>
+        <Modal
             title="图纸交接申请"
             width={1011}
             visible={drawHVisible}
@@ -404,7 +502,11 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo form={outFactoryForm} onChange={handleOutFactoryChange} columns={outFactoryHead} dataSource={{}} edit col={3} />
+            <BaseInfo 
+                form={outFactoryForm}
+                onChange={handleOutFactoryChange}
+                columns={outFactoryHead}
+                dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
             <EditTable haveNewButton={false} form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
         </Modal>
