@@ -947,6 +947,7 @@ export default function IngredientsList(): React.ReactNode {
                     })
                 }
             }
+            console.log(value, "======>>>>", nowIngre)
             let res = [];
             if (value !== "1") {
                 for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
@@ -959,9 +960,9 @@ export default function IngredientsList(): React.ReactNode {
             let data = [];
             if (value === "1") {
                 console.log(nowIngre, availableInventoryData)
-                for (let i = 0; i < nowIngre?.idealRepertoryLengthList?.length; i += 1) {
+                for (let i = 0; i < nowIngre?.available?.length; i += 1) {
                     for (let p = 0; p < availableInventoryData.length; p += 1) {
-                        if (nowIngre?.idealRepertoryLengthList[i] === availableInventoryData[p].length) {
+                        if (nowIngre?.available[i] === availableInventoryData[p].length) {
                             const v = {
                                 ...availableInventoryData[p],
                                 usableNum: availableInventoryData[p].totalNum - availableInventoryData[p].alreadyNum
