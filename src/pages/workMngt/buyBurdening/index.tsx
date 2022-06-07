@@ -3,8 +3,14 @@ import { Input, DatePicker, Select, Button } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, SearchTable as Page } from '../../common'
+import AuthUtil from "../../../utils/AuthUtil";
+import CreatePlan from "./CreatePlan";
+
 export default function EnquiryList(): React.ReactNode {
     const history = useHistory()
+    const [visible, setVisible] = useState<boolean>(false)
+    const [chooseId, setChooseId] = useState<string>("")
+    const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object,
         batcherId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
@@ -23,6 +29,14 @@ export default function EnquiryList(): React.ReactNode {
         }
         setFilterValue(value)
         return value
+    }
+
+     // 创建关闭
+     const handleCreate = (options: any) => {
+        if (options?.code === 1) {
+            history.go(0);
+        }
+        setIsOpenId(false);
     }
 
     return <>
@@ -49,10 +63,15 @@ export default function EnquiryList(): React.ReactNode {
             ]}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
+            extraOperation={<>
+                <Button type="primary" ghost onClick={() => {
+                    setIsOpenId(true)
+                }}>创建</Button>
+            </>}
             searchFormItems={[
                 {
                     name: 'startBatcheStatusUpdateTime',
-                    label: '最新状态变更时间',
+                    label: '配料完成时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
@@ -75,6 +94,10 @@ export default function EnquiryList(): React.ReactNode {
                     children: <Input placeholder="批次号/塔型/计划号" maxLength={200} />
                 }
             ]}
+        />
+        <CreatePlan
+            visible={isOpenId}
+            handleCreate={handleCreate}
         />
     </>
 }

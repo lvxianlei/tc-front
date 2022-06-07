@@ -1,0 +1,84 @@
+{
+  "baseColunm": [
+    {
+        "title": "类型",
+        "dataIndex": "productName"
+    },
+    {
+        "title": "标准",
+        "dataIndex": "productName"
+    },
+    {
+        "title": "物料编码",
+        "dataIndex": "standard"
+    },
+    {
+        "title": "品名",
+        "dataIndex": "spec"
+    },
+    {
+        "title": "材质",
+        "dataIndex": "materialTexture"
+    },
+    {
+        "title": "规格",
+        "dataIndex": "stockWeight"
+    },
+    {
+        "title": "长度（mm）",
+        "dataIndex": "onWayWeight"
+    },
+    {
+        "title": "宽度（mm）",
+        "dataIndex": "canUseWeight"
+    },
+    {
+        "title": "总数量",
+        "dataIndex": "noPickWeight"
+    },
+    {
+        "title": "总重量（吨）",
+        "dataIndex": "safeWeight"
+    },
+    {
+        "title": "可用数量",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "可用重量（吨）",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "占用数量",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "占用重量（吨）",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "在途可用数量",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "在途可用重量（吨）",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "在途占用数量",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "在途占用重量（吨）",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "安全库存重量（吨）",
+        "dataIndex": "alarmWeight"
+    },
+    {
+        "title": "告警库存重量（吨）",
+        "dataIndex": "alarmWeight"
+    }
+  ]
+}
