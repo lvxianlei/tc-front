@@ -41,16 +41,8 @@
             "dataIndex": "batcheTaskStatusName"
         },
         {
-            "title": "最新状态变更时间",
-            "dataIndex": "batcheStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
-        },
-        {
-            "title": "方案编号",
-            "dataIndex": "schemeNumber",
-            "width": 200,
-            "type": "string"
+            "title": "配料完成时间",
+            "dataIndex": "batcheStatusUpdateTime"
         }
     ],
     "SeeList": [

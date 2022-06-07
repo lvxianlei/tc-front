@@ -51,12 +51,6 @@
         {
             "title": "塔型采购状态",
             "dataIndex": "purchaseTaskStatusName"
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "purchaseStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
         }
     ],
     "ListIngredient": [

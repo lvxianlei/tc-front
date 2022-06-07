@@ -43,7 +43,7 @@ export default function Invoicing() {
         }
     })
     return <>
-        <Modal title="配料方案" visible={visible} width={1011}
+        <Modal title="明细" visible={visible} width={1011}
             footer={<Button type="primary" ghost onClick={() => setVisible(false)}>关闭</Button>} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
@@ -76,7 +76,7 @@ export default function Invoicing() {
                     render: (_: any, record: any) => <Button className="btn-operation-link" disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
                         setVisible(true)
                         setChooseId(record.id)
-                    }}>配料方案</Button>
+                    }}>明细</Button>
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost onClick={() => {
@@ -91,11 +91,6 @@ export default function Invoicing() {
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
-                {
-                    name: 'startPurchaseStatusUpdateTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
                 {
                     name: 'purchaseTaskStatus',
                     label: '塔型采购状态',

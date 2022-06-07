@@ -1001,7 +1001,7 @@
       "authority": "rd_assessment_task_list"
     },
     { // 工作管理-采购列表
-      "name": "采购列表",
+      "name": "配料方案",
       "path": "/ingredients/purchaseList",
       "module": "./pages/workMngt/purchaseList/index",
       "exact": true,
