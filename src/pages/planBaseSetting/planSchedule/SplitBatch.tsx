@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Button, Modal, Form, message, Select, DatePicker } from 'antd';
-import { SearchTable as Page } from '../../common';
+import { BaseInfo, CommonTable, DetailTitle, SearchTable as Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from '../../../utils/RequestUtil';
@@ -128,6 +128,73 @@ export default function SampleDraw(): React.ReactNode {
         {
             title: '生产单元组',
             dataIndex: 'factoryName'
+        },
+        {
+            title: "状态",
+            dataIndex: "status",
+            editable: true,
+            width:120,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+            )
+        },
+        {
+            title: "执行状态",
+            dataIndex: "status",
+            editable: true,
+            width:120,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
+            )
+        },
+        {
+            title: "操作",
+            dataIndex: "operation",
+            fixed: "right",
+            render: (_:any,record: any) =>
+                <Button type="link" onClick={()=>{
+                    Modal.warn({
+                        title: "查看批次变更记录",
+                        icon: null,
+                        okText: "确定",
+                        width:'80%',
+                        content: <>
+                                <BaseInfo dataSource={{}} columns={[{
+                                    title:'塔型'
+                                },{
+                                    title:'杆塔'
+                                }]}/>
+                                <DetailTitle  title='批次变更记录'/>
+                                <CommonTable columns={[
+                                    {
+                                        key: 'planNumber',
+                                        title: '原批次号',
+                                        dataIndex: 'planNumber'
+                                    },
+                                    {
+                                        key: 'productCategoryName',
+                                        title: '变更后批次号',
+                                        dataIndex: 'productCategoryName'
+                                    },
+                                    {
+                                        key: 'productionBatch',
+                                        title: '批次变更原因',
+                                        dataIndex: 'productionBatch'
+                                    },
+                                    {
+                                        key: 'productionBatchNo',
+                                        title: '操作时间',
+                                        dataIndex: 'productionBatchNo'
+                                    },
+                                    {
+                                        key: 'productNumber',
+                                        title: '操作人',
+                                        dataIndex: 'productNumber'
+                                    },]} dataSource={[]} pagination={false}/>
+                        </>,
+                        
+                    })
+                }}>查看批次变更记录</Button>
         }
     ]
 

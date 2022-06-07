@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form, Space, Spin, Modal, Input, message, DatePicker, Select } from 'antd';
+import { Button, Form, Space, Spin, Modal, Input, message, DatePicker, Select, Popconfirm } from 'antd';
 import { BaseInfo, CommonAliTable, DetailContent } from '../../common';
 import { ILink, IPlanSchedule, IUnit } from './IPlanSchedule';
 import { useHistory, useParams } from 'react-router-dom';
@@ -110,7 +110,26 @@ export default function DistributedTech(): React.ReactNode {
         {
             title: '技术派工备注',
             dataIndex: 'issueDescription'
+        },
+        {
+            title: "操作",
+            dataIndex: "operation",
+            fixed: "right",
+            render: (_:any,record: any) =>
+                <Popconfirm
+                    title="是否确认删除？"
+                    onConfirm={async () => {
+                        await RequestUtil.delete(`/tower-aps/cyclePlan/${record?.id}`)
+                        message.success("删除成功！")
+                        history.go(0)
+                    }}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="link" >删除</Button>
+                </Popconfirm>
         }
+        
     ]
 
     const SelectChange = (selectedRowKeys: number[], selectedRows: IPlanSchedule[]): void => {
@@ -255,7 +274,7 @@ export default function DistributedTech(): React.ReactNode {
             <CommonAliTable
                 dataSource={dataSource}
                 pagination={false}
-                columns={tableColumns}
+                columns={tableColumns as any}
                 rowSelection={{
                     type: "checkbox",
                     selectedRowKeys: selectedKeys,
