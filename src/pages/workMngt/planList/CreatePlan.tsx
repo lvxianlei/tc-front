@@ -204,7 +204,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             }}>清空</Button>
         </div>
         <CommonTable
-            rowKey={"id"}
+            rowKey="id"
             style={{ padding: "0" }}
             columns={[
                 ...material.map((item: any) => {

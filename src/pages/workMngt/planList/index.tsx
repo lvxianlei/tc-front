@@ -1,25 +1,18 @@
-import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import React, { useState } from "react"
+import { Button, Input, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import CreatePlan from "./CreatePlan";
-interface EditRefProps {
-    id?: string
-    onSubmit: () => void
-    resetFields: () => void
-}
+
 export default function Invoicing() {
-    const [visible, setVisible] = useState<boolean>(false);
-    const addRef = useRef<EditRefProps>();
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<any>({
         ...history.location.state as object,
         purchaserId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     })
-    const [id, setId] = useState<string>();
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -61,19 +54,6 @@ export default function Invoicing() {
         })
     }
 
-    // 编辑采购计划回调
-    const handleOk = () => new Promise(async (resove, reject) => {
-        try {
-            await addRef.current?.onSubmit()
-            message.success("编辑回调计划成功...")
-            setVisible(false)
-            history.go(0)
-            resove(true)
-        } catch (error) {
-            reject(false)
-        }
-    })
-
     // 创建采购计划关闭
     const handleCreate = (options: any) => {
         if (options?.code === 1) {
@@ -113,16 +93,11 @@ export default function Invoicing() {
                         width: 80,
                         render: (_: any, record: any) => {
                             return <>
-                                {/* <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link> */}
                                 <Link className="btn-operation-link" to={{
                                     pathname: `/ingredients/planList/purchaseList/${record.id}`,
                                     search: `productionBatchNos=${record.productionBatchNos}`
                                 }}>采购清单</Link>
-                                {/* <Button type="link" className="btn-operation-link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
-                                <Button type="link" disabled={record.purchasePlanStatus === 2} className="btn-operation-link" onClick={() => {
-                                    setId(record.id);
-                                    setVisible(true);
-                                }}>编辑计划</Button> */}
+
                             </>
                         }
                     }]}
@@ -130,11 +105,6 @@ export default function Invoicing() {
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 searchFormItems={[
-                    {
-                        name: 'startStatusUpdateTime',
-                        label: '最新状态变更时间',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
                     {
                         name: 'planStatus',
                         label: '计划状态',
@@ -159,36 +129,12 @@ export default function Invoicing() {
                         children: <IntgSelect width={400} />
                     },
                     {
-                        name: 'purchasePlanCode',
-                        label: '采购计划编号',
-                        children: <Input />
+                        name: 'fuzzyQuery',
+                        label: "模糊查询项",
+                        children: <Input placeholder="方案编号/生产批次/塔型/下达单号" style={{ width: 300 }} />
                     }
                 ]}
             />
-            {/* <Modal
-                title={'编辑采购计划'}
-                visible={visible}
-                width={1000}
-                maskClosable={false}
-                destroyOnClose={true}
-                onCancel={() => {
-                    addRef.current?.resetFields();
-                    setVisible(false);
-                }}
-                footer={[
-                    <Button key="back" onClick={() => {
-                        addRef.current?.resetFields();
-                        setVisible(false);
-                    }}>
-                        关闭
-                    </Button>,
-                    <Button key="submit" type="primary" onClick={() => handleOk()}>
-                        保存并提交
-                    </Button>
-                ]}
-            >
-                <EditPurchasePlan ref={addRef} id={id} />
-            </Modal> */}
             <CreatePlan
                 visible={isOpenId}
                 handleCreate={handleCreate}
