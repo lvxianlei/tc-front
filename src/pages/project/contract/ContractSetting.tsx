@@ -431,13 +431,13 @@ class ManagementContractSetting extends ContractSetting {
               ),
             },
             {
-              label: "业务经理",
+              label: "跟单业务员",
               name: "salesman",
               initialValue: contract?.salesman,
               rules: [
                 {
                   required: true,
-                  message: "请选择业务经理",
+                  message: "请选择跟单业务员",
                 },
               ],
               children: (
@@ -597,6 +597,31 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <Input.TextArea style={{width: "100%"}}/>
               )
+            },
+            {
+              label: "归属业务经理",
+              name: "ascriptionName",
+              initialValue: contract?.ascriptionName,
+              children: (
+                <>
+                  <Input
+                    value={contract?.ascriptionName}
+                    disabled={true}
+                    suffix={
+                      <ServiceManagerComponent
+                        onSelect={this.onReBackServiceManager}
+                        selectKey={[contract?.ascriptionId]}
+                      />
+                    }
+                  />
+                </>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请选择归属业务经理",
+                },
+              ]
             },
           ],
         },
@@ -985,13 +1010,13 @@ class ManagementContractSetting extends ContractSetting {
               ),
             },
             {
-              label: "业务经理",
+              label: "跟单业务员",
               name: "salesman",
               initialValue: contract?.salesman,
               rules: [
                 {
                   required: true,
-                  message: "请选择业务经理",
+                  message: "请选择跟单业务员",
                 },
               ],
               children: (
@@ -1148,6 +1173,31 @@ class ManagementContractSetting extends ContractSetting {
               children: (
                 <Input.TextArea style={{width: "100%"}}/>
               )
+            },
+            {
+              label: "归属业务经理",
+              name: "ascriptionName",
+              initialValue: contract?.ascriptionName,
+              children: (
+                <>
+                  <Input
+                    value={contract?.ascriptionName}
+                    disabled={true}
+                    suffix={
+                      <ServiceManagerComponent
+                        onSelect={this.onReBackServiceManager}
+                        selectKey={[contract?.ascriptionId]}
+                      />
+                    }
+                  />
+                </>
+              ),
+              rules: [
+                {
+                  required: true,
+                  message: "请选择归属业务经理",
+                },
+              ]
             },
           ],
         },

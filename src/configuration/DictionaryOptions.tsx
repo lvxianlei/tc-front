@@ -49,6 +49,7 @@ export enum DictionaryEnums {
     TENDER_DELIVERY_METHOD = 1219,
     UNLOAD_MODE_TYPE = 12001,
     SETTLEMENT_MODE_TYPE = 12002,
+    PLAN_NAME = 118,
 }
 
 let productType: IDict[] | undefined = [];
@@ -97,6 +98,7 @@ let componentType: IDict[] | undefined = [];
 
 let unloadMode: IDict[] | undefined = [];
 let settlementMode: IDict[] | undefined = [];
+let planName: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -145,6 +147,7 @@ if (dictionary) {
     componentType = dictionary[DictionaryEnums.COMPONENT_TYPE];
     unloadMode = dictionary[DictionaryEnums.UNLOAD_MODE_TYPE];
     settlementMode = dictionary[DictionaryEnums.SETTLEMENT_MODE_TYPE];
+    planName = dictionary[DictionaryEnums.PLAN_NAME];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -192,3 +195,4 @@ export const factoryTypeOptions = factoryType; // 厂区名称
 export const componentTypeOptions = componentType; // 零件类型
 export const unloadModeOptions = unloadMode; // 卸货方式
 export const settlementModeOptions = settlementMode; // 结算方式
+export const planNameOptions = planName; // 计划名称

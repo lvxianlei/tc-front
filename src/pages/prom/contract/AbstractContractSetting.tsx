@@ -22,7 +22,7 @@ import { CascaderOptionType } from 'antd/lib/cascader';
 import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import Modal from 'antd/lib/modal/Modal';
-import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
+import { currencyTypeOptions, planNameOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
 import { Attachment, AttachmentRef } from '../../common';
@@ -48,6 +48,7 @@ export interface ITabItem {
 }
 
 export interface IContractInfo extends IContract {
+    readonly ascriptionId: string;
     readonly customerInfoDto?: ICustomerInfoDto;
     paymentPlanDtos?: IPaymentPlanDto[];
     attachInfoDtos: IAttachDTO[];
@@ -79,7 +80,9 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly deliveryAddress: string; // 交货地点
     readonly description: string; // 备注
     readonly bidBatch: string; // 招标批次
-    readonly payServiceManager: string; // 业务经理的id
+    readonly payServiceManager: string; // 业务经理的id(跟单业务员)
+    readonly ascriptionId: string; // 归属业务经理id
+    readonly ascriptionName: string;// 归属业务经理 name
 }
 
 export interface ICustomerInfoDto {
@@ -272,6 +275,27 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             }) as any)
             console.log(selectedRows)
             this.getForm()?.setFieldsValue({ salesman: selectedRows[0].name, payServiceManager: selectedRows[0].userId?.toString() });
+        }
+    }
+
+
+    /**
+     * 
+     * @param selectedRows 当前选中的列
+     * 归属业务经理弹框回调
+     */
+     public onReBackServiceManager = (selectedRows: DataType[]): void => {
+        const contract: IContractInfo | undefined = this.state.contract;
+        if (selectedRows && selectedRows.length > 0) {
+            this.setState(({
+                contract: {
+                    ...(contract || {}),
+                    ascriptionName: selectedRows[0].name,
+                    ascriptionId : selectedRows[0].userId?.toString()
+                }
+            }) as any)
+            console.log(selectedRows)
+            this.getForm()?.setFieldsValue({ ascriptionName: selectedRows[0].name, ascriptionId: selectedRows[0].userId?.toString() });
         }
     }
 
@@ -829,10 +853,14 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                                 fieldKey={[field.fieldKey, 'name']}
                                                                 rules={[{
                                                                     required: true,
-                                                                    message: '请填写计划名称'
+                                                                    message: '请选择计划名称'
                                                                 }]}
                                                             >
-                                                                <Input />
+                                                                <Select style={{width:'100%'}}>
+                                                                    { planNameOptions && planNameOptions.map((item:any)=>{
+                                                                            return <Select.Option key={item.id} value={item.name}>{item.name}</Select.Option>
+                                                                        }) }
+                                                                </Select>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
