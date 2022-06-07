@@ -18,7 +18,7 @@ interface ChooseModalProps {
 const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({
         ...item,
-        materialStandardName: item.standardName,
+        materialStandardName: item.materialStandardName,
         price: item.unTaxPrice
     })))
     const [selectList, setSelectList] = useState<any[]>([])
@@ -47,14 +47,14 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
             setSelectList(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,
-                quantity: item.surplusNum,
+                num: item.surplusNum,
                 id: item.id
-            })).filter((item: any) => item.quantity))
+            })).filter((item: any) => item.num))
             setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,
-                quantity: item.surplusNum,
+                num: item.surplusNum,
                 id: item.id
-            })).filter((item: any) => item.quantity))
+            })).filter((item: any) => item.num))
             resole(result)
         } catch (error) {
             reject(error)
@@ -66,40 +66,40 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
         setChooseList(initChooseList)
         setSelectList(data?.materialContractDetailVos.map((item: any) => ({
             ...item,
-            quantity: item.surplusNum,
+            num: item.surplusNum,
             id: item.id
-        })).filter((item: any) => item.quantity))
+        })).filter((item: any) => item.num))
         setWaitingArea(data?.materialContractDetailVos.map((item: any) => ({
             ...item,
-            quantity: item.surplusNum,
+            num: item.surplusNum,
             id: item.id
-        })).filter((item: any) => item.quantity))
+        })).filter((item: any) => item.num))
     }
 
     const handleRemove = async (id: string) => {
         const formData = await form.validateFields()
         const currentData = chooseList.find((item: any) => item.id === id)
         const currentSelectData = selectList.find((item: any) => item.id === id)
-        if ((currentData.quantity - formData.quantity) === 0) {
+        if ((currentData.num - formData.num) === 0) {
             setChooseList(chooseList.filter((item: any) => item.id !== id))
             if (currentSelectData) {
-                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
-                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
+                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
-                setSelectList([...selectList, { ...currentData, quantity: formData.quantity }])
-                setWaitingArea([...waitingArea, { ...currentData, quantity: formData.quantity }])
+                setSelectList([...selectList, { ...currentData, num: formData.num }])
+                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
             }
-        } else if ((currentData.quantity - formData.quantity) < 0) {
+        } else if ((currentData.num - formData.num) < 0) {
             message.error("移除数量不能大于已选数量...")
             return
         } else {
-            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, quantity: item.quantity - formData.quantity }) : item))
+            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
             if (currentSelectData) {
-                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
-                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
+                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
-                setSelectList([...selectList, { ...currentData, quantity: formData.quantity }])
-                setWaitingArea([...waitingArea, { ...currentData, quantity: formData.quantity }])
+                setSelectList([...selectList, { ...currentData, num: formData.num }])
+                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
             }
         }
         setVisible(false)
@@ -110,24 +110,24 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
         const formData = await form.validateFields()
         const currentData = selectList.find((item: any) => item.id === id)
         const currentChooseData = chooseList.find((item: any) => item.id === id)
-        if ((currentData.quantity - formData.quantity) === 0) {
+        if ((currentData.num - formData.num) === 0) {
             setSelectList(selectList.filter((item: any) => item.id !== id))
             setWaitingArea(waitingArea.filter((item: any) => item.id !== id))
             if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
+                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
-                setChooseList([...chooseList, { ...currentData, quantity: formData.quantity }])
+                setChooseList([...chooseList, { ...currentData, num: formData.num }])
             }
-        } else if ((currentData.quantity - formData.quantity) < 0) {
+        } else if ((currentData.num - formData.num) < 0) {
             message.error("选择数量不能大于可选数量...")
             return
         } else {
-            setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) - parseFloat(formData.quantity) }) : item))
-            setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) - parseFloat(formData.quantity) }) : item))
+            setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+            setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
             if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, quantity: parseFloat(item.quantity) + parseFloat(formData.quantity) }) : item))
+                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
             } else {
-                setChooseList([...chooseList, { ...currentData, quantity: formData.quantity }])
+                setChooseList([...chooseList, { ...currentData, num: formData.num }])
             }
         }
         setVisible(false)
@@ -240,7 +240,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
                             }
                         ]}
                         style={{ width: "100%" }}
-                        name="quantity"
+                        name="num"
                         label="输入数量"><InputNumber min={1} step={1} /></Form.Item></Col>
                 </Row>
             </Form>
@@ -403,30 +403,29 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleModalOk = () => {
         const meteringMode = form.getFieldValue("meteringMode")
-        let quantity: string = "0.00"
+        let num: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
-            quantity = (parseFloat(quantity) + parseFloat(item.quantity || "0.00")).toFixed(2)
-            const totalTaxPrice = ((item.ponderationWeight || "0") * item.quantity) * item.taxPrice
-            const totalPrice = ((item.weight || "0") * item.quantity) * item.taxPrice
+            num = (parseFloat(num) + parseFloat(item.num || "0.00")).toFixed(2)
+            const totalTaxPrice = ((item.ponderationWeight || "0") * item.num) * item.taxPrice
+            const totalPrice = ((item.weight || "0") * item.num) * item.taxPrice
             const postData = {
                 ...item,
                 id: item.id,
-                productName: item.materialName || item.productName,
-                standard: item.materialStandard || item.standard,
-                standardName: item.materialStandardName || item.standardName,
-                num: item.quantity,
+                materialName: item.materialName,
+                materialStandard: item.materialStandard,
+                materialStandardName: item.materialStandardName,
+                num: item.num,
                 contractUnitPrice: item.taxPrice,
-                quantity: item.quantity ? item.quantity : 0,
                 /** 理算重量 */
                 weight: item.weight,
                 /** 理算总重量 */
-                totalWeight: (item.weight * item.quantity).toFixed(4),
+                totalWeight: (item.weight * item.num).toFixed(4),
                 /***
                  * 计算价税合计 
                  *      总重 = 单个重量 * 数量
                  *      价税合计 = 总重 * 数量 * 合同单价
                  */
-                // price: ((item.weight * item.quantity) * item.quantity * item.price).toFixed(2),
+                // price: ((item.weight * item.num) * item.num * item.price).toFixed(2),
                 taxPrice: item.taxPrice,
                 totalTaxPrice: meteringMode === 1 ? totalPrice.toFixed(2) : totalTaxPrice.toFixed(2),
                 totalUnTaxPrice: meteringMode === 1 ? (totalPrice - totalPrice * (materialData!.taxVal / 100)).toFixed(2)
@@ -490,7 +489,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 for (let i = 0; i < result.lists.length; i += 1) {
                     v.push({
                         ...result.lists[i],
-                        quantity: result.lists[i].quantity ? result.lists[i].quantity : 0
+                        num: result.lists[i].num ? result.lists[i].num : 0
                     })
                 }
             }
@@ -544,7 +543,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contractId: baseFormData.contractNumber.id,
                 contractNumber: baseFormData.contractNumber.value,
                 lists: listsFormData.submit?.map((item: any, index: number) => ({ ...cargoData[index], ...item })),
-                quantity: baseFormData.quantity,
+                num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
             })
@@ -604,9 +603,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const editData = editForm.getFieldsValue().submit
             const dataSource: any[] = cargoData.map((item: any, index: number) => {
                 //过磅
-                const totalTaxPrice = ((editData[index].ponderationWeight || "0") * item.quantity) * item.taxPrice
+                const totalTaxPrice = ((editData[index].ponderationWeight || "0") * item.num) * item.taxPrice
                 //理算
-                const totalPrice = ((item.weight || "0") * item.quantity) * item.taxPrice
+                const totalPrice = ((item.weight || "0") * item.num) * item.taxPrice
                 const postData = {
                     ...item,
                     ...editData[index],
@@ -630,7 +629,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const ponderationWeight = data.submit[data.submit.length - 1]?.ponderationWeight
             const newFields = allValues.submit.map((item: any, index: number) => {
                 if ((index === data.submit.length - 1) && meteringMode === 2) {
-                    const totalTaxPrice = (ponderationWeight * item.quantity) * item.taxPrice
+                    const totalTaxPrice = (ponderationWeight * item.num) * item.taxPrice
                     return ({
                         ...item,
                         totalTaxPrice: totalTaxPrice.toFixed(2),

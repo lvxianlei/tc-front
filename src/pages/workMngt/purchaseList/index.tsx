@@ -57,8 +57,8 @@ export default function Invoicing() {
             <PurchasePlan ids={generateIds} ref={purChasePlanRef} />
         </Modal>
         <Page
-            path="/tower-supply/purchaseTaskTower/purchaser"
-            exportPath={`/tower-supply/purchaseTaskTower/purchaser`}
+            path="/tower-supply/task/purchase/purchaser"
+            exportPath="/tower-supply/task/purchase/purchaser"
             columns={[
                 {
                     title: "序号",

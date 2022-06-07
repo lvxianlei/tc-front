@@ -16,7 +16,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
     const history = useHistory()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any[] = await RequestUtil.get(`/tower-supply/purchaseBatchingScheme/batcher/summary/${id}`);
+            const result: any[] = await RequestUtil.get(`/tower-supply/task/scheme/summary/${id}`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -37,7 +37,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
             current={1}
             size={(data as any).length}
             total={(data as any).length}
-            url={`/tower-supply/purchaseBatchingScheme/batcher/summary/${id}`}
+            url={`/tower-supply/task/scheme/summary/${id}`}
             serchObj={{}}
             closeExportList={() => { setIsExportStoreList(false) }}
         /> : null}

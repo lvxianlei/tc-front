@@ -358,7 +358,7 @@ const ProdUnitAdd = (props: any) => {
                                     } */}
                                 {/* </Select>
                             </Form.Item> */}
-                            <Form.Item label="生产单元编码" rules={[{required:true,pattern: new RegExp(/[0-9a-z]{1,20}$/),message:'请输入数字与字母'},{max:20,message:"最多只能输入20个字符与数字"}]} name='productUnitCode'>
+                            <Form.Item label="生产单元编码" rules={[{required:true,pattern: new RegExp(/[0-9A-Za-z]{1,20}$/),message:'请输入数字与字母'},{max:20,message:"最多只能输入20个字符与数字"}]} name='productUnitCode'>
                                 <Input/>
                             </Form.Item>
                         </Col>

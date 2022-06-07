@@ -23,11 +23,11 @@
         },
         {
             "title": "汇总数量",
-            "dataIndex": "collocationNum"
+            "dataIndex": "num"
         },
         {
             "title": "汇总重量(kg)",
-            "dataIndex": "weight"
+            "dataIndex": "totalWeight"
         }
     ]
 }

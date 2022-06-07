@@ -120,7 +120,7 @@ const AngleSteel = () => {
             ]}
             dataSource={data?.ingredientsConfigVos || []}
         />
-        <DetailTitle style={{marginTop: "12px"}} title="具体策略设置" operation={[
+        <DetailTitle style={{marginTop: "12px"}} title="规格策略设置" operation={[
             <Button key="add" type="primary" ghost style={{ marginRight: 16 }} onClick={() => {
                 setVisible(true)
                 setType("new")

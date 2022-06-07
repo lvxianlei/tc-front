@@ -5,8 +5,6 @@ import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfoList } from "./planListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-// 引入编辑采购计划
-import EditPurchasePlan from './EditPurchasePlan';
 import CreatePlan from "./CreatePlan";
 interface EditRefProps {
     id?: string
@@ -112,22 +110,23 @@ export default function Invoicing() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 300,
+                        width: 80,
                         render: (_: any, record: any) => {
                             return <>
-                                <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link>
-                                <Link className="btn-operation-link" to={`/ingredients/planList/purchaseList/${record.id}`}>采购清单</Link>
-                                <Button type="link" className="btn-operation-link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
+                                {/* <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link> */}
+                                <Link className="btn-operation-link" to={{
+                                    pathname: `/ingredients/planList/purchaseList/${record.id}`,
+                                    search: `productionBatchNos=${record.productionBatchNos}`
+                                }}>采购清单</Link>
+                                {/* <Button type="link" className="btn-operation-link" disabled={record.purchasePlanStatus === 3} onClick={() => handleDelete(record.id)}>取消计划</Button>
                                 <Button type="link" disabled={record.purchasePlanStatus === 2} className="btn-operation-link" onClick={() => {
                                     setId(record.id);
                                     setVisible(true);
-                                }}>编辑计划</Button>
+                                }}>编辑计划</Button> */}
                             </>
                         }
                     }]}
-                extraOperation={<>
-                    <Button type="primary" ghost onClick={() => setIsOpenId(true)}>创建采购计划</Button>
-                </>}
+                extraOperation={<Button type="primary" ghost onClick={() => setIsOpenId(true)}>创建采购计划</Button>}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 searchFormItems={[
@@ -166,7 +165,7 @@ export default function Invoicing() {
                     }
                 ]}
             />
-            <Modal
+            {/* <Modal
                 title={'编辑采购计划'}
                 visible={visible}
                 width={1000}
@@ -189,7 +188,7 @@ export default function Invoicing() {
                 ]}
             >
                 <EditPurchasePlan ref={addRef} id={id} />
-            </Modal>
+            </Modal> */}
             <CreatePlan
                 visible={isOpenId}
                 handleCreate={handleCreate}

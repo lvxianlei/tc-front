@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button, Modal } from 'antd'
+import { Input, DatePicker, Select, Button } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, SearchTable as Page } from '../../common'
@@ -15,7 +15,6 @@ export default function EnquiryList(): React.ReactNode {
         ...history.location.state as object,
         batcherId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     });
-    const userId = AuthUtil.getUserId()
     const onFilterSubmit = (value: any) => {
         // 最新状态变更时间
         if (value.startBatcheStatusUpdateTime) {
@@ -42,8 +41,8 @@ export default function EnquiryList(): React.ReactNode {
 
     return <>
         <Page
-            path="/tower-supply/purchaseTaskTower"
-            exportPath={`/tower-supply/purchaseTaskTower`}
+            path="/tower-supply/task/purchase/batcher"
+            exportPath="/tower-supply/task/purchase/batcher"
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...baseInfo as any,

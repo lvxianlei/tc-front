@@ -5,6 +5,7 @@ import { BaseInfo, DetailTitle, OperationRecord } from '../../common';
 import { baseInfo } from './DetailOverView.json';
 import { OverViewProps } from './DetailOverViewInface';
 import RequestUtil from '../../../utils/RequestUtil';
+import { idText } from 'typescript';
 export default function DetailOverView(props: OverViewProps): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     // 取消
@@ -22,7 +23,7 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
     // 获取详情数据
     const { run: getDetail, data: detailData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/getProduceIngredientsDetails?produceId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/produce/detail?produceId=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -32,7 +33,7 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
     // 接受
     const { run: runProduceIngredients, data: produceIngredientsData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/produceIngredients/receive?produceId=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/task/produce/receive?produceId=${id}`)
             resole(result);
             if (result) {
                 props.onOk();
@@ -55,7 +56,7 @@ export default function DetailOverView(props: OverViewProps): JSX.Element {
             maskClosable={false}
             width={800}
             footer={
-                [1].includes(props.loftingState) ? 
+                props.loftingState === 0 ? 
                 [
                     <Button key="back" onClick={props?.onCancel}>关闭</Button>,
                     <Button type="primary" onClick={hanlePromise}>接受</Button>

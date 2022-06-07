@@ -3,51 +3,48 @@
         {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
-            "width": 100,
+            "width": 120,
             "type": "string"
         },
         {
             "title": "采购类型",
             "dataIndex": "purchaseTypeName",
-            "width": 100
+            "width": 60
         },
         {
             "title": "圆钢收货量（吨）/总重（吨）",
             "dataIndex": "roundSteelTotal",
-            "width": 200,
+            "width": 180,
             "type": "number"
         },
         {
             "title": "角钢收货量（吨）/总重（吨）",
             "dataIndex": "angleSteelTotal",
-            "width": 200,
+            "width": 180,
             "type": "number"
         },
         {
             "title": "钢板收货量（吨）/总重（吨）",
             "dataIndex": "steelPlateTotal",
-            "width": 200,
+            "width": 180,
             "type": "number"
         },
         {
             "title": "采购人",
             "dataIndex": "purchaserName",
-            "type": "string"
+            "type": "string",
+            "width": 80
         },
         {
             "title": "创建日期",
             "dataIndex": "createTime",
-            "type": "string"
+            "type": "string",
+            "width": 80
         },
         {
             "title": "计划状态",
-            "dataIndex": "purchasePlanStatusName"
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "purchasePlanStatusName",
+            "width": 80
         }
     ],
     "AssociatedTowerType": [
@@ -105,7 +102,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standardName",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {
@@ -157,7 +154,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standardName",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {

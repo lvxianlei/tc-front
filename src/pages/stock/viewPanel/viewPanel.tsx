@@ -15,8 +15,7 @@ import useRequest from '@ahooksjs/use-request';
 
 export default function ViewPanel(): React.ReactNode {
     const [filterValue, setFilterValue] = useState<any>({});
-
-
+    
     // 统计数据
     const { run: saveRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
@@ -40,7 +39,6 @@ export default function ViewPanel(): React.ReactNode {
                 exportPath={"/tower-storage/materialStock/summary"}
                 columns={[
                     {
-                        key: 'index',
                         title: '序号',
                         dataIndex: 'index',
                         fixed: "left",
@@ -64,7 +62,7 @@ export default function ViewPanel(): React.ReactNode {
                         children: <Input placeholder="请输入品名进行查询" style={{ width: 300 }} />
                     },
                     {
-                        name: 'standard',
+                        name: 'materialStandard',
                         label: '标准',
                         children: (
                             <Select placeholder="请选择标准" style={{ width: "140px" }}>
