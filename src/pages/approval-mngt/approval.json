@@ -386,7 +386,7 @@
             "type": "popTable",
             "path": "/tower-market/contract",
             "width": 1011,
-            "value": "contractName",
+            "value": "contractNumber",
             "dependencies": true,
             "disabled": true,
             "readOnly": true,
@@ -1244,11 +1244,11 @@
         },
         {
             "title": "合同编号",
-            "dataIndex": "projectName"
+            "dataIndex": "contractNumber"
         },
         {
             "title": "招标编号",
-            "dataIndex": "contractNumber"
+            "dataIndex": "projectNumber"
         },
         {
             "title": "合同总价（元）",

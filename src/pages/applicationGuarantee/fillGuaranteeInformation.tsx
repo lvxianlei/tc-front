@@ -72,6 +72,7 @@ import moment from 'moment';
             // 出具日期存在
             if (allFields.issuanceTime) {
                 const time = moment(effectiveTime).diff(moment(moment(allFields.issuanceTime).format("YYYY-MM-DD")), 'days');
+                console.log(time, "time")
                 if (time < 0) {
                     message.error("出具日期不能大于保函有效截止日期！");
                     addCollectionForm.setFieldsValue({
@@ -103,7 +104,8 @@ import moment from 'moment';
                     })
                     return false;
                 }
-                const result = +((+time / 90) * ((allFields.guaranteePrice * fields.seasonProportion) / 100)).toFixed(2);
+                const v = +((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) >= 500 ? ((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) : 500;
+                const result = +((+time / 90) * (+v)).toFixed(2);
                 addCollectionForm.setFieldsValue({
                     serviceCharge: result,
                     bondServiceCharge: (result + (+allFields.bondProportionMoney || 0)).toFixed(2)
