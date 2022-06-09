@@ -346,7 +346,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 点击出库显示弹框内容
     const IssueOperation = async (record: any) => {
-        setRequirement(record.quantity);
+        setRequirement(record.num);
         setOutboundId(record.id);
         setApplyListdata([record]);
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
