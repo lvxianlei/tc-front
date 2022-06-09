@@ -335,7 +335,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             result.updateTimeEnd = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
-        console.log(value, "value")
         if (value.batcherId) {
             result.departmentId = value.batcherId.first
             result.outStockStaffId = value.batcherId.second
@@ -350,12 +349,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         setOutboundId(record.id);
         setApplyListdata([record]);
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
-            materialTexture: record.materialTexture,//材质
-            productName: record.productName,//品名
-            standard: record.standard,//标准
+            structureTexture: record.structureTexture,//材质
+            materialName: record.materialName,//品名
+            materialStandard: record.materialStandard,//标准
             lengthMin: record.length,//长度最小值
             lengthMax: record.length,//长度最大值
-            spec: record.spec,//规格
+            structureSpec: record.structureSpec,//规格
         });
         setOutLibraryListdata(data.records);
         setIsOutLibraryModal(true)
@@ -408,7 +407,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         OutLibraryListdata.map((item, index) => {
             if (item.outboundQuantity) {
                 let obj: any = {};
-                obj.quantity = item.outboundQuantity
+                obj.num = item.outboundQuantity
                 obj.id = item.id
                 count += parseFloat(item.outboundQuantity || 0)
                 ary.push(obj)
