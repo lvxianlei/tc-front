@@ -2,11 +2,11 @@
     "material": [
         {
             "title": "品名",
-            "dataIndex": "materialCategoryName"
+            "dataIndex": "materialName"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTextureId"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
@@ -14,7 +14,7 @@
         },
         {
             "title": "件号",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "code"
         },
         {
             "title": "长度（mm）",
@@ -22,11 +22,11 @@
         },
         {
             "title": "数量",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "num"
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "totalWeight"
+            "dataIndex": "weight"
         }
     ],
     
@@ -66,7 +66,7 @@
     "baseInfoColumn": [
         {
             "title": "批次号",
-            "dataIndex": "materialName",
+            "dataIndex": "batchNumber",
             "rules": [
                 {
                     "required": true,
@@ -76,7 +76,7 @@
         },
         {
             "title": "计划号",
-            "dataIndex": "materialCategoryName",
+            "dataIndex": "planNumber",
             "rules": [
                 {
                     "required": true,
@@ -86,7 +86,7 @@
         },
         {
             "title": "塔型",
-            "dataIndex": "standard",
+            "dataIndex": "productCategoryName",
             "rules": [
                 {
                     "required": true,
@@ -96,7 +96,7 @@
         },
         {
             "title": "杆塔",
-            "dataIndex": "materialTextureId",
+            "dataIndex": "productNumbers",
             "placeholder": "请输入杆塔号，并以,隔开",
             "rules": [
                 {
@@ -107,7 +107,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "structureSpec",
+            "dataIndex": "materialStandard",
             "type": "select",
             "rules": [
                 {

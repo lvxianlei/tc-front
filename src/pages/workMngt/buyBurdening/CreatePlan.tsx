@@ -1,8 +1,8 @@
 /**
- * 创建计划列表
+ * 配料任务创建
  */
  import React, { useRef, useState } from 'react';
- import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
+ import { Modal, Form, Button, InputNumber, Select, message, Input } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle } from '../../common';
 import {
     material,
@@ -22,59 +22,34 @@ import RequestUtil from '../../../utils/RequestUtil';
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
 
-    const formatSpec = (spec: any): { width: string, length: string } => {
-        if (!spec) {
-            return ({
-                width: "0",
-                length: "0"
-            })
-        }
-        const splitArr = spec.replace("∠", "").split("*")
-        return ({
-            width: splitArr[0] || "0",
-            length: splitArr[1] || "0"
-        })
-    }
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
             for (let p = 0; p < materialList.length; p += 1) {
                 if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].materialTextureId = popDataList[i].materialTextureId;
+                    materialList[p].materialName = popDataList[i].materialName;
                     materialList[p].materialTexture = popDataList[i].materialTexture;
                 }
             }
         }
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
-            const num = parseFloat(item.planPurchaseNum || "1")
-            const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
             return ({
                 ...item,
-                planPurchaseNum: num,
-                taxPrice,
-                price,
-                width: formatSpec(item.structureSpec).width,
-                // length: formatSpec(item.structureSpec).length,
-                weight: item.weight || "1.00",
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                structureTexture: item?.structureTexture || materialTextureOptions?.[0]?.name,
+                code: "1", // 件号
+                length: "1", // 长度
+                num: 1, // 数量
+                weight: 1, // 重量
             })
         })])
         setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
-            const num = parseFloat(item.planPurchaseNum || "1")
-            const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
             return ({
                 ...item,
-                planPurchaseNum: num,
-                taxPrice,
-                price,
-                width: formatSpec(item.structureSpec).width,
-                // length: formatSpec(item.structureSpec).length,
-                weight: item.weight || "1.00",
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                structureTexture: item?.structureTexture || materialTextureOptions?.[0]?.name,
+                code: "1", // 件号
+                length: "1", // 长度
+                num: 1, // 数量
+                weight: 1, // 重量
             })
         })])
         setVisible(false)
@@ -102,21 +77,20 @@ import RequestUtil from '../../../utils/RequestUtil';
         setPopDataList(list.slice(0))
     }
 
-    const lengthChange = (value: number, id: string) => {
+    // 长度
+    const lengthChange = (value: any, id: string, keys: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
-                return ({
-                    ...item,
-                    length: value,
-                    weight: ((item.proportion * value) / 1000 / 1000).toFixed(3),
-                    totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3)
-                })
+                item[keys] = value
+                return item;
             }
             return item
         })
+        console.log(list, "修改后的数据========>>>")
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
+
 
     const handleCreateClick = async() => {
         try {
@@ -126,9 +100,8 @@ import RequestUtil from '../../../utils/RequestUtil';
                 return false;
             }
             const v = {
-                lists: materialList,
-                purchaserTaskTowerIds: "",
-                purchaseType: baseInfo?.purchaseType
+                components: materialList,
+                ...baseInfo
             }
             saveRun(v);
         } catch(error) {
@@ -176,7 +149,19 @@ import RequestUtil from '../../../utils/RequestUtil';
             dataSource={[]}
             col={2}
             classStyle="baseInfo"
-            columns={baseInfoColumn}
+            columns={
+                baseInfoColumn.map((item: any) => {
+                    // 标准
+                    if (item.dataIndex === "materialStandard") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: materialStandardEnum
+                        })
+                    }
+                    return item;
+                })
+            }
         />
         <DetailTitle title="提料明细" />
         <div className='btnWrapper'>
@@ -190,63 +175,60 @@ import RequestUtil from '../../../utils/RequestUtil';
             rowKey={"id"}
             style={{ padding: "0" }}
             columns={[
+                {
+                    key: 'index',
+                    title: '序号',
+                    dataIndex: 'index',
+                    fixed: "left",
+                    width: 50,
+                    render: (_a: any, _b: any, index: number): React.ReactNode => {
+                        return (
+                            <span>
+                                {index + 1}
+                            </span>
+                        )
+                    }
+                },
                 ...material.map((item: any) => {
-                    if (["planPurchaseNum"].includes(item.dataIndex)) {
+                    // 材质
+                    if (item.dataIndex === "structureTexture") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => <Select
+                                style={{ width: '150px' }}
+                                value={records?.structureTexture || materialTextureOptions?.[0]?.name}
+                                onChange={(value: string) => lengthChange(value, records.id, "structureTexture")}
+                            >
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
+                            </Select>
                         })
                     }
+                    // 件号
+                    if (["code"].includes(item.dataIndex)) {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number) => <Input value={value || 1} onChange={(e: any) => lengthChange(e.target.value, records.id, "code")} />
+                        })
+                    }
+                    // 长度
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id, "length")} key={key} />
                         })
                     }
-                    if (item.dataIndex === "standard") {
+                    // 数量
+                    if (item.dataIndex === "num") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
-                                style={{ width: '150px' }}
-                                value={popDataList[key]?.standard && popDataList[key]?.standard + ',' + popDataList[key]?.materialStandardName}
-                                onChange={(e: string) => {
-                                    const newData = popDataList.map((item: any, index: number) => {
-                                        if (index === key) {
-                                            return {
-                                                ...item,
-                                                standard: e.split(',')[0],
-                                                materialStandardName: e.split(',')[1]
-                                            }
-                                        }
-                                        return item
-                                    })
-                                    setPopDataList(newData)
-                                }}>
-                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
-                            </Select>
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} step={0.01} value={value || 1} onChange={(value: number) => lengthChange(value, records.id, "num")} key={key} />
                         })
                     }
-                    if (item.dataIndex === "materialTextureId") {
+                    // 重量
+                    if (item.dataIndex === "weight") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
-                                style={{ width: '150px' }}
-                                value={popDataList[key]?.materialTextureId && popDataList[key]?.materialTextureId + ',' + popDataList[key]?.materialTexture}
-                                onChange={(e: string) => {
-                                    const newData = popDataList.map((item: any, index: number) => {
-                                        if (index === key) {
-                                            return {
-                                                ...item,
-                                                materialTextureId: e.split(',')[0],
-                                                materialTexture: e.split(',')[1]
-                                            }
-                                        }
-                                        return item
-                                    })
-                                    setPopDataList(newData)
-                                }}>
-                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
-                            </Select>
+                            render: (value: number, records: any, key: number) => <InputNumber min={1} step={0.001} value={value || 1} onChange={(value: number) => lengthChange(value, records.id, "weight")} key={key} />
                         })
                     }
                     return item
@@ -288,22 +270,11 @@ import RequestUtil from '../../../utils/RequestUtil';
                 onChange={(fields: any[]) => {
                     setMaterialList(fields.map((item: any) => ({
                         ...item,
-                        materialId: item.id,
-                        code: item.materialCode,
-                        materialCategoryId: item.materialCategory,
-                        planPurchaseNum: item.planPurchaseNum || "1",
-                        spec: item.structureSpec,
-                        source: 2,
-                        materialTextureId: item.structureTexture,
-                        standardName: item.standardName,
-                        length: item.length || 1,
-                        standard: item.standard,
-                        taxPrice: item.taxPrice || 1.00,
-                        price: item.price || 1.00,
-                        taxTotalAmount: item.taxTotalAmount || 1.00,
-                        totalAmount: item.totalAmount || 1.00,
-                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
-                        totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3),
+                        structureTexture: item?.structureTexture || materialTextureOptions?.[0]?.name,
+                        code: "1", // 件号
+                        length: "1", // 长度
+                        num: 1, // 数量
+                        weight: 1, // 重量
                     })) || [])
                 }}
             />

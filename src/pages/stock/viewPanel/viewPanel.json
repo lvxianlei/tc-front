@@ -2,83 +2,83 @@
   "baseColunm": [
     {
         "title": "类型",
-        "dataIndex": "productName"
+        "dataIndex": "materialCategoryName"
     },
     {
         "title": "标准",
-        "dataIndex": "productName"
+        "dataIndex": "materialStandardName"
     },
     {
         "title": "物料编码",
-        "dataIndex": "standard"
+        "dataIndex": "materialCode"
     },
     {
         "title": "品名",
-        "dataIndex": "spec"
+        "dataIndex": "materialName"
     },
     {
         "title": "材质",
-        "dataIndex": "materialTexture"
+        "dataIndex": "structureTexture"
     },
     {
         "title": "规格",
-        "dataIndex": "stockWeight"
+        "dataIndex": "structureSpec"
     },
     {
         "title": "长度（mm）",
-        "dataIndex": "onWayWeight"
+        "dataIndex": "length"
     },
     {
         "title": "宽度（mm）",
-        "dataIndex": "canUseWeight"
+        "dataIndex": "width"
     },
     {
         "title": "总数量",
-        "dataIndex": "noPickWeight"
+        "dataIndex": "totalNum"
     },
     {
         "title": "总重量（吨）",
-        "dataIndex": "safeWeight"
+        "dataIndex": "totalWeight"
     },
     {
         "title": "可用数量",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "usableNum"
     },
     {
         "title": "可用重量（吨）",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "usableTotalWeight"
     },
     {
         "title": "占用数量",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "occupiedNum"
     },
     {
         "title": "占用重量（吨）",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "occupiedTotalWeight"
     },
     {
         "title": "在途可用数量",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "inTransitUsableNum"
     },
     {
         "title": "在途可用重量（吨）",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "inTransitUsableTotalWeight"
     },
     {
         "title": "在途占用数量",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "inTransitOccupiedNum"
     },
     {
         "title": "在途占用重量（吨）",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "inTransitOccupiedTotalWeight"
     },
     {
         "title": "安全库存重量（吨）",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "safetyStock"
     },
     {
         "title": "告警库存重量（吨）",
-        "dataIndex": "alarmWeight"
+        "dataIndex": "alarmStock"
     }
   ]
 }
