@@ -92,7 +92,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 {
                     name: 'batcherId',
                     label: '申请人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'selectName',

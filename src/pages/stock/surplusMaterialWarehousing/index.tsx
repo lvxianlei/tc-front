@@ -298,7 +298,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     {
                         name: "batcherId",
                         label: "入库人",
-                        children: <IntgSelect width={400} />
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: "selectName",

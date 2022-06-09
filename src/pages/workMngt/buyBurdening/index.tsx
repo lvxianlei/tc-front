@@ -86,7 +86,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'batcherId',
                     label: '配料人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

@@ -97,7 +97,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'batcherId',
                     label: '反馈负责人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'startBatcheUpdateTime',

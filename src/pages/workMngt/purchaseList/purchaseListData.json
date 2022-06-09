@@ -102,7 +102,7 @@
         },
         {
             "title": "仓库占用（本次）",
-            "dataIndex": "----------",
+            "dataIndex": "warehouseOccupy",
             "type": "number"
         },
         {

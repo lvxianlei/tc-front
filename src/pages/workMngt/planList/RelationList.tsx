@@ -45,7 +45,7 @@ export default function RelationList() {
             {
                 name: 'purchaserId',
                 label: '采购人',
-                children: <IntgSelect width={400} />
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyQuery',

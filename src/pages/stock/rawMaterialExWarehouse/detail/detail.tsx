@@ -500,7 +500,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'batcherId',
                         label: '出库人',
-                        children: <IntgSelect width={400} />
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'materialTexture',
