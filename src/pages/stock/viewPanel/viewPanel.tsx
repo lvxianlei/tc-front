@@ -17,9 +17,9 @@ export default function ViewPanel(): React.ReactNode {
     const [filterValue, setFilterValue] = useState<any>({});
     
     // 统计数据
-    const { run: saveRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+    const { run: saveRun, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/materialStock/summary/weight`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/materialStock/summary/weight`, filterValue)
             resove(result)
         } catch (error) {
             reject(error)
@@ -45,27 +45,44 @@ export default function ViewPanel(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...baseColunm
+                    ...baseColunm.map((item: any) => {
+                        // 可用重量
+                        if (item.dataIndex === "usableTotalWeight") {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => {
+                                    return (
+                                        <span style={{background: record.usableTotalWeight > record.safetyStock ? "yellow" : ""}}>
+                                            {record.usableTotalWeight}
+                                        </span>
+                                    )
+                                }
+                            })
+                        }
+                        return item;
+                    })
                 ]}
                 onFilterSubmit={onFilterSubmit}
-                extraOperation={<span style={{ marginLeft: "20px" }}>重量合计（吨）：3456.78</span>}
+                extraOperation={<span style={{ marginLeft: "20px" }}>重量合计（吨）：{ data?.weight || 0 }</span>}
                 filterValue={filterValue}
                 searchFormItems={[
                     {
                         label: "类型",
-                        name: 'fuzzyQuery',
+                        name: 'materialCategoryName',
                         children: <Input placeholder="请输入类型进行查询" style={{ width: 300 }} />
                     },
                     {
                         label: "品名",
-                        name: 'fuzzyQuery',
+                        name: 'materialName',
                         children: <Input placeholder="请输入品名进行查询" style={{ width: 300 }} />
                     },
                     {
                         name: 'materialStandard',
                         label: '标准',
                         children: (
-                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
+                            <Select placeholder="请选择标准" style={{ width: "300px" }}>
                                 {
                                     materialStandardTypeOptions?.map((item: any, index: number) => {
                                         return <Select.Option value={item.name} key={index}>{item.name}</Select.Option>
@@ -76,22 +93,22 @@ export default function ViewPanel(): React.ReactNode {
                     },
                     {
                         label: "材质",
-                        name: 'fuzzyQuery',
+                        name: 'structureTexture',
                         children: <Input placeholder="请输入材质进行查询" style={{ width: 300 }} />
                     },
                     {
                         label: "规格",
-                        name: 'fuzzyQuery',
+                        name: 'structureSpec',
                         children: <Input placeholder="请输入规格进行查询" style={{ width: 300 }} />
                     },
                     {
                         label: "长度",
-                        name: 'fuzzyQuery',
+                        name: 'length',
                         children: <Input placeholder="请输入长度进行查询" style={{ width: 300 }} />
                     },
                     {
                         label: "宽度",
-                        name: 'fuzzyQuery',
+                        name: 'width',
                         children: <Input placeholder="请输入宽度进行查询" style={{ width: 300 }} />
                     }
                 ]}
