@@ -51,7 +51,37 @@ export default function Edit() {
             reject(error)
         }
     }))
-
+    const handleNumChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    planPurchaseNum: value,
+                    weight: ((item.proportion * (item.length || 1)) / 1000 / 1000).toFixed(3),
+                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000 / 1000).toFixed(3)
+                })
+            }
+            return item
+        })
+        setPopDataList(list.slice(0))
+    }
+    const handleRemove = (id: string) => {
+        setPopDataList(popDataList.filter((item: any) => item.materialCode !== id))
+    }
+    const lengthChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    length: value,
+                    weight: ((item.proportion * value) / 1000 / 1000).toFixed(3),
+                    totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3)
+                })
+            }
+            return item
+        })
+        setPopDataList(list.slice(0))
+    }
     return (
         <>
             <DetailContent title={[
