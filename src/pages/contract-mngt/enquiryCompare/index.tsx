@@ -179,7 +179,7 @@ export default function ContractMngt() {
                     {
                         name: 'comparisonPersonId',
                         label: '询价人',
-                        children: <IntgSelect width={400} />
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',

@@ -167,7 +167,7 @@ export default function Invoicing() {
                 {
                     name: 'loftingId',
                     label: '配料负责人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

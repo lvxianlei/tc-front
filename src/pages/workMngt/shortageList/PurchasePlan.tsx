@@ -50,7 +50,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     return <Spin spinning={loading}>
         <Row gutter={10}>
             <Col span={12}>
-                <DetailTitle title="配料方案" />
+                <DetailTitle title="配料列表" />
                 <CommonTable haveIndex columns={ListIngredients} dataSource={data?.lists || []} pagination={false} />
             </Col>
             <Col span={12}>

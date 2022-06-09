@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Form } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -76,7 +76,7 @@ export default function Invoicing() {
         }}>
             <Form form={form}>
                 <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因"
-                   name="reason"><Input.TextArea maxLength={400}/></Form.Item>
+                    name="reason"><Input.TextArea maxLength={400} /></Form.Item>
             </Form>
         </Modal>
         <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
@@ -88,7 +88,7 @@ export default function Invoicing() {
             filterValue={filterValue}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
-                ...baseInfo,
+                ...baseInfo as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -155,7 +155,7 @@ export default function Invoicing() {
                 {
                     name: 'handlerId',
                     label: '处理人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

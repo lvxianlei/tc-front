@@ -1,84 +1,99 @@
 {
     "baseInfo": [
         {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": "120"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
             "title": "采购员",
             "dataIndex": "purchasePersonName",
-            "type":"string"
+            "type": "string",
+            "width": 100
         },
         {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanNumber",
-            "type":"string"
+            "type": "string",
+            "width": 130
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "type":"string"
+            "type": "string",
+            "width": 100
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
-            "type":"string"
-        },     
+            "type": "string",
+            "width": 100
+        },
         {
             "title": "品名",
             "dataIndex": "materialName",
-            "type":"string"
+            "type": "string",
+            "width": 100
         },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime"
-        },    
         {
             "title": "搭配长度（mm）",
             "dataIndex": "length",
-            "type":"number"
-        } ,   
+            "type": "number",
+            "width": 130
+        },
         {
             "title": "搭配数量",
             "dataIndex": "amount",
-            "type":"integer"
-        } ,    
+            "type": "integer",
+            "width": 100
+        },
         {
             "title": "重量（吨）",
             "dataIndex": "weight",
-            "type":"number"
+            "type": "number",
+            "width": 100
         },
         {
             "title": "状态",
-            "dataIndex": "shortageStatusName"
-        }                     
+            "dataIndex": "shortageStatusName",
+            "width": 100
+        }
     ],
-    "operationInformation":[
+    "operationInformation": [
         {
             "title": "操作部门",
             "dataIndex": "departmentId",
-            "type":"integer"
+            "type": "integer"
         },
         {
             "title": "操作人",
             "dataIndex": "departmentName",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "操作时间",
             "dataIndex": "updateTime",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "操作时间",
             "dataIndex": "updateTime",
-            "type":"string"
+            "type": "string"
         },
         {
             "title": "操作",
             "dataIndex": "",
-            "type":""
+            "type": ""
         },
         {
             "title": "备注",
             "dataIndex": "remark",
-            "type":"string"
+            "type": "string"
         }
     ]
 }

@@ -210,7 +210,7 @@ export default function Invoicing() {
                     {
                         name: "createUserDeptId",
                         label: "制单人",
-                        children: <IntgSelect width={400} />
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'startStatusUpdateTime',

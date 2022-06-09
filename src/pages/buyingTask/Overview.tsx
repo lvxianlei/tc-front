@@ -53,12 +53,12 @@ export default function MaterialList() {
             {
                 name: 'outStockStaffId',
                 label: '出库人',
-                children: <IntgSelect width={300} />
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'createUser',
                 label: '领料人',
-                children: <IntgSelect width={300} />
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyQuery',

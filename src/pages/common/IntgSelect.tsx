@@ -18,7 +18,7 @@ export const generateTreeNode: (data: any) => any[] = (data: any[]) => {
     }))
 }
 
-export default function IntgSelect({ onChange, width, value = { first: "", second: "" } }: IntgSelectProps): JSX.Element {
+export default function IntgSelect({ onChange, width, value = { first: "", second: "" }, ...props }: IntgSelectProps): JSX.Element {
     const [deptId, setDeptId] = useState<string>(value?.first || "")
     const [userId, setUserId] = useState<string>(value?.second || "")
 
@@ -27,15 +27,6 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
         setUserId(value.second)
         value.first && getUser(value.first)
     }, [value.first])
-
-    const { loading, data: deptData } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: any[] = await RequestUtil.get(`/tower-system/department`)
-            resole(generateTreeNode(result))
-        } catch (error) {
-            reject(error)
-        }
-    }))
 
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -46,40 +37,16 @@ export default function IntgSelect({ onChange, width, value = { first: "", secon
         }
     }), { manual: true })
 
-    const handleFirstChange = useCallback((value: string) => {
-        setDeptId(value)
-        setUserId("")
-        onChange && onChange({ first: value, second: "" })
-    }, [setDeptId, getUser, setUserId])
-
     const handleChange = useCallback((value: string) => {
-        setUserId(value)
-        onChange && onChange({ first: deptId, second: value })
+        console.log(value, '------')
     }, [setUserId, deptId, onChange])
 
-    return <div style={{ width: width || "100%" }}>
-        <Spin spinning={loading}>
-            <TreeSelect
-                placeholder="部门"
-                value={deptId || undefined}
-                style={{ width: "50%" }}
-                onChange={handleFirstChange}
-                treeData={deptData}
-            />
-            <Select
-                placeholder="人员"
-                value={userId || undefined}
-                style={{ width: "50%" }}
-                onChange={handleChange}
-                disabled={!deptId}
-            >
-                {userData?.records?.map((item: any) => <Select.Option
-                    value={item.userId}
-                    key={item.id}
-                >
-                    {item.name}
-                </Select.Option>)}
-            </Select>
-        </Spin>
-    </div>
+    return <Select
+        showSearch
+        style={{ width }}
+        defaultActiveFirstOption={false}
+        showArrow={false}
+        filterOption={false}
+        onSearch={handleChange}
+        {...props} />
 }
