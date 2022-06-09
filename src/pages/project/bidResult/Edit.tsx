@@ -190,7 +190,6 @@ export default function BidResultEdit(): JSX.Element {
         if (changeFileds.isBid) {
             switch (changeFileds.isBid) {
                 case 3:
-                    console.log("---流标--")
                     tabsRef?.setFieldsValue({
                         submit: allFields.submit.map((item: any) => {
                             if (item.projectCompany === changeRow.projectCompany) {
@@ -201,7 +200,6 @@ export default function BidResultEdit(): JSX.Element {
                     })
                     break
                 case 4:
-                    console.log("---废标--")
                     tabsRef?.setFieldsValue({
                         submit: allFields.submit.map((item: any) => {
                             if (item.bidName === changeRow.bidName) {
