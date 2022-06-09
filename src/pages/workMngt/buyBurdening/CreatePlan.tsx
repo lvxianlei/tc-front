@@ -2,7 +2,7 @@
  * 配料任务创建
  */
  import React, { useRef, useState } from 'react';
- import { Modal, Form, Button, InputNumber, Select, message, Input } from 'antd';
+ import { Modal, Form, Button, InputNumber, Select, message, Input, Upload } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle } from '../../common';
 import {
     material,
@@ -14,6 +14,7 @@ import { deliverywayOptions, materialStandardOptions, materialTextureOptions, tr
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import AuthUtil from '../../../utils/AuthUtil';
  
  export default function CreatePlan(props: any): JSX.Element {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -21,6 +22,7 @@ import RequestUtil from '../../../utils/RequestUtil';
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
+    let [count, setCount] = useState<number>(1);
 
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
@@ -57,8 +59,25 @@ import RequestUtil from '../../../utils/RequestUtil';
 
     // 移除
     const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
-        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+        setMaterialList(materialList.filter((item: any) => item.id !== id))
+        setPopDataList(materialList.filter((item: any) => item.id !== id))
+    }
+
+    // 复制
+    const handleCopy = (options: any) => {
+        const result = {
+            ...options,
+            id: count + ""
+        }
+        setCount(count + 1)
+        setMaterialList([
+            ...materialList,
+            result
+        ])
+        setPopDataList([
+            ...popDataList,
+            result
+        ])
     }
     
     const handleNumChange = (value: number, id: string) => {
@@ -165,11 +184,33 @@ import RequestUtil from '../../../utils/RequestUtil';
         />
         <DetailTitle title="提料明细" />
         <div className='btnWrapper'>
-            <Button type='primary' ghost style={{marginRight: 8}}  onClick={() => setVisible(true)}>添加</Button>
-            <Button type='primary' ghost onClick={() => {
-                setMaterialList([]);
-                setPopDataList([]);
-            }}>清空</Button>
+            <Upload 
+                accept=".xls,.xlsx"
+                style={{marginRight: 8}}
+                action={ () => {
+                    const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                    return baseUrl+'/tower-supply/task/purchase/manual/component'
+                } } 
+                headers={
+                    {
+                        'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                        'Tenant-Id': AuthUtil.getTenantId(),
+                        'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                    }
+                }
+                showUploadList={ false }
+                onChange={ (info) => {
+                    if(info.file.response && !info.file.response?.success) {
+                        message.warning(info.file.response?.msg)
+                    }else if(info.file.response && info.file.response?.success){
+                        console.log(info.file.response, "info.file.response")
+                        message.success('导入成功！');
+                    }
+                } }
+            >
+                <Button type="primary" style={{marginRight: 8}} ghost>导入</Button>
+            </Upload>
+            <Button type='primary' ghost onClick={() => setVisible(true)}>添加</Button>
         </div>
         <CommonTable
             rowKey={"id"}
@@ -237,7 +278,10 @@ import RequestUtil from '../../../utils/RequestUtil';
                     title: "操作",
                     fixed: "right",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                    render: (_: any, records: any) => <>
+                        <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button>
+                        <Button type="link" onClick={() => handleRemove(records.id)}>移除</Button>
+                    </>
                 }]}
             pagination={false}
             dataSource={popDataList} />

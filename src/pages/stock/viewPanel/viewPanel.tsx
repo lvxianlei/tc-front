@@ -47,14 +47,19 @@ export default function ViewPanel(): React.ReactNode {
                     },
                     ...baseColunm.map((item: any) => {
                         // 可用重量
+                        // 可用重量 < 告警重量 红
+                        // 可用重量 > 告警重量 && 可用重量 < 安全重量 标黄
                         if (item.dataIndex === "usableTotalWeight") {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
-                                width: 50,
                                 render: (_: any, record: any): React.ReactNode => {
                                     return (
-                                        <span style={{background: record.usableTotalWeight > record.safetyStock ? "yellow" : ""}}>
+                                        <span style={{background: 
+                                            record.usableTotalWeight < record.alarmStock ? "red"
+                                            : (record.usableTotalWeight > record.alarmStock && record.safetyStock) ?
+                                            "yellow" : ""
+                                        }}>
                                             {record.usableTotalWeight}
                                         </span>
                                     )

@@ -96,18 +96,13 @@
     ],
     "PlanList": [
         {
-            "title": "生产未领料（支）",
-            "dataIndex": "uncollectedMaterial",
-            "type": "number"
-        },
-        {
-            "title": "仓库库存（支）",
+            "title": "仓库可用库存（支）",
             "dataIndex": "warehouseStock",
             "type": "number"
         },
         {
-            "title": "在途库存（支）",
-            "dataIndex": "transitStock",
+            "title": "仓库占用（本次）",
+            "dataIndex": "warehouseOccupy",
             "type": "number"
         },
         {

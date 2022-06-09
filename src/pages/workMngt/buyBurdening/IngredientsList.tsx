@@ -906,8 +906,10 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='values'>{nowIngre.utilizationRate}%</span>
                                                     <span className='texts'>原材料米数：</span>
                                                     <span className='values'
-                                                        title={nowIngre?.idealRepertoryLengthList?.join("、")}>
-                                                        {nowIngre?.idealRepertoryLengthList?.join("、")}
+                                                        title={nowIngre?.idealRepertoryLengthList && nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")}>
+                                                        {
+                                                            nowIngre?.idealRepertoryLengthList && nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")
+                                                        }
                                                     </span>
                                                 </div>
                                                 <div className='ingredients_content_wrapper'>
