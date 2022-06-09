@@ -5,7 +5,7 @@ import RequestUtil from '../../utils/RequestUtil'
 interface IntgSelectProps {
     id?: string,
     onChange?: (value: any) => void
-    value?: undefined | { first: string, second: string }
+    value?: undefined | string
     width?: number | string
 }
 
@@ -18,35 +18,34 @@ export const generateTreeNode: (data: any) => any[] = (data: any[]) => {
     }))
 }
 
-export default function IntgSelect({ onChange, width, value = { first: "", second: "" }, ...props }: IntgSelectProps): JSX.Element {
-    const [deptId, setDeptId] = useState<string>(value?.first || "")
-    const [userId, setUserId] = useState<string>(value?.second || "")
+export default function IntgSelect({ onChange, width, value = "", ...props }: IntgSelectProps): JSX.Element {
+    const [IValue, setIValue] = useState<string>(value || "")
 
     useEffect(() => {
-        setDeptId(value.first)
-        setUserId(value.second)
-        value.first && getUser(value.first)
-    }, [value.first])
+        setIValue(value)
+    }, [value])
 
-    const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { loading: fetching, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/employee?dept=${id}&size=1000`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/employee`, { fuzzyName: IValue })
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }), { refreshDeps: [IValue] })
 
-    const handleChange = useCallback((value: string) => {
-        console.log(value, '------')
-    }, [setUserId, deptId, onChange])
+    const handleSearch = useCallback((value: string) => {
+        setIValue(value)
+    }, [setIValue, onChange])
 
     return <Select
         showSearch
+        value={IValue}
         style={{ width }}
         defaultActiveFirstOption={false}
         showArrow={false}
         filterOption={false}
-        onSearch={handleChange}
+        notFoundContent={fetching ? <Spin size="small" /> : null}
+        onSearch={handleSearch}
         {...props} />
 }
