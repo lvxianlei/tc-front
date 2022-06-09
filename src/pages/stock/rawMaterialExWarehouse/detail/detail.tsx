@@ -181,11 +181,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '分类',
-            dataIndex: 'classify',
+            dataIndex: 'materialCategoryName',
             width: 100,
         }, {
             title: '标准',
-            dataIndex: 'standardName',
+            dataIndex: 'materialStandardName',
             width: 100,
         }, {
             title: '品名',
@@ -193,11 +193,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '材质',
-            dataIndex: 'materialTexture',
+            dataIndex: 'structureTexture',
             width: 100,
         }, {
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
             width: 100,
         }, {
             title: '长度（mm）',
@@ -209,7 +209,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '数量',
-            dataIndex: 'quantity',
+            dataIndex: 'num',
             width: 100,
         }, {
             title: '重量（吨）',
@@ -217,7 +217,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '库存数量',
-            dataIndex: 'quantity',
+            dataIndex: 'num',
             width: 100,
         }, {
             title: '出库数量',
@@ -246,27 +246,27 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         },
         {
             title: '物料编码',
-            dataIndex: 'standard',
+            dataIndex: 'materialCode',
             width: 100,
         }, {
             title: '分类',
-            dataIndex: 'classify',
+            dataIndex: 'materialCategoryName',
             width: 100,
         }, {
             title: '标准',
-            dataIndex: 'standard',
+            dataIndex: 'materialStandardName',
             width: 100,
         }, {
             title: '品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName',
             width: 100,
         }, {
             title: '材质',
-            dataIndex: 'materialTexture',
+            dataIndex: 'structureTexture',
             width: 100,
         }, {
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
             width: 100,
         }, {
             title: '长度（mm）',
@@ -278,7 +278,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '数量',
-            dataIndex: 'quantity',
+            dataIndex: 'num',
             width: 100,
         }, {
             title: '重量（吨）',
