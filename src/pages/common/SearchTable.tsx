@@ -57,7 +57,6 @@ export default function SearchTable({
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const history = useHistory()
-    console.log(extraOperation, "extraOperation")
     const { loading, data, run } = useRequest<{ [key: string]: any }>((params: { [key: string]: any } = {}) => new Promise(async (resole, reject) => {
         try {
             if (pagination !== false) {
