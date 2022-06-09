@@ -29,8 +29,9 @@ export default function SalesPlanEdit() {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
             console.log(result)
             baseInfoForm.setFieldsValue({
+                
                 ...result,
-                issueTime: result?.issueTime?moment(result?.issueTime).format('YYYY-MM-DD'):''
+                issueTime: result?.issueTime?moment(result?.issueTime):'',
             })
             cargoDtoForm.setFieldsValue(result)
             setSaleOrderId(result.saleOrderId)
@@ -290,12 +291,12 @@ export default function SalesPlanEdit() {
                             path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
                         }) 
                     }
-                    if(item.dataIndex === "issueTime"){
+                    if(item.dataIndex === "issueTime"&& match.params.type === "new"){
                         return ({
                             ...item,
                             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name="issueTime" style={{ width: '100%' }} initialValue={moment(new Date())}>
-                                    <DatePicker format={'YYYY-MM-DD'}/>
+                                <Form.Item name="issueTime"  initialValue={moment(new Date())}>
+                                    <DatePicker format={'YYYY-MM-DD'} style={{ width: '105%' }}/>
                                 </Form.Item>
                             )
                         }) 
