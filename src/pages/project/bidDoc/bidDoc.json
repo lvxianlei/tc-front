@@ -124,7 +124,8 @@
         {
             "title": "接收日期",
             "dataIndex": "receiveUserDate",
-            "type": "date"
+            "type": "date",
+            "format":"YYYY-MM-DD"
         },
         {
             "title": "授权代表",
