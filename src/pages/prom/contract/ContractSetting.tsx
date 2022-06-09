@@ -79,6 +79,8 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             currencyType: contract.currencyType,
             description: contract.description,
             planType: contract.planType,
+            ascriptionId: contract.ascriptionId,
+            ascriptionName: contract.ascriptionName,
             payType: contract.payType,
             takeOverUser: contract.takeOverUser,
             paymentPlanDtos: contract.paymentPlanDtos,
