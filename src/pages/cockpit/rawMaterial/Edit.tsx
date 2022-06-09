@@ -74,7 +74,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
                 price: priceInfoData.price, // 原材料价格
                 priceSource: (priceSource && priceSource.length > 0) ? priceSource[0].label : priceInfoData.priceSource, // 价格来源
                 quotationTime: priceInfoData.quotationTime, // 报价时间
-                materialSpec: materialData.materialSpec, // 原材料规格
+                structureSpec: materialData.structureSpec, // 原材料规格 
                 structureTexture: structureTexture ? structureTexture[0].label : "", // 原材料材质
                 structureTextureId: materialData.structureTextureId, // 原材料材质id
             })
@@ -91,7 +91,7 @@ export default forwardRef(function Edit({ id, type, priceSourceEnum }: EditProps
         if (fields.materialName) {
             materialForm.setFieldsValue({
                 // purchasePlanCode: fields.records[0].materialName, // 原材料名称
-                materialSpec: fields.materialName.records[0].structureSpec, // 原材料规格
+                structureSpec: fields.materialName.records[0].structureSpec, // 原材料规格
                 materialCategoryName: fields.materialName.records[0].materialCategoryName, // 原材料类型
             })
             setPopContent({ id: fields.id, records: fields.materialName.records[0] })
