@@ -3,53 +3,44 @@
         {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
-            "width": 120,
             "type": "string"
         },
         {
             "title": "采购类型",
-            "dataIndex": "purchaseTypeName",
-            "width": 60
+            "dataIndex": "purchaseTypeName"
         },
         {
             "title": "圆钢收货量（吨）/总重（吨）",
             "dataIndex": "roundSteelTotal",
-            "width": 140,
             "type": "number"
         },
         {
             "title": "角钢收货量（吨）/总重（吨）",
             "dataIndex": "angleSteelTotal",
-            "width": 140,
             "type": "number"
         },
         {
             "title": "钢板收货量（吨）/总重（吨）",
             "dataIndex": "steelPlateTotal",
-            "width": 140,
             "type": "number"
         },
         {
             "title": "采购人",
             "dataIndex": "purchaserName",
-            "width": 60,
             "type": "string"
         },
         {
             "title": "创建日期",
             "dataIndex": "createTime",
-            "width": 80,
             "type": "string"
         },
         {
             "title": "计划状态",
-            "dataIndex": "purchasePlanStatusName",
-            "width": 60
+            "dataIndex": "purchasePlanStatusName"
         },
         {
             "title": "最新状态变更时间",
             "dataIndex": "updateTime",
-            "width": 120,
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         }

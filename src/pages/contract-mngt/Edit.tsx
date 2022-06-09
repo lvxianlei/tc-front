@@ -130,6 +130,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     structureTextureId: id,
                 }
             }) || [])
+            setPopDataList(result?.materialContractDetailVos.map((res: any) => {
+                const id = res.structureTextureId;
+                const name = res.structureTexture;
+                return {
+                    ...res,
+                    structureTexture: name,
+                    structureTextureId: id,
+                }
+            }) || [])
             setSupplierId(result.supplierId);
             setPurchasePlanId(result.comparisonPriceId);
             resove(result)
@@ -191,9 +200,26 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }), { manual: true })
 
     const handleAddModalOk = () => {
-        const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        console.log(newMaterialList, "newMaterialList")
+        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        const newMaterialList: any[] = []
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+            const num = parseFloat(item.num || "1")
+            const taxPrice = parseFloat(item.taxOffer || "1.00")
+            const price = parseFloat(item.offer || "1.00")
+            return ({
+                ...item,
+                num,
+                taxPrice,
+                price,
+                spec: item.structureSpec,
+                width: formatSpec(item.structureSpec).width,
+                // length: formatSpec(item.structureSpec).length,
+                weight: item.weight || "1.00",
+                taxTotalAmount: (num * taxPrice).toFixed(2),
+                totalAmount: (num * price).toFixed(2)
+            })
+        })])
+        setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat(item.offer || "1.00")
@@ -213,7 +239,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setVisible(false)
     }
 
-    const handleRemove = (id: string) => setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
+    const handleRemove = (id: string) => {
+        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
+        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+    }
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, materialList])
 
@@ -328,7 +357,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
-        const newData = materialList.map((item: any) => {
+        const newData = popDataList.map((item: any) => {
             if (item.materialCode === materialCode) {
                 const allData: any = {
                     num: parseFloat(item.num || "1"),
@@ -348,7 +377,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
             return item
         })
-        setMaterialList(newData)
+        setMaterialList(newData.slice(0));
+        setPopDataList(newData.slice(0))
     }
 
     const lengthChange = (value: number, id: string) => {
@@ -364,7 +394,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
             return item
         })
-        setMaterialList(list);
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
     }
 
     // 运费信息
@@ -446,7 +477,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }}
             value={{
                 id: "",
-                records: materialList,
+                records: popDataList,
                 value: ""
             }}
                 onChange={(fields: any[]) => {
@@ -457,10 +488,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             element["totalWeight"]  = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
                         }
                     });
-                    setPopDataList(fields.map((item: any) => ({
+                    setMaterialList(fields.map((item: any) => ({
                         ...item,
                         spec: item.structureSpec,
-                        source: 2,
+                        source: item.source || 2,
                         structureTextureId: item.structureTextureId,
                         materialStandardName: item.materialStandardName,
                         length: item.length || 1,
@@ -543,6 +574,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }}>添加</Button>]} />
         <Row></Row>
         <CommonTable
+            // rowKey={"id"}
             rowKey={(records: any) => `${records.materialName}${records.structureSpec}${records.length}`}
             style={{ padding: "0" }}
             columns={[
@@ -614,7 +646,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={materialList} />
+            dataSource={popDataList} />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })

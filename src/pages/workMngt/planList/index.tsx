@@ -112,7 +112,7 @@ export default function Invoicing() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 200,
+                        width: 270,
                         render: (_: any, record: any) => {
                             return <>
                                 <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link>
