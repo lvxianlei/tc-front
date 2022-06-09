@@ -85,15 +85,13 @@
             "dataIndex": "weight",
             "width": 100,
             "type": "number",
-            "decimal": "3",
-            "required": true
+            "decimal": "3"
         },
         {
             "title": "框架标套数",
             "dataIndex": "frameNumber",
             "width": 100,
-            "type": "number",
-            "required": true
+            "type": "number"
         },
         {
             "title": "中标比例（%）",
