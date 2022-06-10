@@ -158,12 +158,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             biddingBatch: resData?.bidBatch,
             contractAdd: {
                 ...resData,
-                address: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`
+                address: resData.address === "其他-国外" ? resData.address : ((!resData.bigRegion && !resData.address) ? "" : `${resData.bigRegion || ""}-${resData.address || ""}`)
             }
         })
         this.getForm()?.setFieldsValue({
             bidBatch: resData?.bidBatch,
-            region: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`,
+            region: resData.address === "其他-国外" ? resData.address : ((!resData.bigRegion && !resData.address) ? "" : `${resData.bigRegion || ""}-${resData.address || ""}`),
             country: resData?.country || "",
         })
     }
@@ -789,8 +789,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Form.Item name="planType" style={{margin: 0}} initialValue={contract?.planType || 0}>
-                            <Radio.Group style={{position: "relative", top: "7px"}} onChange={(e: RadioChangeEvent) => {
+                        <Form.Item name="planType" style={{ margin: 0 }} initialValue={contract?.planType || 0}>
+                            <Radio.Group style={{ position: "relative", top: "7px" }} onChange={(e: RadioChangeEvent) => {
                                 this.setState({
                                     contract: {
                                         ...(contract || {}),
@@ -820,10 +820,10 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
                                                     <Row key={`${field.name}_${index}`} className={styles.FormItem}>
-                                                        <Col span={2} style={{height: "32px", lineHeight: "32px"}}>{index + 1}</Col>
+                                                        <Col span={2} style={{ height: "32px", lineHeight: "32px" }}>{index + 1}</Col>
                                                         <Col span={4}>
                                                             <Form.Item
-                                                                style={{margin: 0}}
+                                                                style={{ margin: 0 }}
                                                                 {...field}
                                                                 name={[field.name, 'name']}
                                                                 fieldKey={[field.fieldKey, 'name']}
@@ -837,7 +837,7 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         </Col>
                                                         <Col span={4}>
                                                             <Form.Item
-                                                                style={{margin: 0}}
+                                                                style={{ margin: 0 }}
                                                                 {...field}
                                                                 name={[field.name, 'returnedTime']}
                                                                 fieldKey={[field.fieldKey, 'returnedTime']}
@@ -851,18 +851,18 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         </Col>
                                                         <Col span={4}>
                                                             <Form.Item
-                                                                style={{margin: 0}} {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
-                                                                required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
-                                                                message: '请输入计划回款占比'
-                                                            }, {
-                                                                validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                                                                    if (value > 0) {
-                                                                        callback()
-                                                                    } else {
-                                                                        callback('计划回款占比需大于0')
+                                                                style={{ margin: 0 }} {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
+                                                                    required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
+                                                                    message: '请输入计划回款占比'
+                                                                }, {
+                                                                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                                                        if (value > 0) {
+                                                                            callback()
+                                                                        } else {
+                                                                            callback('计划回款占比需大于0')
+                                                                        }
                                                                     }
-                                                                }
-                                                            }]}>
+                                                                }]}>
                                                                 <InputNumber
                                                                     stringMode={false}
                                                                     min="0"
@@ -874,19 +874,19 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
-                                                            <Form.Item 
-                                                                style={{margin: 0}} {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
-                                                                required: this.state.contract?.planType === planType.AMOUNT,
-                                                                message: '请输入计划回款金额'
-                                                            }, {
-                                                                validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                                                                    if (value > 0) {
-                                                                        callback()
-                                                                    } else {
-                                                                        callback('计划回款金额需大于0')
+                                                            <Form.Item
+                                                                style={{ margin: 0 }} {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
+                                                                    required: this.state.contract?.planType === planType.AMOUNT,
+                                                                    message: '请输入计划回款金额'
+                                                                }, {
+                                                                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                                                        if (value > 0) {
+                                                                            callback()
+                                                                        } else {
+                                                                            callback('计划回款金额需大于0')
+                                                                        }
                                                                     }
-                                                                }
-                                                            }]}>
+                                                                }]}>
                                                                 <InputNumber
                                                                     stringMode={false}
                                                                     min="0"
@@ -898,8 +898,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
-                                                            <Form.Item 
-                                                                style={{margin: 0}} {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                            <Form.Item
+                                                                style={{ margin: 0 }} {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
                                                                 <Input.TextArea rows={1} maxLength={300} />
                                                             </Form.Item>
                                                         </Col>
