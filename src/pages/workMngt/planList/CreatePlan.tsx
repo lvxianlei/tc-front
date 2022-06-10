@@ -152,6 +152,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
+                setPopDataList([]);
                 props?.handleCreate();
             }}
             maskClosable={false}
@@ -159,6 +160,7 @@ import RequestUtil from '../../../utils/RequestUtil';
             footer={[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
+                    setPopDataList([]);
                     props?.handleCreate();
                 }}>
                     关闭

@@ -209,7 +209,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
             // weight: item.singleWeight || 0,
-            source: 1,
+            source: item.source || 1,
+            // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            structureTextureId: item.structureTextureId,
+            structureTexture: item.structureTexture,
+            materialStandard: item.materialStandard,
+            materialStandardName: item.materialStandardName,
+            materialCode: item.materialCode
+        })))
+        setPopDataList(chooseData[0]?.materials.map((item: any) => ({
+            ...item,
+            num: item.planPurchaseNum || "0",
+            structureSpec: item.structureSpec,
+            // width: formatSpec(item.spec).width,
+            thickness: formatSpec(item.spec).thickness,
+            // weight: item.singleWeight || 0,
+            source: item.source || 1,
             // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
@@ -303,10 +318,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     setMaterialList(fields.map((item: any) => ({
                         ...item,
                         structureSpec: item.structureSpec,
-                        source: 2,
-                        structureTexture: item.structureTexture,
-                        materialStandardName: item.materialStandardName,
-                        materialStandard: item.materialStandard,
+                        source: item.source || 2,
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ?  materialStandardOptions[0]?.name : "",
+                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.id : "",
+                        structureTexture:item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.name : "",
                         proportion: item.proportion == -1 ? 0 : item.proportion
                     })))
                 }}
@@ -333,7 +349,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             ...item,
                             render: (value: number, records: any) => records.source === 1 ? value : <InputNumber
                                 min={0}
-                                value={value === -1 ? 0 : value}
+                                value={value === -1 ? 1 : value}
                                 onChange={(value: number) => handleInputChange(value, records.id)} />
                         })
                     }
@@ -342,7 +358,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             ...item,
                             render: (value: number, records: any) => records.source === 1 ? value : <InputNumber
                                 min={0}
-                                value={value === -1 ? 0 : value}
+                                value={value === -1 ? 1 : value}
                                 onChange={(value: number) => lengthChange(value, records.id)} />
                         })
                     }
