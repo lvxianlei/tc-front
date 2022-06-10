@@ -47,5 +47,7 @@ export default function IntgSelect({ onChange, width, value = "", ...props }: In
         filterOption={false}
         notFoundContent={fetching ? <Spin size="small" /> : null}
         onSearch={handleSearch}
-        {...props} />
+        {...props} >
+        {userData?.records?.map((item: any) => <Select.Option value={item.id}>{item.name}</Select.Option>)}
+    </Select>
 }
