@@ -54,7 +54,6 @@ export default function BidResultEdit(): JSX.Element {
                 try {
                     if (refFun?.getForm()) {
                         const fdata = await refFun?.getForm().validateFields()
-                        console.log(fdata, "data")
                         // if (fdata?.submit.length <= 0) {
                         //     message.error("每轮至少新增一行...")
                         //     return
@@ -196,12 +195,10 @@ export default function BidResultEdit(): JSX.Element {
             switch (changeFileds.isBid) {
                 case 3:
                     {
-                        const submit = allFields.submit.map((item: any) => {
-                            if (item.projectCompany === changeRow.projectCompany) {
-                                return ({ ...item, isBid: changeFileds.isBid })
-                            }
-                            return item
-                        })
+                        const submit = allFields.submit.map((item: any) => ({
+                            ...item,
+                            isBid: changeFileds.isBid
+                        }))
                         tabsRef?.setFieldsValue({ submit })
                         setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
                             if (item.round === itemKey) {
@@ -236,10 +233,10 @@ export default function BidResultEdit(): JSX.Element {
                                 if ((prevIsBid === 4) && (item.bidName === changeRow.bidName)) {
                                     return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : -1 })
                                 }
-                                if ((prevIsBid === 3) && (item.projectCompany === changeRow.projectCompany)) {
+                                if (prevIsBid === 3) {
                                     return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : -1 })
                                 }
-                                return item
+                                return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : changeFileds.isBid })
                             })
                             tabsRef?.setFieldsValue({ submit })
                             setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
@@ -249,6 +246,19 @@ export default function BidResultEdit(): JSX.Element {
                                 return item
                             }))
                         }
+                        const submit = allFields.submit.map((item: any) => {
+                            if (item.bidName === changeRow.bidName) {
+                                return ({ ...item, isBid: changeFileds.isBid })
+                            }
+                            return item
+                        })
+                        tabsRef?.setFieldsValue({ submit })
+                        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                            if (item.round === itemKey) {
+                                return ({ ...item, bidOpenRecordVos: submit })
+                            }
+                            return item
+                        }))
                     }
                     break
             }
