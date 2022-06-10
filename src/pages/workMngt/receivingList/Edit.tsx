@@ -638,7 +638,20 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
                 return item
             })
+            const weightAll = newFields.reduce((count: string, item: any) => (parseFloat(count) + parseFloat(`${item.ponderationWeight}`)).toFixed(2), "0")
             editForm.setFieldsValue({ submit: newFields })
+            // 运费价税合计 = 过磅重量 * 单价
+            const transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
+            // 装卸费合计 = 过磅重量 * 单价
+            const unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
+            setFreightInformation({
+                ...freightInformation,
+                transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
+            })
+            setHandlingCharges({
+                ...handlingCharges,
+                unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
+            })
         }
     }
 
