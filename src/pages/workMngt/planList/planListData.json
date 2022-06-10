@@ -100,7 +100,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {
@@ -152,7 +152,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {

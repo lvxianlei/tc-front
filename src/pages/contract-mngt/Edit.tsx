@@ -27,6 +27,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [stevedoringForm] = Form.useForm()
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
 
+    const [colunmnBase, setColunmnBase] = useState<any[]>(contractBaseInfo);
     // 运费的数组
     const [newfreightInformation, setNewfreightInformation] = useState<any>(freightInformation); // 运费信息
     // 装卸费
@@ -299,7 +300,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const resetFields = () => {
         baseForm.resetFields()
         attchsRef.current?.resetFields()
+        const result = contractBaseInfo;
+        const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
+        result[index].disabled = true;
+        setColunmnBase(result.slice(0))
         setMaterialList([])
+        setPopDataList([])
     }
 
     const formatSpec = (spec: any): { width: string, length: string } => {
@@ -316,7 +322,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         })
     }
 
-    const handleBaseInfoChange = async (fields: any) => {
+    const handleBaseInfoChange = async (fields: any, allFields: any) => {
         if (fields.supplier) {
             setSupplierId(fields.supplier.id)
             setMaterialList([])
@@ -327,6 +333,26 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     records: []
                 }
             })
+        }
+        if (fields.purchasePlan) {
+            console.log(fields, "点击了采购计划", allFields)
+            if (allFields?.supplier) {
+                const result = colunmnBase;
+                const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
+                result[index].path = `/tower-supply/comparisonPrice?supplierId=${allFields?.supplier?.id}&comparisonStatus=2&purchasePlanId=${fields.purchasePlan.id}`
+                result[index].disabled = false;
+                setColunmnBase(result.slice(0))
+            }
+        }
+        if (fields.supplier) {
+            console.log(fields, "供应商", allFields)
+            if (allFields?.purchasePlan) {
+                const result = colunmnBase;
+                const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
+                result[index].path = `/tower-supply/comparisonPrice?supplierId=${fields?.supplier?.id}&comparisonStatus=2&purchasePlanId=${allFields?.purchasePlan?.id}`
+                result[index].disabled = false;
+                setColunmnBase(result.slice(0))
+            }
         }
         if (fields.comparisonPriceNumber) {
             setPurchasePlanId(fields.comparisonPriceNumber.id);
@@ -539,14 +565,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             col={2}
             classStyle={"overall-form-class-padding0"}
             onChange={handleBaseInfoChange}
-            columns={contractBaseInfo.map((item: any) => {
+            columns={colunmnBase.map((item: any) => {
                 switch (item.dataIndex) {
                     case "deliveryMethod":
                         return ({ ...item, enum: deliveryMethodEnum })
                     case "transportMethod":
                         return ({ ...item, enum: transportMethodEnum })
-                    case "comparisonPriceNumber":
-                        return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2&purchasePlanId=${purchasePlanId}` })
+                    // case "comparisonPriceNumber":
+                    //     return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2&purchasePlanId=${purchasePlanId}` })
                     default:
                         return item
                 }

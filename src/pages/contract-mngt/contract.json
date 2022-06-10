@@ -272,6 +272,7 @@
             "path": "/tower-supply/comparisonPrice",
             "width": 1011,
             "value": "comparisonPriceNumber",
+            "disabled": true,
             "dependencies": true,
             "readOnly": true,
             "columns": [
