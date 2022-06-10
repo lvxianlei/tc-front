@@ -718,7 +718,7 @@ export default function Lofting(): React.ReactNode {
                 ;
             }
         }>
-            <Form form={form}>
+            <Form form={form} className={styles.descripForm}>
                 {editorLock==='添加'&&<Button onClick={() => {
                     const value = form.getFieldsValue(true).dataV || [];
                     value.push({})
@@ -727,10 +727,21 @@ export default function Lofting(): React.ReactNode {
                     form.setFieldsValue({ dataV: [...value] })
                 }} type='primary' ghost>添加一行</Button>}
                 <Table
+                    scroll={{x:1200}}
                     columns={editorLock==='添加'?[
-                        { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                        { 
+                            title: '序号',
+                            dataIndex: 'index', 
+                            key: 'index', 
+                            width: 80,
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) 
+                        },
                         {
-                            title: '段号', dataIndex: 'segmentName', key: 'segmentName', render: (_a: any, _b: any, index: number): React.ReactNode => (
+                            title: '段号', 
+                            dataIndex: 'segmentName', 
+                            key: 'segmentName', 
+                            width: 120,
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "segmentName"]} initialValue={_a} rules={[{ required: true, message: '请填写段号' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
@@ -745,7 +756,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '构件编号', dataIndex: 'code', key: 'code', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '构件编号', 
+                            dataIndex: 'code', 
+                            width: 120,
+                            key: 'code', 
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "code"]} initialValue={_} rules={[{ required: true, message: '请填写构件编号' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
@@ -755,7 +770,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '材料名称', dataIndex: 'materialName', key: 'materialName', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '材料名称', 
+                            dataIndex: 'materialName', 
+                            width: 120,
+                            key: 'materialName', 
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "materialName"]} initialValue={_} rules={[{ required: true, message: '请输入材料名称' }, {
                                     pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]*$/,
                                     message: '仅可输入汉字/数字/字母',
@@ -765,7 +784,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '材质', dataIndex: 'structureTexture', key: 'structureTexture', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '材质', 
+                            dataIndex: 'structureTexture', 
+                            key: 'structureTexture', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "structureTexture"]} initialValue={_} rules={[{ required: true, message: '请输入材质' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
@@ -775,7 +798,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '规格', 
+                            dataIndex: 'structureSpec', 
+                            key: 'structureSpec', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "structureSpec"]} initialValue={_} rules={[{ required: true, message: '请输入规格' }, {
 
                                     pattern: /^[0-9-∠L*]*$/,
@@ -787,42 +814,66 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '长度（mm）', dataIndex: 'length', key: 'length', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '长度（mm）', 
+                            dataIndex: 'length', 
+                            key: 'length', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "length"]} rules={[{ required: true, message: '请输入长度' }]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '宽度（mm）', dataIndex: 'width', key: 'width', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '宽度（mm）', 
+                            dataIndex: 'width',
+                            key: 'width', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "width"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '厚度（mm）', 
+                            dataIndex: 'thickness', 
+                            key: 'thickness', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "thickness"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '大头', dataIndex: 'bigHead', key: 'bigHead', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '大头', 
+                            dataIndex: 'bigHead', 
+                            key: 'bigHead', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "bigHead"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '小头', dataIndex: 'smallHead', key: 'smallHead', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '小头', 
+                            dataIndex: 'smallHead', 
+                            key: 'smallHead', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "smallHead"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '单段件数', 
+                            dataIndex: 'basicsPartNum', 
+                            key: 'basicsPartNum', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "basicsPartNum"]} initialValue={_} rules={[{ required: true, message: '请输入单段件数' }]}>
                                     <InputNumber size="small" min={1} precision={0} max={99} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
@@ -839,7 +890,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '单件重量（kg）', 
+                            dataIndex: 'basicsWeight', 
+                            key: 'basicsWeight', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: true, message: '请输入单件重量' }]}>
                                     <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
@@ -856,21 +911,34 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '小计重量（kg）', 
+                            dataIndex: 'totalWeight', 
+                            key: 'totalWeight', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "totalWeight"]}>
                                     <InputNumber size="small" min={0} precision={2} max={9999.99} disabled />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '备注', dataIndex: 'description', key: 'description', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '备注', 
+                            dataIndex: 'description', 
+                            width: 200,
+                            key: 'description', 
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "description"]} initialValue={_}>
                                     <TextArea showCount rows={1} maxLength={50} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '操作', key: 'operation', render: (_a: any, _b: any, index: number): React.ReactNode => (
+                            key: 'operation',
+                            title: '操作',
+                            dataIndex: 'operation',
+                            fixed: 'right' as FixedType,
+                            width: 80,
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (
                                 <Button type='link' onClick={() => {
                                     tableDataSource && tableDataSource.splice(index, 1);
                                     tableDataSource && setTableDataSource([...tableDataSource])
@@ -881,9 +949,18 @@ export default function Lofting(): React.ReactNode {
                             )
                         }
                     ]:[
-                        { title: '序号', dataIndex: 'index', key: 'index', render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
+                        { 
+                            title: '序号', 
+                            dataIndex: 'index', 
+                            key: 'index', 
+                            width: 80,
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>) },
                         {
-                            title: '段号', dataIndex: 'segmentName', key: 'segmentName', render: (_a: any, _b: any, index: number): React.ReactNode => (
+                            title: '段号', 
+                            dataIndex: 'segmentName', 
+                            key: 'segmentName', 
+                            width: 120,
+                            render: (_a: any, _b: any, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "segmentName"]} initialValue={_a} rules={[{ required: true, message: '请填写段号' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
@@ -898,7 +975,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '构件编号', dataIndex: 'code', key: 'code', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '构件编号', 
+                            dataIndex: 'code', 
+                            width: 120,
+                            key: 'code', 
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "code"]} initialValue={_} rules={[{ required: true, message: '请填写构件编号' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
@@ -908,7 +989,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '材料名称', dataIndex: 'materialName', key: 'materialName', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '材料名称', 
+                            dataIndex: 'materialName', 
+                            width: 120,
+                            key: 'materialName', 
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "materialName"]} initialValue={_} rules={[{ required: true, message: '请输入材料名称' }, {
                                     pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]*$/,
                                     message: '仅可输入汉字/数字/字母',
@@ -918,7 +1003,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '材质', dataIndex: 'structureTexture', key: 'structureTexture', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '材质', 
+                            dataIndex: 'structureTexture', 
+                            key: 'structureTexture', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "structureTexture"]} initialValue={_} rules={[{ required: true, message: '请输入材质' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
@@ -928,7 +1017,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '规格', dataIndex: 'structureSpec', key: 'structureSpec', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '规格', 
+                            dataIndex: 'structureSpec', 
+                            key: 'structureSpec', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "structureSpec"]} initialValue={_} rules={[{ required: true, message: '请输入规格' }, {
 
                                     pattern: /^[0-9-∠L*]*$/,
@@ -940,42 +1033,66 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '长度（mm）', dataIndex: 'length', key: 'length', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '长度（mm）', 
+                            dataIndex: 'length', 
+                            key: 'length', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "length"]} rules={[{ required: true, message: '请输入长度' }]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '宽度（mm）', dataIndex: 'width', key: 'width', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '宽度（mm）', 
+                            dataIndex: 'width', 
+                            key: 'width', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "width"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '厚度（mm）', dataIndex: 'thickness', key: 'thickness', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '厚度（mm）', 
+                            dataIndex: 'thickness', 
+                            key: 'thickness', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "thickness"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '大头', dataIndex: 'bigHead', key: 'bigHead', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '大头', 
+                            dataIndex: 'bigHead', 
+                            key: 'bigHead', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "bigHead"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '小头', dataIndex: 'smallHead', key: 'smallHead', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '小头', 
+                            dataIndex: 'smallHead', 
+                            key: 'smallHead', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "smallHead"]}>
                                     <InputNumber size="small" min={1} precision={0} max={999999} />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '单段件数', dataIndex: 'basicsPartNum', key: 'basicsPartNum', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '单段件数', 
+                            dataIndex: 'basicsPartNum', 
+                            key: 'basicsPartNum', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "basicsPartNum"]} initialValue={_} rules={[{ required: true, message: '请输入单段件数' }]}>
                                     <InputNumber size="small" min={1} precision={0} max={99} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
@@ -992,7 +1109,11 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '单件重量（kg）', dataIndex: 'basicsWeight', key: 'basicsWeight', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '单件重量（kg）', 
+                            dataIndex: 'basicsWeight', 
+                            key: 'basicsWeight', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: true, message: '请输入单件重量' }]}>
                                     <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
@@ -1009,14 +1130,22 @@ export default function Lofting(): React.ReactNode {
                             )
                         },
                         {
-                            title: '小计重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '小计重量（kg）', 
+                            dataIndex: 'totalWeight', 
+                            key: 'totalWeight', 
+                            width: 120,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "totalWeight"]}>
                                     <InputNumber size="small" min={0} precision={2} max={9999.99} disabled />
                                 </Form.Item>
                             )
                         },
                         {
-                            title: '备注', dataIndex: 'description', key: 'description', render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            title: '备注', 
+                            dataIndex: 'description', 
+                            key: 'description', 
+                            width: 200,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "description"]} initialValue={_}>
                                     <TextArea showCount rows={1} maxLength={50} />
                                 </Form.Item>
