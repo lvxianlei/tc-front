@@ -440,13 +440,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             history.go(0)
         }
     }
+    
     return (
         <>
             <Page
                 path="/tower-storage/outStock/detail"
                 exportPath={"/tower-storage/outStock/detail"}
                 exportObject={{ id: params.id }}
-                // sourceKey='outStockDetailPage.records'
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
@@ -584,9 +584,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             columns={ExWarehousingColumns}
                             dataSource={ExWarehousingListdata}
                             size='small'
-                            rowClassName={(item, index) => {
-                                return index % 2 ? 'aaa' : ''
-                            }}
+                            rowClassName={(_item, index) => index % 2 ? 'aaa' : ''}
                             pagination={false}
                         />
                     </div>
