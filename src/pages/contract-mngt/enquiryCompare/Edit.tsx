@@ -254,8 +254,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null,
-                    totalWeight: (parseFloat(item.weight || "0.00") * item.num).toFixed(3)
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
+                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
                 })
             }
             return item
@@ -265,8 +265,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null,
-                    totalWeight: (parseFloat(item.weight || "0.00") * item.num).toFixed(3)
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
+                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
                 })
             }
             return item
