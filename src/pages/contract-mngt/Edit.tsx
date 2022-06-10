@@ -354,6 +354,29 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     totalAmount: (totalWeight * price).toFixed(2)
                 })
             }))
+            setPopDataList(meterialList.map((item: any) => {
+                const num = parseFloat(item.num || "1")
+                const weight = parseFloat(item.weight || "1.00")
+                const totalWeight = parseFloat(item.totalWeight || "1.00")
+                const taxPrice = parseFloat(item.taxOffer || "1.00")
+                const price = parseFloat(item.offer || "1.00")
+                return ({
+                    ...item,
+                    source: 1,
+                    num,
+                    taxPrice,
+                    price,
+                    // spec: item.structureSpec,
+                    // 之前从规格拿宽度，后续添加了width字段
+                    // width: formatSpec(item.structureSpec).width,
+                    structureTexture: item.structureTexture,
+                    structureTextureId: item.structureTextureId,
+                    // length: formatSpec(item.structureSpec).length,
+                    weight: item.weight || "1.00",
+                    taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                    totalAmount: (totalWeight * price).toFixed(2)
+                })
+            }))
         }
     }
 
