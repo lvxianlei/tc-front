@@ -68,12 +68,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const WarehousingColumns = [
         {
             title: '材质名称',
-            dataIndex: 'materialTexture',
+            dataIndex: 'materialName',
             width: 120,
         },
         {
             title: '标准',
-            dataIndex: 'structureTextureName',
+            dataIndex: 'materialStandardName',
             width: 120,
         }, {
             title: '规格',
