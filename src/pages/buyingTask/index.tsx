@@ -119,12 +119,10 @@ export default function RawMaterial() {
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
         if (value.batcherId) {
-            value.batcherDeptId = value.batcherId.first
-            value.batcherId = value.batcherId.second
+            value.batcherId = value.batcherId.value
         }
         if (value.purchaserId) {
-            value.purchaserDeptId = value.purchaserId.first
-            value.purchaserId = value.purchaserId.second
+            value.purchaserId = value.purchaserId.value
         }
         setFilterValue(value)
         return value

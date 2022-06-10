@@ -48,7 +48,7 @@ export default function ContractMngt() {
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
         if (value.comparisonPersonId) {
-            value.comparisonPersonId = value.comparisonPersonId.second
+            value.comparisonPersonId = value.comparisonPersonId.value
         }
         setFilterValue({ ...filterValue, ...value })
         return ({ ...filterValue, ...value })

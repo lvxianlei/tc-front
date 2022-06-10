@@ -47,8 +47,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
     return <>
         <Form form={form} onFinish={(values) => run({
             ...values,
-            purchaserId: values.purchaserId?.second,
-            purchaserDeptId: values.purchaserId?.first
+            purchaserId: values.purchaserId?.value
         })}>
             <Row gutter={[8, 8]}>
                 <Col><Form.Item label="采购类型" name="purchaseType">

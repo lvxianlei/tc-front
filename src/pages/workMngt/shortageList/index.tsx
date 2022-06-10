@@ -34,8 +34,7 @@ export default function Invoicing() {
             delete value.startRefundTime
         }
         if (value.handlerId) {
-            // value.handlerDept = value.handlerId.first
-            value.handlerId = value.handlerId.second
+            value.handlerId = value.handlerId.value
         }
         // setFilterValue({ ...filterValue, ...value })
         return value

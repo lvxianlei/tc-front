@@ -61,8 +61,7 @@ export default function Invoicing() {
             value.endLoftingBatchTime = formatDate[1] + " 23:59:59"
         }
         if (value.loftingId) {
-            value.loftingDeptId = value.loftingId.first
-            value.loftingId = value.loftingId.second
+            value.loftingId = value.loftingId.value
         }
         setFilterValue(value)
         return value

@@ -337,8 +337,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         console.log(value, "value")
         if (value.batcherId) {
-            result.departmentId = value.batcherId.first
-            result.outStockStaffId = value.batcherId.second
+            result.outStockStaffId = value.batcherId.value
         }
         setFilterValue(result)
         return result

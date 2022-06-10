@@ -42,8 +42,7 @@ export default function Overview() {
             value.endLaunchTime = formatDate[1]
         }
         if (value.materialLeader) {
-            value.materialLeaderDept = value.materialLeader.first
-            value.materialLeader = value.materialLeader.second
+            value.materialLeader = value.materialLeader.value
         }
         return value
     }

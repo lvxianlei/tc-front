@@ -48,7 +48,7 @@ export default function ContractMngt(): JSX.Element {
             value.signEndTime = formatDate[1] + " 23:59:59"
         }
         if (value.operatorId) {
-            value.operatorId = value.operatorId?.second
+            value.operatorId = value.operatorId?.value
         }
         setFilterValue(value)
         return value

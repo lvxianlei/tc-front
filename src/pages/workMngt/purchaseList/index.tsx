@@ -25,8 +25,7 @@ export default function Invoicing() {
             value.endPurchaseStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.purchaserId) {
-            value.purchaserDeptId = value.purchaserId.first
-            value.purchaserId = value.purchaserId.second
+            value.purchaserId = value.purchaserId.value
         }
         setFilterValue(value)
         return value

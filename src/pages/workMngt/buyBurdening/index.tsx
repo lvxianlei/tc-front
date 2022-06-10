@@ -25,7 +25,7 @@ export default function EnquiryList(): React.ReactNode {
         // 配料人
         if (value.batcherId) {
             value.batcherDeptId = value.batcherId.first
-            value.batcherId = value.batcherId.second
+            value.batcherId = value.batcherId.value
         }
         setFilterValue(value)
         return value

@@ -25,8 +25,7 @@ export default function Invoicing() {
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.handler) {
-            value.handlerDept = value.handler.first
-            value.handler = value.handler.second
+            value.handler = value.handler.value
         }
         setFilterValue({ ...filterValue, ...value })
         return value
