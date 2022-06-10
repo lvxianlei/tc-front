@@ -118,6 +118,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }
             })
             setMaterialList(comparisonPriceDetailVos || [])
+            setPopDataList(comparisonPriceDetailVos || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -161,11 +162,20 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const resetFields = () => {
         form.resetFields()
         setMaterialList([])
+        setPopDataList([])
     }
 
     const handleAddModalOk = () => {
-        const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        const newMaterialList: any[] = []
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
+            ...item,
+            num: item.num || "0",
+            width: formatSpec(item.spec).width,
+            thickness: formatSpec(item.spec).thickness,
+            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+        }))])
+        setPopDataList([...materialList, ...newMaterialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
@@ -209,10 +219,24 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         })))
         setChooseVisible(false)
     }
-    const handleRemove = (id: string) => setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
+
+    const handleRemove = (id: string) => {
+        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
+        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+    }
 
     const handleInputChange = (value: number, id: string) => {
         setMaterialList(materialList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    num: value,
+                    totalWeight: (parseFloat(item.weight || "0.00") * value).toFixed(2)
+                })
+            }
+            return item
+        }))
+        setPopDataList(materialList.map((item: any) => {
             if (item.id === id) {
                 return ({
                     ...item,
@@ -230,8 +254,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null,
-                    totalWeight: (parseFloat(item.weight || "0.00") * item.num).toFixed(3)
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
+                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
+                })
+            }
+            return item
+        }));
+        setPopDataList(materialList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    length: value,
+                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
+                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
                 })
             }
             return item
@@ -261,11 +296,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }}
                 value={{
                     id: "",
-                    records: materialList,
+                    records: popDataList,
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
-                    setPopDataList(fields.map((item: any) => ({
+                    setMaterialList(fields.map((item: any) => ({
                         ...item,
                         structureSpec: item.structureSpec,
                         source: 2,
@@ -314,7 +349,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key].materialStandard && materialList[key].materialStandard + ',' + materialList[key].materialStandardName} onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if (index === key) {
                                         return {
@@ -334,7 +369,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "structureTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.structureTexture : <Select style={{ width: '150px' }} value={materialList[key].structureTextureId && materialList[key].structureTextureId + ',' + materialList[key].structureTexture} onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records?.structureTexture : <Select style={{ width: '150px' }} value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if (index === key) {
                                         return {
@@ -358,6 +393,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
-            dataSource={materialList} />
+            dataSource={popDataList} />
     </Spin>
 })
