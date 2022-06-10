@@ -195,10 +195,7 @@ export default function BidResultEdit(): JSX.Element {
             switch (changeFileds.isBid) {
                 case 3:
                     {
-                        const submit = allFields.submit.map((item: any) => ({
-                            ...item,
-                            isBid: changeFileds.isBid
-                        }))
+                        const submit = allFields.submit.map((item: any) => ({ ...item, isBid: changeFileds.isBid }))
                         tabsRef?.setFieldsValue({ submit })
                         setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
                             if (item.round === itemKey) {
@@ -210,12 +207,24 @@ export default function BidResultEdit(): JSX.Element {
                     break
                 case 4:
                     {
-                        const submit = allFields.submit.map((item: any) => {
+                        const prevIsBid = prevData.find((item: any) => item.id === changeRow.id)?.isBid
+                        let submit = allFields.submit.map((item: any) => {
                             if (item.bidName === changeRow.bidName) {
                                 return ({ ...item, isBid: changeFileds.isBid })
                             }
                             return item
                         })
+                        if (prevIsBid === 3 && changeFileds.isBid === 4) {
+                            submit = submit.map((item: any) => {
+                                if (item.projectCompany !== changeRow.projectCompany) {
+                                    return ({
+                                        ...item,
+                                        isBid: -1
+                                    })
+                                }
+                                return item
+                            })
+                        }
                         tabsRef?.setFieldsValue({ submit })
                         setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
                             if (item.round === itemKey) {
@@ -236,7 +245,7 @@ export default function BidResultEdit(): JSX.Element {
                                 if (prevIsBid === 3) {
                                     return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : -1 })
                                 }
-                                return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : changeFileds.isBid })
+                                return ({ ...item, isBid: item.isBid })
                             })
                             tabsRef?.setFieldsValue({ submit })
                             setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
@@ -246,19 +255,6 @@ export default function BidResultEdit(): JSX.Element {
                                 return item
                             }))
                         }
-                        const submit = allFields.submit.map((item: any) => {
-                            if (item.bidName === changeRow.bidName) {
-                                return ({ ...item, isBid: changeFileds.isBid })
-                            }
-                            return item
-                        })
-                        tabsRef?.setFieldsValue({ submit })
-                        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
-                            if (item.round === itemKey) {
-                                return ({ ...item, bidOpenRecordVos: submit })
-                            }
-                            return item
-                        }))
                     }
                     break
             }
