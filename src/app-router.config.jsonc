@@ -572,6 +572,13 @@
       "exact": true,
       "authority": "project_detail"
     },
+    { // 项目管理资审文件编辑
+      "name": "资审文件编辑",
+      "path": "/project/management/edit/qualificationReview/:id",
+      "module": "./pages/project/qualificationReview/Edit",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
       "path": "/project/management/edit/bidDoc/:id",
