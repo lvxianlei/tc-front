@@ -27,42 +27,42 @@ export interface EditRefProps {
 export default function List(): React.ReactNode {
     const columns = [
         {
-            key: 'segI',
+            key: 'productType',
             title: '产品类型',
             width: 50,
             fixed: 'left' as FixedType,
-            dataIndex: 'segI'
+            dataIndex: 'productType'
         },
         {
-            key: 'partLabel',
+            key: 'projectEntries',
             title: '定额条目',
-            dataIndex: 'partLabel',
+            dataIndex: 'projectEntries',
             fixed: 'left' as FixedType,
             width: 80
         },
         {
-            key: 'materialTypename',
+            key: 'voltageGradePriceFirst',
             title: '【0-330】电压等级定额',
             width: 100,
-            dataIndex: 'materialTypename'
+            dataIndex: 'voltageGradePriceFirst'
         },
         {
-            key: 'materialMark',
+            key: 'voltageGradePriceSecond',
             title: '【500kV-750kV】定额',
             width: 100,
-            dataIndex: 'materialMark'
+            dataIndex: 'voltageGradePriceSecond'
         },
         {
-            key: 'spec',
+            key: 'voltageGradePriceThird',
             title: '【800kV+】定额',
             width: 80,
-            dataIndex: 'spec'
+            dataIndex: 'voltageGradePriceThird'
         },
         {
-            key: 'tolerance',
+            key: 'specialPrice',
             title: '特殊定额',
             width: 80,
-            dataIndex: 'tolerance'
+            dataIndex: 'specialPrice'
         },
         {
             key: 'operation',
@@ -72,8 +72,8 @@ export default function List(): React.ReactNode {
             width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type="link" onClick={() => { }}>编辑</Button>
-                    <Button type="link" onClick={() => { }}>删除</Button>
+                    <Button type="link" onClick={() => { setRowData(record); setVisible(true); }}>编辑</Button>
+                    <Button type="link" onClick={() => delRow(record.id)}>删除</Button>
                 </Space>
             )
         }
@@ -81,16 +81,16 @@ export default function List(): React.ReactNode {
 
     const pickColumns = [
         {
-            key: 'fileName',
+            key: 'productType',
             title: '产品类型',
             width: 80,
-            dataIndex: 'fileName'
+            dataIndex: 'productType'
         },
         {
-            key: 'segmentGroupName',
+            key: 'projectEntries',
             title: '定额条目',
             width: 80,
-            dataIndex: 'segmentGroupName'
+            dataIndex: 'projectEntries'
         },
         {
             key: 'partLabelRange',
@@ -121,51 +121,51 @@ export default function List(): React.ReactNode {
 
     const boltColumns = [
         {
-            key: 'fileName',
+            key: 'productType',
             title: '产品类型',
             width: 80,
-            dataIndex: 'fileName'
+            dataIndex: 'productType'
         },
         {
-            key: 'segmentGroupName',
+            key: 'projectEntries',
             title: '定额条目',
             width: 80,
-            dataIndex: 'segmentGroupName'
+            dataIndex: 'projectEntries'
         },
         {
-            key: 'partLabelRange',
+            key: 'a',
             title: '螺栓清点',
             width: 80,
-            dataIndex: 'partLabelRange'
+            dataIndex: 'a'
         },
         {
-            key: 'fileType',
+            key: 'b',
             title: '螺栓校核',
             width: 150,
-            dataIndex: 'fileType'
+            dataIndex: 'b'
         },
         {
-            key: 'fileType',
+            key: 'c',
             title: '螺栓计划-出',
             width: 150,
-            dataIndex: 'fileType'
+            dataIndex: 'c'
         },
         {
-            key: 'fileType',
+            key: 'd',
             title: '螺栓计划-校',
             width: 150,
-            dataIndex: 'fileType'
+            dataIndex: 'd'
         },
         {
-            key: 'fileType',
+            key: 'e',
             title: '螺栓清点套用',
             width: 150,
-            dataIndex: 'fileType'
+            dataIndex: 'e'
         },
         {
-            key: 'fileSize',
+            key: 'a',
             title: '螺栓计划套用',
-            dataIndex: 'fileSize',
+            dataIndex: 'a',
             width: 120
         },
         {
@@ -185,16 +185,16 @@ export default function List(): React.ReactNode {
 
     const otherColumns = [
         {
-            key: 'fileName',
+            key: 'projectEntries',
             title: '校核条目',
             width: 80,
-            dataIndex: 'fileName'
+            dataIndex: 'projectEntries'
         },
         {
-            key: 'segmentGroupName',
+            key: 'price',
             title: '金额',
             width: 80,
-            dataIndex: 'segmentGroupName'
+            dataIndex: 'price'
         },
         {
             key: 'operation',
@@ -223,27 +223,12 @@ export default function List(): React.ReactNode {
     const [nowColumns, setNowColumns] = useState<any>(columns);
     const [type, setType] = useState<'edit' | 'new'>('new');
     const [form] = useForm();
+    const [rowData, setRowData] = useState<any>();
 
-    const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig, filterValue?: Record<string, any>) => new Promise(async (resole, reject) => {
-        if (status === '1') {
-            // const result = await RequestUtil.get<any>(`/tower-tdm/towerManuPart/${params.towerId}`, { current: pagenation?.current || 1, size: pagenation?.size || 15, querySegments: params.querySegments, ...filterValue });
-            // setPage({ ...result })
-            // resole(result?.records || [])
-            resole([])
-        } else if (status === '2') {
-            const result = await RequestUtil.get<any>(`/tower-tdm/loftProcess/getLoftingFiles`, {
-
-            });
-            resole(result || [])
-        } else if (status === '3') {
-            const result = await RequestUtil.get<any>(`/tower-tdm/loftProcess/getLoftingFiles`, {
-
-            });
-            setPage({ ...result })
-            resole(result || [])
-        } else {
-            resole([{id: '1'}])
-        }
+    const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig) => new Promise(async (resole, reject) => {
+        const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status });
+        setPage({ ...result })
+        resole(result?.records || [])
     }), { refreshDeps: [status] })
 
     const handleChangePage = (current: number, pageSize: number) => {
@@ -263,24 +248,31 @@ export default function List(): React.ReactNode {
         }
     })
 
+    const delRow = (id: string) => {
+        RequestUtil.delete(`/tower-science/projectPrice`, { id: id }).then(res => {
+            message.success("删除成功！")
+            history.go(0)
+        })
+    }
+
     const otherEdit = (record: Record<string, any>) => {
         Modal.confirm({
             title: "编辑",
             icon: null,
             closable: true,
-            content: <Form form={form} labelCol={{span: 6}}>
+            content: <Form form={form} labelCol={{ span: 6 }}>
                 <Form.Item
                     label="金额"
-                    name="planCompleteTime"
+                    name="price"
                     rules={[{ required: true, message: '请输入金额' }]}
-                    initialValue={1.2}>
+                    initialValue={record?.price}>
                     <InputNumber />
                 </Form.Item>
             </Form>,
             onOk: async () => new Promise(async (resove, reject) => {
                 try {
                     const value = await form.validateFields();
-                    RequestUtil.post(``, { ...value }).then(res => {
+                    RequestUtil.post(`/tower-science/projectPrice/other`, { ...record, ...value }).then(res => {
                         message.success("编辑成功！")
                         form.resetFields()
                         history.go(0)
@@ -304,7 +296,7 @@ export default function List(): React.ReactNode {
             title={type === 'new' ? '新增' : '编辑'}
             onOk={handleOk}
             onCancel={() => setVisible(false)}>
-            <LoftQuotaNew type={type} ref={newRef} />
+            <LoftQuotaNew type={type} record={rowData} ref={newRef} />
         </Modal>
         <Row className={styles.search}>
             <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
@@ -312,12 +304,18 @@ export default function List(): React.ReactNode {
                 setNowColumns(event.target.value === '1' ? columns : event.target.value === '2' ? pickColumns : event.target.value === '3' ? boltColumns : otherColumns)
                 run();
             }}>
+                {/* 1-放样、2-提料、3-螺栓、4-其他 */}
                 <Radio.Button value={'1'} key="1">放样定额配置</Radio.Button>
                 <Radio.Button value={'2'} key="2">提料定额配置</Radio.Button>
                 <Radio.Button value={'3'} key="3">螺栓定额配置</Radio.Button>
                 <Radio.Button value={'4'} key="4">其他定额配置</Radio.Button>
             </Radio.Group>
-            <Button type="primary" className={styles.topBtn} onClick={() => { setVisible(true); setType('new') }} ghost>新增</Button>
+            {
+                status === '1' ?
+                    <Button type="primary" className={styles.topBtn} onClick={() => { setVisible(true); setType('new') }} ghost>新增</Button>
+                    :
+                    null
+            }
         </Row>
         <CommonTable
             haveIndex

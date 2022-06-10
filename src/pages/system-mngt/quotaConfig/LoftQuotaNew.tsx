@@ -9,35 +9,26 @@ import { Form, Input, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import moment from "moment";
 import { productTypeOptions } from "../../../configuration/DictionaryOptions";
 
 interface modalProps {
-    readonly id?: string;
+    readonly record?: any;
     readonly type?: 'new' | 'edit';
 }
 
-export default forwardRef(function LoftQuotaNew({ id, type }: modalProps, ref) {
-    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+export default forwardRef(function LoftQuotaNew({ record, type }: modalProps, ref) {
+    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(`/tower-tdm/loftProcess/getSegAssignList/${id}`);
-            form.setFieldsValue({
-                data: [...result.map((res: any) => {
-                    return {
-                        ...res,
-                        planCompletionDate: res?.planCompletionDate && moment(res?.planCompletionDate)
-                    }
-                })]
-            })
-            resole(result)
+            form.setFieldsValue({ ...record })
+            resole(true);
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [id, type] })
+    }), { manual: type === "new", refreshDeps: [record, type] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(``, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/projectPrice/lofting`, data)
             resove(result)
         } catch (error) {
             reject(error)
@@ -48,7 +39,8 @@ export default forwardRef(function LoftQuotaNew({ id, type }: modalProps, ref) {
         try {
             const value = await form.validateFields()
             await saveRun({
-                ...value
+                ...value,
+                id: record?.id || ''
             })
             resolve(true);
         } catch (error) {
@@ -62,7 +54,7 @@ export default forwardRef(function LoftQuotaNew({ id, type }: modalProps, ref) {
 
     return <DetailContent key='TowerDispatch'>
         <Form form={form} layout="horizontal" labelCol={{ span: 8 }}>
-            <Form.Item name={'name'} label="产品类型" rules={[{ required: true, message: '请选择产品类型' }]}>
+            <Form.Item name={'productType'} label="产品类型" rules={[{ required: true, message: '请选择产品类型' }]}>
                 <Select style={{ width: '100%' }} >
                     <Select.Option key={0} value={""}>全部</Select.Option>
                     {
@@ -74,19 +66,19 @@ export default forwardRef(function LoftQuotaNew({ id, type }: modalProps, ref) {
                     }
                 </Select>
             </Form.Item>
-            <Form.Item name={'name'} label="定额条目" rules={[{ required: true, message: '请输入定额条目' }]}>
+            <Form.Item name={'projectEntries'} label="定额条目" rules={[{ required: true, message: '请输入定额条目' }]}>
                 <Input maxLength={100} />
             </Form.Item>
-            <Form.Item name={'name'} label="【0-330】电压等级定额" rules={[{ required: true, message: '请输入【0-330】电压等级定额' }]}>
+            <Form.Item name={'voltageGradePriceFirst'} label="【0-330】电压等级定额" rules={[{ required: true, message: '请输入【0-330】电压等级定额' }]}>
                 <Input maxLength={100} />
             </Form.Item>
-            <Form.Item name={'name'} label="【500kV-750kV】定额" rules={[{ required: true, message: '请输入【500kV-750kV】定额' }]}>
+            <Form.Item name={'voltageGradePriceSecond'} label="【500kV-750kV】定额" rules={[{ required: true, message: '请输入【500kV-750kV】定额' }]}>
                 <Input maxLength={100} />
             </Form.Item>
-            <Form.Item name={'name'} label="【800kV+】定额" rules={[{ required: true, message: '请输入【800kV+】定额' }]}>
+            <Form.Item name={'voltageGradePriceThird'} label="【800kV+】定额" rules={[{ required: true, message: '请输入【800kV+】定额' }]}>
                 <Input maxLength={100} />
             </Form.Item>
-            <Form.Item name={'name'} label="特殊定额" rules={[{ required: true, message: '请输入特殊定额' }]}>
+            <Form.Item name={'specialPrice'} label="特殊定额" rules={[{ required: true, message: '请输入特殊定额' }]}>
                 <Input maxLength={100} />
             </Form.Item>
         </Form>
