@@ -202,6 +202,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleAddModalOk = () => {
         // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         const newMaterialList: any[] = []
+        console.log(materialStandardOptions, "====>>", materialList)
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
@@ -490,17 +491,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     });
                     setMaterialList(fields.map((item: any) => ({
                         ...item,
+                        num: item?.num || 1,
                         spec: item.structureSpec,
                         source: item.source || 2,
-                        structureTextureId: item.structureTextureId,
-                        materialStandardName: item.materialStandardName,
                         length: item.length || 1,
-                        materialStandard: item.materialStandard,
                         taxPrice: item.taxPrice || 1.00,
                         price: item.price || 1.00,
                         width:item.width || 0,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ?  materialStandardOptions[0]?.name : "",
+                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.id : "",
+                        structureTexture:item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.name : "",
                         weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
                         totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })))
