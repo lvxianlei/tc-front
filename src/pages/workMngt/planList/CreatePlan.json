@@ -60,11 +60,11 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard"
+            "dataIndex": "materialStandard"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTextureId"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
