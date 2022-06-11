@@ -3,11 +3,13 @@
         {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
-            "type": "string"
+            "type": "string",
+            "width": 140
         },
         {
             "title": "采购类型",
-            "dataIndex": "purchaseTypeName"
+            "dataIndex": "purchaseTypeName",
+            "width": 100
         },
         {
             "title": "圆钢收货量（吨）/总重（吨）",
@@ -37,7 +39,7 @@
             "title": "创建日期",
             "dataIndex": "createTime",
             "type": "string",
-            "width": 80
+            "width": 100
         },
         {
             "title": "计划状态",
@@ -94,63 +96,63 @@
     ],
     "PurchaseList": [
         {
-            "title":"类型",
-            "dataIndex":"materialCategoryName",
-            "width":100
+            "title": "类型",
+            "dataIndex": "materialCategoryName",
+            "width": 100
         },
         {
             "title": "品名",
             "dataIndex": "materialName",
             "type": "string",
-            "width":100
+            "width": 100
         },
         {
             "title": "标准",
             "dataIndex": "materialStandardName",
             "type": "string",
-            "width":100
+            "width": 100
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
             "type": "string",
-            "width":100
+            "width": 100
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
             "type": "string",
-            "width":100
+            "width": 100
         },
         {
             "title": "长度",
             "dataIndex": "length",
             "type": "number",
-            "width":100
+            "width": 100
         },
         {
             "title": "宽度",
             "dataIndex": "width",
             "type": "number",
-            "width":100
+            "width": 100
         },
         {
             "title": "单个重量(吨)",
             "dataIndex": "weight",
             "type": "number",
-            "width":100
+            "width": 100
         },
         {
             "title": "计划采购量",
             "dataIndex": "planPurchaseNum",
             "type": "string",
-            "width":100
+            "width": 100
         },
         {
             "title": "已采购量",
             "dataIndex": "alreadyPurchaseNum",
             "type": "number",
-            "width":100
+            "width": 100
         }
     ],
     "PurchaseTypeStatistics": [
