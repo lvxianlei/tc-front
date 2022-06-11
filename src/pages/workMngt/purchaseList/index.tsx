@@ -1,14 +1,12 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, Select, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
-import AuthUtil from "../../../utils/AuthUtil"
 export default function Invoicing() {
     const history = useHistory()
-    const userId = AuthUtil.getUserId()
     const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean }>({ onSubmit: () => { }, confirmLoading: false })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)

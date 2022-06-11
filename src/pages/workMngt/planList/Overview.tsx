@@ -102,13 +102,14 @@ export default function Edit() {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
+    
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
             for (let p = 0; p < materialList.length; p += 1) {
                 if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].materialTextureId = popDataList[i].materialTextureId;
-                    materialList[p].materialTexture = popDataList[i].materialTexture;
+                    materialList[p].structureTextureId = popDataList[i].structureTextureId;
+                    materialList[p].structureTexture = popDataList[i].structureTexture;
                 }
             }
         }
@@ -196,18 +197,18 @@ export default function Edit() {
                                     render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                                 })
                             }
-                            if (item.dataIndex === "standard") {
+                            if (item.dataIndex === "materialStandardName") {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
                                         style={{ width: '150px' }}
-                                        value={popDataList[key]?.standard && popDataList[key]?.standard + ',' + popDataList[key]?.materialStandardName}
+                                        value={popDataList[key]?.materialStandard && popDataList[key]?.materialStandard + ',' + popDataList[key]?.materialStandardName}
                                         onChange={(e: string) => {
                                             const newData = popDataList.map((item: any, index: number) => {
                                                 if (index === key) {
                                                     return {
                                                         ...item,
-                                                        standard: e.split(',')[0],
+                                                        materialStandard: e.split(',')[0],
                                                         materialStandardName: e.split(',')[1]
                                                     }
                                                 }
@@ -219,19 +220,20 @@ export default function Edit() {
                                     </Select>
                                 })
                             }
-                            if (item.dataIndex === "materialTextureId") {
+                            if (item.dataIndex === "structureTexture") {
+                                console.log(popDataList,"-----")
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
+                                    render: (value: number, records: any, key: number) => records.source === 1 ? records.structureTexture : <Select
                                         style={{ width: '150px' }}
-                                        value={popDataList[key]?.materialTextureId && popDataList[key]?.materialTextureId + ',' + popDataList[key]?.materialTexture}
+                                        value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
                                         onChange={(e: string) => {
                                             const newData = popDataList.map((item: any, index: number) => {
                                                 if (index === key) {
                                                     return {
                                                         ...item,
-                                                        materialTextureId: e.split(',')[0],
-                                                        materialTexture: e.split(',')[1]
+                                                        structureTextureId: e.split(',')[0],
+                                                        structureTextureName: e.split(',')[1]
                                                     }
                                                 }
                                                 return item
@@ -262,9 +264,7 @@ export default function Edit() {
             <Modal width={1100} title={`选择原材料明细`} destroyOnClose
                 visible={visible}
                 onOk={handleAddModalOk}
-                onCancel={() => {
-                    setVisible(false);
-                }}
+                onCancel={() => setVisible(false)}
             >
                 <PopTableContent
                     data={{
