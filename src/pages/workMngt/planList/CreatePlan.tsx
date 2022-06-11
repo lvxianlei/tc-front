@@ -39,41 +39,29 @@ export default function CreatePlan(props: any): JSX.Element {
         for (let i = 0; i < popDataList.length; i += 1) {
             for (let p = 0; p < materialList.length; p += 1) {
                 if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].materialTextureId = popDataList[i].materialTextureId;
+                    materialList[p].structureTexture = popDataList[i].structureTexture;
                     materialList[p].materialTexture = popDataList[i].materialTexture;
                 }
             }
         }
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
-            const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
             return ({
                 ...item,
                 planPurchaseNum: num,
-                taxPrice,
-                price,
                 width: formatSpec(item.structureSpec).width,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
             })
         })])
         setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
-            const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
             return ({
                 ...item,
                 planPurchaseNum: num,
-                taxPrice,
-                price,
                 width: formatSpec(item.structureSpec).width,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
             })
         })])
         setVisible(false)
@@ -152,6 +140,7 @@ export default function CreatePlan(props: any): JSX.Element {
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
+                setPopDataList([]);
                 props?.handleCreate();
             }}
             maskClosable={false}
@@ -159,6 +148,7 @@ export default function CreatePlan(props: any): JSX.Element {
             footer={[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
+                    setPopDataList([]);
                     props?.handleCreate();
                 }}>
                     关闭

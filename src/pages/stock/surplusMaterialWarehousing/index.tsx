@@ -135,7 +135,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const WarehousingColumns = [
         {
             title: '材质名称',
-            dataIndex: 'materialTexture',
+            dataIndex: 'materialName',
             width: 100,
         },
         {

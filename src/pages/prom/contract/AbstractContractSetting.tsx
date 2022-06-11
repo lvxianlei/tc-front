@@ -22,7 +22,7 @@ import { CascaderOptionType } from 'antd/lib/cascader';
 import { RuleObject } from 'antd/lib/form';
 import { StoreValue } from 'antd/lib/form/interface';
 import Modal from 'antd/lib/modal/Modal';
-import { currencyTypeOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
+import { currencyTypeOptions, planNameOptions, productTypeOptions, saleTypeOptions, voltageGradeOptions, winBidTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IContract } from '../../IContract';
 import layoutStyles from '../../../layout/Layout.module.less';
 import { Attachment, AttachmentRef } from '../../common';
@@ -48,6 +48,7 @@ export interface ITabItem {
 }
 
 export interface IContractInfo extends IContract {
+    readonly ascriptionId: string;
     readonly customerInfoDto?: ICustomerInfoDto;
     paymentPlanDtos?: IPaymentPlanDto[];
     attachInfoDtos: IAttachDTO[];
@@ -79,7 +80,9 @@ export interface ProjectContractInfo extends IContractInfo {
     readonly deliveryAddress: string; // 交货地点
     readonly description: string; // 备注
     readonly bidBatch: string; // 招标批次
-    readonly payServiceManager: string; // 业务经理的id
+    readonly payServiceManager: string; // 业务经理的id(跟单业务员)
+    readonly ascriptionId: string; // 归属业务经理id
+    readonly ascriptionName: string;// 归属业务经理 name
 }
 
 export interface ICustomerInfoDto {
@@ -158,12 +161,12 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             biddingBatch: resData?.bidBatch,
             contractAdd: {
                 ...resData,
-                address: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`
+                address: resData.address === "其他-国外" ? resData.address : ((!resData.bigRegion && !resData.address) ? "" : `${resData.bigRegion || ""}-${resData.address || ""}`)
             }
         })
         this.getForm()?.setFieldsValue({
             bidBatch: resData?.bidBatch,
-            region: resData.address === "其他-国外" ? resData.address : `${resData.bigRegion}-${resData.address}`,
+            region: resData.address === "其他-国外" ? resData.address : ((!resData.bigRegion && !resData.address) ? "" : `${resData.bigRegion || ""}-${resData.address || ""}`),
             country: resData?.country || "",
         })
     }
@@ -272,6 +275,27 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             }) as any)
             console.log(selectedRows)
             this.getForm()?.setFieldsValue({ salesman: selectedRows[0].name, payServiceManager: selectedRows[0].userId?.toString() });
+        }
+    }
+
+
+    /**
+     * 
+     * @param selectedRows 当前选中的列
+     * 归属业务经理弹框回调
+     */
+     public onReBackServiceManager = (selectedRows: DataType[]): void => {
+        const contract: IContractInfo | undefined = this.state.contract;
+        if (selectedRows && selectedRows.length > 0) {
+            this.setState(({
+                contract: {
+                    ...(contract || {}),
+                    ascriptionName: selectedRows[0].name,
+                    ascriptionId : selectedRows[0].userId?.toString()
+                }
+            }) as any)
+            console.log(selectedRows)
+            this.getForm()?.setFieldsValue({ ascriptionName: selectedRows[0].name, ascriptionId: selectedRows[0].userId?.toString() });
         }
     }
 
@@ -789,8 +813,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
             render: (): React.ReactNode => {
                 return (
                     <>
-                        <Form.Item name="planType" style={{margin: 0}} initialValue={contract?.planType || 0}>
-                            <Radio.Group style={{position: "relative", top: "7px"}} onChange={(e: RadioChangeEvent) => {
+                        <Form.Item name="planType" style={{ margin: 0 }} initialValue={contract?.planType || 0}>
+                            <Radio.Group style={{ position: "relative", top: "7px" }} onChange={(e: RadioChangeEvent) => {
                                 this.setState({
                                     contract: {
                                         ...(contract || {}),
@@ -820,24 +844,28 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                             {
                                                 fields.map<React.ReactNode>((field: FormListFieldData, index: number): React.ReactNode => (
                                                     <Row key={`${field.name}_${index}`} className={styles.FormItem}>
-                                                        <Col span={2} style={{height: "32px", lineHeight: "32px"}}>{index + 1}</Col>
+                                                        <Col span={2} style={{ height: "32px", lineHeight: "32px" }}>{index + 1}</Col>
                                                         <Col span={4}>
                                                             <Form.Item
-                                                                style={{margin: 0}}
+                                                                style={{ margin: 0 }}
                                                                 {...field}
                                                                 name={[field.name, 'name']}
                                                                 fieldKey={[field.fieldKey, 'name']}
                                                                 rules={[{
                                                                     required: true,
-                                                                    message: '请填写计划名称'
+                                                                    message: '请选择计划名称'
                                                                 }]}
                                                             >
-                                                                <Input />
+                                                                <Select style={{width:'100%'}}>
+                                                                    { planNameOptions && planNameOptions.map((item:any)=>{
+                                                                            return <Select.Option key={item.id} value={item.name}>{item.name}</Select.Option>
+                                                                        }) }
+                                                                </Select>
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
                                                             <Form.Item
-                                                                style={{margin: 0}}
+                                                                style={{ margin: 0 }}
                                                                 {...field}
                                                                 name={[field.name, 'returnedTime']}
                                                                 fieldKey={[field.fieldKey, 'returnedTime']}
@@ -851,18 +879,18 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                         </Col>
                                                         <Col span={4}>
                                                             <Form.Item
-                                                                style={{margin: 0}} {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
-                                                                required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
-                                                                message: '请输入计划回款占比'
-                                                            }, {
-                                                                validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                                                                    if (value > 0) {
-                                                                        callback()
-                                                                    } else {
-                                                                        callback('计划回款占比需大于0')
+                                                                style={{ margin: 0 }} {...field} name={[field.name, 'returnedRate']} fieldKey={[field.fieldKey, 'returnedRate']} rules={[{
+                                                                    required: this.state.contract?.planType === planType.PROPORTION || this.state.contract?.planType === undefined,
+                                                                    message: '请输入计划回款占比'
+                                                                }, {
+                                                                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                                                        if (value > 0) {
+                                                                            callback()
+                                                                        } else {
+                                                                            callback('计划回款占比需大于0')
+                                                                        }
                                                                     }
-                                                                }
-                                                            }]}>
+                                                                }]}>
                                                                 <InputNumber
                                                                     stringMode={false}
                                                                     min="0"
@@ -874,19 +902,19 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
-                                                            <Form.Item 
-                                                                style={{margin: 0}} {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
-                                                                required: this.state.contract?.planType === planType.AMOUNT,
-                                                                message: '请输入计划回款金额'
-                                                            }, {
-                                                                validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                                                                    if (value > 0) {
-                                                                        callback()
-                                                                    } else {
-                                                                        callback('计划回款金额需大于0')
+                                                            <Form.Item
+                                                                style={{ margin: 0 }} {...field} name={[field.name, 'returnedAmount']} fieldKey={[field.fieldKey, 'returnedAmount']} rules={[{
+                                                                    required: this.state.contract?.planType === planType.AMOUNT,
+                                                                    message: '请输入计划回款金额'
+                                                                }, {
+                                                                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                                                        if (value > 0) {
+                                                                            callback()
+                                                                        } else {
+                                                                            callback('计划回款金额需大于0')
+                                                                        }
                                                                     }
-                                                                }
-                                                            }]}>
+                                                                }]}>
                                                                 <InputNumber
                                                                     stringMode={false}
                                                                     min="0"
@@ -898,8 +926,8 @@ export default abstract class AbstractContractSetting<P extends RouteComponentPr
                                                             </Form.Item>
                                                         </Col>
                                                         <Col span={4}>
-                                                            <Form.Item 
-                                                                style={{margin: 0}} {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
+                                                            <Form.Item
+                                                                style={{ margin: 0 }} {...field} name={[field.name, 'description']} fieldKey={[field.fieldKey, 'description']}>
                                                                 <Input.TextArea rows={1} maxLength={300} />
                                                             </Form.Item>
                                                         </Col>

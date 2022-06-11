@@ -3,7 +3,7 @@ import { useHistory, useParams } from "react-router-dom"
 import { Spin, Button, Form, message } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { bidDocColumns } from './bidDoc.json'
+import { bidDocColumns } from './qualificat.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { TabTypes } from "../Detail"
@@ -14,7 +14,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const [baseInfoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${params.id}`, { type: 1 })
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidDoc/${params.id}`, { type: 2 })
             if (result.bidType === -1) {
                 result.bidType = null
             }
@@ -26,7 +26,7 @@ export default function BaseInfoEdit(): JSX.Element {
     }))
     const { loading: saveStatus, run: saveRun } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidDoc`, { ...postData, type: 1 })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/bidDoc`, { ...postData, type: 2 })
             resole(result)
         } catch (error) {
             reject(error)

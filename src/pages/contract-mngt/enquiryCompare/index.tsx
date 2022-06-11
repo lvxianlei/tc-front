@@ -115,7 +115,7 @@ export default function ContractMngt() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 200,
+                        width: 270,
                         render: (_: any, records: any) => <>
                             <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
                             <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {

@@ -2,19 +2,30 @@
  * 填写保函信息
  */
  import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
- import { Form, Spin } from 'antd';
+ import { Form, message, Spin } from 'antd';
  import { BaseInfo,  Attachment, AttachmentRef } from '../common';
  import useRequest from '@ahooksjs/use-request'
  import RequestUtil from '../../utils/RequestUtil';
  import { baseColums } from './applicationColunm.json';
  import { FileProps } from '../common/Attachment';
- import { EditProps } from './application';
+ import { EditPropsGurance } from './application';
+import moment from 'moment';
  
- export default forwardRef(function FillGuaranteeInformation({id}: EditProps, ref) {
+ export default forwardRef(function FillGuaranteeInformation({id, guaranteePrice, effectiveTime}: EditPropsGurance, ref) {
     const [addCollectionForm] = Form.useForm();
     const [attachVosData, setAttachVosData] = useState<any[]>([])
     const fillGuarantee = useRef<AttachmentRef>();
-    
+    console.log(effectiveTime, "effectiveTime", moment("2022-05-26").diff(moment(moment("2022-05-25").format("YYYY-MM-DD")), 'days'))
+    if (guaranteePrice) {
+        addCollectionForm.setFieldsValue({
+            guaranteePrice
+        })
+    }
+    if (effectiveTime) {
+        addCollectionForm.setFieldsValue({
+            effectiveTime
+        })
+    }
     // 关闭
     const resetFields = () => {
         addCollectionForm.resetFields();
@@ -51,11 +62,83 @@
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
 
+    const handGuaranteChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        console.log(fields, "====", allFields)
+        if (fields.bondProportion) {
+            addCollectionForm.setFieldsValue({
+                bondProportionMoney: ((allFields.guaranteePrice * fields.bondProportion) / 100).toFixed(2),
+                bondServiceCharge: ((allFields.guaranteePrice * fields.bondProportion) / 100).toFixed(2) + (allFields.serviceCharge || 0)
+            })
+            // 出具日期存在
+            if (allFields.issuanceTime) {
+                const time = moment(effectiveTime).diff(moment(moment(allFields.issuanceTime).format("YYYY-MM-DD")), 'days');
+                console.log(time, "time")
+                if (time < 0) {
+                    message.error("出具日期不能大于保函有效截止日期！");
+                    addCollectionForm.setFieldsValue({
+                        issuanceTime: ""
+                    })
+                    return false;
+                }
+                if (allFields.seasonProportionMoney) {
+                    const result = +((+time / 90) * (+allFields.seasonProportionMoney)).toFixed(2);
+                    addCollectionForm.setFieldsValue({
+                        serviceCharge: result,
+                        bondServiceCharge: (result + (+allFields.bondProportionMoney || 0)).toFixed(2)
+                    })
+                }
+            } 
+        }
+        if (fields.seasonProportion) {
+            // 手续费占比
+            addCollectionForm.setFieldsValue({
+                seasonProportionMoney: +((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) >= 500 ? ((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) : 500
+            })
+            // 出具日期存在
+            if (allFields.issuanceTime) {
+                const time = moment(effectiveTime).diff(moment(moment(allFields.issuanceTime).format("YYYY-MM-DD")), 'days');
+                if (time < 0) {
+                    message.error("出具日期不能大于保函有效截止日期！");
+                    addCollectionForm.setFieldsValue({
+                        issuanceTime: ""
+                    })
+                    return false;
+                }
+                const v = +((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) >= 500 ? ((allFields.guaranteePrice * fields.seasonProportion) / 100).toFixed(2) : 500;
+                const result = +((+time / 90) * (+v)).toFixed(2);
+                addCollectionForm.setFieldsValue({
+                    serviceCharge: result,
+                    bondServiceCharge: (result + (+allFields.bondProportionMoney || 0)).toFixed(2)
+                })
+            }
+        }
+        if (fields.issuanceTime) {
+            // 出具日期
+            const time = moment(effectiveTime).diff(moment(moment(fields.issuanceTime).format("YYYY-MM-DD")), 'days');
+            if (time < 0) {
+                message.error("出具日期不能大于保函有效截止日期！");
+                addCollectionForm.setFieldsValue({
+                    issuanceTime: ""
+                })
+                return false;
+            }
+            if (allFields.seasonProportionMoney) {
+                const result = +((time / 90) * allFields.seasonProportionMoney).toFixed(2);
+                addCollectionForm.setFieldsValue({
+                    serviceCharge: result,
+                    bondServiceCharge: (result + (+allFields.bondProportionMoney || 0)).toFixed(2)
+                })
+            }
+            
+        }
+    }
+
     return (
         <Spin spinning={loading}>
             <BaseInfo
+                onChange={handGuaranteChange}
                 form={addCollectionForm}
-                dataSource={{content: 1}}
+                dataSource={{}}
                 col={ 2 }
                 edit
                 columns={ baseColums}

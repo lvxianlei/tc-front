@@ -65,7 +65,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
-                                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.weight}`}>明细</Link>
+                                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`}>明细</Link>
                             </>
                         )
                     }

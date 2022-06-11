@@ -48,7 +48,7 @@
         },
         {
             "title": "搭配数量",
-            "dataIndex": "amount",
+            "dataIndex": "num",
             "type": "integer",
             "width": 100
         },

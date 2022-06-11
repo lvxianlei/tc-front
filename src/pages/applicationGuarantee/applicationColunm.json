@@ -44,8 +44,12 @@
             "dataIndex": "issuanceTime"
         },
         {
-            "title": "要求交回日期",
+            "title": "承诺交回日期",
             "dataIndex": "requiredReturnTime"
+        },
+        {
+            "title": "保函有效截止期",
+            "dataIndex": "effectiveTime"
         },
         {
             "title": "保函交回日期",
@@ -89,24 +93,12 @@
             ]
         },
         {
-            "dataIndex": "requiredReturnTime",
-            "title": "要求交回日期",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "placeholder": "请选择要求交回日期",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择要求交回日期"
-                }
-            ]
-        },
-        {
             "dataIndex": "effectiveTime",
             "title": "保函有效截止期",
             "type": "date",
             "format": "YYYY-MM-DD",
             "placeholder": "请选择保函有效截止期",
+            "disabled": true,
             "rules": [
                 {
                     "required": true,
@@ -116,9 +108,91 @@
         },
         {
             "dataIndex": "guaranteeDescription",
-            "title": "保函信息备注",
+            "title": "备注",
             "placeholder": "请输入保函信息备注",
             "type": "textarea"
+        },
+        {
+            "dataIndex": "guaranteePrice",
+            "title": "履约保函金额（元）",
+            "placeholder": "请输入履约保函金额（元）",
+            "disabled": true
+        },
+        {
+            "dataIndex": "bondProportion",
+            "title": "保函保证金占比（%）",
+            "placeholder": "请输入保证保函金占比（%）",
+            "type": "number",
+            "max": 100,
+            "min": 1,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保证保函金占比（%）"
+                }
+            ]
+        },
+        {
+            "dataIndex": "bondProportionMoney",
+            "title": "保函保证金",
+            "placeholder": "请输入保证保函金",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保证保函金"
+                }
+            ]
+        },
+        {
+            "dataIndex": "seasonProportion",
+            "title": "每季手续费占比（%）",
+            "placeholder": "请输入每季手续费占比（%）",
+            "type": "number",
+            "max": 100,
+            "min": 1,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入每季手续费占比（%）"
+                }
+            ]
+        },
+        {
+            "dataIndex": "seasonProportionMoney",
+            "title": "每季手续费",
+            "placeholder": "请输入每季手续费",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入每季手续费"
+                }
+            ]
+        },
+        {
+            "dataIndex": "serviceCharge",
+            "title": "手续费",
+            "placeholder": "请输入手续费",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入手续费"
+                }
+            ]
+        },
+        {
+            "dataIndex": "bondServiceCharge",
+            "title": "保证金+手续费",
+            "placeholder": "请输入保证金+手续费",
+            "disabled": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入保证金+手续费"
+                }
+            ]
         }
     ],
     "enclosure": [
@@ -143,11 +217,11 @@
     "recoveryGuarantee": [
         {
             "dataIndex": "requiredReturnTime",
-            "title": "要求交回日期",
+            "title": "承诺交回日期",
             "type": "date",
             "format": "YYYY-MM-DD",
             "disabled": true,
-            "placeholder": "请选择要求交回日期",
+            "placeholder": "请选择承诺交回日期",
             "rules": [
                 {
                     "required": true,
@@ -228,7 +302,7 @@
             "title": "申请日期"
         },
         {
-            "dataIndex": "applyDeptId",
+            "dataIndex": "applyDeptName",
             "title": "申请部门"
         },
         {
@@ -244,7 +318,7 @@
             "title": "合同编号"
         },
         {
-            "dataIndex": "biddingNumber",
+            "dataIndex": "projectNumber",
             "title": "招标编号"
         },
         {
@@ -271,15 +345,6 @@
             "title": "保函金额"
         },
         {
-            "dataIndex": "applicantStatus",
-            "title": "办理状态",
-            "type": "select",
-            "enum": [
-                { "value": 1, "label": "是" },
-                { "value": 0, "label": "否" }
-            ]
-        },
-        {
             "dataIndex": "description",
             "title": "备注"
         }
@@ -291,7 +356,7 @@
         },
         {
             "dataIndex": "requiredReturnTime",
-            "title": "要求交回日期"
+            "title": "承诺交回日期"
         },
         {
             "dataIndex": "effectiveTime",
@@ -305,7 +370,7 @@
     "recoveryForm": [
         {
             "dataIndex": "requiredReturnTime",
-            "title": "要求交回日期"
+            "title": "承诺交回日期"
         },
         {
             "dataIndex": "guaranteeReturnTime",

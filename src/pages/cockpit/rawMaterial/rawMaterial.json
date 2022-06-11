@@ -214,7 +214,7 @@
         },
         {
             "title": "原材料规格",
-            "dataIndex": "materialSpec",
+            "dataIndex": "structureSpec",
             "disabled": true
         },
         {
