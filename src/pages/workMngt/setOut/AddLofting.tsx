@@ -235,8 +235,11 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             editable: true,
             dataIndex: 'groove',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "groove"]} initialValue={_}>
-                    <InputNumber size="small" min={0} />
+                <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
+                }]}>
+                    <InputNumber size="small" min={0} maxLength={1}/>
                 </Form.Item>
             )
         },

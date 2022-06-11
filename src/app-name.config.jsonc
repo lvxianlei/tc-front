@@ -41,7 +41,7 @@
         "description": "质检过程相关功能",
         "iconFont": "icon-zhijianzhongxin2", // iconfont
         "color": "#9D45FF", // iconfont的颜色
-        "path": "/notice/QMS",
+        "path": "/qualityInspection/disposition",
         "appName": "QMS"
     },
     {
