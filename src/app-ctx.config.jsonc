@@ -42,6 +42,11 @@
                         "label": "成本评估配置",
                         "path": "/sys/costconfig",
                         "authority": "costconfig"
+                    },
+                    {
+                        "label": "定额配置",
+                        "path": "/sys/quotaConfig",
+                        "authority": "costconfig"
                     }
                 ]
             },

@@ -54,7 +54,6 @@ export default function BidResultEdit(): JSX.Element {
                 try {
                     if (refFun?.getForm()) {
                         const fdata = await refFun?.getForm().validateFields()
-                        console.log(fdata, "data")
                         // if (fdata?.submit.length <= 0) {
                         //     message.error("每轮至少新增一行...")
                         //     return
@@ -150,7 +149,13 @@ export default function BidResultEdit(): JSX.Element {
             const { refFun, title: roundName, key: round } = item
             if (refFun?.getForm()) {
                 const fdata = refFun?.getForm().getFieldsValue()
-                return ({ round, roundName, bidOpenRecordVos: fdata?.submit })
+                return ({
+                    round, roundName, bidOpenRecordVos: fdata?.submit.map((item: any) => ({
+                        ...item,
+                        unitPrice: null,
+                        money: null
+                    }))
+                })
             } else {
                 return ({ round, roundName, bidOpenRecordVos: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
             }
@@ -186,55 +191,74 @@ export default function BidResultEdit(): JSX.Element {
             }))
             return
         }
-
         if (changeFileds.isBid) {
             switch (changeFileds.isBid) {
                 case 3:
-                    console.log("---流标--")
-                    tabsRef?.setFieldsValue({
-                        submit: allFields.submit.map((item: any) => {
-                            if (item.projectCompany === changeRow.projectCompany) {
-                                return ({ ...item, isBid: changeFileds.isBid })
+                    {
+                        const submit = allFields.submit.map((item: any) => ({ ...item, isBid: changeFileds.isBid }))
+                        tabsRef?.setFieldsValue({ submit })
+                        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                            if (item.round === itemKey) {
+                                return ({ ...item, bidOpenRecordVos: submit })
                             }
                             return item
-                        })
-                    })
+                        }))
+                    }
                     break
                 case 4:
-                    console.log("---废标--")
-                    tabsRef?.setFieldsValue({
-                        submit: allFields.submit.map((item: any) => {
+                    {
+                        const prevIsBid = prevData.find((item: any) => item.id === changeRow.id)?.isBid
+                        let submit = allFields.submit.map((item: any) => {
                             if (item.bidName === changeRow.bidName) {
                                 return ({ ...item, isBid: changeFileds.isBid })
                             }
                             return item
                         })
-                    })
-                    break
-                default:
-                    const prevIsBid = prevData.find((item: any) => item.id === changeRow.id)?.isBid
-                    if ([3, 4].includes(prevIsBid)) {
-                        tabsRef?.setFieldsValue({
-                            submit: allFields.submit.map((item: any) => {
-                                if ((prevIsBid === 4) && (item.bidName === changeRow.bidName)) {
-                                    return ({ ...item, isBid: -1 })
-                                }
-                                if ((prevIsBid === 3) && (item.projectCompany === changeRow.projectCompany)) {
-                                    return ({ ...item, isBid: -1 })
+                        if (prevIsBid === 3 && changeFileds.isBid === 4) {
+                            submit = submit.map((item: any) => {
+                                if (item.projectCompany !== changeRow.projectCompany) {
+                                    return ({
+                                        ...item,
+                                        isBid: -1
+                                    })
                                 }
                                 return item
                             })
-                        })
+                        }
+                        tabsRef?.setFieldsValue({ submit })
+                        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                            if (item.round === itemKey) {
+                                return ({ ...item, bidOpenRecordVos: submit })
+                            }
+                            return item
+                        }))
+                    }
+                    break
+                default:
+                    {
+                        const prevIsBid = prevData.find((item: any) => item.id === changeRow.id)?.isBid
+                        if ([3, 4].includes(prevIsBid)) {
+                            const submit = allFields.submit.map((item: any) => {
+                                if ((prevIsBid === 4) && (item.bidName === changeRow.bidName)) {
+                                    return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : -1 })
+                                }
+                                if (prevIsBid === 3) {
+                                    return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : -1 })
+                                }
+                                return ({ ...item, isBid: item.isBid })
+                            })
+                            tabsRef?.setFieldsValue({ submit })
+                            setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                                if (item.round === itemKey) {
+                                    return ({ ...item, bidOpenRecordVos: submit })
+                                }
+                                return item
+                            }))
+                        }
                     }
                     break
             }
         }
-        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
-            if (item.round === itemKey) {
-                return ({ ...item, bidOpenRecordVos: allFields.submit })
-            }
-            return item
-        }))
     }
 
     return (<>
@@ -375,4 +399,4 @@ const PartBidInfo = memo(({ id }: { id: string }) => {
             filterValue={{ id, isSign }}
             searchFormItems={[]} />
     </>
-}) 
+})

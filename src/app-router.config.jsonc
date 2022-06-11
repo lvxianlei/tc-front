@@ -2658,6 +2658,13 @@
       "exact": true,
       "authority": "home_page_person_center"
     },
+    { // RD-定额配置
+      "name": "定额配置",
+      "path": "/sys/quotaConfig",
+      "module": "./pages/system-mngt/quotaConfig/List",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
     { // 工序配置
       "name": "工序配置列表",
       "path": "/unqualifiedAmount/processConfigurationList",

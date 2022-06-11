@@ -42,7 +42,7 @@
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "width": 120
         },
         {

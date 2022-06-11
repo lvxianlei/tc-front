@@ -68,12 +68,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const WarehousingColumns = [
         {
             title: '材质名称',
-            dataIndex: 'materialTexture',
+            dataIndex: 'materialName',
             width: 120,
         },
         {
             title: '标准',
-            dataIndex: 'structureTextureName',
+            dataIndex: 'materialStandardName',
             width: 120,
         }, {
             title: '规格',
@@ -181,11 +181,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '分类',
-            dataIndex: 'classify',
+            dataIndex: 'materialCategoryName',
             width: 100,
         }, {
             title: '标准',
-            dataIndex: 'standardName',
+            dataIndex: 'materialStandardName',
             width: 100,
         }, {
             title: '品名',
@@ -193,11 +193,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '材质',
-            dataIndex: 'materialTexture',
+            dataIndex: 'structureTexture',
             width: 100,
         }, {
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
             width: 100,
         }, {
             title: '长度（mm）',
@@ -209,7 +209,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '数量',
-            dataIndex: 'quantity',
+            dataIndex: 'num',
             width: 100,
         }, {
             title: '重量（吨）',
@@ -217,7 +217,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '库存数量',
-            dataIndex: 'quantity',
+            dataIndex: 'num',
             width: 100,
         }, {
             title: '出库数量',
@@ -246,27 +246,27 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         },
         {
             title: '物料编码',
-            dataIndex: 'standard',
+            dataIndex: 'materialCode',
             width: 100,
         }, {
             title: '分类',
-            dataIndex: 'classify',
+            dataIndex: 'materialCategoryName',
             width: 100,
         }, {
             title: '标准',
-            dataIndex: 'standard',
+            dataIndex: 'materialStandardName',
             width: 100,
         }, {
             title: '品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName',
             width: 100,
         }, {
             title: '材质',
-            dataIndex: 'materialTexture',
+            dataIndex: 'structureTexture',
             width: 100,
         }, {
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
             width: 100,
         }, {
             title: '长度（mm）',
@@ -278,7 +278,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
         }, {
             title: '数量',
-            dataIndex: 'quantity',
+            dataIndex: 'num',
             width: 100,
         }, {
             title: '重量（吨）',
@@ -335,7 +335,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             result.updateTimeEnd = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
-        console.log(value, "value")
         if (value.batcherId) {
             result.departmentId = value.batcherId.first
             result.outStockStaffId = value.batcherId.second
@@ -346,16 +345,16 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 点击出库显示弹框内容
     const IssueOperation = async (record: any) => {
-        setRequirement(record.quantity);
+        setRequirement(record.num);
         setOutboundId(record.id);
         setApplyListdata([record]);
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
-            materialTexture: record.materialTexture,//材质
-            productName: record.productName,//品名
-            standard: record.standard,//标准
+            structureTexture: record.structureTexture,//材质
+            materialName: record.materialName,//品名
+            materialStandard: record.materialStandard,//标准
             lengthMin: record.length,//长度最小值
             lengthMax: record.length,//长度最大值
-            spec: record.spec,//规格
+            structureSpec: record.structureSpec,//规格
         });
         setOutLibraryListdata(data.records);
         setIsOutLibraryModal(true)
@@ -408,7 +407,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         OutLibraryListdata.map((item, index) => {
             if (item.outboundQuantity) {
                 let obj: any = {};
-                obj.quantity = item.outboundQuantity
+                obj.num = item.outboundQuantity
                 obj.id = item.id
                 count += parseFloat(item.outboundQuantity || 0)
                 ary.push(obj)
@@ -441,13 +440,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             history.go(0)
         }
     }
+    
     return (
         <>
             <Page
                 path="/tower-storage/outStock/detail"
                 exportPath={"/tower-storage/outStock/detail"}
                 exportObject={{ id: params.id }}
-                // sourceKey='outStockDetailPage.records'
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
@@ -585,9 +584,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             columns={ExWarehousingColumns}
                             dataSource={ExWarehousingListdata}
                             size='small'
-                            rowClassName={(item, index) => {
-                                return index % 2 ? 'aaa' : ''
-                            }}
+                            rowClassName={(_item, index) => index % 2 ? 'aaa' : ''}
                             pagination={false}
                         />
                     </div>

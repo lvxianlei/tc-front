@@ -530,11 +530,11 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "materialName"
         },
         {
             "title": "长度(mm)",

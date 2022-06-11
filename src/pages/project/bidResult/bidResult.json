@@ -85,15 +85,13 @@
             "dataIndex": "weight",
             "width": 100,
             "type": "number",
-            "decimal": "3",
-            "required": true
+            "decimal": "3"
         },
         {
             "title": "框架标套数",
             "dataIndex": "frameNumber",
             "width": 100,
-            "type": "number",
-            "required": true
+            "type": "number"
         },
         {
             "title": "中标比例（%）",
@@ -147,20 +145,12 @@
             ]
         },
         {
-            "title": "中标包名称",
-            "dataIndex": "packageNum"
-        },
-        {
             "title": "中标价(元)",
             "dataIndex": "bidMoney"
         },
         {
             "title": "中标重量(吨)",
             "dataIndex": "bidWeight"
-        },
-        {
-            "title": "中标单价(元)",
-            "dataIndex": "bidUnitPrice"
         },
         {
             "title": "框架标套数",
@@ -310,7 +300,7 @@
         },
         {
             "title": "中标套数",
-            "dataIndex": "---"
+            "dataIndex": "bidFrameNumber"
         },
         {
             "title": "平均单价（元）",
