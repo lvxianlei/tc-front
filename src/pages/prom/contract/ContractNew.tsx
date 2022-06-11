@@ -55,6 +55,7 @@ export class ContractNew extends AbstractContractSetting<IContractNewRouteProps,
         };
         values.signCustomerId = this.state.contract?.signCustomerId;
         values.payServiceManager = this.state.contract?.payServiceManager;
+        values.ascriptionId = this.state.contract?.ascriptionId;
         if (planValue.length > 0) {
             if (totalRate < 100) {
                 message.error('计划回款总占比必须等于100');

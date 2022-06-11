@@ -78,6 +78,8 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
             currencyType: contract.currencyType,
             description: contract.description,
             planType: contract.planType,
+            ascriptionId: contract.ascriptionId,
+            ascriptionName: contract.ascriptionName,
             payType: contract.payType,
             takeOverUser: contract.takeOverUser,
             paymentPlanDtos: contract.paymentPlanDtos,
@@ -150,6 +152,7 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
         values.signCustomerId = this.state.contract?.signCustomerId;
         values.region = Array.isArray(values?.region) ? values?.region?.[0] : values?.region;
         values.payServiceManager = this.state.contract?.payServiceManager;
+        values.ascriptionId = this.state.contract?.ascriptionId;
         if (planValue.length > 0) {
             if (totalRate < 100) {
                 message.error('计划回款总占比必须等于100');
