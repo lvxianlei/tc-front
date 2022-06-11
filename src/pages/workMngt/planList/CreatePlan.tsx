@@ -194,7 +194,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>清空</Button>
             </div>
             <CommonTable
-                rowKey="id"
+                rowKey={"id"}
                 style={{ padding: "0" }}
                 columns={[
                     ...material.map((item: any) => {
@@ -210,18 +210,18 @@ export default function CreatePlan(props: any): JSX.Element {
                                 render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                             })
                         }
-                        if (item.dataIndex === "standard") {
+                        if (item.dataIndex === "materialStandard") {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
                                     style={{ width: '150px' }}
-                                    value={popDataList[key]?.standard && popDataList[key]?.standard + ',' + popDataList[key]?.materialStandardName}
+                                    value={popDataList[key]?.materialStandard && popDataList[key]?.materialStandard + ',' + popDataList[key]?.materialStandardName}
                                     onChange={(e: string) => {
                                         const newData = popDataList.map((item: any, index: number) => {
                                             if (index === key) {
                                                 return {
                                                     ...item,
-                                                    standard: e.split(',')[0],
+                                                    materialStandard: e.split(',')[0],
                                                     materialStandardName: e.split(',')[1]
                                                 }
                                             }
@@ -233,18 +233,18 @@ export default function CreatePlan(props: any): JSX.Element {
                                 </Select>
                             })
                         }
-                        if (item.dataIndex === "materialTextureId") {
+                        if (item.dataIndex === "structureTexture") {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
                                     style={{ width: '150px' }}
-                                    value={popDataList[key]?.materialTextureId && popDataList[key]?.materialTextureId + ',' + popDataList[key]?.materialTexture}
+                                    value={popDataList[key]?.structureTexture && popDataList[key]?.structureTexture + ',' + popDataList[key]?.materialTexture}
                                     onChange={(e: string) => {
                                         const newData = popDataList.map((item: any, index: number) => {
                                             if (index === key) {
                                                 return {
                                                     ...item,
-                                                    materialTextureId: e.split(',')[0],
+                                                    structureTexture: e.split(',')[0],
                                                     materialTexture: e.split(',')[1]
                                                 }
                                             }
@@ -299,16 +299,13 @@ export default function CreatePlan(props: any): JSX.Element {
                             code: item.materialCode,
                             materialCategoryId: item.materialCategory,
                             planPurchaseNum: item.planPurchaseNum || "1",
-                            spec: item.structureSpec,
                             source: 2,
-                            materialTextureId: item.structureTexture,
                             standardName: item.standardName,
                             length: item.length || 1,
-                            standard: item.standard,
-                            taxPrice: item.taxPrice || 1.00,
-                            price: item.price || 1.00,
-                            taxTotalAmount: item.taxTotalAmount || 1.00,
-                            totalAmount: item.totalAmount || 1.00,
+                            materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                            materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                            structureTexture: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                            materialTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
                             weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
                             totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3),
                         })) || [])
