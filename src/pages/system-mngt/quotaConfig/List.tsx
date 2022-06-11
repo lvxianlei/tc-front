@@ -27,11 +27,11 @@ export interface EditRefProps {
 export default function List(): React.ReactNode {
     const columns = [
         {
-            key: 'productType',
+            key: 'productTypeName',
             title: '产品类型',
             width: 50,
             fixed: 'left' as FixedType,
-            dataIndex: 'productType'
+            dataIndex: 'productTypeName'
         },
         {
             key: 'projectEntries',
@@ -72,7 +72,7 @@ export default function List(): React.ReactNode {
             width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type="link" onClick={() => { setRowData(record); setVisible(true); }}>编辑</Button>
+                    <Button type="link" onClick={() => { setRowData(record); setVisible(true); setType('edit'); }}>编辑</Button>
                     <Button type="link" onClick={() => delRow(record.id)}>删除</Button>
                 </Space>
             )
@@ -225,6 +225,8 @@ export default function List(): React.ReactNode {
     const [form] = useForm();
     const [rowData, setRowData] = useState<any>();
 
+
+
     const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status });
         setPage({ ...result })
@@ -239,7 +241,7 @@ export default function List(): React.ReactNode {
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await newRef.current?.onSubmit()
-            message.success("上传成功！")
+            message.success("保存成功！")
             setVisible(false)
             history.go(0)
             resove(true)
@@ -249,10 +251,19 @@ export default function List(): React.ReactNode {
     })
 
     const delRow = (id: string) => {
-        RequestUtil.delete(`/tower-science/projectPrice`, { id: id }).then(res => {
-            message.success("删除成功！")
-            history.go(0)
+        Modal.confirm({
+            title: "删除",
+            content: "确定删除放样定额配置？",
+            okText: '确定',
+            cancelText: '取消',
+            onOk: () => {
+                RequestUtil.delete(`/tower-science/projectPrice?id=${id}`).then(res => {
+                    message.success("删除成功！")
+                    history.go(0)
+                })
+            }
         })
+        
     }
 
     const otherEdit = (record: Record<string, any>) => {

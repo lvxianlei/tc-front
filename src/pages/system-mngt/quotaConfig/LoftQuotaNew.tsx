@@ -19,6 +19,7 @@ interface modalProps {
 export default forwardRef(function LoftQuotaNew({ record, type }: modalProps, ref) {
     const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
+            console.log(record)
             form.setFieldsValue({ ...record })
             resole(true);
         } catch (error) {
@@ -56,7 +57,6 @@ export default forwardRef(function LoftQuotaNew({ record, type }: modalProps, re
         <Form form={form} layout="horizontal" labelCol={{ span: 8 }}>
             <Form.Item name={'productType'} label="产品类型" rules={[{ required: true, message: '请选择产品类型' }]}>
                 <Select style={{ width: '100%' }} >
-                    <Select.Option key={0} value={""}>全部</Select.Option>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -78,7 +78,7 @@ export default forwardRef(function LoftQuotaNew({ record, type }: modalProps, re
             <Form.Item name={'voltageGradePriceThird'} label="【800kV+】定额" rules={[{ required: true, message: '请输入【800kV+】定额' }]}>
                 <Input maxLength={100} />
             </Form.Item>
-            <Form.Item name={'specialPrice'} label="特殊定额" rules={[{ required: true, message: '请输入特殊定额' }]}>
+            <Form.Item name={'specialPrice'} label="特殊定额">
                 <Input maxLength={100} />
             </Form.Item>
         </Form>
