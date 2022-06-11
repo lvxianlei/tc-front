@@ -1,86 +1,16 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react'
-import { Button, TableColumnProps, Modal, Input, message, Form } from 'antd'
+import { Button, Modal, message, Form } from 'antd'
 import RequestUtil from '../../../utils/RequestUtil';
 import { useHistory } from 'react-router-dom';
+import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 import { BaseInfo, DetailContent, DetailTitle, SearchTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
-import { setting } from "./setting.json"
+import { tableHeadColumns, setting } from "./setting.json"
 export default (): React.ReactNode => {
     const history = useHistory()
     const [form] = Form.useForm()
     const [visible, setVisible] = useState<boolean>(false);
     const [editRow, setEditRow] = useState<any | "new" | null>();
-    const columns: TableColumnProps<object>[] = [
-        {
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a, _b, index) => <span>{index + 1}</span>
-        },
-        {
-            title: '物料编码',
-            dataIndex: 'materialCode',
-            width: 100
-        }, {
-            title: '标准',
-            dataIndex: 'materialStandard',
-            width: 100
-        },
-        {
-            title: '品名',
-            dataIndex: 'materialName',
-            width: 100
-        },
-        {
-            title: '材质',
-            dataIndex: 'structureTexture',
-            width: 100
-        },
-        {
-            title: '规格',
-            dataIndex: 'structureSpec',
-            width: 100
-        },
-        {
-            title: '长度',
-            dataIndex: 'length',
-            width: 60
-        },
-        {
-            title: '宽度',
-            dataIndex: 'weight',
-            width: 60
-        },
-        {
-            title: '安全库存（吨）',
-            dataIndex: 'safetyStockWeight',
-            width: 100
-        },
-        {
-            title: '告警库存（吨）',
-            dataIndex: 'warningStockWeight',
-            width: 100
-        },
-        {
-            title: '操作',
-            dataIndex: 'operation',
-            width: 100,
-            render: (_text: any, item: any, index: number): React.ReactNode => {
-                return (
-                    <div>
-                        <span
-                            className='yello'
-                            onClick={() => {
-                                setVisible(true)
-                                setEditRow(item)
-                            }}
-                        >编辑</span>
-                    </div>
-                )
-            }
-        }
-    ]
 
     const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
@@ -93,10 +23,34 @@ export default (): React.ReactNode => {
         }
     }), { manual: true })
 
+    const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.delete(`/tower-storage/safetyStock/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const handleSubmit = async () => {
-        await run()
+        const params = await form.validateFields()
+        await run({ ...params, materialName: params.materialName.value })
         message.success('操作成功')
     }
+
+    const handleDelete = async (id: string) => {
+        await deleteRun(id)
+    }
+
+    const handleChange = (fields: any) => {
+        if (fields.materialName) {
+            form.setFieldsValue({
+                materialCode: fields.materialName.records?.[0].materialCode,
+                structureSpec: fields.materialName.records?.[0].structureSpec
+            })
+        }
+    }
+
     // 关闭弹窗
     const closeModal = () => {
         setVisible(false)
@@ -115,7 +69,35 @@ export default (): React.ReactNode => {
         }}>添加</Button>]} />
         <SearchTable
             path='/tower-storage/safetyStock'
-            columns={[...columns as any]}
+            columns={[
+                {
+                    title: '序号',
+                    dataIndex: 'index',
+                    width: 50,
+                    render: (_a, _b, index) => <span>{index + 1}</span>
+                },
+                ...tableHeadColumns,
+                {
+                    title: '操作',
+                    dataIndex: 'operation',
+                    width: 100,
+                    render: (_text: any, item: any): React.ReactNode => {
+                        return (
+                            <>
+                                <Button type="link"
+                                    onClick={() => {
+                                        setVisible(true)
+                                        setEditRow(item)
+                                    }}
+                                >编辑</Button>
+                                <Button type="link"
+                                    onClick={() => handleDelete(item.id)}
+                                >删除</Button>
+                            </>
+                        )
+                    }
+                }
+            ]}
             searchFormItems={[]} />
         <Modal
             width={1101}
@@ -125,12 +107,24 @@ export default (): React.ReactNode => {
             onOk={handleSubmit}
             maskClosable={false}
             onCancel={closeModal}
+            confirmLoading={loading}
             cancelText="取消"
             okText="确定"
         >
-            <BaseInfo form={form} col={2} edit columns={setting.map((item: any) => {
-                return item
-            })} dataSource={editRow === "new" ? {} : editRow || {}} />
+            <BaseInfo form={form} col={2} edit
+                columns={setting.map((item: any) => {
+                    switch (item.dataIndex) {
+                        case "structureTexture":
+                            return ({ ...item, enum: materialTextureOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
+                        case "materialStandard":
+                            return ({ ...item, enum: materialStandardOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
+                        default:
+                            return item
+                    }
+                })}
+                onChange={handleChange}
+                dataSource={editRow === "new" ? {} : editRow || {}}
+            />
         </Modal>
     </DetailContent >)
 };

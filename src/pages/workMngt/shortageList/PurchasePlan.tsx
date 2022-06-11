@@ -29,9 +29,13 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         }
     }), { manual: true })
 
-    const handleInputChange = (event: any, index: number) => {
-        setDataSource(dataSource.map((item: any, dataIndex: number) => dataIndex === index ? ({ ...item, planPurchaseNum: event }) : item))
+    const handleInputChange = (event: any, fields: string, index: number) => {
+        setDataSource(dataSource.map((item: any, dataIndex: number) => dataIndex === index ? ({
+            ...item,
+            [fields]: event
+        }) : item))
     }
+    
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
             await saveRun({
@@ -56,12 +60,19 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             <Col span={12}>
                 <DetailTitle title="计划列表" />
                 <CommonTable columns={PlanList.map((item: any) => {
+                    if (item.dataIndex === "warehouseOccupy") {
+                        return ({
+                            ...item,
+                            render: (_: any, record: any, index: number) => {
+                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, "warehouseOccupy", index)} style={{ height: 27 }} />
+                            }
+                        })
+                    }
                     if (item.dataIndex === "purchasePlanNumber") {
                         return ({
                             ...item,
                             render: (_: any, record: any, index: number) => {
-                                console.log(_, record.purchasePlanNumber)
-                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
+                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, "purchasePlanNumber", index)} style={{ height: 27 }} />
                             }
                         })
                     }
