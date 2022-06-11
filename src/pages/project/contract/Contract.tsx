@@ -118,7 +118,7 @@ class ManagementContract extends PromContract {
         }
       },
       {
-        title: "业务经理",
+        title: "跟单业务员",
         dataIndex: "salesman",
       },
       {

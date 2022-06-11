@@ -24,7 +24,7 @@
         },
         {
             "title": "汇总数量",
-            "dataIndex": "quantity"
+            "dataIndex": "num"
         },
         {
             "title": "汇总重量(kg)",
@@ -50,7 +50,7 @@
         },
         {
             "title": "数量",
-            "dataIndex": "quantity"
+            "dataIndex": "num"
         },
         {
             "title": "零件1",

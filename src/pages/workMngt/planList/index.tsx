@@ -112,7 +112,7 @@ export default function Invoicing() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 300,
+                        width: 270,
                         render: (_: any, record: any) => {
                             return <>
                                 <Link className="btn-operation-link" to={`/ingredients/planList/relationTower/${record.id}`}>关联塔型</Link>
@@ -125,9 +125,7 @@ export default function Invoicing() {
                             </>
                         }
                     }]}
-                extraOperation={<>
-                    <Button type="primary" ghost onClick={() => setIsOpenId(true)}>创建采购计划</Button>
-                </>}
+                extraOperation={<Button type="primary" key="new" ghost onClick={() => setIsOpenId(true)}>创建采购计划</Button>}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 searchFormItems={[

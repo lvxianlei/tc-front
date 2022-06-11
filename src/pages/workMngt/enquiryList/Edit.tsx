@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react'
 import { Spin, Input, Form, message } from 'antd'
-import { DetailTitle, CommonTable, BaseInfo, Attachment, AttachmentRef } from '../../common'
+import { DetailTitle, CommonTable, Attachment, AttachmentRef } from '../../common'
 import { CurrentPriceInformation } from "./enquiryList.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'

@@ -1,7 +1,7 @@
 /**
  * b编辑采购计划
  */
-import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Form, Spin, Button, InputNumber } from 'antd';
 import { CommonTable, DetailTitle } from '../../common';
 import useRequest from '@ahooksjs/use-request'
@@ -105,26 +105,19 @@ export default forwardRef(function EditPurchasePlan({ id }: EditProps, ref) {
                     dataIndex: "opration",
                     fixed: "right",
                     width: 100,
-                    render: (_: any, record: any) => {
-                        return (
-                            <>
-                                <Button type="link" onClick={() => delItem(record.id)}>移除</Button>
-                            </>
-                        )
-                    }
+                    render: (_: any, record: any) => <Button type="link" onClick={() => delItem(record.id)}>移除</Button>
                 }
             ]} dataSource={towerType} />
             <DetailTitle title="配料列表" />
             <CommonTable pagination={false} columns={[
                 {
-                    key: 'index',
                     title: '序号',
                     dataIndex: 'index',
                     width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
                 ...ingredientsColumn.map((item: any) => {
-                    if (item.dataIndex === "standard") {
+                    if (item.dataIndex === "materialStandard") {
                         return ({
                             title: item.title,
                             dataIndex: item.dataIndex,

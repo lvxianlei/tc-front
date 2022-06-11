@@ -1,12 +1,17 @@
 {
     "bidDocColumns": [
         {
-            "title": "类别",
-            "dataIndex": "bidType",
-            "rules": [
+            "title": "是否入围",
+            "dataIndex": "isCompetition",
+            "type": "select",
+            "enum": [
                 {
-                    "required": true,
-                    "message": "请选择类别..."
+                    "label": "是",
+                    "value": 1
+                },
+                {
+                    "label": "否",
+                    "value": 0
                 }
             ]
         },
@@ -124,8 +129,7 @@
         {
             "title": "接收日期",
             "dataIndex": "receiveUserDate",
-            "type": "date",
-            "format":"YYYY-MM-DD"
+            "type": "date"
         },
         {
             "title": "授权代表",

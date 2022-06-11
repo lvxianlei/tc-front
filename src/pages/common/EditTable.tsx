@@ -70,11 +70,11 @@ export default function EditableTable({
             dataIndex: 'opration',
             span: 1,
             editable: false,
-            render: (fieldKey: number, index: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => handleRemove(remove, fieldKey)}>删除</Button>
+            render: (fieldKey: number, _index: number, remove: (index: number | number[]) => void): JSX.Element => <Button type="link" onClick={() => handleRemove(remove, fieldKey)}>删除</Button>
         }
     ] : columns
     columns = haveIndex ? [
-        { title: '序号', dataIndex: 'index', span: 1, editable: false, render: (key: number, index: number): React.ReactNode => (<span style={{ marginLeft: 8 }}>{index + 1}</span>) },
+        { title: '序号', dataIndex: 'index', span: 1, editable: false, render: (_key: number, index: number): React.ReactNode => (<span style={{ marginLeft: 8 }}>{index + 1}</span>) },
         ...columns
     ] : columns
     const handleRemove = (remove: any, key: any) => {
@@ -86,6 +86,7 @@ export default function EditableTable({
         setDataSource({ submit: dataSource })
         form && form.setFieldsValue({ submit: dataSource })
     }, [JSON.stringify(dataSource)])
+
     return (
         <Form form={form} onValuesChange={onChange} initialValues={{ submit: IDataSource }} className={styles.editable}>
             <Form.List name="submit">

@@ -84,7 +84,7 @@ export default function SearchTable({
         {searchFormItems.length > 0 && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
             const formValue = await form.getFieldsValue()
             const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
-            setPagenationParams({ ...pagenationParams, current: 1, pageSize: 10 })
+            setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
             await run(params)
         }}>
             <Row gutter={[8, 8]}>

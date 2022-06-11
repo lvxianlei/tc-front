@@ -3,13 +3,13 @@
         {
             "title": "批次号",
             "dataIndex": "batchNumber",
-            "width": 200,
+            "width": 150,
             "type": "string"
         },
         {
             "title": "计划号",
             "dataIndex": "planNumber",
-            "width": 200,
+            "width": 150,
             "type": "string"
         },
         {
@@ -27,7 +27,7 @@
         {
             "title": "提料重量（kg）",
             "dataIndex": "totalWeight",
-            "width": 200,
+            "width": 100,
             "type": "string"
         },
         {
@@ -38,18 +38,20 @@
         },
         {
             "title": "配料状态",
-            "dataIndex": "batcheTaskStatusName"
+            "dataIndex": "batcheTaskStatusName",
+            "width": 80
         },
         {
             "title": "最新状态变更时间",
             "dataIndex": "batcheStatusUpdateTime",
             "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "format": "YYYY-MM-DD HH:mm",
+            "width": 150
         },
         {
             "title": "方案编号",
             "dataIndex": "schemeNumber",
-            "width": 200,
+            "width": 150,
             "type": "string"
         }
     ],
