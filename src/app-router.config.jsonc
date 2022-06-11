@@ -821,7 +821,7 @@
     { // 配置管理-安全库存配置
       "name": "安全库存配置",
       "path": "/config/configList/securitySetting",
-      "module": "./pages/stock/securitySetting/securitySetting",
+      "module": "./pages/stock/securitySetting/index",
       "exact": true,
       "authority": "sw_configuration_management_safety_stock_configuration"
     },
