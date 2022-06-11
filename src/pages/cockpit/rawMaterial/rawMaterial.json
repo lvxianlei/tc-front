@@ -6,7 +6,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "materialSpec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "材质",
@@ -78,7 +78,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "materialSpec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "原材料类型",
@@ -150,7 +150,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "standard"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "材料",
@@ -162,7 +162,7 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         }
     ],
     "materialInfo": [
@@ -214,7 +214,7 @@
         },
         {
             "title": "原材料规格",
-            "dataIndex": "materialSpec",
+            "dataIndex": "structureSpec",
             "disabled": true
         },
         {

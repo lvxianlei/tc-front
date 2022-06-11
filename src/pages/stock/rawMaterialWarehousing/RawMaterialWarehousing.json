@@ -3,22 +3,22 @@
         {
             "title": "收货单号",
             "dataIndex": "receiveNumber",
-            "width": 120
+            "width": 100
         },
         {
             "title": "纸质单号",
             "dataIndex": "paperNumber",
-            "width": 120
+            "width": 100
         },
         {
             "title": "结算方式",
             "dataIndex": "settlementModeName",
-            "width": 120
+            "width": 80
         },
         {
             "title": "状态",
             "dataIndex": "receiveStatusName",
-            "width": 120
+            "width": 80
         },
         {
             "title": "最新状态变更时间",
@@ -29,37 +29,37 @@
         {
             "title": "供应商",
             "dataIndex": "supplierName",
-            "width": 120
+            "width": 80
         },
         {
             "title": "联系人",
             "dataIndex": "contactsUser",
-            "width": 120
+            "width": 80
         },
         {
             "title": "联系电话",
             "dataIndex": "contactsPhone",
-            "width": 120
+            "width": 100
         },
         {
             "title": "合同编号",
             "dataIndex": "contractNumber",
-            "width": 120
+            "width": 100
         },
         {
             "title": "到货时间",
             "dataIndex": "receiveTime",
-            "width": 120
+            "width": 100
         },
         {
             "title": "重量(吨)",
             "dataIndex": "weight",
-            "width": 120
+            "width": 60
         },
         {
             "title": "价税合计(元)",
             "dataIndex": "price",
-            "width": 120
+            "width": 100
         },
         {
             "title": "备注",

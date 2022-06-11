@@ -258,7 +258,8 @@ export default function Overview() {
             tableProps={{
                 rowSelection: {
                     selectedRowKeys: selectedRows,
-                    onChange: handleSelectChange
+                    onChange: handleSelectChange,
+                    getCheckboxProps: (records: any) => ({ disabled: records.receiveDetailStatus === 1 })
                 }
             }}
             columns={[
@@ -269,14 +270,16 @@ export default function Overview() {
                     fixed: "right",
                     width: 100,
                     render: (_: any, records: any) => <>
-                        <a
+                        <Button
+                            type="link"
+                            disabled={records.receiveDetailStatus === 1}
                             style={{ marginRight: 12 }}
                             onClick={() => {
                                 setAttachType(1)
                                 setDetailId([records.id])
                                 setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
-                            }}>收货</a>
+                            }}>收货</Button>
                         <a
                             style={{ marginRight: 12 }}
                             onClick={() => {

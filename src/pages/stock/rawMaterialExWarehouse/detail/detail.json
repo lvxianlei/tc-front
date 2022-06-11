@@ -18,17 +18,17 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "width": 120
         },
         {
             "title": "标准",
-            "dataIndex": "standardName",
+            "dataIndex": "materialStandardName",
             "width": 120
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "width": 120
         },
         {

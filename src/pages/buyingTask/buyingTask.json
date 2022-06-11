@@ -2,12 +2,13 @@
     "buyingTask": [
         {
             "title": "原材料采购任务编号",
-            "width": 130,
+            "width": 150,
             "dataIndex": "purchaseNumber"
         },
         {
             "title": "任务状态",
             "dataIndex": "taskStatus",
+            "width": 80,
             "type": "select",
             "enum": [
                 {
@@ -42,32 +43,38 @@
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "statusUpdateTime"
+            "dataIndex": "statusUpdateTime",
+            "width": 130
         },
         {
             "title": "已完成（吨）/ 需求（吨）",
-            "width": 170,
+            "width": 140,
             "dataIndex": "completionProgres"
         },
         {
             "title": "计划号",
-            "dataIndex": "planNumber"
+            "dataIndex": "planNumber",
+            "width": 100
         },
         {
             "title": "订单编号",
-            "dataIndex": "saleOrderNumber"
+            "dataIndex": "saleOrderNumber",
+            "width": 100
         },
         {
             "title": "内部合同编号",
-            "dataIndex": "internalNumber"
+            "dataIndex": "internalNumber",
+            "width": 120
         },
         {
             "title": "配料人",
-            "dataIndex": "batcher"
+            "dataIndex": "batcher",
+            "width": 100
         },
         {
             "title": "采购人",
-            "dataIndex": "purchaser"
+            "dataIndex": "purchaser",
+            "width": 100
         }
     ],
     "operatingInformation": [

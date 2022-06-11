@@ -24,24 +24,20 @@ export default function ViewPanel(): React.ReactNode {
 
     const columns = [
         {
-            key: 'productName',
             title: '品名',
-            dataIndex: 'productName',
+            dataIndex: 'materialName',
         },
         {
-            key: 'standard',
             title: '标准',
-            dataIndex: 'standard'
+            dataIndex: 'materialStandardName'
         },
         {
-            key: 'spec',
             title: '规格',
-            dataIndex: 'spec',
+            dataIndex: 'structureSpec',
         },
         {
-            key: 'materialTexture',
             title: '材质',
-            dataIndex: 'materialTexture'
+            dataIndex: 'structureTexture'
         },
         {
             key: 'stockWeight',
@@ -78,7 +74,7 @@ export default function ViewPanel(): React.ReactNode {
             title: '库存状态',
             dataIndex: 'typeName',
             isExport: true,
-            render: (text: any, item: any, index: any) => {
+            render: (_a: any, item: any) => {
                 return (
                     <div>
                         {
@@ -123,7 +119,6 @@ export default function ViewPanel(): React.ReactNode {
                 exportPath={"/tower-storage/safetyStock/board"}
                 columns={[
                     {
-                        key: 'index',
                         title: '序号',
                         dataIndex: 'index',
                         fixed: "left",
@@ -136,7 +131,7 @@ export default function ViewPanel(): React.ReactNode {
                 filterValue={filterValue}
                 searchFormItems={[
                     {
-                        name: 'materialTexture',
+                        name: 'structureTexture',
                         label: '材质',
                         children: (
                             <Select placeholder="请选择回款类型" style={{ width: "140px" }}>
@@ -151,7 +146,7 @@ export default function ViewPanel(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'standard',
+                        name: 'materialStandard',
                         label: '标准',
                         children: (
                             <Select placeholder="请选择标准" style={{ width: "140px" }}>
