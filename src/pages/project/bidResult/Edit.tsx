@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react"
+import React, { Fragment, memo, useRef, useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
-import { Button, Form, message, Spin, Modal } from "antd"
-import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData } from "../../common"
+import { Button, Form, message, Spin, Modal, Select, Row, Col, Checkbox } from "antd"
+import { DetailContent, BaseInfo, DetailTitle, EditTable, formatData, Page } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
-import { bidInfoColumns, setting } from './bidResult.json'
+import { bidInfoColumns, setting, partBidNumber } from './bidResult.json'
 import { EditTableHasForm, TabsCanEdit, UploadXLS } from "./EditTabs"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
@@ -54,7 +54,6 @@ export default function BidResultEdit(): JSX.Element {
                 try {
                     if (refFun?.getForm()) {
                         const fdata = await refFun?.getForm().validateFields()
-                        console.log(fdata, "data")
                         // if (fdata?.submit.length <= 0) {
                         //     message.error("每轮至少新增一行...")
                         //     return
@@ -91,11 +90,12 @@ export default function BidResultEdit(): JSX.Element {
             map.forEach((value: any) => {
                 if (+value !== 100) flag = true;
             })
-            console.log(map, "================>>>>>>>>>>>>>>>")
+
             if (flag) {
                 message.error("相同包名称的中标比例必须等于100！");
                 return false;
             }
+
             const postTabsData = _tabsData.reduce((total: any, nextItem: any) => {
                 const nextTabItem = nextItem.formData ? nextItem.formData.map((formItem: any) => ({
                     ...formItem,
@@ -130,9 +130,7 @@ export default function BidResultEdit(): JSX.Element {
         })
     }
 
-    const handleTabsCanEditChange = (removeKey: string, removeItem: any) => {
-        setBidOpenRecordVos(bidOpenRecordVos.filter((bid: any) => bid.round !== parseFloat(removeKey)))
-    }
+    const handleTabsCanEditChange = (removeKey: string) => setBidOpenRecordVos(bidOpenRecordVos.filter((bid: any) => bid.round !== parseFloat(removeKey)))
 
     const generateFormatEditData = (column: any, data: any) => {
         let value: any = ""
@@ -144,6 +142,123 @@ export default function BidResultEdit(): JSX.Element {
                 value = data
         }
         return value
+    }
+    // 新增一轮
+    const handleAddNew = () => {
+        const tabsData = (ref.current as any).getData().map((item: any) => {
+            const { refFun, title: roundName, key: round } = item
+            if (refFun?.getForm()) {
+                const fdata = refFun?.getForm().getFieldsValue()
+                return ({
+                    round, roundName, bidOpenRecordVos: fdata?.submit.map((item: any) => ({
+                        ...item,
+                        unitPrice: null,
+                        money: null
+                    }))
+                })
+            } else {
+                return ({ round, roundName, bidOpenRecordVos: bidOpenRecordVos.find((item: any) => item.round === round).bidOpenRecordVos || [] })
+            }
+        })
+        setBidOpenRecordVos([
+            {
+                round: bidOpenRecordVos.length + 1,
+                roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
+                bidOpenRecordVos: tabsData[0]?.bidOpenRecordVos || []
+            },
+            ...bidOpenRecordVos
+        ])
+    }
+
+    const handleEditableChange = (fields: any, allFields: any, itemKey: any) => {
+        const changeFileds = fields.submit[fields.submit.length - 1]
+        const changeRow = allFields.submit[fields.submit.length - 1]
+        const tabsRef: any = (ref.current as any).getData().find((item: any) => item.key === itemKey)?.refFun?.getForm()
+        const prevData: any = bidOpenRecordVos.find((item: any) => item.round === itemKey)?.bidOpenRecordVos
+        if (changeFileds.id) {
+            setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                if (item.round === itemKey) {
+                    return ({
+                        ...item,
+                        bidOpenRecordVos: allFields.submit.map((item: any) => item.id === changeFileds.id ? ({
+                            ...item,
+                            frameNumber: 0,
+                            isBid: -1
+                        }) : item)
+                    })
+                }
+                return item
+            }))
+            return
+        }
+        if (changeFileds.isBid) {
+            switch (changeFileds.isBid) {
+                case 3:
+                    {
+                        const submit = allFields.submit.map((item: any) => ({ ...item, isBid: changeFileds.isBid }))
+                        tabsRef?.setFieldsValue({ submit })
+                        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                            if (item.round === itemKey) {
+                                return ({ ...item, bidOpenRecordVos: submit })
+                            }
+                            return item
+                        }))
+                    }
+                    break
+                case 4:
+                    {
+                        const prevIsBid = prevData.find((item: any) => item.id === changeRow.id)?.isBid
+                        let submit = allFields.submit.map((item: any) => {
+                            if (item.bidName === changeRow.bidName) {
+                                return ({ ...item, isBid: changeFileds.isBid })
+                            }
+                            return item
+                        })
+                        if (prevIsBid === 3 && changeFileds.isBid === 4) {
+                            submit = submit.map((item: any) => {
+                                if (item.projectCompany !== changeRow.projectCompany) {
+                                    return ({
+                                        ...item,
+                                        isBid: -1
+                                    })
+                                }
+                                return item
+                            })
+                        }
+                        tabsRef?.setFieldsValue({ submit })
+                        setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                            if (item.round === itemKey) {
+                                return ({ ...item, bidOpenRecordVos: submit })
+                            }
+                            return item
+                        }))
+                    }
+                    break
+                default:
+                    {
+                        const prevIsBid = prevData.find((item: any) => item.id === changeRow.id)?.isBid
+                        if ([3, 4].includes(prevIsBid)) {
+                            const submit = allFields.submit.map((item: any) => {
+                                if ((prevIsBid === 4) && (item.bidName === changeRow.bidName)) {
+                                    return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : -1 })
+                                }
+                                if (prevIsBid === 3) {
+                                    return ({ ...item, isBid: item.id === changeRow.id ? item.isBid : -1 })
+                                }
+                                return ({ ...item, isBid: item.isBid })
+                            })
+                            tabsRef?.setFieldsValue({ submit })
+                            setBidOpenRecordVos(bidOpenRecordVos.map((item: any) => {
+                                if (item.round === itemKey) {
+                                    return ({ ...item, bidOpenRecordVos: submit })
+                                }
+                                return item
+                            }))
+                        }
+                    }
+                    break
+            }
+        }
     }
 
     return (<>
@@ -161,16 +276,10 @@ export default function BidResultEdit(): JSX.Element {
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo form={baseInfoForm} edit columns={setting} dataSource={data || {}} />
+                <PartBidInfo id={params.id} />
                 <DetailTitle title="开标信息" operation={[<Button key="new"
                     type="primary"
-                    onClick={() => setBidOpenRecordVos([
-                        {
-                            round: bidOpenRecordVos.length + 1,
-                            roundName: `第 ${bidOpenRecordVos.length + 1} 轮`,
-                            bidOpenRecordVos: []
-                        },
-                        ...bidOpenRecordVos
-                    ])}>新增一轮报价</Button>]} />
+                    onClick={handleAddNew}>新增一轮报价</Button>]} />
                 <TabsCanEdit
                     ref={ref}
                     canEdit={true}
@@ -187,8 +296,8 @@ export default function BidResultEdit(): JSX.Element {
                             <EditTableHasForm
                                 columns={bidInfoColumns}
                                 dataSource={data}
+                                onChange={(changeFileds, allFields) => handleEditableChange(changeFileds, allFields, item.key)}
                                 opration={[
-
                                     <UploadXLS key="xlxs" readEnd={async (_data) => {
                                         const vilidateCols = ["包名称", "投标人名称", "分标编号", "物资资别", "项目单位", "总价（元）", "重量（吨）", "电压等级"]
                                         if (_data.length <= 0) {
@@ -223,9 +332,14 @@ export default function BidResultEdit(): JSX.Element {
                                     }} />,
                                     <Button
                                         type="link"
-                                        onClick={() => {
-                                            exportDown("/tower-market/bidBase/export", "POST", {}, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "开标信息导入模板")
-                                        }}
+                                        key="export"
+                                        onClick={() => exportDown(
+                                            "/tower-market/bidBase/export",
+                                            "POST",
+                                            {},
+                                            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                                            "开标信息导入模板"
+                                        )}
                                         style={{ marginRight: 16 }}
                                     >下载导入模板</Button>
                                 ]}
@@ -238,3 +352,51 @@ export default function BidResultEdit(): JSX.Element {
         </DetailContent>
     </>)
 }
+
+const PartBidInfo = memo(({ id }: { id: string }) => {
+    const [isSign, setIsSign] = useState("")
+
+    const { run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/bidBase/partBidNumber`, postData)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleCheckedChange = async (e: any, checkId: string) => {
+        await run({
+            id: checkId,
+            isSign: e.target.checked ? 2 : 1
+        })
+    }
+
+    return <>
+        <DetailTitle title="中标信息" operation={[<Fragment key="right">
+            <span style={{ fontSize: 14 }}>合同状态：</span>
+            <Select
+                defaultValue={""}
+                onChange={(value) => setIsSign(value)}
+                style={{ width: 100, fontWeight: 500, color: "#333", textAlign: "left" }}>
+                <Select.Option value="">全部</Select.Option>
+                <Select.Option value={1}>未签完</Select.Option>
+                <Select.Option value={2}>已签完</Select.Option>
+            </Select></Fragment>]
+        } />
+        <Page
+            columns={partBidNumber.map((item: any) => {
+                if (item.dataIndex === "isSign") {
+                    return ({
+                        ...item, render: (value, records: any) => <Checkbox
+                            onChange={(event: any) => handleCheckedChange(event, records.id)}
+                            checked={value === 2} />
+                    })
+                }
+                return item
+            })}
+            path={`/tower-market/bidBase/partBidNumber`}
+            filterValue={{ id, isSign }}
+            searchFormItems={[]} />
+    </>
+})

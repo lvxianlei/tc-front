@@ -13,6 +13,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import Base from "./baseInfo/Overview"
 import BidDoc from "./bidDoc/Overview"
+import QualificationReview from "./qualificationReview/Overview"
 import BidResult from "./bidResult/Overview"
 import FrameAgreement from './frameAgreement/Overview'
 // 合同列表
@@ -64,7 +65,7 @@ export default function ManagementDetail(): React.ReactNode {
             resole(result)
             return
         }
-        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement"].includes(params.tab as string)) {
+        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement","qualificationReview"].includes(params.tab as string)) {
             resole({})
             return
         }
@@ -188,6 +189,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_base: <Base id={params.id} />,
         tab_cost: <CostDetail />,
         tab_bidDoc: <BidDoc id={params.id} />,
+        tab_qualificationReview: <QualificationReview id={params.id} />,
         tab_bidResult: <BidResult id={params.id} />,
         tab_frameAgreement: <FrameAgreement id={params.id} />,
         tab_contract: <>

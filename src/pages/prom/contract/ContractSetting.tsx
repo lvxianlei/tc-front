@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from 'react-router';
 import { IFormItemGroup } from '../../../components/AbstractFillableComponent';
 
 import RequestUtil from '../../../utils/RequestUtil';
-import AbstractContractSetting, { IAbstractContractSettingState, IAttachDTO, IContractInfo, IPaymentPlanDto, IRegion, planType, ProjectContractInfo } from './AbstractContractSetting';
+import AbstractContractSetting, { IAbstractContractSettingState, IAttachDTO, IPaymentPlanDto, ProjectContractInfo } from './AbstractContractSetting';
 import moment from 'moment'
 import { message } from 'antd';
 
@@ -54,7 +54,6 @@ export class ContractSetting extends AbstractContractSetting<IContractSettingRou
                 customerInfoDto: contract.customerInfoVo,
             }
         })
-        console.log("=================>>>")
         this.getForm()?.setFieldsValue({
             contractNumber: contract.contractNumber,
             purchaseOrderNumber: contract.purchaseOrderNumber, // 修复采购订单编辑回显有问题

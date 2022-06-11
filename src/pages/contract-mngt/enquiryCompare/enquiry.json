@@ -2,23 +2,28 @@
     "comparison": [
         {
             "title": "询比价编号",
-            "dataIndex": "comparisonPriceNumber"
+            "dataIndex": "comparisonPriceNumber",
+            "width": 200
         },
         {
             "title": "用途",
-            "dataIndex": "purpose"
+            "dataIndex": "purpose",
+            "width": 150
         },
         {
             "title": "询比价状态",
-            "dataIndex": "comparisonStatusName"
+            "dataIndex": "comparisonStatusName",
+            "width": 100
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "updateTime"
+            "dataIndex": "updateTime",
+            "width": 200
         },
         {
             "title": "询价人",
-            "dataIndex": "comparisonPersonName"
+            "dataIndex": "comparisonPersonName",
+            "width": 150
         }
     ],
     "editBaseInfo": [
@@ -52,11 +57,11 @@
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "长度（mm）",
@@ -103,11 +108,11 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialTextureId"
+            "dataIndex": "structureTextureId"
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "宽度（mm）",
@@ -154,11 +159,11 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "宽度（mm）",

@@ -2,7 +2,8 @@
     "contract": [
         {
             "title": "合同编号",
-            "dataIndex": "contractNumber"
+            "dataIndex": "contractNumber",
+            "width": 200
         },
         {
             "title": "关联采购计划",
@@ -58,7 +59,8 @@
         },
         {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "width": 200
         }
     ],
     "material": [
@@ -72,11 +74,11 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialTextureId"
+            "dataIndex": "structureTextureId"
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度（mm）",
@@ -122,11 +124,11 @@
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度（mm）",
@@ -270,6 +272,7 @@
             "path": "/tower-supply/comparisonPrice",
             "width": 1011,
             "value": "comparisonPriceNumber",
+            "disabled": true,
             "dependencies": true,
             "readOnly": true,
             "columns": [

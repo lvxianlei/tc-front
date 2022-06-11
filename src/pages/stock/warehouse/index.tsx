@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from 'react'
-import { Button, TableColumnProps, message } from 'antd'
+import { Button, message } from 'antd'
 import RequestUtil from "../../../utils/RequestUtil"
 import Edit from './Edit'
 import { useHistory } from 'react-router-dom'

@@ -1,11 +1,6 @@
 {
     "angleConfigStrategy": [
         {
-            "title": "厚度",
-            "dataIndex": "thickness",
-            "type": "number"
-        },
-        {
             "title": "宽度",
             "dataIndex": "width",
             "type": "number"
@@ -42,6 +37,31 @@
                     "message": "请输入余量(mm)..."
                 }
             ]
+        },
+        {
+            "title": "开数",
+            "dataIndex": "openNumber",
+            "type": "select",
+            "mode": "multiple",
+            "enum": [
+                {
+                    "value": "1",
+                    "label": "1"
+                },
+                {
+                    "value": "2",
+                    "label": "2"
+                },
+                {
+                    "value": "3",
+                    "label": "3"
+                },
+                {
+                    "value": "4",
+                    "label": "4"
+                }
+            ],
+            "required": true
         },
         {
             "title": "理想库存长(mm)",
@@ -85,12 +105,6 @@
     ],
     "material": [
         {
-            "title": "厚度mm",
-            "dataIndex": "thickness",
-            "type": "string",
-            "width": 100
-        },
-        {
             "title": "宽度mm",
             "dataIndex": "width",
             "type": "string",
@@ -113,6 +127,10 @@
             "dataIndex": "margin",
             "type": "number",
             "width": 100
+        },
+        {
+            "title": "开数",
+            "dataIndex": "openNumber"
         },
         {
             "title": "理想库存长(mm)",
@@ -166,22 +184,22 @@
     "safetyStock": [
         {
             "title": "品名",
-            "dataIndex": "productName",
+            "dataIndex": "materialName",
             "type": "string"
         },
         {
             "title": "标准",
-            "dataIndex": "standard",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {
             "title": "规格",
-            "dataIndex": "spec",
+            "dataIndex": "structureSpec",
             "type": "string"
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture",
+            "dataIndex": "structureTexture",
             "type": "string"
         },
         {

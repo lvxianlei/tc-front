@@ -1,8 +1,8 @@
 // 合同管理-询比价
 import React, { useState, useRef } from 'react'
 import { useHistory, Link } from "react-router-dom"
-import { IntgSelect, Page } from "../../common"
-import { Select, Input, Button, Modal, DatePicker, message, Form, Space, Popconfirm } from 'antd'
+import { IntgSelect, SearchTable as Page } from "../../common"
+import { Select, Input, Button, Modal, DatePicker, message, Form, Popconfirm } from 'antd'
 import { comparison } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -107,7 +107,7 @@ export default function ContractMngt() {
                     {
                         "title": "序号",
                         "dataIndex": "index",
-                        "width": 30,
+                        "width": 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...comparison,
@@ -115,6 +115,7 @@ export default function ContractMngt() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
+                        width: 270,
                         render: (_: any, records: any) => <>
                             <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
                             <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
@@ -124,7 +125,7 @@ export default function ContractMngt() {
                             <Popconfirm
                                 title="确定删除吗？"
                                 disabled={records.comparisonStatus !== 1}
-                                onConfirm={async() => {
+                                onConfirm={async () => {
                                     await deleteRun(records?.id)
                                     message.success("删除成功...")
                                     history.go(0)

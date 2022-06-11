@@ -138,6 +138,7 @@ export default function RawMaterial() {
                     {
                         title: "序号",
                         dataIndex: "index",
+                        width: 50,
                         fixed: "left",
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },

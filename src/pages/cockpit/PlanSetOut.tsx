@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Input, Select } from 'antd';
 import { Page } from '../common';
 import moment from 'moment';
-import { patternTypeOptions } from '../../configuration/DictionaryOptions';
 import { FixedType } from 'rc-table/lib/interface';
 
 export default function PlanSetOut(): React.ReactNode {  //张韵泽 28号：负责人直接返回名称，无需增加-Name字段   30号：加Name
