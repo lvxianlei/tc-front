@@ -18,7 +18,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                 purchaseType: 3
             })
             //TODO 临时初始数据
-            setDataSource(result?.lists.map((item: any) => ({ ...item, planPurchaseNum: 0 })) || [])
+            setDataSource(result?.lists.map((item: any, index: number) => ({ ...item, planPurchaseNum: 0, key: `${item.structureSpec}-${index}` })) || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -70,15 +70,19 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                         return ({
                             ...item,
                             render: (_: any, record: any, index: number) => {
-                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, "warehouseOccupy", index)} style={{ height: 27 }} />
+                                return <InputNumber value={record.warehouseOccupy} key={index}
+                                    onChange={(value: number) => handleInputChange(value, "warehouseOccupy", index)}
+                                    style={{ height: 27 }} />
                             }
                         })
                     }
-                    if (item.dataIndex === "purchasePlanNumber") {
+                    if (item.dataIndex === "planPurchaseNum") {
                         return ({
                             ...item,
                             render: (_: any, record: any, index: number) => {
-                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, "purchasePlanNumber", index)} style={{ height: 27 }} />
+                                return <InputNumber value={record.planPurchaseNum} key={index}
+                                    onChange={(value: number) => handleInputChange(value, "planPurchaseNum", index)}
+                                    style={{ height: 27 }} />
                             }
                         })
                     }

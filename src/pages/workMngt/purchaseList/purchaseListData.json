@@ -107,7 +107,7 @@
         },
         {
             "title": "计划采购（本次）",
-            "dataIndex": "purchasePlanNumber",
+            "dataIndex": "planPurchaseNum",
             "type": "number"
         }
     ],

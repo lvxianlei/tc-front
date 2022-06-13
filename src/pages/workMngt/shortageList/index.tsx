@@ -5,6 +5,7 @@ import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import AuthUtil from "../../../utils/AuthUtil"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
 export default function Invoicing() {
@@ -60,6 +61,7 @@ export default function Invoicing() {
             reject(false)
         }
     })
+
     return <>
         <Modal title="操作信息"
             visible={visible}
@@ -131,9 +133,7 @@ export default function Invoicing() {
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
                     },
-                    // getCheckboxProps: (record: object[]) => ({
-                    //     disabled: false
-                    // })
+                    getCheckboxProps: (record: any) => record.purchasePersonId !== AuthUtil.getUserId()
                 }
             }}
             searchFormItems={[

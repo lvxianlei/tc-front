@@ -70,6 +70,7 @@ export default (): React.ReactNode => {
         }}>添加</Button>]} />
         <SearchTable
             path='/tower-storage/safetyStock'
+            modal
             columns={[
                 {
                     title: '序号',

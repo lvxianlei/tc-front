@@ -112,12 +112,11 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您选择原材料明细!");
                 return false;
             }
-            const v = {
-                lists: materialList,
+            saveRun({
+                purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",
                 purchaseType: baseInfo?.purchaseType
-            }
-            saveRun(v);
+            });
         } catch (error) {
             console.log(error);
         }
