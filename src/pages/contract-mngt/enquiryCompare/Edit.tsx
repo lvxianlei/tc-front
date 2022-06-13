@@ -315,16 +315,18 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
-                    setMaterialList(fields.map((item: any) => ({
-                        ...item,
-                        structureSpec: item.structureSpec,
-                        source: item.source || 2,
-                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ?  materialStandardOptions[0]?.name : "",
-                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
-                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.id : "",
-                        structureTexture:item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.name : "",
-                        proportion: item.proportion == -1 ? 0 : item.proportion
-                    })))
+                    setMaterialList(fields.map((item: any) => {
+                        return ({
+                            ...item,
+                            structureSpec: item.structureSpec,
+                            source: item.source || 2,
+                            materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ?  materialStandardOptions[0]?.name : "",
+                            materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                            structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.id : "",
+                            structureTexture:item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.name : "",
+                            proportion: item.proportion == -1 ? 0 : item.proportion
+                        })
+                    }))
                 }}
             />
         </Modal>
@@ -385,7 +387,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "structureTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records?.structureTexture : <Select style={{ width: '150px' }} value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture} onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records?.structureTexture : <Select style={{ width: '150px' }} value={records?.structureTextureId + ',' + records?.structureTexture} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if (index === key) {
                                         return {
