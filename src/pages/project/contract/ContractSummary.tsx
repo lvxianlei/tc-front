@@ -197,7 +197,7 @@ class ManagementContractSummary extends ContractSummary {
         ],
         [
           {
-            label: "业务经理",
+            label: "跟单业务员",
             value: baseInfo?.salesman,
           },
           {
@@ -209,7 +209,11 @@ class ManagementContractSummary extends ContractSummary {
           {
             label: "备注",
             value: baseInfo?.description,
-          }
+          },
+          {
+            label: "归属业务经理",
+            value: baseInfo?.ascriptionName,
+          },
         ]
       ],
     };
