@@ -6,35 +6,43 @@
         },
         {
             "title": "编号",
-            "dataIndex": "inquiryNumber"
+            "dataIndex": "inquiryNumber",
+            "width": 120
         },
         {
             "title": "任务状态",
-            "dataIndex": "inquiryStatusName"
+            "dataIndex": "inquiryStatusName",
+            "width": 80
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "statusUpdateTime"
+            "dataIndex": "statusUpdateTime",
+            "width": 150
         },
         {
             "title": "项目名称",
-            "dataIndex": "projectName"
+            "dataIndex": "projectName",
+            "width": 100
         },
         {
             "title": "客户名称",
-            "dataIndex": "biddingPerson"
+            "dataIndex": "biddingPerson",
+            "width": 100
         },
         {
             "title": "项目负责人",
-            "dataIndex": "projectLeader"
+            "dataIndex": "projectLeader",
+            "width": 80
         },
         {
             "title": "投标截止时间",
-            "dataIndex": "biddingEndTime"
+            "dataIndex": "biddingEndTime",
+            "width": 120
         },
         {
             "title": "工程报价员",
-            "dataIndex": "inquirer"
+            "dataIndex": "inquirer",
+            "width": 80
         }
     ],
     "overviewBaseInfo": [

@@ -33,8 +33,16 @@ export default (): React.ReactNode => {
 
     const handleSubmit = async () => {
         const params = await form.validateFields()
-        await run({ ...params, materialName: params.materialName.value })
-        message.success('操作成功')
+        await run({
+            ...params,
+            materialName: params.materialName.value,
+            materialStandard: params.materialStandard.value,
+            materialStandardName: params.materialStandard.label,
+            structureTextureId: params.materialStandard.value,
+            structureTexture: params.materialStandard.label
+        })
+        await message.success('操作成功')
+        history.go(0)
     }
 
     const handleDelete = async (id: string) => {
@@ -82,14 +90,20 @@ export default (): React.ReactNode => {
                 {
                     title: '操作',
                     dataIndex: 'operation',
-                    width: 100,
+                    width: 120,
+                    fixed: "right",
                     render: (_text: any, item: any): React.ReactNode => {
                         return (
                             <>
                                 <Button type="link"
                                     onClick={() => {
                                         setVisible(true)
-                                        setEditRow(item)
+                                        setEditRow(({
+                                            ...item,
+                                            materialName: { value: item.materialName },
+                                            structureTextureId: { value: item.structureTextureId, label: item.structureTexture },
+                                            materialStandard: { value: item.materialStandard, label: item.materialStandardName }
+                                        }))
                                     }}
                                 >编辑</Button>
                                 <Button type="link"
@@ -115,6 +129,11 @@ export default (): React.ReactNode => {
         >
             <BaseInfo form={form} col={2} edit
                 columns={setting.map((item: any) => {
+                    if (editRow && editRow !== "new") {
+                        if (!["safetyStockWeight", "warningStockWeight"].includes(item.dataIndex)) {
+                            item = { ...item, disabled: true }
+                        }
+                    }
                     switch (item.dataIndex) {
                         case "structureTextureId":
                             return ({ ...item, type: "select", enum: materialTextureOptions?.map((item: any) => ({ label: item.name, value: item.id })) })

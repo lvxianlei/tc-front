@@ -5,7 +5,7 @@ import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
 import { enquiryTaskList } from "./enquiryTask.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { IntgSelect, Page } from '../common'
+import { IntgSelect, SearchTable as Page } from '../common'
 import Overview from './Overview'
 import TaskAssign from './TaskAssign'
 import TaskResult from './TaskResult'
@@ -138,6 +138,7 @@ export default function EnquiryTask(): React.ReactNode {
                     title: "序号",
                     dataIndex: "index",
                     fixed: "left",
+                    width: 50,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
                 ...enquiryTaskList,
@@ -145,7 +146,7 @@ export default function EnquiryTask(): React.ReactNode {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 300,
                     render: (_: any, record: any) => {
                         return <>
                             <a className="btn-operation-link" onClick={() => {

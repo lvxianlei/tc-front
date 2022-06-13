@@ -1,12 +1,12 @@
 //合同看板
 import React, { useState } from 'react'
-import { Button, Select, DatePicker, Input } from 'antd'
+import { Select, DatePicker, Input } from 'antd'
 import { Link, } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { contract } from "./contract.json"
 
 export default function ViewContract(): React.ReactNode {
-    const [ filterValue, setFilterValue ] = useState({});
+    const [filterValue, setFilterValue] = useState({});
     const onFilterSubmit = (value: any) => {
         if (value.signStartTime) {
             const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -39,10 +39,11 @@ export default function ViewContract(): React.ReactNode {
                 key: 'operation',
                 title: '操作',
                 dataIndex: 'operation',
+                fixed: "right",
+                width: 100,
                 render: (_: any, records: any) => <Link to={`/bulletin/contract/overView/${records.id}`}>明细</Link>
             }]}
-        // extraOperation={<Button type="primary">导出</Button>}
-        filterValue={ filterValue }
+        filterValue={filterValue}
         onFilterSubmit={onFilterSubmit}
         searchFormItems={[
             {

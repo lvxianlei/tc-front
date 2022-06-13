@@ -99,6 +99,7 @@
             "title": "材质",
             "dataIndex": "structureTextureId",
             "required": true,
+            "labelInValue": true,
             "type": "select",
             "enum": []
         },
@@ -106,6 +107,7 @@
             "title": "标准",
             "dataIndex": "materialStandard",
             "required": true,
+            "labelInValue": true,
             "type": "select",
             "enum": []
         },
