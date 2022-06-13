@@ -52,10 +52,10 @@ export default function EnquiryList(): React.ReactNode {
                     fixed: "right",
                     dataIndex: 'operation',
                     render: (_: any, records: any) => (<>
-                        <Button type="link" className='btn-operation-link' disabled={![1].includes(records.batcheTaskStatus)} >
+                        <Button type="link" className='btn-operation-link' disabled={!records.purchasePlanNumber} >
                             <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
                         </Button>
-                        <Button type="link" className='btn-operation-link' disabled={![3].includes(records.batcheTaskStatus)}>
+                        <Button type="link" className='btn-operation-link'>
                             <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}/${records.batcheTaskStatus}`}>配料方案</Link>
                         </Button>
                     </>)

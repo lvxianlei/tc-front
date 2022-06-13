@@ -45,14 +45,13 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             const result = handleData();
             if (!result) {
                 // 可以保存
-                
+                await saveRun({
+                    purchaseType: 1,
+                    purchaserTaskTowerIds: ids.join(","),
+                    purchasePlanDetailDTOS: dataSource
+                })
+                resole(true)
             }
-            // await saveRun({
-            //     purchaseType: 1,
-            //     purchaserTaskTowerIds: ids.join(","),
-            //     lists: dataSource
-            // })
-            // resole(true)
         } catch (error) {
             reject(false)
         }
