@@ -386,7 +386,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "structureTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records?.structureTexture : <Select style={{ width: '150px' }} value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture} onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records?.structureTexture : <Select style={{ width: '150px' }} value={records?.structureTextureId + ',' + records?.structureTexture} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if (index === key) {
                                         return {
