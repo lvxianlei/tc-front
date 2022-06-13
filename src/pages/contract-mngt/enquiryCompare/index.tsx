@@ -48,7 +48,7 @@ export default function ContractMngt() {
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
         if (value.comparisonPersonId) {
-            value.comparisonPersonId = value.comparisonPersonId.second
+            value.comparisonPersonId = value.comparisonPersonId.value
         }
         setFilterValue({ ...filterValue, ...value })
         return ({ ...filterValue, ...value })
@@ -179,7 +179,7 @@ export default function ContractMngt() {
                     {
                         name: 'comparisonPersonId',
                         label: '询价人',
-                        children: <IntgSelect width={400} />
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',

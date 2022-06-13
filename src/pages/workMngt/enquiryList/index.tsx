@@ -28,8 +28,7 @@ export default function EnquiryList(): React.ReactNode {
             value.endPlannedDeliveryTime = formatDate[1] + " 23:59:59"
         }
         if (value.inquirerId) {
-            value.deptId = value.inquirerId.first
-            value.inquirerId = value.inquirerId.second
+            value.inquirerId = value.inquirerId.value
         }
         return value
     }
@@ -124,7 +123,7 @@ export default function EnquiryList(): React.ReactNode {
                 {
                     name: 'inquirerId',
                     label: '工程报价员',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

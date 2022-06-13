@@ -57,8 +57,7 @@ export default function EnquiryTask(): React.ReactNode {
             value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
         }
         if (value.inquirerId) {
-            value.deptId = value.inquirerId.first;
-            value.inquirerId = value.inquirerId.second;
+            value.inquirerId = value.inquirerId.value;
         }
         setFilterValue(value)
         return value
@@ -196,7 +195,7 @@ export default function EnquiryTask(): React.ReactNode {
                 {
                     name: 'inquirerId',
                     label: '工程报价员',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

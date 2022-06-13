@@ -13,14 +13,18 @@ interface Values {
 }
 export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps, ref): JSX.Element {
     const [dataSource, setDataSource] = useState<any[]>([])
-    let [number, setNumber] = useState<number>(1);
-    let [values, setValues] = useState<Values>({});
+    let [count, setCout] = useState<number>(1);
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase?purchaserTaskTowerIds=${ids.join(",")}&purchaseType=1`)
             resole(result)
             //TODO 临时初始数据
-            setDataSource(result?.lists.map((item: any) => ({ ...item, planPurchaseNum: 0 })) || [])
+            setDataSource(result?.lists.map((item: any) => ({
+                ...item,
+                planPurchaseNum: 1,
+                purchasePlanNumber: item?.purchasePlanNumber || 1,
+                warehouseOccupy: item?.warehouseOccupy || 1
+            })) || [])
         } catch (error) {
             reject(error)
         }
@@ -35,26 +39,45 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         }
     }), { manual: true })
 
-    useEffect(() => {
-        if (JSON.stringify(values) !== "{}") {
-            let result = dataSource;
-            result[(values["index"] as any)].planPurchaseNum = values.value;
-            setDataSource(result.slice(0));
-        }
-    }, [number])
-
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
-            await saveRun({
-                purchaseType: 1,
-                purchaserTaskTowerIds: ids.join(","),
-                lists: dataSource
-            })
-            resole(true)
+            console.log(dataSource, "======>>>>")
+            const result = handleData();
+            if (!result) {
+                // 可以保存
+                await saveRun({
+                    purchaseType: 1,
+                    purchaserTaskTowerIds: ids.join(","),
+                    purchasePlanDetailDTOS: dataSource
+                })
+                resole(true)
+            }
         } catch (error) {
             reject(false)
         }
     })
+
+    useEffect(() => {
+        if (count !== 1) {
+            handleData();
+        }
+    }, [JSON.stringify(dataSource)])
+
+    // 判断标红
+    const handleData = () => {
+        const result = dataSource;
+        let flag = false;
+        for (let i = 0; i < result.length; i += 1) {
+            if (((result[i].purchasePlanNumber || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
+                result[i]["isRed"] = false;
+            } else {
+                result[i]["isRed"] = true;
+                flag = true;
+            }
+        }
+        setDataSource(result.slice(0))
+        return flag;
+    }
 
     useImperativeHandle(ref, () => ({ onSubmit: handleSubmit, confirmLoading }), [handleSubmit, confirmLoading])
 
@@ -80,13 +103,34 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                         key={index}
                                         max={999}
                                         min={0}
-                                        onChange={(value: number) => {
-                                            setNumber(++number)
-                                            setValues({
-                                                index,
-                                                value: value ? value : 0
-                                            })
-                                        }} style={{ height: 27 }} />
+                                        onChange={(e: any) => {
+                                            const result = dataSource;
+                                            result[index].purchasePlanNumber = e
+                                            setDataSource(result.slice(0));
+                                            setCout(count + 1);
+                                        }}
+                                        style={{ height: 27, border: record?.isRed ? "1px solid red" : ""  }}
+                                    />
+                                }
+                            })
+                        }
+                        if (item.dataIndex === "warehouseOccupy") {
+                            return ({
+                                ...item,
+                                render: (_: any, record: any, index: number) => {
+                                    return <InputNumber
+                                        value={record.warehouseOccupy}
+                                        key={index}
+                                        max={999}
+                                        min={0}
+                                        onChange={(e: any) => {
+                                            const result = dataSource;
+                                            result[index].warehouseOccupy = e
+                                            setDataSource(result.slice(0));
+                                            setCout(count + 1);
+                                        }}
+                                        style={{ height: 27}}
+                                    />
                                 }
                             })
                         }

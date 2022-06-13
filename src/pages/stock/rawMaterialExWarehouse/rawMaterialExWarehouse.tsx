@@ -38,8 +38,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             delete value.startRefundTime
         }
         if (value.batcherId) {
-            result.departmentId = value.batcherId.first
-            result.applyStaffId = value.batcherId.second
+            result.applyStaffId = value.batcherId.value
         }
         setFilterValue(result)
         return result
@@ -92,7 +91,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 {
                     name: 'batcherId',
                     label: '申请人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'selectName',

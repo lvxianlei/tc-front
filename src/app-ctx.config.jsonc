@@ -526,7 +526,7 @@
                         "authority": "work_management_purchase_ingredients"
                     },
                     {
-                        "label": "采购列表",
+                        "label": "配料方案",
                         "path": "/ingredients/purchaseList",
                         "authority": "work_management_purchase_list"
                     },

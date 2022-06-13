@@ -34,8 +34,7 @@ export default function RawMaterialStock(): React.ReactNode {
             value.updateTimeEnd = formatDate[1] + ' 23:59:59';
         }
         if (value.batcherId) {
-            value.departmentId = value.batcherId.first
-            value.stockUser = value.batcherId.second
+            value.stockUser = value.batcherId.value
         }
         setFilterValue(value)
         return value
@@ -298,7 +297,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     {
                         name: "batcherId",
                         label: "入库人",
-                        children: <IntgSelect width={400} />
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: "selectName",

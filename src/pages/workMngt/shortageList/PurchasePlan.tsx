@@ -7,13 +7,18 @@ import RequestUtil from '../../../utils/RequestUtil'
 interface PurchasePlanProps {
     ids: string[]
 }
+
 export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps, ref): JSX.Element {
     const [dataSource, setDataSource] = useState<any[]>([])
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase?purchaserTaskTowerIds=${ids.join(",")}&purchaseType=1`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase`, {
+                purchaserTaskTowerIds: ids.join(","),
+                materialShortageIds: ids.join(","),
+                purchaseType: 3
+            })
             //TODO 临时初始数据
-            setDataSource(result?.lists.map((item: any) => ({ ...item, planPurchaseNum: 0 })) || [])
+            setDataSource(result?.lists.map((item: any, index: number) => ({ ...item, planPurchaseNum: 0, key: `${item.structureSpec}-${index}` })) || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -22,22 +27,27 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/shortage`, { ...data })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan`, { ...data })
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
-    const handleInputChange = (event: any, index: number) => {
-        setDataSource(dataSource.map((item: any, dataIndex: number) => dataIndex === index ? ({ ...item, planPurchaseNum: event }) : item))
+    const handleInputChange = (event: any, fields: string, index: number) => {
+        setDataSource(dataSource.map((item: any, dataIndex: number) => dataIndex === index ? ({
+            ...item,
+            [fields]: event
+        }) : item))
     }
+
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
             await saveRun({
-                purchaseType: 1,
+                purchaseType: 3,
                 purchaserTaskTowerIds: ids.join(","),
-                lists: dataSource
+                materialShortageIds: ids.join(","),
+                purchasePlanDetailDTOS: dataSource
             })
             resole(true)
         } catch (error) {
@@ -50,18 +60,29 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     return <Spin spinning={loading}>
         <Row gutter={10}>
             <Col span={12}>
-                <DetailTitle title="配料方案" />
+                <DetailTitle title="配料列表" />
                 <CommonTable haveIndex columns={ListIngredients} dataSource={data?.lists || []} pagination={false} />
             </Col>
             <Col span={12}>
                 <DetailTitle title="计划列表" />
                 <CommonTable columns={PlanList.map((item: any) => {
-                    if (item.dataIndex === "purchasePlanNumber") {
+                    if (item.dataIndex === "warehouseOccupy") {
                         return ({
                             ...item,
                             render: (_: any, record: any, index: number) => {
-                                console.log(_, record.purchasePlanNumber)
-                                return <InputNumber value={record.purchasePlanNumber} key={index} onChange={(value: number) => handleInputChange(value, index)} style={{ height: 27 }} />
+                                return <InputNumber value={record.warehouseOccupy} key={index}
+                                    onChange={(value: number) => handleInputChange(value, "warehouseOccupy", index)}
+                                    style={{ height: 27 }} />
+                            }
+                        })
+                    }
+                    if (item.dataIndex === "planPurchaseNum") {
+                        return ({
+                            ...item,
+                            render: (_: any, record: any, index: number) => {
+                                return <InputNumber value={record.planPurchaseNum} key={index}
+                                    onChange={(value: number) => handleInputChange(value, "planPurchaseNum", index)}
+                                    style={{ height: 27 }} />
                             }
                         })
                     }

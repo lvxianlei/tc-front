@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Form } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./shortageListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import AuthUtil from "../../../utils/AuthUtil"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
 export default function Invoicing() {
@@ -34,8 +35,7 @@ export default function Invoicing() {
             delete value.startRefundTime
         }
         if (value.handlerId) {
-            // value.handlerDept = value.handlerId.first
-            value.handlerId = value.handlerId.second
+            value.handlerId = value.handlerId.value
         }
         // setFilterValue({ ...filterValue, ...value })
         return value
@@ -61,6 +61,7 @@ export default function Invoicing() {
             reject(false)
         }
     })
+
     return <>
         <Modal title="操作信息"
             visible={visible}
@@ -76,7 +77,7 @@ export default function Invoicing() {
         }}>
             <Form form={form}>
                 <Form.Item rules={[{ required: true, message: "请填写取消原因..." }]} label="取消原因"
-                   name="reason"><Input.TextArea maxLength={400}/></Form.Item>
+                    name="reason"><Input.TextArea maxLength={400} /></Form.Item>
             </Form>
         </Modal>
         <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
@@ -88,7 +89,7 @@ export default function Invoicing() {
             filterValue={filterValue}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
-                ...baseInfo,
+                ...baseInfo as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -115,13 +116,13 @@ export default function Invoicing() {
             extraOperation={<>
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost onClick={() => {
-                    message.warning("功能开发中...")
-                    // if (!generateIds || generateIds.length <= 0) {
-                    //     message.warning("必须选择任务才能生成采购计划...")
-                    //     return
-                    // } else {
-                    //     setGenerateVisible(true)
-                    // }
+                    // message.warning("功能开发中...")
+                    if (!generateIds || generateIds.length <= 0) {
+                        message.warning("必须选择任务才能生成采购计划...")
+                        return
+                    } else {
+                        setGenerateVisible(true)
+                    }
                 }}>生成采购计划</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
@@ -132,9 +133,7 @@ export default function Invoicing() {
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
                     },
-                    getCheckboxProps: (record: object[]) => ({
-                        disabled: false
-                    })
+                    getCheckboxProps: (record: any) => record.purchasePersonId !== AuthUtil.getUserId()
                 }
             }}
             searchFormItems={[
@@ -156,7 +155,7 @@ export default function Invoicing() {
                 {
                     name: 'handlerId',
                     label: '处理人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',
