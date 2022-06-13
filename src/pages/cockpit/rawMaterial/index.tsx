@@ -1,9 +1,9 @@
 //原材料看板
 import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { materialPrice } from "./rawMaterial.json"
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import HistoryPrice from './HistoryPrice'
 import DataSource from './DataSource'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -11,7 +11,6 @@ import useRequest from '@ahooksjs/use-request'
 import { materialStandardOptions } from '../../../configuration/DictionaryOptions'
 
 export default function ViewRawMaterial(): React.ReactNode {
-    const history = useHistory()
     const invoiceTypeEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
@@ -20,7 +19,7 @@ export default function ViewRawMaterial(): React.ReactNode {
     const [materialName, setMaterialName] = useState<string>("")
     const [priceVisible, setPriceVisible] = useState<boolean>(false)
     const [dataVisible, setDataVisible] = useState<boolean>(false)
-    const [ filterValue, setFilterValue ] = useState({});
+    const [filterValue, setFilterValue] = useState({});
     const onFilterSubmit = (value: any) => {
         if (value.startUpdateTime) {
             const formatDate = value.startUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -78,12 +77,13 @@ export default function ViewRawMaterial(): React.ReactNode {
         <Page
             path="/tower-supply/materialPrice"
             exportPath={`/tower-supply/materialPrice`}
-            filterValue={ filterValue }
+            filterValue={filterValue}
             columns={[
                 {
                     "title": "序号",
                     "fixed": "left",
                     "dataIndex": "index",
+                    width: 40,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
                 ...materialPrice,
@@ -92,14 +92,14 @@ export default function ViewRawMaterial(): React.ReactNode {
                     title: '操作',
                     dataIndex: 'operation',
                     fixed: 'right',
-                    width: 100,
+                    width: 150,
                     render: (_: any, record: any): React.ReactNode => (<>
                         <Button type="link" className="btn-operation-link" onClick={() => {
                             setDetailId(record.id)
                             setMaterialName(record.materialName)
                             setPriceVisible(true)
                         }}>历史价格</Button>
-                        <Button type="link" className="btn-operation-link"onClick={() => {
+                        <Button type="link" className="btn-operation-link" onClick={() => {
                             setDetailId(record.id)
                             setDataVisible(true)
                         }}>数据源</Button>

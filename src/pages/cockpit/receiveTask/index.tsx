@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal } from 'antd'
 import { Link } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { receiveColumns } from "./receiveTask.json"
 import PrepareOverview from "../../financial/prepares/Overview"
 import BillOverview from "../../financial/bills/Overview"

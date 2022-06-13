@@ -2,39 +2,48 @@
     "materialPrice": [
         {
             "title": "原材料名称",
-            "dataIndex": "materialName"
+            "dataIndex": "materialName",
+            "width": 100
         },
         {
             "title": "规格",
-            "dataIndex": "structureSpec"
+            "dataIndex": "structureSpec",
+            "width": 130
         },
         {
             "title": "材质",
-            "dataIndex": "structureTexture"
+            "dataIndex": "structureTexture",
+            "width": 60
         },
         {
             "title": "原材料类型",
-            "dataIndex": "materialCategoryName"
+            "dataIndex": "materialCategoryName",
+            "width": 80
         },
         {
             "title": "原材料标准",
-            "dataIndex": "materialStandardName"
+            "dataIndex": "materialStandardName",
+            "width": 100
         },
         {
             "title": "报价时间",
-            "dataIndex": "quotationTime"
+            "dataIndex": "quotationTime",
+            "width": 100
         },
         {
             "title": "更新时间",
-            "dataIndex": "updateTime"
+            "dataIndex": "updateTime",
+            "width": 150
         },
         {
             "title": "价格来源",
-            "dataIndex": "priceSource"
+            "dataIndex": "priceSource",
+            "width": 100
         },
         {
             "title": "价格",
-            "dataIndex": "price"
+            "dataIndex": "price",
+            "width": 60
         }
     ],
     "dataSource": [
