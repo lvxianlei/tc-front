@@ -130,7 +130,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan`, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/task/purchase/manual`, data)
             message.success("创建成功！");
             props?.handleCreate({code: 1})
             resove(result)
@@ -205,6 +205,21 @@ import AuthUtil from '../../../utils/AuthUtil';
                     }else if(info.file.response && info.file.response?.success){
                         console.log(info.file.response, "info.file.response")
                         message.success('导入成功！');
+                        let counts: number = count,
+                         result = popDataList;
+                        if (info.file.response.data && info.file.response.data.length > 0) {
+                            for (let i = 0; i < info.file.response.data.length; i += 1) {
+                                const v = {
+                                    ...info.file.response.data[i],
+                                    id: (+counts) + 1 + "",
+                                }
+                                counts = counts + 1;
+                                result.push(v)
+                            }
+                        }
+                        setMaterialList(result.slice(0));
+                        setPopDataList(result.slice(0))
+                        setCount(counts);
                     }
                 } }
             >
@@ -255,7 +270,7 @@ import AuthUtil from '../../../utils/AuthUtil';
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id, "length")} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={100} value={value || 100} onChange={(value: number) => lengthChange(value, records.id, "length")} key={key} />
                         })
                     }
                     // 数量
