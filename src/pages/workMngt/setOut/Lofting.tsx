@@ -27,7 +27,6 @@ interface Column extends ColumnType<object> {
 }
 
 export default function Lofting(): React.ReactNode {
-
     const menu = (
         <Menu>
             <Menu.Item key="1" onClick={() => setVisible(true)}>
@@ -173,7 +172,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'apertureNumber',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "apertureNumber"]} initialValue={_}>
+                <Form.Item name={['data', index, "apertureNumber"]} initialValue={_} rules={[{
+                    pattern: /^[0-9,*]*$/,
+                    message: '仅可输入数字/*/,',
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -198,10 +200,10 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "electricWelding"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^\+?[1-9][0-9]*$/,
+                    message: '仅可输入非负数',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)}/>
                 </Form.Item>
             )
         },
@@ -213,8 +215,8 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
                 }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
@@ -228,10 +230,10 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "chamfer"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^\+?[1-9][0-9]*$/,
+                    message: '仅可输入非负数',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -243,10 +245,10 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "openCloseAngle"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^\+?[1-9][0-9]*$/,
+                    message: '仅可输入非负数',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -257,11 +259,11 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'bend',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                <Form.Item name={['data', index, "bend"]} initialValue={_}  rules={[{
+                    pattern: /^\+?[1-9][0-9]*$/,
+                    message: '仅可输入非负数',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -273,8 +275,8 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "shovelBack"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
                 }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
@@ -288,8 +290,8 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "rootClear"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
                 }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
@@ -303,10 +305,10 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "squash"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^\+?[1-9][0-9]*$/,
+                    message: '仅可输入非负数',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -317,7 +319,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'specialCode',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "specialCode"]} initialValue={_}>
+                <Form.Item name={['data', index, "specialCode"]} initialValue={_} rules={[{
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -329,7 +334,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'suppress',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "suppress"]} initialValue={_}>
+                <Form.Item name={['data', index, "suppress"]} initialValue={_} rules={[{
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -366,8 +374,8 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "slottedForm"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
                 }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
@@ -381,8 +389,8 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "intersectingLine"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
                 }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
@@ -419,7 +427,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'arcContaining',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "arcContaining"]} initialValue={_}>
+                <Form.Item name={['data', index, "arcContaining"]} initialValue={_} rules={[{
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
+                }]}>
                     <Input size="small" maxLength={50} onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -432,8 +443,8 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perforate"]} initialValue={_} rules={[{
-                    pattern: /^[1-2\s]*$/,
-                    message: '仅可输入1/2',
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
                 }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
@@ -458,7 +469,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'withReaming',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "withReaming"]} initialValue={_}>
+                <Form.Item name={['data', index, "withReaming"]} initialValue={_} rules={[{
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -470,7 +484,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'reamingNumber',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "reamingNumber"]} initialValue={_}>
+                <Form.Item name={['data', index, "reamingNumber"]} initialValue={_} rules={[{
+                    pattern: /^[0-9,*]*$/,
+                    message: '仅可输入数字/*/,',
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -482,7 +499,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'gasCutting',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "gasCutting"]} initialValue={_}>
+                <Form.Item name={['data', index, "gasCutting"]} initialValue={_} rules={[{
+                    pattern: /^[1]*$/,
+                    message: '仅可输入1',
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
@@ -494,7 +514,10 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'gasCuttingNumber',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_}>
+                <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_} rules={[{
+                    pattern: /^[0-9,*]*$/,
+                    message: '仅可输入数字/*/,',
+                }]}>
                     <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
                 </Form.Item>
             )
