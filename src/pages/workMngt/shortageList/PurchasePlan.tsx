@@ -7,11 +7,16 @@ import RequestUtil from '../../../utils/RequestUtil'
 interface PurchasePlanProps {
     ids: string[]
 }
+
 export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps, ref): JSX.Element {
     const [dataSource, setDataSource] = useState<any[]>([])
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase?purchaserTaskTowerIds=${ids.join(",")}&purchaseType=1`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase`, {
+                purchaserTaskTowerIds: ids.join(","),
+                materialShortageIds: ids.join(","),
+                purchaseType: 3
+            })
             //TODO 临时初始数据
             setDataSource(result?.lists.map((item: any) => ({ ...item, planPurchaseNum: 0 })) || [])
             resole(result)
@@ -22,7 +27,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/shortage`, { ...data })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan`, { ...data })
             resole(result)
         } catch (error) {
             reject(error)
@@ -35,13 +40,14 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             [fields]: event
         }) : item))
     }
-    
+
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
             await saveRun({
-                purchaseType: 1,
+                purchaseType: 3,
                 purchaserTaskTowerIds: ids.join(","),
-                lists: dataSource
+                materialShortageIds: ids.join(","),
+                purchasePlanDetailDTOS: dataSource
             })
             resole(true)
         } catch (error) {

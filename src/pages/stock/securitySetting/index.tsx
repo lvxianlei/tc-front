@@ -11,8 +11,7 @@ export default (): React.ReactNode => {
     const [form] = Form.useForm()
     const [visible, setVisible] = useState<boolean>(false);
     const [editRow, setEditRow] = useState<any | "new" | null>();
-
-    const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
+    const { loading, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil[editRow === "new" ? "post" : "put"](
                 `/tower-storage/safetyStock`,
@@ -40,6 +39,8 @@ export default (): React.ReactNode => {
 
     const handleDelete = async (id: string) => {
         await deleteRun(id)
+        await message.success("删除成功...")
+        history.go(0)
     }
 
     const handleChange = (fields: any) => {
@@ -73,7 +74,7 @@ export default (): React.ReactNode => {
                 {
                     title: '序号',
                     dataIndex: 'index',
-                    width: 50,
+                    width: 40,
                     render: (_a, _b, index) => <span>{index + 1}</span>
                 },
                 ...tableHeadColumns,
@@ -114,8 +115,8 @@ export default (): React.ReactNode => {
             <BaseInfo form={form} col={2} edit
                 columns={setting.map((item: any) => {
                     switch (item.dataIndex) {
-                        case "structureTexture":
-                            return ({ ...item, enum: materialTextureOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
+                        case "structureTextureId":
+                            return ({ ...item, type: "select", enum: materialTextureOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
                         case "materialStandard":
                             return ({ ...item, enum: materialStandardOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
                         default:

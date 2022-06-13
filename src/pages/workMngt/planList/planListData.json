@@ -39,6 +39,7 @@
             "title": "创建日期",
             "dataIndex": "createTime",
             "type": "string",
+            "format":"YYYY-MM-DD",
             "width": 100
         },
         {

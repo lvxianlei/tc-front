@@ -114,13 +114,13 @@ export default function Invoicing() {
             extraOperation={<>
                 {/* <Button type="primary" ghost>导出</Button> */}
                 <Button type="primary" ghost onClick={() => {
-                    message.warning("功能开发中...")
-                    // if (!generateIds || generateIds.length <= 0) {
-                    //     message.warning("必须选择任务才能生成采购计划...")
-                    //     return
-                    // } else {
-                    //     setGenerateVisible(true)
-                    // }
+                    // message.warning("功能开发中...")
+                    if (!generateIds || generateIds.length <= 0) {
+                        message.warning("必须选择任务才能生成采购计划...")
+                        return
+                    } else {
+                        setGenerateVisible(true)
+                    }
                 }}>生成采购计划</Button>
             </>}
             onFilterSubmit={onFilterSubmit}
@@ -131,9 +131,9 @@ export default function Invoicing() {
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
                     },
-                    getCheckboxProps: (record: object[]) => ({
-                        disabled: false
-                    })
+                    // getCheckboxProps: (record: object[]) => ({
+                    //     disabled: false
+                    // })
                 }
             }}
             searchFormItems={[

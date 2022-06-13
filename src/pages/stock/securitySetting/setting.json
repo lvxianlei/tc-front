@@ -57,6 +57,7 @@
             "dependencies": true,
             "readOnly": true,
             "value": "materialName",
+            "required": true,
             "columns": [
                 {
                     "title": "编号",
@@ -85,43 +86,51 @@
         {
             "title": "物料编码",
             "dataIndex": "materialCode",
+            "required": true,
             "disabled": true
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
+            "required": true,
             "disabled": true
         },
         {
             "title": "材质",
-            "dataIndex": "structureTexture",
+            "dataIndex": "structureTextureId",
+            "required": true,
             "type": "select",
             "enum": []
         },
         {
             "title": "标准",
             "dataIndex": "materialStandard",
+            "required": true,
             "type": "select",
             "enum": []
         },
         {
             "title": "长度",
             "dataIndex": "length",
+            "required": true,
             "type": "number"
         },
         {
             "title": "宽度",
             "dataIndex": "weight",
+            "required": true,
             "type": "number"
         },
         {
             "title": "安全库存（吨）",
             "dataIndex": "safetyStockWeight",
+            "required": true,
             "type": "number"
         },
         {
             "title": "告警库存（吨）",
             "dataIndex": "warningStockWeight",
+            "required": true,
             "type": "number"
         }
     ]

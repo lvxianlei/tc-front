@@ -1,11 +1,11 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useCallback, useEffect, ReactNode } from "react"
 import { TreeSelect, Select, Spin } from "antd"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 interface IntgSelectProps {
     id?: string,
     onChange?: (value: any) => void
-    value?: undefined | string
+    value?: undefined | { value: string | number, label: string | ReactNode }
     width?: number | string
 }
 
@@ -18,11 +18,11 @@ export const generateTreeNode: (data: any) => any[] = (data: any[]) => {
     }))
 }
 
-export default function IntgSelect({ onChange, width, value = "", ...props }: IntgSelectProps): JSX.Element {
-    const [IValue, setIValue] = useState<string>(value || "")
+export default function IntgSelect({ onChange, width, value = { value: "", label: "" }, ...props }: IntgSelectProps): JSX.Element {
+    const [IValue, setIValue] = useState<any>(value || { value: "", label: "" })
     useEffect(() => {
         setIValue(value)
-    }, [value])
+    }, [JSON.stringify(value)])
 
     const { loading: fetching, data: userData, run } = useRequest<{ [key: string]: any }>((fuzzyName: string) => new Promise(async (resole, reject) => {
         try {
