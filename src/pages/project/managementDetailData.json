@@ -444,6 +444,19 @@
                     "message": "请输入优先级..."
                 }
             ]
+        },
+        {
+            "title": "下发时间",
+            "dataIndex": "issueTime",
+            "maxLength": 20,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择下发时间..."
+                }
+            ],
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
     ],
     "taskNoticeEditSpec": [

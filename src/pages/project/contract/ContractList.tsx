@@ -6,13 +6,17 @@ import {
     Button,
     Popconfirm,
     Space,
-    message
+    message,
+    Modal,
+    Form,
+    Select
 } from 'antd';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Page } from '../../common';
 import { IContract } from "../../IContract";
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
+import MiddleModal from '../../../components/MiddleModal';
 
 export default function ContractList(): JSX.Element {
     const history = useHistory();
@@ -104,7 +108,7 @@ export default function ContractList(): JSX.Element {
           }
         },
         {
-          title: "业务经理",
+          title: "跟单业务员",
           dataIndex: "salesman",
         },
         {
@@ -152,7 +156,7 @@ export default function ContractList(): JSX.Element {
                         title: "操作",
                         fixed: "right",
                         dataIndex: "operation",
-                        render: (_: undefined, record: object): React.ReactNode => (
+                        render: (_: undefined, record: any): React.ReactNode => (
                             <Space direction="horizontal" size="small">
                             <Button type="link">
                                 <Link
@@ -192,6 +196,15 @@ export default function ContractList(): JSX.Element {
                                 添加回款记录
                                 </Link>
                             </Button>
+                            <MiddleModal onSelect={async (selectedRows: any[]): Promise<void> => {
+                                console.log(selectedRows)
+                                await RequestUtil.post(`/tower-market/contract/contractBid`,{
+                                  id: record?.id,
+                                  bidStatisticsId: selectedRows[0].id
+                                })
+                                message.success('关联成功！')
+                                history.go(0)
+                            }} projectId={record?.projectId} selectKey={record?.bidStatisticsId}/>
                             {/* <Upload
                                 key="sub"
                                 name="file"
