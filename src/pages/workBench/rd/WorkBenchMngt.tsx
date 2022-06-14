@@ -48,6 +48,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 	const workBenchList = [
 		{
 			title: '评估任务',
+			col: 4,
 			child: [
 				{
 					title: '待确认',
@@ -72,6 +73,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '确认任务',
+			col: 4,
 			child: [
 				{
 					title: '待确认',
@@ -96,6 +98,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '放样任务',
+			col: 4,
 			child: [
 				{
 					title: '待确认',
@@ -120,7 +123,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '评估任务',
-			col: 2,
+			col: 4,
 			child: [
 				{
 					title: '待完成',
@@ -134,7 +137,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '确认任务',
-			col: 2,
+			col: 4,
 			child: [
 				{
 					title: '待完成',
@@ -148,6 +151,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '提料任务',
+			col: 4,
 			child: [
 				{
 					title: '待提料',
@@ -180,23 +184,24 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '问题单',
+			col: 4,
 			child: [
 				{
-					title: '我创建的-提料信息',//问题单-我创建的-提料信息-塔
+					title: '提料信息',//问题单-我创建的-提料信息-塔
 					dataIndex: 'problemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-TL',
 					createUserId: userId,
 					authority: 'problem_establish'
 				}, {
-					title: '我创建的-放样任务', //问题单-我创建的-放样任务-塔
+					title: '放样任务', //问题单-我创建的-放样任务-塔
 					dataIndex: 'segmentProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-FY',
 					createUserId: userId,
 					authority: 'segment_problem_establish'
 				}, {
-					title: '我创建的-螺栓',//问题单-我创建的-放样任务-螺栓
+					title: '螺栓',//问题单-我创建的-放样任务-螺栓
 					dataIndex: 'boltProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-LS',
@@ -211,8 +216,85 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'problem_pending'
 				}
 			]
+		},  {
+			title: '组焊工作',
+			col: 4,
+			child: [
+				{
+					title: '待指派',
+					dataIndex: 'weldingToBeAssigned',
+					path: '/workMngt/assemblyWeldingList',
+					state: 2,
+					userId: userId,
+					authority: 'welding_to_be_assigned'
+				},
+				{
+					title: '待组焊',
+					dataIndex: 'weldingToBeWelding',
+					path: '/workMngt/assemblyWeldingList',
+					state: 3,
+					weldingUserId: userId,
+					authority: 'welding_to_be_welding'
+				}
+			]
 		}, {
+			title: '螺栓列表',
+			col: 4,
+			child: [
+				{
+					title: '待指派',
+					dataIndex: 'boltToBeAssigned',
+					path: '/workMngt/boltList',
+					state: 2,
+					weldingUserId: userId,
+					authority: 'bolt_to_be_assigned'
+				},
+				{
+					title: '待制作',
+					dataIndex: 'boltToBeMade',
+					path: '/workMngt/boltList',
+					state: 3,
+					userId: userId,
+					authority: 'bolt_to_be_made'
+				},
+				{
+					title: '待校核',
+					dataIndex: 'boltToBeCheck',
+					path: '/workMngt/boltList',
+					state: 4,
+					userId: userId,
+					authority: 'bolt_to_be_check'
+				}
+			]
+		}, {
+			title: '小样图工作',
+			col: 4,
+			child: [
+				{
+					title: '待上传',
+					dataIndex: 'sampleToBeUploaded',
+					path: '/workMngt/sampleDrawList',
+					state: 2,
+					userId: userId,
+					authority: 'sample_to_be_uploaded'
+				}
+			]
+		}, {
+			title: '图纸',
+			col: 4,
+			child: [
+				{
+					title: '待上传',
+					dataIndex: 'drawToUpload',
+					path: '/workMngt/templateList',
+					state: 1,
+					userId: userId,
+					authority: 'draw_to_upload'
+				}
+			]
+		},  {
 			title: '放样任务',
+			col:5,
 			child: [
 				{
 					title: '待指派',
@@ -249,81 +331,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'segment_product_to_be_lofting'
 				}
 			]
-		}, {
-			title: '组焊工作',
-			child: [
-				{
-					title: '待指派',
-					dataIndex: 'weldingToBeAssigned',
-					path: '/workMngt/assemblyWeldingList',
-					state: 2,
-					userId: userId,
-					authority: 'welding_to_be_assigned'
-				},
-				{
-					title: '待组焊',
-					dataIndex: 'weldingToBeWelding',
-					path: '/workMngt/assemblyWeldingList',
-					state: 3,
-					weldingUserId: userId,
-					authority: 'welding_to_be_welding'
-				}
-			]
-		}, {
-			title: '螺栓列表',
-			child: [
-				{
-					title: '待指派',
-					dataIndex: 'boltToBeAssigned',
-					path: '/workMngt/boltList',
-					state: 2,
-					weldingUserId: userId,
-					authority: 'bolt_to_be_assigned'
-				},
-				{
-					title: '待制作',
-					dataIndex: 'boltToBeMade',
-					path: '/workMngt/boltList',
-					state: 3,
-					userId: userId,
-					authority: 'bolt_to_be_made'
-				},
-				{
-					title: '待校核',
-					dataIndex: 'boltToBeCheck',
-					path: '/workMngt/boltList',
-					state: 4,
-					userId: userId,
-					authority: 'bolt_to_be_check'
-				}
-			]
-		}, {
-			title: '小样图工作',
-			col: 2,
-			child: [
-				{
-					title: '待上传',
-					dataIndex: 'sampleToBeUploaded',
-					path: '/workMngt/sampleDrawList',
-					state: 2,
-					userId: userId,
-					authority: 'sample_to_be_uploaded'
-				}
-			]
-		}, {
-			title: '图纸',
-			col: 2,
-			child: [
-				{
-					title: '待上传',
-					dataIndex: 'drawToUpload',
-					path: '/workMngt/templateList',
-					state: 1,
-					userId: userId,
-					authority: 'draw_to_upload'
-				}
-			]
-		}
+		},
 	]
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -342,15 +350,20 @@ export default function WorkBenchMngt(): React.ReactNode {
 	}
 
 	const getChildContent = (res: IList, ind: number, data: Record<string, any>) => {
-		return <div key={ind} className={res.col !== 2 ? styles.border : styles.border2}>
-			<DetailTitle title={res.title} />
-			<div>{
+		return <div key={ind} className={res.col ===4 ? styles.border : styles.border2}>
+			<div style={{padding:'10px'}}>
+				<DetailTitle title={res.title}  />
+			</div>
+			
+			<div style={{backgroundColor:"#fff",}}>{
 				res?.child && res?.child.map((item: IList, index: number) => {
 					const dataIndex: string | undefined = item.dataIndex;
 					if (authorities?.indexOf(item?.authority || '') === -1) {
 						return null
 					} else {
-						return <div className={res.col !== 2 ? styles.content : styles.content2} key={ind + '_' + index} onClick={() => {
+						return <div className={res.col === 4 ? styles.content : styles.content2}
+						style={res.col&&res.col !== 4?{width:`${((res?.col)*10+11)/res?.col}%`}:{width:'23%'}}
+						 key={ind + '_' + index} onClick={() => {
 							if (item.path) {
 								history.push({
 									pathname: item.path,
@@ -364,11 +377,12 @@ export default function WorkBenchMngt(): React.ReactNode {
 								})
 							}
 						}}>
-							<p>
-								<CheckCircleOutlined style={{ paddingRight: "8px" }} />{item.title}<span className={styles.rightoutlined}><RightOutlined /></span>
-							</p>
-							<p className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</p>
-							<div className={styles.draw}>
+							
+							<div className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</div>
+							<div style={{textAlign:'center'}}>
+								{item.title}
+							</div>
+							{/* <div className={styles.draw}>
 								<Line
 									keyIndex={dataIndex + '_' + index}
 									valueList={[
@@ -381,7 +395,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 										Math.ceil(Math.random() * 100)
 									]}
 								/>
-							</div>
+							</div> */}
 						</div>
 					}
 				})
@@ -400,35 +414,38 @@ export default function WorkBenchMngt(): React.ReactNode {
 		</div>
 		<div className={styles.right}>
 			<div className={styles.notice}>
-				<p>
-					<SoundOutlined />公告
-					<Link to={`/homePage/notice`} className={styles.more}>更多<DoubleRightOutlined /></Link>
+				<p >
+					公告
+					<Link to={`/homePage/notice`} className={styles.more}>更多<RightOutlined /></Link>
 				</p>
-				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[{
-					key: 'releaseTime',
-					title: '时间',
-					dataIndex: 'releaseTime',
-				},
+				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[
 				{
 					key: 'title',
 					title: '文案',
 					dataIndex: 'title',
 					render: (_: string, record: Record<string, any>): React.ReactNode => (
-						<Link to={`/homePage/notice/detail/${record.id}`}>{_}</Link>
+						<span onClick={()=>{history.push(`/homePage/notice/detail/${record.id}`)}} className={styles.titleColor}>{_.length>18?_.slice(0,18)+'...':_}</span>
 					)
-				}]} />
+				},{
+					key: 'releaseTime',
+					title: '时间',
+					dataIndex: 'releaseTime',
+				}]}/>
 			</div>
 			<div className={styles.notice}>
-				<p><SoundOutlined /> 提醒</p>
-				<Table dataSource={[]} pagination={false} showHeader={false} columns={[{
-					key: 'time',
-					title: '时间',
-					dataIndex: 'time',
-				},
+				<p> 提醒</p>
+				<Table dataSource={[]} pagination={false} showHeader={false} columns={[
 				{
 					key: 'description',
 					title: '文案',
-					dataIndex: 'description'
+					dataIndex: 'description',
+					render: (_: string, record: Record<string, any>): React.ReactNode => (
+						<span>{_.length>18?_.slice(0,18)+'...':_}</span>
+					)
+				},{
+					key: 'time',
+					title: '时间',
+					dataIndex: 'time',
 				}]} />
 			</div>
 		</div>
