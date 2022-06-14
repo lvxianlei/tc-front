@@ -200,6 +200,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows;
+        console.log(chooseData, "======>>>")
         setPurchasePlanId(chooseData[0].id);
         setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
@@ -409,6 +410,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
-            dataSource={popDataList.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
+            dataSource={popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
     </Spin>
 })
