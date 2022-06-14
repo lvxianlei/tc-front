@@ -201,7 +201,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows;
         setPurchasePlanId(chooseData[0].id);
-        setMaterialList(chooseData[0]?.materials.map((item: any) => ({
+        setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
@@ -216,7 +216,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
         })))
-        setPopDataList(chooseData[0]?.materials.map((item: any) => ({
+        setPopDataList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
@@ -318,10 +318,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         ...item,
                         structureSpec: item.structureSpec,
                         source: item.source || 2,
-                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ?  materialStandardOptions[0]?.name : "",
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                         materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
-                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.id : "",
-                        structureTexture:item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.name : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                        structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
                         proportion: item.proportion == -1 ? 0 : item.proportion
                     })))
                 }}
@@ -340,7 +340,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         ]} />
         <CommonTable
             haveIndex
-            style={{ padding: "0", }}
+            style={{ padding: "0"}}
+            rowKey="key"
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {
                     if (item.dataIndex === "num") {
@@ -384,7 +385,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "structureTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records?.structureTexture : <Select style={{ width: '150px' }} value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture} onChange={(e: string) => {
+                            render: (value: number, records: any, key: number) => records.source === 1 ? records?.structureTexture : <Select style={{ width: '150px' }} value={records?.structureTextureId + ',' + records?.structureTexture} onChange={(e: string) => {
                                 const newData = materialList.map((item: any, index: number) => {
                                     if (index === key) {
                                         return {
@@ -408,6 +409,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
-            dataSource={popDataList} />
+            dataSource={popDataList.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
     </Spin>
 })
