@@ -1296,13 +1296,11 @@
         },
         {
             "title": "保函有效截止期",
-            "dataIndex": "effectiveTime",
-            "type": "date"
+            "dataIndex": "effectiveTime"
         },
         {
             "title": "承诺交回日期",
-            "dataIndex": "promisedReturnDate",
-            "type": "date"
+            "dataIndex": "promisedReturnDate"
         },
         {
             "title": "保函保障期间",
