@@ -201,7 +201,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows;
         setPurchasePlanId(chooseData[0].id);
-        setMaterialList(chooseData[0]?.materials.map((item: any) => ({
+        setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
@@ -216,7 +216,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
         })))
-        setPopDataList(chooseData[0]?.materials.map((item: any) => ({
+        setPopDataList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
