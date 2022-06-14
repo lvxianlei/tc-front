@@ -900,7 +900,7 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='values'>{nowIngre.edgeLoss}</span>
                                                     <span className='texts'> 端口：</span>
                                                     <span className='values'>{nowIngre.clampLoss}</span>
-                                                    <span className='texts'>余料长：</span>
+                                                    <span className='texts'>余量：</span>
                                                     <span className='values'>{nowIngre.margin}mm</span>
                                                     <span className='texts'>利用率：</span>
                                                     <span className='values'>{nowIngre.utilizationRate}%</span>
