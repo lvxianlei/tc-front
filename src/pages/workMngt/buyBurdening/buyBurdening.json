@@ -43,7 +43,7 @@
         },
         {
             "title": "配料完成时间",
-            "dataIndex": "batcheStatusUpdateTime"
+            "dataIndex": "taskFinishTime"
         }
     ],
     "SeeList": [

@@ -19,8 +19,8 @@ export default function EnquiryList(): React.ReactNode {
         // 最新状态变更时间
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
-            value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
+            value.startTaskFinishTime = formatDate[0] + ' 00:00:00';
+            value.endTaskFinishTime = formatDate[1] + ' 23:59:59';
         }
         // 配料人
         if (value.batcherId) {
@@ -51,14 +51,17 @@ export default function EnquiryList(): React.ReactNode {
                     width: 120,
                     fixed: "right",
                     dataIndex: 'operation',
-                    render: (_: any, records: any) => (<>
-                        <Button type="link" className='btn-operation-link' disabled={!records.purchasePlanNumber} >
-                            <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
-                        </Button>
-                        <Button type="link" className='btn-operation-link'>
-                            <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}/${records.batcheTaskStatus}`}>配料方案</Link>
-                        </Button>
-                    </>)
+                    render: (_: any, records: any) => {
+                        console.log(records.purchasePlanNumber, !records.purchasePlanNumber, "========>>>>")
+                        return <>
+                            <Button type="link" className='btn-operation-link' disabled={records.purchasePlanNumber} >
+                                <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
+                            </Button>
+                            <Button type="link" className='btn-operation-link'>
+                                <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}/${records.batcheTaskStatus}`}>配料方案</Link>
+                            </Button>
+                        </>
+                    }
                 }
             ]}
             filterValue={filterValue}
