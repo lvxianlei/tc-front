@@ -51,14 +51,17 @@ export default function EnquiryList(): React.ReactNode {
                     width: 120,
                     fixed: "right",
                     dataIndex: 'operation',
-                    render: (_: any, records: any) => (<>
-                        <Button type="link" className='btn-operation-link' disabled={!records.purchasePlanNumber} >
-                            <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
-                        </Button>
-                        <Button type="link" className='btn-operation-link'>
-                            <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}/${records.batcheTaskStatus}`}>配料方案</Link>
-                        </Button>
-                    </>)
+                    render: (_: any, records: any) => {
+                        console.log(records.purchasePlanNumber, !records.purchasePlanNumber, "========>>>>")
+                        return <>
+                            <Button type="link" className='btn-operation-link' disabled={records.purchasePlanNumber} >
+                                <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
+                            </Button>
+                            <Button type="link" className='btn-operation-link'>
+                                <Link to={`/ingredients/buyBurdening/batchingScheme/${records.id}/${records.batcheTaskStatus}`}>配料方案</Link>
+                            </Button>
+                        </>
+                    }
                 }
             ]}
             filterValue={filterValue}
