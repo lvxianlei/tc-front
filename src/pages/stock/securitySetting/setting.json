@@ -7,7 +7,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandard",
+            "dataIndex": "materialStandardName",
             "width": 100
         },
         {
