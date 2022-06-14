@@ -74,11 +74,11 @@
     },
     {
         "title": "安全库存重量（吨）",
-        "dataIndex": "safetyStock"
+        "dataIndex": "safetyStockWeight"
     },
     {
         "title": "告警库存重量（吨）",
-        "dataIndex": "alarmStock"
+        "dataIndex": "warningStockWeight"
     }
   ]
 }
