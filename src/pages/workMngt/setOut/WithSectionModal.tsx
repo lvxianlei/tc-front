@@ -239,6 +239,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                         ...this.getForm()?.getFieldsValue(true),
                         productSegmentListDTOList: [...newList || []]
                     })
+                    this.fastForm.current?.resetFields(['part'])
                 }, 1000)
             }
         } else {
