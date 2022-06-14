@@ -433,8 +433,8 @@ export default function IngredientsList(): React.ReactNode {
             // 根据原材料长度
             if (schemeData[i].length) {
                 if (map.has(schemeData[i].length)) {
-                    const result = map.get(schemeData[i].length);
-                    map.set(schemeData[i].length, result + schemeData[i].num);
+                    const result: any = map.get(schemeData[i].length);
+                    map.set(schemeData[i].length, (result * 1) + (+schemeData[i].num));
                 } else {
                     map.set(schemeData[i].length, schemeData[i].num);
                 }
@@ -1062,7 +1062,7 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='values'>{nowIngre.edgeLoss}</span>
                                                     <span className='texts'> 端口：</span>
                                                     <span className='values'>{nowIngre.clampLoss}</span>
-                                                    <span className='texts'>余料长：</span>
+                                                    <span className='texts'>余量：</span>
                                                     <span className='values'>{nowIngre.margin}mm</span>
                                                     <span className='texts'>利用率：</span>
                                                     <span className='values'>{nowIngre.utilizationRate}%</span>
