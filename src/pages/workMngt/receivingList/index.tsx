@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Spin } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -126,14 +126,15 @@ export default function Invoicing() {
                     title: "序号",
                     dataIndex: "index",
                     width: 40,
+                    fixed: "left",
                     render: (_: any, _a: any, index: number) => <>{index + 1}</>
                 },
-                ...baseInfo,
+                ...baseInfo as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 170,
                     render: (_: any, record: any) => {
                         return <>
                             <Link className="btn-operation-link" to={`/stock/receiving/detail/${record.id}`}>明细</Link>

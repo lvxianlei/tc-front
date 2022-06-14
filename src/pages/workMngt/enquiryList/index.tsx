@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { useHistory } from "react-router-dom"
 import { Input, DatePicker, Select, Button, Modal, message } from 'antd'
-import { Page, IntgSelect } from '../../common';
+import { SearchTable as Page, IntgSelect } from '../../common';
 import { baseInfo } from "./enquiryList.json"
 import Edit from "./Edit"
 import AuthUtil from "../../../utils/AuthUtil"
@@ -80,13 +80,14 @@ export default function EnquiryList(): React.ReactNode {
             path="/tower-supply/inquiryTask/inquirer"
             exportPath={"/tower-supply/inquiryTask/inquirer"}
             columns={[
-                { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
-                ...baseInfo,
+                { title: "序号", dataIndex: "index", width: 50, fixed: "left", render: (_: any, _a: any, index) => <>{index + 1}</> },
+                ...baseInfo as any,
                 {
                     key: "operation",
                     title: "操作",
-                    width: 100,
+                    width: 150,
                     dataIndex: "operation",
+                    fixed: "right",
                     render: (_: any, records: any) => <Button
                         type="link"
                         className="btn-operation-link"

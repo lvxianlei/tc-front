@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import Edit from "./Edit"
 import Overview from "./Overview"
 import AttachFile from "./AttachFile"
@@ -194,7 +194,8 @@ export default function ApplyPayment() {
         <Page
             path="/tower-supply/applyPayment"
             exportPath={"/tower-supply/applyPayment/export"}
-            sourceKey="page.records"
+            // sourceKey="page.records"
+            transformResult={(result:any)=>result?.page.records}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...ApplicationForPayment.map((item: any) => {
@@ -232,7 +233,7 @@ export default function ApplyPayment() {
                             <Popconfirm
                                 title="确定删除此请款申请吗？"
                                 disabled={![0, 3].includes(record.applyStatus)}
-                                onConfirm={async() => {
+                                onConfirm={async () => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")
                                     history.go(0)
