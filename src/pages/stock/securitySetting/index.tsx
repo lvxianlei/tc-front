@@ -38,8 +38,8 @@ export default (): React.ReactNode => {
             materialName: params.materialName.value,
             materialStandard: params.materialStandard.value,
             materialStandardName: params.materialStandard.label,
-            structureTextureId: params.materialStandard.value,
-            structureTexture: params.materialStandard.label
+            structureTextureId: params.structureTextureId.value,
+            structureTexture: params.structureTextureId.label
         })
         await message.success('操作成功')
         history.go(0)
