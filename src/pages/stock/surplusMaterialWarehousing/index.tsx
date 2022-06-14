@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Space, Button, Modal, Input, DatePicker, Select, message, Table } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, SearchTable as Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import '../StockPublicStyle.less';
 import './modal.less';
@@ -307,7 +307,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
-                columns={columns}
+                columns={columns as any[]}
                 exportPath="/tower-storage/receiveStock/excess"
             />
             {/* 入库弹框 */}

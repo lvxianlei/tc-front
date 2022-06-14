@@ -27,7 +27,7 @@
         {
             "title": "提料重量（kg）",
             "dataIndex": "totalWeight",
-            "width": 100,
+            "width": 120,
             "type": "string"
         },
         {
@@ -43,7 +43,7 @@
         },
         {
             "title": "配料完成时间",
-            "dataIndex": "batcheStatusUpdateTime"
+            "dataIndex": "taskFinishTime"
         }
     ],
     "SeeList": [

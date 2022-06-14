@@ -48,7 +48,7 @@
         },
         {
             "title": "已完成（吨）/ 需求（吨）",
-            "width": 140,
+            "width": 160,
             "dataIndex": "completionProgres"
         },
         {

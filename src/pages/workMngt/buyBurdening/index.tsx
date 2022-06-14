@@ -19,8 +19,8 @@ export default function EnquiryList(): React.ReactNode {
         // 最新状态变更时间
         if (value.startBatcheStatusUpdateTime) {
             const formatDate = value.startBatcheStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startBatcheStatusUpdateTime = formatDate[0] + ' 00:00:00';
-            value.endBatcheStatusUpdateTime = formatDate[1] + ' 23:59:59';
+            value.startTaskFinishTime = formatDate[0] + ' 00:00:00';
+            value.endTaskFinishTime = formatDate[1] + ' 23:59:59';
         }
         // 配料人
         if (value.batcherId) {

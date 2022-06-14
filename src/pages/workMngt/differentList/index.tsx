@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfoList } from './differentListData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -52,7 +52,7 @@ export default function Invoicing() {
         exportPath={"/tower-supply/componentDiff"}
         columns={[
             { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
-            ...baseInfoList,
+            ...baseInfoList as any,
             {
                 title: "操作",
                 dataIndex: "opration",

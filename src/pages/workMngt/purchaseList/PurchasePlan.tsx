@@ -21,8 +21,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             //TODO 临时初始数据
             setDataSource(result?.lists.map((item: any) => ({
                 ...item,
-                planPurchaseNum: 1,
-                purchasePlanNumber: item?.purchasePlanNumber || 1,
+                planPurchaseNum: item?.planPurchaseNum || 1,
                 warehouseOccupy: item?.warehouseOccupy || 1
             })) || [])
         } catch (error) {
@@ -41,7 +40,6 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
-            console.log(dataSource, "======>>>>")
             const result = handleData();
             if (!result) {
                 // 可以保存
@@ -68,7 +66,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         const result = dataSource;
         let flag = false;
         for (let i = 0; i < result.length; i += 1) {
-            if (((result[i].purchasePlanNumber || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
+            if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
                 result[i]["isRed"] = false;
             } else {
                 result[i]["isRed"] = true;
@@ -94,18 +92,18 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                 <CommonTable
                     rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
                     columns={PlanList.map((item: any) => {
-                        if (item.dataIndex === "purchasePlanNumber") {
+                        if (item.dataIndex === "planPurchaseNum") {
                             return ({
                                 ...item,
                                 render: (_: any, record: any, index: number) => {
                                     return <InputNumber
-                                        value={record.purchasePlanNumber}
+                                        value={record.planPurchaseNum}
                                         key={index}
                                         max={999}
                                         min={0}
                                         onChange={(e: any) => {
                                             const result = dataSource;
-                                            result[index].purchasePlanNumber = e
+                                            result[index].planPurchaseNum = e
                                             setDataSource(result.slice(0));
                                             setCout(count + 1);
                                         }}
