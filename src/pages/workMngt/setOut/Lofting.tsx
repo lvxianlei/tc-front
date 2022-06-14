@@ -458,7 +458,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -488,7 +488,7 @@ export default function Lofting(): React.ReactNode {
                     pattern: /^[0-9,*]*$/,
                     message: '仅可输入数字/*/,',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -518,7 +518,7 @@ export default function Lofting(): React.ReactNode {
                     pattern: /^[0-9,*]*$/,
                     message: '仅可输入数字/*/,',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },

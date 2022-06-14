@@ -10,6 +10,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import styles from './confirm.module.less'
+import { FixedType } from 'rc-table/lib/interface';
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
@@ -538,6 +539,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '操作',
           width: 100,
           dataIndex: 'operation',
+          fixed: 'right' as FixedType,
           render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             <Space direction="horizontal" size="small">
                 <Button type="link" onClick={()=>{
