@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef } from "react";
-import { Form, Input, Select } from 'antd';
+import { Form, Input, InputNumber, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -70,13 +70,13 @@ export default forwardRef(function LoftQuotaNew({ record, type }: modalProps, re
                 <Input maxLength={100} />
             </Form.Item>
             <Form.Item name={'voltageGradePriceFirst'} label="【0-330】电压等级定额" rules={[{ required: true, message: '请输入【0-330】电压等级定额' }]}>
-                <Input maxLength={100} />
+                <InputNumber min={0} max={99} style={{ width: '100%' }}/>
             </Form.Item>
             <Form.Item name={'voltageGradePriceSecond'} label="【500kV-750kV】定额" rules={[{ required: true, message: '请输入【500kV-750kV】定额' }]}>
-                <Input maxLength={100} />
+                <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item name={'voltageGradePriceThird'} label="【800kV+】定额" rules={[{ required: true, message: '请输入【800kV+】定额' }]}>
-                <Input maxLength={100} />
+                <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
             <Form.Item name={'specialPrice'} label="特殊定额">
                 <Input maxLength={100} />
