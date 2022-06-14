@@ -415,7 +415,7 @@
         "title": "配料信息",
         "dataIndex": "",
         "type": "popTable",
-        "path": "/tower-supply/produceIngredients/getLoftingSchemes",
+        "path": "/tower-supply/task/produce/materialRequisition",
         "width": 1011,
         "value": "receiveNumber",
         "selectType": "checkbox",
