@@ -5,74 +5,64 @@
     position: relative;
 }
 .left {
-    width: 70%;
+    width: 75%;
     position: absolute;
 }
 .border {
     border: 1px solid #eeeeee;
     border-radius: 5px;
-    padding: 12px;
     margin: 12px 12px 0;
-    width: auto;
+    width: 45%;
+    background-color: #F8F8F8;
+    display: inline-block;
 }
 .border2 {
     border: 1px solid #eeeeee;
     border-radius: 5px;
-    padding: 12px;
-    margin: 12px 3% 0 12px;
-    width: 45%;
+    margin: 12px 12px 0;
+    width: 92%;
+    background-color: #F8F8F8;
     display: inline-block;
 }
 .content2 {
     display: inline-block;
-    background-color: #F8F8F8;
-    margin-right: 10px;
+    background-color: #fff;
+    cursor: pointer;
     padding: 10px;
-    border-radius: 5px;
-    width: 90%;
-    .rightoutlined {
-        float: right;
-    }
-    .draw {
-        width: 100%;
-        padding: -10%;
-    }
     .total {
         font-size: 30px;
+        text-align: center;
         font-weight: bold;
         margin-bottom: 0;
         line-height: 1;
+    }
+    &:hover {
+        color: @primary-color;
     }
 }
 .content {
     display: inline-block;
-    background-color: #F8F8F8;
     margin-right: 10px;
-    margin-bottom: 10px;
+    cursor: pointer;
     padding: 10px;
-    border-radius: 5px;
-    width: 24%;
-    .rightoutlined {
-        float: right;
-    }
-    .draw {
-        width: 100%;
-        padding: -10%;
-    }
+    width: 23%;
     .total {
+        text-align: center;
         font-size: 30px;
         font-weight: bold;
         margin-bottom: 0;
         line-height: 1;
     }
+    &:hover {
+        color: @primary-color;
+    }
 }
 .right {
-    width: 25%;
+    width: 27%;
     position: absolute;
-    left: 75%;
+    left: 72%;
     right: 16px;
     top: auto;
-    color: @primary-color;
     font-size: 16px;
 }
 .notice {
@@ -86,5 +76,13 @@
         position: absolute;
         right: 30px;
         color: #666666;
+    }
+}
+
+.titleColor{
+    color:'#000';
+    cursor: pointer;
+    &:hover {
+        color: @primary-color;
     }
 }
