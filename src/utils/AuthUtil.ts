@@ -121,7 +121,7 @@ export default abstract class AuthUtil {
      * @returns sinzetech auth 
      */
     public static getSinzetechAuth(): string {
-        return sessionStorage.getItem(TOKEN_KEY) || ''
+        return Cookies.get(TOKEN_KEY) || ''
     }
 
     /**
@@ -131,7 +131,7 @@ export default abstract class AuthUtil {
      * @param [options] 
      */
     public static setSinzetechAuth(token: string, refrenshToken: string): void {
-        sessionStorage.setItem(TOKEN_KEY, token)
+        Cookies.set(TOKEN_KEY, token)
         sessionStorage.setItem(REFRENSH_TOKEN, refrenshToken)
         this.timer && clearInterval(this.timer)
         this.timer = setTimeout(() => {
@@ -146,7 +146,7 @@ export default abstract class AuthUtil {
      * @param [options] 
      */
     public static removeSinzetechAuth(): void {
-        sessionStorage.removeItem(TOKEN_KEY);
+        Cookies.remove(TOKEN_KEY);
         sessionStorage.removeItem(REFRENSH_TOKEN);
         sessionStorage.removeItem(APP_Name);
     }
@@ -162,6 +162,10 @@ export default abstract class AuthUtil {
 
     public static getAccount(): string {
         return Cookies.get(ACCOUNT) || '';
+    }
+  
+    public static removeAccount(): void {
+        Cookies.remove(ACCOUNT);
     }
 
     /**
@@ -230,6 +234,13 @@ export default abstract class AuthUtil {
         } catch (error) {
             console.log("ERROR: refrenshToken", error)
         }
+    }
+
+    /** 
+     * 清除tdm-token -SINZETECH_TOKEN_KEY
+     * */ 
+    public static removeSinzetechToken(): void {
+        Cookies.remove('SINZETECH_TOKEN_KEY');
     }
 }
 

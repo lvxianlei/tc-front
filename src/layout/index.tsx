@@ -67,19 +67,33 @@ const SiderMenu: React.FC = () => {
                                 hasAuthority(subItem.authority) && <Menu.Item
                                     key={subItem.path}
                                     style={{ paddingLeft: "58px", fontWeight: 500 }}
-                                    onClick={() => setSelectedDarkMenuItem([subItem.path] as any)}>
-                                    <Link to={subItem.path}>{subItem.label}</Link>
+                                    onClick={() => {
+                                        if (subItem.path?.split('://')[0] === 'http') {
+                                            window.location.href = subItem.path;
+                                            setSelectedDarkMenuItem(selectedDarkMenuItem)
+                                        } else {
+                                            setSelectedDarkMenuItem([subItem.path] as any)
+                                        }
+                                    }}>
+                                    <Link to={item.path?.split('://')[0] === 'http' ? selectedDarkMenuItem : subItem.path}>{subItem.label}</Link>
                                 </Menu.Item>
                             ))
                         }
                     </Menu.SubMenu>
                     :
                     <Menu.Item
-                        onClick={() => setSelectedDarkMenuItem([item.path] as any)}
+                        onClick={() => {
+                            if (item.path?.split('://')[0] === 'http') {
+                                window.location.href = item.path;
+                                setSelectedDarkMenuItem(selectedDarkMenuItem)
+                            } else {
+                                setSelectedDarkMenuItem([item.path] as any)
+                            }
+                        }}
                         className={styles.subMenu}
                         key={item.path}
-                        icon={<i className={`iconfont icon-${item.icon}`} style={{ position: "relative", top: 1, marginRight: 6 }}></i>}>
-                        <Link to={item.path}>{item.label}</Link>
+                        icon={<i className={`font_family iconfont icon-${item.icon}`} style={{ position: "relative", top: 1, marginRight: 6 }}></i>}>
+                        <Link to={item.path?.split('://')[0] === 'http' ? selectedDarkMenuItem : item.path}>{item.label}</Link>
                     </Menu.Item>
             ))
         }
@@ -177,23 +191,23 @@ export default function (): JSX.Element {
 
     const menu = (
         <Menu>
-          <Menu.Item>
-            <p style={{textAlign: "center", height: "24px", lineHeight: "24px", margin: 0}} onClick={() => history.push("/homePage/personalCenter")}>
-                个人信息
-            </p>
-          </Menu.Item>
-          <Menu.Item>
-            <p style={{textAlign: "center", height: "24px", lineHeight: "24px", margin: 0}} onClick={() => history.push("/changePage/personalPassWord")}>
-                修改密码
-            </p>
-          </Menu.Item>
-          <Menu.Item>
-            <p style={{textAlign: "center", height: "24px", lineHeight: "24px", margin: 0}} onClick={() => logOut()}>
-                退出账号
-            </p>
-          </Menu.Item>
+            <Menu.Item>
+                <p style={{ textAlign: "center", height: "24px", lineHeight: "24px", margin: 0 }} onClick={() => history.push("/homePage/personalCenter")}>
+                    个人信息
+                </p>
+            </Menu.Item>
+            <Menu.Item>
+                <p style={{ textAlign: "center", height: "24px", lineHeight: "24px", margin: 0 }} onClick={() => history.push("/changePage/personalPassWord")}>
+                    修改密码
+                </p>
+            </Menu.Item>
+            <Menu.Item>
+                <p style={{ textAlign: "center", height: "24px", lineHeight: "24px", margin: 0 }} onClick={() => logOut()}>
+                    退出账号
+                </p>
+            </Menu.Item>
         </Menu>
-      );
+    );
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
@@ -212,18 +226,18 @@ export default function (): JSX.Element {
                                     <Link to={`/approvalm/management`}>
                                         <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
                                     </Link>
-                                    
+
                                 </Col>
                                 <Col>
                                     <Link to={`/homePage/notice`}>
-                                        <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{marginRight: 16}}></span>
+                                        <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
                                     </Link>
                                 </Col>
                                 <Col>
                                     <Dropdown overlay={menu} placement="bottomCenter">
                                         <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
                                             <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
-                                            <span style={{marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff"}}>{AuthUtil.getAccount()}<DownOutlined /></span>
+                                            <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
                                         </a>
                                     </Dropdown>
                                 </Col>
