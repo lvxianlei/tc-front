@@ -280,8 +280,8 @@ export default function Overview() {
                                 setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
                             }}>收货</Button>
-                        <a
-                            style={{ marginRight: 12 }}
+                        <Button
+                            type="link"
                             disabled={records.receiveDetailStatus !== 0}
                             onClick={() => {
                                 setAttachType(2)
@@ -289,7 +289,7 @@ export default function Overview() {
                                 setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
                             }}
-                        >拒收</a>
+                        >拒收</Button>
                     </>
                 }
             ]}
