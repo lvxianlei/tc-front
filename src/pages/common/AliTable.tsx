@@ -45,9 +45,20 @@ const StyledBaseTable = (styled(BaseTable)`
     --header-row-height: 36px;
     --header-color: #666;
     --cell-padding: 0px 8px;
+    th {
+      .resize-handle {
+        width: 1px;
+      }
+      .ant-btn-link {
+        padding-left: 0px;
+      }
+    }
     td {
         color: #666;
         padding: 0 8px;
+      .ant-btn-link {
+        padding-left: 0px;
+      }
     }
     &.edit {
       td {
@@ -112,7 +123,7 @@ interface AntdTableProps extends BaseTableProps {
  * */
 export default ({ size = "default", ...props }: AntdTableProps) => {
   return <StyledBaseTable
-    defaultColumnWidth={140}
+    defaultColumnWidth={100}
     {...props}
     className={`${size} ${props.className}`}
     components={{

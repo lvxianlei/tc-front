@@ -18,10 +18,10 @@ export default function MaterialList() {
             value.endOutStockTime = formatDate[1] + ' 23:59:59';
         }
         if(value.outStockStaffId){
-            value.outStockStaffId = value.outStockStaffId.second
+            value.outStockStaffId = value.outStockStaffId.value
         }
         if(value.createUser){
-            value.createUser = value.createUser.second
+            value.createUser = value.createUser.value
         }
         setFilterValue(value)
         return value
@@ -53,12 +53,12 @@ export default function MaterialList() {
             {
                 name: 'outStockStaffId',
                 label: '出库人',
-                children: <IntgSelect width={300} />
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'createUser',
                 label: '领料人',
-                children: <IntgSelect width={300} />
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyQuery',

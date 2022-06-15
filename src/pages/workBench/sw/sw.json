@@ -152,7 +152,7 @@
             "title": "采购列表",
             "col": 2,
             "dataIndex": "purchaseTaskTowerWorkBenchVo",
-            "path": "工作管理-采购列表",
+            "path": "工作管理-配料方案",
             "workbenchItemVos": [
                 {
                     "title": "待完成",

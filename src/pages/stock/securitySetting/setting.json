@@ -1,0 +1,139 @@
+{
+    "tableHeadColumns": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "width": 100
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 100
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "width": 60
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "weight",
+            "width": 60
+        },
+        {
+            "title": "安全库存（吨）",
+            "dataIndex": "safetyStockWeight",
+            "width": 100
+        },
+        {
+            "title": "告警库存（吨）",
+            "dataIndex": "warningStockWeight",
+            "width": 100
+        }
+    ],
+    "setting": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "popTable",
+            "path": "/tower-system/material",
+            "width": 1011,
+            "selectType": "radio",
+            "dependencies": true,
+            "readOnly": true,
+            "value": "materialName",
+            "required": true,
+            "columns": [
+                {
+                    "title": "编号",
+                    "dataIndex": "materialCode"
+                },
+                {
+                    "title": "类别",
+                    "dataIndex": "materialTypeName",
+                    "search": true
+                },
+                {
+                    "title": "类型",
+                    "dataIndex": "materialCategoryName",
+                    "search": true
+                },
+                {
+                    "title": "品名",
+                    "dataIndex": "materialName"
+                },
+                {
+                    "title": "规格",
+                    "dataIndex": "structureSpec"
+                }
+            ]
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "required": true,
+            "disabled": true
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "required": true,
+            "disabled": true
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTextureId",
+            "required": true,
+            "labelInValue": true,
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard",
+            "required": true,
+            "labelInValue": true,
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "required": true,
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "weight",
+            "required": true,
+            "type": "number"
+        },
+        {
+            "title": "安全库存（吨）",
+            "dataIndex": "safetyStockWeight",
+            "required": true,
+            "type": "number"
+        },
+        {
+            "title": "告警库存（吨）",
+            "dataIndex": "warningStockWeight",
+            "required": true,
+            "type": "number"
+        }
+    ]
+}

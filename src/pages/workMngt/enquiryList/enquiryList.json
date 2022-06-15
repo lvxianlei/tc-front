@@ -2,7 +2,7 @@
     "baseInfo": [
         {
             "title": "工程报价任务编号",
-            "width": 100,
+            "width": 120,
             "dataIndex": "sysInquiryNumber"
         },
         {
@@ -12,41 +12,41 @@
         },
         {
             "title": "客户名称",
-            "width": 50,
+            "width": 70,
             "dataIndex": "biddingPerson"
         },
         {
             "title": "项目负责人",
-            "width": 50,
+            "width": 80,
             "dataIndex": "projectLeader"
         },
         {
             "title": "投标截止时间",
-            "width": 50,
+            "width": 100,
             "dataIndex": "biddingEndTime"
         },
         {
             "title": "计划交付时间",
-            "width": 50,
+            "width": 100,
             "dataIndex": "plannedDeliveryTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "任务状态",
-            "width": 50,
+            "width": 80,
             "dataIndex": "inquiryStatusName"
         },
         {
             "title": "最新状态变更时间",
-            "width": 100,
+            "width": 170,
             "dataIndex": "statusUpdateTime",
             "type": "date",
             "format": "YYYY-MM-DD HH:mm"
         },
         {
             "title": "工程报价员",
-            "width": 50,
+            "width": 100,
             "dataIndex": "inquirer"
         }
     ],

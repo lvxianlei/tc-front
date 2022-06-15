@@ -6,7 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
 import { baseColumn } from "./RawMaterialWarehousing.json";
 // 引入新增纸质单号
@@ -30,20 +30,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
-        const result = {
-            fuzzyQuery: value.fuzzyQuery || "",
-            receiveStatus: value.receiveStatus || "",
-            startStatusUpdateTime: "",
-            endStatusUpdateTime: "",
-        }
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            result.startStatusUpdateTime = `${formatDate[0]} 00:00:00`
-            result.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
+            value.startStatusUpdateTime = `${formatDate[0]} 00:00:00`
+            value.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
-        setFilterValue(result)
-        return result
+        setFilterValue({ ...value })
+        return value
     }
     // 新增回调
     const handleOk = () => new Promise(async (resove, reject) => {

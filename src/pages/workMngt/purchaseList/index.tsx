@@ -1,14 +1,12 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Button, Input, Select, Modal, message } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
-import AuthUtil from "../../../utils/AuthUtil"
 export default function Invoicing() {
     const history = useHistory()
-    const userId = AuthUtil.getUserId()
     const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean }>({ onSubmit: () => { }, confirmLoading: false })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
@@ -25,8 +23,7 @@ export default function Invoicing() {
             value.endPurchaseStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.purchaserId) {
-            value.purchaserDeptId = value.purchaserId.first
-            value.purchaserId = value.purchaserId.second
+            value.purchaserId = value.purchaserId.value
         }
         setFilterValue(value)
         return value
@@ -43,7 +40,7 @@ export default function Invoicing() {
         }
     })
     return <>
-        <Modal title="配料方案" visible={visible} width={1011}
+        <Modal title="明细" visible={visible} width={1011}
             footer={<Button type="primary" ghost onClick={() => setVisible(false)}>关闭</Button>} onCancel={() => setVisible(false)}>
             <Overview id={chooseId} />
         </Modal>
@@ -76,7 +73,7 @@ export default function Invoicing() {
                     render: (_: any, record: any) => <Button className="btn-operation-link" disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
                         setVisible(true)
                         setChooseId(record.id)
-                    }}>配料方案</Button>
+                    }}>明细</Button>
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost onClick={() => {
@@ -92,11 +89,6 @@ export default function Invoicing() {
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
-                    name: 'startPurchaseStatusUpdateTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
                     name: 'purchaseTaskStatus',
                     label: '塔型采购状态',
                     children: <Select style={{ width: 200 }} defaultValue={""}>
@@ -108,7 +100,7 @@ export default function Invoicing() {
                 {
                     name: 'purchaserId',
                     label: '采购人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',
