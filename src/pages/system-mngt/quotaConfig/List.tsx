@@ -267,6 +267,7 @@ export default function List(): React.ReactNode {
     }
 
     const otherEdit = (record: Record<string, any>) => {
+        form.setFieldsValue({price: record?.price})
         Modal.confirm({
             title: "编辑",
             icon: null,
@@ -285,7 +286,7 @@ export default function List(): React.ReactNode {
                     const value = await form.validateFields();
                     RequestUtil.post(`/tower-science/projectPrice/other`, { ...record, ...value }).then(res => {
                         message.success("编辑成功！")
-                        form.resetFields()
+                        form.setFieldsValue({price: ''})
                         history.go(0)
                     })
                     resove(true)
@@ -294,7 +295,7 @@ export default function List(): React.ReactNode {
                 }
             }),
             onCancel() {
-                form.resetFields()
+                form.setFieldsValue({price: ''})
             }
         })
     }

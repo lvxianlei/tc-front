@@ -1157,6 +1157,13 @@
                         "authority": "approvalm"
                     }
                 ]
+            },
+            {
+                "label": "TDM-塔型数据管理",
+                "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
+                "appName": "RD",
+                "path": "http://erp-tdm-qa.dhwy.cn",
+                "authority": "approvalm"
             }
         ]
     },
