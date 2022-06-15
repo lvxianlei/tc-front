@@ -1012,8 +1012,8 @@ export default function IngredientsList(): React.ReactNode {
                                                                                     render: (_: any, record: any): React.ReactNode => (
                                                                                         // <span>{record[item.dataIndex]}</span>
                                                                                         <div style={{
-                                                                                            color: record.lineHeightColumn.includes(item.dataIndex) ? "#fff" : "black",
-                                                                                            backgroundColor: record.lineHeightColumn.includes(item.dataIndex) ? "green" : "",
+                                                                                            // color: record.lineHeightColumn.includes(item.dataIndex) ? "#fff" : "black",
+                                                                                            backgroundColor: record.lineHeightColumn.includes(item.dataIndex) ? "#CAF982" : "",
                                                                                             height: "32px",
                                                                                             lineHeight: "32px"
                                                                                         }}>{record[item.dataIndex]}</div>
