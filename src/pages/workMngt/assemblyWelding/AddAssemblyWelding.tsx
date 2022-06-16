@@ -341,7 +341,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
     */
     const addComponent = (record: Record<string, any>, index: number) => {
         let newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
-        let weldingLength: number = form.getFieldsValue(true).electricWeldingMeters?.toFixed(4);
+        let weldingLength: number = form?.getFieldsValue(true)?.electricWeldingMeters;
         let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.singleNum) || 1);
         let isNewComponent: boolean = newWeldingDetailedStructureList.every((items: IComponentList) => {
             return record.id !== items.structureId;
