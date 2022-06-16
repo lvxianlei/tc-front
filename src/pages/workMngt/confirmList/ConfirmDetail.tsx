@@ -229,6 +229,7 @@ export default function ConfirmDetail(): React.ReactNode {
             legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
             legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
             otherWeight:item.otherWeight? item.otherWeight: 0,
+            monomerWeight:item.monomerWeight?item.monomerWeight:0,
             totalWeight: item.totalWeight? item.totalWeight: 0,
           }
         }));
