@@ -163,7 +163,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                     name: 'workUnit',
                     label: '生产单元',
                     children: <Form.Item name="workUnit" >
-                        <Select style={{ width: "100px" }}>
+                        <Select style={{ width: "100px" }} >
                             {productUnitData?.map((item: any) => {
                                 return <Select.Option key={item.name} value={item.name}>{item.name}</Select.Option>
                             })}
@@ -251,7 +251,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                 required:true,
                                 message:'请选择生产单元'
                             }]}>
-                                <Select placeholder="请选择">
+                                <Select placeholder="请选择" showSearch>
                                     {productUnitData?.map((item: any) => {
                                         return <Select.Option key={item.id} value={item.id+','+item.name}>{item.name}</Select.Option>
                                     })}
@@ -263,7 +263,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                                 required:true,
                                 message:'请选择生产环节'
                             }]}>
-                                <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode}>
+                                <Select style={{ width: '100%' }} showSearch >
                                     { prodLinkList && prodLinkList.map((item:any)=>{
                                         return <Select.Option key={item.userId} value={item.id+','+item.name}>{item.name}</Select.Option>
                                     }) }
