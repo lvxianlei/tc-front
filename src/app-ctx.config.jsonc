@@ -1162,7 +1162,7 @@
                 "label": "TDM-塔型数据管理",
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "RD",
-                "path": "http://erp-tdm-qa.dhwy.cn",
+                "path": "http://erp-tdm-hjt.dhwy.cn",
                 "authority": "approvalm"
             }
         ]
