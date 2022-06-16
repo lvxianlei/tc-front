@@ -235,6 +235,10 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                         setVisible(false)
                         edit==='编辑'&& setEdit(`添加`)
                         form.resetFields()
+                        setWorkmanship([{workProList:[{}]}])
+                        form.setFieldsValue({
+                            craftNameDTOS:workmanship
+                        })
                     }}>关闭</Button>
                 </Space>
             }
@@ -242,6 +246,10 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                 setVisible(false)
                 edit==='编辑'&& setEdit(`添加`)
                 form.resetFields()
+                setWorkmanship([{workProList:[{}]}])
+                form.setFieldsValue({
+                    craftNameDTOS:workmanship
+                })
             }}  width={ '80%' }
         >
                 <Form form={form} {...formItemLayout}>
