@@ -181,13 +181,7 @@ export default function UnqualifiedAmountList(): React.ReactNode {
                     name: 'unProject',
                     label: '不合格项目',
                     children: <Form.Item name="unProject" >
-                        <Select style={{ width: "100px" }}>
-                            { unProject && unProject.map(({ id, unProject }:any, index:number) => {
-                                  return <Select.Option key={ index } value={ unProject }>
-                                      { unProject }
-                                  </Select.Option>
-                            }) }
-                        </Select>
+                        <Input/>
                     </Form.Item>
                 },
                 
