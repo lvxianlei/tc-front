@@ -52,7 +52,6 @@ export default function EnquiryList(): React.ReactNode {
                     fixed: "right",
                     dataIndex: 'operation',
                     render: (_: any, records: any) => {
-                        console.log(records.purchasePlanNumber, !records.purchasePlanNumber, "========>>>>")
                         return <>
                             <Button type="link" className='btn-operation-link' disabled={records.purchasePlanNumber} >
                                 <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>

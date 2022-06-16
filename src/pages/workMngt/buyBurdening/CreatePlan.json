@@ -25,7 +25,7 @@
             "dataIndex": "num"
         },
         {
-            "title": "重量（吨）",
+            "title": "重量（kg）",
             "dataIndex": "weight"
         }
     ],
@@ -67,6 +67,7 @@
         {
             "title": "批次号",
             "dataIndex": "batchNumber",
+            "maxlength": 15,
             "rules": [
                 {
                     "required": true,
@@ -77,6 +78,7 @@
         {
             "title": "计划号",
             "dataIndex": "planNumber",
+            "maxlength": 15,
             "rules": [
                 {
                     "required": true,
@@ -87,6 +89,7 @@
         {
             "title": "塔型",
             "dataIndex": "productCategoryName",
+            "maxlength": 15,
             "rules": [
                 {
                     "required": true,
