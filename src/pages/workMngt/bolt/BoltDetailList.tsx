@@ -46,6 +46,9 @@ export default function BoltCheck(): React.ReactNode {
             title: '说明',
             dataIndex: 'description',
             width: 120,
+            render: (_: string, record: any): React.ReactNode => (
+                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+            )
         },
         {
             title: '操作',
