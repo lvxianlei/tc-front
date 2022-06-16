@@ -9,17 +9,19 @@
     position: absolute;
 }
 .border {
-    border: 1px solid #eeeeee;
-    border-radius: 5px;
-    margin: 12px 12px 0;
+    // border: 1px solid #eeeeee;
+    // border-radius: 5px;
+    box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin: 20px 12px 0;
     width: 45%;
     background-color: #F8F8F8;
     display: inline-block;
 }
 .border2 {
-    border: 1px solid #eeeeee;
-    border-radius: 5px;
-    margin: 12px 12px 0;
+    box-shadow: 2px 2px 12px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    margin: 20px 12px 0;
     width: 92%;
     background-color: #F8F8F8;
     display: inline-block;
@@ -35,6 +37,8 @@
         font-weight: bold;
         margin-bottom: 0;
         line-height: 1;
+
+       
     }
     &:hover {
         color: @primary-color;
@@ -85,4 +89,12 @@
     &:hover {
         color: @primary-color;
     }
+}
+
+.detailTitle{
+    padding: 0px 0px 0px 0px;
+    box-sizing: border-box;
+    font-size: 16px;
+    color: #181818;
+    font-weight: bold;
 }
