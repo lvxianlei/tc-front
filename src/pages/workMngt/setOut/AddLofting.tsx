@@ -445,7 +445,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             dataIndex: 'perforateNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
-                    <InputNumber size="small" min={0} />
+                    <Input size="small" min={0} />
                 </Form.Item>
             )
         },

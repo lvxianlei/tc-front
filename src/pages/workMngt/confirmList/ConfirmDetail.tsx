@@ -10,6 +10,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import styles from './confirm.module.less'
+import { FixedType } from 'rc-table/lib/interface';
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
@@ -227,7 +228,17 @@ export default function ConfirmDetail(): React.ReactNode {
             legConfigurationB:item.legConfigurationB? item.legConfigurationB: 0,
             legConfigurationC:item.legConfigurationC? item.legConfigurationC: 0,
             legConfigurationD:item.legConfigurationD? item.legConfigurationD: 0,
-            otherWeight:item.otherWeight? item.otherWeight: 0,
+            otherWeightBg:item.otherWeightBg? item.otherWeightBg: 0,
+            otherWeightPt:item.otherWeightPt? item.otherWeightPt: 0,
+            otherWeightXxp:item.otherWeightXxp? item.otherWeightXxp: 0,
+            otherWeightPat:item.otherWeightPat? item.otherWeightPat: 0,
+            otherWeightFd:item.otherWeightFd? item.otherWeightFd: 0,
+            otherWeightDdssgkb:item.otherWeightDdssgkb? item.otherWeightDdssgkb: 0,
+            otherWeightGdxg:item.otherWeightGdxg? item.otherWeightGdxg: 0,
+            otherWeightXg:item.otherWeightXg? item.otherWeightXg: 0,
+            otherWeightQtsm:item.otherWeightQtsm? item.otherWeightQtsm: 0,
+            otherWeightLs:item.otherWeightLs? item.otherWeightLs: 0,
+            monomerWeight:item.monomerWeight?item.monomerWeight:0,
             totalWeight: item.totalWeight? item.totalWeight: 0,
           }
         }));
@@ -421,7 +432,7 @@ export default function ConfirmDetail(): React.ReactNode {
         width: 100,
         key: 'monomerWeight', 
         render:(_:any,record:any)=>{
-          return <span>{(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
+          return <span>{record?.monomerWeight?parseFloat(record?.monomerWeight).toFixed(2):(parseFloat(record.legWeightA)+parseFloat(record.legWeightB)+parseFloat(record.legWeightC)+parseFloat(record.legWeightD)+parseFloat(record.bodyWeight)).toFixed(2)}</span>
         }  
       },
       { 
@@ -538,6 +549,7 @@ export default function ConfirmDetail(): React.ReactNode {
           title: '操作',
           width: 100,
           dataIndex: 'operation',
+          fixed: 'right' as FixedType,
           render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             <Space direction="horizontal" size="small">
                 <Button type="link" onClick={()=>{
