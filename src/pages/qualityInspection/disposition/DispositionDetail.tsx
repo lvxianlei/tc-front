@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Image } from 'antd';
+import { Spin, Button, Space, Modal, Image, Descriptions } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -100,14 +100,10 @@ const questionColums = [
     {
         "dataIndex": "questionDesc",
         "title": "问题描述",
-        "type": "textarea"
-    }
-]
-const dealColums = [
-    {
+        // "type": "textarea"
+    }, {
         "dataIndex": "handleDesc",
-        "title": "处理建议",
-        "type": "textarea"
+        "title": "处理建议"
     }
 ]
 
@@ -138,10 +134,8 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
             <BaseInfo columns={specialColums} dataSource={detailData} />
             <DetailTitle title='基本信息'/>
             <BaseInfo columns={detailColums} dataSource={detailData}  />
-            <DetailTitle title='问题描述'/>
+            <DetailTitle title='其他信息'/>
             <BaseInfo columns={questionColums} dataSource={detailData}  />
-            <DetailTitle title='处理意见'/>
-            <BaseInfo columns={dealColums} dataSource={detailData} col={6} />
         </DetailContent>
     </>
 }
