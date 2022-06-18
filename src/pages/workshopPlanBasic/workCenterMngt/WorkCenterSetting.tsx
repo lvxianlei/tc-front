@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Select, InputNumber, Popconfirm, Space, Button, TimePicker, Table, message, Modal, Input } from 'antd'
+import { Spin, Form, Select, InputNumber, Popconfirm, Space, Button, TimePicker, Table, message, Modal, Input, Upload } from 'antd'
 import { DetailTitle, BaseInfo, DetailContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -9,6 +9,8 @@ import { FixedType } from 'rc-table/lib/interface';
 import { materialTextureOptions } from "../../../configuration/DictionaryOptions";
 import moment from "moment"
 import { useHistory, useParams } from "react-router-dom"
+import { downloadTemplate } from "../../workMngt/setOut/downloadTemplate"
+import AuthUtil from "../../../utils/AuthUtil"
 
 interface EditProps {
     type: "new" | "edit",
@@ -33,7 +35,6 @@ export default function WorkCenterSetting(): React.ReactNode{
                 time: result.workStartTime&&result.workEndTime?[moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')]:'',
                 equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[]
             })
-            form.setFieldsValue({ workCenterRelations: [...result?.workCenterRelations] });
             setWorkCenterRelationsList(result?.workCenterRelations);
             resole(result)
         } catch (error) {
@@ -152,12 +153,6 @@ export default function WorkCenterSetting(): React.ReactNode{
             "title": "生产单元名称",
             "dataIndex": "workUnitName",
             "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择生产单元名称"
-                }
-            ]
         },
         {
             "title": "生产单元编码",
@@ -167,11 +162,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                 {
                     "required": true,
                     "message": "请选择生产单元编码"
-                },
-                // {
-                //     "pattern": /^[0-9a-zA-Z]*$/,
-                //     "message": '仅可输入数字/字母'
-                // }
+                }
             ]
         },
         {
@@ -227,11 +218,13 @@ export default function WorkCenterSetting(): React.ReactNode{
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={()=>{
                         setVisible(true)
+                        console.log(record)
                         form.setFieldsValue({
                             ...record,
+                            index:index,
                             process: record?.processId+','+record?.processName
                         })
-
+                        console.log(form.getFieldsValue(true))
                     }}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -245,44 +238,7 @@ export default function WorkCenterSetting(): React.ReactNode{
             )
         }
     ]
-    const useFactory = () => {
-        Modal.confirm({
-            title: '新增',
-            icon: null,
-            // content: ,
-            onOk: async () => new Promise(async (resove, reject) => {
-                try {
-                    const value = await form.getFieldsValue(true)
-                    // await run(selectedRows.map((item: any) => ({
-                    //     id: item.id,
-                    //     productionBatchNo: item.productionBatchNo,
-                    //     factoryId: factoryId.factoryId,
-                    //     productCategoryId: item.productCategoryId
-                    // })))
-                    // await message.success("已成功分配生产单元组！")
-                    // setSelectedKeys([])
-                    // setSelectedRows([])
-                    form.resetFields()
-                    history.go(0)
-                    resove(true)
-                } catch (error) {
-                    reject(false)
-                }
-            }),
-            onCancel() {
-                form.resetFields()
-            }
-        })
-    }
 
-    const addRow = () => {
-        let workCenterListValues = form.getFieldsValue(true).workCenterRelations || [];
-        let newData = {
-            workHour: ''
-        }
-        setWorkCenterRelationsList([...workCenterListValues, newData]);
-        form.setFieldsValue({ workCenterRelations: [...workCenterListValues, newData] })
-    }
 
     const delRow = (index: number) => {
         workCenterRelationsList.splice(index, 1);
@@ -334,7 +290,12 @@ export default function WorkCenterSetting(): React.ReactNode{
                     return ({
                         ...item, type: 'select',
                         render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Form.Item name="workUnitName" style={{ width: '100%' }}>
+                            <Form.Item name="workUnitName" style={{ width: '100%' }} rules={[
+                                {
+                                    "required": true,
+                                    "message": "请选择生产单元"
+                                }
+                            ]}> 
                                 <Select onChange={(value:any)=>{
                                     console.log(value)
                                     const codeValue = value.split(',')
@@ -370,6 +331,37 @@ export default function WorkCenterSetting(): React.ReactNode{
                 <Button type="primary" onClick={()=>{
                     setVisible(true)
                 }}>新增</Button>
+                <Upload 
+                    action={ () => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl+'/tower-science/drawProductDetail/import'
+                    } } 
+                    accept=".xls,.xlsx"
+                    headers={
+                        {
+                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={ false }
+                    onChange={ async (info) => {
+                        if(info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        }
+                        if(info.file.response && info.file.response?.success){
+                            if (info.file.response && info.file.response?.success) {
+                                if (info.file.response?.data) {
+                                    message.success('导入成功！');
+                                    setWorkCenterRelationsList(info.file.response?.data.concat(workCenterRelationsList))
+                                }
+                            }
+                        } 
+                    } }
+                >
+                    <Button type="primary" ghost>导入</Button>
+                </Upload>
+                <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '产能矩阵模板')} ghost>下载导入模板</Button>
             </Space>]} />
             <Table
                 scroll={{ x: 500 }}
@@ -397,13 +389,12 @@ export default function WorkCenterSetting(): React.ReactNode{
                     console.log(value)
                     setVisible(false)
                     if(value.id){
-                        
-                    }else{
-                        workCenterRelationsList.push(value)
-                        setWorkCenterRelationsList(
-                            [...workCenterRelationsList]
-                        )
+                        workCenterRelationsList.splice(value?.index,1)
                     }
+                    workCenterRelationsList.unshift(value)
+                    setWorkCenterRelationsList(
+                        [...workCenterRelationsList]
+                    )
                    
                     form.resetFields()
                     
@@ -411,6 +402,9 @@ export default function WorkCenterSetting(): React.ReactNode{
             >
                 <Form form={form}>
                     <Form.Item name="id" style={{display:'none'}}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="index" style={{display:'none'}}>
                         <Input />
                     </Form.Item>
                     <Form.Item name="process" label='工序' rules={[{
