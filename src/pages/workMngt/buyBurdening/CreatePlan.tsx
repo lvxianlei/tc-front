@@ -10,7 +10,7 @@ import {
     baseInfoColumn
 } from "./CreatePlan.json";
 import { PopTableContent } from "./ComparesModal"
-import { deliverywayOptions, materialStandardOptions, materialTextureOptions, transportationTypeOptions } from "../../../configuration/DictionaryOptions"
+import {  materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -38,8 +38,8 @@ import AuthUtil from '../../../utils/AuthUtil';
             return ({
                 ...item,
                 structureTexture: item?.structureTexture || materialTextureOptions?.[0]?.name,
-                code: "1", // 件号
-                length: "1", // 长度
+                code: "", // 件号
+                length: "100", // 长度
                 num: 1, // 数量
                 weight: 1, // 重量
             })
@@ -48,8 +48,8 @@ import AuthUtil from '../../../utils/AuthUtil';
             return ({
                 ...item,
                 structureTexture: item?.structureTexture || materialTextureOptions?.[0]?.name,
-                code: "1", // 件号
-                length: "1", // 长度
+                code: "", // 件号
+                length: "100", // 长度
                 num: 1, // 数量
                 weight: 1, // 重量
             })
@@ -67,6 +67,7 @@ import AuthUtil from '../../../utils/AuthUtil';
     const handleCopy = (options: any) => {
         const result = {
             ...options,
+            code: "",
             id: count + ""
         }
         setCount(count + 1)
@@ -86,8 +87,8 @@ import AuthUtil from '../../../utils/AuthUtil';
                 return ({
                     ...item,
                     planPurchaseNum: value,
-                    weight: ((item.proportion * (item.length || 1)) / 1000 / 1000).toFixed(3),
-                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000 / 1000).toFixed(3)
+                    weight: ((item.proportion * (item.length || 1)) / 1000).toFixed(3),
+                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
                 })
             }
             return item
@@ -110,12 +111,21 @@ import AuthUtil from '../../../utils/AuthUtil';
         setPopDataList(list.slice(0))
     }
 
-
     const handleCreateClick = async() => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
             if (materialList.length < 1) {
                 message.error("请您选择原材料明细!");
+                return false;
+            }
+            let flag = false;
+            for (let i = 0; i < materialList.length; i += 1) {
+                if (!materialList[i].code) {
+                    flag = true
+                }
+            }
+            if (flag) {
+                message.error("请填写件号！");
                 return false;
             }
             const v = {
@@ -145,6 +155,8 @@ import AuthUtil from '../../../utils/AuthUtil';
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
+                setPopDataList([]);
+                addCollectionForm.resetFields();
                 props?.handleCreate();
             }}
             maskClosable={false}
@@ -152,6 +164,8 @@ import AuthUtil from '../../../utils/AuthUtil';
             footer={[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
+                    setPopDataList([]);
+                    addCollectionForm.resetFields();
                     props?.handleCreate();
                 }}>
                     关闭
@@ -263,7 +277,7 @@ import AuthUtil from '../../../utils/AuthUtil';
                     if (["code"].includes(item.dataIndex)) {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <Input value={value || 1} onChange={(e: any) => lengthChange(e.target.value, records.id, "code")} />
+                            render: (value: number, records: any, key: number) => <Input value={value || ""} onChange={(e: any) => lengthChange(e.target.value, records.id, "code")} />
                         })
                     }
                     // 长度
@@ -330,8 +344,8 @@ import AuthUtil from '../../../utils/AuthUtil';
                     setMaterialList(fields.map((item: any) => ({
                         ...item,
                         structureTexture: item?.structureTexture || materialTextureOptions?.[0]?.name,
-                        code: "1", // 件号
-                        length: "1", // 长度
+                        code: "", // 件号
+                        length: "100", // 长度
                         num: 1, // 数量
                         weight: 1, // 重量
                     })) || [])

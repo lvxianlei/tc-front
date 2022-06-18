@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react"
 import { Button, InputNumber, message, Modal, Select } from 'antd'
 import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom'
-import { DetailContent, CommonTable, CommonAliTable, PopTableContent, SearchTable } from '../../common'
+import { DetailContent, CommonTable, PopTableContent, SearchTable } from '../../common'
 import { PurchaseList, PurchaseTypeStatistics } from "./planListData.json"
 import { addMaterial } from "./CreatePlan.json"
 import useRequest from '@ahooksjs/use-request'
@@ -169,6 +169,7 @@ export default function Edit() {
             purchasePlanDetailDTOS
         })
         message.success("保存成功...")
+        setIsEdit(false)
     }
 
     const handleCancelPlan = async () => {
@@ -185,6 +186,7 @@ export default function Edit() {
                     onClick={() => setIsExportStoreList(true)}
                     style={{ marginBottom: 16 }}
                 >导出</Button>
+                <span style={{ paddingLeft: 20 }}>批次号：<i style={{ fontStyle: "normal", color: "rgb(255, 140, 0)" }}>{location.search.replace("?", "").split("=")[1]}</i></span>
                 {isEdit && <Button key="add" type="primary" style={{ margin: "0px 16px" }} onClick={() => setVisible(true)}>添加</Button>}
             </>}
                 operation={[
@@ -193,7 +195,7 @@ export default function Edit() {
                     <Fragment key="save">{isEdit && <Button key="save" loading={saveLoading} type="primary" style={{ marginRight: 16 }} onClick={handleSave}>保存</Button>}</Fragment>,
                     <Button key="goback" type="ghost" onClick={() => history.goBack()}>返回</Button>
                 ]}>
-                {!isEdit && <CommonAliTable
+                {!isEdit && <CommonTable
                     loading={loading}
                     columns={PurchaseList}
                     dataSource={dataTable?.records || []}
@@ -228,7 +230,7 @@ export default function Edit() {
                                         style={{ width: '150px' }}
                                         labelInValue
                                         value={{ value: records.materialStandard, label: records.materialStandardName }}
-                                        options={materialStandardOptions?.map((item: any) => ({ label: item.name, value: item.id }))}
+                                        options={materialStandardOptions?.map((item: any) => ({ label: item.name, value: item.id })) || []}
                                         onChange={(e: any) => setPopDataList(popDataList.map((item: any, index: number) => {
                                             if (index === key) {
                                                 return {
@@ -248,7 +250,7 @@ export default function Edit() {
                                         style={{ width: '150px' }}
                                         labelInValue
                                         value={{ value: records.structureTextureId, label: records.structureTexture }}
-                                        options={materialTextureOptions?.map((item: any) => ({ value: item.id, label: item.name }))}
+                                        options={materialTextureOptions?.map((item: any) => ({ value: item.id, label: item.name })) || []}
                                         onChange={(e: any) => setPopDataList(popDataList.map((item: any, index: number) => {
                                             if (index === key) {
                                                 return {
@@ -275,6 +277,7 @@ export default function Edit() {
                     modal={true}
                     path={`/tower-supply/materialPurchasePlan/list/summary/${params.id}`}
                     columns={PurchaseTypeStatistics as any[]}
+                    pagination={false}
                     transformResult={(result: any) => result.purchasePlanListTotalVOS || []}
                     extraOperation={(result: any) => (<div style={{ marginBottom: 12 }}>
                         采购类型统计： 圆钢总重（t）：<span style={{ color: "#FF8C00" }}>{result?.roundSteelTotal === -1 ? "0" : result?.roundSteelTotal}</span>
@@ -330,7 +333,7 @@ export default function Edit() {
                     }}
                 />
             </Modal>
-            {/* {isExport ? <ExportList
+            {isExport ? <ExportList
                 history={history}
                 location={location}
                 match={match}
@@ -338,13 +341,13 @@ export default function Edit() {
                     let keys = [...PurchaseList]
                     return keys
                 }}
-                current={purchasePlanData?.current || 1}
+                current={pagenation.current || 1}
                 size={dataTable?.records.length || 10}
                 total={dataTable?.records.length || 0}
                 url={`/tower-supply/materialPurchasePlan/list/${params.id}`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}
-            /> : null} */}
+            /> : null}
         </>
     )
 }
