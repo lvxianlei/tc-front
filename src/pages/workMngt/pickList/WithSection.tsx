@@ -32,9 +32,10 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
     const [detailData, setDetailData] = useState<IDetail>();
     const [basicHeightList, setBasicHeightList] = useState<any[]>([]);
     const [productList, setProductList] = useState<any[]>([]);
-    const [productNumber,setProductNumber] = useState<any>('');
+    const [productNumber, setProductNumber] = useState<any>('');
     const { loading, data } = useRequest<IDetail>(() => new Promise(async (resole, reject) => {
-        try {let result :any= {};
+        try {
+            let result: any = {};
             if (type === 'new') {
                 const data = await RequestUtil.get<any[]>(`/tower-science/materialProduct/getBasicHeightProduct?productCategoryId=${productCategoryId}`);
                 console.log(1)
@@ -50,19 +51,19 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
                         // legNumberB: result?.legNumberB,
                         // legNumberC: result?.legNumberC,
                         // legNumberD: result?.legNumberD,
-                        productSegmentListDTOList: detailData?.map((item:any)=>{
+                        productSegmentListDTOList: detailData?.map((item: any) => {
                             return {
                                 ...item,
-                                count:0
+                                count: 0
                             }
                         })
                     });
                     setDetailData({
                         ...result,
-                        materialDrawProductSegmentList: detailData?.map((item:any)=>{
+                        materialDrawProductSegmentList: detailData?.map((item: any) => {
                             return {
                                 ...item,
-                                count:0
+                                count: 0
                             }
                         })
                     })
@@ -87,9 +88,9 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
                     ...result,
                     materialDrawProductSegmentList: detailData
                 })
-               
+
             }
-            
+
             resole({
                 ...result,
                 materialDrawProductSegmentList: detailData
@@ -215,7 +216,7 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
                         ...detailData,
                         materialDrawProductSegmentList: [...finalList]
                     })
-                    fastForm.resetFields();
+                    fastForm.resetFields(['fast']);
                     setFastLoading(false)
                 }, 1000)
             }
@@ -228,56 +229,56 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
     return <Spin spinning={loading}>
         <Form form={fastForm}>
             <Row>
-            {type === 'new' ? <>
-                            <Form.Item name="basicHeight" label="杆塔" rules={[{
-                                required: true,
-                                message: '请选择呼高'
-                            }]}>
-                                <Select placeholder="请选择呼高" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
-                                    const data = basicHeightList?.filter(res => res.basicHeight === e);
-                                    setProductList( data && data[0].materialProductVOList)
-                                    fastForm.setFieldsValue({
-                                        productId:[]
-                                    })
-                                }}>
-                                    {basicHeightList && basicHeightList?.map(({ basicHeight }, index) => {
-                                        return <Select.Option key={index} value={basicHeight || ''}>
-                                            {basicHeight}
-                                        </Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        {/* </Col> */}
-                            {/* <Col span={5}> */}
-                                <Form.Item name="productId" rules={[{
-                                    required: true,
-                                    message: '请选择杆塔'
-                                }]}>
-                                    <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
-                                        const productId = fastForm.getFieldsValue(true).productId;
-                                        setProductNumber(productId?.map((res: string) => res.split(',')[1]).join(','))
-                                        setDetailData({
-                                            ...detailData,
-                                            productNumber: productId?.map((res: string) => res.split(',')[1]),
-                                            productIdList: productId?.map((res: string) => res.split(',')[0])
-                                        })
-                                    }}>
-                                        {productList && productList.map(({ id, productNumber }, index) => {
-                                            return <Select.Option key={index} value={id + ',' + productNumber || ''}>
-                                                {productNumber}
-                                            </Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                            </> : null}
+                {type === 'new' ? <>
+                    <Form.Item name="basicHeight" label="杆塔" rules={[{
+                        required: true,
+                        message: '请选择呼高'
+                    }]}>
+                        <Select placeholder="请选择呼高" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
+                            const data = basicHeightList?.filter(res => res.basicHeight === e);
+                            setProductList(data && data[0].materialProductVOList)
+                            fastForm.setFieldsValue({
+                                productId: []
+                            })
+                        }}>
+                            {basicHeightList && basicHeightList?.map(({ basicHeight }, index) => {
+                                return <Select.Option key={index} value={basicHeight || ''}>
+                                    {basicHeight}
+                                </Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                    {/* </Col> */}
+                    {/* <Col span={5}> */}
+                    <Form.Item name="productId" rules={[{
+                        required: true,
+                        message: '请选择杆塔'
+                    }]}>
+                        <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
+                            const productId = fastForm.getFieldsValue(true).productId;
+                            setProductNumber(productId?.map((res: string) => res.split(',')[1]).join(','))
+                            setDetailData({
+                                ...detailData,
+                                productNumber: productId?.map((res: string) => res.split(',')[1]),
+                                productIdList: productId?.map((res: string) => res.split(',')[0])
+                            })
+                        }}>
+                            {productList && productList.map(({ id, productNumber }, index) => {
+                                return <Select.Option key={index} value={id + ',' + productNumber || ''}>
+                                    {productNumber}
+                                </Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                </> : null}
                 <Col offset={type === 'new' ? 1 : 0} span={6}>
-                            <Form.Item name="fast" label="快速配段" rules={[{
-                                pattern: /^[a-zA-Z0-9-,*()]*$/,
-                                message: '仅可输入英文字母/数字/特殊字符',
-                            }]}>
-                                <Input style={{ width: '100%' }} disabled={type === 'detail'}/>
-                            </Form.Item>
-                        </Col>
+                    <Form.Item name="fast" label="快速配段" rules={[{
+                        pattern: /^[a-zA-Z0-9-,*()]*$/,
+                        message: '仅可输入英文字母/数字/特殊字符',
+                    }]}>
+                        <Input style={{ width: '100%' }} disabled={type === 'detail'} />
+                    </Form.Item>
+                </Col>
                 <Col offset={2} span={4}>
                     <Button type="primary" loading={fastLoading} disabled={type === 'detail'} onClick={fastWithSectoin} ghost>确定</Button>
                 </Col>
@@ -328,7 +329,7 @@ export default forwardRef(function Edit({ type, id, batchNo, productCategoryId }
                     <span>{detailData?.productCategoryName}</span>
                 </Descriptions.Item>
                 <Descriptions.Item label="杆塔号">
-                    <span>{type==='new'?productNumber:detailData?.productNumber}</span>
+                    <span>{type === 'new' ? productNumber : detailData?.productNumber}</span>
                 </Descriptions.Item>
                 {
                     [...detailData?.materialDrawProductSegmentList || []]?.map((items: IMaterialDetail, index: number) => {
