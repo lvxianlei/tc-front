@@ -7,7 +7,8 @@ import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, messag
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import { CommonTable as CommonTableBeFore, DetailContent, DetailTitle } from '../../common';
+import CommonTable from '../../common/CommonAliTable';
 import { StockColumn, ConstructionDetailsColumn, BatchingScheme } from "./IngredientsList.json";
 
 import InheritOneIngredient from "./BatchingRelatedPopFrame/InheritOneIngredient"; // 继承一次配料
@@ -1088,7 +1089,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                 }}>自动配料</Button>,
                                                                 <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
-                                                            <CommonTable
+                                                            <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
                                                                     type: "radio",
@@ -1132,7 +1133,9 @@ export default function IngredientsList(): React.ReactNode {
                                                                     ]}
                                                                     dataSource={item.selectedScheme.slice(0)}
                                                                     pagination={false}
-                                                                    scroll={{ x: 1200, y: 320 }}
+                                                                    // scroll={{ x: 1200, y: 320 }}
+                                                                    style={{height: 300, overflow: "auto"}}
+                                                                    code={1}
                                                                 />
                                                             </div>
                                                             <div className='title_wrapper' style={{width: document.documentElement.clientWidth - 678}}>
@@ -1214,7 +1217,8 @@ export default function IngredientsList(): React.ReactNode {
                                                                     ]}
                                                                     dataSource={alternativeData}
                                                                     pagination={false}
-                                                                    scroll={{ x: 1200, y: 310 }}
+                                                                    // scroll={{ x: 1200, y: 320 }}
+                                                                    style={{height: 300, overflow: "auto"}}
                                                                 />
                                                             </div>
                                                         </div>
