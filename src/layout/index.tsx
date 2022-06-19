@@ -14,6 +14,7 @@ import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
 import ApplicationContext from "../configuration/ApplicationContext";
+import Cookies from "js-cookie";
 const { Header, Sider, Content } = Layout
 const filters = require.context("../filters", true, /.ts$/)
 
@@ -167,6 +168,8 @@ export default function (): JSX.Element {
         AuthUtil.removeRealName();
         AuthUtil.removeUserId();
         AuthUtil.removeTenantName();
+        Cookies.remove('DHWY_TOKEN', { domain: '.dhwy.cn' })
+        Cookies.remove('ACCOUNT', { domain: '.dhwy.cn' })
         window.location.pathname = '/login';
     };
 
