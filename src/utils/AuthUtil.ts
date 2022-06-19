@@ -240,7 +240,7 @@ export default abstract class AuthUtil {
      * 清除tdm-token -SINZETECH_TOKEN_KEY
      * */ 
     public static removeSinzetechToken(): void {
-        Cookies.remove('SINZETECH_TOKEN_KEY', { domain: '.dhwy.cn' });
+        Cookies.remove('SINZETECH_TOKEN_KEY', { domain: 'erp-tdm-hjt.dhwy.cn' });
     }
 }
 
