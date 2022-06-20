@@ -18,7 +18,7 @@
         },
         {
             "title": "执行状态",
-            "dataIndex": "status",
+            "dataIndex": "executeStatus",
             "type": "select",
             "width":150,
             "enum": [
@@ -60,7 +60,7 @@
         },
         {
             "title": "执行状态",
-            "dataIndex": "status",
+            "dataIndex": "executeStatus",
             "type": "select",
             "width":150,
             "enum": [

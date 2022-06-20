@@ -39,9 +39,9 @@ const tableColumns = [
         dataIndex: 'structureTexture',
     },
     {
-        key: 'structureSpec',
+        key: 'executeStatus',
         title: '执行状态',
-        dataIndex: 'structureSpec',
+        dataIndex: 'executeStatus',
         width: 200,
     }
 ]
@@ -91,13 +91,13 @@ export default function PlanChangeDetail(): React.ReactNode {
         <CommonTable
             columns={tableColumns}
             dataSource={detailData?.records}
-            onChange={(pagination: TablePaginationConfig) => {
-                getTableDataSource(pagination);
-            }}
-            rowSelection={{
-                selectedRowKeys: selectedKeys,
-                onChange: SelectChange,
-            }}
+            // onChange={(pagination: TablePaginationConfig) => {
+            //     getTableDataSource(pagination);
+            // }}
+            // rowSelection={{
+            //     selectedRowKeys: selectedKeys,
+            //     onChange: SelectChange,
+            // }}
             pagination={{
                 current: detailData?.current || 0,
                 pageSize: detailData?.size || 0,

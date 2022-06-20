@@ -167,7 +167,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             // {
-            //     name: 'status',
+            //     name: 'executeStatus',
             //     label: '执行状态',
             //     children: <Form.Item name='status' initialValue={1}>
             //         <Select placeholder="请选择" style={{ width: "150px" }}>

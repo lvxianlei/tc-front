@@ -293,7 +293,7 @@ export default function PlanTrialList(): React.ReactNode {
         },
         // {
         //     title: "执行状态",
-        //     dataIndex: "status",
+        //     dataIndex: "executeStatus",
         //     editable: true,
         //     width:120,
         //     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
@@ -425,7 +425,7 @@ export default function PlanTrialList(): React.ReactNode {
         <Form.Item label='计划交货日期' name='time'>
             <DatePicker.RangePicker />
         </Form.Item>
-        {/* <Form.Item label='执行状态' name='status' initialValue={1}>
+        {/* <Form.Item label='执行状态' name='executeStatus' initialValue={1}>
             <Select placeholder="请选择" style={{ width: "150px" }}>
                 <Select.Option value={1} key="1">正常</Select.Option>
                 <Select.Option value={2} key="2">暂停</Select.Option>
