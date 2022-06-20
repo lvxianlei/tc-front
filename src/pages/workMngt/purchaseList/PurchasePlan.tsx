@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from "react"
-import { Spin, Row, Col, InputNumber } from "antd"
+import { Spin, Row, Col, InputNumber, message, Input } from "antd"
 import { DetailTitle, CommonTable } from '../../common'
 import { ListIngredients, PlanList } from "./purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -21,8 +21,8 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             //TODO 临时初始数据
             setDataSource(result?.lists.map((item: any) => ({
                 ...item,
-                planPurchaseNum: item?.planPurchaseNum || 1,
-                warehouseOccupy: item?.warehouseOccupy || 1
+                planPurchaseNum: item?.planPurchaseNum || "",
+                warehouseOccupy: item?.warehouseOccupy || ""
             })) || [])
         } catch (error) {
             reject(error)
@@ -97,7 +97,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                 ...item,
                                 render: (_: any, record: any, index: number) => {
                                     return <InputNumber
-                                        value={record.planPurchaseNum}
+                                        value={record.planPurchaseNum || 0}
                                         key={index}
                                         max={999}
                                         min={0}
@@ -116,15 +116,22 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                             return ({
                                 ...item,
                                 render: (_: any, record: any, index: number) => {
-                                    return <InputNumber
-                                        value={record.warehouseOccupy}
+                                    return <Input
+                                        value={record.warehouseOccupy || ""}
                                         key={index}
-                                        max={999}
-                                        min={0}
+                                        // max={999}
+                                        // min={0}
                                         onChange={(e: any) => {
                                             const result = dataSource;
-                                            result[index].warehouseOccupy = e
-                                            setDataSource(result.slice(0));
+                                            let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
+                                            if ((arg || 0) > (record.warehouseStock || 0)) {
+                                                message.error("本次占用数量过多，请修改！");
+                                                result[index].warehouseOccupy = ""
+                                                setDataSource(result.slice(0));
+                                            } else {
+                                                result[index].warehouseOccupy = arg
+                                                setDataSource(result.slice(0));
+                                            }
                                             setCout(count + 1);
                                         }}
                                         style={{ height: 27}}

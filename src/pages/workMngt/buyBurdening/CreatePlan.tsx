@@ -118,14 +118,25 @@ import AuthUtil from '../../../utils/AuthUtil';
                 message.error("请您选择原材料明细!");
                 return false;
             }
-            let flag = false;
+            let flag = false,
+                str = [],
+                isAll = false;
             for (let i = 0; i < materialList.length; i += 1) {
                 if (!materialList[i].code) {
                     flag = true
                 }
+                if (str.indexOf(materialList[i].code) === -1) {
+                    str.push(materialList[i].code)
+                } else {
+                    isAll = true;
+                }
             }
             if (flag) {
                 message.error("请填写件号！");
+                return false;
+            }
+            if (isAll) {
+                message.error("存在相同件号的构件，请修改！");
                 return false;
             }
             const v = {

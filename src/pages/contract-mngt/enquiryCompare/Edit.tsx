@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle, useRef, useEffect } from "react"
+import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
@@ -200,7 +200,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows;
-        console.log(chooseData, "======>>>")
         setPurchasePlanId(chooseData[0].id);
         setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
