@@ -11,6 +11,15 @@ export default (): React.ReactNode => {
     const [form] = Form.useForm()
     const [visible, setVisible] = useState<boolean>(false);
     const [editRow, setEditRow] = useState<any | "new" | null>();
+
+    const materialStandardEnum = materialStandardOptions?.map((item: {
+        id: string,
+        name: string
+    }) => ({
+        value: item.id,
+        label: item.name
+    }))
+
     const { loading, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil[editRow === "new" ? "post" : "put"](
@@ -135,10 +144,24 @@ export default (): React.ReactNode => {
                         }
                     }
                     switch (item.dataIndex) {
+                        case "":
+                            return ({
+                                ...item,
+                                columns: (item as any).columns.map((item: any) => {
+                                    if (item.dataIndex === "materialStandard") {
+                                        return ({
+                                            ...item,
+                                            type: "select",
+                                            enum: materialStandardEnum
+                                        })
+                                    }
+                                    return item
+                                })
+                            })
                         case "structureTextureId":
                             return ({ ...item, type: "select", enum: materialTextureOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
                         case "materialStandard":
-                            return ({ ...item, enum: materialStandardOptions?.map((item: any) => ({ label: item.name, value: item.id })) })
+                            return ({ ...item, enum: materialStandardEnum })
                         default:
                             return item
                     }
