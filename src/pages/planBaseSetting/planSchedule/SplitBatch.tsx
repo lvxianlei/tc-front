@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Button, Modal, Form, message, Select, DatePicker } from 'antd';
+import { Space, Button, Modal, Form, message, Select, DatePicker, Input } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, SearchTable as Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
@@ -428,6 +428,9 @@ export default function SampleDraw(): React.ReactNode {
                         </Select.Option>
                     </Select>
                 </Form.Item>
+                {selectedRows.find(r=>{return r.productionBatch})&&<Form.Item name='productionBatch' rules={[{ required: true, message: '请填写变更原因' }]} label='变更原因'>
+                    <Input.TextArea showCount maxLength={100}/>
+                </Form.Item>}
             </Form>,
             onOk: handleModalOk,
             onCancel: () => form.resetFields()
