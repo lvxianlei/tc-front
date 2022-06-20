@@ -7,7 +7,7 @@ import { CommonTable, DetailTitle } from '../../common';
 import Line from './Line';
 import { CheckCircleOutlined, RightOutlined, SoundOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import useRequest from '@ahooksjs/use-request';
-import { Spin, Table } from 'antd';
+import { Spin, Table , Image} from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
 import ApplicationContext from '../../../configuration/ApplicationContext';
 import { Link } from 'react-router-dom';
@@ -22,6 +22,7 @@ export interface WorkBenchMngtState {
 interface IList {
 	readonly title: string;
 	readonly child?: IList[];
+	readonly icon?: string;
 	readonly dataIndex?: string;
 	readonly col?: number;
 	readonly path?: string;
@@ -48,6 +49,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 	const workBenchList = [
 		{
 			title: '评估任务',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E8%AF%84%E4%BC%B0%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
 				{
@@ -73,6 +75,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '确认任务',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%A1%AE%E8%AE%A4%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
 				{
@@ -98,6 +101,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '放样任务',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%94%BE%E6%A0%B7%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
 				{
@@ -123,6 +127,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '评估任务',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E8%AF%84%E4%BC%B0%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
 				{
@@ -137,6 +142,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '确认任务',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%A1%AE%E8%AE%A4%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
 				{
@@ -151,6 +157,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '提料任务',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%8F%90%E6%96%99%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
 				{
@@ -184,6 +191,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 		},
 		{
 			title: '问题单',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E9%97%AE%E9%A2%98%E5%8D%95.png',
 			col: 4,
 			child: [
 				{
@@ -218,6 +226,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 			]
 		},  {
 			title: '组焊工作',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%BB%84%E7%84%8A%E5%B7%A5%E4%BD%9C.png',
 			col: 4,
 			child: [
 				{
@@ -239,6 +248,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 			]
 		}, {
 			title: '螺栓列表',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E8%9E%BA%E6%A0%93.png',
 			col: 4,
 			child: [
 				{
@@ -268,6 +278,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 			]
 		}, {
 			title: '小样图工作',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E5%B0%8F%E6%A0%B7%E5%9B%BE.png',
 			col: 4,
 			child: [
 				{
@@ -281,6 +292,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 			]
 		}, {
 			title: '图纸',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E5%9B%BE%E7%BA%B8.png',
 			col: 4,
 			child: [
 				{
@@ -294,6 +306,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 			]
 		},  {
 			title: '放样任务',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%94%BE%E6%A0%B7%E4%BB%BB%E5%8A%A1.png',
 			col:5,
 			child: [
 				{
@@ -351,8 +364,11 @@ export default function WorkBenchMngt(): React.ReactNode {
 
 	const getChildContent = (res: IList, ind: number, data: Record<string, any>) => {
 		return <div key={ind} className={res.col ===4 ? styles.border : styles.border2}>
-			<div style={{padding:'10px'}}>
-				<DetailTitle title={res.title}  />
+			<div style={{padding:'10px',display:'flex'}}>
+				<div>
+					<span style={{marginRight:"10px"}}><img src={res.icon} /></span>
+					<span className={styles.detailTitle}>{res.title}</span>
+				</div>
 			</div>
 			
 			<div style={{backgroundColor:"#fff",}}>{
@@ -362,7 +378,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 						return null
 					} else {
 						return <div className={res.col === 4 ? styles.content : styles.content2}
-						style={res.col&&res.col !== 4?{width:`${((res?.col)*10+11)/res?.col}%`}:{width:'23%'}}
+						style={res.col&&res.col !== 4?{width:`${((res?.col)*10+11)/res?.col}%`}:{width:'22%'}}
 						 key={ind + '_' + index} onClick={() => {
 							if (item.path) {
 								history.push({

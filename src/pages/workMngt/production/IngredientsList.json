@@ -24,9 +24,8 @@
             "dataIndex": "code"
         },
         {
-            "title": "长度(mm)",
-            "dataIndex": "length",
-            "width": 80
+            "title": "长度",
+            "dataIndex": "length"
         },
         {
             "title": "总数",
@@ -39,19 +38,19 @@
     ],
     "BatchingScheme": [
         {
-            "title": "原材料长度（mm）",
+            "title": "原材料长度",
             "dataIndex": "length",
-            "width": 90,
+            "width": 80,
             "type": "number"
         },
         {
             "title": "数量",
-            "width": 20,
+            "width": 40,
             "dataIndex": "num"
         },
         {
             "title": "利用率",
-            "width": 30,
+            "width": 40,
             "dataIndex": "utilizationRate"
         },
         {
@@ -61,64 +60,64 @@
         },
         {
             "title": "零件1",
+            "width": 40,
             "dataIndex": "component1",
-            "width": 30,
             "type": "number"
         },
         {
-            "title": "长度1（mm）",
+            "title": "长度1",
+            "width": 40,
             "dataIndex": "len1",
-            "width": 60,
             "type": "string"
         },
         {
             "title": "数量1",
-            "width": 30,
+            "width": 40,
             "dataIndex": "num1"
         },
         {
             "title": "零件2",
-            "width": 30,
+            "width": 40,
             "dataIndex": "component2"
         },
         {
-            "title": "长度2（mm）",
-            "width": 60,
+            "title": "长度2",
+            "width": 40,
             "dataIndex": "len2"
         },
         {
             "title": "数量2",
-            "width": 30,
+            "width": 40,
             "dataIndex": "num2"
         },
         {
             "title": "零件3",
-            "width": 30,
+            "width": 40,
             "dataIndex": "component3"
         },
         {
-            "title": "长度3（mm）",
-            "width": 60,
+            "title": "长度3",
+            "width": 40,
             "dataIndex": "len3"
         },
         {
             "title": "数量3",
-            "width": 30,
+            "width": 40,
             "dataIndex": "num3"
         },
         {
             "title": "零件4",
-            "width": 30,
+            "width": 40,
             "dataIndex": "component4"
         },
         {
-            "title": "长度4（mm）",
-            "width": 60,
+            "title": "长度4",
+            "width": 40,
             "dataIndex": "len4"
         },
         {
             "title": "数量4",
-            "width": 30,
+            "width": 40,
             "dataIndex": "num4"
         }
     ]
