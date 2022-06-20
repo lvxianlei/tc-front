@@ -87,22 +87,6 @@
         {
             "title": "确认备料",
             "dataIndex": "processMaterialDescription"
-        },
-        {
-            "title": "执行状态",
-            "dataIndex": "status",
-            "type": "select",
-            "width":150,
-            "enum": [
-                {
-                    "value": 1,
-                    "label": "正常"
-                },
-                {
-                    "value": 2,
-                    "label": "取消"
-                }
-            ]
         }
     ],
     "commonHeader": [

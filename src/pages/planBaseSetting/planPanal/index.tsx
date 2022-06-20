@@ -170,17 +170,17 @@ export default () => {
                     label: "计划交货日期",
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
-                {
-                    name: 'status',
-                    label: '执行状态',
-                    children: <Form.Item name='status' initialValue={1}>
-                        <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option value={1} key="1">正常</Select.Option>
-                            {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
-                            <Select.Option value={2} key="2">取消</Select.Option>
-                        </Select>
-                    </Form.Item>
-                },
+                // {
+                //     name: 'status',
+                //     label: '执行状态',
+                //     children: <Form.Item name='status' initialValue={1}>
+                //         <Select placeholder="请选择" style={{ width: "150px" }}>
+                //             <Select.Option value={1} key="1">正常</Select.Option>
+                //             {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
+                //             <Select.Option value={2} key="2">取消</Select.Option>
+                //         </Select>
+                //     </Form.Item>
+                // },
                 // {
                 //     name: "customerDeliveryStartTime",
                 //     label: "客户交货日期",
