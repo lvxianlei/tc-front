@@ -97,7 +97,7 @@
     "PlanList": [
         {
             "title": "仓库可用库存（支）",
-            "dataIndex": "warehouseStock",
+            "dataIndex": "availableStock",
             "type": "number"
         },
         {
