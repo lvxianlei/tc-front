@@ -124,7 +124,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                         onChange={(e: any) => {
                                             const result = dataSource;
                                             let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
-                                            if ((arg || 0) > (record.warehouseStock || 0)) {
+                                            if ((arg || 0) > (record.availableStock || 0)) {
                                                 message.error("本次占用数量过多，请修改！");
                                                 result[index].warehouseOccupy = ""
                                                 setDataSource(result.slice(0));
