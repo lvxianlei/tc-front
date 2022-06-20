@@ -73,7 +73,8 @@ export default function SampleDraw(): React.ReactNode {
                     const splitData = await form.getFieldsValue(true)
                     await splitBatchRun(selectedRows.map((item: any) => ({
                             id: item.id,
-                            productionBatch: splitData?.productionBatch
+                            productionBatch: splitData?.productionBatch,
+                            reason: splitData?.reason? splitData?.reason: ''
                     })))
                     await message.success("提交成功！")
                     setSelectedKeys([])
@@ -131,11 +132,11 @@ export default function SampleDraw(): React.ReactNode {
         },
         {
             title: "状态",
-            dataIndex: "status",
+            dataIndex: "productStauts",
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+                <span>{_===0?'未下发':'已下发'}</span>
             )
         },
         {
@@ -144,52 +145,57 @@ export default function SampleDraw(): React.ReactNode {
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_===1?'正常':_===2?'取消':'-'}</span>
+                <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
             )
         },
         {
             title: "操作",
             dataIndex: "operation",
             fixed: "right",
-            render: (_:any,record: any) =>
-                <Button type="link" onClick={()=>{
+            render: (_: any, record: Record<string, any>, index: number) =>
+                <Button type="link" onClick={async ()=>{
+                    // const value:any[] = await RequestUtil.get(`/productionPlan/change/batch/${record?.productId}`)
                     Modal.warn({
                         title: "查看批次变更记录",
                         icon: null,
                         okText: "确定",
                         width:'80%',
                         content: <>
-                                <BaseInfo dataSource={{}} columns={[{
-                                    title:'塔型'
+                                <BaseInfo dataSource={
+                                    record
+                                } columns={[{
+                                    title:'塔型',
+                                    dataIndex:'productCategoryName'
                                 },{
-                                    title:'杆塔'
+                                    title:'杆塔',
+                                    dataIndex:'productNumber'
                                 }]}/>
                                 <DetailTitle  title='批次变更记录'/>
                                 <CommonTable columns={[
                                     {
-                                        key: 'planNumber',
+                                        key: 'originalBatch',
                                         title: '原批次号',
-                                        dataIndex: 'planNumber'
+                                        dataIndex: 'originalBatch'
                                     },
                                     {
-                                        key: 'productCategoryName',
+                                        key: 'newBatch',
                                         title: '变更后批次号',
-                                        dataIndex: 'productCategoryName'
+                                        dataIndex: 'newBatch'
                                     },
                                     {
-                                        key: 'productionBatch',
+                                        key: 'reason',
                                         title: '批次变更原因',
-                                        dataIndex: 'productionBatch'
+                                        dataIndex: 'reason'
                                     },
                                     {
-                                        key: 'productionBatchNo',
+                                        key: 'createTime',
                                         title: '操作时间',
-                                        dataIndex: 'productionBatchNo'
+                                        dataIndex: 'createTime'
                                     },
                                     {
-                                        key: 'productNumber',
+                                        key: 'createUserName',
                                         title: '操作人',
-                                        dataIndex: 'productNumber'
+                                        dataIndex: 'createUserName'
                                     },]} dataSource={[]} pagination={false}/>
                         </>,
                         
@@ -428,7 +434,7 @@ export default function SampleDraw(): React.ReactNode {
                         </Select.Option>
                     </Select>
                 </Form.Item>
-                {selectedRows.find(r=>{return r.productionBatch})&&<Form.Item name='productionBatch' rules={[{ required: true, message: '请填写变更原因' }]} label='变更原因'>
+                {selectedRows.find(r=>{return r.productionBatch})&&<Form.Item name='reason' rules={[{ required: true, message: '请填写变更原因' }]} label='变更原因'>
                     <Input.TextArea showCount maxLength={100}/>
                 </Form.Item>}
             </Form>,
