@@ -151,6 +151,11 @@ export default () => {
                         >
                             <Button type="link" size="small">详情</Button>
                         </Link>
+                        <Link
+                            to={`/planProd/cyclePlan/detail/${record?.id}/${record?.configId}`}
+                        >
+                            <Button type="link" size="small">变更</Button>
+                        </Link>
                         {
                             record?.status === 1?<Popconfirm
                             title="删除后不可恢复，确认删除?"

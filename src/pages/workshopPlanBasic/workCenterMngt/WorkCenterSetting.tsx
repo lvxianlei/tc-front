@@ -334,7 +334,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                 <Upload 
                     action={ () => {
                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl+'/tower-science/drawProductDetail/import'
+                        return baseUrl+'/tower-system/dataRecord/import'
                     } } 
                     accept=".xls,.xlsx"
                     headers={
@@ -352,8 +352,18 @@ export default function WorkCenterSetting(): React.ReactNode{
                         if(info.file.response && info.file.response?.success){
                             if (info.file.response && info.file.response?.success) {
                                 if (info.file.response?.data) {
-                                    message.success('导入成功！');
-                                    setWorkCenterRelationsList(info.file.response?.data.concat(workCenterRelationsList))
+                                    const str =  'http://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/upload/20220620/ea0ec0debc15adb2a59074627f59954b.xlsx?Expires=1655687012295&OSSAccessKeyId=LTAI5tMjPgTT4YauhRxnzUYL&Signature=dracHhqgPW%2BlhC%2BQYBxM8yW2KsU%3D'
+                                    const strArr = [{
+                                        materialTextureName:'1'
+                                    }]
+                                    const value =  typeof str === 'string'
+                                    if(value){
+                                        window.open(str)
+                                    }else{
+                                        message.success('导入成功！');
+                                        setWorkCenterRelationsList(info.file.response?.data.concat(workCenterRelationsList))
+                                    }
+                                   
                                 }
                             }
                         } 

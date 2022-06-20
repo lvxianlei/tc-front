@@ -184,8 +184,8 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         children: <Form.Item name='status' initialValue={1}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
                                 <Select.Option value={1} key="1">正常</Select.Option>
-                                <Select.Option value={2} key="2">暂停</Select.Option>
-                                <Select.Option value={3} key="3">取消</Select.Option>
+                                {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
+                                <Select.Option value={2} key="2">取消</Select.Option>
                             </Select>
                         </Form.Item>
                     },

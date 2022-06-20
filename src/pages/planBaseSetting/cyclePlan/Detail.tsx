@@ -159,7 +159,7 @@ export default function CyclePlanDetail(): React.ReactNode {
             dataIndex: "status",
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
+                <span>{_===1?'正常':_===2?'取消':'-'}</span>
             )
         },
         {
