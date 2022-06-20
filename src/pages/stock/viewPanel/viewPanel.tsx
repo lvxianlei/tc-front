@@ -53,6 +53,7 @@ export default function ViewPanel(): React.ReactNode {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
+                                width: 120,
                                 render: (_: any, record: any): React.ReactNode => {
                                     return (
                                         <span style={{background: 
@@ -90,7 +91,7 @@ export default function ViewPanel(): React.ReactNode {
                             <Select placeholder="请选择标准" style={{ width: "300px" }}>
                                 {
                                     materialStandardTypeOptions?.map((item: any, index: number) => {
-                                        return <Select.Option value={item.name} key={index}>{item.name}</Select.Option>
+                                        return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
                                     })
                                 }
                             </Select>
