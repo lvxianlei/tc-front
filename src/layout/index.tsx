@@ -168,7 +168,9 @@ export default function (): JSX.Element {
         AuthUtil.removeRealName();
         AuthUtil.removeUserId();
         AuthUtil.removeTenantName();
+        AuthUtil.removeSinzetechToken();
         Cookies.remove('DHWY_TOKEN', { domain: '.dhwy.cn' })
+        Cookies.remove('DHWY_TOKEN', { domain: 'localhost' })
         Cookies.remove('ACCOUNT', { domain: '.dhwy.cn' })
         window.location.pathname = '/login';
     };

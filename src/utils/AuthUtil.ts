@@ -235,5 +235,13 @@ export default abstract class AuthUtil {
             console.log("ERROR: refrenshToken", error)
         }
     }
+
+    /** 
+     * 清除tdm-token -SINZETECH_TOKEN_KEY
+     * */ 
+    public static removeSinzetechToken(): void {
+        Cookies.remove('DHWY_TDM_TOKEN', { domain: '.dhwy.cn' });
+        Cookies.remove('DHWY_TDM_TOKEN', { domain: 'localhost' });
+    }
 }
 
