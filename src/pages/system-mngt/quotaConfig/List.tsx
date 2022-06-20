@@ -42,7 +42,7 @@ export default function List(): React.ReactNode {
         },
         {
             key: 'voltageGradePriceFirst',
-            title: '【0-330】电压等级定额',
+            title: '（0-330】电压等级定额',
             width: 100,
             dataIndex: 'voltageGradePriceFirst'
         },
