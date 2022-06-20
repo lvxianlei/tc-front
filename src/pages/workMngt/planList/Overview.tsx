@@ -49,7 +49,11 @@ export default function Edit() {
                 current: current,
                 size: size
             })
-            setPopDataList(result.records.map(((item: any, index: number) => ({ ...item, id: `${item.materialName}-${index}` }))))
+            setPopDataList(result.records.map(((item: any, index: number) => ({
+                ...item,
+                source: 1,
+                id: `${item.materialName}-${index}`
+            }))))
             resole(result)
             setPagenation({ ...pagenation, current: result.page, pageSize: result.size })
         } catch (error) {
@@ -186,7 +190,7 @@ export default function Edit() {
                     onClick={() => setIsExportStoreList(true)}
                     style={{ marginBottom: 16 }}
                 >导出</Button>
-                <span style={{ paddingLeft: 20 }}>批次号：<i style={{ fontStyle: "normal", color: "rgb(255, 140, 0)" }}>{location.search.replace("?", "").split("=")[1]}</i></span>
+                <span style={{ paddingLeft: 20 }}>批次号：<i style={{ fontStyle: "normal", color: "rgb(255, 140, 0)" }}>{location.search.replace("?", "").split("=")[1] || "(空)"}</i></span>
                 {isEdit && <Button key="add" type="primary" style={{ margin: "0px 16px" }} onClick={() => setVisible(true)}>添加</Button>}
             </>}
                 operation={[
