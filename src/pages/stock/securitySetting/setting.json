@@ -58,6 +58,13 @@
             "readOnly": true,
             "value": "materialName",
             "required": true,
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "品名/规格/编号"
+                }
+            ],
             "columns": [
                 {
                     "title": "编号",
@@ -65,13 +72,11 @@
                 },
                 {
                     "title": "类别",
-                    "dataIndex": "materialTypeName",
-                    "search": true
+                    "dataIndex": "materialTypeName"
                 },
                 {
                     "title": "类型",
-                    "dataIndex": "materialCategoryName",
-                    "search": true
+                    "dataIndex": "materialCategoryName"
                 },
                 {
                     "title": "品名",
