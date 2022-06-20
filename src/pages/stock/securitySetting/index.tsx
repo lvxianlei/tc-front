@@ -118,7 +118,7 @@ export default (): React.ReactNode => {
         <Modal
             width={1101}
             className="public_modal_input"
-            title='编辑'
+            title={editRow === "new" ? "添加安全库存策略" : "编辑安全库存策略"}
             visible={visible}
             onOk={handleSubmit}
             maskClosable={false}

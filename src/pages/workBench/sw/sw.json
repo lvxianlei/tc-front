@@ -4,7 +4,6 @@
             "title": "工程报价任务",
             "path": "询价任务",
             "dataIndex": "inquiryTaskWorkBenchVo",
-            "col": 1,
             "workbenchItemVos": [
                 {
                     "title": "待指派",

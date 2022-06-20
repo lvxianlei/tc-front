@@ -138,11 +138,6 @@ export default function Invoicing() {
             }}
             searchFormItems={[
                 {
-                    name: 'startRefundTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
                     name: 'shortageStatus',
                     label: '状态',
                     children: <Select style={{ width: 200 }}>

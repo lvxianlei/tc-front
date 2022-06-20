@@ -20,25 +20,13 @@ export default function SWWorkBench(): React.ReactNode {
     return <Spin spinning={loading}>
         <div className={styles.all}>
             <div className={styles.left}>
-                {swWork.map((item: any, ind: number) => <div key={ind} className={item.col !== 2 ? styles.border : styles.border2}>
-                    <DetailTitle title={item.title}></DetailTitle>
+                {swWork.map((item: any, ind: number) => <div key={ind} className={styles.workItem}>
+                    <DetailTitle title={item.title} style={{ background: "#f8f8f8", padding: "10px" }} />
                     {item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((workbenchItem: any, index: number) => {
-                        return <div key={index} className={item.col !== 2 ? styles.content : styles.content2}>
+                        return <div key={index} className={styles.content}>
                             <div style={{ cursor: "pointer" }} onClick={() => history.push(workbenchItem.path)}>
-                                <p><CheckCircleOutlined style={{ paddingRight: "8px" }}/>{workbenchItem.title}<span className={styles.rightoutlined}><RightOutlined /></span></p>
                                 <p className={styles.total}>{data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
-                                <div className={styles.draw}>
-                                    <Line keyIndex={`${ind}${index}`}
-                                        valueList={[
-                                            Math.ceil(Math.random() * 80),
-                                            Math.ceil(Math.random() * 100),
-                                            Math.ceil(Math.random() * 150),
-                                            Math.ceil(Math.random() * 100),
-                                            Math.ceil(Math.random() * 90),
-                                            Math.ceil(Math.random() * 100),
-                                            Math.ceil(Math.random() * 100)
-                                        ]} />
-                                </div>
+                                <p style={{ textAlign: "center" }}>{workbenchItem.title}</p>
                             </div>
                         </div>
                     })}

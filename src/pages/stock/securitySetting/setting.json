@@ -26,24 +26,24 @@
             "width": 100
         },
         {
-            "title": "长度",
+            "title": "长度(mm)",
             "dataIndex": "length",
-            "width": 60
+            "width": 100
         },
         {
-            "title": "宽度",
+            "title": "宽度(mm)",
             "dataIndex": "weight",
-            "width": 60
+            "width": 100
         },
         {
-            "title": "安全库存（吨）",
+            "title": "安全库存重量(吨)",
             "dataIndex": "safetyStockWeight",
-            "width": 100
+            "width": 120
         },
         {
-            "title": "告警库存（吨）",
+            "title": "告警库存数量(吨)",
             "dataIndex": "warningStockWeight",
-            "width": 100
+            "width": 120
         }
     ],
     "setting": [
@@ -112,28 +112,32 @@
             "enum": []
         },
         {
-            "title": "长度",
+            "title": "长度(mm)",
             "dataIndex": "length",
             "required": true,
-            "type": "number"
+            "type": "number",
+            "min": 0
         },
         {
-            "title": "宽度",
+            "title": "宽度(mm)",
             "dataIndex": "weight",
             "required": true,
-            "type": "number"
+            "type": "number",
+            "min": 0
         },
         {
             "title": "安全库存（吨）",
             "dataIndex": "safetyStockWeight",
             "required": true,
-            "type": "number"
+            "type": "number",
+            "min": 0
         },
         {
             "title": "告警库存（吨）",
             "dataIndex": "warningStockWeight",
             "required": true,
-            "type": "number"
+            "type": "number",
+            "min": 0
         }
     ]
 }
