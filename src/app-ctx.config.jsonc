@@ -1068,12 +1068,22 @@
                 ]
             },
             {
-                "label": "车间计划基础配置",
+                "label": "基础配置",
                 "icon": "zhujihuapaichan-chejianjihuajichupeizhi_chejianjihuajichupeizhi",
                 "appName": "PC",
                 "path": "/workshopPlanBasic",
                 "authority": "approvalm",
                 "items": [
+                    {
+                        "label": "生产环节管理",
+                        "path": "/workshopPlanBasic/prodLink",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "生产单元管理",
+                        "path": "/workshopPlanBasic/prodUnit",
+                        "authority": "approvalm"
+                    },
                     {
                         "label": "生产工序管理",
                         "path": "/workshopPlanBasic/processMngt",
@@ -1109,25 +1119,7 @@
                         "path": "/workshopPlanBasic/assemblyWeld",
                         "authority": "approvalm"
                     }
-                ]
-            },
-            {
-                "label": "主生产计划",
-                "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
-                "appName": "PC",
-                "path": "/planBaseSetting",
-                "authority": "approvalm",
-                "items": [
-                    {
-                        "label": "生产环节管理",
-                        "path": "/planBaseSetting/prodLink",
-                        "authority": "approvalm"
-                    },
-                    {
-                        "label": "生产单元管理",
-                        "path": "/planBaseSetting/prodUnit",
-                        "authority": "approvalm"
-                    }
+                    
                 ]
             },
             {
