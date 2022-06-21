@@ -4,7 +4,7 @@ import { DetailTitle, BaseInfo, CommonTable, formatData, EditableTable } from '.
 import { BasicInformation, editCargoDetails, SelectedArea, Selected, freightInfo, handlingChargesInfo } from "./receivingListData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { materialStandardTypeOptions, materialTextureOptions, unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
+import { materialStandardOptions, materialTextureOptions, unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
 import { changeTwoDecimal_f } from "../../../utils/KeepDecimals";
 import moment from "moment"
 interface ChooseModalProps {
@@ -31,7 +31,7 @@ const ChooseModal = forwardRef(({ id, initChooseList }: ChooseModalProps, ref) =
     const [waitingArea, setWaitingArea] = useState<any[]>([])
 
     // 标准
-    const standardEnum = materialStandardTypeOptions?.map((item: { id: string, name: string }) => ({
+    const standardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))

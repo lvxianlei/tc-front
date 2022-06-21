@@ -27,7 +27,6 @@ export enum DictionaryEnums {
     DELIVERY_WAY = 128,
     TRANSPORTATION_TYPE = 129,
     PAYMENT_CATEGORY = 136,
-    MATERIAL_STANDARD_TYPE = 138,
     MATERIAL_TEXTURE = 139,
     SUPPLIER_TYPE = 144,
     QUALITY_ASSURANCE = 145,
@@ -135,7 +134,6 @@ if (dictionary) {
     contractForm = dictionary[DictionaryEnums.CONTRACT_FORM];
     paymentCategory = dictionary[DictionaryEnums.PAYMENT_CATEGORY];
     source = dictionary[DictionaryEnums.SOURCE];
-    materialStandardType = dictionary[DictionaryEnums.MATERIAL_STANDARD_TYPE];
     payCategory = dictionary[DictionaryEnums.PAY_CATEGORY];
     bidType = dictionary[DictionaryEnums.BID_TYPE];
     collectionType = dictionary[DictionaryEnums.COLLECTION_TYPE];
@@ -184,7 +182,6 @@ export const contractPlanStatusOptions = contractPlanStatus; // 合同计划状�
 export const contractFormOptions = contractForm; // 收到合同形式
 export const paymentCategoryOptions = paymentCategory; //支付类别
 export const sourceOptions = source; //来源
-export const materialStandardTypeOptions = materialStandardType; //原材料标准类型
 export const payCategoryOptions = payCategory; //来款性质
 export const collectionTypeeOptions = collectionType; // 回款类型
 export const weighingtypeOptions = weighingType; //过磅类型
