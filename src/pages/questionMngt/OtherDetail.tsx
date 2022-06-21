@@ -113,9 +113,9 @@ const towerColumns = [
         title: '理算重量（kg）', 
         dataIndex: 'basicsTheoryWeight', 
         key: 'basicsTheoryWeight' ,
-        render: (_: number, _b: any, index: number): React.ReactNode => (
-            <span>{_===-1?0:_}</span>
-        )  
+        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            <span >{_ === -1 ? 0 : (parseFloat(record?.basicsTheoryWeight)*parseFloat(record?.basicsPartNum)).toFixed(2)}</span>
+        )
     },
     { 
         title: '单件重量（kg）',

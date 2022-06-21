@@ -7,7 +7,8 @@ import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, messag
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import { CommonTable as CommonTableBeFore, DetailContent, DetailTitle } from '../../common';
+import CommonTable from '../../common/CommonAliTable';
 import { StockColumn, ConstructionDetailsColumn, BatchingScheme } from "./IngredientsList.json";
 
 import InheritOneIngredient from "./BatchingRelatedPopFrame/InheritOneIngredient"; // 继承一次配料
@@ -900,14 +901,14 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='values'>{nowIngre.edgeLoss}</span>
                                                     <span className='texts'> 端口：</span>
                                                     <span className='values'>{nowIngre.clampLoss}</span>
-                                                    <span className='texts'>余料长：</span>
+                                                    <span className='texts'>余量：</span>
                                                     <span className='values'>{nowIngre.margin}mm</span>
                                                     <span className='texts'>利用率：</span>
                                                     <span className='values'>{nowIngre.utilizationRate}%</span>
                                                     <span className='texts'>原材料米数：</span>
                                                     <span className='values'
                                                         title={nowIngre?.idealRepertoryLengthList?.join("、")}>
-                                                        {nowIngre?.idealRepertoryLengthList?.join("、")}
+                                                        {nowIngre?.idealRepertoryLengthList && nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")}
                                                     </span>
                                                 </div>
                                                 <div className='ingredients_content_wrapper'>
@@ -920,7 +921,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                 }}>自动配料</Button>,
                                                                 <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
-                                                            <CommonTable
+                                                            <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
                                                                     type: "radio",
@@ -952,7 +953,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                             title: "操作",
                                                                             dataIndex: "opration",
                                                                             fixed: "right",
-                                                                            width: 80,
+                                                                            width: 40,
                                                                             render: (_: any, record: any, index: number) => {
                                                                                 return (
                                                                                     <>
@@ -964,7 +965,9 @@ export default function IngredientsList(): React.ReactNode {
                                                                     ]}
                                                                     dataSource={item.selectedScheme.slice(0)}
                                                                     pagination={false}
-                                                                    scroll={{ x: 1200, y: 200 }}
+                                                                    // scroll={{ x: 1200, y: 320 }}
+                                                                    style={{height: 300, overflow: "auto"}}
+                                                                    code={1}
                                                                 />
                                                             </div>
                                                             <div className='title_wrapper' style={{ width: document.documentElement.clientWidth - 678 }}>
@@ -1010,8 +1013,8 @@ export default function IngredientsList(): React.ReactNode {
                                                                                     render: (_: any, record: any): React.ReactNode => (
                                                                                         // <span>{record[item.dataIndex]}</span>
                                                                                         <div style={{
-                                                                                            color: record.lineHeightColumn.includes(item.dataIndex) ? "#fff" : "black",
-                                                                                            backgroundColor: record.lineHeightColumn.includes(item.dataIndex) ? "green" : "",
+                                                                                            // color: record.lineHeightColumn.includes(item.dataIndex) ? "#fff" : "black",
+                                                                                            backgroundColor: record.lineHeightColumn.includes(item.dataIndex) ? "#CAF982" : "",
                                                                                             height: "32px",
                                                                                             lineHeight: "32px"
                                                                                         }}>{record[item.dataIndex]}</div>
@@ -1034,7 +1037,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                             title: "操作",
                                                                             dataIndex: "opration",
                                                                             fixed: "right",
-                                                                            width: 80,
+                                                                            width: 40,
                                                                             render: (_: any, record: any, index: number) => {
                                                                                 return (
                                                                                     <>
@@ -1046,7 +1049,8 @@ export default function IngredientsList(): React.ReactNode {
                                                                     ]}
                                                                     dataSource={alternativeData}
                                                                     pagination={false}
-                                                                    scroll={{ x: 1200, y: 200 }}
+                                                                    // scroll={{ x: 1200, y: 310 }}
+                                                                    style={{height: 300, overflow: "auto"}}
                                                                 />
                                                             </div>
                                                         </div>

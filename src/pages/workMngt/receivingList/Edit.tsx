@@ -406,7 +406,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         let num: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             num = (parseFloat(num) + parseFloat(item.num || "0.00")).toFixed(2)
-            const totalTaxPrice = ((item.ponderationWeight || "0") * item.num) * item.taxPrice
+            const totalTaxPrice = (item.ponderationWeight || "0") * item.taxPrice
             const totalPrice = ((item.weight || "0") * item.num) * item.taxPrice
             const postData = {
                 ...item,
@@ -439,28 +439,28 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         setCargoData(dataSource)
         setVisible(false);
         // 选择完货物明细，
-        let transportPriceCount = "0",
-            unloadPriceCount = "0",
-            weightAll = 0,
-            priceAll = 0;
-        if (dataSource.length > 0) {
-            for (let i = 0; i < dataSource.length; i += 1) {
-                weightAll = weightAll + (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
-                priceAll = dataSource[i].price * 1 + priceAll;
-            }
-            // 运费价税合计 = 总重量 * 单价
-            transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
-            // 装卸费合计 = 总重量 * 单价
-            unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
-        }
-        setFreightInformation({
-            ...freightInformation,
-            transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
-        })
-        setHandlingCharges({
-            ...handlingCharges,
-            unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
-        })
+        // let transportPriceCount = "0",
+        //     unloadPriceCount = "0",
+        //     weightAll = 0,
+        //     priceAll = 0;
+        // if (dataSource.length > 0) {
+        //     for (let i = 0; i < dataSource.length; i += 1) {
+        //         weightAll = weightAll + (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
+        //         priceAll = dataSource[i].price * 1 + priceAll;
+        //     }
+        //     // 运费价税合计 = 总重量 * 单价
+        //     transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
+        //     // 装卸费合计 = 总重量 * 单价
+        //     unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
+        // }
+        // setFreightInformation({
+        //     ...freightInformation,
+        //     transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
+        // })
+        // setHandlingCharges({
+        //     ...handlingCharges,
+        //     unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
+        // })
     }
 
     const { run: getSupplier } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
@@ -603,7 +603,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const editData = editForm.getFieldsValue().submit
             const dataSource: any[] = cargoData.map((item: any, index: number) => {
                 //过磅
-                const totalTaxPrice = ((editData[index].ponderationWeight || "0") * item.num) * item.taxPrice
+                const totalTaxPrice = (editData[index].ponderationWeight || "0") * item.taxPrice
                 //理算
                 const totalPrice = ((item.weight || "0") * item.num) * item.taxPrice
                 const postData = {
@@ -629,7 +629,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const ponderationWeight = data.submit[data.submit.length - 1]?.ponderationWeight
             const newFields = allValues.submit.map((item: any, index: number) => {
                 if ((index === data.submit.length - 1) && meteringMode === 2) {
-                    const totalTaxPrice = (ponderationWeight * item.num) * item.taxPrice
+                    const totalTaxPrice = (ponderationWeight || "0") * item.taxPrice
                     return ({
                         ...item,
                         totalTaxPrice: totalTaxPrice.toFixed(2),

@@ -203,7 +203,7 @@ export default function Lofting(): React.ReactNode {
                     pattern: /^\+?[1-9][0-9]*$/,
                     message: '仅可输入非负数',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)}/>
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -259,7 +259,7 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'bend',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "bend"]} initialValue={_}  rules={[{
+                <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
                     pattern: /^\+?[1-9][0-9]*$/,
                     message: '仅可输入非负数',
                 }]}>
@@ -458,7 +458,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -488,7 +488,7 @@ export default function Lofting(): React.ReactNode {
                     pattern: /^[0-9,*]*$/,
                     message: '仅可输入数字/*/,',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -518,7 +518,7 @@ export default function Lofting(): React.ReactNode {
                     pattern: /^[0-9,*]*$/,
                     message: '仅可输入数字/*/,',
                 }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                    <Input size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
@@ -729,14 +729,12 @@ export default function Lofting(): React.ReactNode {
 
     const del = () => {
         if (selectedKeys.length > 0) {
-            if (selectedKeys.length > 100) {
-                message.warning('删除项不可大于100')
-            } else {
-                RequestUtil.delete(`/tower-science/productStructure?productStructureIdList=${selectedKeys.join(',')}`).then(res => {
-                    message.success('删除成功');
-                    history.go(0);
-                })
-            }
+            RequestUtil.post(`/tower-science/productStructure`, {
+                productStructureIdList: selectedKeys
+            }).then(res => {
+                message.success('删除成功');
+                history.go(0);
+            })
         } else {
             message.warning('请选择要删除的数据')
         }

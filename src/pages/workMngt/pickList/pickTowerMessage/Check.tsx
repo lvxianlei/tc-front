@@ -103,7 +103,11 @@ export default function PickCheckList(): React.ReactNode {
             title: '理算重量（kg）', 
             dataIndex: 'basicsTheoryWeight', 
             key: 'basicsTheoryWeight', 
-            editable: false 
+            editable: false,
+            render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{(parseFloat(record?.basicsTheoryWeight)*parseFloat(record?.basicsPartNum)).toFixed(2)}</span>
+            )
+            
         },
         { 
             title: '单件重量（kg）', 

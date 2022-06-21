@@ -111,7 +111,7 @@
             ]
         },
         {
-            "title": "塔型配料",
+            "title": "采购配料",
             "dataIndex": "purchaseIngredientsWorkBenchVo",
             "col": 2,
             "path": "工作管理-采购配料",
@@ -149,7 +149,7 @@
             ]
         },
         {
-            "title": "塔型采购",
+            "title": "采购列表",
             "col": 2,
             "dataIndex": "purchaseTaskTowerWorkBenchVo",
             "path": "工作管理-采购列表",
