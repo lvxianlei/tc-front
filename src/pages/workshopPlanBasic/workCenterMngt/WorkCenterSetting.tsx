@@ -354,13 +354,14 @@ export default function WorkCenterSetting(): React.ReactNode{
                         if(info.file.response && info.file.response?.success){
                             if (info.file.response && info.file.response?.success) {
                                 if (info.file.response?.data) {
-                                    const str =  info.file.response?.data
+                                    console.log(info.file.response?.data?.data)
+                                    const str =  info.file.response?.data?.data
                                     const value =  typeof str === 'string'
                                     if(value){
                                         window.open(str)
                                     }else{
                                         message.success('导入成功！');
-                                        setWorkCenterRelationsList(info.file.response?.data.concat(workCenterRelationsList))
+                                        setWorkCenterRelationsList([...info.file.response?.data?.data.concat(workCenterRelationsList)])
                                     }
                                    
                                 }
