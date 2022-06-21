@@ -3,10 +3,10 @@
  * 原文件：当前目录下OriginalDocument.tsx
  * 时间：2022/01/05
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, Select } from 'antd';
 import { SearchTable as Page } from '../../common';
-import { materialStandardTypeOptions } from '../../../configuration/DictionaryOptions';
+import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import {
     baseColunm
@@ -95,7 +95,7 @@ export default function ViewPanel(): React.ReactNode {
                         children: (
                             <Select placeholder="请选择标准" style={{ width: "300px" }}>
                                 {
-                                    materialStandardTypeOptions?.map((item: any, index: number) => {
+                                    materialStandardOptions?.map((item: any, index: number) => {
                                         return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
                                     })
                                 }
