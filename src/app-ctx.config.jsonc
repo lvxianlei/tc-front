@@ -42,6 +42,11 @@
                         "label": "成本评估配置",
                         "path": "/sys/costconfig",
                         "authority": "costconfig"
+                    },
+                    {
+                        "label": "定额配置",
+                        "path": "/sys/quotaConfig",
+                        "authority": "costconfig"
                     }
                 ]
             },
@@ -1119,6 +1124,46 @@
                         "authority": "approvalm"
                     }
                 ]
+            },
+            {
+                "label": "质量检验看板",
+                "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
+                "appName": "QMS",
+                "path": "/qualityInspection",
+                "authority": "approvalm",
+                "items": [
+                    {
+                        "label": "不合格处置单",
+                        "path": "/qualityInspection/disposition",
+                        "authority": "approvalm"
+                    }
+                ]
+            },
+            {
+                "label": "不合格项目金额配置",
+                "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
+                "appName": "QMS",
+                "path": "/unqualifiedAmount",
+                "authority": "approvalm",
+                "items": [
+                    {
+                        "label": "工序配置列表",
+                        "path": "/unqualifiedAmount/processConfigurationList",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "不合格项目金额配置列表",
+                        "path": "/unqualifiedAmount/list",
+                        "authority": "approvalm"
+                    }
+                ]
+            },
+            {
+                "label": "TDM-塔型数据管理",
+                "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
+                "appName": "RD",
+                "path": "http://erp-tdm-hjt.dhwy.cn/login",
+                "authority": "approvalm"
             }
         ]
     },

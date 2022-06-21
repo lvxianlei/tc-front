@@ -76,6 +76,7 @@ export default function Login(): JSX.Element {
             })
         } else {
             Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
+            Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
             Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserId(user_id)
