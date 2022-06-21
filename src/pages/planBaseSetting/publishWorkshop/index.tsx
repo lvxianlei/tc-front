@@ -11,7 +11,7 @@ export default () => {
     const history = useHistory()
     const [weldingForm] = Form.useForm()
     const [form] = Form.useForm();
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ executeStatus: 1 });
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ executeStatus: 1, status: 1  });
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
     const [selectedRows, setSelectedRows] = useState<Key[]>([])
     const onSelectChange = (selected: Key[], selectedRows:any[]) => {
