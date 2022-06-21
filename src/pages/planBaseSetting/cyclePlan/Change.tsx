@@ -13,7 +13,7 @@ const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.Cla
 const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
 
 
-export default function CyclePlanDetail(): React.ReactNode {
+export default function CyclePlanChange(): React.ReactNode {
     const DragHandle = SortableHandle(() => <>
         <MenuOutlined style={{ cursor: 'grab', color: '#999' }} />
     </>);
@@ -207,7 +207,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={async () => {
-                        await RequestUtil.delete(`/tower-aps/cyclePlan/cyclePlanOrder/${record?.cyclePlanId}/${record.id}`)
+                        await RequestUtil.delete(`/tower-aps/cyclePlan/cyclePlanOrder/${record.id}`)
                         message.success('删除成功！')
                         history.go(0)
                     }}
@@ -394,7 +394,7 @@ export default function CyclePlanDetail(): React.ReactNode {
             <DetailContent operation={[
                 <Space>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () =>{
+                    <Button type="primary" ghost onClick={async () =>{
                         await form.validateFields()
                         const value = form.getFieldsValue(true)
                         console.log(value)
@@ -419,13 +419,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                         setDeleteIdList([])
                         setSelectedRows([])
                         await run()
-                    }}>保存</Button>}
-                    {detail?.status!==2&&<Button type="primary" ghost onClick={async () => {
+                    }}>保存</Button>
+                    <Button type="primary" ghost onClick={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/confirmMaterial/${params.id}`)
                             message.success("备料确认已下发！")
                             await run()
-                    }} disabled={detail?.status===2}>备料确认</Button>}
-                    {detail?.status!==2&&<Popconfirm
+                    }} disabled={detail?.status===2}>备料确认</Button>
+                    <Popconfirm
                         title="下发后不可取消，是否下发周期计划？"
                         onConfirm={async () => {
                             await RequestUtil.post(`/tower-aps/cyclePlan/issue/${params.id}`)
@@ -436,7 +436,7 @@ export default function CyclePlanDetail(): React.ReactNode {
                         cancelText="取消"
                     >
                         <Button type="primary" ghost >周期计划下发</Button>
-                    </Popconfirm>}
+                    </Popconfirm>
                 </Space>
             ]}>
                 <DetailTitle title="基础信息"/>
@@ -486,13 +486,13 @@ export default function CyclePlanDetail(): React.ReactNode {
                     </Row>
                 </Form>
                 <DetailTitle title="周期计划下达单"/>
-                {detail?.status!==2&&<Space>
+                <Space>
                     <ReleaseOrder run={run} data={detail}/>
                     <Button type="primary" ghost onClick={useDate} disabled={!(selectedKeys.length > 0)}>计划完成日期</Button>
                     <Button type="primary" ghost onClick={() => {
                         setVisible(true)
                     }} disabled={!(selectedKeys.length > 0)}>周期计划备注</Button>
-                </Space>}
+                </Space>
                 <div>
                     <Space>
                         <span>合计：</span>

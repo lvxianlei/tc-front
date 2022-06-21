@@ -235,7 +235,7 @@ export default function ManualDistribute(): ReactElement {
                 <Radio.Button value={1}>构件明细</Radio.Button>
                 <Radio.Button value={2}>组焊明细</Radio.Button>
             </Radio.Group>
-            <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配单元</Button>
+            <Button type="primary" disabled={selectedRowKeys.length <= 0}>手动分配单元</Button>
         </Space>
         <Row style={{ paddingLeft: 20 }}>
             <Space>
