@@ -56,10 +56,15 @@ export default function ViewPanel(): React.ReactNode {
                                 width: 120,
                                 render: (_: any, record: any): React.ReactNode => {
                                     return (
-                                        <span style={{background: 
-                                            record.usableTotalWeight < record.warningStockWeight ? "red"
-                                            : (record.usableTotalWeight > record.warningStockWeight && record.safetyStockWeight) ?
-                                            "yellow" : ""
+                                        <span style={{
+                                                display: "inline-block",
+                                                width: "100%",
+                                                height: "100%",
+                                                lineHeight: "26px",
+                                                background: 
+                                                    record.usableTotalWeight < record.warningStockWeight ? "red"
+                                                    : (record.usableTotalWeight > record.warningStockWeight && record.safetyStockWeight) ?
+                                                    "yellow" : ""
                                         }}>
                                             {record.usableTotalWeight}
                                         </span>
