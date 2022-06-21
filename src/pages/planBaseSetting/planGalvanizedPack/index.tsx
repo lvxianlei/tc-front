@@ -43,7 +43,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         totalAngleNumber:0,
         totalPlateNumber:0,
     })
-    const [filterValue, setFilterValue] = useState({status:1});
+    const [filterValue, setFilterValue] = useState({});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const history = useHistory();
