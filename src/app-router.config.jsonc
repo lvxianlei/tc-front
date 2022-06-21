@@ -2653,14 +2653,14 @@
     },
     { // 生产环节管理
       "name": "生产环节管理",
-      "path": "/planBaseSetting/prodLink",
+      "path": "/workshopPlanBasic/prodLink",
       "module": "./pages/planBaseSetting/prodLink/prodLink",
       "exact": true,
       "authority": "approvalm"
     },
     { // 生产单元管理
       "name": "生产单元管理",
-      "path": "/planBaseSetting/prodUnit",
+      "path": "/workshopPlanBasic/prodUnit",
       "module": "./pages/planBaseSetting/prodUnit/prodUnit",
       "exact": true,
       "authority": "production_unit_management"
