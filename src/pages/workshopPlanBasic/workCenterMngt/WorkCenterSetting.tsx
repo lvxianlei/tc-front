@@ -34,7 +34,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                 ...result,
                 time: result.workStartTime&&result.workEndTime?[moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')]:'',
                 equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[],
-                workUnitName: result?.workUnitId+','+result?.workUnitName+','+result?.code
+                unitName: result?.unitId+','+result?.unitName+','+result?.code
             })
             setWorkCenterRelationsList(result?.workCenterRelations);
             resole(result)
@@ -116,7 +116,8 @@ export default function WorkCenterSetting(): React.ReactNode{
                     workStartTime: baseData?.time?baseData.time[0].format('HH:mm'):"",
                     workEndTime:  baseData?.time?baseData.time[1].format('HH:mm'):"",
                     workCenterRelations: workCenterRelationsList,
-                    workUnitName: baseData?.workUnitName.split(',')[1],
+                    unitName: baseData?.unitName.split(',')[1],
+                    unitId: baseData?.unitName.split(',')[0],
                     equipmentId: baseData&&baseData?.equipmentId&&baseData?.equipmentId.length>0?baseData.equipmentId.join(','):''
                 })
                 resolve(true);
@@ -153,7 +154,7 @@ export default function WorkCenterSetting(): React.ReactNode{
         },
         {
             "title": "生产单元名称",
-            "dataIndex": "workUnitName",
+            "dataIndex": "unitName",
             "type": "select",
         },
         {
@@ -288,11 +289,11 @@ export default function WorkCenterSetting(): React.ReactNode{
                         )
                     })
                 }
-                if (item.dataIndex === "workUnitName") {
+                if (item.dataIndex === "unitName") {
                     return ({
                         ...item, type: 'select',
                         render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Form.Item name="workUnitName" style={{ width: '100%' }} rules={[
+                            <Form.Item name="unitName" style={{ width: '100%' }} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择生产单元"

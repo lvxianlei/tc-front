@@ -17,16 +17,16 @@ import { useHistory } from 'react-router';
 export default function ProcessMngt(): React.ReactNode {
     const columns = [
         {
-            key: 'workUnit',
+            key: 'code',
             title: '生产单元编码',
             width: 150,
-            dataIndex: 'workUnit'
+            dataIndex: 'code'
         },
         {
-            key: 'workUnitName',
+            key: 'unitName',
             title: '生产单元名称',
             width: 150,
-            dataIndex: 'workUnitName'
+            dataIndex: 'unitName'
         },
         {
             key: 'workCenterName',
@@ -103,7 +103,7 @@ export default function ProcessMngt(): React.ReactNode {
                 refresh={refresh}
                 searchFormItems={[
                     {
-                        name: 'workUnitName',
+                        name: 'unitName',
                         label: '',
                         children: <Input placeholder="生产单元名称" />
                     },
