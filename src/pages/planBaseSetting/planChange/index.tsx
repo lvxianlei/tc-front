@@ -1,33 +1,18 @@
-import React, { useCallback, useState } from "react"
+import React, { useState } from "react"
 import { Link, useHistory } from "react-router-dom"
-import { Button, DatePicker, Form, Input, message, Modal, Popconfirm, Select, Space } from "antd"
+import { Button, DatePicker, Form, Input, Select, Space } from "antd"
 import { Page } from "../../common"
 import { productTypeOptions } from "../../../configuration/DictionaryOptions"
-import RequestUtil from "../../../utils/RequestUtil"
-import useRequest from "@ahooksjs/use-request"
 export default () => {
-    const history = useHistory()
-    const [isAdd, setIsAdd] = useState<boolean>(false)
     const [refresh, setRefresh] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
-        status:1
+        changeType: 1
     });
-    const [form] = Form.useForm();
-    const [cyclePlanType,setCyclePlanType] = useState<any[]>([]);
-    const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-aps/workshop/config/cycleConfig?current=1&size=10000`)
-        setCyclePlanType(data?.records)
-        resole(data)
-    }), {})
-    const formItemLayout = {
-        labelCol: { span: 6 },
-        wrapperCol: { span: 16 }
-    };
     const columns = [
         {
             title: "塔型",
             width: 150,
-            dataIndex: "productCategory"
+            dataIndex: "productCategoryName"
         },
         {
             title: "计划号",
@@ -36,28 +21,28 @@ export default () => {
         },
         {
             title: "产品类型",
-            dataIndex: "productType",
+            dataIndex: "productTypeName",
             width: 200,
         },
         {
             title: "客户",
-            dataIndex: "customerCompany",
+            dataIndex: "customer",
             width: 150,
         },
         {
             title: "基数",
             width: 150,
-            dataIndex: "num"
+            dataIndex: "number"
         },
         {
             title: "总重量（t）",
             width: 150,
-            dataIndex: "num"
+            dataIndex: "totalWeight"
         },
         {
             title: "变更类型",
             width: 150,
-            dataIndex: "num",
+            dataIndex: "changeType",
             type: "select",
             enum: [
                 {
@@ -82,11 +67,11 @@ export default () => {
         {
             title: "变更日期",
             width: 150,
-            dataIndex: "num"
+            dataIndex: "changeDate"
         }
     ] 
     return <Page
-            path="/tower-aps/cyclePlan"
+            path="/tower-aps/change/page"
             filterValue={filterValue}
             columns={[
                 ...columns as any,
@@ -96,7 +81,7 @@ export default () => {
                     fixed: "right",
                     render: (_:any,record: any) => <Space>
                         <Link
-                            to={`/planProd/planChange/${record?.id}/${record?.status}`}
+                            to={`/planProd/planChange/${record?.changeId}/${record?.changeType}`}
                         >
                             <Button type="link" size="small">明细</Button>
                         </Link>
@@ -110,23 +95,29 @@ export default () => {
                     children: <Input placeholder="计划号/塔型/业务经理/客户" style={{ width: 150 }} />
                 },
                 {
-                    name: "configId",
+                    name: "productTypeName",
                     label: '产品类型',
                     children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                        <Select.Option key={''} value={''}>
+                            全部
+                        </Select.Option>
                         {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
+                            return <Select.Option key={index} value={name}>
                                 {name}
                             </Select.Option>
                         })}
                     </Select>
                 },
                 {
-                    name: "status",
+                    name: "changeType",
                     label: "变更类型",
-                    children: <Form.Item name='status' initialValue={1}>
+                    children: <Form.Item name='changeType' initialValue={1}>
                         <Select placeholder="请选择" style={{ width: "150px" }}>
+                            <Select.Option key={''} value={''}>
+                                全部
+                            </Select.Option>
                             <Select.Option value={1} key={1}>暂停加工</Select.Option>
-                            <Select.Option value={2} key={2}> 取消加工</Select.Option>
+                            <Select.Option value={2} key={2}>取消加工</Select.Option>
                             <Select.Option value={3} key={3}>恢复加工</Select.Option>
                         </Select>
                     </Form.Item>
@@ -141,8 +132,8 @@ export default () => {
             onFilterSubmit={(values: any) => {
                 if (values.time) {
                     const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-                    values.planStartTime = formatDate[0] + ' 00:00:00';
-                    values.planEndTime = formatDate[1] + ' 23:59:59';
+                    values.startTime = formatDate[0] + ' 00:00:00';
+                    values.endTime = formatDate[1] + ' 23:59:59';
                     delete values.time
                 }
                 setFilterValue(values)

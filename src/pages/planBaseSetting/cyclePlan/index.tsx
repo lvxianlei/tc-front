@@ -152,7 +152,7 @@ export default () => {
                             <Button type="link" size="small" disabled={record?.isChanged===2}>详情</Button>
                         </Link>
                         <Link
-                            to={`/planProd/cyclePlan/detail/${record?.id}/${record?.configId}`}
+                            to={`/planProd/cyclePlan/change/${record?.id}/${record?.configId}`}
                         >
                             <Button type="link" size="small"  disabled={record?.isChanged===1}>变更</Button>
                         </Link>
@@ -190,6 +190,7 @@ export default () => {
                     name: "configId",
                     label: '周期计划类型',
                     children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                        <Select.Option value='' key="">全部</Select.Option>
                         {cyclePlanType && cyclePlanType.map(({ groupId, cyclePlan }, index) => {
                             return <Select.Option key={index} value={groupId}>
                                 {cyclePlan}
@@ -202,6 +203,7 @@ export default () => {
                     label: "周期计划状态",
                     children: <Form.Item name='status' initialValue={1}>
                         <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                            <Select.Option value='' key="">全部</Select.Option>
                             <Select.Option value={1}>未下发</Select.Option>
                             <Select.Option value={2}>已下发</Select.Option>
                         </Select>

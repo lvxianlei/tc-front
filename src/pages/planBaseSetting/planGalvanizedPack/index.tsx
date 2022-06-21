@@ -89,16 +89,16 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 <span>角钢总件数：{sum?.totalAngleNumber}</span>
                 <span>钢板总件数：{sum?.totalPlateNumber}</span>
             </Space>
-            <Button type="primary" disabled={selectedKeys.length <= 0} onClick={()=>{
-                let error:boolean = false;
-                selectedRows.map((item:any)=>{
-                    if(item.status !==1 ){
-                        error = true
-                    }
-                })
-                if(error){
-                    return message.error('已下发、已完成，不可再次镀锌包装下发！')
-                }
+            <Button type="primary" disabled={selectedKeys.length <= 0|| selectedRows.findIndex((item:any)=>item.status!==1)!==-1} onClick={()=>{
+                // let error:boolean = false;
+                // selectedRows.map((item:any)=>{
+                //     if(item.status !==1 ){
+                //         error = true
+                //     }
+                // })
+                // if(error){
+                //     return message.error('已下发、已完成，不可再次镀锌包装下发！')
+                // }
                 history.push(`/planProd/planGalvanizedPack/${selectedKeys.join(',')}`)
             }}>镀锌包装下发</Button>
         </Space>}
@@ -122,6 +122,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 name: 'productTypeId',
                 label: '产品类型',
                 children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                    <Select.Option value='' key="">全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
@@ -154,6 +155,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 label: '状态',
                 children: <Form.Item name='status' initialValue={1}>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
+                        {/* <Select.Option value='' key="">全部</Select.Option> */}
                         <Select.Option value={1} key="1">未下发</Select.Option>
                         <Select.Option value={2} key="2">已下发</Select.Option>
                         <Select.Option value={3} key="3">镀锌已完成</Select.Option>

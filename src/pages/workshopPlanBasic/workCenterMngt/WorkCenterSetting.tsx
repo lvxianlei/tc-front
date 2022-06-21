@@ -33,7 +33,8 @@ export default function WorkCenterSetting(): React.ReactNode{
             baseForm.setFieldsValue({
                 ...result,
                 time: result.workStartTime&&result.workEndTime?[moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')]:'',
-                equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[]
+                equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[],
+                workUnitName: result?.workUnitId+','+result?.workUnitName+','+result?.code
             })
             setWorkCenterRelationsList(result?.workCenterRelations);
             resole(result)
@@ -115,6 +116,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                     workStartTime: baseData?.time?baseData.time[0].format('HH:mm'):"",
                     workEndTime:  baseData?.time?baseData.time[1].format('HH:mm'):"",
                     workCenterRelations: workCenterRelationsList,
+                    workUnitName: baseData?.workUnitName.split(',')[1],
                     equipmentId: baseData&&baseData?.equipmentId&&baseData?.equipmentId.length>0?baseData.equipmentId.join(','):''
                 })
                 resolve(true);
@@ -334,7 +336,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                 <Upload 
                     action={ () => {
                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl+'/tower-system/dataRecord/import'
+                        return baseUrl+'/tower-aps/work/relation/importRelation'
                     } } 
                     accept=".xls,.xlsx"
                     headers={
@@ -352,10 +354,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                         if(info.file.response && info.file.response?.success){
                             if (info.file.response && info.file.response?.success) {
                                 if (info.file.response?.data) {
-                                    const str =  'http://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/upload/20220620/ea0ec0debc15adb2a59074627f59954b.xlsx?Expires=1655687012295&OSSAccessKeyId=LTAI5tMjPgTT4YauhRxnzUYL&Signature=dracHhqgPW%2BlhC%2BQYBxM8yW2KsU%3D'
-                                    const strArr = [{
-                                        materialTextureName:'1'
-                                    }]
+                                    const str =  info.file.response?.data
                                     const value =  typeof str === 'string'
                                     if(value){
                                         window.open(str)
@@ -371,7 +370,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                 >
                     <Button type="primary" ghost>导入</Button>
                 </Upload>
-                <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '产能矩阵模板')} ghost>下载导入模板</Button>
+                <Button type="primary" onClick={() => downloadTemplate('/tower-aps/work/relation/exportTemplate', '产能矩阵模板')} ghost>下载导入模板</Button>
             </Space>]} />
             <Table
                 scroll={{ x: 500 }}

@@ -141,7 +141,7 @@ export default function SampleDraw(): React.ReactNode {
         },
         {
             title: "执行状态",
-            dataIndex: "executeStatus",
+            dataIndex: "executionStatus",
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
@@ -154,7 +154,7 @@ export default function SampleDraw(): React.ReactNode {
             fixed: "right",
             render: (_: any, record: Record<string, any>, index: number) =>
                 <Button type="link" onClick={async ()=>{
-                    // const value:any[] = await RequestUtil.get(`/productionPlan/change/batch/${record?.productId}`)
+                    const value:any[] = await RequestUtil.get(`/tower-aps/productionPlan/change/batch/${record?.id}`)
                     Modal.warn({
                         title: "查看批次变更记录",
                         icon: null,
@@ -196,7 +196,7 @@ export default function SampleDraw(): React.ReactNode {
                                         key: 'createUserName',
                                         title: '操作人',
                                         dataIndex: 'createUserName'
-                                    },]} dataSource={[]} pagination={false}/>
+                                    },]} dataSource={[...value]} pagination={false}/>
                         </>,
                         
                     })

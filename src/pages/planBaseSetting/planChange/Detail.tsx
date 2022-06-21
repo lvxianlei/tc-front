@@ -16,33 +16,46 @@ interface IResponseData {
 
 const tableColumns = [
     {
-        key: 'segmentName',
+        key: 'productNumber',
         title: '杆塔号',
-        dataIndex: 'segmentName',
+        dataIndex: 'productNumber',
     },
     {
-        key: 'code',
+        key: 'isWorkDistributed',
         title: '是否技术派工',
-        dataIndex: 'code',
-        width: 120
+        dataIndex: 'isWorkDistributed',
+        width: 120,
+        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_===true?'是':'否'}</span>
+        )
+        
     },
     {
-        key: 'materialName',
+        key: 'isProdctionOrder',
         title: '是否生产下达',
         width: 200,
-        dataIndex: 'materialName'
+        dataIndex: 'isProductionOrder',
+        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_===true?'是':'否'}</span>
+        )
     },
     {
-        key: 'structureTexture',
+        key: 'isReport',
         title: '是否全部报工',
         width: 150,
-        dataIndex: 'structureTexture',
+        dataIndex: 'isReport',
+        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_===true?'是':'否'}</span>
+        )
     },
     {
-        key: 'executeStatus',
+        key: 'changeStatus',
         title: '执行状态',
-        dataIndex: 'executeStatus',
+        dataIndex: 'changeStatus',
         width: 200,
+        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+            <span>{_===1?'暂停':_===2?'取消':_===3?'正常':'-'}</span>
+        )
     }
 ]
 
@@ -60,7 +73,7 @@ export default function PlanChangeDetail(): React.ReactNode {
     }
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IResponseData>(`/tower-science/drawProductStructure/productCategory/${params.id}`, { ...pagination });
+        const data = await RequestUtil.get<IResponseData>(`/tower-aps/change/detail/${params.id}`, { ...pagination });
         setDetailData(data);
         resole(data);
     });

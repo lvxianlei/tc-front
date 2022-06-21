@@ -1845,6 +1845,13 @@
       "exact": true,
       "authority": "approvalm"
     },
+    { // 计划排产-周期计划-变更
+      "name": "变更",
+      "path": "/planProd/cyclePlan/change/:id/:configId",
+      "module": "./pages/planBaseSetting/cyclePlan/Change",
+      "exact": true,
+      "authority": "approvalm"
+    },
     { // 计划排产-车间计划基础配置-周期计划类型配置
       "name": "周期计划类型配置管理",
       "path": "/workshopPlanBasic/cyclePlanConfig",
