@@ -63,7 +63,8 @@ export default function PlanChangeDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, status: string }>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    const [detailData, setDetailData] = useState<IResponseData | undefined>(undefined);
+    const [detailData, setDetailData] = useState<any>({});
+    const [dataSource, setDataSource] = useState<IResponseData | undefined>(undefined);
     const page = {
         current: 1,
         pageSize: 10
@@ -73,8 +74,10 @@ export default function PlanChangeDetail(): React.ReactNode {
     }
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<IResponseData>(`/tower-aps/change/detail/${params.id}`, { ...pagination });
+        const data:any = await RequestUtil.get<IResponseData>(`/tower-aps/change/detail/${params.id}`);
+        const dataSource :any = await RequestUtil.get<IResponseData>(`/tower-aps/change/product/page/${params.id}`, { ...pagination });
         setDetailData(data);
+        setDataSource(dataSource)
         resole(data);
     });
 
@@ -96,14 +99,14 @@ export default function PlanChangeDetail(): React.ReactNode {
     ]}>
         <DetailTitle title='基本信息'/>
         <BaseInfo
-            dataSource={{}}
+            dataSource={detailData}
             col={3}
             columns={baseDataColumns}
         />
         <DetailTitle title='杆塔信息'/>
         <CommonTable
             columns={tableColumns}
-            dataSource={detailData?.records}
+            dataSource={dataSource?.records}
             // onChange={(pagination: TablePaginationConfig) => {
             //     getTableDataSource(pagination);
             // }}
@@ -112,9 +115,9 @@ export default function PlanChangeDetail(): React.ReactNode {
             //     onChange: SelectChange,
             // }}
             pagination={{
-                current: detailData?.current || 0,
-                pageSize: detailData?.size || 0,
-                total: detailData?.total || 0,
+                current: dataSource?.current || 0,
+                pageSize: dataSource?.size || 0,
+                total: dataSource?.total || 0,
                 showSizeChanger: false
             }}
         />
