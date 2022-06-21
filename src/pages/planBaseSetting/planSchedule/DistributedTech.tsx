@@ -115,13 +115,13 @@ export default function DistributedTech(): React.ReactNode {
             title: "操作",
             dataIndex: "operation",
             fixed: "right",
-            render: (_:any,record: any) =>
+            render: (_:any,record: any,index:number) =>
                 <Popconfirm
                     title="是否确认删除？"
                     onConfirm={async () => {
-                        await RequestUtil.delete(`/tower-aps/cyclePlan/${record?.id}`)
+                        dataSource.splice(index,1)
+                        setDataSource([...dataSource])
                         message.success("删除成功！")
-                        history.go(0)
                     }}
                     okText="确认"
                     cancelText="取消"
@@ -174,10 +174,15 @@ export default function DistributedTech(): React.ReactNode {
 
     const issue = async () => {
         const data = await form.validateFields();
-        RequestUtil.post(`/tower-aps/planUnitLink/lofting/issue?unitId=${data?.unitId}&ids=${dataSource.map((item: IPlanSchedule) => { return item.id }).join(',')}&linkId=${data?.linkId}`).then(res => {
-            message.success('下发成功');
-            history.goBack();
-        });
+        if(dataSource.length>0){
+            RequestUtil.post(`/tower-aps/planUnitLink/lofting/issue?unitId=${data?.unitId}&ids=${dataSource.map((item: IPlanSchedule) => { return item.id }).join(',')}&linkId=${data?.linkId}`).then(res => {
+                message.success('下发成功');
+                history.goBack();
+            });
+        }else{
+            message.error(`当前无数据，不可技术派工！`)
+        }
+        
     }
 
     const completeTime = () => {
@@ -272,7 +277,7 @@ export default function DistributedTech(): React.ReactNode {
                     onClick={techDescription} >技术派工备注</Button>
             </Space>
             <CommonAliTable
-                dataSource={dataSource}
+                dataSource={[...dataSource]}
                 pagination={false}
                 columns={tableColumns as any}
                 rowSelection={{

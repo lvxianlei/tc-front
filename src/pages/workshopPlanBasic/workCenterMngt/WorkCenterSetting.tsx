@@ -34,7 +34,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                 ...result,
                 time: result.workStartTime&&result.workEndTime?[moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')]:'',
                 equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[],
-                unitName: result?.unitId+','+result?.unitName+','+result?.code
+                unitName: result?.unitName+','+result?.code
             })
             setWorkCenterRelationsList(result?.workCenterRelations);
             resole(result)
@@ -116,8 +116,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                     workStartTime: baseData?.time?baseData.time[0].format('HH:mm'):"",
                     workEndTime:  baseData?.time?baseData.time[1].format('HH:mm'):"",
                     workCenterRelations: workCenterRelationsList,
-                    unitName: baseData?.unitName.split(',')[1],
-                    unitId: baseData?.unitName.split(',')[0],
+                    unitName: baseData?.unitName.split(',')[0],
                     equipmentId: baseData&&baseData?.equipmentId&&baseData?.equipmentId.length>0?baseData.equipmentId.join(','):''
                 })
                 resolve(true);
@@ -153,7 +152,7 @@ export default function WorkCenterSetting(): React.ReactNode{
             ]
         },
         {
-            "title": "生产单元名称",
+            "title": <span><span style={{color:'red'}}>* </span>生产单元名称</span>,
             "dataIndex": "unitName",
             "type": "select",
         },
@@ -296,18 +295,18 @@ export default function WorkCenterSetting(): React.ReactNode{
                             <Form.Item name="unitName" style={{ width: '100%' }} rules={[
                                 {
                                     "required": true,
-                                    "message": "请选择生产单元"
+                                    "message": "请选择生产单元名称"
                                 }
                             ]}> 
                                 <Select onChange={(value:any)=>{
                                     console.log(value)
                                     const codeValue = value.split(',')
                                     baseForm.setFieldsValue({
-                                        code:codeValue[2]
+                                        code:codeValue[1]
                                     })
                                 }} showSearch>
                                     {codeList?.map((item: any) => {
-                                        return <Select.Option key={item.id} value={item.id+","+item.name+','+item.productUnitCode}>{item.name}</Select.Option>
+                                        return <Select.Option key={item.id} value={item.name+','+item.productUnitCode}>{item.name}</Select.Option>
                                     })}
                                 </Select>
                             </Form.Item>
