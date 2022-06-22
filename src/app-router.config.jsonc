@@ -1077,20 +1077,6 @@
       "exact": true,
       "authority": "sw_work_management_receiving_list_edits"
     },
-    { // 工作管理-差异列表
-      "name": "差异列表",
-      "path": "/ingredients/differentList",
-      "module": "./pages/workMngt/differentList/index",
-      "exact": true,
-      "authority": "work_management_difference_list"
-    },
-    { // 工作管理-差异列表-详情
-      "name": "差异列表",
-      "path": "/ingredients/differentList/detail/:id",
-      "module": "./pages/workMngt/differentList/Overview",
-      "exact": true,
-      "authority": "sw_work_management_difference_list_details"
-    },
     { // 工作管理-缺料列表
       "name": "缺料列表",
       "path": "/ingredients/shortageList",

@@ -546,11 +546,6 @@
                         "authority": "work_management_production_ingredients"
                     },
                     {
-                        "label": "差异列表",
-                        "path": "/ingredients/differentList",
-                        "authority": "work_management_difference_list"
-                    },
-                    {
                         "label": "缺料列表",
                         "path": "/ingredients/shortageList",
                         "authority": "work_management_shortage_list"

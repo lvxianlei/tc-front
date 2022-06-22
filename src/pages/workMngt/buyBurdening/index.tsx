@@ -65,11 +65,11 @@ export default function EnquiryList(): React.ReactNode {
             ]}
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
-            extraOperation={<>
-                <Button type="primary" ghost onClick={() => {
-                    setIsOpenId(true)
-                }}>创建</Button>
-            </>}
+            // extraOperation={<>
+            //     <Button type="primary" ghost onClick={() => {
+            //         setIsOpenId(true)
+            //     }}>创建</Button>
+            // </>}
             searchFormItems={[
                 {
                     name: 'startBatcheStatusUpdateTime',
