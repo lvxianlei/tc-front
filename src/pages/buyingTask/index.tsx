@@ -163,8 +163,8 @@ export default function RawMaterial() {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'startStatusUpdateTime',
-                        label: '最新状态变更时间',
+                        name: 'start----------Time',
+                        label: '客户交货日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
@@ -179,16 +179,6 @@ export default function RawMaterial() {
                             <Select.Option value={6} key={6}>已提交</Select.Option>
                             <Select.Option value={7} key={7}>已拒绝</Select.Option>
                         </Select>
-                    },
-                    {
-                        name: 'batcherId',
-                        label: '配料人',
-                        children: <IntgSelect width={200} />
-                    },
-                    {
-                        name: 'purchaserId',
-                        label: '采购人',
-                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',
