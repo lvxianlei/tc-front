@@ -121,14 +121,16 @@
             "dataIndex": "length",
             "required": true,
             "type": "number",
-            "min": 0
+            "min": 0,
+            "precision": 0
         },
         {
             "title": "宽度(mm)",
             "dataIndex": "weight",
             "required": true,
             "type": "number",
-            "min": 0
+            "min": 0,
+            "precision": 0
         },
         {
             "title": "安全库存（吨）",

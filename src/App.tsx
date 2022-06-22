@@ -15,6 +15,7 @@ const PrivateRoute = ({ component: Component }: any) => (
   <Route
     render={props => {
       if (AuthUtil.getSinzetechAuth()) {
+        console.log(AuthUtil.getSinzetechAuth())
         return <Component {...props} />
       } else {
         return <Redirect to={{ pathname: "/login" }} />
