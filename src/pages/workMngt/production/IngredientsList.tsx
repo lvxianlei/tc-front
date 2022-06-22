@@ -50,7 +50,7 @@ export default function IngredientsList(): React.ReactNode {
     const history = useHistory()
     const [ serarchForm ] = Form.useForm();
     // 传递的参数 status: 状态 productionBatchNo：批次号 productCategoryName： 塔型 materialStandardName： 标准
-    const params = useParams<{ id: string, status: string, productionBatchNo: string, productCategoryName: string, materialStandardName: string }>();
+    const params = useParams<{ id: string, status: string, productionBatchNo: string, productCategoryName: string, materialStandardName: string, materialStandard: string }>();
 
     // 按钮
     const btnList: BtnList[] = [
@@ -899,6 +899,7 @@ export default function IngredientsList(): React.ReactNode {
                 latestArrivalTime, // 最晚到货时间
                 length,
                 inRoadInventory, // 是否使用在途库存（1:使用 2:不使用）
+                materialStandard: params.materialStandard, // 标准id
             });
             let v: any[] = [];
             let s: any[] = [];

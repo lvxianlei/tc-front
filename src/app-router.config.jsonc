@@ -1044,7 +1044,7 @@
     },
     { // 工作管理-生产配料-生产配料
       "name": "生产配料",
-      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName",
+      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard",
       "module": "./pages/workMngt/production/IngredientsList",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"
@@ -1076,20 +1076,6 @@
       "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
       "authority": "sw_work_management_receiving_list_edits"
-    },
-    { // 工作管理-差异列表
-      "name": "差异列表",
-      "path": "/ingredients/differentList",
-      "module": "./pages/workMngt/differentList/index",
-      "exact": true,
-      "authority": "work_management_difference_list"
-    },
-    { // 工作管理-差异列表-详情
-      "name": "差异列表",
-      "path": "/ingredients/differentList/detail/:id",
-      "module": "./pages/workMngt/differentList/Overview",
-      "exact": true,
-      "authority": "sw_work_management_difference_list_details"
     },
     { // 工作管理-缺料列表
       "name": "缺料列表",

@@ -148,7 +148,7 @@
             ]
         },
         {
-            "title": "采购列表",
+            "title": "配料方案",
             "col": 2,
             "dataIndex": "purchaseTaskTowerWorkBenchVo",
             "path": "工作管理-配料方案",
@@ -182,25 +182,6 @@
                         }
                     },
                     "authority": "workbench_data10"
-                }
-            ]
-        },
-        {
-            "title": "差异处理",
-            "dataIndex": "componentDiffWorkBenchVo",
-            "col": 2,
-            "path": "工作管理-差异列表",
-            "workbenchItemVos": [
-                {
-                    "title": "待处理",
-                    "dataIndex": "pendingNum",
-                    "path": {
-                        "pathname": "/ingredients/differentList",
-                        "state": {
-                            "diffStatus": 1
-                        }
-                    },
-                    "authority": "workbench_data11"
                 }
             ]
         },
