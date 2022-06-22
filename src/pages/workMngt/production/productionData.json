@@ -11,12 +11,22 @@
             "type": "string"
         },
         {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "type": "string"
+        },
+        {
             "title": "周期计划号",
             "dataIndex": "weekPlanNumber",
             "type": "string"
         },
         {
-            "title": "计划号",
+            "title": "工程名称----新加",
+            "dataIndex": "planNumber",
+            "type": "string"
+        },
+        {
+            "title": "标准----新加",
             "dataIndex": "planNumber",
             "type": "string"
         },
@@ -46,18 +56,13 @@
             "type": "string"
         },
         {
+            "title": "配料完成时间-----新加",
+            "dataIndex": "planNumber",
+            "type": "string"
+        },
+        {
             "title": "配料状态",
             "dataIndex": "batcheTaskStatusName"
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
-            "type": "string"
-        },
-        {
-            "title": "方案编号",
-            "dataIndex": "schemeNumber",
-            "type": "string"
         }
     ],
     "ConstructionDetails": [

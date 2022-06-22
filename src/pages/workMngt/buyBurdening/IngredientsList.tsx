@@ -107,9 +107,12 @@ export default function IngredientsList(): React.ReactNode {
     const [selectedScheme, setSelectedScheme] = useState<any[]>([]);
 
     // 过滤
-    const [sort, setSort] = useState<string>("");
+    const [sort, setSort] = useState<string>("1");
 
     let [count, setCount] = useState<number>(0);
+
+    // 记录构建明细改变
+    let [detailCount, setDetailCount] = useState<number>(0);
 
     // 存储配料策略的list
     const [angleConfigStrategy, setAngleConfigStrategy] = useState<any[]>([]);
@@ -272,6 +275,7 @@ export default function IngredientsList(): React.ReactNode {
     const rowSelectionCheck = {
         selectedRowKeys: selectedRowKeysCheck,
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
+            console.log(selectedRowKeys, selectedRows, "======")
             setSelectedRowKeysCheck(selectedRowKeys);
             setSelectedRowCheck(selectedRows)
         },
@@ -442,11 +446,17 @@ export default function IngredientsList(): React.ReactNode {
         Statistics()
     }, [JSON.stringify(globallyStoredData), activeKey, activeSort, count])
 
+    // 双击后构建明细发生变化
+    useEffect(() => {
+        if (detailCount > 0) {
+            getScheme(1);
+        }
+    }, [detailCount])
+
 
     const handleModalSure = async() => {
         // 修改当前的配料策略
         const baseData = await serarchForm.validateFields();
-        console.log(baseData, "========>>>>")
         setNowIngre({
             ...baseData
         });
@@ -787,7 +797,7 @@ export default function IngredientsList(): React.ReactNode {
         setAlternativeData([]);
         try {
             if (code === 1) {
-                setSort("");
+                setSort("1");
             }
             const serarchData = await serarchForm.validateFields();
             if (selectedRowCheck.length < 1) {
@@ -919,13 +929,30 @@ export default function IngredientsList(): React.ReactNode {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
+                                                                // <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
                                                                     type: "radio",
                                                                     ...rowSelectionCheck,
+                                                                }}
+                                                                rowClassName={(record: any) => {
+                                                                    if (+record.notConfigured === 0) return 'table-color-dust';
+                                                                 }}
+                                                                onRow={(record: any) => {
+                                                                    return {
+                                                                        onDoubleClick: async(event: any) => {
+                                                                            if (record.notConfigured > 0) {
+                                                                                setSelectedRowKeysCheck([record.id]);
+                                                                                setSelectedRowCheck([record]);
+                                                                                setDetailCount(detailCount + 1);
+                                                                            } else {
+                                                                                message.error("当前构件已配完！");
+                                                                                return false;
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }}
                                                                 key={"id"}
                                                                 columns={ConstructionDetailsColumn}
@@ -978,7 +1005,6 @@ export default function IngredientsList(): React.ReactNode {
                                                                         setSort(res);
                                                                         getScheme(2, res);
                                                                     }}>
-                                                                        <Select.Option value="">默认排序</Select.Option>
                                                                         <Select.Option value="1">完全下料优先</Select.Option>
                                                                         <Select.Option value="2">利用率<ArrowDownOutlined /></Select.Option>
                                                                         <Select.Option value="4">余料长度<ArrowDownOutlined /></Select.Option>

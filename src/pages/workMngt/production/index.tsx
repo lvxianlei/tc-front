@@ -120,7 +120,7 @@ export default function Invoicing() {
                     width: 160,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" className="btn-operation-link" disabled={userId !== record.batcherId} onClick={() => {
+                            <Button type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(record.id)
                                 setDetailOver(true)
                                 setLoftingState(record.batcheTaskStatus)
@@ -128,12 +128,12 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                disabled={userId !== record.batcherId || record.batcheTaskStatus !== 1}
+                                disabled={record.batcheTaskStatus !== 1}
                             >
                                 <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'
-                                 disabled={userId !== record.batcherId || record.batcheTaskStatus !== 3}
+                                 disabled={record.batcheTaskStatus !== 3}
                             >
                                 <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
                             </Button>
@@ -145,7 +145,7 @@ export default function Invoicing() {
             searchFormItems={[
                 {
                     name: 'startStatusUpdateTime',
-                    label: '最新状态变更时间',
+                    label: '配料完成时间----新加',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {

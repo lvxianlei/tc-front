@@ -13,6 +13,18 @@
             "type": "string"
         },
         {
+            "title": "工程名称-----新加",
+            "dataIndex": "planNumber",
+            "width": 150,
+            "type": "string"
+        },
+        {
+            "title": "标准---新加",
+            "dataIndex": "planNumber",
+            "width": 150,
+            "type": "string"
+        },
+        {
             "title": "塔型",
             "dataIndex": "productCategoryName",
             "width": 100,
