@@ -150,12 +150,12 @@ export default function RawMaterial() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 250,
+                        width: 80,
                         render: (_: any, records: any) => <>
                             <Button type="link" className="btn-operation-link" onClick={() => { detail(records.id) }}>任务详情</Button>
-                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
+                            {/* <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
                             <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/detail/${records.planNumber}`)}>用料清单</Button>
-                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
+                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button> */}
                         </>
                     }
                 ]}
