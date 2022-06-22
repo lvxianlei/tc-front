@@ -53,7 +53,7 @@ export default abstract class AuthUtil {
      * @returns App name
      */
     public static getCurrentAppName(): string {
-        return sessionStorage.getItem(APP_Name) || ''
+        return Cookies.get(APP_Name) || ''
     }
 
     /**
@@ -63,7 +63,7 @@ export default abstract class AuthUtil {
      * @param [options] 
      */
     public static setCurrentAppName(appName: string): void {
-        sessionStorage.setItem(APP_Name, appName)
+        Cookies.set(APP_Name, appName)
     }
 
     /**
@@ -163,7 +163,7 @@ export default abstract class AuthUtil {
     public static getAccount(): string {
         return Cookies.get(ACCOUNT) || '';
     }
-  
+
     public static removeAccount(): void {
         Cookies.remove(ACCOUNT);
     }
@@ -238,7 +238,7 @@ export default abstract class AuthUtil {
 
     /** 
      * 清除tdm-token -SINZETECH_TOKEN_KEY
-     * */ 
+     * */
     public static removeSinzetechToken(): void {
         Cookies.remove('DHWY_TDM_TOKEN', { domain: '.dhwy.cn' });
         Cookies.remove('DHWY_TDM_TOKEN', { domain: 'localhost' });

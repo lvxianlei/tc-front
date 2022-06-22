@@ -107,9 +107,9 @@ export default function Edit() {
             if (item.id === id) {
                 return ({
                     ...item,
-                    length: value
-                    // weight: ((item.proportion * value) / 1000 / 1000).toFixed(3),
-                    // totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3)
+                    length: value,
+                    weight: (((item.proportion || "0") * value) / 1000 / 1000).toFixed(3),
+                    totalWeight: (((item.proportion || "0") * value * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3)
                 })
             }
             return item
@@ -224,7 +224,7 @@ export default function Edit() {
                             if (item.dataIndex === "length") {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                                 })
                             }
                             if (item.dataIndex === "materialStandardName") {
@@ -315,24 +315,25 @@ export default function Edit() {
                         value: ""
                     }}
                     onChange={(fields: any[]) => {
-                        setMaterialList(fields.map((item: any) => ({
+                        setMaterialList(fields.map((item: any, index: number) => ({
                             ...item,
+                            id: `${item.materialCode}-${index}-${new Date().getTime()}`,
                             // materialId: item.id,
                             // materialCode: item.materialCode,
                             // materialCategoryId: item.materialCategoryId,
-                            // planPurchaseNum: item.planPurchaseNum || "1",
+                            planPurchaseNum: item.planPurchaseNum || "1",
                             // structureSpec: item.structureSpec,
                             // source: 2,
                             // structureTexture: item.structureTexture,
                             // materialStandardName: item.materialStandardName,
-                            // length: item.length || 1,
+                            length: item.length || 1,
                             // materialStandard: item.materialStandard,
-                            // taxPrice: item.taxPrice || 1.00,
-                            // price: item.price || 1.00,
-                            // taxTotalAmount: item.taxTotalAmount || 1.00,
-                            // totalAmount: item.totalAmount || 1.00,
-                            // weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
-                            // totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3),
+                            taxPrice: item.taxPrice || 1.00,
+                            price: item.price || 1.00,
+                            taxTotalAmount: item.taxTotalAmount || 1.00,
+                            totalAmount: item.totalAmount || 1.00,
+                            weight: ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1)) / 1000 / 1000).toFixed(3),
+                            totalWeight: ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3)
                         })) || [])
                     }}
                 />
