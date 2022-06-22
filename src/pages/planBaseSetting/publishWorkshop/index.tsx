@@ -11,9 +11,13 @@ export default () => {
     const history = useHistory()
     const [weldingForm] = Form.useForm()
     const [form] = Form.useForm();
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ status: 1 });
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ executeStatus: 1, status: 1  });
     const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([])
-    const onSelectChange = (selected: Key[]) => setSelectedRowKeys(selected)
+    const [selectedRows, setSelectedRows] = useState<Key[]>([])
+    const onSelectChange = (selected: Key[], selectedRows:any[]) => {
+        setSelectedRowKeys(selected)
+        setSelectedRows(selectedRows)
+    }
     const [status, setStatus] = useState<number>(1)
     const tableColumns = [
         {
@@ -181,7 +185,7 @@ export default () => {
         path="/tower-aps/workshopOrder"
         filterValue={filterValue}
         columns={status === 1 ? [
-            ...pageTable,
+            ...pageTable  as any,
             {
                 title: "操作",
                 width: 160,
@@ -192,7 +196,7 @@ export default () => {
                     <Link to={`/planProd/publishWorkshop/welding/${record.id}/${record.issuedNumber}/${record.productCategory}`}><Button type="link" size="small">组焊明细</Button></Link>
                 </>
             }] : [
-            ...workShopOrder,
+            ...workShopOrder as any,
             {
                 title: "操作",
                 width: 100,
@@ -200,7 +204,7 @@ export default () => {
                 dataIndex: "opration",
                 render: (_, record: any) => <Link
                     to={`/planProd/publishWorkshop/manual/${record.id}/${record.issuedNumber}/${record.productCategory}`}
-                >手动分配生产单元</Link>
+                 ><Button type='link' disabled={record?.executeStatus===2}>手动分配生产单元</Button></Link>
             }]}
         extraOperation={
             <>
@@ -216,15 +220,21 @@ export default () => {
                 </Radio.Group>
                 {status === 1 && <>
                     {/* <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleWeldingClick}>电焊分配车间</Button> */}
-                    <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleAuto}>快速分配单元</Button>
+                    <Button type="primary" disabled={selectedRowKeys.length <= 0 || selectedRows.findIndex((item:any)=> item.executeStatus===2)!==-1} onClick={handleAuto}>快速分配单元</Button>
                 </>}
             </>
         }
         searchFormItems={[
             {
+                name: 'fuzzyMsg',
+                label: '模糊查询项',
+                children: <Input placeholder="计划号/塔型/下达单号" style={{ width: 300 }} />
+            },
+            {
                 name: 'productType',
                 label: '产品类型',
                 children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    <Select.Option value='' key="">全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
@@ -233,15 +243,23 @@ export default () => {
                 </Select>
             },
             {
+                name: 'executeStatus',
+                label: '执行状态',
+                children: <Form.Item name='executeStatus' initialValue={1}>
+                    <Select placeholder="请选择" style={{ width: "150px" }}>
+                        <Select.Option value='' key="">全部</Select.Option>
+                        <Select.Option value={1} key="1">正常</Select.Option>
+                        {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
+                        <Select.Option value={2} key="2">取消</Select.Option>
+                    </Select>
+                </Form.Item>
+            },
+            {
                 name: 'time',
                 label: '生产下达日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
-            {
-                name: 'fuzzyMsg',
-                label: '模糊查询项',
-                children: <Input placeholder="计划号/塔型/下达单号" style={{ width: 300 }} />
-            }
+            
         ]}
         tableProps={status === 1 ? {
             rowSelection: {
@@ -257,6 +275,7 @@ export default () => {
                 values.endTime = formatDate[1] + ' 23:59:59';
                 delete values.time
             }
+            setFilterValue(values)
             return values;
         }}
     />

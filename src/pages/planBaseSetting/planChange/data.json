@@ -1,0 +1,80 @@
+{
+    "baseDataColumns": [
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width":150,
+            "fixed": "left"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategory",
+            "width":150,
+            "fixed": "left"
+        },
+        {
+            "title": "产品类型",
+            "width":150,
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "客户",
+            "width":150,
+            "dataIndex": "customer"
+        },
+        {
+            "title": "变更类型",
+            "width":150,
+            "dataIndex": "changeType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "暂停加工"
+                },
+                {
+                    "value": 2,
+                    "label": "取消加工"
+                },
+                {
+                    "value": 3,
+                    "label": "恢复加工"
+                }
+            ]
+        },
+        {
+            "title": "变更日期",
+            "width":150,
+            "dataIndex": "changeDate",
+            "type":"date",
+            "format":"YYYY-MM-DD"
+        },
+        {
+            "title": "总重量（t）",
+            "width":150,
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "业务员",
+            "width":150,
+            "dataIndex": "businessManagerName"
+        },
+        {
+            "title": "基数",
+            "width":150,
+            "dataIndex": "number"
+        },
+        {
+            "title": "变更原因",
+            "width":150,
+            "dataIndex": "reason",
+            "type":"textarea"
+        },
+        {
+            "title": "备注",
+            "width":150,
+            "dataIndex": "remark",
+            "type":"textarea"
+        }
+    ]
+}

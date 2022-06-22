@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useState } from "react"
 import { useHistory } from "react-router-dom"
-import { DatePicker, Dropdown, Input, Menu, Radio, Row, Space, Spin } from "antd"
+import { DatePicker, Dropdown, Form, Input, Menu, Radio, Row, Select, Space, Spin } from "antd"
 import { DownOutlined } from "@ant-design/icons"
 import { SearchTable as Page } from "../../common"
 import useRequest from "@ahooksjs/use-request"
@@ -170,6 +170,17 @@ export default () => {
                     label: "计划交货日期",
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
+                // {
+                //     name: 'executeStatus',
+                //     label: '执行状态',
+                //     children: <Form.Item name='status' initialValue={1}>
+                //         <Select placeholder="请选择" style={{ width: "150px" }}>
+                //             <Select.Option value={1} key="1">正常</Select.Option>
+                //             {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
+                //             <Select.Option value={2} key="2">取消</Select.Option>
+                //         </Select>
+                //     </Form.Item>
+                // },
                 // {
                 //     name: "customerDeliveryStartTime",
                 //     label: "客户交货日期",

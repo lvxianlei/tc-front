@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Space, Button, Modal, Form, message, Select, DatePicker } from 'antd';
-import { SearchTable as Page } from '../../common';
+import { Space, Button, Modal, Form, message, Select, DatePicker, Input } from 'antd';
+import { BaseInfo, CommonTable, DetailTitle, SearchTable as Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import { factoryTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from '../../../utils/RequestUtil';
@@ -73,7 +73,8 @@ export default function SampleDraw(): React.ReactNode {
                     const splitData = await form.getFieldsValue(true)
                     await splitBatchRun(selectedRows.map((item: any) => ({
                             id: item.id,
-                            productionBatch: splitData?.productionBatch
+                            productionBatch: splitData?.productionBatch,
+                            reason: splitData?.reason? splitData?.reason: ''
                     })))
                     await message.success("提交成功！")
                     setSelectedKeys([])
@@ -128,6 +129,78 @@ export default function SampleDraw(): React.ReactNode {
         {
             title: '生产单元组',
             dataIndex: 'factoryName'
+        },
+        {
+            title: "状态",
+            dataIndex: "productStauts",
+            editable: true,
+            width:120,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===0?'未下发':'已下发'}</span>
+            )
+        },
+        {
+            title: "执行状态",
+            dataIndex: "executionStatus",
+            editable: true,
+            width:120,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
+            )
+        },
+        {
+            title: "操作",
+            dataIndex: "operation",
+            fixed: "right",
+            render: (_: any, record: Record<string, any>, index: number) =>
+                <Button type="link" onClick={async ()=>{
+                    const value:any[] = await RequestUtil.get(`/tower-aps/productionPlan/change/batch/${record?.id}`)
+                    Modal.warn({
+                        title: "查看批次变更记录",
+                        icon: null,
+                        okText: "确定",
+                        width:'80%',
+                        content: <>
+                                <BaseInfo dataSource={
+                                    record
+                                } columns={[{
+                                    title:'塔型',
+                                    dataIndex:'productCategoryName'
+                                },{
+                                    title:'杆塔',
+                                    dataIndex:'productNumber'
+                                }]}/>
+                                <DetailTitle  title='批次变更记录'/>
+                                <CommonTable columns={[
+                                    {
+                                        key: 'originalBatch',
+                                        title: '原批次号',
+                                        dataIndex: 'originalBatch'
+                                    },
+                                    {
+                                        key: 'newBatch',
+                                        title: '变更后批次号',
+                                        dataIndex: 'newBatch'
+                                    },
+                                    {
+                                        key: 'reason',
+                                        title: '批次变更原因',
+                                        dataIndex: 'reason'
+                                    },
+                                    {
+                                        key: 'createTime',
+                                        title: '操作时间',
+                                        dataIndex: 'createTime'
+                                    },
+                                    {
+                                        key: 'createUserName',
+                                        title: '操作人',
+                                        dataIndex: 'createUserName'
+                                    },]} dataSource={[...value]} pagination={false}/>
+                        </>,
+                        
+                    })
+                }}>查看批次变更记录</Button>
         }
     ]
 
@@ -361,6 +434,9 @@ export default function SampleDraw(): React.ReactNode {
                         </Select.Option>
                     </Select>
                 </Form.Item>
+                {selectedRows.find(r=>{return r.productionBatch})&&<Form.Item name='reason' rules={[{ required: true, message: '请填写变更原因' }]} label='变更原因'>
+                    <Input.TextArea showCount maxLength={100}/>
+                </Form.Item>}
             </Form>,
             onOk: handleModalOk,
             onCancel: () => form.resetFields()
