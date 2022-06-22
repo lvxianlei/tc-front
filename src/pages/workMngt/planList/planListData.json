@@ -3,46 +3,49 @@
         {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
-            "type": "string"
+            "type": "string",
+            "width": 140
         },
         {
             "title": "采购类型",
-            "dataIndex": "purchaseTypeName"
+            "dataIndex": "purchaseTypeName",
+            "width": 100
         },
         {
             "title": "圆钢收货量（吨）/总重（吨）",
             "dataIndex": "roundSteelTotal",
+            "width": 180,
             "type": "number"
         },
         {
             "title": "角钢收货量（吨）/总重（吨）",
             "dataIndex": "angleSteelTotal",
+            "width": 180,
             "type": "number"
         },
         {
             "title": "钢板收货量（吨）/总重（吨）",
             "dataIndex": "steelPlateTotal",
+            "width": 180,
             "type": "number"
         },
         {
             "title": "采购人",
             "dataIndex": "purchaserName",
-            "type": "string"
+            "type": "string",
+            "width": 80
         },
         {
             "title": "创建日期",
             "dataIndex": "createTime",
-            "type": "string"
+            "type": "string",
+            "format":"YYYY-MM-DD",
+            "width": 100
         },
         {
             "title": "计划状态",
-            "dataIndex": "purchasePlanStatusName"
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
+            "dataIndex": "purchasePlanStatusName",
+            "width": 80
         }
     ],
     "AssociatedTowerType": [
@@ -94,49 +97,63 @@
     ],
     "PurchaseList": [
         {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "type": "string"
+            "title": "类型",
+            "dataIndex": "materialCategoryName",
+            "width": 100
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string",
+            "width": 100
         },
         {
             "title": "标准",
             "dataIndex": "materialStandardName",
-            "type": "string"
+            "type": "string",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string",
+            "width": 100
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
-            "type": "string"
-        },
-        {
-            "title": "配料品名",
-            "dataIndex": "materialName",
-            "type": "string"
+            "type": "string",
+            "width": 100
         },
         {
             "title": "长度",
             "dataIndex": "length",
-            "type": "number"
+            "type": "number",
+            "width": 100
         },
         {
             "title": "宽度",
             "dataIndex": "width",
-            "type": "number"
+            "type": "number",
+            "width": 100
         },
         {
             "title": "单个重量(吨)",
             "dataIndex": "weight",
-            "type": "number"
-        },
-        {
-            "title": "已采购量",
-            "dataIndex": "alreadyPurchaseNum",
-            "type": "string"
+            "type": "number",
+            "width": 100
         },
         {
             "title": "计划采购量",
             "dataIndex": "planPurchaseNum",
-            "type": "string"
+            "type": "string",
+            "width": 100
+        },
+        {
+            "title": "已采购量",
+            "dataIndex": "alreadyPurchaseNum",
+            "type": "number",
+            "width": 100
         }
     ],
     "PurchaseTypeStatistics": [

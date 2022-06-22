@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, DatePicker, Select, Modal, message, Input, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import Edit from "./Edit"
 import Overview from "./Overview"
 import { baseinfo } from "../financialData.json"
@@ -144,7 +144,7 @@ export default function Invoice() {
                             <Popconfirm
                                 title="确定删除此票据吗？"
                                 disabled={![1, 4].includes(record.invoiceStatus)}
-                                onConfirm={async() => {
+                                onConfirm={async () => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")
                                     history.go(0)

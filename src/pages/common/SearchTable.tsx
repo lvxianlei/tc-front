@@ -1,5 +1,5 @@
 
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useState } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
 import CommonAliTable, { columnsProps } from "./CommonAliTable"
@@ -23,11 +23,13 @@ interface SearchTableProps {
     transformResult?: (result: any) => any
     onFilterSubmit?: <T>(arg: T) => T
     filterValue?: { [key: string]: any }
-    extraOperation?: React.ReactNode | React.ReactNode[]
+    extraOperation?: React.ReactNode | React.ReactNode[] | ((result: any) => any)
     tableProps?: { [i: string]: any }
     pagination?: boolean
+    modal?: boolean // 分页栏是否固定到底部
     readonly exportPath?: string; //导出接口
     exportObject?: { [key: string]: any }, // 导出可能会包含的id等
+    getDataSource?: (dataSource: any[]) => void
     [key: string]: any
 }
 
@@ -43,6 +45,7 @@ export default function SearchTable({
     onFilterSubmit,
     extraOperation,
     transformResult,
+    getDataSource,
     searchFormItems = [],
     filterValue = {},
     tableProps,
@@ -66,7 +69,11 @@ export default function SearchTable({
             const paramsOptions = stringify({ ...params, ...filterValue })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
-            resole(transformResult ? transformResult(result) : result)
+            resole({
+                source: result,
+                result: transformResult ? transformResult(result) : result
+            })
+            getDataSource && getDataSource((transformResult ? transformResult(result) : result))
         } catch (error) {
             reject(false)
         }
@@ -120,23 +127,22 @@ export default function SearchTable({
                     </Space>
                 )
             }
-            {extraOperation}
+            {typeof extraOperation === "function" ? extraOperation(data?.source) : extraOperation}
         </Space>
-        
         <CommonAliTable
             columns={columns}
             rowKey={rowKey || ((record: any) => record.id)}
             size="small"
             isLoading={loading}
-            dataSource={data?.records || data || []}
+            dataSource={data?.result.records || data?.result || []}
             {...tableProps}
             {...props}
         />
         {
-            pagination !== false && <footer className={modal?styles.pagenationWarpModal:styles.pagenationWarp}>
+            pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
                 <Pagination
                     className={styles.pagination}
-                    total={data?.total}
+                    total={data?.result.total}
                     current={pagenationParams.current}
                     showTotal={(total: number) => `共${total}条记录`}
                     showSizeChanger
@@ -145,28 +151,28 @@ export default function SearchTable({
             </footer>
         }
         {isExport ? <ExportList
-                    history={history}
-                    location={location}
-                    match={match}
-                    columnsKey={() => {
-                        const keys = [...columns]
-                        if (!keys[keys.length - 1].isExport) {
-                            keys.pop()
-                        }
-                        return keys
-                    }}
-                    current={pagenationParams.current || 1}
-                    size={pagenationParams.pageSize || 10}
-                    total={data?.total || 0}
-                    url={exportPath}
-                    serchObj={{
-                        ...JSON.parse(JSON.stringify(filterValue || {})),
-                        ...JSON.parse(JSON.stringify(exportObject || {}))
-                    }}
-                    closeExportList={() => {
-                        setIsExport(false)
-                    }}
-                /> : null}
+            history={history}
+            location={location}
+            match={match}
+            columnsKey={() => {
+                const keys = [...columns]
+                if (!keys[keys.length - 1].isExport) {
+                    keys.pop()
+                }
+                return keys
+            }}
+            current={pagenationParams.current || 1}
+            size={pagenationParams.pageSize || 10}
+            total={data?.result.total || 0}
+            url={exportPath}
+            serchObj={{
+                ...JSON.parse(JSON.stringify(filterValue || {})),
+                ...JSON.parse(JSON.stringify(exportObject || {}))
+            }}
+            closeExportList={() => {
+                setIsExport(false)
+            }}
+        /> : null}
     </>
 }
 

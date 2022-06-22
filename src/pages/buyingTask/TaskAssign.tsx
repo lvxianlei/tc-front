@@ -29,12 +29,9 @@ export default forwardRef(function ({ id }: OverviewProps, ref) {
 
     const onSubmit = async () => {
         const data = await form.validateFields()
-        console.log(data)
         await saveRun({
-            batcherDeptId: data.batcherDeptId.first,
-            batcherId: data.batcherDeptId.second,
-            purchaserDeptId: data.purchaserDeptId.first,
-            purchaserId: data.purchaserDeptId.second
+            batcherId: data.batcherDeptId.value,
+            purchaserId: data.purchaserDeptId.value
         })
     }
 

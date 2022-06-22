@@ -51,7 +51,8 @@ export default function MaterialMngt(): React.ReactNode {
             key: 'structureSpec',
             title: '规格',
             dataIndex: 'structureSpec',
-            width: 120
+            width: 120,
+            type: "string"
         },
         {
             key: 'proportion',
@@ -197,7 +198,21 @@ export default function MaterialMngt(): React.ReactNode {
     return <Spin spinning={loading}>
         <Page
             path="/tower-system/material"
-            columns={columns}
+            columns={[
+                ...columns.map((item: any) => {
+                    if (item.dataIndex === "structureSpec") {
+                        return ({
+                            title: item.title,
+                            dataIndex: item.dataIndex,
+                            width: 50,
+                            render: (_: any, record: any): React.ReactNode => (
+                                <span>{record?.structureSpec}</span>
+                            )
+                        })
+                    }
+                    return item;
+                })
+            ]}
             headTabs={[]}
             refresh={refresh}
             filterValue={filterValue}

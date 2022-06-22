@@ -150,7 +150,7 @@
                 "items": [
                     {
                         "label": "开票申请列表",
-                        "path": "/invoicing",
+                        "path": "/invoicing/billList",
                         "authority": "approvalm_invoicing_list"
                     }
                 ]
@@ -526,7 +526,7 @@
                         "authority": "work_management_purchase_ingredients"
                     },
                     {
-                        "label": "采购列表",
+                        "label": "配料方案",
                         "path": "/ingredients/purchaseList",
                         "authority": "work_management_purchase_list"
                     },
@@ -544,11 +544,6 @@
                         "label": "备料确认",
                         "path": "/ingredients/materialPreparationConfirmation",
                         "authority": "work_management_production_ingredients"
-                    },
-                    {
-                        "label": "差异列表",
-                        "path": "/ingredients/differentList",
-                        "authority": "work_management_difference_list"
                     },
                     {
                         "label": "缺料列表",

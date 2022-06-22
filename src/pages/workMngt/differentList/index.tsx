@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, message } from 'antd'
+import { Input, DatePicker, Select, Modal, message } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfoList } from './differentListData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -25,8 +25,7 @@ export default function Invoicing() {
             value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.handler) {
-            value.handlerDept = value.handler.first
-            value.handler = value.handler.second
+            value.handler = value.handler.value
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -53,7 +52,7 @@ export default function Invoicing() {
         exportPath={"/tower-supply/componentDiff"}
         columns={[
             { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
-            ...baseInfoList,
+            ...baseInfoList as any,
             {
                 title: "操作",
                 dataIndex: "opration",
@@ -84,7 +83,7 @@ export default function Invoicing() {
             {
                 name: 'handler',
                 label: '处理人',
-                children: <IntgSelect width={400} />
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyQuery',

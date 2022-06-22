@@ -61,8 +61,7 @@ export default function Invoicing() {
             value.endLoftingBatchTime = formatDate[1] + " 23:59:59"
         }
         if (value.loftingId) {
-            value.loftingDeptId = value.loftingId.first
-            value.loftingId = value.loftingId.second
+            value.loftingId = value.loftingId.value
         }
         setFilterValue(value)
         return value
@@ -167,7 +166,7 @@ export default function Invoicing() {
                 {
                     name: 'loftingId',
                     label: '配料负责人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

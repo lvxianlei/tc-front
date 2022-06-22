@@ -828,7 +828,7 @@
     { // 配置管理-安全库存配置
       "name": "安全库存配置",
       "path": "/config/configList/securitySetting",
-      "module": "./pages/stock/securitySetting/securitySetting",
+      "module": "./pages/stock/securitySetting/index",
       "exact": true,
       "authority": "sw_configuration_management_safety_stock_configuration"
     },
@@ -1008,7 +1008,7 @@
       "authority": "rd_assessment_task_list"
     },
     { // 工作管理-采购列表
-      "name": "采购列表",
+      "name": "配料方案",
       "path": "/ingredients/purchaseList",
       "module": "./pages/workMngt/purchaseList/index",
       "exact": true,
@@ -1076,20 +1076,6 @@
       "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
       "authority": "sw_work_management_receiving_list_edits"
-    },
-    { // 工作管理-差异列表
-      "name": "差异列表",
-      "path": "/ingredients/differentList",
-      "module": "./pages/workMngt/differentList/index",
-      "exact": true,
-      "authority": "work_management_difference_list"
-    },
-    { // 工作管理-差异列表-详情
-      "name": "差异列表",
-      "path": "/ingredients/differentList/detail/:id",
-      "module": "./pages/workMngt/differentList/Overview",
-      "exact": true,
-      "authority": "sw_work_management_difference_list_details"
     },
     { // 工作管理-缺料列表
       "name": "缺料列表",
