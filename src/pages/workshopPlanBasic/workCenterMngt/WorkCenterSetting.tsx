@@ -355,13 +355,13 @@ export default function WorkCenterSetting(): React.ReactNode{
                             if (info.file.response && info.file.response?.success) {
                                 if (info.file.response?.data) {
                                     console.log(info.file.response?.data?.data)
-                                    const str =  info.file.response?.data?.data
+                                    const str =  info.file.response?.data
                                     const value =  typeof str === 'string'
                                     if(value){
                                         window.open(str)
                                     }else{
                                         message.success('导入成功！');
-                                        setWorkCenterRelationsList([...info.file.response?.data?.data.concat(workCenterRelationsList)])
+                                        setWorkCenterRelationsList([...info.file.response?.data.concat(workCenterRelationsList)])
                                     }
                                    
                                 }
@@ -383,7 +383,7 @@ export default function WorkCenterSetting(): React.ReactNode{
             />
             <Modal
                 visible={visible}
-                title={ form.getFieldsValue(true)?.id?'编辑':'新增'}
+                title={ form.getFieldsValue(true)?.processName?'编辑':'新增'}
                 onCancel={() => {
                     setVisible(false)
                     form.resetFields()
