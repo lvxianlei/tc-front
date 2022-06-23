@@ -107,7 +107,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                             setDataSource(result.slice(0));
                                             setCout(count + 1);
                                         }}
-                                        style={{ height: 27, border: record?.isRed ? "1px solid red" : ""  }}
+                                        style={{ height: 27, border: record?.isRed ? "1px solid red" : "" }}
                                     />
                                 }
                             })
@@ -117,7 +117,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                 ...item,
                                 render: (_: any, record: any, index: number) => {
                                     return <Input
-                                        value={record.warehouseOccupy || ""}
+                                        value={record.warehouseOccupy || (record.availableStock > record.num ? record.num : record.availableStock)}
                                         key={index}
                                         // max={999}
                                         // min={0}
@@ -134,7 +134,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                             }
                                             setCout(count + 1);
                                         }}
-                                        style={{ height: 27}}
+                                        style={{ height: 27 }}
                                     />
                                 }
                             })

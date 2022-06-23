@@ -118,6 +118,20 @@ export default function Edit() {
         setPopDataList(list)
     }
 
+    const widthChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    width: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list);
+        setPopDataList(list)
+    }
+
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.id === maItem.id))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -137,7 +151,7 @@ export default function Edit() {
                 planPurchaseNum: num,
                 taxPrice,
                 price,
-                width: formatSpec(item.structureSpec).width,
+                width: 0,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
                 taxTotalAmount: (num * taxPrice).toFixed(2),
@@ -153,7 +167,7 @@ export default function Edit() {
                 planPurchaseNum: num,
                 taxPrice,
                 price,
-                width: formatSpec(item.structureSpec).width,
+                width: 0,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
                 taxTotalAmount: (num * taxPrice).toFixed(2),
@@ -218,13 +232,29 @@ export default function Edit() {
                             if (["planPurchaseNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber
+                                        min={1} value={value}
+                                        onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                                 })
                             }
                             if (item.dataIndex === "length") {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber
+                                        min={1}
+                                        value={value}
+                                        onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                })
+                            }
+                            if (item.dataIndex === "width") {
+                                return ({
+                                    ...item,
+                                    render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber
+                                        min={0}
+                                        max={99999}
+                                        value={value}
+                                        precision={0}
+                                        onChange={(value: number) => widthChange(value, records.id)} key={key} />
                                 })
                             }
                             if (item.dataIndex === "materialStandardName") {
@@ -327,6 +357,7 @@ export default function Edit() {
                             // structureTexture: item.structureTexture,
                             // materialStandardName: item.materialStandardName,
                             length: item.length || 1,
+                            width: 0,
                             // materialStandard: item.materialStandard,
                             taxPrice: item.taxPrice || 1.00,
                             price: item.price || 1.00,
