@@ -685,6 +685,13 @@
       "exact": true,
       "authority": "rd_cockpit"
     },
+    { // 驾驶舱-报表
+      "name": "报表",
+      "path": "/cockpit/statements",
+      "module": "./pages/cockpit/Statements",
+      "exact": true,
+      "authority": "rd_cockpit"
+    },
     { // 驾驶舱-库存看板
       "name": "库存看板",
       "path": "/bulletin/viewPanel",
