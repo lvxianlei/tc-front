@@ -22,13 +22,12 @@ export default function Statements(): React.ReactNode {
         myChart.setOption({
             backgroundColor: '#0B1C3D',
             color: [
-            '#2778FF',
-            '#80C269',
-            '#FFD200',
-            '#F45E23',
-            '#E5004F'
-          ],
-        
+                '#2778FF',
+                '#80C269',
+                '#FFD200',
+                '#F45E23',
+                '#E5004F'
+            ],
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -58,9 +57,9 @@ export default function Statements(): React.ReactNode {
                 },
             },
             toolbox: {
-              feature: {
-                saveAsImage: { show: true }
-              }
+                feature: {
+                    saveAsImage: { show: true }
+                }
             },
             legend: {
                 icon: 'rect',
@@ -164,12 +163,12 @@ export default function Statements(): React.ReactNode {
         accuracyChart.setOption({
             backgroundColor: '#0B1C3D',
             color: [
-            '#2778FF',
-            '#80C269',
-            '#FFD200',
-            '#F45E23',
-            '#E5004F'
-          ],
+                '#2778FF',
+                '#80C269',
+                '#FFD200',
+                '#F45E23',
+                '#E5004F'
+            ],
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -205,9 +204,9 @@ export default function Statements(): React.ReactNode {
                 data: ['角钢塔', '钢管塔', '四管塔', '架构', '钢结构']
             },
             toolbox: {
-              feature: {
-                saveAsImage: { show: true }
-              }
+                feature: {
+                    saveAsImage: { show: true }
+                }
             },
             xAxis: [
                 {
@@ -306,8 +305,8 @@ export default function Statements(): React.ReactNode {
         productionDistributionChart.setOption({
             backgroundColor: '#0B1C3D',
             color: [
-            '#1C86F1'
-          ],
+                '#1C86F1'
+            ],
             tooltip: {
                 trigger: 'axis',
                 axisPointer: {
@@ -327,9 +326,9 @@ export default function Statements(): React.ReactNode {
                 },
             },
             toolbox: {
-              feature: {
-                saveAsImage: { show: true }
-              }
+                feature: {
+                    saveAsImage: { show: true }
+                }
             },
             xAxis: [
                 {
@@ -381,265 +380,270 @@ export default function Statements(): React.ReactNode {
                     }
                 }
             },
-              legend: {
+            legend: {
                 icon: 'rect',
                 top: '5%',
                 left: 'center',
                 itemWidth: 14
-              },
-              toolbox: {
+            },
+            toolbox: {
                 feature: {
-                  saveAsImage: { show: true }
+                    saveAsImage: { show: true }
                 }
-              },
-              series: [
+            },
+            series: [
                 {
-                  name: '未下达量',
-                  type: 'pie', 
+                    name: '未下达量',
+                    type: 'pie',
                     width: "70%",
                     right: 'center',
-                  radius: ['40%', '70%'],
-                  avoidLabelOverlap: false,
-                  label: {
-                    show: false,
-                    position: 'center'
-                  },
-                  emphasis: {
+                    radius: ['40%', '70%'],
+                    avoidLabelOverlap: false,
                     label: {
-                      show: true,
-                      fontSize: '24',
-                      fontWeight: 'bold'
-                    }
-                  },
-                  labelLine: {
-                    show: false
-                  },
-                  data: [
-                    { value: 1048, name: '角钢塔' },
-                    { value: 735, name: '钢管塔' },
-                    { value: 580, name: '四管塔' },
-                    { value: 484, name: '架构' },
-                    { value: 300, name: '钢结构' }
-                  ]
+                        show: false,
+                        position: 'center'
+                    },
+                    emphasis: {
+                        label: {
+                            show: true,
+                            fontSize: '24',
+                            fontWeight: 'bold'
+                        }
+                    },
+                    labelLine: {
+                        show: false
+                    },
+                    data: [
+                        { value: 1048, name: '角钢塔' },
+                        { value: 735, name: '钢管塔' },
+                        { value: 580, name: '四管塔' },
+                        { value: 484, name: '架构' },
+                        { value: 300, name: '钢结构' }
+                    ]
                 }
-              ]
+            ]
         });
     }
 
 
     return <div className={styles.statement}>
+        <div className={styles.header}>
+            <div className={styles.headerbg}>
+                
+            <span className={styles.headerTitle}>数据展示</span>
+            </div>
+        </div>
         <div className={styles.top}>
-            
-        <div className={styles.left}>
-            <div>
-                <span className={styles.title}>放样统计分析</span>
-                <Select className={styles.select} size="small" onChange={(e) => {
+            <div className={styles.left}>
+                <div>
+                    <span className={styles.title}>放样统计分析</span>
+                    <Select className={styles.select} size="small" onChange={(e) => {
 
-                }}>
-                    <Select.Option key={0} value={'2020'}>2020</Select.Option>
-                    <Select.Option key={1} value={'2021'}>2021</Select.Option>
-                    <Select.Option key={2} value={'2022'}>2022</Select.Option>
-                </Select>
+                    }}>
+                        <Select.Option key={0} value={'2020'}>2020</Select.Option>
+                        <Select.Option key={1} value={'2021'}>2021</Select.Option>
+                        <Select.Option key={2} value={'2022'}>2022</Select.Option>
+                    </Select>
+                </div>
+                <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '400px' }} key={'LoftingStatisticalAnalysis'} />
+                <Table bordered pagination={false} dataSource={[{ index: '111', a: '111' }]} columns={[
+                    {
+                        key: 'index',
+                        title: '产品类型',
+                        width: 50,
+                        dataIndex: 'index',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'a',
+                        title: '角钢塔',
+                        width: 50,
+                        dataIndex: 'a',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'c',
+                        title: '钢管杆',
+                        width: 50,
+                        dataIndex: 'c',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'd',
+                        title: '四管塔',
+                        width: 50,
+                        dataIndex: 'd',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'e',
+                        title: '架构',
+                        width: 50,
+                        dataIndex: 'e',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'f',
+                        title: '钢结构',
+                        width: 50,
+                        dataIndex: 'f',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'q',
+                        title: '小计',
+                        width: 50,
+                        dataIndex: 'q',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    }
+                ]} />
             </div>
-            <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '400px' }} key={'LoftingStatisticalAnalysis'}/>
-            <Table bordered pagination={false} dataSource={[{index: '111',a: '111'}]} columns={[
-                {
-                    key: 'index',
-                    title: '产品类型',
-                    width: 50,
-                    dataIndex: 'index',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'a',
-                    title: '角钢塔',
-                    width: 50,
-                    dataIndex: 'a',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'c',
-                    title: '钢管杆',
-                    width: 50,
-                    dataIndex: 'c',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'd',
-                    title: '四管塔',
-                    width: 50,
-                    dataIndex: 'd',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'e',
-                    title: '架构',
-                    width: 50,
-                    dataIndex: 'e',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'f',
-                    title: '钢结构',
-                    width: 50,
-                    dataIndex: 'f',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'q',
-                    title: '小计',
-                    width: 50,
-                    dataIndex: 'q',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                }
-            ]}/>
-        </div>
-        <div className={styles.right}>
-            <div>
-                <span className={styles.title}>放样正确率统计分析</span>
-                <Select className={styles.select} size="small" onChange={(e) => {
+            <div className={styles.right}>
+                <div>
+                    <span className={styles.title}>放样正确率统计分析</span>
+                    <Select className={styles.select} size="small" onChange={(e) => {
 
-                }}>
-                    <Select.Option key={0} value={'2020'}>2020</Select.Option>
-                    <Select.Option key={1} value={'2021'}>2021</Select.Option>
-                    <Select.Option key={2} value={'2022'}>2022</Select.Option>
-                </Select>
+                    }}>
+                        <Select.Option key={0} value={'2020'}>2020</Select.Option>
+                        <Select.Option key={1} value={'2021'}>2021</Select.Option>
+                        <Select.Option key={2} value={'2022'}>2022</Select.Option>
+                    </Select>
+                </div>
+                <div id={'LoftingAccuracyStatistics'} style={{ width: '100%', height: '400px' }} key={'LoftingAccuracyStatistics'} />
+                <Table bordered pagination={false} dataSource={[{ index: '111', a: '111' }]} columns={[
+                    {
+                        key: 'index',
+                        title: '产品类型',
+                        width: 50,
+                        dataIndex: 'index',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'a',
+                        title: '角钢塔',
+                        width: 50,
+                        dataIndex: 'a',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'c',
+                        title: '钢管杆',
+                        width: 50,
+                        dataIndex: 'c',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'd',
+                        title: '四管塔',
+                        width: 50,
+                        dataIndex: 'd',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'e',
+                        title: '架构',
+                        width: 50,
+                        dataIndex: 'e',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'f',
+                        title: '钢结构',
+                        width: 50,
+                        dataIndex: 'f',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    },
+                    {
+                        key: 'q',
+                        title: '小计',
+                        width: 50,
+                        dataIndex: 'q',
+                        render: (_a: any, _b: any, index: number) => { return index + 1 }
+                    }
+                ]} />
             </div>
-            <div id={'LoftingAccuracyStatistics'} style={{ width: '100%', height: '400px' }} key={'LoftingAccuracyStatistics'}/>
-        <Table bordered pagination={false} dataSource={[{index: '111',a: '111'}]} columns={[
-                {
-                    key: 'index',
-                    title: '产品类型',
-                    width: 50,
-                    dataIndex: 'index',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'a',
-                    title: '角钢塔',
-                    width: 50,
-                    dataIndex: 'a',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'c',
-                    title: '钢管杆',
-                    width: 50,
-                    dataIndex: 'c',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'd',
-                    title: '四管塔',
-                    width: 50,
-                    dataIndex: 'd',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'e',
-                    title: '架构',
-                    width: 50,
-                    dataIndex: 'e',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'f',
-                    title: '钢结构',
-                    width: 50,
-                    dataIndex: 'f',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'q',
-                    title: '小计',
-                    width: 50,
-                    dataIndex: 'q',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                }
-            ]}/>
-        </div>
         </div>
         <div className={styles.bottom}>
-            
-        <div className={styles.left}>
-            <div>
-                <span className={styles.title}>生产下达统计分析</span>
-                <Select className={styles.select} size="small" onChange={(e) => {
 
-                }}>
-                    <Select.Option key={0} value={'2020'}>2020</Select.Option>
-                    <Select.Option key={1} value={'2021'}>2021</Select.Option>
-                    <Select.Option key={2} value={'2022'}>2022</Select.Option>
-                </Select>
+            <div className={styles.left}>
+                <div>
+                    <span className={styles.title}>生产下达统计分析</span>
+                    <Select className={styles.select} size="small" onChange={(e) => {
+
+                    }}>
+                        <Select.Option key={0} value={'2020'}>2020</Select.Option>
+                        <Select.Option key={1} value={'2021'}>2021</Select.Option>
+                        <Select.Option key={2} value={'2022'}>2022</Select.Option>
+                    </Select>
+                </div>
+                <div id={'productionDistributionStatistics'} style={{ width: '100%', height: '400px' }} key={'productionDistributionStatistics'} />
             </div>
-            <div id={'productionDistributionStatistics'} style={{ width: '100%', height: '400px' }} key={'productionDistributionStatistics'}/>
-        </div>
-        <div className={styles.right}>
+            <div className={styles.right}>
                 <p className={styles.title}>生产下达统计分析</p>
-            <div className={styles.rightContent}>
-                <div style={{width: "40%"}}>
+                <div className={styles.rightContent}>
+                    <div style={{ width: "40%" }}>
 
-               
-            <div id={'productionDistribution'} style={{ width: '100%', height: '400px' }} key={'productionDistribution'}/>
-             </div>
-<div style={{width: "100%",marginLeft: "2%"}}>
-            <Select className={styles.select} size="small" onChange={(e) => {
 
-}}>
-    <Select.Option key={0} value={''}>全部</Select.Option>
-    <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
-    <Select.Option key={2} value={'钢管塔'}>钢管塔</Select.Option>
-    <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
-    <Select.Option key={4} value={'架构'}>架构</Select.Option>
-    <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
-</Select>
-            <Table bordered pagination={false} dataSource={[{index: '111',a: '111'}]} columns={[
-                {
-                    key: 'index',
-                    title: '序号',
-                    width: 50,
-                    dataIndex: 'index',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'a',
-                    title: '计划号',
-                    width: 50,
-                    dataIndex: 'a',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'c',
-                    title: '项目名称',
-                    width: 50,
-                    dataIndex: 'c',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'd',
-                    title: '下技术总量',
-                    width: 50,
-                    dataIndex: 'd',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'e',
-                    title: '已下达量',
-                    width: 50,
-                    dataIndex: 'e',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                },
-                {
-                    key: 'f',
-                    title: '未下达量',
-                    width: 50,
-                    dataIndex: 'f',
-                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                }
-            ]}/>        
-                    
-</div>
-            </div>
+                        <div id={'productionDistribution'} style={{ width: '100%', height: '400px' }} key={'productionDistribution'} />
+                    </div>
+                    <div style={{ width: "100%", marginLeft: "2%" }}>
+                        <Select className={styles.select} size="small" onChange={(e) => {
+
+                        }}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
+                            <Select.Option key={2} value={'钢管塔'}>钢管塔</Select.Option>
+                            <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
+                            <Select.Option key={4} value={'架构'}>架构</Select.Option>
+                            <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
+                        </Select>
+                        <Table bordered pagination={false} dataSource={[{ index: '111', a: '111' }]} columns={[
+                            {
+                                key: 'index',
+                                title: '序号',
+                                width: 50,
+                                dataIndex: 'index',
+                                render: (_a: any, _b: any, index: number) => { return index + 1 }
+                            },
+                            {
+                                key: 'a',
+                                title: '计划号',
+                                width: 50,
+                                dataIndex: 'a',
+                                render: (_a: any, _b: any, index: number) => { return index + 1 }
+                            },
+                            {
+                                key: 'c',
+                                title: '项目名称',
+                                width: 50,
+                                dataIndex: 'c',
+                                render: (_a: any, _b: any, index: number) => { return index + 1 }
+                            },
+                            {
+                                key: 'd',
+                                title: '下技术总量',
+                                width: 50,
+                                dataIndex: 'd',
+                                render: (_a: any, _b: any, index: number) => { return index + 1 }
+                            },
+                            {
+                                key: 'e',
+                                title: '已下达量',
+                                width: 50,
+                                dataIndex: 'e',
+                                render: (_a: any, _b: any, index: number) => { return index + 1 }
+                            },
+                            {
+                                key: 'f',
+                                title: '未下达量',
+                                width: 50,
+                                dataIndex: 'f',
+                                render: (_a: any, _b: any, index: number) => { return index + 1 }
+                            }
+                        ]} />
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>
