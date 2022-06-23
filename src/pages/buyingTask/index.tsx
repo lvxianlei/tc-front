@@ -113,10 +113,11 @@ export default function RawMaterial() {
     ]
 
     const onFilterSubmit = (value: any) => {
-        if (value.startStatusUpdateTime) {
-            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
-            value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
+        if (value.startPlanDeliveryTime) {
+            const formatDate = value.startPlanDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
+            delete value.startPlanDeliveryTime
+            value.startPlanDeliveryTime = formatDate[0] + ' 00:00:00';
+            value.endPlanDeliveryTime = formatDate[1] + ' 23:59:59';
         }
         if (value.batcherId) {
             value.batcherId = value.batcherId.value
@@ -163,7 +164,7 @@ export default function RawMaterial() {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'start----------Time',
+                        name: 'startPlanDeliveryTime',
                         label: '客户交货日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },

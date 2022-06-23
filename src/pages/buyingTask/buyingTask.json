@@ -22,19 +22,19 @@
         },
         {
             "title": "工程名称",
-            "dataIndex": "--------------"
+            "dataIndex": "orderProjectName"
         },
         {
             "title": "下发时间",
-            "dataIndex": "----------------"
+            "dataIndex": "issuedTime"
         },
         {
             "title": "总重量(吨)",
-            "dataIndex": "-------------"
+            "dataIndex": "totalWeight"
         },
         {
             "title": "客户交货日期",
-            "dataIndex": "----------------"
+            "dataIndex": "deliveryTime"
         },
         {
             "title": "任务状态",
