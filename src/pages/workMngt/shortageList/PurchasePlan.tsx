@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from "react"
-import { Spin, Row, Col, InputNumber } from "antd"
+import { Spin, Row, Col, InputNumber, message, Input } from "antd"
 import { DetailTitle, CommonTable } from '../../common'
 import { ListIngredients, PlanList } from "../purchaseList/purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -10,6 +10,7 @@ interface PurchasePlanProps {
 
 export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps, ref): JSX.Element {
     const [dataSource, setDataSource] = useState<any[]>([])
+    const [count, setCout] = useState<number>(1);
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase`, {
@@ -43,19 +44,44 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
-            await saveRun({
-                purchaseType: 3,
-                purchaserTaskTowerIds: ids.join(","),
-                materialShortageIds: ids.join(","),
-                purchasePlanDetailDTOS: dataSource
-            })
+            const result = handleData();
+            if (!result) {
+                await saveRun({
+                    purchaseType: 3,
+                    purchaserTaskTowerIds: ids.join(","),
+                    materialShortageIds: ids.join(","),
+                    purchasePlanDetailDTOS: dataSource
+                })
+                resole(true)
+            }
             resole(true)
         } catch (error) {
             reject(false)
         }
     })
 
+    useEffect(() => {
+        if (count !== 1) {
+            handleData();
+        }
+    }, [JSON.stringify(dataSource)])
+
     useImperativeHandle(ref, () => ({ onSubmit: handleSubmit }))
+    // 判断标红
+    const handleData = () => {
+        const result = dataSource;
+        let flag = false;
+        for (let i = 0; i < result.length; i += 1) {
+            if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
+                result[i]["isRed"] = false;
+            } else {
+                result[i]["isRed"] = true;
+                flag = true;
+            }
+        }
+        setDataSource(result.slice(0))
+        return flag;
+    }
 
     return <Spin spinning={loading}>
         <Row gutter={10}>
@@ -70,9 +96,26 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                         return ({
                             ...item,
                             render: (_: any, record: any, index: number) => {
-                                return <InputNumber value={record.warehouseOccupy} key={index}
-                                    onChange={(value: number) => handleInputChange(value, "warehouseOccupy", index)}
-                                    style={{ height: 27 }} />
+                                return <Input
+                                    value={record.warehouseOccupy || (record.availableStock > record.num ? record.num : record.availableStock)}
+                                    key={index}
+                                    // max={999}
+                                    // min={0}
+                                    onChange={(e: any) => {
+                                        const result = dataSource;
+                                        let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
+                                        if ((arg || 0) > (record.availableStock || 0)) {
+                                            message.error("本次占用数量过多，请修改！");
+                                            result[index].warehouseOccupy = ""
+                                            setDataSource(result.slice(0));
+                                        } else {
+                                            result[index].warehouseOccupy = arg
+                                            setDataSource(result.slice(0));
+                                        }
+                                        setCout(count + 1);
+                                    }}
+                                    style={{ height: 27 }}
+                                />
                             }
                         })
                     }
@@ -92,3 +135,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         </Row>
     </Spin>
 })
+
+function useEffect(arg0: () => void, arg1: string[]) {
+    throw new Error("Function not implemented.")
+}

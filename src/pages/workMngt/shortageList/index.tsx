@@ -133,7 +133,7 @@ export default function Invoicing() {
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
                     },
-                    getCheckboxProps: (record: any) => record.purchasePersonId !== AuthUtil.getUserId()
+                    getCheckboxProps: (record: any) => (record.purchasePersonId !== AuthUtil.getUserId()) && record.shortageStatusName !== "待处理"
                 }
             }}
             searchFormItems={[
