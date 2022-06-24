@@ -2,27 +2,33 @@
     "tableHeader": [
         {
             "title": "计划号",
-            "dataIndex": "planNumber"
+            "dataIndex": "planNumber",
+            "width": 100
         },
         {
             "title": "塔型",
-            "dataIndex": "productCategoryName"
+            "dataIndex": "productCategoryName",
+            "width": 100
         },
         {
             "title": "批次号",
-            "dataIndex": "productionBatchNo"
+            "dataIndex": "productionBatchNo",
+            "width": 100
         },
         {
             "title": "下达单号",
-            "dataIndex": "issuedNumber"
+            "dataIndex": "issuedNumber",
+            "width": 130
         },
         {
             "title": "基数",
-            "dataIndex": "number"
+            "dataIndex": "number",
+            "width": 50
         },
         {
             "title": "电压等级(Kv)",
-            "dataIndex": "voltageGradeName"
+            "dataIndex": "voltageGradeName",
+            "width": 90
         },
         {
             "title": "工程名称",
@@ -30,85 +36,104 @@
         },
         {
             "title": "业务经理",
-            "dataIndex": "businessManagerName"
+            "dataIndex": "businessManagerName",
+            "width": 90
         },
         {
             "title": "产品类型",
-            "dataIndex": "productTypeName"
+            "dataIndex": "productTypeName",
+            "width": 90
         },
         {
             "title": "生产单元组",
-            "dataIndex": "factoryName"
+            "dataIndex": "factoryName",
+            "width": 100
         },
         {
             "title": "审批日期",
             "dataIndex": "approvalTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "width": 100
         },
         {
             "title": "客户交货日期",
-            "dataIndex": "customerDeliveryTime"
+            "dataIndex": "customerDeliveryTime",
+            "width": 100
         },
         {
             "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "width": 100
         },
         {
             "title": "试装类型",
-            "dataIndex": "trialAssemble"
+            "dataIndex": "trialAssemble",
+            "width": 90
         },
         {
             "title": "技术下达重量（t）",
-            "dataIndex": "totalWeight"
+            "dataIndex": "totalWeight",
+            "width": 120
         },
         {
             "title": "角钢重量（t）",
-            "dataIndex": "steelTotalWeight"
+            "dataIndex": "steelTotalWeight",
+            "width": 105
         },
         {
             "title": "钢板重量（t）",
-            "dataIndex": "platTotalWeight"
+            "dataIndex": "platTotalWeight",
+            "width": 100
         },
         {
             "title": "总件数",
-            "dataIndex": "totalProcessNum"
+            "dataIndex": "totalProcessNum",
+            "width": 90
         },
         {
             "title": "总孔数",
-            "dataIndex": "totalHolesNum"
+            "dataIndex": "totalHolesNum",
+            "width": 90
         },
         {
             "title": "库存备料",
-            "dataIndex": "storageMaterialDescription"
+            "dataIndex": "storageMaterialDescription",
+            "width": 90
         },
         {
             "title": "确认备料",
-            "dataIndex": "processMaterialDescription"
+            "dataIndex": "processMaterialDescription",
+            "width": 90
         }
     ],
     "commonHeader": [
         {
             "title": "下发日期",
-            "code": "issueTime"
+            "code": "issueTime",
+            "width": 100
         },
         {
             "title": "计划完成日期",
-            "code": "planCompleteTime"
+            "code": "planCompleteTime",
+            "width": 100
         },
         {
             "title": "实际完成日期",
-            "code": "completeTime"
+            "code": "completeTime",
+            "width": 100
         },
         {
             "title": "状态",
-            "code": "status"
+            "code": "status",
+            "width": 100
         },
         {
             "title": "执行单元",
-            "code": "unitName"
+            "code": "unitName",
+            "width": 100
         }
     ]
 }
