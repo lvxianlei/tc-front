@@ -132,7 +132,7 @@ export default function SampleDraw(): React.ReactNode {
         },
         {
             title: "状态",
-            dataIndex: "productStauts",
+            dataIndex: "productStatus",
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
