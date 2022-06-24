@@ -268,7 +268,7 @@ export default function (): JSX.Element {
                                 style={{
                                     height: "100%",
                                     boxSizing: "border-box",
-                                    padding: "16px",
+                                    padding: `${location.pathname === "/cockpit/statements" ? '0' : '16px'}`,
                                     overflowY: "auto"
                                 }}>
                                 {

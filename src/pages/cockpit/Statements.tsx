@@ -4,19 +4,286 @@
  * @description 驾驶舱-报表
  */
 
+import useRequest from '@ahooksjs/use-request';
 import { Select, Table } from 'antd';
 import * as echarts from 'echarts';
 import React, { createRef, useEffect, useState } from 'react'
-import styles from './Statements.module.less'
+import RequestUtil from '../../utils/RequestUtil';
+import styles from './Statements.module.less';
+import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 export default function Statements(): React.ReactNode {
-    const ref = createRef<HTMLDivElement>() // 初始值
     useEffect(() => {
         initCharts();
     })
 
+    const columns = [
+        {
+            key: 'productType',
+            title: '产品类型',
+            width: 100,
+            dataIndex: 'productType'
+        },
+        {
+            key: 'angleSteel',
+            title: '角钢塔',
+            width: 50,
+            dataIndex: 'angleSteel',
+            render: (_: number): React.ReactNode => (
+                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{color: 'red'}} />{_}</span> : <span><ArrowDownOutlined style={{color: 'green'}} />{_}</span>}</span>
+            )
+        },
+        {
+            key: 'steelTubePole',
+            title: '钢管杆',
+            width: 50,
+            dataIndex: 'steelTubePole',
+            render: (_: number): React.ReactNode => (
+                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{color: 'red'}} />{_}</span> : <span><ArrowDownOutlined style={{color: 'green'}} />{_}</span>}</span>
+            )
+        },
+        {
+            key: 'fourPipe',
+            title: '四管塔',
+            width: 50,
+            dataIndex: 'fourPipe',
+            render: (_: number): React.ReactNode => (
+                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{color: 'red'}} />{_}</span> : <span><ArrowDownOutlined style={{color: 'green'}} />{_}</span>}</span>
+            )
+        },
+        {
+            key: 'architecture',
+            title: '架构',
+            width: 50,
+            dataIndex: 'architecture',
+            render: (_: number): React.ReactNode => (
+                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{color: 'red'}} />{_}</span> : <span><ArrowDownOutlined style={{color: 'green'}} />{_}</span>}</span>
+            )
+        },
+        {
+            key: 'steelStructure',
+            title: '钢结构',
+            width: 50,
+            dataIndex: 'steelStructure',
+            render: (_: number): React.ReactNode => (
+                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{color: 'red'}} />{_}</span> : <span><ArrowDownOutlined style={{color: 'green'}} />{_}</span>}</span>
+            )
+        },
+        {
+            key: 'subtotal',
+            title: '小计',
+            width: 50,
+            dataIndex: 'subtotal'
+        }
+    ]
+
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        // const value: any = await RequestUtil.get(``);
+        let value = [{
+            "date": "202201",
+            "val": [{
+                "data": ["11.25", "15", "0", "1.10"],
+                "type": "角钢塔"
+            }, {
+                "data": ["15.22", "19.6", "0", "0"],
+                "type": "钢管杆"
+            }, {
+                "data": ["18.44", "23.85", "0", "0"],
+                "type": "四管塔"
+            }, {
+                "data": ["10.22", "0", "0", "0"],
+                "type": "架构"
+            }, {
+                "data": ["45.99", "0", "0", "0"],
+                "type": "钢结构"
+            }]
+        }, {
+            "date": "202202",
+            "val": [{
+                "data": ["0", "0", "0", "20.98"],
+                "type": "角钢塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢管杆"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "四管塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "架构"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢结构"
+            }]
+        }, {
+            "date": "202203",
+            "val": [{
+                "data": ["4", "0", "70", "0"],
+                "type": "角钢塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢管杆"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "四管塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "架构"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢结构"
+            }]
+        }, {
+            "date": "202204",
+            "val": [{
+                "data": ["21", "0", "50", "70"],
+                "type": "角钢塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢管杆"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "四管塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "架构"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢结构"
+            }]
+        }, {
+            "date": "202205",
+            "val": [{
+                "data": ["1", "0", "32.11", "0"],
+                "type": "角钢塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢管杆"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "四管塔"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "架构"
+            }, {
+                "data": ["0", "0", "0", "0"],
+                "type": "钢结构"
+            }]
+        }, {
+            "date": "202206",
+            "val": [{
+                "data": ["123.122", "13.12", "-12.22", "14.89"],
+                "type": "角钢塔"
+            }, {
+                "data": ["159.66", "12.98", "-18.98", "11.21"],
+                "type": "钢管杆"
+            }, {
+                "data": ["234.24", "12.2", "-13.1", "55.3"],
+                "type": "四管塔"
+            }, {
+                "data": ["96.21", "23.44", "-10.66", "11.00"],
+                "type": "架构"
+            }, {
+                "data": ["23.99", "8.33", "-10", "0"],
+                "type": "钢结构"
+            }]
+        }]
+        const tableData = value[value.length - 1]?.val;
+        tableData && getTableData(tableData)
+        const angleSteelData = value.map(res => res.val).map(res => res[0]?.data);
+        const steelTubePoleData = value.map(res => res.val).map(res => res[1]?.data);
+        const fourPipeData = value.map(res => res.val).map(res => res[2]?.data);
+        const architectureData = value.map(res => res.val).map(res => res[3]?.data);
+        const steelStructureData = value.map(res => res.val).map(res => res[4]?.data);
+        const pureData = value?.map(res => res.val)?.map(item => item?.map(res => res.data));
+        const secondData = pureData?.map(items => [
+            items?.map((item: any[]) => item[0]),
+            items?.map((item: any[]) => item[1]),
+            items?.map((item: any[]) => item[2]),
+            items?.map((item: any[]) => item[3])
+        ])
+        const thirdData = secondData?.map(res => [
+            (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+        ])
+        let processedData = {
+            dateList: value.map(res => res?.date),
+            angleSteel: angleSteelData,
+            steelTubePole: steelTubePoleData,
+            fourPipe: fourPipeData,
+            architecture: architectureData,
+            steelStructure: steelStructureData,
+            subtotal: thirdData
+        };
+        resole(processedData)
+    }), {})
+
+    const { data: yearLists } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const now = new Date().getFullYear();
+        var startYear = now - 3;//起始年份
+        var arr = new Array();
+        for (var i = startYear; i <= now; i++) {
+            var obj = [
+                { "id": i + '01-' + i + '06', "label": i + "上半年" },
+                { "id": i + '07-' + i + '12', "label": i + "下半年" }
+            ];
+            arr.push(...obj);
+        }
+        resole(arr)
+    }), {})
+
+    const { data: loftingStatisticalAnalysisData, run: getTableData } = useRequest<any>((initialData: any) => new Promise(async (resole, reject) => {
+        const subtotal = [
+            initialData.map((res: any) => Number(res?.data[0])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            initialData.map((res: any) => Number(res?.data[1])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            initialData.map((res: any) => Number(res?.data[2])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            initialData.map((res: any) => Number(res?.data[3])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
+        ]
+        const newData = [
+            {
+                productType: '放样件号数（万）',
+                angleSteel: initialData[0]?.data[0],
+                steelTubePole: initialData[1]?.data[0],
+                fourPipe: initialData[2]?.data[0],
+                architecture: initialData[3]?.data[0],
+                steelStructure: initialData[4]?.data[0],
+                subtotal: subtotal[0].toFixed(2)
+            },
+            {
+                productType: '环比%',
+                angleSteel: initialData[0]?.data[1],
+                steelTubePole: initialData[1]?.data[1],
+                fourPipe: initialData[2]?.data[1],
+                architecture: initialData[3]?.data[1],
+                steelStructure: initialData[4]?.data[1],
+                subtotal: subtotal[1].toFixed(2)
+            },
+            {
+                productType: '同比%',
+                angleSteel: initialData[0]?.data[2],
+                steelTubePole: initialData[1]?.data[2],
+                fourPipe: initialData[2]?.data[2],
+                architecture: initialData[3]?.data[2],
+                steelStructure: initialData[4]?.data[2],
+                subtotal: subtotal[2].toFixed(2)
+            },
+            {
+                productType: '定基比%',
+                angleSteel: initialData[0]?.data[3],
+                steelTubePole: initialData[1]?.data[3],
+                fourPipe: initialData[2]?.data[3],
+                architecture: initialData[3]?.data[3],
+                steelStructure: initialData[4]?.data[3],
+                subtotal: subtotal[3].toFixed(2)
+            }
+        ]
+        resole(newData)
+    }), { manual: true })
 
     const initCharts = () => {
+        (document as HTMLElement | any).getElementById('LoftingStatisticalAnalysis').removeAttribute("_echarts_instance_");
         const myChart = echarts.init((document as HTMLElement | any).getElementById('LoftingStatisticalAnalysis'), 'dark');
         // 绘制图表
         myChart.setOption({
@@ -37,20 +304,27 @@ export default function Statements(): React.ReactNode {
                     }
                 },
                 formatter: (params: any) => {
-                    var res = '<div><span style="padding-right: 6px">月份' + params[0].name +
-                        '</span><span style="padding-right: 6px">总量' + params[0].name +
-                        '</span><span style="padding-right: 6px">环比增长' + params[0].name +
-                        '</span><span style="padding-right: 6px">同比下降' + params[0].name +
-                        '</span><span style="padding-right: 6px">定基比增长' + params[0].name +
+                    var res = '<div style="padding-bottom: 5px; display: flex"><span style="padding-right: 6px"><span style="padding-right: 5px">月份</span>' + params[5].axisValue +
+                        '</span><span style="padding-right: 6px">总量' + params[5].data +
+                        '</span><span style="padding-right: 6px;">' +
+                        ((Number(data?.subtotal[params[5].dataIndex][1]) === 0) ? '环比' + data?.subtotal[params[5].dataIndex][1] : (Number(data?.subtotal[params[5].dataIndex][1]) > 0) ? '<span style="color: red">环比增长' + data?.subtotal[params[5].dataIndex][1] + '</span>' : '<span style="color: green">环比下降' + data?.subtotal[params[5].dataIndex][1] + '</span>') +
+                        '</span><span style="padding-right: 6px;">' +
+                        ((Number(data?.subtotal[params[5].dataIndex][2]) === 0) ? '同比' + data?.subtotal[params[5].dataIndex][2] : (Number(data?.subtotal[params[5].dataIndex][2]) > 0) ? '<span style="color: red">同比增长' + data?.subtotal[params[5].dataIndex][2] + '</span>' : '<span style="color: green">同比下降' + data?.subtotal[params[5].dataIndex][2] + '</span>') +
+                        '</span><span style="padding-right: 6px;">' +
+                        ((Number(data?.subtotal[params[5].dataIndex][3]) === 0) ? '定基比' + data?.subtotal[params[5].dataIndex][3] : (Number(data?.subtotal[params[5].dataIndex][3]) > 0) ? '<span style="color: red">定基比增长' + data?.subtotal[params[5].dataIndex][3] + '</span>' : '<span style="color: green">定基比下降' + data?.subtotal[params[5].dataIndex][3] + '</span>') +
                         '</span></div>'
                     for (var i = 0; i < params.length; i++) {
-                        res += '<p><span style="display: inline-block;padding: 5px 0;">' +
-                            '<i style="display: inline-block;width: 10px;height: 10px;background: ' + params[i].color +
-                            ';border-radius: 50%;}"></i></span><span style="padding-right: 6px; width: 20px">' + params[i].seriesName +
+                        const paramsData = i === 0 ? data?.angleSteel : i === 1 ? data?.steelTubePole : i === 2 ? data?.fourPipe : i === 3 ? data?.architecture : data?.steelStructure
+                        res += '<div"><span style="display: inline-block; padding: 0 5px;">' +
+                            '<i style="display: inline-block; width: 10px;height: 10px; background: ' + params[i].color +
+                            ';}"></i></span><span style="padding-right: 6px; width: 20px">' + params[i].seriesName +
                             '</span><span style="padding-right: 6px">' + params[i].data +
-                            '</span><span style="padding-right: 6px">环比增长' + params[i].name +
-                            '</span><span style="padding-right: 6px">同比下降' + params[i].name +
-                            '</span><span style="padding-right: 6px">定基比增长' + params[i].name +
+                            '</span><span style="padding-right: 6px;">' +
+                            ((Number(paramsData[params[i].dataIndex][1]) === 0) ? '环比' + paramsData[params[i].dataIndex][1] : (Number(paramsData[params[i].dataIndex][1]) > 0) ? '<span style="color: red">环比增长' + paramsData[params[i].dataIndex][1] + '</span>' : '<span style="color: green">环比下降' + paramsData[params[i].dataIndex][1] + '</span>') +
+                            '</span><span style="padding-right: 6px;">' +
+                            ((Number(paramsData[params[i].dataIndex][2]) === 0) ? '同比' + paramsData[params[i].dataIndex][2] : (Number(paramsData[params[i].dataIndex][2]) > 0) ? '<span style="color: red">同比增长' + paramsData[params[i].dataIndex][2] + '</span>' : '<span style="color: green">同比下降' + paramsData[params[i].dataIndex][2] + '</span>') +
+                            '</span><span style="padding-right: 6px;">' +
+                            ((Number(paramsData[params[i].dataIndex][3]) === 0) ? '定基比' + paramsData[params[i].dataIndex][3] : (Number(paramsData[params[i].dataIndex][3]) > 0) ? '<span style="color: red">定基比增长' + paramsData[params[i].dataIndex][3] + '</span>' : '<span style="color: green">定基比下降' + paramsData[params[i].dataIndex][3] + '</span>') +
                             '</span></p>'
                     }
                     return res;
@@ -70,7 +344,7 @@ export default function Statements(): React.ReactNode {
             xAxis: [
                 {
                     type: 'category',
-                    data: ['01', '02', '03', '04', '05', '06'],
+                    data: data?.dateList || [],
                     axisPointer: {
                         type: 'shadow'
                     }
@@ -88,15 +362,12 @@ export default function Statements(): React.ReactNode {
                 {
                     name: '角钢塔',
                     type: 'bar',
-
                     tooltip: {
                         valueFormatter: function (value: string) {
                             return value;
                         }
                     },
-                    data: [
-                        2.0, 4.9, 7.0, 23.2, 25.6, 76.7
-                    ]
+                    data: data?.angleSteel?.map((res: any) => res[0])
                 },
                 {
                     name: '钢管塔',
@@ -106,9 +377,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: [
-                        2.6, 5.3, 9.0, 26.4, 28.7, 70.7
-                    ]
+                    data: data?.steelTubePole?.map((res: any) => res[0])
                 },
                 {
                     name: '四管塔',
@@ -118,9 +387,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: [
-                        2.6, 5.9, 9.0, 26.4, 89, 70.7
-                    ]
+                    data: data?.fourPipe?.map((res: any) => res[0])
                 },
                 {
                     name: '架构',
@@ -130,9 +397,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: [
-                        2.6, 5.9, 9.0, 26.4, 28.7, 100.12
-                    ]
+                    data: data?.architecture?.map((res: any) => res[0])
                 },
                 {
                     name: '钢结构',
@@ -142,9 +407,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: [
-                        2.6, 5.9, 9.0, 26.4, 28.7, 70.7
-                    ]
+                    data: data?.steelStructure?.map((res: any) => res[0])
                 },
                 {
                     name: '总量',
@@ -154,10 +417,11 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: [8.0, 12.2, 13.3, 94.5, 56.3, 80.2]
+                    data: data?.subtotal?.map((res: any) => res[0])
                 }
             ]
         });
+        (document as HTMLElement | any).getElementById('LoftingAccuracyStatistics').removeAttribute("_echarts_instance_");
         const accuracyChart = echarts.init((document as HTMLElement | any).getElementById('LoftingAccuracyStatistics'), 'dark');
         // 绘制图表
         accuracyChart.setOption({
@@ -300,6 +564,7 @@ export default function Statements(): React.ReactNode {
             ]
         });
 
+        (document as HTMLElement | any).getElementById('productionDistributionStatistics').removeAttribute("_echarts_instance_");
         const productionDistributionChart = echarts.init((document as HTMLElement | any).getElementById('productionDistributionStatistics'), 'dark');
         // 绘制图表
         productionDistributionChart.setOption({
@@ -367,6 +632,7 @@ export default function Statements(): React.ReactNode {
             ]
         });
 
+        (document as HTMLElement | any).getElementById('productionDistribution').removeAttribute("_echarts_instance_");
         const productionDistributionPieChart = echarts.init((document as HTMLElement | any).getElementById('productionDistribution'), 'dark');
         // 绘制图表
         productionDistributionPieChart.setOption({
@@ -429,8 +695,7 @@ export default function Statements(): React.ReactNode {
     return <div className={styles.statement}>
         <div className={styles.header}>
             <div className={styles.headerbg}>
-                
-            <span className={styles.headerTitle}>数据展示</span>
+                <span className={styles.headerTitle}>汇金通技术部放样统计数据分析</span>
             </div>
         </div>
         <div className={styles.top}>
@@ -440,63 +705,21 @@ export default function Statements(): React.ReactNode {
                     <Select className={styles.select} size="small" onChange={(e) => {
 
                     }}>
-                        <Select.Option key={0} value={'2020'}>2020</Select.Option>
-                        <Select.Option key={1} value={'2021'}>2021</Select.Option>
-                        <Select.Option key={2} value={'2022'}>2022</Select.Option>
+                        {
+                            yearLists && yearLists.map((res: any, index: number) => (
+                                <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
+                            ))
+                        }
                     </Select>
                 </div>
-                <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '400px' }} key={'LoftingStatisticalAnalysis'} />
-                <Table bordered pagination={false} dataSource={[{ index: '111', a: '111' }]} columns={[
-                    {
-                        key: 'index',
-                        title: '产品类型',
-                        width: 50,
-                        dataIndex: 'index',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'a',
-                        title: '角钢塔',
-                        width: 50,
-                        dataIndex: 'a',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'c',
-                        title: '钢管杆',
-                        width: 50,
-                        dataIndex: 'c',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'd',
-                        title: '四管塔',
-                        width: 50,
-                        dataIndex: 'd',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'e',
-                        title: '架构',
-                        width: 50,
-                        dataIndex: 'e',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'f',
-                        title: '钢结构',
-                        width: 50,
-                        dataIndex: 'f',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'q',
-                        title: '小计',
-                        width: 50,
-                        dataIndex: 'q',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    }
-                ]} />
+                <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '300px' }} key={'LoftingStatisticalAnalysis'} />
+                <Table
+                    bordered
+                    scroll={{ x: true }}
+                    pagination={false}
+                    dataSource={loftingStatisticalAnalysisData || []}
+                    columns={columns}
+                    onRow={() => ({ className: styles.tableRow })} />
             </div>
             <div className={styles.right}>
                 <div>
@@ -504,63 +727,19 @@ export default function Statements(): React.ReactNode {
                     <Select className={styles.select} size="small" onChange={(e) => {
 
                     }}>
-                        <Select.Option key={0} value={'2020'}>2020</Select.Option>
-                        <Select.Option key={1} value={'2021'}>2021</Select.Option>
-                        <Select.Option key={2} value={'2022'}>2022</Select.Option>
+                        {
+                            yearLists && yearLists.map((res: any, index: number) => (
+                                <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
+                            ))
+                        }
                     </Select>
                 </div>
-                <div id={'LoftingAccuracyStatistics'} style={{ width: '100%', height: '400px' }} key={'LoftingAccuracyStatistics'} />
-                <Table bordered pagination={false} dataSource={[{ index: '111', a: '111' }]} columns={[
-                    {
-                        key: 'index',
-                        title: '产品类型',
-                        width: 50,
-                        dataIndex: 'index',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'a',
-                        title: '角钢塔',
-                        width: 50,
-                        dataIndex: 'a',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'c',
-                        title: '钢管杆',
-                        width: 50,
-                        dataIndex: 'c',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'd',
-                        title: '四管塔',
-                        width: 50,
-                        dataIndex: 'd',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'e',
-                        title: '架构',
-                        width: 50,
-                        dataIndex: 'e',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'f',
-                        title: '钢结构',
-                        width: 50,
-                        dataIndex: 'f',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    },
-                    {
-                        key: 'q',
-                        title: '小计',
-                        width: 50,
-                        dataIndex: 'q',
-                        render: (_a: any, _b: any, index: number) => { return index + 1 }
-                    }
-                ]} />
+                <div id={'LoftingAccuracyStatistics'} style={{ width: '100%', height: '300px' }} key={'LoftingAccuracyStatistics'} />
+                <Table
+                    bordered
+                    pagination={false}
+                    dataSource={[]}
+                    columns={columns} />
             </div>
         </div>
         <div className={styles.bottom}>
@@ -571,9 +750,11 @@ export default function Statements(): React.ReactNode {
                     <Select className={styles.select} size="small" onChange={(e) => {
 
                     }}>
-                        <Select.Option key={0} value={'2020'}>2020</Select.Option>
-                        <Select.Option key={1} value={'2021'}>2021</Select.Option>
-                        <Select.Option key={2} value={'2022'}>2022</Select.Option>
+                        {
+                            yearLists && yearLists.map((res: any, index: number) => (
+                                <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
+                            ))
+                        }
                     </Select>
                 </div>
                 <div id={'productionDistributionStatistics'} style={{ width: '100%', height: '400px' }} key={'productionDistributionStatistics'} />
