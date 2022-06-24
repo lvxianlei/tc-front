@@ -30,15 +30,15 @@
             "enum": [
                 {
                     "value": 1,
-                    "label": "暂停加工"
+                    "label": "恢复加工"
                 },
                 {
                     "value": 2,
-                    "label": "取消加工"
+                    "label": "暂停加工"
                 },
                 {
                     "value": 3,
-                    "label": "恢复加工"
+                    "label": "取消加工"
                 }
             ]
         },
