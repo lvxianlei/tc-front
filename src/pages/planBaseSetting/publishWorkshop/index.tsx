@@ -275,6 +275,7 @@ export default () => {
                 values.endTime = formatDate[1] + ' 23:59:59';
                 delete values.time
             }
+            values.status = status
             setFilterValue(values)
             return values;
         }}
