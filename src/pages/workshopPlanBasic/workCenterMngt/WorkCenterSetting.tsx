@@ -398,9 +398,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                     }
                     console.log(value)
                     setVisible(false)
-                    if(value.id){
-                        workCenterRelationsList.splice(value?.index,1)
-                    }
+                    workCenterRelationsList.splice(value?.index,1)
                     workCenterRelationsList.unshift(value)
                     setWorkCenterRelationsList(
                         [...workCenterRelationsList]
