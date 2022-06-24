@@ -43,8 +43,9 @@ export default function CyclePlanChange(): React.ReactNode {
         {
             key: 'index',
             title: '优先级',
-            width: 100,
+            width: 60,
             fixed: "left",
+            align:'center',
             dataIndex: 'index',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{ index+ 1 }</span> 
@@ -56,6 +57,7 @@ export default function CyclePlanChange(): React.ReactNode {
             dataIndex: 'sort',
             width: 50,
             fixed: "left",
+            align:'center',
             className: 'drag-visible',
             render: ()=><DragHandle/>,
         },
@@ -119,13 +121,13 @@ export default function CyclePlanChange(): React.ReactNode {
         {
             key: 'totalHoles',
             title: '总孔数',
-            width: 100,
+            width: 90,
             dataIndex: 'totalHoles'
         },
         {
             key: 'totalNumber',
             title: '总件数',
-            width: 100,
+            width: 90,
             dataIndex: 'totalNumber'
         },
         {
@@ -149,7 +151,7 @@ export default function CyclePlanChange(): React.ReactNode {
         {
             title: "状态",
             dataIndex: "status",
-            width:120,
+            width:100,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
             )
@@ -157,7 +159,7 @@ export default function CyclePlanChange(): React.ReactNode {
         {
             title: "执行状态",
             dataIndex: "executeStatus",
-            width:120,
+            width:100,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{_===1?'正常':_===2?'取消':'-'}</span>
             )
