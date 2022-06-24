@@ -733,17 +733,22 @@ export default function IngredientsList(): React.ReactNode {
     // 对配料策略进行处理
     const handleAnge = (options: any[], key: number) => {
         console.log(options, "接受到的数据=====", key, miter)
+        const spec = activeSort.split("_")[0];
         for (let i = 0; i < options.length; i += 1) {
             const result = options[i].width.split("~");
             if ((key >= result[0] * 1) && (key <= result[1] * 1)) {
                 setNowIngre({
                     ...options[i],
                     available: miter,
+                    edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
+                    clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 });
                 serarchForm.setFieldsValue({
                     ...options[i],
                     available: miter,
+                    edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
+                    clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 })
             }

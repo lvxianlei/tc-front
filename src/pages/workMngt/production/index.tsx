@@ -52,8 +52,8 @@ export default function Invoicing() {
     const onFilterSubmit = (value: any) => {
         if (value.startStatusUpdateTime) {
             const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startStatusUpdateTime = formatDate[0] + " 00:00:00"
-            value.endStatusUpdateTime = formatDate[1] + " 23:59:59"
+            value.startTaskFinishTime = formatDate[0] + " 00:00:00"
+            value.endTaskFinishTime = formatDate[1] + " 23:59:59"
         }
         if (value.orderTimeUpdateTime) {
             const formatDate = value.orderTimeUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -128,7 +128,7 @@ export default function Invoicing() {
                             <Button
                                 type="link"
                                 className="btn-operation-link" 
-                                disabled={record.batcheTaskStatus !== 1}
+                                disabled={record.batcheTaskStatus !== 1 && (record?.updateUser)}
                             >
                                 <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}/${record.materialStandard}`}>配料</Link>
                             </Button>
@@ -145,7 +145,7 @@ export default function Invoicing() {
             searchFormItems={[
                 {
                     name: 'startStatusUpdateTime',
-                    label: '配料完成时间----新加',
+                    label: '配料完成时间',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {

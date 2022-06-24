@@ -21,13 +21,13 @@
             "type": "string"
         },
         {
-            "title": "工程名称----新加",
-            "dataIndex": "planNumber",
+            "title": "工程名称",
+            "dataIndex": "orderProjectName",
             "type": "string"
         },
         {
-            "title": "标准----新加",
-            "dataIndex": "planNumber",
+            "title": "标准",
+            "dataIndex": "materialStandardName",
             "type": "string"
         },
         {
@@ -56,8 +56,8 @@
             "type": "string"
         },
         {
-            "title": "配料完成时间-----新加",
-            "dataIndex": "planNumber",
+            "title": "配料完成时间",
+            "dataIndex": "taskFinishTime",
             "type": "string"
         },
         {
