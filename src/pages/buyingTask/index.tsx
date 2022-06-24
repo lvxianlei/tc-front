@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
-import { Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, SearchTable as Page } from '../common'
+import { Attachment, BaseInfo, DetailTitle, OperationRecord, SearchTable as Page } from '../common'
 import { buyingTask, setting, spec, productInfo } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
