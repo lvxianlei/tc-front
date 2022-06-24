@@ -97,7 +97,7 @@ export default () => {
                 {
                     name: "productTypeName",
                     label: '产品类型',
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    children: <Select placeholder="请选择"  style={{ width: "150px" }}>
                         <Select.Option key={''} value={''}>
                             全部
                         </Select.Option>

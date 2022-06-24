@@ -1,7 +1,7 @@
 import React, { Key, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { Button, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from "antd"
-import { CommonTable, DetailTitle, SearchTable as Page } from "../../common"
+import { CommonTable, DetailTitle, Page } from "../../common"
 import { pageTable, workShopOrder, componentdetails } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
