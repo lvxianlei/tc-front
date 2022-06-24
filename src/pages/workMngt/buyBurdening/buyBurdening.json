@@ -13,14 +13,14 @@
             "type": "string"
         },
         {
-            "title": "工程名称-----新加",
-            "dataIndex": "planNumber",
+            "title": "工程名称",
+            "dataIndex": "orderProjectName",
             "width": 150,
             "type": "string"
         },
         {
-            "title": "标准---新加",
-            "dataIndex": "planNumber",
+            "title": "标准",
+            "dataIndex": "materialStandardName",
             "width": 150,
             "type": "string"
         },
