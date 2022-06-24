@@ -47,15 +47,15 @@ export default () => {
             enum: [
                 {
                     "value": 1,
-                    "label": "暂停加工"
+                    "label": "恢复加工"
                 },
                 {
                     "value": 2,
-                    "label": "取消加工"
+                    "label": "暂停加工"
                 },
                 {
                     "value": 3,
-                    "label": "恢复加工"
+                    "label": "取消加工"
                 }
             ]
         },
@@ -97,7 +97,7 @@ export default () => {
                 {
                     name: "productTypeName",
                     label: '产品类型',
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    children: <Select placeholder="请选择"  style={{ width: "150px" }}>
                         <Select.Option key={''} value={''}>
                             全部
                         </Select.Option>
@@ -116,9 +116,9 @@ export default () => {
                             <Select.Option key={''} value={''}>
                                 全部
                             </Select.Option>
-                            <Select.Option value={1} key={1}>暂停加工</Select.Option>
-                            <Select.Option value={2} key={2}>取消加工</Select.Option>
-                            <Select.Option value={3} key={3}>恢复加工</Select.Option>
+                            <Select.Option value={1} key={1}>恢复加工</Select.Option>
+                            <Select.Option value={2} key={2}>暂停加工</Select.Option>
+                            <Select.Option value={3} key={3}>取消加工</Select.Option>
                         </Select>
                     </Form.Item>
                 },

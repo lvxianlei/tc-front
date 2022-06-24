@@ -132,7 +132,7 @@ export default function SampleDraw(): React.ReactNode {
         },
         {
             title: "状态",
-            dataIndex: "productStauts",
+            dataIndex: "productStatus",
             editable: true,
             width:120,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
@@ -493,7 +493,7 @@ export default function SampleDraw(): React.ReactNode {
         extraOperation={
             <Space>
                 <Button type="primary" onClick={useDate} disabled={!(selectedKeys.length !== 0)}>设置计划交货期</Button>
-                <Button type="primary" onClick={settingBatch} disabled={!(selectedKeys.length !== 0)}>拆分批次</Button>
+                <Button type="primary" onClick={settingBatch} disabled={!(selectedKeys.length !== 0)||selectedRows.findIndex((item:any)=>item.executionStatus!==1)!==-1}>拆分批次</Button>
                 {/* <Button type="primary" onClick={finishBatch} disabled={!(selectedKeys.length !== 0)}>下发批次/分组</Button> */}
                 <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配生产单元组</Button>
                 {/* <Button type="primary" onClick={useFactory} disabled={!(selectedKeys.length !== 0)}>分配厂区</Button>

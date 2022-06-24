@@ -1,7 +1,7 @@
 import React, { Key, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
 import { Button, DatePicker, Form, Input, message, Modal, Radio, Row, Select } from "antd"
-import { CommonTable, DetailTitle, SearchTable as Page } from "../../common"
+import { CommonTable, DetailTitle, Page } from "../../common"
 import { pageTable, workShopOrder, componentdetails } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
@@ -69,14 +69,14 @@ export default () => {
         }
     }), { manual: true })
 
-    const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.get(`/tower-aps/workshop/config/welding`);
-            resole(result || [])
-        } catch (error) {
-            reject(error)
-        }
-    }))
+    // const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result: any = await RequestUtil.get(`/tower-aps/workshop/config/welding`);
+    //         resole(result || [])
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }))
 
     const { run: weldingRun } = useRequest<any>((params) => new Promise(async (resole, reject) => {
         try {
@@ -146,40 +146,40 @@ export default () => {
         }
     }
 
-    const handleWeldingClick = async () => {
-        Modal.confirm({
-            icon: null,
-            title: "电焊分配车间",
-            content: <Form form={weldingForm}>
-                <Form.Item name="workshopId" label="电焊车间" rules={[{ required: true, message: "请选择组焊车间..." }]}>
-                    <Select>
-                        {listData.map((item: any) => <Select.Option
-                            key={item.weldingWorkshopId}
-                            value={item.weldingWorkshopId}>{item.weldingWorkshopName}</Select.Option>)}
-                    </Select>
-                </Form.Item>
-            </Form>,
-            onOk: async () => new Promise(async (resove, reject) => {
-                const workshop = await weldingForm.validateFields()
-                try {
-                    await weldingRun({
-                        workshopId: workshop.workshopId,
-                        workshopName: listData.find((item: any) => item.weldingWorkshopId === workshop.workshopId).weldingWorkshopName,
-                        issueOrderIds: selectedRowKeys
-                    })
-                    resove(true)
-                    await message.success("电焊分配车间完成...")
-                    setSelectedRowKeys([])
-                    weldingForm.resetFields()
-                    history.go(0)
-                } catch (error) {
-                    console.log(error)
-                    reject(error)
-                }
-            }),
-            onCancel: () => weldingForm.resetFields()
-        })
-    }
+    // const handleWeldingClick = async () => {
+    //     Modal.confirm({
+    //         icon: null,
+    //         title: "电焊分配车间",
+    //         content: <Form form={weldingForm}>
+    //             <Form.Item name="workshopId" label="电焊车间" rules={[{ required: true, message: "请选择组焊车间..." }]}>
+    //                 <Select>
+    //                     {listData.map((item: any) => <Select.Option
+    //                         key={item.weldingWorkshopId}
+    //                         value={item.weldingWorkshopId}>{item.weldingWorkshopName}</Select.Option>)}
+    //                 </Select>
+    //             </Form.Item>
+    //         </Form>,
+    //         onOk: async () => new Promise(async (resove, reject) => {
+    //             const workshop = await weldingForm.validateFields()
+    //             try {
+    //                 await weldingRun({
+    //                     workshopId: workshop.workshopId,
+    //                     workshopName: listData.find((item: any) => item.weldingWorkshopId === workshop.workshopId).weldingWorkshopName,
+    //                     issueOrderIds: selectedRowKeys
+    //                 })
+    //                 resove(true)
+    //                 await message.success("电焊分配车间完成...")
+    //                 setSelectedRowKeys([])
+    //                 weldingForm.resetFields()
+    //                 history.go(0)
+    //             } catch (error) {
+    //                 console.log(error)
+    //                 reject(error)
+    //             }
+    //         }),
+    //         onCancel: () => weldingForm.resetFields()
+    //     })
+    // }
 
     return <Page
         path="/tower-aps/workshopOrder"
@@ -275,6 +275,7 @@ export default () => {
                 values.endTime = formatDate[1] + ' 23:59:59';
                 delete values.time
             }
+            values.status = status
             setFilterValue(values)
             return values;
         }}
