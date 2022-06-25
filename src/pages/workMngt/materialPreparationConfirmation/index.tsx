@@ -4,11 +4,10 @@
  * time: 2022/05/06
  */
 import React, { useState } from 'react'
-import { Input, DatePicker, Select, Button, Modal } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { Input, DatePicker, Select, Button } from 'antd'
+import { useHistory } from 'react-router-dom'
 import { baseInfo } from "./buyBurdening.json"
 import { IntgSelect, SearchTable as Page } from '../../common'
-import AuthUtil from "../../../utils/AuthUtil";
 // 引入查看详情
 import Overview from './OverView';
 export default function EnquiryList(): React.ReactNode {
@@ -111,6 +110,6 @@ export default function EnquiryList(): React.ReactNode {
                 }
             ]}
         />
-        <Overview totalWeight={totalWeight} totalNum={totalNum} visible={visible} chooseId={chooseId} materialConfirmStatus={materialConfirmStatus} handleCallBack={ handleCallBack } />
+        <Overview totalWeight={totalWeight} totalNum={totalNum} visible={visible} chooseId={chooseId} materialConfirmStatus={materialConfirmStatus} handleCallBack={handleCallBack} />
     </>
 }

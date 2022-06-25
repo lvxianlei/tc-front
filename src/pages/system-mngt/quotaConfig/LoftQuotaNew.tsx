@@ -69,7 +69,7 @@ export default forwardRef(function LoftQuotaNew({ record, type }: modalProps, re
             <Form.Item name={'projectEntries'} label="定额条目" rules={[{ required: true, message: '请输入定额条目' }]}>
                 <Input maxLength={100} />
             </Form.Item>
-            <Form.Item name={'voltageGradePriceFirst'} label="【0-330】电压等级定额" rules={[{ required: true, message: '请输入【0-330】电压等级定额' }]}>
+            <Form.Item name={'voltageGradePriceFirst'} label="（0-330】电压等级定额" rules={[{ required: true, message: '请输入（0-330】电压等级定额' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }}/>
             </Form.Item>
             <Form.Item name={'voltageGradePriceSecond'} label="【500kV-750kV】定额" rules={[{ required: true, message: '请输入【500kV-750kV】定额' }]}>

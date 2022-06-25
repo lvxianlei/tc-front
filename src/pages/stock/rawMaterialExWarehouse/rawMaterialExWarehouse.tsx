@@ -86,7 +86,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <IntgSelect width={200} />
                     },
                     {
-                        name: 'selectName',
+                        name: 'fuzzyQuery',
                         label: "关键字",
                         children: <Input placeholder="请输入领料编号/生产批次进行查询" style={{ width: 300 }} />
                     }

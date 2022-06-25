@@ -87,7 +87,6 @@
             "dataIndex": "planPurchaseNum"
         }
     ],
-    
     "addMaterial": {
         "title": "原材料",
         "type": "popTable",
@@ -96,16 +95,21 @@
         "selectType": "checkbox",
         "dependencies": true,
         "readOnly": true,
+        "search": [
+            {
+                "title": "查询",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "品名/规格/编号"
+            }
+        ],
         "columns": [
             {
                 "title": "编号",
-                "dataIndex": "materialCode",
-                "search": true
+                "dataIndex": "materialCode"
             },
             {
                 "title": "类别",
-                "dataIndex": "materialTypeName",
-                "search": true
+                "dataIndex": "materialTypeName"
             },
             {
                 "title": "类型",

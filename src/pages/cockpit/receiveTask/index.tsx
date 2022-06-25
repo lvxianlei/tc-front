@@ -54,7 +54,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                 ...receiveColumns.map((item: any) => {
                     switch (item.dataIndex) {
                         case "receiveNumber":
-                            return ({ ...item, render: (value: any, records: any) => value ? <Link to={`/ingredients/receiving/detail/${records.receiveStockId}`}>{value}</Link> : "-" })
+                            return ({ ...item, render: (value: any, records: any) => value ? <Link to={`/stock/receiving/detail/${records.receiveStockId}`}>{value}</Link> : "-" })
                         case "pleasePayNumber":
                             return ({
                                 ...item,

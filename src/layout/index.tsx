@@ -1,10 +1,8 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Avatar, Breadcrumb, Button, Col, Dropdown, Layout, Menu, Popconfirm, Row } from "antd";
-import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined } from "@ant-design/icons"
+import { Avatar, Breadcrumb, Col, Dropdown, Layout, Menu, Row } from "antd";
+import { MenuUnfoldOutlined, DownOutlined } from "@ant-design/icons"
 import styles from './Layout.module.less';
-// import layoutStyles from './Layout.module.less';
 import { Link, Route, useHistory, useLocation } from "react-router-dom";
-import { UserOutlined, BellOutlined } from '@ant-design/icons';
 import AuthUtil from "../utils/AuthUtil";
 import ctxConfig from "../app-ctx.config.jsonc"
 import ctxRouter from "../app-router.config.jsonc"
@@ -13,7 +11,7 @@ import { useAuthorities, useDictionary, hasAuthority } from "../hooks"
 import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
-import ApplicationContext from "../configuration/ApplicationContext";
+import Cookies from "js-cookie";
 const { Header, Sider, Content } = Layout
 const filters = require.context("../filters", true, /.ts$/)
 
@@ -167,6 +165,10 @@ export default function (): JSX.Element {
         AuthUtil.removeRealName();
         AuthUtil.removeUserId();
         AuthUtil.removeTenantName();
+        AuthUtil.removeSinzetechToken();
+        Cookies.remove('DHWY_TOKEN', { domain: '.dhwy.cn' })
+        Cookies.remove('DHWY_TOKEN', { domain: 'localhost' })
+        Cookies.remove('ACCOUNT', { domain: '.dhwy.cn' })
         window.location.pathname = '/login';
     };
 

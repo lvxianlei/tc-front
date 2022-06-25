@@ -399,6 +399,13 @@ export default function Lofting(): React.ReactNode {
                             <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : ''}>{_ === -1 ? 0 : _}</p>
                         )
                     }
+                } else if (col.dataIndex === 'basicsTheoryWeight') {
+                    return {
+                        ...col,
+                        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                            <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : ''}>{_ === -1 ? 0 : (parseFloat(record?.basicsTheoryWeight)*parseFloat(record?.basicsPartNum)).toFixed(2)}</p>
+                        )
+                    }
                 } else {
                     return {
                         ...col,

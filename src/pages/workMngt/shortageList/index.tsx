@@ -133,15 +133,10 @@ export default function Invoicing() {
                     onChange: (selectedRowKeys: any[]) => {
                         setGenerateIds(selectedRowKeys)
                     },
-                    getCheckboxProps: (record: any) => record.purchasePersonId !== AuthUtil.getUserId()
+                    getCheckboxProps: (record: any) => (record.purchasePersonId !== AuthUtil.getUserId()) && record.shortageStatusName !== "待处理"
                 }
             }}
             searchFormItems={[
-                {
-                    name: 'startRefundTime',
-                    label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
                 {
                     name: 'shortageStatus',
                     label: '状态',

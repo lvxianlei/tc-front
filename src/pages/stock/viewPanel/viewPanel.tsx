@@ -3,10 +3,10 @@
  * 原文件：当前目录下OriginalDocument.tsx
  * 时间：2022/01/05
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Input, Select } from 'antd';
 import { SearchTable as Page } from '../../common';
-import { materialStandardTypeOptions } from '../../../configuration/DictionaryOptions';
+import { materialStandardOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import {
     baseColunm
@@ -53,12 +53,19 @@ export default function ViewPanel(): React.ReactNode {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
+                                width: 120,
                                 render: (_: any, record: any): React.ReactNode => {
+                                    console.log(record.usableTotalWeight, )
                                     return (
-                                        <span style={{background: 
-                                            record.usableTotalWeight < record.warningStockWeight ? "red"
-                                            : (record.usableTotalWeight > record.warningStockWeight && record.safetyStockWeight) ?
-                                            "yellow" : ""
+                                        <span style={{
+                                                display: "inline-block",
+                                                width: "100%",
+                                                height: "100%",
+                                                lineHeight: "26px",
+                                                background: 
+                                                    record.usableTotalWeight < record.warningStockWeight ? "red"
+                                                    : (record.usableTotalWeight > record.warningStockWeight && record.usableTotalWeight < record.safetyStockWeight) ?
+                                                    "yellow" : ""
                                         }}>
                                             {record.usableTotalWeight}
                                         </span>
@@ -89,8 +96,8 @@ export default function ViewPanel(): React.ReactNode {
                         children: (
                             <Select placeholder="请选择标准" style={{ width: "300px" }}>
                                 {
-                                    materialStandardTypeOptions?.map((item: any, index: number) => {
-                                        return <Select.Option value={item.name} key={index}>{item.name}</Select.Option>
+                                    materialStandardOptions?.map((item: any, index: number) => {
+                                        return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
                                     })
                                 }
                             </Select>

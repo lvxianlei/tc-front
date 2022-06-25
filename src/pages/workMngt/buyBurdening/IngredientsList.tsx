@@ -7,7 +7,8 @@ import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, messag
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import { CommonTable as CommonTableBeFore, DetailContent, DetailTitle } from '../../common';
+import CommonTable from '../../common/CommonAliTable';
 import { StockColumn, ConstructionDetailsColumn, BatchingScheme } from "./IngredientsList.json";
 
 import InheritOneIngredient from "./BatchingRelatedPopFrame/InheritOneIngredient"; // 继承一次配料
@@ -106,9 +107,12 @@ export default function IngredientsList(): React.ReactNode {
     const [selectedScheme, setSelectedScheme] = useState<any[]>([]);
 
     // 过滤
-    const [sort, setSort] = useState<string>("");
+    const [sort, setSort] = useState<string>("1");
 
     let [count, setCount] = useState<number>(0);
+
+    // 记录构建明细改变
+    let [detailCount, setDetailCount] = useState<number>(0);
 
     // 存储配料策略的list
     const [angleConfigStrategy, setAngleConfigStrategy] = useState<any[]>([]);
@@ -271,6 +275,7 @@ export default function IngredientsList(): React.ReactNode {
     const rowSelectionCheck = {
         selectedRowKeys: selectedRowKeysCheck,
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
+            console.log(selectedRowKeys, selectedRows, "======")
             setSelectedRowKeysCheck(selectedRowKeys);
             setSelectedRowCheck(selectedRows)
         },
@@ -441,11 +446,17 @@ export default function IngredientsList(): React.ReactNode {
         Statistics()
     }, [JSON.stringify(globallyStoredData), activeKey, activeSort, count])
 
+    // 双击后构建明细发生变化
+    useEffect(() => {
+        if (detailCount > 0) {
+            getScheme(1);
+        }
+    }, [detailCount])
+
 
     const handleModalSure = async() => {
         // 修改当前的配料策略
         const baseData = await serarchForm.validateFields();
-        console.log(baseData, "========>>>>")
         setNowIngre({
             ...baseData
         });
@@ -640,16 +651,21 @@ export default function IngredientsList(): React.ReactNode {
 
     // 对配料策略进行处理
     const handleAnge = (options: any[], key: number) => {
-        console.log(options, "接受到的数据", key)
+        console.log(options, "接受到的数据", key, activeSort)
+        const spec = activeSort.split("_")[0];
         for (let i = 0; i < options.length; i += 1) {
             const result = options[i].width.split("~");
             if ((key >= result[0] * 1) && (key <= result[1] * 1)) {
                 setNowIngre({
                     ...options[i],
+                    edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
+                    clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 });
                 serarchForm.setFieldsValue({
                     ...options[i],
+                    edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
+                    clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 })
             }
@@ -786,7 +802,7 @@ export default function IngredientsList(): React.ReactNode {
         setAlternativeData([]);
         try {
             if (code === 1) {
-                setSort("");
+                setSort("1");
             }
             const serarchData = await serarchForm.validateFields();
             if (selectedRowCheck.length < 1) {
@@ -906,10 +922,8 @@ export default function IngredientsList(): React.ReactNode {
                                                     <span className='values'>{nowIngre.utilizationRate}%</span>
                                                     <span className='texts'>原材料米数：</span>
                                                     <span className='values'
-                                                        title={nowIngre?.idealRepertoryLengthList && nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")}>
-                                                        {
-                                                            nowIngre?.idealRepertoryLengthList && nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")
-                                                        }
+                                                        title={nowIngre?.idealRepertoryLengthList?.join("、")}>
+                                                        {nowIngre?.idealRepertoryLengthList && nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")}
                                                     </span>
                                                 </div>
                                                 <div className='ingredients_content_wrapper'>
@@ -920,13 +934,30 @@ export default function IngredientsList(): React.ReactNode {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
+                                                                // <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
-                                                            <CommonTable
+                                                            <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
                                                                     type: "radio",
                                                                     ...rowSelectionCheck,
+                                                                }}
+                                                                rowClassName={(record: any) => {
+                                                                    if (+record.notConfigured === 0) return 'table-color-dust';
+                                                                 }}
+                                                                onRow={(record: any) => {
+                                                                    return {
+                                                                        onDoubleClick: async(event: any) => {
+                                                                            if (record.notConfigured > 0) {
+                                                                                setSelectedRowKeysCheck([record.id]);
+                                                                                setSelectedRowCheck([record]);
+                                                                                setDetailCount(detailCount + 1);
+                                                                            } else {
+                                                                                message.error("当前构件已配完！");
+                                                                                return false;
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }}
                                                                 key={"id"}
                                                                 columns={ConstructionDetailsColumn}
@@ -954,7 +985,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                             title: "操作",
                                                                             dataIndex: "opration",
                                                                             fixed: "right",
-                                                                            width: 80,
+                                                                            width: 40,
                                                                             render: (_: any, record: any, index: number) => {
                                                                                 return (
                                                                                     <>
@@ -966,7 +997,9 @@ export default function IngredientsList(): React.ReactNode {
                                                                     ]}
                                                                     dataSource={item.selectedScheme.slice(0)}
                                                                     pagination={false}
-                                                                    scroll={{ x: 1200, y: 200 }}
+                                                                    // scroll={{ x: 1200, y: 320 }}
+                                                                    style={{height: 300, overflow: "auto"}}
+                                                                    code={1}
                                                                 />
                                                             </div>
                                                             <div className='title_wrapper' style={{ width: document.documentElement.clientWidth - 678 }}>
@@ -977,7 +1010,6 @@ export default function IngredientsList(): React.ReactNode {
                                                                         setSort(res);
                                                                         getScheme(2, res);
                                                                     }}>
-                                                                        <Select.Option value="">默认排序</Select.Option>
                                                                         <Select.Option value="1">完全下料优先</Select.Option>
                                                                         <Select.Option value="2">利用率<ArrowDownOutlined /></Select.Option>
                                                                         <Select.Option value="4">余料长度<ArrowDownOutlined /></Select.Option>
@@ -1012,8 +1044,8 @@ export default function IngredientsList(): React.ReactNode {
                                                                                     render: (_: any, record: any): React.ReactNode => (
                                                                                         // <span>{record[item.dataIndex]}</span>
                                                                                         <div style={{
-                                                                                            color: record.lineHeightColumn.includes(item.dataIndex) ? "#fff" : "black",
-                                                                                            backgroundColor: record.lineHeightColumn.includes(item.dataIndex) ? "green" : "",
+                                                                                            // color: record.lineHeightColumn.includes(item.dataIndex) ? "#fff" : "black",
+                                                                                            backgroundColor: record.lineHeightColumn.includes(item.dataIndex) ? "#CAF982" : "",
                                                                                             height: "32px",
                                                                                             lineHeight: "32px"
                                                                                         }}>{record[item.dataIndex]}</div>
@@ -1036,7 +1068,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                             title: "操作",
                                                                             dataIndex: "opration",
                                                                             fixed: "right",
-                                                                            width: 80,
+                                                                            width: 40,
                                                                             render: (_: any, record: any, index: number) => {
                                                                                 return (
                                                                                     <>
@@ -1048,7 +1080,8 @@ export default function IngredientsList(): React.ReactNode {
                                                                     ]}
                                                                     dataSource={alternativeData}
                                                                     pagination={false}
-                                                                    scroll={{ x: 1200, y: 200 }}
+                                                                    // scroll={{ x: 1200, y: 310 }}
+                                                                    style={{height: 300, overflow: "auto"}}
                                                                 />
                                                             </div>
                                                         </div>
