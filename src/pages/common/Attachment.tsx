@@ -130,7 +130,8 @@ export default forwardRef(function ({
             }])
             const result: URLProps = await saveFile({
                 fileName: event.name,
-                fileSize: event.size
+                fileSize: event.size,
+                isAuthClear: true
             })
             setUploadOSSUrlInfo(result)
             if (multiple) {
@@ -145,7 +146,6 @@ export default forwardRef(function ({
     }), [attchs, setAttachs, setUploadOSSUrlInfo])
 
     const uploadChange = useCallback((event: any) => {
-        console.log(event)
         if (event.file.status === "done") {
             if (event.file.xhr.status === 200) {
                 setAttachs(attchs.map(item => {
