@@ -1122,7 +1122,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                // <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
+                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
