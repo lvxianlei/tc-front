@@ -82,6 +82,46 @@ export default function Statements(): React.ReactNode {
         }
     ]
 
+    const issuedColumns = [
+        {
+            key: 'index',
+            title: '序号',
+            width: 50,
+            dataIndex: 'index',
+            render: (_a: any, _b: any, index: number) => { return index + 1 }
+        },
+        {
+            key: 'planNumber',
+            title: '计划号',
+            width: 50,
+            dataIndex: 'planNumber'
+        },
+        {
+            key: 'projectName',
+            title: '项目名称',
+            width: 50,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'totalWeight',
+            title: '下技术总量',
+            width: 50,
+            dataIndex: 'totalWeight'
+        },
+        {
+            key: 'issWeight',
+            title: '已下达量',
+            width: 50,
+            dataIndex: 'issWeight'
+        },
+        {
+            key: 'noIssWeight',
+            title: '未下达量',
+            width: 50,
+            dataIndex: 'noIssWeight'
+        }
+    ]
+
     const { data: yearLists } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const now = new Date().getFullYear();
         var startYear = now - 3;//起始年份
@@ -153,7 +193,7 @@ export default function Statements(): React.ReactNode {
         resole(processedData)
     }), {})
 
-    
+
     const { data: accuracyData, run: getAccuracy } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
         const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/accuracy`, { date: date || halfYear });
         const tableData = value[value.length - 1]?.val;
@@ -189,7 +229,7 @@ export default function Statements(): React.ReactNode {
     }), {})
 
     const { data: issuedPie } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(``);
+        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getProductTypeStatistics`);
         const processedData = value.map((res: any) => {
             return {
                 value: res.no_iss_weight,
@@ -200,56 +240,12 @@ export default function Statements(): React.ReactNode {
     }), {})
 
     const { data: issuedData, run: getIssuedData } = useRequest<any>((productType: string) => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(``, { productType: productType || '' });
+        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics?productType=${productType || ''}`);
         resole(value)
     }), {})
 
     const { data: issuedBarData, run: getIssuedBarData } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
-        // const value: any = await RequestUtil.get<any>(``, { date: date || issuedHalfYear });
-        const value = [
-            {
-                "date": "2022-01",
-                "totalWeight": "750.56",
-                "hb": "-0.36",
-                "tb": "-0.6",
-                "djb": "-0.36"
-            },
-            {
-                "date": "2022-02",
-                "totalWeight": "100.56",
-                "hb": "-6",
-                "tb": "-0.36",
-                "djb": "-0.36"
-            },
-            {
-                "date": "2022-03",
-                "totalWeight": "950.56",
-                "hb": "-0.36",
-                "tb": "-0.36",
-                "djb": "-0.36"
-            },
-            {
-                "date": "2022-04",
-                "totalWeight": "100.56",
-                "hb": "-0.36",
-                "tb": "-0.36",
-                "djb": "-0.36"
-            },
-            {
-                "date": "2022-05",
-                "totalWeight": "10.56",
-                "hb": "-0.36",
-                "tb": "-0.36",
-                "djb": "-0.36"
-            },
-            {
-                "date": "2022-06",
-                "totalWeight": "13.56",
-                "hb": "-0.36",
-                "tb": "-0.36",
-                "djb": "-0.36"
-            }
-        ]
+        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getIssStatistics?date=${date || issuedHalfYear}`);
         resole(value)
     }), {})
 
@@ -839,51 +835,7 @@ export default function Statements(): React.ReactNode {
                                 <Select.Option key={4} value={'架构'}>架构</Select.Option>
                                 <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
                             </Select>
-                            <Table bordered pagination={false} dataSource={issuedData || []} columns={[
-                                {
-                                    key: 'index',
-                                    title: '序号',
-                                    width: 50,
-                                    dataIndex: 'index',
-                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                                },
-                                {
-                                    key: 'a',
-                                    title: '计划号',
-                                    width: 50,
-                                    dataIndex: 'a',
-                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                                },
-                                {
-                                    key: 'c',
-                                    title: '项目名称',
-                                    width: 50,
-                                    dataIndex: 'c',
-                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                                },
-                                {
-                                    key: 'd',
-                                    title: '下技术总量',
-                                    width: 50,
-                                    dataIndex: 'd',
-                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                                },
-                                {
-                                    key: 'e',
-                                    title: '已下达量',
-                                    width: 50,
-                                    dataIndex: 'e',
-                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                                },
-                                {
-                                    key: 'f',
-                                    title: '未下达量',
-                                    width: 50,
-                                    dataIndex: 'f',
-                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
-                                }
-                            ]} />
-
+                            <Table bordered pagination={false} dataSource={issuedData || []} columns={issuedColumns} />
                         </div>
                     </div>
                 </div>
