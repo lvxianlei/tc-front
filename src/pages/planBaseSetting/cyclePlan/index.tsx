@@ -190,7 +190,7 @@ export default () => {
                     name: "configId",
                     label: '周期计划类型',
                     children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                        <Select.Option value='' key="">全部</Select.Option>
+                        {/* <Select.Option value='' key="">全部</Select.Option> */}
                         {cyclePlanType && cyclePlanType.map(({ groupId, cyclePlan }, index) => {
                             return <Select.Option key={index} value={groupId}>
                                 {cyclePlan}
@@ -203,7 +203,7 @@ export default () => {
                     label: "周期计划状态",
                     children: <Form.Item name='status' initialValue={1}>
                         <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                            <Select.Option value='' key="">全部</Select.Option>
+                            {/* <Select.Option value='' key="">全部</Select.Option> */}
                             <Select.Option value={1}>未下发</Select.Option>
                             <Select.Option value={2}>已下发</Select.Option>
                         </Select>
