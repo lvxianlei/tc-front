@@ -122,7 +122,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 name: 'productTypeId',
                 label: '产品类型',
                 children: <Select placeholder="请选择" style={{ width: "150px" }}>
-                    <Select.Option value='' key="">全部</Select.Option>
+                    {/* <Select.Option value='' key="">全部</Select.Option> */}
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
