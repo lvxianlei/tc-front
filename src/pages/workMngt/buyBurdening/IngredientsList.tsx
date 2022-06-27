@@ -155,6 +155,7 @@ export default function IngredientsList(): React.ReactNode {
                     message.error("请您先进行方案对比!");
                     return false;
                 }
+                getbatch();
                 handleSaveData(2);
                 break;
             default:
@@ -783,11 +784,9 @@ export default function IngredientsList(): React.ReactNode {
     }), { manual: true })
 
     // 抢占配料任务
-    const { run: getbatch } = useRequest<any[]>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
+    const { run: getbatch } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any[] = await RequestUtil.post(`/tower-supply/task/batch`, {
-                batchId: params.id
-            })
+            const result: any[] = await RequestUtil.post(`/tower-supply/task/batch?batchId=${params.id}`)
             resole(result || [])
         } catch (error) {
             reject(error)
@@ -860,8 +859,6 @@ export default function IngredientsList(): React.ReactNode {
                 return false;
             }
             setAlternativeData(result || []);
-            // 抢占配料
-            getbatch();
             resole(result)
         } catch (error) {
             reject(error)
