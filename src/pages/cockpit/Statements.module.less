@@ -67,10 +67,10 @@
             padding: 6px 16px;
         }
 
-        :global(.ant-table-tbody > tr.ant-table-placeholder:hover > td) {     
-            background-color: #0B1C3D;
+        :global(.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td:not(.ant-table-cell-fix-right)) {
+            background:rgba(255, 255, 255, 0.01)!important;
         }
-
+        
         :global(.ant-table-tbody > tr > td) {
             border-bottom: 1px solid rgb(11, 28, 61);
             color: #FFFFFF;
@@ -99,6 +99,25 @@
         border-right: 1px solid rgba(101, 124, 168, 0.3);
     }
 
+    :global(.ant-pagination-disabled .ant-pagination-item-link) {
+        color: #FFFFFF;
+    }
+
+    :global(.ant-pagination-prev button) {
+        color: #FFFFFF;
+    }
+
+    :global(.ant-pagination-next button) {
+        color: #FFFFFF;
+    }
+
+    :global(.ant-pagination-item-active) {
+        background-color: #30466D;
+    }
+
+    :global(.ant-pagination-item a) {
+        color: #FFFFFF;
+    }
     .select {
         width: 150px;
         margin-bottom: 6px;
