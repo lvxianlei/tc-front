@@ -938,9 +938,7 @@ export default function IngredientsList(): React.ReactNode {
     // 抢占配料任务
     const { run: getbatch } = useRequest<any[]>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
         try {
-            const result: any[] = await RequestUtil.post(`/tower-supply/task/batch`, {
-                batchId: params.id
-            })
+            const result: any[] = await RequestUtil.post(`/tower-supply/task/batch?batchId${params.id}`)
             resole(result || [])
         } catch (error) {
             reject(error)
