@@ -131,7 +131,7 @@ export default forwardRef(function ({
             const result: URLProps = await saveFile({
                 fileName: event.name,
                 fileSize: event.size,
-                isAuthClear: true
+                isAutoClear: true
             })
             setUploadOSSUrlInfo(result)
             if (multiple) {
