@@ -158,6 +158,7 @@ export default function IngredientsList(): React.ReactNode {
                     message.error("请您先进行方案对比!");
                     return false;
                 }
+                getbatch();
                 handleSaveData(2);
                 break;
             default:
@@ -1021,7 +1022,6 @@ export default function IngredientsList(): React.ReactNode {
                 v.push(Object.assign(item, { num: item.num }))
             })
             setAlternativeData(v || []);
-            getbatch();
             resole(result)
         } catch (error) {
             reject(error)
