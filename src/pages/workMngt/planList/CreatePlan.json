@@ -98,6 +98,7 @@
         "search": [
             {
                 "title": "查询",
+                "type": "string",
                 "dataIndex": "fuzzyQuery",
                 "placeholder": "品名/规格/编号"
             }

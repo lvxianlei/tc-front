@@ -3,12 +3,11 @@
  */
 import React, { useState } from 'react';
 import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
-import { BaseInfo, CommonTable, DetailTitle } from '../../common';
+import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
     addMaterial
 } from "./CreatePlan.json";
-import { PopTableContent } from "./ComparesModal"
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
@@ -301,13 +300,6 @@ export default function CreatePlan(props: any): JSX.Element {
                     data={{
                         ...(addMaterial as any),
                         columns: (addMaterial as any).columns.map((item: any) => {
-                            if (item.dataIndex === "standard") {
-                                return ({
-                                    ...item,
-                                    type: "select",
-                                    enum: materialStandardEnum
-                                })
-                            }
                             return item
                         })
                     }}
