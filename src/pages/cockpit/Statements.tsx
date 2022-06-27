@@ -250,7 +250,7 @@ export default function Statements(): React.ReactNode {
     }), {})
 
     const { data: issuedData, run: getIssuedData } = useRequest<any>((productType: string, page: Record<string, any>) => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics`, { productType: productType || '', ...page, current: 1, pageSize: 10 });
+        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics`, { productType: productType || '', current: 1, pageSize: 10, ...page });
         setPagenation(value);
         resole(value?.records || []);
     }), {})
