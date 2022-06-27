@@ -158,6 +158,7 @@ export default function IngredientsList(): React.ReactNode {
                     message.error("请您先进行方案对比!");
                     return false;
                 }
+                getbatch();
                 handleSaveData(2);
                 break;
             default:
@@ -1021,7 +1022,6 @@ export default function IngredientsList(): React.ReactNode {
                 v.push(Object.assign(item, { num: item.num }))
             })
             setAlternativeData(v || []);
-            getbatch();
             resole(result)
         } catch (error) {
             reject(error)
@@ -1122,7 +1122,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                // <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
+                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
