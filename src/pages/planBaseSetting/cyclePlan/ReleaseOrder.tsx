@@ -170,7 +170,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         children:
                         <Form.Item initialValue={productTypeOptions&&productTypeOptions[0].id} name='productTypeId'>
                             <Select placeholder="请选择"  getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                                <Select.Option value='' key="">全部</Select.Option>
+                                {/* <Select.Option value='' key="">全部</Select.Option> */}
                                 {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id}>
                                         {name}
