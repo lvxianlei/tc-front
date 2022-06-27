@@ -3,7 +3,7 @@
  * author: mschange
  * time: 2022/4/21
  */
-import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, message, Modal, Radio, Row, Select, Table, Tabs } from 'antd';
+import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, message, Modal, Radio, Row, Select, Table, Tabs, Tooltip } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -782,6 +782,18 @@ export default function IngredientsList(): React.ReactNode {
         }
     }), { manual: true })
 
+    // 抢占配料任务
+    const { run: getbatch } = useRequest<any[]>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any[] = await RequestUtil.post(`/tower-supply/task/batch`, {
+                batchId: params.id
+            })
+            resole(result || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     // 获取构建分类明细
     const { run: getSortDetail } = useRequest<any[]>((purchaseTowerId: string, spec: string, texture: string) => new Promise(async (resole, reject) => {
         try {
@@ -848,11 +860,20 @@ export default function IngredientsList(): React.ReactNode {
                 return false;
             }
             setAlternativeData(result || []);
+            // 抢占配料
+            getbatch();
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
+
+    const components = {
+        body: {
+            row: (e: any) => <Tooltip title="双击进行配料~"><tr {...e} /></Tooltip>,
+            cell: "td"
+        }
+    }
 
     return (
         <div className='ingredientsListWrapper'>
@@ -942,6 +963,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     type: "radio",
                                                                     ...rowSelectionCheck,
                                                                 }}
+                                                                components={components}
                                                                 rowClassName={(record: any) => {
                                                                     if (+record.notConfigured === 0) return 'table-color-dust';
                                                                  }}
