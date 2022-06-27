@@ -7,12 +7,20 @@
 import useRequest from '@ahooksjs/use-request';
 import { Select, Spin, Table } from 'antd';
 import * as echarts from 'echarts';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './Statements.module.less';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 export default function Statements(): React.ReactNode {
+    const [firstData, setFirstData] = useState<any>();
+    const [secondData, setSecondData] = useState<any>();
+    const [pagenation, setPagenation] = useState({
+        current: 1,
+        pageSize: 10,
+        total: 0
+    })
+    const [productType, setProductType] = useState('');
     const halfYear = (new Date().getMonth() > 6) ? `${new Date().getFullYear()}07-${new Date().getFullYear()}12` : `${new Date().getFullYear()}01-${new Date().getFullYear()}06`;
     const issuedHalfYear = (new Date().getMonth() > 6) ?
         `${new Date().getFullYear()}-07,${new Date().getFullYear()}-08,${new Date().getFullYear()}-09,${new Date().getFullYear()}-10,${new Date().getFullYear()}-11,${new Date().getFullYear()}-12` :
@@ -161,6 +169,7 @@ export default function Statements(): React.ReactNode {
         // 6同比（万分比）
         // 7定基比（万分比）
         const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting`, { date: date || halfYear });
+        setFirstData(value);
         const tableData = value[value.length - 1]?.val;
         tableData && getTableData(tableData);
         const angleSteelData = value.map((res: any) => res.val).map((res: any) => res[0]?.data);
@@ -196,6 +205,7 @@ export default function Statements(): React.ReactNode {
 
     const { data: accuracyData, run: getAccuracy } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
         const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/accuracy`, { date: date || halfYear });
+        setSecondData(value);
         const tableData = value[value.length - 1]?.val;
         tableData && getCorrectData(tableData);
         const angleSteelData = value.map((res: any) => res.val).map((res: any) => res[0]?.data);
@@ -239,9 +249,10 @@ export default function Statements(): React.ReactNode {
         resole(processedData)
     }), {})
 
-    const { data: issuedData, run: getIssuedData } = useRequest<any>((productType: string) => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics?productType=${productType || ''}`);
-        resole(value)
+    const { data: issuedData, run: getIssuedData } = useRequest<any>((productType: string, page: Record<string, any>) => new Promise(async (resole, reject) => {
+        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics`, { productType: productType || '', ...page, current: 1, pageSize: 10 });
+        setPagenation(value);
+        resole(value?.records || []);
     }), {})
 
     const { data: issuedBarData, run: getIssuedBarData } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
@@ -349,6 +360,13 @@ export default function Statements(): React.ReactNode {
     const initCharts = () => {
         (document as HTMLElement | any).getElementById('LoftingStatisticalAnalysis').removeAttribute("_echarts_instance_");
         const myChart = echarts.init((document as HTMLElement | any).getElementById('LoftingStatisticalAnalysis'), 'dark');
+        myChart.getZr().on('click', params => {
+            let pointInPixel = [params.offsetX, params.offsetY]
+            if (myChart.containPixel('grid', pointInPixel)) {
+                let xIndex = myChart.convertFromPixel({ seriesIndex: 0 }, [params.offsetX, params.offsetY])[0]
+                getTableData(firstData[xIndex].val)
+            }
+        })
         // 绘制图表
         myChart.setOption({
             backgroundColor: '#0B1C3D',
@@ -361,6 +379,8 @@ export default function Statements(): React.ReactNode {
             ],
             tooltip: {
                 trigger: 'axis',
+                confine: true,
+                position: [0, 0],
                 axisPointer: {
                     type: 'shadow',
                     crossStyle: {
@@ -487,6 +507,13 @@ export default function Statements(): React.ReactNode {
         });
         (document as HTMLElement | any).getElementById('LoftingAccuracyStatistics').removeAttribute("_echarts_instance_");
         const accuracyChart = echarts.init((document as HTMLElement | any).getElementById('LoftingAccuracyStatistics'), 'dark');
+        accuracyChart.getZr().on('click', params => {
+            let pointInPixel = [params.offsetX, params.offsetY]
+            if (accuracyChart.containPixel('grid', pointInPixel)) {
+                let xIndex = accuracyChart.convertFromPixel({ seriesIndex: 0 }, [params.offsetX, params.offsetY])[0]
+                getCorrectData(secondData[xIndex].val)
+            }
+        })
         // 绘制图表
         accuracyChart.setOption({
             backgroundColor: '#0B1C3D',
@@ -749,6 +776,10 @@ export default function Statements(): React.ReactNode {
         });
     }
 
+    const paginationChange = (page: number, pageSize?: number | undefined) => {
+        setPagenation({ ...pagenation, current: page, pageSize: pageSize || 15 });
+        getIssuedData(productType, { current: page, pageSize: pageSize })
+    }
 
     return <Spin spinning={loading}>
         <div className={styles.statement}>
@@ -776,7 +807,7 @@ export default function Statements(): React.ReactNode {
                         bordered
                         scroll={{ x: true }}
                         pagination={false}
-                        dataSource={loftingStatisticalAnalysisData || []}
+                        dataSource={[...loftingStatisticalAnalysisData || []]}
                         columns={columns}
                         onRow={() => ({ className: styles.tableRow })} />
                 </div>
@@ -802,7 +833,6 @@ export default function Statements(): React.ReactNode {
                 </div>
             </div>
             <div className={styles.bottom}>
-
                 <div className={styles.left}>
                     <div>
                         <span className={styles.title}>生产下达统计分析</span>
@@ -819,23 +849,37 @@ export default function Statements(): React.ReactNode {
                     <div id={'productionDistributionStatistics'} style={{ width: '100%', height: '400px' }} key={'productionDistributionStatistics'} />
                 </div>
                 <div className={styles.right}>
-                    <p className={styles.title}>生产下达统计分析</p>
+                    <div>
+                        <span className={styles.title}>未生产下达统计分析</span>
+                        <Select key={'productionDistribution'} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
+                            getIssuedData(e);
+                            setProductType(e);
+                        }}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
+                            <Select.Option key={2} value={'钢管杆'}>钢管杆</Select.Option>
+                            <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
+                            <Select.Option key={4} value={'架构'}>架构</Select.Option>
+                            <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
+                        </Select>
+                    </div>
                     <div className={styles.rightContent}>
                         <div style={{ width: "40%" }}>
                             <div id={'productionDistribution'} style={{ width: '100%', height: '400px' }} key={'productionDistribution'} />
                         </div>
                         <div style={{ width: "100%", marginLeft: "2%" }}>
-                            <Select key={'productionDistribution'} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
-                                getIssuedData(e);
-                            }}>
-                                <Select.Option key={0} value={''}>全部</Select.Option>
-                                <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
-                                <Select.Option key={2} value={'钢管塔'}>钢管塔</Select.Option>
-                                <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
-                                <Select.Option key={4} value={'架构'}>架构</Select.Option>
-                                <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
-                            </Select>
-                            <Table bordered pagination={false} dataSource={issuedData || []} columns={issuedColumns} />
+                            <Table
+                                bordered
+                                pagination={{
+                                    size: "small",
+                                    pageSize: pagenation.pageSize,
+                                    onChange: paginationChange,
+                                    current: pagenation.current,
+                                    total: pagenation?.total
+                                }}
+                                dataSource={issuedData || []}
+                                columns={issuedColumns}
+                            />
                         </div>
                     </div>
                 </div>
