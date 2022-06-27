@@ -6,52 +6,6 @@
             "dataIndex": "purchaseNumber"
         },
         {
-            "title": "任务状态",
-            "dataIndex": "taskStatus",
-            "width": 80,
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待确认",
-                    "value": 1
-                },
-                {
-                    "label": "已完成",
-                    "value": 2
-                },
-                {
-                    "label": "待指派",
-                    "value": 3
-                },
-                {
-                    "label": "待接收",
-                    "value": 4
-                },
-                {
-                    "label": "待完成",
-                    "value": 5
-                },
-                {
-                    "label": "已提交",
-                    "value": 6
-                },
-                {
-                    "label": "已拒绝",
-                    "value": 7
-                }
-            ]
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "statusUpdateTime",
-            "width": 130
-        },
-        {
-            "title": "已完成（吨）/ 需求（吨）",
-            "width": 160,
-            "dataIndex": "completionProgres"
-        },
-        {
             "title": "计划号",
             "dataIndex": "planNumber",
             "width": 100
@@ -62,19 +16,46 @@
             "width": 100
         },
         {
-            "title": "内部合同编号",
+            "title": "内部合同号",
             "dataIndex": "internalNumber",
             "width": 120
         },
         {
-            "title": "配料人",
-            "dataIndex": "batcher",
-            "width": 100
+            "title": "工程名称",
+            "dataIndex": "orderProjectName"
         },
         {
-            "title": "采购人",
-            "dataIndex": "purchaser",
-            "width": 100
+            "title": "下发时间",
+            "dataIndex": "issuedTime"
+        },
+        {
+            "title": "总重量(吨)",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "客户交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "任务状态",
+            "dataIndex": "taskStatus",
+            "width": 80,
+            "type": "select",
+            "enum": [
+                {
+                    "label": "待完成",
+                    "value": 1
+                },
+                {
+                    "label": "已完成",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "已完成（吨）/ 需求（吨）",
+            "width": 160,
+            "dataIndex": "completionProgres"
         }
     ],
     "operatingInformation": [

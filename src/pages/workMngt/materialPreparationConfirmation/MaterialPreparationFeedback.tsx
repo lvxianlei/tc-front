@@ -5,19 +5,13 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Input, message } from 'antd';
-import { CommonTable, DetailTitle } from '../../common';
-import {
-    Detail
-} from "./materialPreparation";
-import {
-    MaterialPreparationColumns
-} from "./buyBurdening.json";
+import { CommonTable } from '../../common';
+import { Detail } from "./materialPreparation";
+import { MaterialPreparationColumns } from "./buyBurdening.json";
 import "./OverView.less"
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-
 const { TextArea } = Input;
-
 export default function MaterialPreparationFeedback(props: Detail): JSX.Element {
     const [textValue, setTextValue] = useState<string>("");
     useEffect(() => {
@@ -46,7 +40,6 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                 stockDetail: (data as any)?.materialConfirmInfoDetails
             }
             const result = await RequestUtil.put(`/tower-supply/materialConfirm/issuedNumber/confirm`, v)
-            console.log(result, "=====>>>")
             message.success("反馈成功！");
             props?.handleCallBack();
             resolve(result || {});
@@ -54,7 +47,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
             reject(error)
         }
     }), { manual: true })
-    
+
     return (
         <Modal
             title={'备料反馈'}
@@ -64,7 +57,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
             width={1100}
             className="OverViewDetail"
             footer={[
-                props?.code === "1" ? 
+                props?.code === "1" ?
                     <>
                         <Button key="back" style={{ marginRight: 16 }} onClick={() => {
                             setTextValue("");
@@ -83,18 +76,18 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                             确认反馈
                         </Button>
                     </>
-                : <Button key="back" style={{marginRight: 16}} onClick={props?.handleCallBack}>
-                    关闭
-                </Button>
+                    : <Button key="back" style={{ marginRight: 16 }} onClick={props?.handleCallBack}>
+                        关闭
+                    </Button>
             ]}
         >
             <div className='titleWrapper'>
                 <span className='text'>下达单号：</span>
-                <span className='value'>{ (data as any)?.issuedNumber }</span>
+                <span className='value'>{(data as any)?.issuedNumber}</span>
                 <span className='text'>计划号：</span>
-                <span className='value'>{ (data as any)?.planNumber }</span>
+                <span className='value'>{(data as any)?.planNumber}</span>
                 <span className='text'>塔型：</span>
-                <span className='value'>{ (data as any)?.productCategoryName }</span>
+                <span className='value'>{(data as any)?.productCategoryName}</span>
             </div>
             <CommonTable
                 columns={
@@ -114,7 +107,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                                     width: 120,
                                     render: (_: any, record: any): React.ReactNode => {
                                         return (
-                                            <span>{ record.stockType > 0 ? "库存充足" : "库存缺料" }</span>)
+                                            <span>{record.stockType > 0 ? "库存充足" : "库存缺料"}</span>)
                                     }
                                 })
                             }

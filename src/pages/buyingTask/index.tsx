@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
-import { Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, SearchTable as Page } from '../common'
+import { Attachment, BaseInfo, DetailTitle, OperationRecord, SearchTable as Page } from '../common'
 import { buyingTask, setting, spec, productInfo } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
@@ -113,10 +113,11 @@ export default function RawMaterial() {
     ]
 
     const onFilterSubmit = (value: any) => {
-        if (value.startStatusUpdateTime) {
-            const formatDate = value.startStatusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startStatusUpdateTime = formatDate[0] + ' 00:00:00';
-            value.endStatusUpdateTime = formatDate[1] + ' 23:59:59';
+        if (value.startPlanDeliveryTime) {
+            const formatDate = value.startPlanDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
+            delete value.startPlanDeliveryTime
+            value.startPlanDeliveryTime = formatDate[0] + ' 00:00:00';
+            value.endPlanDeliveryTime = formatDate[1] + ' 23:59:59';
         }
         if (value.batcherId) {
             value.batcherId = value.batcherId.value
@@ -150,12 +151,12 @@ export default function RawMaterial() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 250,
+                        width: 80,
                         render: (_: any, records: any) => <>
                             <Button type="link" className="btn-operation-link" onClick={() => { detail(records.id) }}>任务详情</Button>
-                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
+                            {/* <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
                             <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/detail/${records.planNumber}`)}>用料清单</Button>
-                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button>
+                            <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button> */}
                         </>
                     }
                 ]}
@@ -163,32 +164,18 @@ export default function RawMaterial() {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'startStatusUpdateTime',
-                        label: '最新状态变更时间',
+                        name: 'startPlanDeliveryTime',
+                        label: '客户交货日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
                         name: 'taskStatus',
                         label: '任务状态',
-                        children: <Select style={{ width: 100 }}>
-                            <Select.Option value={1} key={1}>待确认</Select.Option>
+                        children: <Select style={{ width: 100 }} defaultValue="">
+                            <Select.Option value="" key={0}>全部</Select.Option>
+                            <Select.Option value={1} key={1}>待完成</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
-                            <Select.Option value={3} key={3}>待指派</Select.Option>
-                            <Select.Option value={4} key={4}>待接收</Select.Option>
-                            <Select.Option value={5} key={5}>待完成</Select.Option>
-                            <Select.Option value={6} key={6}>已提交</Select.Option>
-                            <Select.Option value={7} key={7}>已拒绝</Select.Option>
                         </Select>
-                    },
-                    {
-                        name: 'batcherId',
-                        label: '配料人',
-                        children: <IntgSelect width={200} />
-                    },
-                    {
-                        name: 'purchaserId',
-                        label: '采购人',
-                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',

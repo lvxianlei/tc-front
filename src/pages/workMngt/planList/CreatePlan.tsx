@@ -105,6 +105,20 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList(list.slice(0))
     }
 
+    const widthChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    width: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list);
+        setPopDataList(list)
+    }
+
     const handleCreateClick = async () => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
@@ -152,7 +166,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     关闭
                 </Button>,
-                <Button type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
                     创建
                 </Button>
             ]}
@@ -186,8 +200,8 @@ export default function CreatePlan(props: any): JSX.Element {
             />
             <DetailTitle title="原材料明细" />
             <div className='btnWrapper'>
-                <Button type='primary' ghost style={{ marginRight: 8 }} onClick={() => setVisible(true)}>添加</Button>
-                <Button type='primary' ghost onClick={() => {
+                <Button type='primary' key="add" ghost style={{ marginRight: 8 }} onClick={() => setVisible(true)}>添加</Button>
+                <Button type='primary' key="clear" ghost onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
                 }}>清空</Button>
@@ -207,6 +221,17 @@ export default function CreatePlan(props: any): JSX.Element {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                            })
+                        }
+                        if (item.dataIndex === "width") {
+                            return ({
+                                ...item,
+                                render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber
+                                    min={0}
+                                    max={99999}
+                                    value={value}
+                                    precision={0}
+                                    onChange={(value: number) => widthChange(value, records.id)} key={key} />
                             })
                         }
                         if (item.dataIndex === "materialStandard") {
@@ -301,6 +326,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             source: 2,
                             standardName: item.standardName,
                             length: item.length || 1,
+                            width: 0,
                             materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
                             materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                             structureTexture: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
