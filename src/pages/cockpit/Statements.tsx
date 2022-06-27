@@ -5,7 +5,7 @@
  */
 
 import useRequest from '@ahooksjs/use-request';
-import { Select, Table } from 'antd';
+import { Select, Spin, Table } from 'antd';
 import * as echarts from 'echarts';
 import React, { createRef, useEffect, useState } from 'react'
 import RequestUtil from '../../utils/RequestUtil';
@@ -14,11 +14,12 @@ import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 export default function Statements(): React.ReactNode {
     const halfYear = (new Date().getMonth() > 6) ? `${new Date().getFullYear()}07-${new Date().getFullYear()}12` : `${new Date().getFullYear()}01-${new Date().getFullYear()}06`;
-    const [nowDate, setNowDate] = useState(halfYear);
+    const issuedHalfYear = (new Date().getMonth() > 6) ?
+        `${new Date().getFullYear()}-07,${new Date().getFullYear()}-08,${new Date().getFullYear()}-09,${new Date().getFullYear()}-10,${new Date().getFullYear()}-11,${new Date().getFullYear()}-12` :
+        `${new Date().getFullYear()}-01,${new Date().getFullYear()}-02,${new Date().getFullYear()}-03,${new Date().getFullYear()}-04,${new Date().getFullYear()}-05,${new Date().getFullYear()}-06`;
 
     useEffect(() => {
         initCharts();
-        setNowDate(nowDate);
     })
 
     const columns = [
@@ -33,8 +34,8 @@ export default function Statements(): React.ReactNode {
             title: '角钢塔',
             width: 50,
             dataIndex: 'angleSteel',
-            render: (_: number): React.ReactNode => (
-                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string): React.ReactNode => (
+                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -42,8 +43,8 @@ export default function Statements(): React.ReactNode {
             title: '钢管杆',
             width: 50,
             dataIndex: 'steelTubePole',
-            render: (_: number): React.ReactNode => (
-                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string): React.ReactNode => (
+                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -51,8 +52,8 @@ export default function Statements(): React.ReactNode {
             title: '四管塔',
             width: 50,
             dataIndex: 'fourPipe',
-            render: (_: number): React.ReactNode => (
-                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string): React.ReactNode => (
+                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -60,8 +61,8 @@ export default function Statements(): React.ReactNode {
             title: '架构',
             width: 50,
             dataIndex: 'architecture',
-            render: (_: number): React.ReactNode => (
-                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string): React.ReactNode => (
+                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -69,8 +70,8 @@ export default function Statements(): React.ReactNode {
             title: '钢结构',
             width: 50,
             dataIndex: 'steelStructure',
-            render: (_: number): React.ReactNode => (
-                <span>{_ === 0 ? _ : _ > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string): React.ReactNode => (
+                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -95,117 +96,23 @@ export default function Statements(): React.ReactNode {
         resole(arr)
     }), {})
 
-    const { loading, data } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
-        // const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting`, {date: date || nowDate});
-        let value = [{
-            "date": "202201",
-            "val": [{
-                "data": ["11.25", "15", "0", "1.10", "11.29"],
-                "type": "角钢塔"
-            }, {
-                "data": ["15.22", "19.6", "0", "0", "11.29"],
-                "type": "钢管杆"
-            }, {
-                "data": ["18.44", "23.85", "0", "0", "11.29"],
-                "type": "四管塔"
-            }, {
-                "data": ["10.22", "0", "0", "0", "11.29"],
-                "type": "架构"
-            }, {
-                "data": ["45.99", "0", "0", "0", "11.29"],
-                "type": "钢结构"
-            }]
-        }, {
-            "date": "202202",
-            "val": [{
-                "data": ["0", "0", "0", "20.98", "8.645"],
-                "type": "角钢塔"
-            }, {
-                "data": ["0", "34.5", "0", "0", "8.645"],
-                "type": "钢管杆"
-            }, {
-                "data": ["0", "89.21", "0", "0", "8.645"],
-                "type": "四管塔"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "架构"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "钢结构"
-            }]
-        }, {
-            "date": "202203",
-            "val": [{
-                "data": ["4", "0", "70", "0", "8.645"],
-                "type": "角钢塔"
-            }, {
-                "data": ["0", "78.1", "0", "0", "8.645"],
-                "type": "钢管杆"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "四管塔"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "架构"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "钢结构"
-            }]
-        }, {
-            "date": "202204",
-            "val": [{
-                "data": ["21", "0", "50", "70", "8.645"],
-                "type": "角钢塔"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "钢管杆"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "四管塔"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "架构"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "钢结构"
-            }]
-        }, {
-            "date": "202205",
-            "val": [{
-                "data": ["1", "0", "32.11", "0", "8.645"],
-                "type": "角钢塔"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "钢管杆"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "四管塔"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "架构"
-            }, {
-                "data": ["0", "0", "0", "0", "8.645"],
-                "type": "钢结构"
-            }]
-        }, {
-            "date": "202206",
-            "val": [{
-                "data": ["123.122", "13.12", "-12.22", "14.89", "1.36"],
-                "type": "角钢塔"
-            }, {
-                "data": ["159.66", "12.98", "-18.98", "11.21", "1.36"],
-                "type": "钢管杆"
-            }, {
-                "data": ["234.24", "12.2", "-13.1", "55.3", "1.36"],
-                "type": "四管塔"
-            }, {
-                "data": ["96.21", "23.44", "-10.66", "11.00", "1.36"],
-                "type": "架构"
-            }, {
-                "data": ["23.99", "8.33", "-10", "0", "1.36"],
-                "type": "钢结构"
-            }]
-        }]
+
+    const { data: issuedYearLists } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const now = new Date().getFullYear();
+        var startYear = now - 3;//起始年份
+        var arr = new Array();
+        for (var i = startYear; i <= now; i++) {
+            var obj = [
+                { "id": i + '-01,' + i + '-02,' + i + '-03,' + i + '-04,' + i + '-05,' + i + '-06', "label": i + "上半年" },
+                { "id": i + '-07,' + i + '-08,' + i + '-09,' + i + '-10,' + i + '-11,' + i + '-12', "label": i + "下半年" }
+            ];
+            arr.push(...obj);
+        }
+        resole(arr)
+    }), {})
+
+    const { loading, data, run } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
+        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting`, { date: date || halfYear });
         const tableData = value[value.length - 1]?.val;
         tableData && getTableData(tableData);
         tableData && getCorrectData(tableData);
@@ -239,6 +146,71 @@ export default function Statements(): React.ReactNode {
             subtotal: thirdData
         };
         resole(processedData)
+    }), {})
+
+    const { data: issuedPie } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const value: any = await RequestUtil.get<any>(``);
+        const processedData = value.map((res: any) => {
+            return {
+                value: res.no_iss_weight,
+                name: res.product_type_name
+            }
+        })
+        resole(processedData)
+    }), {})
+
+    const { data: issuedData, run: getIssuedData } = useRequest<any>((productType: string) => new Promise(async (resole, reject) => {
+        const value: any = await RequestUtil.get<any>(``, { productType: productType || '' });
+        resole(value)
+    }), {})
+
+    const { data: issuedBarData, run: getIssuedBarData } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
+        // const value: any = await RequestUtil.get<any>(``, { date: date || issuedHalfYear });
+        const value = [
+            {
+                "date": "2022-01",
+                "totalWeight": "750.56",
+                "hb": "-0.36",
+                "tb": "-0.6",
+                "djb": "-0.36"
+            },
+            {
+                "date": "2022-02",
+                "totalWeight": "100.56",
+                "hb": "-6",
+                "tb": "-0.36",
+                "djb": "-0.36"
+            },
+            {
+                "date": "2022-03",
+                "totalWeight": "950.56",
+                "hb": "-0.36",
+                "tb": "-0.36",
+                "djb": "-0.36"
+            },
+            {
+                "date": "2022-04",
+                "totalWeight": "100.56",
+                "hb": "-0.36",
+                "tb": "-0.36",
+                "djb": "-0.36"
+            },
+            {
+                "date": "2022-05",
+                "totalWeight": "10.56",
+                "hb": "-0.36",
+                "tb": "-0.36",
+                "djb": "-0.36"
+            },
+            {
+                "date": "2022-06",
+                "totalWeight": "13.56",
+                "hb": "-0.36",
+                "tb": "-0.36",
+                "djb": "-0.36"
+            }
+        ]
+        resole(value)
     }), {})
 
     const { data: loftingStatisticalAnalysisData, run: getTableData } = useRequest<any>((initialData: any) => new Promise(async (resole, reject) => {
@@ -289,7 +261,7 @@ export default function Statements(): React.ReactNode {
         resole(newData)
     }), { manual: true })
 
-    
+
     const { data: loftingAccuracyStatisticsData, run: getCorrectData } = useRequest<any>((initialData: any) => new Promise(async (resole, reject) => {
         const subtotal = [
             initialData.map((res: any) => Number(res?.data[0])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
@@ -635,10 +607,19 @@ export default function Statements(): React.ReactNode {
                 },
                 formatter: (params: any) => {
                     var res = '<div><p><span style="padding-right: 6px">月份</span>' + params[0].name +
-                        '</p><p><span style="padding-right: 6px">总量</span>' + params[0].name +
-                        '</p><p><span style="padding-right: 6px">环比增长</span>' + params[0].name +
-                        '</p><p><span style="padding-right: 6px">同比下降</span>' + params[0].name +
-                        '</p><p><span style="padding-right: 6px">定基比增长</span>' + params[0].name +
+                        '</p><p><span style="padding-right: 6px">总量</span>' + params[0].value +
+                        '</p><p style="padding-right: 6px; width: 25%;">' +
+                        ((Number(issuedBarData[params[0].dataIndex].hb) === 0) ? '环比' + issuedBarData[params[0].dataIndex].hb
+                            : (Number(issuedBarData[params[0].dataIndex].hb) > 0) ? '<span style="color: red">环比增长' + issuedBarData[params[0].dataIndex].hb + '%</span>'
+                                : '<span style="color: green">环比下降' + issuedBarData[params[0].dataIndex].hb + '%</span>') +
+                        '</p><p style="padding-right: 6px; width: 25%;">' +
+                        ((Number(issuedBarData[params[0].dataIndex].tb) === 0) ? '同比' + issuedBarData[params[0].dataIndex].tb
+                            : (Number(issuedBarData[params[0].dataIndex].tb) > 0) ? '<span style="color: red">同比增长' + issuedBarData[params[0].dataIndex].tb + '%</span>'
+                                : '<span style="color: green">同比下降' + issuedBarData[params[0].dataIndex].tb + '%</span>') +
+                        '</p><p style="padding-right: 6px; width: 25%;">' +
+                        ((Number(issuedBarData[params[0].dataIndex].djb) === 0) ? '定基比' + issuedBarData[params[0].dataIndex].djb
+                            : (Number(issuedBarData[params[0].dataIndex].djb) > 0) ? '<span style="color: red">定基比增长' + issuedBarData[params[0].dataIndex].djb + '%</span>'
+                                : '<span style="color: green">定基比下降' + issuedBarData[params[0].dataIndex].djb + '%</span>') +
                         '</p></div>'
                     return res;
                 },
@@ -651,7 +632,7 @@ export default function Statements(): React.ReactNode {
             xAxis: [
                 {
                     type: 'category',
-                    data: ['202201', '202202', '202203', '202204', '202205', '202206'],
+                    data: issuedBarData?.map((res: any) => res.date),
                     axisPointer: {
                         type: 'shadow'
                     }
@@ -668,9 +649,7 @@ export default function Statements(): React.ReactNode {
             series: [
                 {
                     type: 'bar',
-                    data: [
-                        2.0, 4.9, 7.0, 23.2, 25.6, 76.7
-                    ]
+                    data: issuedBarData?.map((res: any) => res.totalWeight)
                 },
                 {
                     name: '总量',
@@ -680,7 +659,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: [8.0, 12.2, 13.3, 94.5, 56.3, 80.2]
+                    data: issuedBarData?.map((res: any) => res.totalWeight)
                 }
             ]
         });
@@ -718,10 +697,6 @@ export default function Statements(): React.ReactNode {
                     right: 'center',
                     radius: ['40%', '70%'],
                     avoidLabelOverlap: false,
-                    label: {
-                        show: false,
-                        position: 'center'
-                    },
                     emphasis: {
                         label: {
                             show: true,
@@ -730,155 +705,149 @@ export default function Statements(): React.ReactNode {
                         }
                     },
                     labelLine: {
-                        show: false
+                        show: true
                     },
-                    data: [
-                        { value: 1048, name: '角钢塔' },
-                        { value: 735, name: '钢管塔' },
-                        { value: 580, name: '四管塔' },
-                        { value: 484, name: '架构' },
-                        { value: 300, name: '钢结构' }
-                    ]
+                    data: issuedPie || []
                 }
             ]
         });
     }
 
 
-    return <div className={styles.statement}>
-        <div className={styles.header}>
-            <div className={styles.headerbg}>
-                <span className={styles.headerTitle}>汇金通技术部放样统计数据分析</span>
-            </div>
-        </div>
-        <div className={styles.top}>
-            <div className={styles.left}>
-                <div>
-                    <span className={styles.title}>放样统计分析</span>
-                    <Select key={'LoftingStatisticalAnalysis'} className={styles.select} size="small" defaultValue={nowDate} onChange={(e) => {
-                        console.log(e)
-                    }}>
-                        {
-                            yearLists && yearLists.map((res: any, index: number) => (
-                                <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
-                            ))
-                        }
-                    </Select>
+    return <Spin spinning={loading}>
+        <div className={styles.statement}>
+            <div className={styles.header}>
+                <div className={styles.headerbg}>
+                    <span className={styles.headerTitle}>汇金通技术部放样统计数据分析</span>
                 </div>
-                <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '300px' }} key={'LoftingStatisticalAnalysis'} />
-                <Table
-                    bordered
-                    scroll={{ x: true }}
-                    pagination={false}
-                    dataSource={loftingStatisticalAnalysisData || []}
-                    columns={columns}
-                    onRow={() => ({ className: styles.tableRow })} />
             </div>
-            <div className={styles.right}>
-                <div>
-                    <span className={styles.title}>放样正确率统计分析</span>
-                    <Select key={'LoftingAccuracyStatistics'} className={styles.select} size="small" defaultValue={nowDate} onChange={(e) => {
-
-                    }}>
-                        {
-                            yearLists && yearLists.map((res: any, index: number) => (
-                                <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
-                            ))
-                        }
-                    </Select>
-                </div>
-                <div id={'LoftingAccuracyStatistics'} style={{ width: '100%', height: '300px' }} key={'LoftingAccuracyStatistics'} />
-                <Table
-                    bordered
-                    pagination={false}
-                    dataSource={loftingAccuracyStatisticsData || []}
-                    columns={columns} />
-            </div>
-        </div>
-        <div className={styles.bottom}>
-
-            <div className={styles.left}>
-                <div>
-                    <span className={styles.title}>生产下达统计分析</span>
-                    <Select key={'productionDistributionStatistics'} className={styles.select} size="small" defaultValue={nowDate} onChange={(e) => {
-
-                    }}>
-                        {
-                            yearLists && yearLists.map((res: any, index: number) => (
-                                <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
-                            ))
-                        }
-                    </Select>
-                </div>
-                <div id={'productionDistributionStatistics'} style={{ width: '100%', height: '400px' }} key={'productionDistributionStatistics'} />
-            </div>
-            <div className={styles.right}>
-                <p className={styles.title}>生产下达统计分析</p>
-                <div className={styles.rightContent}>
-                    <div style={{ width: "40%" }}>
-
-
-                        <div id={'productionDistribution'} style={{ width: '100%', height: '400px' }} key={'productionDistribution'} />
-                    </div>
-                    <div style={{ width: "100%", marginLeft: "2%" }}>
-                        <Select key={'productionDistribution'} className={styles.select} size="small" onChange={(e) => {
-
+            <div className={styles.top}>
+                <div className={styles.left}>
+                    <div>
+                        <span className={styles.title}>放样统计分析</span>
+                        <Select key={'LoftingStatisticalAnalysis'} className={styles.select} size="small" defaultValue={halfYear} onChange={(e) => {
+                            console.log(e)
                         }}>
-                            <Select.Option key={0} value={''}>全部</Select.Option>
-                            <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
-                            <Select.Option key={2} value={'钢管塔'}>钢管塔</Select.Option>
-                            <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
-                            <Select.Option key={4} value={'架构'}>架构</Select.Option>
-                            <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
-                        </Select>
-                        <Table bordered pagination={false} dataSource={[{ index: '111', a: '111' }]} columns={[
                             {
-                                key: 'index',
-                                title: '序号',
-                                width: 50,
-                                dataIndex: 'index',
-                                render: (_a: any, _b: any, index: number) => { return index + 1 }
-                            },
-                            {
-                                key: 'a',
-                                title: '计划号',
-                                width: 50,
-                                dataIndex: 'a',
-                                render: (_a: any, _b: any, index: number) => { return index + 1 }
-                            },
-                            {
-                                key: 'c',
-                                title: '项目名称',
-                                width: 50,
-                                dataIndex: 'c',
-                                render: (_a: any, _b: any, index: number) => { return index + 1 }
-                            },
-                            {
-                                key: 'd',
-                                title: '下技术总量',
-                                width: 50,
-                                dataIndex: 'd',
-                                render: (_a: any, _b: any, index: number) => { return index + 1 }
-                            },
-                            {
-                                key: 'e',
-                                title: '已下达量',
-                                width: 50,
-                                dataIndex: 'e',
-                                render: (_a: any, _b: any, index: number) => { return index + 1 }
-                            },
-                            {
-                                key: 'f',
-                                title: '未下达量',
-                                width: 50,
-                                dataIndex: 'f',
-                                render: (_a: any, _b: any, index: number) => { return index + 1 }
+                                yearLists && yearLists.map((res: any, index: number) => (
+                                    <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
+                                ))
                             }
-                        ]} />
+                        </Select>
+                    </div>
+                    <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '300px' }} key={'LoftingStatisticalAnalysis'} />
+                    <Table
+                        bordered
+                        scroll={{ x: true }}
+                        pagination={false}
+                        dataSource={loftingStatisticalAnalysisData || []}
+                        columns={columns}
+                        onRow={() => ({ className: styles.tableRow })} />
+                </div>
+                <div className={styles.right}>
+                    <div>
+                        <span className={styles.title}>放样正确率统计分析</span>
+                        <Select key={'LoftingAccuracyStatistics'} className={styles.select} size="small" defaultValue={halfYear} onChange={(e) => {
+                            run(e);
+                        }}>
+                            {
+                                yearLists && yearLists.map((res: any, index: number) => (
+                                    <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
+                                ))
+                            }
+                        </Select>
+                    </div>
+                    <div id={'LoftingAccuracyStatistics'} style={{ width: '100%', height: '300px' }} key={'LoftingAccuracyStatistics'} />
+                    <Table
+                        bordered
+                        pagination={false}
+                        dataSource={loftingAccuracyStatisticsData || []}
+                        columns={columns} />
+                </div>
+            </div>
+            <div className={styles.bottom}>
 
+                <div className={styles.left}>
+                    <div>
+                        <span className={styles.title}>生产下达统计分析</span>
+                        <Select key={'productionDistributionStatistics'} className={styles.select} size="small" defaultValue={issuedHalfYear} onChange={(e) => {
+                            getIssuedBarData(e);
+                        }}>
+                            {
+                                issuedYearLists && issuedYearLists.map((res: any, index: number) => (
+                                    <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
+                                ))
+                            }
+                        </Select>
+                    </div>
+                    <div id={'productionDistributionStatistics'} style={{ width: '100%', height: '400px' }} key={'productionDistributionStatistics'} />
+                </div>
+                <div className={styles.right}>
+                    <p className={styles.title}>生产下达统计分析</p>
+                    <div className={styles.rightContent}>
+                        <div style={{ width: "40%" }}>
+                            <div id={'productionDistribution'} style={{ width: '100%', height: '400px' }} key={'productionDistribution'} />
+                        </div>
+                        <div style={{ width: "100%", marginLeft: "2%" }}>
+                            <Select key={'productionDistribution'} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
+                                getIssuedData(e);
+                            }}>
+                                <Select.Option key={0} value={''}>全部</Select.Option>
+                                <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
+                                <Select.Option key={2} value={'钢管塔'}>钢管塔</Select.Option>
+                                <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
+                                <Select.Option key={4} value={'架构'}>架构</Select.Option>
+                                <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
+                            </Select>
+                            <Table bordered pagination={false} dataSource={issuedData || []} columns={[
+                                {
+                                    key: 'index',
+                                    title: '序号',
+                                    width: 50,
+                                    dataIndex: 'index',
+                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
+                                },
+                                {
+                                    key: 'a',
+                                    title: '计划号',
+                                    width: 50,
+                                    dataIndex: 'a',
+                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
+                                },
+                                {
+                                    key: 'c',
+                                    title: '项目名称',
+                                    width: 50,
+                                    dataIndex: 'c',
+                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
+                                },
+                                {
+                                    key: 'd',
+                                    title: '下技术总量',
+                                    width: 50,
+                                    dataIndex: 'd',
+                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
+                                },
+                                {
+                                    key: 'e',
+                                    title: '已下达量',
+                                    width: 50,
+                                    dataIndex: 'e',
+                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
+                                },
+                                {
+                                    key: 'f',
+                                    title: '未下达量',
+                                    width: 50,
+                                    dataIndex: 'f',
+                                    render: (_a: any, _b: any, index: number) => { return index + 1 }
+                                }
+                            ]} />
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </Spin>
 }
