@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
-import { Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, SearchTable as Page } from '../common'
+import { Attachment, BaseInfo, DetailTitle, OperationRecord, SearchTable as Page } from '../common'
 import { buyingTask, setting, spec, productInfo } from "./buyingTask.json"
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
@@ -171,14 +171,10 @@ export default function RawMaterial() {
                     {
                         name: 'taskStatus',
                         label: '任务状态',
-                        children: <Select style={{ width: 100 }}>
-                            <Select.Option value={1} key={1}>待确认</Select.Option>
+                        children: <Select style={{ width: 100 }} defaultValue="">
+                            <Select.Option value="" key={0}>全部</Select.Option>
+                            <Select.Option value={1} key={1}>待完成</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
-                            <Select.Option value={3} key={3}>待指派</Select.Option>
-                            <Select.Option value={4} key={4}>待接收</Select.Option>
-                            <Select.Option value={5} key={5}>待完成</Select.Option>
-                            <Select.Option value={6} key={6}>已提交</Select.Option>
-                            <Select.Option value={7} key={7}>已拒绝</Select.Option>
                         </Select>
                     },
                     {
