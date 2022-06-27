@@ -27,6 +27,7 @@ export default function WorkCenterSetting(): React.ReactNode{
     // const [allMaterialList, setAllMaterialList] = useState<any>([]);
     const [visible,setVisible] =  useState<boolean>(false);
     const [specifications, setSpecifications] = useState<any[]>([]);
+    const [title,setTitle] = useState<string>('新增');
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/${params?.id}`)
@@ -221,6 +222,7 @@ export default function WorkCenterSetting(): React.ReactNode{
                     <Button type="link" onClick={()=>{
                         setVisible(true)
                         console.log(record)
+                        setTitle('编辑')
                         form.setFieldsValue({
                             ...record,
                             index:index,
@@ -332,6 +334,7 @@ export default function WorkCenterSetting(): React.ReactNode{
             <DetailTitle title="产能矩阵" operation={[<Space size="small">
                 <Button type="primary" onClick={()=>{
                     setVisible(true)
+                    setTitle(`新增`)
                 }}>新增</Button>
                 <Upload 
                     action={ () => {
@@ -398,14 +401,18 @@ export default function WorkCenterSetting(): React.ReactNode{
                     }
                     console.log(value)
                     setVisible(false)
-                    workCenterRelationsList.splice(value?.index,1)
-                    workCenterRelationsList.unshift(value)
+                    if(title==='新增'){
+                        workCenterRelationsList.unshift(value)
+                    }else{
+                        workCenterRelationsList.splice(value?.index,1)
+                        workCenterRelationsList.unshift(value)
+                    }
                     setWorkCenterRelationsList(
                         [...workCenterRelationsList]
                     )
                    
                     form.resetFields()
-                    
+                    setTitle('新增')
                 }}
             >
                 <Form form={form}>
