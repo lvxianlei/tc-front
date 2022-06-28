@@ -264,12 +264,12 @@ export default function (): JSX.Element {
                         >
                             <SiderMenu />
                         </Sider>
-                        <Layout style={{ backgroundColor: "#fff", height: "100%", overflow: "hidden", position: "relative" }}>
+                        <Layout style={{ backgroundColor: `${location.pathname === "/cockpit/statements" ? '#071530' : '#fff'}`, height: "100%", overflow: "hidden", position: "relative" }}>
                             <Content
                                 style={{
                                     height: "100%",
                                     boxSizing: "border-box",
-                                    padding: "16px",
+                                    padding: `${location.pathname === "/cockpit/statements" ? '0' : '16px'}`,
                                     overflowY: "auto"
                                 }}>
                                 {
