@@ -22,7 +22,9 @@ export default function PlanTrialList(): React.ReactNode {
         status: string,
         materialLeader: string
     }>();
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({
+        status:1
+    });
     const [refresh, setRefresh] = useState<boolean>(false);
     const [editorLock, setEditorLock] = useState('编辑');
     const [sum, setSum] = useState<any>({
