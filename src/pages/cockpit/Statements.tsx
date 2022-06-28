@@ -189,19 +189,20 @@ export default function Statements(): React.ReactNode {
             const fourPipeData = value.map((res: any) => res.val).map((res: any) => res[2]?.data);
             const architectureData = value.map((res: any) => res.val).map((res: any) => res[3]?.data);
             const steelStructureData = value.map((res: any) => res.val).map((res: any) => res[4]?.data);
-            const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
-            const secondData = pureData?.map((items: any) => [
-                items?.map((item: any[]) => item[0]),
-                items?.map((item: any[]) => item[1]),
-                items?.map((item: any[]) => item[2]),
-                items?.map((item: any[]) => item[3])
-            ])
-            const thirdData = secondData?.map((res: any) => [
-                (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-                (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-                (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-                (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
-            ])
+            const subtotalData = value.map((res: any) => res.val).map((res: any) => res[5]?.data);
+            // const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
+            // const secondData = pureData?.map((items: any) => [
+            //     items?.map((item: any[]) => item[0]),
+            //     items?.map((item: any[]) => item[1]),
+            //     items?.map((item: any[]) => item[2]),
+            //     items?.map((item: any[]) => item[3])
+            // ])
+            // const thirdData = secondData?.map((res: any) => [
+            //     (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            //     (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            //     (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            //     (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
+            // ])
             let processedData = {
                 dateList: value.map((res: any) => res?.date),
                 angleSteel: angleSteelData,
@@ -209,7 +210,7 @@ export default function Statements(): React.ReactNode {
                 fourPipe: fourPipeData,
                 architecture: architectureData,
                 steelStructure: steelStructureData,
-                subtotal: thirdData
+                subtotal: subtotalData
             };
             resole(processedData)
         } catch (error) {
@@ -229,19 +230,20 @@ export default function Statements(): React.ReactNode {
             const fourPipeData = value.map((res: any) => res.val).map((res: any) => res[2]?.data);
             const architectureData = value.map((res: any) => res.val).map((res: any) => res[3]?.data);
             const steelStructureData = value.map((res: any) => res.val).map((res: any) => res[4]?.data);
-            const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
-            const secondData = pureData?.map((items: any) => [
-                items?.map((item: any[]) => item[4]),
-                items?.map((item: any[]) => item[5]),
-                items?.map((item: any[]) => item[6]),
-                items?.map((item: any[]) => item[7])
-            ])
-            const thirdData = secondData?.map((res: any) => [
-                (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-                (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-                (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-                (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
-            ])
+            const subtotalData = value.map((res: any) => res.val).map((res: any) => res[5]?.data);
+            // const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
+            // const secondData = pureData?.map((items: any) => [
+            //     items?.map((item: any[]) => item[4]),
+            //     items?.map((item: any[]) => item[5]),
+            //     items?.map((item: any[]) => item[6]),
+            //     items?.map((item: any[]) => item[7])
+            // ])
+            // const thirdData = secondData?.map((res: any) => [
+            //     (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            //     (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            //     (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+            //     (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
+            // ])
             let processedData = {
                 dateList: value.map((res: any) => res?.date),
                 angleSteel: angleSteelData,
@@ -249,9 +251,10 @@ export default function Statements(): React.ReactNode {
                 fourPipe: fourPipeData,
                 architecture: architectureData,
                 steelStructure: steelStructureData,
-                subtotal: thirdData
+                subtotal: subtotalData
             };
             resole(processedData)
+            console.log(processedData)
         } catch (error) {
             reject(error)
         }
@@ -293,12 +296,12 @@ export default function Statements(): React.ReactNode {
 
     const { data: loftingStatisticalAnalysisData, run: getTableData } = useRequest<any>((initialData: any) => new Promise(async (resole, reject) => {
         try {
-            const subtotal = [
-                initialData.map((res: any) => Number(res?.data[0])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-                initialData.map((res: any) => Number(res?.data[1])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-                initialData.map((res: any) => Number(res?.data[2])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-                initialData.map((res: any) => Number(res?.data[3])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
-            ]
+            // const subtotal = [
+            //     initialData.map((res: any) => Number(res?.data[0])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            //     initialData.map((res: any) => Number(res?.data[1])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            //     initialData.map((res: any) => Number(res?.data[2])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            //     initialData.map((res: any) => Number(res?.data[3])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
+            // ]
             const newData = [
                 {
                     productType: '放样件号数（万）',
@@ -307,7 +310,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[0],
                     architecture: initialData[3]?.data[0],
                     steelStructure: initialData[4]?.data[0],
-                    subtotal: subtotal[0].toFixed(2)
+                    subtotal: initialData[5]?.data[0]
                 },
                 {
                     productType: '环比%',
@@ -316,7 +319,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[1],
                     architecture: initialData[3]?.data[1],
                     steelStructure: initialData[4]?.data[1],
-                    subtotal: subtotal[1].toFixed(2)
+                    subtotal: initialData[5]?.data[1]
                 },
                 {
                     productType: '同比%',
@@ -325,7 +328,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[2],
                     architecture: initialData[3]?.data[2],
                     steelStructure: initialData[4]?.data[2],
-                    subtotal: subtotal[2].toFixed(2)
+                    subtotal: initialData[5]?.data[2]
                 },
                 {
                     productType: '定基比%',
@@ -334,7 +337,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[3],
                     architecture: initialData[3]?.data[3],
                     steelStructure: initialData[4]?.data[3],
-                    subtotal: subtotal[3].toFixed(2)
+                    subtotal: initialData[5]?.data[3]
                 }
             ]
             resole(newData)
@@ -346,12 +349,12 @@ export default function Statements(): React.ReactNode {
 
     const { data: loftingAccuracyStatisticsData, run: getCorrectData } = useRequest<any>((initialData: any) => new Promise(async (resole, reject) => {
         try {
-            const subtotal = [
-                initialData.map((res: any) => Number(res?.data[4])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-                initialData.map((res: any) => Number(res?.data[5])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-                initialData.map((res: any) => Number(res?.data[6])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-                initialData.map((res: any) => Number(res?.data[7])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
-            ]
+            // const subtotal = [
+            //     initialData.map((res: any) => Number(res?.data[4])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            //     initialData.map((res: any) => Number(res?.data[5])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            //     initialData.map((res: any) => Number(res?.data[6])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+            //     initialData.map((res: any) => Number(res?.data[7])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
+            // ]
             const newData = [
                 {
                     productType: '放样正确率（万分比）',
@@ -360,7 +363,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[4],
                     architecture: initialData[3]?.data[4],
                     steelStructure: initialData[4]?.data[4],
-                    subtotal: subtotal[0].toFixed(2)
+                    subtotal: initialData[5]?.data[4]
                 },
                 {
                     productType: '环比（万分比）',
@@ -369,7 +372,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[5],
                     architecture: initialData[3]?.data[5],
                     steelStructure: initialData[4]?.data[5],
-                    subtotal: subtotal[1].toFixed(2)
+                    subtotal: initialData[5]?.data[5]
                 },
                 {
                     productType: '同比（万分比）',
@@ -378,7 +381,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[6],
                     architecture: initialData[3]?.data[6],
                     steelStructure: initialData[4]?.data[6],
-                    subtotal: subtotal[2].toFixed(2)
+                    subtotal: initialData[5]?.data[6]
                 },
                 {
                     productType: '定基比（万分比）',
@@ -387,7 +390,7 @@ export default function Statements(): React.ReactNode {
                     fourPipe: initialData[2]?.data[7],
                     architecture: initialData[3]?.data[7],
                     steelStructure: initialData[4]?.data[7],
-                    subtotal: subtotal[3].toFixed(2)
+                    subtotal: initialData[5]?.data[7]
                 }
             ]
             resole(newData)
@@ -575,11 +578,11 @@ export default function Statements(): React.ReactNode {
                     var res = '<div style="padding-bottom: 5px; display: flex; width: 600px"><span style="padding-right: 6px; width: 20%;"><span style="padding-right: 5px">月份</span>' + params[params.length - 1].axisValue +
                         '</span><span style="padding-right: 6px; width: 20%;">总量' + params[params.length - 1].data +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][0]) === 0) ? '环比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][0] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][0]) > 0) ? '<span style="color: red">环比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][0] + '%</span>' : '<span style="color: green">环比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][0] + '%</span>') +
+                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][5]) === 0) ? '环比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][5] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][5]) > 0) ? '<span style="color: red">环比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][5] + '%</span>' : '<span style="color: green">环比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][5] + '%</span>') +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][1]) === 0) ? '同比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][1] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][1]) > 0) ? '<span style="color: red">同比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][1] + '%</span>' : '<span style="color: green">同比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][1] + '%</span>') +
+                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][6]) === 0) ? '同比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][6] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][6]) > 0) ? '<span style="color: red">同比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][6] + '%</span>' : '<span style="color: green">同比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][6] + '%</span>') +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][2]) === 0) ? '定基比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][2] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][2]) > 0) ? '<span style="color: red">定基比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][2] + '%</span>' : '<span style="color: green">定基比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][2] + '%</span>') +
+                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][7]) === 0) ? '定基比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][7] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][7]) > 0) ? '<span style="color: red">定基比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][7] + '%</span>' : '<span style="color: green">定基比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][7] + '%</span>') +
                         '</span></div>'
                     for (var i = 0; i < params.length - 1; i++) {
                         const paramsData = i === 0 ? accuracyData?.angleSteel : i === 1 ? accuracyData?.steelTubePole : i === 2 ? accuracyData?.fourPipe : i === 3 ? accuracyData?.architecture : accuracyData?.steelStructure
@@ -686,7 +689,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: accuracyData?.subtotal?.map((res: any) => res[0])
+                    data: accuracyData?.subtotal?.map((res: any) => res[4])
                 }
             ]
         });
@@ -833,7 +836,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.left}>
                     <div>
                         <span className={styles.title}>放样统计分析</span>
-                        <Select key={'LoftingStatisticalAnalysis'} className={styles.select} dropdownClassName = {styles.dropdownStyle} size="small" defaultValue={halfYear} onChange={(e) => {
+                        <Select key={'LoftingStatisticalAnalysis'} className={styles.select} dropdownClassName={styles.dropdownStyle} size="small" defaultValue={halfYear} onChange={(e) => {
                             run(e)
                         }}>
                             {
