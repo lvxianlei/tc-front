@@ -98,9 +98,9 @@ export default () => {
                     name: "productTypeName",
                     label: '产品类型',
                     children: <Select placeholder="请选择"  style={{ width: "150px" }}>
-                        <Select.Option key={''} value={''}>
+                        {/* <Select.Option key={''} value={''}>
                             全部
-                        </Select.Option>
+                        </Select.Option> */}
                         {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={name}>
                                 {name}
@@ -113,9 +113,9 @@ export default () => {
                     label: "变更类型",
                     children: <Form.Item name='changeType' initialValue={1}>
                         <Select placeholder="请选择" style={{ width: "150px" }}>
-                            <Select.Option key={''} value={''}>
+                            {/* <Select.Option key={''} value={''}>
                                 全部
-                            </Select.Option>
+                            </Select.Option> */}
                             <Select.Option value={1} key={1}>恢复加工</Select.Option>
                             <Select.Option value={2} key={2}>暂停加工</Select.Option>
                             <Select.Option value={3} key={3}>取消加工</Select.Option>

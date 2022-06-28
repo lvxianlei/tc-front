@@ -143,7 +143,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
-                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{detail?.totalWeight || "0.00"}
+                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{(detail?.totalWeight).toFixed(3) || "0.000"}
                         </span>
                     </>
                 }}
@@ -170,7 +170,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         children:
                         <Form.Item initialValue={productTypeOptions&&productTypeOptions[0].id} name='productTypeId'>
                             <Select placeholder="请选择"  getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                                <Select.Option value='' key="">全部</Select.Option>
+                                {/* <Select.Option value='' key="">全部</Select.Option> */}
                                 {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id}>
                                         {name}
@@ -184,7 +184,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         label: '执行状态',
                         children: <Form.Item name='executeStatus' initialValue={1}>
                             <Select placeholder="请选择" style={{ width: "150px" }}>
-                                <Select.Option value='' key="">全部</Select.Option>
+                                {/* <Select.Option value='' key="">全部</Select.Option> */}
                                 <Select.Option value={1} key="1">正常</Select.Option>
                                 {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
                                 <Select.Option value={2} key="2">取消</Select.Option>

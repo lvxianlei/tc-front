@@ -264,16 +264,16 @@ export default function CyclePlanChange(): React.ReactNode {
                         format='YYYY-MM-DD' 
                         placeholder='请选择'
                         locale={zhCN} 
-                        disabledDate={
-                            current => { 
-                                const value = form.getFieldsValue(true)
-                                const formatDate = value.date.map((item: any) => item.format("YYYY-MM-DD"))
-                                value.startTime = formatDate[0];
-                                value.endTime = formatDate[1];
-                                return current && (current < moment(formatDate[0]) || current > moment(formatDate[1]).add(1, 'days'))
+                        // disabledDate={
+                        //     current => { 
+                        //         const value = form.getFieldsValue(true)
+                        //         const formatDate = value.date.map((item: any) => item.format("YYYY-MM-DD"))
+                        //         value.startTime = formatDate[0];
+                        //         value.endTime = formatDate[1];
+                        //         return current && (current < moment(formatDate[0]) || current > moment(formatDate[1]).add(1, 'days'))
                                 
-                            }
-                        }
+                        //     }
+                        // }
                     />
                 </Form.Item>
             </Form>,
@@ -436,8 +436,9 @@ export default function CyclePlanChange(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={detail.status===2}
                     >
-                        <Button type="primary" ghost >周期计划下发</Button>
+                        <Button type="primary" ghost disabled={detail.status===2}>周期计划下发</Button>
                     </Popconfirm>
                 </Space>
             ]}>

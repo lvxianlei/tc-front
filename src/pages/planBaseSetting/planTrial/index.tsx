@@ -401,7 +401,7 @@ export default function PlanTrialList(): React.ReactNode {
         </Form.Item>
         <Form.Item label='产品类型' name='productTypeId'>
             <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "100px" }}>
-                <Select.Option value='' key="">全部</Select.Option>
+                {/* <Select.Option value='' key="">全部</Select.Option> */}
                 {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                     return <Select.Option key={index} value={id}>
                         {name}
@@ -411,7 +411,7 @@ export default function PlanTrialList(): React.ReactNode {
         </Form.Item>
         <Form.Item label='试装单元' name='productUnitName'>
             <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                <Select.Option value='' key="">全部</Select.Option>
+                {/* <Select.Option value='' key="">全部</Select.Option> */}
                 { productUnitData?.map((item: any) => {
                     return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
                 }) }
@@ -419,7 +419,7 @@ export default function PlanTrialList(): React.ReactNode {
         </Form.Item>
         <Form.Item label='状态' name='status' initialValue={1}>
             <Select placeholder="请选择" style={{ width: "100px" }}>
-                <Select.Option value='' key="">全部</Select.Option>
+                {/* <Select.Option value='' key="">全部</Select.Option> */}
                 <Select.Option value={1} key="1">未下发</Select.Option>
                 <Select.Option value={2} key="2">已下发</Select.Option>
                 <Select.Option value={3} key="3">已完成</Select.Option>

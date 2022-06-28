@@ -233,8 +233,8 @@ export default () => {
             {
                 name: 'productType',
                 label: '产品类型',
-                children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
-                    <Select.Option value='' key="">全部</Select.Option>
+                children: <Select placeholder="请选择" style={{ width: "150px" }}>
+                    {/* <Select.Option value='' key="">全部</Select.Option> */}
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
@@ -247,7 +247,7 @@ export default () => {
                 label: '执行状态',
                 children: <Form.Item name='executeStatus' initialValue={1}>
                     <Select placeholder="请选择" style={{ width: "150px" }}>
-                        <Select.Option value='' key="">全部</Select.Option>
+                        {/* <Select.Option value='' key="">全部</Select.Option> */}
                         <Select.Option value={1} key="1">正常</Select.Option>
                         {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
                         <Select.Option value={2} key="2">取消</Select.Option>
