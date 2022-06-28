@@ -53,11 +53,7 @@ const SiderMenu: React.FC<{ isOpend: boolean }> = ({ isOpend }) => {
         openKeys={selectedSubMenuItem as any}
         selectedKeys={selectedDarkMenuItem}
         onOpenChange={handleOpenChange}
-        // inlineCollapsed={isOpend}
-        style={{
-            // width: ctxConfig.layout.width,
-            backgroundColor: ctxConfig.layout.theme
-        }}
+        style={{ backgroundColor: ctxConfig.layout.theme }}
     >
         {
             getMenuItemForAppName().filter((item: any) => hasAuthority(item.authority)).map((item: any): React.ReactNode => (

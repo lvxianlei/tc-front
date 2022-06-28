@@ -17,9 +17,11 @@ export default function OverViewDetail(props: Details): JSX.Element {
     const [batcherId, setBatcherId] = useState<string>("");
     const [code, setCode] = useState<string>("1");
     // 关闭回调
-    const handleCallBack = () => {
+    const handleCallBack = (res: any) => {
+        if (res.code === 1) {
+            run();
+        }
         setVisible(false);
-        run();
     }
 
     useEffect(() => {
