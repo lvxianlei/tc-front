@@ -121,6 +121,11 @@
             "width": 100
         },
         {
+            "title": "完成进度",
+            "code": "percent",
+            "width": 100
+        },
+        {
             "title": "实际完成日期",
             "code": "completeTime",
             "width": 100
