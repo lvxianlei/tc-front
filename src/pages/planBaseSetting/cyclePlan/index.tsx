@@ -171,9 +171,7 @@ export default () => {
                         >
                             <Button type="link" disabled={record?.state === 1}>删除</Button>
                         </Popconfirm>:
-                            <Button type="link" onClick={()=>{
-                                message.error('计划已下发，不可删除！')
-                            }}>删除</Button>
+                            <Button type="link" disabled>删除</Button>
                         }
                         
                         
