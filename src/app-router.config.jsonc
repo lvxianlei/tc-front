@@ -1868,8 +1868,15 @@
     },
     { // 计划排产-计划看板
       "name": "计划看板",
-      "path": "/planProd/planPanal",
+      "path": "/planPanal/list",
       "module": "./pages/planBaseSetting/planPanal/index",
+      "exact": true,
+      "authority": "approvalm"
+    },
+    { // 计划排产-数据统计
+      "name": "数据统计",
+      "path": "/planPanal/dataStatistics",
+      "module": "./pages/planBaseSetting/dataStatistics/index",
       "exact": true,
       "authority": "approvalm"
     },

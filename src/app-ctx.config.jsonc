@@ -650,11 +650,6 @@
                         "authority": "approvalm"
                     },
                     {
-                        "label": "计划看板",
-                        "path": "/planProd/planPanal",
-                        "authority": "approvalm"
-                    },
-                    {
                         "label": "试装计划",
                         "path": "/planProd/planTrial",
                         "authority": "approvalm"
@@ -662,6 +657,25 @@
                     {
                         "label": "镀锌包装计划",
                         "path": "/planProd/planGalvanizedPack",
+                        "authority": "approvalm"
+                    }
+                ]
+            },
+            {
+                "label": "计划看板",
+                "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
+                "path": "/planPanal",
+                "appName": "PC",
+                "authority": "approvalm",
+                "items": [
+                    {
+                        "label": "计划看板",
+                        "path": "/planPanal/list",
+                        "authority": "approvalm"
+                    },
+                    {
+                        "label": "数据统计",
+                        "path": "/planPanal/dataStatistics",
                         "authority": "approvalm"
                     }
                 ]
