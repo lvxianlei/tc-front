@@ -436,8 +436,9 @@ export default function CyclePlanChange(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={detail.status===2}
                     >
-                        <Button type="primary" ghost >周期计划下发</Button>
+                        <Button type="primary" ghost disabled={detail.status===2}>周期计划下发</Button>
                     </Popconfirm>
                 </Space>
             ]}>
