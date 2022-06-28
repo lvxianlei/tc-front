@@ -71,15 +71,7 @@ export default function RawMaterial() {
     }
     // 三个按钮
     const buttons: {} | null | undefined = [
-        <div>
-            <Button onClick={() => handleClose()}>关闭</Button>
-            {
-                obj.taskStatus === 1 && <>
-                    <Button onClick={() => setIsModalVisible3(true)}>拒绝</Button>
-                    <Button type="primary" onClick={() => { receive(id) }}>接收</Button>
-                </>
-            }
-        </div>
+        <Button onClick={() => handleClose()}>关闭</Button>
     ]
     const buttons1: {} | null | undefined = [
         <div>
