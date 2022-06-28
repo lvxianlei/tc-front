@@ -8,94 +8,77 @@ export default () => {
         {
             title: "工程名称",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "orderProjectName"
         },
         {
             title: "合同号",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "internalNumber"
         },
         {
             title: "计划号",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "planNumber"
         },
         {
             title: "塔型",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "productCategory"
         },
         {
             title: "基数",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "number"
         },
         {
             title: "总重量（t）",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "totalWeight"
         },
         {
             title: "报工重量（t）",
             width: 200,
-            dataIndex: "configName"
+            dataIndex: "reportWeight"
         },
         {
             title: "总件数",
-            dataIndex: "startTime",
-            type: "date",
+            dataIndex: "totalNumber",
             width: 200,
-            format: "YYYY-MM-DD"
         },
         {
             title: "报工件数",
-            dataIndex: "endTime",
-            type: "date",
+            dataIndex: "reportNum",
             width: 200,
-            format: "YYYY-MM-DD"
         },
         {
             title: "总孔数",
-            dataIndex: "status",
+            dataIndex: "totalHolesNum",
             width: 150,
-            type: "select",
-            enum: [
-                {
-                    "value": 1,
-                    "label": "未下发"
-                },
-                {
-                    "value": 2,
-                    "label": "已下发"
-                }
-            ]
         },
         {
             title: "报工孔数",
-            dataIndex: "issueTime",
-            type: "date",
+            dataIndex: "reportHolesNum",
             width: 200,
-            format: "YYYY-MM-DD"
         },
         {
             title: "加工进度",
             width: 150,
-            dataIndex: "createUserName"
+            dataIndex: "reportRate"
         }
     ] 
     return <>
         <Page
-            path="/tower-aps/cyclePlan"
+            path="/tower-aps/statistic/page"
             filterValue={filterValue}
             columns={columns}
             searchFormItems={[
                 {
-                    name: "fuzzyMsg",
+                    name: "productCategory",
                     label: '塔型',
                     children: <Input placeholder="塔型" style={{ width: 150 }} />
                 },
                 {
-                    name: "configId",
+                    name: "planNumber",
                     label: '计划号',
                     children: <Input placeholder="计划号" style={{ width: 150 }} />
                 }
