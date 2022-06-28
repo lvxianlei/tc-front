@@ -72,11 +72,14 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     const handleChange = (id: string, value: number, name: string) => {
-        console.log(id, materials)
+        console.log(id, materials, materials)
+        // 不含税报价 = 含税报价 - （含税报价 * 材料税率）
+        // 材料税率 目前是写死 13%
         setMaterials(materials.map((item: any) => item.materialCode + item.length === id ?
             ({
                 ...item,
-                [name]: value
+                [name]: value,
+                offer: value - (value * 0.13),
             }) : item))
     }
 
@@ -103,9 +106,9 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
             if (item.dataIndex === "taxOffer") {
                 return ({ ...item, render: (value: number, records: any) => <div style={{ padding: "2px 0" }}><InputNumber style={{ height: 28 }} min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "taxOffer")} /></div> })
             }
-            if (item.dataIndex === "offer") {
-                return ({ ...item, render: (value: number, records: any) => <div style={{ padding: "2px 0" }}><InputNumber style={{ height: 28 }} min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "offer")} /></div> })
-            }
+            // if (item.dataIndex === "offer") {
+            //     return ({ ...item, render: (value: number, records: any) => <div style={{ padding: "2px 0" }}><InputNumber style={{ height: 28 }} min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "offer")} /></div> })
+            // }
             return item
         })}
             dataSource={materials} />
