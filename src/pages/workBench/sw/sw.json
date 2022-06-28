@@ -68,17 +68,6 @@
                         }
                     },
                     "authority": "workbench_data4"
-                },
-                {
-                    "title": "已完成",
-                    "dataIndex": "boBeSubmitNum",
-                    "path": {
-                        "pathname": "/buyingTask/index",
-                        "state": {
-                            "taskStatus": 2
-                        }
-                    },
-                    "authority": "workbench_data5"
                 }
             ]
         },
@@ -86,7 +75,7 @@
             "title": "备料确认",
             "dataIndex": "materialConfirmWorkBatchVO",
             "path": "工作管理-备料确认",
-            "icon": "",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%A4%87%E6%96%99%E7%A1%AE%E8%AE%A4.png",
             "workbenchItemVos": [
                 {
                     "title": "待反馈",
@@ -106,7 +95,7 @@
             "dataIndex": "purchaseIngredientsWorkBenchVo",
             "col": 2,
             "path": "工作管理-采购配料",
-            "icon": "",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E9%87%87%E8%B4%AD%E9%85%8D%E6%96%99.png",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
@@ -126,7 +115,7 @@
             "col": 2,
             "dataIndex": "produceIngredientsWorkBatchVo",
             "path": "工作管理-生产配料",
-            "icon": "",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E7%94%9F%E4%BA%A7%E9%85%8D%E6%96%99.png",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
@@ -146,7 +135,7 @@
             "col": 2,
             "dataIndex": "purchaseTaskTowerWorkBenchVo",
             "path": "工作管理-配料方案",
-            "icon": "",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E9%85%8D%E6%96%99%E6%96%B9%E6%A1%88.png",
             "workbenchItemVos": [
                 {
                     "title": "待完成",
@@ -186,7 +175,7 @@
             "dataIndex": "materialShortageWorkBatchVo",
             "col": 2,
             "path": "工作管理-缺料列表",
-            "icon": "",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E7%BC%BA%E6%96%99%E5%A4%84%E7%90%86.png",
             "workbenchItemVos": [
                 {
                     "title": "待处理",
@@ -266,6 +255,7 @@
             "dataIndex": "applyPaymentWorkBatchVo",
             "col": 1,
             "path": "财务管理-请款申请",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%AE%A1%E6%89%B9.png",
             "workbenchItemVos": [
                 {
                     "title": "我发起的",
