@@ -42,8 +42,8 @@ export default function Statements(): React.ReactNode {
             title: '角钢塔',
             width: 50,
             dataIndex: 'angleSteel',
-            render: (_: string): React.ReactNode => (
-                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                index === 0 ? <span>{_}</span> : <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -51,8 +51,8 @@ export default function Statements(): React.ReactNode {
             title: '钢管杆',
             width: 50,
             dataIndex: 'steelTubePole',
-            render: (_: string): React.ReactNode => (
-                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                index === 0 ? <span>{_}</span> : <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -60,8 +60,8 @@ export default function Statements(): React.ReactNode {
             title: '四管塔',
             width: 50,
             dataIndex: 'fourPipe',
-            render: (_: string): React.ReactNode => (
-                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                index === 0 ? <span>{_}</span> : <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -69,8 +69,8 @@ export default function Statements(): React.ReactNode {
             title: '架构',
             width: 50,
             dataIndex: 'architecture',
-            render: (_: string): React.ReactNode => (
-                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                index === 0 ? <span>{_}</span> : <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
@@ -78,15 +78,18 @@ export default function Statements(): React.ReactNode {
             title: '钢结构',
             width: 50,
             dataIndex: 'steelStructure',
-            render: (_: string): React.ReactNode => (
-                <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                index === 0 ? <span>{_}</span> : <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
             )
         },
         {
             key: 'subtotal',
             title: '小计',
             width: 50,
-            dataIndex: 'subtotal'
+            dataIndex: 'subtotal',
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                index === 0 ? <span>{_}</span> : <span>{Number(_) === 0 ? Number(_) : Number(_) > 0 ? <span><ArrowUpOutlined style={{ color: 'red' }} />{_}</span> : <span><ArrowDownOutlined style={{ color: 'green' }} />{_}</span>}</span>
+            )
         }
     ]
 
@@ -424,16 +427,16 @@ export default function Statements(): React.ReactNode {
                     }
                 },
                 formatter: (params: any) => {
-                    var res = '<div style="padding-bottom: 5px; display: flex; width: 600px"><span style="padding-right: 6px; width: 20%;"><span style="padding-right: 5px">月份</span>' + params[5].axisValue +
-                        '</span><span style="padding-right: 6px; width: 20%;">总量' + params[5].data +
+                    var res = '<div style="padding-bottom: 5px; display: flex; width: 600px"><span style="padding-right: 6px; width: 20%;"><span style="padding-right: 5px">月份</span>' + params[params.length - 1].axisValue +
+                        '</span><span style="padding-right: 6px; width: 20%;">总量' + params[params.length - 1].data +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(data?.subtotal[params[5].dataIndex][1]) === 0) ? '环比' + data?.subtotal[params[5].dataIndex][1] : (Number(data?.subtotal[params[5].dataIndex][1]) > 0) ? '<span style="color: red">环比增长' + data?.subtotal[params[5].dataIndex][1] + '%</span>' : '<span style="color: green">环比下降' + data?.subtotal[params[5].dataIndex][1] + '%</span>') +
+                        ((Number(data?.subtotal[params[params.length - 1].dataIndex][1]) === 0) ? '环比' + data?.subtotal[params[params.length - 1].dataIndex][1] : (Number(data?.subtotal[params[params.length - 1].dataIndex][1]) > 0) ? '<span style="color: red">环比增长' + data?.subtotal[params[params.length - 1].dataIndex][1] + '%</span>' : '<span style="color: green">环比下降' + data?.subtotal[params[params.length - 1].dataIndex][1] + '%</span>') +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(data?.subtotal[params[5].dataIndex][2]) === 0) ? '同比' + data?.subtotal[params[5].dataIndex][2] : (Number(data?.subtotal[params[5].dataIndex][2]) > 0) ? '<span style="color: red">同比增长' + data?.subtotal[params[5].dataIndex][2] + '%</span>' : '<span style="color: green">同比下降' + data?.subtotal[params[5].dataIndex][2] + '%</span>') +
+                        ((Number(data?.subtotal[params[params.length - 1].dataIndex][2]) === 0) ? '同比' + data?.subtotal[params[params.length - 1].dataIndex][2] : (Number(data?.subtotal[params[params.length - 1].dataIndex][2]) > 0) ? '<span style="color: red">同比增长' + data?.subtotal[params[params.length - 1].dataIndex][2] + '%</span>' : '<span style="color: green">同比下降' + data?.subtotal[params[params.length - 1].dataIndex][2] + '%</span>') +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(data?.subtotal[params[5].dataIndex][3]) === 0) ? '定基比' + data?.subtotal[params[5].dataIndex][3] : (Number(data?.subtotal[params[5].dataIndex][3]) > 0) ? '<span style="color: red">定基比增长' + data?.subtotal[params[5].dataIndex][3] + '%</span>' : '<span style="color: green">定基比下降' + data?.subtotal[params[5].dataIndex][3] + '%</span>') +
+                        ((Number(data?.subtotal[params[params.length - 1].dataIndex][3]) === 0) ? '定基比' + data?.subtotal[params[params.length - 1].dataIndex][3] : (Number(data?.subtotal[params[params.length - 1].dataIndex][3]) > 0) ? '<span style="color: red">定基比增长' + data?.subtotal[params[params.length - 1].dataIndex][3] + '%</span>' : '<span style="color: green">定基比下降' + data?.subtotal[params[params.length - 1].dataIndex][3] + '%</span>') +
                         '</span></div>'
-                    for (var i = 0; i < params.length; i++) {
+                    for (var i = 0; i < params.length - 1; i++) {
                         const paramsData = i === 0 ? data?.angleSteel : i === 1 ? data?.steelTubePole : i === 2 ? data?.fourPipe : i === 3 ? data?.architecture : data?.steelStructure
                         res += '<div style="padding-bottom: 5px; display: flex; width: 600px;"><span style="display: inline-block; padding: 0 5px;">' +
                             '<i style="display: inline-block; width: 10px; height: 10px; background: ' + params[i].color +
@@ -569,16 +572,16 @@ export default function Statements(): React.ReactNode {
                     }
                 },
                 formatter: (params: any) => {
-                    var res = '<div style="padding-bottom: 5px; display: flex; width: 600px"><span style="padding-right: 6px; width: 20%;"><span style="padding-right: 5px">月份</span>' + params[5].axisValue +
-                        '</span><span style="padding-right: 6px; width: 20%;">总量' + params[5].data +
+                    var res = '<div style="padding-bottom: 5px; display: flex; width: 600px"><span style="padding-right: 6px; width: 20%;"><span style="padding-right: 5px">月份</span>' + params[params.length - 1].axisValue +
+                        '</span><span style="padding-right: 6px; width: 20%;">总量' + params[params.length - 1].data +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(accuracyData?.subtotal[params[5].dataIndex][0]) === 0) ? '环比' + accuracyData?.subtotal[params[5].dataIndex][0] : (Number(accuracyData?.subtotal[params[5].dataIndex][0]) > 0) ? '<span style="color: red">环比增长' + accuracyData?.subtotal[params[5].dataIndex][0] + '%</span>' : '<span style="color: green">环比下降' + accuracyData?.subtotal[params[5].dataIndex][0] + '%</span>') +
+                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][0]) === 0) ? '环比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][0] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][0]) > 0) ? '<span style="color: red">环比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][0] + '%</span>' : '<span style="color: green">环比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][0] + '%</span>') +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(accuracyData?.subtotal[params[5].dataIndex][1]) === 0) ? '同比' + accuracyData?.subtotal[params[5].dataIndex][1] : (Number(accuracyData?.subtotal[params[5].dataIndex][1]) > 0) ? '<span style="color: red">同比增长' + accuracyData?.subtotal[params[5].dataIndex][1] + '%</span>' : '<span style="color: green">同比下降' + accuracyData?.subtotal[params[5].dataIndex][1] + '%</span>') +
+                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][1]) === 0) ? '同比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][1] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][1]) > 0) ? '<span style="color: red">同比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][1] + '%</span>' : '<span style="color: green">同比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][1] + '%</span>') +
                         '</span><span style="padding-right: 6px; width: 25%;">' +
-                        ((Number(accuracyData?.subtotal[params[5].dataIndex][2]) === 0) ? '定基比' + accuracyData?.subtotal[params[5].dataIndex][2] : (Number(accuracyData?.subtotal[params[5].dataIndex][2]) > 0) ? '<span style="color: red">定基比增长' + accuracyData?.subtotal[params[5].dataIndex][2] + '%</span>' : '<span style="color: green">定基比下降' + accuracyData?.subtotal[params[5].dataIndex][2] + '%</span>') +
+                        ((Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][2]) === 0) ? '定基比' + accuracyData?.subtotal[params[params.length - 1].dataIndex][2] : (Number(accuracyData?.subtotal[params[params.length - 1].dataIndex][2]) > 0) ? '<span style="color: red">定基比增长' + accuracyData?.subtotal[params[params.length - 1].dataIndex][2] + '%</span>' : '<span style="color: green">定基比下降' + accuracyData?.subtotal[params[params.length - 1].dataIndex][2] + '%</span>') +
                         '</span></div>'
-                    for (var i = 0; i < params.length; i++) {
+                    for (var i = 0; i < params.length - 1; i++) {
                         const paramsData = i === 0 ? accuracyData?.angleSteel : i === 1 ? accuracyData?.steelTubePole : i === 2 ? accuracyData?.fourPipe : i === 3 ? accuracyData?.architecture : accuracyData?.steelStructure
                         res += '<div style="padding-bottom: 5px; display: flex; width: 600px;"><span style="display: inline-block; padding: 0 5px;">' +
                             '<i style="display: inline-block; width: 10px; height: 10px; background: ' + params[i].color +
@@ -830,7 +833,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.left}>
                     <div>
                         <span className={styles.title}>放样统计分析</span>
-                        <Select key={'LoftingStatisticalAnalysis'} className={styles.select} dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)', color: '#fff' }} size="small" defaultValue={halfYear} onChange={(e) => {
+                        <Select key={'LoftingStatisticalAnalysis'} className={styles.select} dropdownClassName = {styles.dropdownStyle} size="small" defaultValue={halfYear} onChange={(e) => {
                             run(e)
                         }}>
                             {
