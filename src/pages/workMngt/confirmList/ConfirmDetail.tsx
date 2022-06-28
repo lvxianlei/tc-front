@@ -448,7 +448,7 @@ export default function ConfirmDetail(): React.ReactNode {
         //   } 
       },
       { 
-        title: '其他增重-抱箍（kg）', 
+        title: '增重-抱箍（kg）', 
         dataIndex: 'otherWeightBg', 
         width: 200,
         key: 'otherWeightBg', 
@@ -457,7 +457,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-平台（kg）', 
+        title: '增重-平台（kg）', 
         dataIndex: 'otherWeightPt', 
         width: 200,
         key: 'otherWeightPt', 
@@ -466,7 +466,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-相序牌（kg）', 
+        title: '增重-相序牌（kg）', 
         dataIndex: 'otherWeightXxp', 
         width: 200,
         key: 'otherWeightXxp', 
@@ -475,7 +475,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-爬梯（kg）', 
+        title: '增重-爬梯（kg）', 
         dataIndex: 'otherWeightPat', 
         width: 200,
         key: 'otherWeightPat', 
@@ -484,7 +484,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-防盗（kg）', 
+        title: '增重-防盗（kg）', 
         dataIndex: 'otherWeightFd', 
         width: 200,
         key: 'otherWeightFd', 
@@ -493,7 +493,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-兜底绳施工孔板（kg）', 
+        title: '增重-兜底绳施工孔板（kg）', 
         dataIndex: 'otherWeightDdssgkb', 
         width: 200,
         key: 'otherWeightDdssgkb', 
@@ -502,7 +502,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-挂点修改（kg）', 
+        title: '增重-挂点修改（kg）', 
         dataIndex: 'otherWeightGdxg', 
         width: 200,
         key: 'otherWeightGdxg', 
@@ -511,7 +511,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-修改（kg）', 
+        title: '增重-修改（kg）', 
         dataIndex: 'otherWeightXg', 
         width: 200,
         key: 'otherWeightXg', 
@@ -520,7 +520,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-全塔双帽（kg）', 
+        title: '增重-全塔双帽（kg）', 
         dataIndex: 'otherWeightQtsm', 
         width: 200,
         key: 'otherWeightQtsm', 
@@ -529,7 +529,7 @@ export default function ConfirmDetail(): React.ReactNode {
         }  
       },
       { 
-        title: '其他增重-螺栓（kg）', 
+        title: '增重-螺栓（kg）', 
         dataIndex: 'otherWeightLs', 
         width: 200,
         key: 'otherWeightLs', 
@@ -777,30 +777,30 @@ export default function ConfirmDetail(): React.ReactNode {
                                 <Form.Item name="lineName" rules={[{
                                     "required": true,
                                     "message":"请输入线路名称"
-                                }]}>
-                                    <Input  maxLength={50}/>
+                                }]}  wrapperCol={{span:24}}>
+                                    <Input  maxLength={50} style={{width:'100%'}}/>
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="塔型" span={ 2 }>
                                 <Form.Item name="productCategory" rules={[{
                                   "required": true,
                                   "message":"请输入塔型"
-                                }]}>
-                                    <Input  maxLength={30}/>
+                                }]}  wrapperCol={{span:24}}>
+                                    <Input  maxLength={30}  style={{width:'100%'}}/>
                                 </Form.Item>
                               
                             </Descriptions.Item>
                             <Descriptions.Item label="塔型钢印号" span={ 2 }>
-                                <Form.Item name="steelProductShape">
-                                    <Input  maxLength={30}/>
+                                <Form.Item name="steelProductShape"  wrapperCol={{span:24}}>
+                                    <Input  maxLength={30}  style={{width:'100%'}}/>
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="产品类型" span={ 2 }>
                                 <Form.Item name="productType" rules={[{
                                     "required": true,
                                     "message":"请选择产品类型"
-                                }]}>
-                                    <Select style={{width:'100px'}}>
+                                }]}  wrapperCol={{span:24}}>
+                                    <Select style={{width:'100%'}}>
                                       {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                           return <Select.Option key={index} value={id}>
                                               {name}
@@ -813,8 +813,8 @@ export default function ConfirmDetail(): React.ReactNode {
                                 <Form.Item name="voltageLevel" rules={[{
                                     "required": true,
                                     "message":"请选择产品类型"
-                                }]}>
-                                    <Select style={{width:'100px'}}>
+                                }]}  wrapperCol={{span:24}}>
+                                    <Select style={{width:'100%'}}>
                                     {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
                                             {name}
@@ -824,7 +824,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="模式" span={ 2 }>
-                                <Form.Item name="pattern" >
+                                <Form.Item name="pattern"  style={{width:'100%'}}  wrapperCol={{span:24}}>
                                     <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
                                       { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                                           return <Select.Option key={ index } value={ id }>
@@ -839,7 +839,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                 confirmData?.map((item: any, index: number) => {
                                     return  <>  
                                         <Descriptions.Item label="杆塔号" span={ 2 }>
-                                          <Form.Item name={["confirmList", index, "name"]} rules={[{
+                                          <Form.Item name={["confirmList", index, "name"]}   wrapperCol={{span:24}} rules={[{
                                               required: true,
                                               message:'请输入杆塔号'
                                             //   validator: (rule: any, value: string, callback: (error?: string) => void) => {
@@ -856,7 +856,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                               pattern: /^[^\s]*$/,
                                               message: '禁止输入空格',
                                           }]}>
-                                              <Input  maxLength={50} onChange={(value)=>{
+                                              <Input  maxLength={50}  style={{width:'100%'}} onChange={(value)=>{
 
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
@@ -886,24 +886,24 @@ export default function ConfirmDetail(): React.ReactNode {
                                           </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="基数"  span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "A"]}>
+                                            <Form.Item name={["confirmList", index, "A"]}  style={{width:'100%'}}  wrapperCol={{span:24}}>
                                                 <Input  maxLength={50} disabled/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="呼高（m）"  span={ 2 }>
+                                        <Descriptions.Item label="呼高(m)"  span={ 2 }>
                                           <Form.Item name={["confirmList", index, "basicHeight"]}  rules={[{
                                               "required": true,
-                                              "message":"请输入呼高（m）"
-                                          }]}>
-                                              <InputNumber precision={2}  min={0} max={99.99}/>
+                                              "message":"请输入呼高(m)"
+                                          }]}  wrapperCol={{span:24}}>
+                                              <InputNumber precision={2}  min={0} max={99.99}  style={{width:'100%'}}/>
                                           </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="本体重量（kg）" span={ 2 }>
+                                        <Descriptions.Item label="本体重量(kg)" span={ 2 }>
                                           <Form.Item name={["confirmList", index, "bodyWeight"]} rules={[{
                                               "required": true,
-                                              "message":"请输入本体重量（kg）"
-                                          }]} initialValue={0}>
-                                              <InputNumber precision={2}  min={0}  onChange={(value:number)=>{
+                                              "message":"请输入本体重量(kg)"
+                                          }]} initialValue={0}  wrapperCol={{span:24}}>
+                                              <InputNumber precision={2}  min={0}  style={{width:'100%'}}  onChange={(value:number)=>{
                                                   const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                   const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
                                                   const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
@@ -939,30 +939,30 @@ export default function ConfirmDetail(): React.ReactNode {
                                           </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="接腿配置A" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "legConfigurationA"]}>
-                                              <Input   maxLength={10}/>
+                                            <Form.Item name={["confirmList", index, "legConfigurationA"]}  wrapperCol={{span:24}}>
+                                              <Input   maxLength={10}  style={{width:'100%'}}/>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="接腿配置B" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "legConfigurationB"]} >
-                                                <Input   maxLength={10}/>
+                                            <Form.Item name={["confirmList", index, "legConfigurationB"]}  wrapperCol={{span:24}}>
+                                                <Input   maxLength={10}  style={{width:'100%'}}/>
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="接腿配置C" span={ 2 }>
-                                          <Form.Item name={["confirmList", index, "legConfigurationC"]}>
-                                              <Input   maxLength={10}/>
+                                          <Form.Item name={["confirmList", index, "legConfigurationC"]}  wrapperCol={{span:24}}>
+                                              <Input   maxLength={10}  style={{width:'100%'}}/>
                                           </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="接腿配置D" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "legConfigurationD"]} >
-                                                <Input  maxLength={10}/>
+                                            <Form.Item name={["confirmList", index, "legConfigurationD"]}  wrapperCol={{span:24}}>
+                                                <Input  maxLength={10}  style={{width:'100%'}}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="接腿重A（kg）" span={ 2 }>
+                                        <Descriptions.Item label="接腿重A(kg)" span={ 2 }>
                                             <Form.Item name={["confirmList", index, "legWeightA"]}
-                                            initialValue={0}
+                                            initialValue={0}  wrapperCol={{span:24}}
                                             >
-                                                <InputNumber precision={2} min={0}  onChange={(value:number)=>{
+                                                <InputNumber precision={2} min={0} style={{width:'100%'}}  onChange={(value:number)=>{
                                                      const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                      const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                      const dataB: number = legValueSum[index]?.legWeightB?legValueSum[index]?.legWeightB:0;
@@ -989,9 +989,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={99999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="接腿重B（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "legWeightB"]}  initialValue={0}>
-                                                <InputNumber precision={2} min={0}  onChange={(value:number)=>{
+                                        <Descriptions.Item label="接腿重B(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightB"]}  initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2} min={0}  style={{width:'100%'}}  onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataB: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1018,9 +1018,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={99999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="接腿重C（kg）" span={ 2 }>
-                                          <Form.Item name={["confirmList", index, "legWeightC"]}  initialValue={0}>
-                                              <InputNumber precision={2} min={0}   onChange={(value:number)=>{
+                                        <Descriptions.Item label="接腿重C(kg)" span={ 2 }>
+                                          <Form.Item name={["confirmList", index, "legWeightC"]}  initialValue={0}  wrapperCol={{span:24}}>
+                                              <InputNumber precision={2} min={0}   style={{width:'100%'}} onChange={(value:number)=>{
                                                   const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                   const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                   const dataB: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1047,9 +1047,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                               }} max={99999.99}/>
                                           </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="接腿重D（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "legWeightD"]}  initialValue={0}>
-                                                <InputNumber precision={2}  min={0}  onChange={(value:number)=>{
+                                        <Descriptions.Item label="接腿重D(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "legWeightD"]}  initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const dataA: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataB: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1076,25 +1076,25 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={99999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="单重（kg）" span={ 2 }>
+                                        <Descriptions.Item label="单重(kg)" span={ 2 }>
                                             <Form.Item name={["confirmList", index, "monomerWeight"]}  rules={[{
                                                 "required": true,
-                                                "message":"请输入单重（kg）"
-                                            }]} initialValue={0}>
-                                                <InputNumber precision={2} disabled  max={9999999.99}/>
+                                                "message":"请输入单重(kg)"
+                                            }]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2} disabled  max={9999999.99}  style={{width:'100%'}}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="总重（kg）" span={ 2 }>
+                                        <Descriptions.Item label="总重(kg)" span={ 2 }>
                                           <Form.Item name={["confirmList", index, "totalWeight"]} rules={[{
                                               "required": true,
-                                              "message":"请输入总重（kg）"
-                                          }]} initialValue={0}>
-                                              <InputNumber precision={2} disabled />
+                                              "message":"请输入总重(kg)"
+                                          }]} initialValue={0}  wrapperCol={{span:24}}>
+                                              <InputNumber precision={2} disabled  style={{width:'100%'}}/>
                                           </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-抱箍（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightBg"]} initialValue={0}>
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-抱箍(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightBg"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1121,9 +1121,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-平台（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightPt"]} initialValue={0}>
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-平台(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightPt"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1150,9 +1150,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-相序牌（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightXxp"]} initialValue={0}>
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-相序牌(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightXxp"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     console.log(legValueSum)
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
@@ -1180,9 +1180,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-爬梯（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightPat"]} initialValue={0}>
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-爬梯(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightPat"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1209,9 +1209,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-防盗（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightFd"]} initialValue={0}>
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-防盗(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightFd"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}   style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1238,9 +1238,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-兜底绳施工孔板（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightDdssgkb"]} initialValue={0} >
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-兜底绳施工孔板(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightDdssgkb"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1267,9 +1267,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-挂点修改（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightGdxg"]} initialValue={0}>
-                                                <InputNumber precision={2} min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-挂点修改(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightGdxg"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2} min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1296,9 +1296,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-修改（kg）" span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightXg"]} initialValue={0} >
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-修改(kg)" span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightXg"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1325,9 +1325,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-全塔双帽（kg）"span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightQtsm"]} initialValue={0}>
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-全塔双帽(kg)"span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightQtsm"]} initialValue={0} wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1354,9 +1354,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 }} max={999999.99}/>
                                             </Form.Item>
                                         </Descriptions.Item>
-                                        <Descriptions.Item label="其他增重-螺栓（kg）"span={ 2 }>
-                                            <Form.Item name={["confirmList", index, "otherWeightLs"]} initialValue={0}>
-                                                <InputNumber precision={2}  min={0} onChange={(value:number)=>{
+                                        <Descriptions.Item label="增重-螺栓(kg)"span={ 2 }>
+                                            <Form.Item name={["confirmList", index, "otherWeightLs"]} initialValue={0}  wrapperCol={{span:24}}>
+                                                <InputNumber precision={2}  min={0}  style={{width:'100%'}} onChange={(value:number)=>{
                                                     const legValueSum = form.getFieldsValue(true)?.confirmList;
                                                     const data: number = legValueSum[index]?.bodyWeight?legValueSum[index]?.bodyWeight:0;
                                                     const dataA: number = legValueSum[index]?.legWeightA?legValueSum[index]?.legWeightA:0;
@@ -1384,7 +1384,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                             </Form.Item>
                                         </Descriptions.Item>
                                         <Descriptions.Item label="备注" span={ 7 }>
-                                            <Form.Item name={["confirmList", index, "description"]}>
+                                            <Form.Item name={["confirmList", index, "description"]}  wrapperCol={{span:24}}>
                                                 <TextArea rows={1}  maxLength={400} style={{width:'100%'}}/>
                                             </Form.Item>
                                         </Descriptions.Item>

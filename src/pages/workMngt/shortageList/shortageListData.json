@@ -1,6 +1,16 @@
 {
     "baseInfo": [
         {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": "120"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
             "title": "采购员",
             "dataIndex": "purchasePersonName",
             "type": "string",
@@ -31,15 +41,10 @@
             "width": 100
         },
         {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
-            "width": 150
-        },
-        {
             "title": "搭配长度（mm）",
             "dataIndex": "length",
             "type": "number",
-            "width": 120
+            "width": 130
         },
         {
             "title": "搭配数量",

@@ -51,12 +51,6 @@
         {
             "title": "塔型采购状态",
             "dataIndex": "purchaseTaskStatusName"
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "purchaseStatusUpdateTime",
-            "type": "date",
-            "format": "YYYY-MM-DD HH:mm"
         }
     ],
     "ListIngredient": [
@@ -102,23 +96,18 @@
     ],
     "PlanList": [
         {
-            "title": "生产未领料（支）",
-            "dataIndex": "uncollectedMaterial",
+            "title": "仓库可用库存（支）",
+            "dataIndex": "availableStock",
             "type": "number"
         },
         {
-            "title": "仓库库存（支）",
-            "dataIndex": "warehouseStock",
-            "type": "number"
-        },
-        {
-            "title": "在途库存（支）",
-            "dataIndex": "transitStock",
+            "title": "仓库占用（本次）",
+            "dataIndex": "warehouseOccupy",
             "type": "number"
         },
         {
             "title": "计划采购（本次）",
-            "dataIndex": "purchasePlanNumber",
+            "dataIndex": "planPurchaseNum",
             "type": "number"
         }
     ],

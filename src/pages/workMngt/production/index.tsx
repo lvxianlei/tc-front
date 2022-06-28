@@ -61,8 +61,7 @@ export default function Invoicing() {
             value.endLoftingBatchTime = formatDate[1] + " 23:59:59"
         }
         if (value.loftingId) {
-            value.loftingDeptId = value.loftingId.first
-            value.loftingId = value.loftingId.second
+            value.loftingId = value.loftingId.value
         }
         setFilterValue(value)
         return value
@@ -131,7 +130,7 @@ export default function Invoicing() {
                                 className="btn-operation-link" 
                                 disabled={userId !== record.batcherId || record.batcheTaskStatus !== 1}
                             >
-                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}`}>配料</Link>
+                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}/${record.materialStandard}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'
                                  disabled={userId !== record.batcherId || record.batcheTaskStatus !== 3}
@@ -167,7 +166,7 @@ export default function Invoicing() {
                 {
                     name: 'loftingId',
                     label: '配料负责人',
-                    children: <IntgSelect width={400} />
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyQuery',

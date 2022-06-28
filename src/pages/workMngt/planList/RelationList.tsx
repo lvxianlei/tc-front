@@ -14,8 +14,7 @@ export default function RelationList() {
             value.endPurchaseStatusUpdateTime = formatDate[1] + " 23:59:59"
         }
         if (value.purchaserId) {
-            value.purchaserDeptId = value.purchaserId.first
-            value.purchaserId = value.purchaserId.second
+            value.purchaserId = value.purchaserId.value
         }
         return ({ ...value, purchasePlanId: params.id })
     }
@@ -45,7 +44,7 @@ export default function RelationList() {
             {
                 name: 'purchaserId',
                 label: '采购人',
-                children: <IntgSelect width={400} />
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyQuery',

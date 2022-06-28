@@ -1,0 +1,102 @@
+{
+  "baseColunm": [
+    {
+        "title": "类型",
+        "width": 50,
+        "dataIndex": "materialCategoryName"
+    },
+    {
+        "title": "标准",
+        "width": 80,
+        "dataIndex": "materialStandardName"
+    },
+    {
+        "title": "物料编码",
+        "width": 80,
+        "dataIndex": "materialCode"
+    },
+    {
+        "title": "品名",
+        "width": 80,
+        "dataIndex": "materialName"
+    },
+    {
+        "title": "材质",
+        "width": 80,
+        "dataIndex": "structureTexture"
+    },
+    {
+        "title": "规格",
+        "width": 80,
+        "dataIndex": "structureSpec"
+    },
+    {
+        "title": "长度（mm）",
+        "width": 100,
+        "dataIndex": "length"
+    },
+    {
+        "title": "宽度（mm）",
+        "width": 100,
+        "dataIndex": "width"
+    },
+    {
+        "title": "总数量",
+        "width": 80,
+        "dataIndex": "totalNum"
+    },
+    {
+        "title": "总重量（吨）",
+        "width": 100,
+        "dataIndex": "totalWeight"
+    },
+    {
+        "title": "可用数量",
+        "width": 80,
+        "dataIndex": "usableNum"
+    },
+    {
+        "title": "可用重量（吨）",
+        "width": 160,
+        "dataIndex": "usableTotalWeight"
+    },
+    {
+        "title": "占用数量",
+        "width": 80,
+        "dataIndex": "occupiedNum"
+    },
+    {
+        "title": "占用重量（吨）",
+        "width": 120,
+        "dataIndex": "occupiedTotalWeight"
+    },
+    {
+        "title": "在途可用数量",
+        "width": 120,
+        "dataIndex": "inTransitUsableNum"
+    },
+    {
+        "title": "在途可用重量（吨）",
+        "width": 150,
+        "dataIndex": "inTransitUsableTotalWeight"
+    },
+    {
+        "title": "在途占用数量",
+        "width": 120,
+        "dataIndex": "inTransitOccupiedNum"
+    },
+    {
+        "title": "在途占用重量（吨）",
+        "width": 150,
+        "dataIndex": "inTransitOccupiedTotalWeight"
+    },
+    {
+        "title": "安全库存重量（吨）",
+        "dataIndex": "safetyStockWeight"
+    },
+    {
+        "title": "告警库存重量（吨）",
+        "dataIndex": "warningStockWeight"
+    }
+  ]
+}

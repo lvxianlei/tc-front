@@ -194,15 +194,15 @@
                     "search": true,
                     "enum": [
                         {
-                            "label": "外部",
+                            "label": "配料采购",
                             "value": 1
                         },
                         {
-                            "label": "内部",
+                            "label": "库存采购",
                             "value": 2
                         },
                         {
-                            "label": "缺料",
+                            "label": "缺料采购",
                             "value": 3
                         }
                     ]

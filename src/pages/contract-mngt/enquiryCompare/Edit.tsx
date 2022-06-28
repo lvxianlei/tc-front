@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle, useRef, useEffect } from "react"
+import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
@@ -47,8 +47,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
     return <>
         <Form form={form} onFinish={(values) => run({
             ...values,
-            purchaserId: values.purchaserId?.second,
-            purchaserDeptId: values.purchaserId?.first
+            purchaserId: values.purchaserId?.value
         })}>
             <Row gutter={[8, 8]}>
                 <Col><Form.Item label="采购类型" name="purchaseType">
@@ -202,7 +201,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows;
         setPurchasePlanId(chooseData[0].id);
-        setMaterialList(chooseData[0]?.materials.map((item: any) => ({
+        setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
@@ -217,7 +216,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
         })))
-        setPopDataList(chooseData[0]?.materials.map((item: any) => ({
+        setPopDataList(chooseData[0]?.materials?.map((item: any) => ({
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
@@ -410,6 +409,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
-            dataSource={popDataList.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
+            dataSource={popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
     </Spin>
 })

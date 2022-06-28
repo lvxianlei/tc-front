@@ -3,7 +3,7 @@
         {
             "title": "收货单号",
             "dataIndex": "receiveNumber",
-            "width": 100
+            "width": 150
         },
         {
             "title": "纸质单号",
@@ -13,12 +13,12 @@
         {
             "title": "合同编号",
             "dataIndex": "contractNumber",
-            "width": 100
+            "width": 180
         },
         {
             "title": "状态",
             "dataIndex": "receiveStatusName",
-            "width": 50
+            "width": 60
         },
         {
             "title": "结算方式",

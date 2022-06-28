@@ -33,6 +33,7 @@ const SiderMenu: React.FC = () => {
 
     const getMenuItemForAppName = () => {
         const currentApp = AuthUtil.getCurrentAppName()
+        console.log(ctxConfig.layout.menu)
         return ctxConfig.layout.menu.filter((item: any) => [currentApp, ""].includes(item.appName))
     }
 

@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Button, Select, DatePicker, Input, Modal } from 'antd'
 import { Link } from 'react-router-dom'
-import { Page } from '../../common'
+import { SearchTable as Page } from '../../common'
 import { receiveColumns } from "./receiveTask.json"
 import PrepareOverview from "../../financial/prepares/Overview"
 import BillOverview from "../../financial/bills/Overview"
@@ -54,7 +54,7 @@ export default function ViewReceivingNote(): React.ReactNode {
                 ...receiveColumns.map((item: any) => {
                     switch (item.dataIndex) {
                         case "receiveNumber":
-                            return ({ ...item, render: (value: any, records: any) => value ? <Link to={`/ingredients/receiving/detail/${records.receiveStockId}`}>{value}</Link> : "-" })
+                            return ({ ...item, render: (value: any, records: any) => value ? <Link to={`/stock/receiving/detail/${records.receiveStockId}`}>{value}</Link> : "-" })
                         case "pleasePayNumber":
                             return ({
                                 ...item,
