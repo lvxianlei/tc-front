@@ -2,8 +2,7 @@
 
 .statement {
     width: 100%;
-    background-color: #071530;
-    padding: 0 16px 16px 16px;
+    background-image: url('../../../public/statementsbg.png');
 
     .tableRow:hover > td {
         background-color: rgba(255, 255, 255, 0.05);
@@ -13,11 +12,13 @@
         width: 100%;
         height: 106px;
         position: relative;
+        margin-bottom: 16px;
+        
         .headerbg {
             background-image: url('../../../public/statements_header.png');
-            background-position: center;
+            background-position: bottom;
             background-repeat: no-repeat;
-            height: 100%;
+            height: 95%;
 
             .headerTitle {
                 color: rgba(137, 234, 255, 1);
@@ -25,7 +26,7 @@
                 font-size: 25px;
                 position: absolute;
                 left: 50%;
-                top: 32px;
+                top: 10px;
                 transform: translate(-50%);
             }
         }
@@ -53,7 +54,7 @@
 
 
     :global(.ant-table) {
-        background-color: #0B1C3D;
+        background: rgba(11, 28, 61, 0.5);
         color: #FFFFFF;
         border: 1px solid #0B1C3D;
 
@@ -141,6 +142,7 @@
         width: 100%;  
         display: flex;
         margin-bottom: 1%;
+        padding: 0 16px 16px 16px;
 
         .left {
             width: 100%;
@@ -148,7 +150,7 @@
             border-radius: 4px;
             margin-right: 1%;
             padding: 16px;
-            background: #0B1C3D;
+            background: rgba(11, 28, 61, 0.5);
         }
     
         .right {
@@ -156,13 +158,14 @@
             border: 1px solid rgba(153, 204, 255, 0.25);
             border-radius: 4px;
             padding: 16px;
-            background: #0B1C3D;
+            background: rgba(11, 28, 61, 0.5);
         }
     }
 
     .bottom {
         width: 100%;  
         display: flex;
+        padding: 0 16px 16px 16px;
 
         .left {
             width: 50%;
@@ -170,7 +173,7 @@
             border-radius: 4px;
             margin-right: 1%;
             padding: 16px;
-            background: #0B1C3D;
+            background: rgba(11, 28, 61, 0.5);
         }
     
         .right {
@@ -178,7 +181,7 @@
             border: 1px solid rgba(153, 204, 255, 0.25);
             border-radius: 4px;
             padding: 16px;
-            background: #0B1C3D;
+            background: rgba(11, 28, 61, 0.5);
 
             .rightContent {
                 display: flex;
