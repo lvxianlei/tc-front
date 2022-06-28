@@ -107,7 +107,7 @@ export default function Statements(): React.ReactNode {
         {
             key: 'projectName',
             title: '项目名称',
-            width: 50,
+            width: 120,
             dataIndex: 'projectName'
         },
         {
@@ -131,230 +131,266 @@ export default function Statements(): React.ReactNode {
     ]
 
     const { data: yearLists } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const now = new Date().getFullYear();
-        var startYear = now - 3;//起始年份
-        var arr = new Array();
-        for (var i = startYear; i <= now; i++) {
-            var obj = [
-                { "id": i + '01-' + i + '06', "label": i + "上半年" },
-                { "id": i + '07-' + i + '12', "label": i + "下半年" }
-            ];
-            arr.push(...obj);
+        try {
+            const now = new Date().getFullYear();
+            var startYear = now - 3;//起始年份
+            var arr = new Array();
+            for (var i = startYear; i <= now; i++) {
+                var obj = [
+                    { "id": i + '01-' + i + '06', "label": i + "上半年" },
+                    { "id": i + '07-' + i + '12', "label": i + "下半年" }
+                ];
+                arr.push(...obj);
+            }
+            resole(arr)
+        } catch (error) {
+            reject(error)
         }
-        resole(arr)
     }), {})
 
     const { data: issuedYearLists } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const now = new Date().getFullYear();
-        var startYear = now - 3;//起始年份
-        var arr = new Array();
-        for (var i = startYear; i <= now; i++) {
-            var obj = [
-                { "id": i + '-01,' + i + '-02,' + i + '-03,' + i + '-04,' + i + '-05,' + i + '-06', "label": i + "上半年" },
-                { "id": i + '-07,' + i + '-08,' + i + '-09,' + i + '-10,' + i + '-11,' + i + '-12', "label": i + "下半年" }
-            ];
-            arr.push(...obj);
+        try {
+            const now = new Date().getFullYear();
+            var startYear = now - 3;//起始年份
+            var arr = new Array();
+            for (var i = startYear; i <= now; i++) {
+                var obj = [
+                    { "id": i + '-01,' + i + '-02,' + i + '-03,' + i + '-04,' + i + '-05,' + i + '-06', "label": i + "上半年" },
+                    { "id": i + '-07,' + i + '-08,' + i + '-09,' + i + '-10,' + i + '-11,' + i + '-12', "label": i + "下半年" }
+                ];
+                arr.push(...obj);
+            }
+            resole(arr)
+        } catch (error) {
+            reject(error)
         }
-        resole(arr)
     }), {})
 
     const { loading, data, run } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
-        // data数组位表示：
-        // 0放样件号数（万）
-        // 1环比
-        // 2同比
-        // 3定基比
-        // 4放样正确率（万分比）
-        // 5环比（万分比）
-        // 6同比（万分比）
-        // 7定基比（万分比）
-        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting`, { date: date || halfYear });
-        setFirstData(value);
-        const tableData = value[value.length - 1]?.val;
-        tableData && getTableData(tableData);
-        const angleSteelData = value.map((res: any) => res.val).map((res: any) => res[0]?.data);
-        const steelTubePoleData = value.map((res: any) => res.val).map((res: any) => res[1]?.data);
-        const fourPipeData = value.map((res: any) => res.val).map((res: any) => res[2]?.data);
-        const architectureData = value.map((res: any) => res.val).map((res: any) => res[3]?.data);
-        const steelStructureData = value.map((res: any) => res.val).map((res: any) => res[4]?.data);
-        const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
-        const secondData = pureData?.map((items: any) => [
-            items?.map((item: any[]) => item[0]),
-            items?.map((item: any[]) => item[1]),
-            items?.map((item: any[]) => item[2]),
-            items?.map((item: any[]) => item[3])
-        ])
-        const thirdData = secondData?.map((res: any) => [
-            (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-            (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-            (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-            (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
-        ])
-        let processedData = {
-            dateList: value.map((res: any) => res?.date),
-            angleSteel: angleSteelData,
-            steelTubePole: steelTubePoleData,
-            fourPipe: fourPipeData,
-            architecture: architectureData,
-            steelStructure: steelStructureData,
-            subtotal: thirdData
-        };
-        resole(processedData)
+        try {
+            // data数组位表示：
+            // 0放样件号数（万）
+            // 1环比
+            // 2同比
+            // 3定基比
+            // 4放样正确率（万分比）
+            // 5环比（万分比）
+            // 6同比（万分比）
+            // 7定基比（万分比）
+            const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting`, { date: date || halfYear });
+            setFirstData(value);
+            const tableData = value[value.length - 1]?.val;
+            tableData && getTableData(tableData);
+            const angleSteelData = value.map((res: any) => res.val).map((res: any) => res[0]?.data);
+            const steelTubePoleData = value.map((res: any) => res.val).map((res: any) => res[1]?.data);
+            const fourPipeData = value.map((res: any) => res.val).map((res: any) => res[2]?.data);
+            const architectureData = value.map((res: any) => res.val).map((res: any) => res[3]?.data);
+            const steelStructureData = value.map((res: any) => res.val).map((res: any) => res[4]?.data);
+            const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
+            const secondData = pureData?.map((items: any) => [
+                items?.map((item: any[]) => item[0]),
+                items?.map((item: any[]) => item[1]),
+                items?.map((item: any[]) => item[2]),
+                items?.map((item: any[]) => item[3])
+            ])
+            const thirdData = secondData?.map((res: any) => [
+                (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+                (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+                (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+                (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
+            ])
+            let processedData = {
+                dateList: value.map((res: any) => res?.date),
+                angleSteel: angleSteelData,
+                steelTubePole: steelTubePoleData,
+                fourPipe: fourPipeData,
+                architecture: architectureData,
+                steelStructure: steelStructureData,
+                subtotal: thirdData
+            };
+            resole(processedData)
+        } catch (error) {
+            reject(error)
+        }
     }), {})
 
 
     const { data: accuracyData, run: getAccuracy } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/accuracy`, { date: date || halfYear });
-        setSecondData(value);
-        const tableData = value[value.length - 1]?.val;
-        tableData && getCorrectData(tableData);
-        const angleSteelData = value.map((res: any) => res.val).map((res: any) => res[0]?.data);
-        const steelTubePoleData = value.map((res: any) => res.val).map((res: any) => res[1]?.data);
-        const fourPipeData = value.map((res: any) => res.val).map((res: any) => res[2]?.data);
-        const architectureData = value.map((res: any) => res.val).map((res: any) => res[3]?.data);
-        const steelStructureData = value.map((res: any) => res.val).map((res: any) => res[4]?.data);
-        const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
-        const secondData = pureData?.map((items: any) => [
-            items?.map((item: any[]) => item[4]),
-            items?.map((item: any[]) => item[5]),
-            items?.map((item: any[]) => item[6]),
-            items?.map((item: any[]) => item[7])
-        ])
-        const thirdData = secondData?.map((res: any) => [
-            (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-            (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-            (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
-            (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
-        ])
-        let processedData = {
-            dateList: value.map((res: any) => res?.date),
-            angleSteel: angleSteelData,
-            steelTubePole: steelTubePoleData,
-            fourPipe: fourPipeData,
-            architecture: architectureData,
-            steelStructure: steelStructureData,
-            subtotal: thirdData
-        };
-        resole(processedData)
+        try {
+            const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/accuracy`, { date: date || halfYear });
+            setSecondData(value);
+            const tableData = value[value.length - 1]?.val;
+            tableData && getCorrectData(tableData);
+            const angleSteelData = value.map((res: any) => res.val).map((res: any) => res[0]?.data);
+            const steelTubePoleData = value.map((res: any) => res.val).map((res: any) => res[1]?.data);
+            const fourPipeData = value.map((res: any) => res.val).map((res: any) => res[2]?.data);
+            const architectureData = value.map((res: any) => res.val).map((res: any) => res[3]?.data);
+            const steelStructureData = value.map((res: any) => res.val).map((res: any) => res[4]?.data);
+            const pureData = value?.map((res: any) => res.val)?.map((item: any) => item?.map((res: any) => res.data));
+            const secondData = pureData?.map((items: any) => [
+                items?.map((item: any[]) => item[4]),
+                items?.map((item: any[]) => item[5]),
+                items?.map((item: any[]) => item[6]),
+                items?.map((item: any[]) => item[7])
+            ])
+            const thirdData = secondData?.map((res: any) => [
+                (res[0].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+                (res[1].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+                (res[2].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2),
+                (res[3].reduce((total: number, currentValue: number) => total + Number(currentValue), 0)).toFixed(2)
+            ])
+            let processedData = {
+                dateList: value.map((res: any) => res?.date),
+                angleSteel: angleSteelData,
+                steelTubePole: steelTubePoleData,
+                fourPipe: fourPipeData,
+                architecture: architectureData,
+                steelStructure: steelStructureData,
+                subtotal: thirdData
+            };
+            resole(processedData)
+        } catch (error) {
+            reject(error)
+        }
     }), {})
 
     const { data: issuedPie } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getProductTypeStatistics`);
-        const processedData = value.map((res: any) => {
-            return {
-                value: res.no_iss_weight,
-                name: res.product_type_name
-            }
-        })
-        resole(processedData)
+        try {
+            const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getProductTypeStatistics`);
+            const processedData = value.map((res: any) => {
+                return {
+                    value: res.no_iss_weight,
+                    name: res.product_type_name
+                }
+            })
+            resole(processedData)
+        } catch (error) {
+            reject(error)
+        }
     }), {})
 
     const { data: issuedData, run: getIssuedData } = useRequest<any>((productType: string, page: Record<string, any>) => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics`, { productType: productType || '', current: 1, pageSize: 10, ...page });
-        setPagenation(value);
-        resole(value?.records || []);
+        try {
+            const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics`, { productType: productType || '', current: 1, pageSize: 10, ...page });
+            setPagenation(value);
+            resole(value?.records || []);
+        } catch (error) {
+            reject(error)
+        }
     }), {})
 
     const { data: issuedBarData, run: getIssuedBarData } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
-        const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getIssStatistics?date=${date || issuedHalfYear}`);
-        resole(value)
+        try {
+            const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getIssStatistics?date=${date || issuedHalfYear}`);
+            resole(value)
+        } catch (error) {
+            reject(error)
+        }
     }), {})
 
     const { data: loftingStatisticalAnalysisData, run: getTableData } = useRequest<any>((initialData: any) => new Promise(async (resole, reject) => {
-        const subtotal = [
-            initialData.map((res: any) => Number(res?.data[0])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-            initialData.map((res: any) => Number(res?.data[1])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-            initialData.map((res: any) => Number(res?.data[2])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-            initialData.map((res: any) => Number(res?.data[3])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
-        ]
-        const newData = [
-            {
-                productType: '放样件号数（万）',
-                angleSteel: initialData[0]?.data[0],
-                steelTubePole: initialData[1]?.data[0],
-                fourPipe: initialData[2]?.data[0],
-                architecture: initialData[3]?.data[0],
-                steelStructure: initialData[4]?.data[0],
-                subtotal: subtotal[0].toFixed(2)
-            },
-            {
-                productType: '环比%',
-                angleSteel: initialData[0]?.data[1],
-                steelTubePole: initialData[1]?.data[1],
-                fourPipe: initialData[2]?.data[1],
-                architecture: initialData[3]?.data[1],
-                steelStructure: initialData[4]?.data[1],
-                subtotal: subtotal[1].toFixed(2)
-            },
-            {
-                productType: '同比%',
-                angleSteel: initialData[0]?.data[2],
-                steelTubePole: initialData[1]?.data[2],
-                fourPipe: initialData[2]?.data[2],
-                architecture: initialData[3]?.data[2],
-                steelStructure: initialData[4]?.data[2],
-                subtotal: subtotal[2].toFixed(2)
-            },
-            {
-                productType: '定基比%',
-                angleSteel: initialData[0]?.data[3],
-                steelTubePole: initialData[1]?.data[3],
-                fourPipe: initialData[2]?.data[3],
-                architecture: initialData[3]?.data[3],
-                steelStructure: initialData[4]?.data[3],
-                subtotal: subtotal[3].toFixed(2)
-            }
-        ]
-        resole(newData)
+        try {
+            const subtotal = [
+                initialData.map((res: any) => Number(res?.data[0])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+                initialData.map((res: any) => Number(res?.data[1])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+                initialData.map((res: any) => Number(res?.data[2])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+                initialData.map((res: any) => Number(res?.data[3])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
+            ]
+            const newData = [
+                {
+                    productType: '放样件号数（万）',
+                    angleSteel: initialData[0]?.data[0],
+                    steelTubePole: initialData[1]?.data[0],
+                    fourPipe: initialData[2]?.data[0],
+                    architecture: initialData[3]?.data[0],
+                    steelStructure: initialData[4]?.data[0],
+                    subtotal: subtotal[0].toFixed(2)
+                },
+                {
+                    productType: '环比%',
+                    angleSteel: initialData[0]?.data[1],
+                    steelTubePole: initialData[1]?.data[1],
+                    fourPipe: initialData[2]?.data[1],
+                    architecture: initialData[3]?.data[1],
+                    steelStructure: initialData[4]?.data[1],
+                    subtotal: subtotal[1].toFixed(2)
+                },
+                {
+                    productType: '同比%',
+                    angleSteel: initialData[0]?.data[2],
+                    steelTubePole: initialData[1]?.data[2],
+                    fourPipe: initialData[2]?.data[2],
+                    architecture: initialData[3]?.data[2],
+                    steelStructure: initialData[4]?.data[2],
+                    subtotal: subtotal[2].toFixed(2)
+                },
+                {
+                    productType: '定基比%',
+                    angleSteel: initialData[0]?.data[3],
+                    steelTubePole: initialData[1]?.data[3],
+                    fourPipe: initialData[2]?.data[3],
+                    architecture: initialData[3]?.data[3],
+                    steelStructure: initialData[4]?.data[3],
+                    subtotal: subtotal[3].toFixed(2)
+                }
+            ]
+            resole(newData)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: true })
 
 
     const { data: loftingAccuracyStatisticsData, run: getCorrectData } = useRequest<any>((initialData: any) => new Promise(async (resole, reject) => {
-        const subtotal = [
-            initialData.map((res: any) => Number(res?.data[4])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-            initialData.map((res: any) => Number(res?.data[5])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-            initialData.map((res: any) => Number(res?.data[6])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
-            initialData.map((res: any) => Number(res?.data[7])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
-        ]
-        const newData = [
-            {
-                productType: '放样正确率（万分比）',
-                angleSteel: initialData[0]?.data[4],
-                steelTubePole: initialData[1]?.data[4],
-                fourPipe: initialData[2]?.data[4],
-                architecture: initialData[3]?.data[4],
-                steelStructure: initialData[4]?.data[4],
-                subtotal: subtotal[0].toFixed(2)
-            },
-            {
-                productType: '环比（万分比）',
-                angleSteel: initialData[0]?.data[5],
-                steelTubePole: initialData[1]?.data[5],
-                fourPipe: initialData[2]?.data[5],
-                architecture: initialData[3]?.data[5],
-                steelStructure: initialData[4]?.data[5],
-                subtotal: subtotal[1].toFixed(2)
-            },
-            {
-                productType: '同比（万分比）',
-                angleSteel: initialData[0]?.data[6],
-                steelTubePole: initialData[1]?.data[6],
-                fourPipe: initialData[2]?.data[6],
-                architecture: initialData[3]?.data[6],
-                steelStructure: initialData[4]?.data[6],
-                subtotal: subtotal[2].toFixed(2)
-            },
-            {
-                productType: '定基比（万分比）',
-                angleSteel: initialData[0]?.data[7],
-                steelTubePole: initialData[1]?.data[7],
-                fourPipe: initialData[2]?.data[7],
-                architecture: initialData[3]?.data[7],
-                steelStructure: initialData[4]?.data[7],
-                subtotal: subtotal[3].toFixed(2)
-            }
-        ]
-        resole(newData)
+        try {
+            const subtotal = [
+                initialData.map((res: any) => Number(res?.data[4])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+                initialData.map((res: any) => Number(res?.data[5])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+                initialData.map((res: any) => Number(res?.data[6])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0),
+                initialData.map((res: any) => Number(res?.data[7])).reduce((total: number, currentValue: number) => total + Number(currentValue), 0)
+            ]
+            const newData = [
+                {
+                    productType: '放样正确率（万分比）',
+                    angleSteel: initialData[0]?.data[4],
+                    steelTubePole: initialData[1]?.data[4],
+                    fourPipe: initialData[2]?.data[4],
+                    architecture: initialData[3]?.data[4],
+                    steelStructure: initialData[4]?.data[4],
+                    subtotal: subtotal[0].toFixed(2)
+                },
+                {
+                    productType: '环比（万分比）',
+                    angleSteel: initialData[0]?.data[5],
+                    steelTubePole: initialData[1]?.data[5],
+                    fourPipe: initialData[2]?.data[5],
+                    architecture: initialData[3]?.data[5],
+                    steelStructure: initialData[4]?.data[5],
+                    subtotal: subtotal[1].toFixed(2)
+                },
+                {
+                    productType: '同比（万分比）',
+                    angleSteel: initialData[0]?.data[6],
+                    steelTubePole: initialData[1]?.data[6],
+                    fourPipe: initialData[2]?.data[6],
+                    architecture: initialData[3]?.data[6],
+                    steelStructure: initialData[4]?.data[6],
+                    subtotal: subtotal[2].toFixed(2)
+                },
+                {
+                    productType: '定基比（万分比）',
+                    angleSteel: initialData[0]?.data[7],
+                    steelTubePole: initialData[1]?.data[7],
+                    fourPipe: initialData[2]?.data[7],
+                    architecture: initialData[3]?.data[7],
+                    steelStructure: initialData[4]?.data[7],
+                    subtotal: subtotal[3].toFixed(2)
+                }
+            ]
+            resole(newData)
+        } catch (error) {
+            reject(error)
+        }
     }), { manual: true })
 
     const initCharts = () => {
@@ -451,7 +487,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: data?.angleSteel?.map((res: any) => res[1])
+                    data: data?.angleSteel?.map((res: any) => res[0])
                 },
                 {
                     name: '钢管塔',
@@ -461,7 +497,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: data?.steelTubePole?.map((res: any) => res[1])
+                    data: data?.steelTubePole?.map((res: any) => res[0])
                 },
                 {
                     name: '四管塔',
@@ -471,7 +507,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: data?.fourPipe?.map((res: any) => res[1])
+                    data: data?.fourPipe?.map((res: any) => res[0])
                 },
                 {
                     name: '架构',
@@ -481,7 +517,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: data?.architecture?.map((res: any) => res[1])
+                    data: data?.architecture?.map((res: any) => res[0])
                 },
                 {
                     name: '钢结构',
@@ -491,7 +527,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: data?.steelStructure?.map((res: any) => res[1])
+                    data: data?.steelStructure?.map((res: any) => res[0])
                 },
                 {
                     name: '总量',
@@ -501,7 +537,7 @@ export default function Statements(): React.ReactNode {
                             return value;
                         }
                     },
-                    data: data?.subtotal?.map((res: any) => res[1])
+                    data: data?.subtotal?.map((res: any) => res[0])
                 }
             ]
         });
@@ -763,12 +799,14 @@ export default function Statements(): React.ReactNode {
                     emphasis: {
                         label: {
                             show: true,
-                            fontSize: '24',
+                            fontSize: '18',
                             fontWeight: 'bold'
                         }
                     },
                     labelLine: {
-                        show: true
+                        show: true,
+                        length: 10,
+                        length2: 10
                     },
                     data: issuedPie || []
                 }
@@ -792,7 +830,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.left}>
                     <div>
                         <span className={styles.title}>放样统计分析</span>
-                        <Select key={'LoftingStatisticalAnalysis'} className={styles.select} size="small" defaultValue={halfYear} onChange={(e) => {
+                        <Select key={'LoftingStatisticalAnalysis'} className={styles.select} dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)', color: '#fff' }} size="small" defaultValue={halfYear} onChange={(e) => {
                             run(e)
                         }}>
                             {
@@ -814,7 +852,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.right}>
                     <div>
                         <span className={styles.title}>放样正确率统计分析</span>
-                        <Select key={'LoftingAccuracyStatistics'} className={styles.select} size="small" defaultValue={halfYear} onChange={(e) => {
+                        <Select key={'LoftingAccuracyStatistics'} className={styles.select} dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)' }} size="small" defaultValue={halfYear} onChange={(e) => {
                             getAccuracy(e);
                         }}>
                             {
@@ -836,7 +874,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.left}>
                     <div>
                         <span className={styles.title}>生产下达统计分析</span>
-                        <Select key={'productionDistributionStatistics'} className={styles.select} size="small" defaultValue={issuedHalfYear} onChange={(e) => {
+                        <Select key={'productionDistributionStatistics'} className={styles.select} size="small" dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)' }} defaultValue={issuedHalfYear} onChange={(e) => {
                             getIssuedBarData(e);
                         }}>
                             {
@@ -851,7 +889,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.right}>
                     <div>
                         <span className={styles.title}>未生产下达统计分析</span>
-                        <Select key={'productionDistribution'} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
+                        <Select key={'productionDistribution'} style={{ marginLeft: '7%' }} dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)' }} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
                             getIssuedData(e);
                             setProductType(e);
                         }}>
