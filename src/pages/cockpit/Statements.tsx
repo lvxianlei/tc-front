@@ -858,7 +858,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.right}>
                     <div>
                         <span className={styles.title}>放样正确率统计分析</span>
-                        <Select key={'LoftingAccuracyStatistics'} className={styles.select} dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)' }} size="small" defaultValue={halfYear} onChange={(e) => {
+                        <Select key={'LoftingAccuracyStatistics'} className={styles.select} dropdownClassName={styles.dropdownStyle} size="small" defaultValue={halfYear} onChange={(e) => {
                             getAccuracy(e);
                         }}>
                             {
@@ -880,7 +880,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.left}>
                     <div>
                         <span className={styles.title}>生产下达统计分析</span>
-                        <Select key={'productionDistributionStatistics'} className={styles.select} size="small" dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)' }} defaultValue={issuedHalfYear} onChange={(e) => {
+                        <Select key={'productionDistributionStatistics'} className={styles.select} size="small" dropdownClassName={styles.dropdownStyle} defaultValue={issuedHalfYear} onChange={(e) => {
                             getIssuedBarData(e);
                         }}>
                             {
@@ -895,7 +895,7 @@ export default function Statements(): React.ReactNode {
                 <div className={styles.right}>
                     <div>
                         <span className={styles.title}>未生产下达统计分析</span>
-                        <Select key={'productionDistribution'} style={{ marginLeft: '7%' }} dropdownStyle={{ backgroundColor: 'rgba(206, 239, 252, 0.8)' }} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
+                        <Select key={'productionDistribution'} style={{ marginLeft: '7%' }} dropdownClassName={styles.dropdownStyle} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
                             getIssuedData(e);
                             setProductType(e);
                         }}>
