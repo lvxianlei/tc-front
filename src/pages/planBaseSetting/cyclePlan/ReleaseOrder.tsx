@@ -143,7 +143,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
-                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{(detail?.totalWeight).toFixed(3) || "0.000"}
+                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{parseFloat(detail?.totalWeight).toFixed(3) || "0.000"}
                         </span>
                     </>
                 }}
