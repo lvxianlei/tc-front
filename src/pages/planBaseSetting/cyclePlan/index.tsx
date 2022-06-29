@@ -149,7 +149,7 @@ export default () => {
                         <Link
                             to={`/planProd/cyclePlan/detail/${record?.id}/${record?.configId}`}
                         >
-                            <Button type="link" size="small" disabled={record?.status!==1||record?.isChanged===2||record?.isChanged===3}>详情</Button>
+                            <Button type="link" size="small" disabled={record?.status!==1||record?.isChanged!==1}>详情</Button>
                         </Link>
                         <Link
                             to={`/planProd/cyclePlan/change/${record?.id}/${record?.configId}`}
