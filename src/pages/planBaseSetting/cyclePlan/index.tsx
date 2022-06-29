@@ -157,7 +157,7 @@ export default () => {
                             <Button type="link" size="small"  disabled={record?.status===1&&record?.isChanged===1}>变更</Button>
                         </Link>
                         {
-                            record?.status === 1?<Popconfirm
+                            record?.status === 1||record?.isChanged!==1?<Popconfirm
                             title="删除后不可恢复，确认删除?"
                             onConfirm={() => {
                                 RequestUtil.delete(`/tower-aps/cyclePlan/${record?.id}`)
@@ -167,9 +167,9 @@ export default () => {
                             }}
                             okText="确认"
                             cancelText="取消"
-                            disabled={record?.state === 1}
+                            disabled={record?.state === 1||record?.isChanged!==1}
                         >
-                            <Button type="link" disabled={record?.state === 1}>删除</Button>
+                            <Button type="link" disabled={record?.state === 1||record?.isChanged!==1}>删除</Button>
                         </Popconfirm>:
                             <Button type="link" disabled>删除</Button>
                         }
