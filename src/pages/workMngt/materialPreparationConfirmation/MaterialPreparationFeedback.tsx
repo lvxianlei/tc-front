@@ -41,7 +41,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
             }
             const result = await RequestUtil.put(`/tower-supply/materialConfirm/issuedNumber/confirm`, v)
             message.success("反馈成功！");
-            props?.handleCallBack();
+            props?.handleCallBack({code: 1});
             resolve(result || {});
         } catch (error) {
             reject(error)
@@ -52,7 +52,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
         <Modal
             title={'备料反馈'}
             visible={props.visible}
-            onCancel={props?.handleCallBack}
+            onCancel={() => props?.handleCallBack({code: 0})}
             maskClosable={false}
             width={1100}
             className="OverViewDetail"
@@ -61,7 +61,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                     <>
                         <Button key="back" style={{ marginRight: 16 }} onClick={() => {
                             setTextValue("");
-                            props?.handleCallBack()
+                            props?.handleCallBack({code: 0})
                         }}>
                             取消
                         </Button>,
@@ -76,7 +76,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                             确认反馈
                         </Button>
                     </>
-                    : <Button key="back" style={{ marginRight: 16 }} onClick={props?.handleCallBack}>
+                    : <Button key="back" style={{ marginRight: 16 }} onClick={() => props?.handleCallBack({code: 0})}>
                         关闭
                     </Button>
             ]}
@@ -107,7 +107,7 @@ export default function MaterialPreparationFeedback(props: Detail): JSX.Element 
                                     width: 120,
                                     render: (_: any, record: any): React.ReactNode => {
                                         return (
-                                            <span>{record.stockType > 0 ? "库存充足" : "库存缺料"}</span>)
+                                            <span>{record.stockType === 1 ? "库存充足" : "库存缺料"}</span>)
                                     }
                                 })
                             }

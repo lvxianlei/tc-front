@@ -1174,7 +1174,7 @@
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "RD",
                 "path": "http://erp-tdm-hjt.dhwy.cn/login",
-                "authority": "approvalm"
+                "authority": "tdm-rd-jump"
             }
         ]
     },
