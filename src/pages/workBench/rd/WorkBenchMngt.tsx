@@ -248,7 +248,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 			]
 		}, {
 			title: '螺栓列表',
-			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E8%9E%BA%E6%A0%93.png',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%BC%96%E7%BB%84%2021.png',
 			col: 4,
 			child: [
 				{
