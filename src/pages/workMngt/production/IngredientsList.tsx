@@ -1121,7 +1121,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     return false;
                                                                 }}>自动配料</Button>,
                                                                 <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
-                                                            ]} />
+                                                            ]} col={{left: 8, right: 16}} />
                                                             <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
