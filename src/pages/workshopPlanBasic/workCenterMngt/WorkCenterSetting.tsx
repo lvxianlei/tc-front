@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Select, InputNumber, Popconfirm, Space, Button, TimePicker, Table, message } from 'antd'
+import { Spin, Form, Select, InputNumber, Popconfirm, Space, Button, TimePicker, Table, message, Modal, Input, Upload } from 'antd'
 import { DetailTitle, BaseInfo, DetailContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -9,6 +9,8 @@ import { FixedType } from 'rc-table/lib/interface';
 import { materialTextureOptions } from "../../../configuration/DictionaryOptions";
 import moment from "moment"
 import { useHistory, useParams } from "react-router-dom"
+import { downloadTemplate } from "../../workMngt/setOut/downloadTemplate"
+import AuthUtil from "../../../utils/AuthUtil"
 
 interface EditProps {
     type: "new" | "edit",
@@ -23,17 +25,18 @@ export default function WorkCenterSetting(): React.ReactNode{
     const params = useParams<{ id: string }>();
     const [workCenterRelationsList, setWorkCenterRelationsList] = useState<IWorkCenterMngt[]>([]);
     // const [allMaterialList, setAllMaterialList] = useState<any>([]);
-    const [specifications, setSpecifications] = useState<any>({});
-
+    const [visible,setVisible] =  useState<boolean>(false);
+    const [specifications, setSpecifications] = useState<any[]>([]);
+    const [title,setTitle] = useState<string>('新增');
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/${params?.id}`)
             baseForm.setFieldsValue({
                 ...result,
                 time: result.workStartTime&&result.workEndTime?[moment(result.workStartTime, 'HH:mm'), moment(result.workEndTime, 'HH:mm')]:'',
-                equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[]
+                equipmentId: result?.equipmentId&&result?.equipmentId.length>0 ? result?.equipmentId.split(','):[],
+                unitName: result?.unitName+','+result?.code
             })
-            form.setFieldsValue({ workCenterRelations: [...result?.workCenterRelations] });
             setWorkCenterRelationsList(result?.workCenterRelations);
             resole(result)
         } catch (error) {
@@ -82,7 +85,7 @@ export default function WorkCenterSetting(): React.ReactNode{
             reject(error)
         }
     }))
-
+    
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-aps/work/center/info`, { ...postData, id: data?.id })
@@ -92,18 +95,29 @@ export default function WorkCenterSetting(): React.ReactNode{
         }
     }), { manual: true })
 
+    const { run: specificationGet } = useRequest<{ [key: string]: any }>((e: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-system/material?size=1000&materialName=${e}`);
+            // console.log(result)
+            setSpecifications(result?.records)
+            resole(result?.records)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             await baseForm.validateFields();
-            if (form.getFieldsValue(true).workCenterRelations && form.getFieldsValue(true).workCenterRelations.length > 0) {
-                const data = await form.validateFields();
+            if (workCenterRelationsList && workCenterRelationsList.length > 0) {
                 const baseData = await baseForm.getFieldsValue(true);
                 console.log(baseData)
                 await saveRun({
                     ...baseData,
                     workStartTime: baseData?.time?baseData.time[0].format('HH:mm'):"",
                     workEndTime:  baseData?.time?baseData.time[1].format('HH:mm'):"",
-                    workCenterRelations: [...data?.workCenterRelations],
+                    workCenterRelations: workCenterRelationsList,
+                    unitName: baseData?.unitName.split(',')[0],
                     equipmentId: baseData&&baseData?.equipmentId&&baseData?.equipmentId.length>0?baseData.equipmentId.join(','):''
                 })
                 resolve(true);
@@ -120,22 +134,7 @@ export default function WorkCenterSetting(): React.ReactNode{
         baseForm.resetFields();
     }
 
-    const materialChange = async (e: string, index: number) => {
-        // var newArr = allMaterialList.filter((item: any, index: any, self: any) => {
-        //     return e === item.materialName
-        // })
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/material?size=1000&materialName=${e}`);
-        const workCenterRelations = form.getFieldsValue(true)?.workCenterRelations;
-        workCenterRelations[index] = {
-            ...workCenterRelations[index],
-            specificationName: ''
-        }
-        form.setFieldsValue({ workCenterRelations: workCenterRelations })
-        setSpecifications({
-            ...specifications,
-            [index]: result?.records
-        })
-    }
+
 
     const baseColumns = [
         {
@@ -154,17 +153,18 @@ export default function WorkCenterSetting(): React.ReactNode{
             ]
         },
         {
-            "title": "编码",
+            "title": <span><span style={{color:'red'}}>* </span>生产单元名称</span>,
+            "dataIndex": "unitName",
+            "type": "select",
+        },
+        {
+            "title": "生产单元编码",
             "dataIndex": "code",
             "type": "string",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入编码"
-                },
-                {
-                    "pattern": /^[0-9a-zA-Z]*$/,
-                    "message": '仅可输入数字/字母'
+                    "message": "请选择生产单元编码"
                 }
             ]
         },
@@ -184,96 +184,32 @@ export default function WorkCenterSetting(): React.ReactNode{
         {
             key: 'processId',
             title: <span><span style={{ color: 'red' }}>*</span>工序</span>,
-            dataIndex: 'processId',
+            dataIndex: 'processName',
             width: 210,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["workCenterRelations", index, "processId"]} initialValue={_} rules={[{
-                    "required": true,
-                    "message": "请选择工序"
-                },
-                {
-                    "pattern": /^[^\s]*$/,
-                    "message": '禁止输入空格',
-                }]}>
-                    <Select placeholder="请选择" style={{ width: '200px' }} size="small">
-                        {processList?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                        })}
-                    </Select>
-                </Form.Item>
-            )
         },
         {
             key: 'materialName',
             title: <span><span style={{ color: 'red' }}>*</span>材料</span>,
             dataIndex: 'materialName',
             width: 210,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["workCenterRelations", index, "materialName"]} initialValue={_} rules={[{
-                    "required": true,
-                    "message": "请选择材料"
-                }]}>
-                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} onChange={(e: string) => materialChange(e, index)}>
-                        {materialList?.map((item: any) => {
-                            return <Select.Option key={item} value={item}>{item}</Select.Option>
-                        })}
-                    </Select>
-                </Form.Item>
-            )
         },
         {
             key: 'specificationName',
             title: <span><span style={{ color: 'red' }}>*</span>规格</span>,
             dataIndex: 'specificationName',
             width: 210,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["workCenterRelations", index, "specificationName"]} initialValue={_} rules={[{
-                    "required": true,
-                    "message": "请选择规格"
-                }]}>
-                    <Select placeholder="请选择" size="small" style={{ width: '200px' }} key={index} onDropdownVisibleChange={
-                        (open) => {
-                            if (open && form.getFieldsValue(true)?.workCenterRelations[index]?.materialName) {
-                                materialChange(form.getFieldsValue(true)?.workCenterRelations[index]?.materialName, index);
-                            }
-                        }
-                    }>
-                        {specifications[index]?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
-                        })}
-                    </Select>
-                </Form.Item>
-            )
         },
         {
             key: 'materialTextureName',
             title: <span><span style={{ color: 'red' }}>*</span>材质</span>,
             dataIndex: 'materialTextureName',
             width: 210,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["workCenterRelations", index, "materialTextureName"]} initialValue={_} rules={[{
-                    "required": true,
-                    "message": "请选择材质"
-                }]}>
-                    <Select style={{ width: '200px' }} size="small">
-                        {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
-                    </Select>
-                </Form.Item>
-            )
         },
         {
             key: 'workHour',
             title: <span><span style={{ color: 'red' }}>*</span>标准工时（s）</span>,
             dataIndex: 'workHour',
             width: 150,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["workCenterRelations", index, "workHour"]} initialValue={_} rules={[{
-                    "required": true,
-                    "message": "请输入标准工时"
-                }]}>
-                    <InputNumber step={1} min={0} max={3600} precision={0} size="small" key={index} />
-                </Form.Item>
-            )
         },
         {
             key: 'operation',
@@ -283,6 +219,17 @@ export default function WorkCenterSetting(): React.ReactNode{
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
+                    <Button type="link" onClick={()=>{
+                        setVisible(true)
+                        console.log(record)
+                        setTitle('编辑')
+                        form.setFieldsValue({
+                            ...record,
+                            index:index,
+                            process: record?.processId+','+record?.processName
+                        })
+                        console.log(form.getFieldsValue(true))
+                    }}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => delRow(index)}
@@ -297,20 +244,9 @@ export default function WorkCenterSetting(): React.ReactNode{
     ]
 
 
-    const addRow = () => {
-        let workCenterListValues = form.getFieldsValue(true).workCenterRelations || [];
-        let newData = {
-            workHour: ''
-        }
-        setWorkCenterRelationsList([...workCenterListValues, newData]);
-        form.setFieldsValue({ workCenterRelations: [...workCenterListValues, newData] })
-    }
-
-    const delRow = (index?: number) => {
-        let workCenterListValues = form.getFieldsValue(true).workCenterRelations || [];
-        workCenterListValues.splice(index, 1);
-        setWorkCenterRelationsList([...workCenterListValues]);
-        form.setFieldsValue({ workCenterRelations: [...workCenterListValues] })
+    const delRow = (index: number) => {
+        workCenterRelationsList.splice(index, 1);
+        setWorkCenterRelationsList([...workCenterRelationsList]);
     }
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
@@ -354,12 +290,37 @@ export default function WorkCenterSetting(): React.ReactNode{
                         )
                     })
                 }
+                if (item.dataIndex === "unitName") {
+                    return ({
+                        ...item, type: 'select',
+                        render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Form.Item name="unitName" style={{ width: '100%' }} rules={[
+                                {
+                                    "required": true,
+                                    "message": "请选择生产单元名称"
+                                }
+                            ]}> 
+                                <Select onChange={(value:any)=>{
+                                    console.log(value)
+                                    const codeValue = value.split(',')
+                                    baseForm.setFieldsValue({
+                                        code:codeValue[1]
+                                    })
+                                }} showSearch>
+                                    {codeList?.map((item: any) => {
+                                        return <Select.Option key={item.id} value={item.name+','+item.productUnitCode}>{item.name}</Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        )
+                    })
+                }
                 if (item.dataIndex === "code") {
                     return ({
                         ...item, type: 'select',
                         render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                             <Form.Item name="code" style={{ width: '100%' }}>
-                                <Select>
+                                <Select disabled>
                                     {codeList?.map((item: any) => {
                                         return <Select.Option key={item.id} value={item.productUnitCode}>{item.productUnitCode}</Select.Option>
                                     })}
@@ -371,17 +332,148 @@ export default function WorkCenterSetting(): React.ReactNode{
                 return item
             })} col={2} dataSource={{}} edit />
             <DetailTitle title="产能矩阵" operation={[<Space size="small">
-                <Button type="primary" onClick={addRow}>新增</Button>
+                <Button type="primary" onClick={()=>{
+                    setVisible(true)
+                    setTitle(`新增`)
+                }}>新增</Button>
+                <Upload 
+                    action={ () => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl+'/tower-aps/work/relation/importRelation'
+                    } } 
+                    accept=".xls,.xlsx"
+                    headers={
+                        {
+                            'Authorization': `Basic ${ AuthUtil.getAuthorization() }`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={ false }
+                    onChange={ async (info) => {
+                        if(info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        }
+                        if(info.file.response && info.file.response?.success){
+                            if (info.file.response && info.file.response?.success) {
+                                if (info.file.response?.data) {
+                                    console.log(info.file.response?.data?.data)
+                                    const str =  info.file.response?.data
+                                    const value =  typeof str === 'string'
+                                    if(value){
+                                        window.open(str)
+                                    }else{
+                                        message.success('导入成功！');
+                                        setWorkCenterRelationsList([...info.file.response?.data.concat(workCenterRelationsList)])
+                                    }
+                                   
+                                }
+                            }
+                        } 
+                    } }
+                >
+                    <Button type="primary" ghost>导入</Button>
+                </Upload>
+                <Button type="primary" onClick={() => downloadTemplate('/tower-aps/work/relation/exportTemplate', '产能矩阵模板')} ghost>下载导入模板</Button>
             </Space>]} />
-            <Form form={form}>
-                <Table
-                    scroll={{ x: 500 }}
-                    rowKey="id"
-                    dataSource={[...workCenterRelationsList]}
-                    pagination={false}
-                    columns={tableColumns}
-                    className={styles.addModal} />
-            </Form>
+            <Table
+                scroll={{ x: 500 }}
+                rowKey="id"
+                dataSource={[...workCenterRelationsList]}
+                pagination={false}
+                columns={tableColumns}
+                className={styles.addModal} 
+            />
+            <Modal
+                visible={visible}
+                title={ form.getFieldsValue(true)?.processName?'编辑':'新增'}
+                onCancel={() => {
+                    setVisible(false)
+                    form.resetFields()
+                }}
+                onOk={async () => {
+                    await form.validateFields()
+                    const value = await form.getFieldsValue(true)
+                    if(value.process){
+                        value.processId = value.process.split(',')[0]
+                        value.processName = value.process.split(',')[1]
+                        delete value.process
+                    }
+                    console.log(value)
+                    setVisible(false)
+                    if(title==='新增'){
+                        workCenterRelationsList.unshift(value)
+                    }else{
+                        workCenterRelationsList.splice(value?.index,1)
+                        workCenterRelationsList.unshift(value)
+                    }
+                    setWorkCenterRelationsList(
+                        [...workCenterRelationsList]
+                    )
+                   
+                    form.resetFields()
+                    setTitle('新增')
+                }}
+            >
+                <Form form={form}>
+                    <Form.Item name="id" style={{display:'none'}}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="index" style={{display:'none'}}>
+                        <Input />
+                    </Form.Item>
+                    <Form.Item name="process" label='工序' rules={[{
+                        "required": true,
+                        "message": "请选择工序"
+                    },
+                    {
+                        "pattern": /^[^\s]*$/,
+                        "message": '禁止输入空格',
+                    }]}>
+                        <Select placeholder="请选择" style={{ width: '100%' }} size="small">
+                            {processList?.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id+','+item.name}>{item.name}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name= "materialName" label='材料' rules={[{
+                        "required": true,
+                        "message": "请选择材料"
+                    }]}>
+                        <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} onChange={async (e: string) => {
+                            await specificationGet(e)
+                        }}>
+                            {materialList?.map((item: any) => {
+                                return <Select.Option key={item} value={item}>{item}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name= "specificationName" label='规格' rules={[{
+                        "required": true,
+                        "message": "请选择规格"
+                    }]}>
+                        <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} >
+                            {specifications?.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="materialTextureName" label='材质' rules={[{
+                        "required": true,
+                        "message": "请选择材质"
+                    }]}>
+                        <Select style={{ width: '100%' }} size="small" showSearch>
+                            {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item name="workHour" label='标准工时' rules={[{
+                        "required": true,
+                        "message": "请输入标准工时"
+                    }]}>
+                        <InputNumber  style={{ width: '100%' }} step={1} min={0} max={3600} precision={0} size="small"/>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </DetailContent>
     </Spin>
 }

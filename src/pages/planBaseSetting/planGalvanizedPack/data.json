@@ -3,24 +3,24 @@
         {
             "title": "批次号",
             "dataIndex": "productionBatchNo",
-            "width":150,
+            "width":100,
             "fixed": "left"
         },
         {
             "title": "计划号",
             "dataIndex": "planNumber",
-            "width":150,
+            "width":100,
             "fixed": "left"
         },
         {
             "title": "塔型",
             "dataIndex": "productCategory",
-            "width":150,
+            "width":100,
             "fixed": "left"
         },
         {
             "title": "产品类型",
-            "width":150,
+            "width":90,
             "dataIndex": "productType"
         },
         {
@@ -40,76 +40,76 @@
         },
         {
             "title": "业务经理",
-            "width":150,
+            "width":90,
             "dataIndex": "businessManagerName"
         },
         {
             "title": "电压等级（kv）",
-            "width":150,
+            "width":110,
             "dataIndex": "voltageGradeName"
         },
         {
             "title": "计划交货日期",
             "dataIndex": "planDeliveryTime",
-            "width":150
+            "width":100
         },
         {
             "title": "角钢重量（t）",
-            "width":150,
+            "width":100,
             "dataIndex": "angleWeight"
         },
         {
             "title": "钢板重量（t）",
-            "width":150,
+            "width":100,
             "dataIndex": "plateWeight"
         },
         {
             "title": "角钢总件数",
-            "width":150,
+            "width":100,
             "dataIndex": "angleNumber"
         },
         {
             "title": "钢板总件数",
-            "width":150,
+            "width":100,
             "dataIndex": "plateNumber"
         },
         {
             "title": "开始转运日期",
-            "width":150,
+            "width":100,
             "dataIndex": "transferStartTime",
             "type":"date",
             "format":"YYYY-MM-DD"
         },
         {
             "title": "完成转运日期",
-            "width":150,
+            "width":100,
             "dataIndex": "transferEndTime",
             "type":"date",
             "format":"YYYY-MM-DD"
         },
         {
             "title": "镀锌生产单元",
-            "width":150,
+            "width":100,
             "dataIndex": "galvanizedUnitName"
         },
         {
             "title": "镀锌计划完成日期",
-            "width":150,
+            "width":120,
             "dataIndex": "galvanizedCompleteTime"
         },
         {
             "title": "镀锌备注",
-            "width":150,
+            "width":100,
             "dataIndex": "galvanizedDescription"
         },
         {
             "title": "包装生产单元",
-            "width":150,
+            "width":100,
             "dataIndex": "packageUnitName"
         },
         {
             "title": "包装计划完成日期",
-            "width":150,
+            "width":120,
             "dataIndex": "packageCompleteTime"
         },
         {
@@ -119,14 +119,14 @@
         },
         {
             "title": "报补件日期",
-            "width":150,
+            "width":100,
             "dataIndex": "reportTime",
             "type":"date",
             "format":"YYYY-MM-DD"
         },
         {
             "title": "入库日期",
-            "width":150,
+            "width":100,
             "dataIndex": "storageTime",
             "type":"date",
             "format":"YYYY-MM-DD"
@@ -135,7 +135,7 @@
             "title": "状态",
             "dataIndex": "status",
             "type": "select",
-            "width":150,
+            "width":100,
             "enum": [
                 {
                     "value": 1,
@@ -159,25 +159,25 @@
             "title": "下发日期",
             "dataIndex": "issueTime",
             "type": "date",
-            "width":150,
+            "width":100,
             "format": "YYYY-MM-DD"
         },
         {
             "title": "下发人",
-            "width":150,
+            "width":90,
             "dataIndex": "issueUserName"
         },
         {
             "title": "镀锌实际完成时间",
             "dataIndex": "galvanizedCompleteRealTime",
-            "width":150,
+            "width":120,
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "包装实际完成时间",
             "dataIndex": "packageCompleteRealTime",
-            "width":150,
+            "width":120,
             "type": "date",
             "format": "YYYY-MM-DD"
         }
