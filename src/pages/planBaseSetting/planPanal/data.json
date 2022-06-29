@@ -121,7 +121,7 @@
             "width": 100
         },
         {
-            "title": "完成进度",
+            "title": "完成进度（%）",
             "code": "percent",
             "width": 100
         },
