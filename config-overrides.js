@@ -18,13 +18,13 @@ const Dotenv = require("dotenv");
 const AntdDayjsWebpackPlugin = require("antd-dayjs-webpack-plugin");
 const MockWebpackPlugin = require("mock-webpack-plugin");
 const mockConfig = require("./mock/config");
-const { DefinePlugin } = require("webpack");
+const { DefinePlugin, DllReferencePlugin } = require("webpack");
+const dllConfig = require("./config-overrides-dll")
 const envConfig = Dotenv.config({
   path: path.join(__dirname, "/env", `.env.${process.env.REACT_APP_ENV}`)
 });
-
 const WebpackBar = require("webpackbar");
-module.exports = {
+module.exports = process.env.REACT_APP_ENV === "dll" ? dllConfig : {
   webpack: override(
     function (config) {
       const scopePluginIndex = config.resolve.plugins.findIndex(
@@ -37,26 +37,6 @@ module.exports = {
     setWebpackOptimizationSplitChunks({
       chunks: "all",
       cacheGroups: {
-        rcRelevant: {
-          name: "rc-relevant",
-          test: /[\\/]node_modules[\\/](@ant-design|rc-table|rc-picker|rc-select|rc-util|rc-menu|rc-tree|rc-pagination|rc-image|rc-virtual-list|rc-textarea|rc-trigger)[\\/]/,
-          chunks: "all",
-          priority: 4
-        },
-        antd: {
-          name: "antd",
-          test: /[\\/]node_modules[\\/]antd[\\/]/,
-          chunks: "all",
-          priority: 3
-        },
-        vendor: {
-          name: "vendor",
-          priority: 2,
-          test: /node_modules/,
-          chunks: "all",
-          minSize: 0,
-          minChunks: 2
-        },
         common: {
           name: "common",
           priority: 1,
@@ -65,7 +45,9 @@ module.exports = {
           minSize: 0,
           minChunks: 2
         }
-      }
+      },
+      minChunks: 5,
+      minSize: 10000
     }),
     addWebpackAlias({
       "@utils": path.resolve(__dirname, "./src/utils"),
@@ -107,6 +89,10 @@ module.exports = {
     ),
     addWebpackPlugin(new WebpackBar()),
     addWebpackPlugin(new AntdDayjsWebpackPlugin()),
+    addWebpackPlugin(new DllReferencePlugin({
+      context: __dirname,
+      manifest: require("./dll.json")
+    })),
     addWebpackPlugin(
       new DefinePlugin({
         "process.env.REACT_APP_ENV": envConfig.parsed.REQUEST_API_PATH_PREFIX
