@@ -27,42 +27,42 @@ export default () => {
         },
         {
             title: "基数",
-            width: 150,
+            width: 100,
             dataIndex: "number"
         },
         {
             title: "总重量（t）",
-            width: 150,
+            width: 100,
             dataIndex: "totalWeight"
         },
         {
             title: "报工重量（t）",
-            width: 200,
+            width: 120,
             dataIndex: "reportWeight"
         },
         {
             title: "总件数",
             dataIndex: "totalNumber",
-            width: 200,
+            width: 100,
         },
         {
             title: "报工件数",
             dataIndex: "reportNum",
-            width: 200,
+            width: 100,
         },
         {
             title: "总孔数",
             dataIndex: "totalHolesNum",
-            width: 150,
+            width: 100,
         },
         {
             title: "报工孔数",
             dataIndex: "reportHolesNum",
-            width: 200,
+            width: 100,
         },
         {
             title: "加工进度（%）",
-            width: 150,
+            width: 100,
             dataIndex: "reportRate"
         }
     ] 
