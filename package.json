@@ -59,7 +59,7 @@
     "build:uat": "cross-env REACT_APP_ENV=uat GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
     "test": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired test",
     "eject": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject",
-    "gen:ts": "npx ytt -c ytt.config.ts"
+    "dll": "cross-env REACT_APP_ENV=dll GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build"
   },
   "eslintConfig": {
     "extends": [

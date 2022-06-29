@@ -227,6 +227,11 @@
                         "label": "放样计划",
                         "path": "/cockpit/planSetOut",
                         "authority": "rd_cockpit"
+                    },
+                    {
+                        "label": "报表",
+                        "path": "/cockpit/statements",
+                        "authority": "rd_cockpit"
                     }
                 ]
             },
@@ -1158,7 +1163,7 @@
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "RD",
                 "path": "http://erp-tdm-hjt.dhwy.cn/login",
-                "authority": "approvalm"
+                "authority": "tdm-rd-jump"
             }
         ]
     },
