@@ -61,7 +61,7 @@ export default () => {
             width: 200,
         },
         {
-            title: "加工进度",
+            title: "加工进度（%）",
             width: 150,
             dataIndex: "reportRate"
         }
