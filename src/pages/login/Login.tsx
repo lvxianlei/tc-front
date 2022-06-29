@@ -10,6 +10,7 @@ import style from './Login.module.less'
 import Cookies from 'js-cookie'
 import useRequest from '@ahooksjs/use-request'
 import MD5 from 'crypto-js/md5'
+const ossUrl = "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87"
 interface ITenant {
     readonly tenantId: string;
     readonly domain: string;
@@ -92,9 +93,9 @@ export default function Login(): JSX.Element {
             <Layout.Content className={style.content} >
                 <div className={style.logo}>
                     <Carousel style={{ position: "relative" }} autoplay>
-                        <img style={{ height: "100%" }} src={process.env.PUBLIC_URL + "/VCG41N896058462.png"} />
-                        <img style={{ height: "100%" }} src={process.env.PUBLIC_URL + "/VCG211101842372.jpg"} />
-                        <img style={{ height: "100%" }} src={process.env.PUBLIC_URL + "/VCG211169486505.jpg"} />
+                        <img style={{ height: "100%" }} src={ossUrl + "/banner-1.png"} />
+                        <img style={{ height: "100%" }} src={ossUrl + "/banner-2.png"} />
+                        <img style={{ height: "100%" }} src={ossUrl + "/banner-3.png"} />
                     </Carousel>
                 </div>
                 <div className={style.loginArea}>

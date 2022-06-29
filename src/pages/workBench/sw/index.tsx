@@ -3,10 +3,9 @@ import styles from './WorkBench.module.less'
 import RequestUtil from '../../../utils/RequestUtil'
 import { DetailTitle } from '../../common'
 import { swWork } from "./sw.json"
-import { CheckCircleOutlined, RightOutlined, SoundOutlined } from '@ant-design/icons'
+import Icon, { SoundOutlined } from '@ant-design/icons'
 import useRequest from '@ahooksjs/use-request'
 import { Spin, Table } from 'antd'
-import Line from '../rd/Line'
 import ApplicationContext from '../../../configuration/ApplicationContext'
 import { useHistory } from 'react-router-dom'
 export default function SWWorkBench(): React.ReactNode {
@@ -21,7 +20,18 @@ export default function SWWorkBench(): React.ReactNode {
         <div className={styles.all}>
             <div className={styles.left}>
                 {swWork.map((item: any, ind: number) => <div key={ind} className={styles.workItem}>
-                    <DetailTitle title={item.title} style={{ background: "#f8f8f8", padding: "10px" }} />
+                    <DetailTitle title={<>
+                        <Icon component={() => <img
+                            src={item.icon}
+                            style={{
+                                display: "inline-block",
+                                width: 30,
+                                height: 30,
+                                marginRight: 14,
+                                verticalAlign: "center"
+                            }} />} />
+                        <span style={{ verticalAlign: "sub" }}>{item.title}</span>
+                    </>} style={{ background: "#f8f8f8", padding: "10px" }} />
                     {item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((workbenchItem: any, index: number) => {
                         return <div key={index} className={styles.content}>
                             <div style={{ cursor: "pointer" }} onClick={() => history.push(workbenchItem.path)}>
