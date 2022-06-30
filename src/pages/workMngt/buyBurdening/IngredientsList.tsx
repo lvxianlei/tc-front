@@ -21,7 +21,6 @@ import "./ingredientsList.less"
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import layoutStyles from '../../../layout/Layout.module.less';
-import { resolve } from 'path';
 
 interface Panes {
     title?: string
