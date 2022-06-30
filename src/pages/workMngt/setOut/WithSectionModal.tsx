@@ -104,7 +104,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 this.fastForm.current?.validateFields().then(res => {
                     const value = this.getForm()?.getFieldsValue(true);
                     const loftingProductSegmentList = this.state.detailData?.loftingProductSegmentList;
-                    value.productCategoryId = this.state.detailData?.productCategoryId;
+                    value.productCategoryId = this.props.productCategoryId;
                     value.productId = this.state.detailData?.productId;
                     value.productSegmentListDTOList = value.productSegmentListDTOList?.map((items: IProductSegmentList, index: number) => {
                         if (items) {
@@ -228,7 +228,6 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                         detailData: {
                             ...this.getForm()?.getFieldsValue(true),
                             productCategoryName: this.state.detailData?.productCategoryName,
-                            productCategoryId: this.props.productCategoryId,
                             productNumber: this.state.detailData?.productNumber,
                             productIdList: this.state.detailData?.productIdList,
                             loftingProductSegmentList: [...newList || []]
