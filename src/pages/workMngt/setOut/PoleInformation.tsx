@@ -120,7 +120,7 @@ export default function PoleInformation(): React.ReactNode {
                         userId === record.loftingUser ?
                             <>{
                                 record.loftingStatus === 2 && location?.state?.status === 4 ?
-                                    <WithSectionModal key={record.id} id={record.id} updateList={() => setRefresh(!refresh)} />
+                                    <WithSectionModal key={record.id} productCategoryId={params.id} id={record.id} updateList={() => setRefresh(!refresh)} />
                                     : <Button type="link" disabled>配段</Button>
                             }</>
                             : null
