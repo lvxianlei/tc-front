@@ -19,144 +19,11 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
         productTypeId: productTypeOptions && productTypeOptions.length>0 && productTypeOptions[0].id,
         configId: params?.configId,
         cyclePlanId: params?.id,
+        executeStatus: 1
     });
     const [columns, setColumns] = useState<any[]>(tableHeader)
-    const [filterStatus, setFilterStatus] = useState<{ [key: string]: any }>({})
-    // const columns : any =[
-    //     {
-    //         key: 'planNumber',
-    //         title: '计划号',
-    //         width: 100,
-    //         fixed: "left",
-    //         dataIndex: 'planNumber'
-    //     },
-    //     {
-    //         key: 'productCategoryName',
-    //         title: '塔型',
-    //         width: 100,
-    //         fixed: "left",
-    //         dataIndex: 'productCategoryName'
-    //     },
-    //     {
-    //         key: 'productionBatchNo',
-    //         title: '批次号',
-    //         width: 100,
-    //         fixed: "left",
-    //         dataIndex: 'productionBatchNo',
-    //         render: (_: string, record: any): React.ReactNode => (
-    //             <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
-    //         )
-    //     },
-    //     {
-    //         key: 'issuedNumber',
-    //         title: '下达单号',
-    //         width: 100,
-    //         fixed: "left",
-    //         dataIndex: 'issuedNumber'
-    //     },
-    //     {
-    //         key: 'number',
-    //         title: '基数',
-    //         width: 100,
-    //         dataIndex: 'number'
-    //     },
-    //     {
-    //         key: 'voltageGradeName',
-    //         title: '电压等级（Kv）',
-    //         width: 150,
-    //         dataIndex: 'voltageGradeName'
-    //     },
-    //     {
-    //         key: 'orderProjectName',
-    //         title: '工程名称',
-    //         width: 100,
-    //         dataIndex: 'orderProjectName'
-    //     },
-    //     {
-    //         key: 'businessManagerName',
-    //         title: '业务经理',
-    //         width: 100,
-    //         dataIndex: 'businessManagerName'
-    //     },
-    //     {
-    //         key: 'productTypeName',
-    //         title: '产品类型',
-    //         width: 100,
-    //         dataIndex: 'productTypeName'
-    //     },
-    //     {
-    //         key: 'factoryName',
-    //         title: '厂区',
-    //         width: 100,
-    //         dataIndex: 'factoryName'
-    //     },
-    //     {
-    //         key: 'approvalTime',
-    //         title: '审批日期',
-    //         width: 100,
-    //         dataIndex: 'approvalTime'
-    //     },
-    //     {
-    //         key: 'customerDeliveryTime',
-    //         title: '客户交货日期',
-    //         width: 100,
-    //         dataIndex: 'customerDeliveryTime'
-    //     },
-    //     {
-    //         key: 'planDeliveryTime',
-    //         title: '计划交货日期',
-    //         width: 100,
-    //         dataIndex: 'planDeliveryTime'
-    //     },
-    //     {
-    //         key: 'trialAssemble',
-    //         title: '试装类型',
-    //         width: 100,
-    //         dataIndex: 'trialAssemble'
-    //     },
-    //     {
-    //         key: 'totalWeight',
-    //         title: '技术下达重量（t）',
-    //         width: 150,
-    //         dataIndex: 'totalWeight'
-    //     },
-    //     {
-    //         key: 'steelTotalWeight',
-    //         title: '角钢重量（t）',
-    //         width: 100,
-    //         dataIndex: 'steelTotalWeight'
-    //     },
-    //     {
-    //         key: 'platTotalWeight',
-    //         title: '连板重量（t）',
-    //         width: 100,
-    //         dataIndex: 'platTotalWeight'
-    //     },
-    //     {
-    //         key: 'totalProcessNum',
-    //         title: '总件数',
-    //         width: 100,
-    //         dataIndex: 'totalProcessNum'
-    //     },
-    //     {
-    //         key: 'totalHolesNum',
-    //         title: '总孔数',
-    //         width: 100,
-    //         dataIndex: 'totalHolesNum'
-    //     },
-    //     {
-    //         key: 'storageMaterialDescription',
-    //         title: '库存备料',
-    //         width: 100,
-    //         dataIndex: 'storageMaterialDescription'
-    //     },
-    //     {
-    //         key: 'processMaterialDescription',
-    //         title: '生产备料',
-    //         width: 100,
-    //         dataIndex: 'processMaterialDescription'
-    //     },
-    // ]
+    const [filterStatus, setFilterStatus] = useState<{ [key: string]: any }>({ })
+    
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -276,7 +143,7 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                 extraOperation={(data: any) => {
                     return <>
                         <span style={{ marginLeft: "20px" }}>
-                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{detail?.totalWeight || "0.00"}
+                            合计：总件数： {detail?.totalNumber}  总孔数：{detail?.totalHoles}  总重量（t）：{parseFloat(detail?.totalWeight).toFixed(3) || "0.000"}
                         </span>
                     </>
                 }}
@@ -303,11 +170,24 @@ export default function ReleaseOrder({run,data}:{run:()=>void, data:any}): React
                         children:
                         <Form.Item initialValue={productTypeOptions&&productTypeOptions[0].id} name='productTypeId'>
                             <Select placeholder="请选择"  getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                                {/* <Select.Option value='' key="">全部</Select.Option> */}
                                 {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id}>
                                         {name}
                                     </Select.Option>
                                 })}
+                            </Select>
+                        </Form.Item>
+                    },
+                    {
+                        name: 'executeStatus',
+                        label: '执行状态',
+                        children: <Form.Item name='executeStatus' initialValue={1}>
+                            <Select placeholder="请选择" style={{ width: "150px" }}>
+                                {/* <Select.Option value='' key="">全部</Select.Option> */}
+                                <Select.Option value={1} key="1">正常</Select.Option>
+                                {/* <Select.Option value={2} key="2">暂停</Select.Option> */}
+                                <Select.Option value={2} key="2">取消</Select.Option>
                             </Select>
                         </Form.Item>
                     },

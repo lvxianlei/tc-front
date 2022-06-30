@@ -946,7 +946,7 @@ export default function IngredientsList(): React.ReactNode {
     }), { manual: true })
 
     // 手动配料
-    const { run: getScheme } = useRequest<{ [key: string]: any }>((code: number = 1, sorts: string = "") => new Promise(async (resole, reject) => {
+    const { loading, run: getScheme } = useRequest<{ [key: string]: any }>((code: number = 1, sorts: string = "") => new Promise(async (resole, reject) => {
         setAlternativeData([]);
         try {
             if (code === 1) {
@@ -955,6 +955,13 @@ export default function IngredientsList(): React.ReactNode {
             const serarchData = await serarchForm.validateFields();
             if (selectedRowCheck.length < 1) {
                 message.error("请您选择构建明细！");
+                resole({});
+                return false;
+            }
+            // 当前选中禁用
+            if (selectedRowCheck[0].notConfigured <= 0) {
+                message.error("请您更换构件后再进行配料！");
+                resole({});
                 return false;
             }
             // 重组构建明细数据
@@ -1011,6 +1018,7 @@ export default function IngredientsList(): React.ReactNode {
                 stockDetails: value === "1" ? data : res,
                 sort: code === 1 ? "" : sorts
             });
+            resole(result)
             if (result.length < 1) {
                 message.error("暂无合适的备选方案！");
                 return false;
@@ -1020,7 +1028,6 @@ export default function IngredientsList(): React.ReactNode {
                 v.push(Object.assign(item, { num: item.num }))
             })
             setAlternativeData(v || []);
-            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -1115,13 +1122,13 @@ export default function IngredientsList(): React.ReactNode {
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
-                                                            <DetailTitle key={"detail"} title="构件明细" operation={[
+                                                            <DetailTitle key={"detail"} title="构件明细" col={{left: 8, right: 16}} operation={[
                                                                 <Button type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" onClick={() => getScheme(1)}>手动配料</Button>
-                                                            ]} col={{left: 8, right: 16}} />
+                                                                <Button type="primary" ghost key="choose" disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
+                                                            ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{

@@ -149,10 +149,15 @@ export default () => {
                         <Link
                             to={`/planProd/cyclePlan/detail/${record?.id}/${record?.configId}`}
                         >
-                            <Button type="link" size="small">详情</Button>
+                            <Button type="link" size="small" disabled={record?.status!==1||record?.isChanged!==1}>详情</Button>
+                        </Link>
+                        <Link
+                            to={`/planProd/cyclePlan/change/${record?.id}/${record?.configId}`}
+                        >
+                            <Button type="link" size="small"  disabled={record?.status===1&&record?.isChanged===1}>变更</Button>
                         </Link>
                         {
-                            record?.status === 1?<Popconfirm
+                            record?.status === 1||record?.isChanged!==1?<Popconfirm
                             title="删除后不可恢复，确认删除?"
                             onConfirm={async () => {
                                 await RequestUtil.delete(`/tower-aps/cyclePlan/${record?.id}`)
@@ -162,13 +167,11 @@ export default () => {
                             }}
                             okText="确认"
                             cancelText="取消"
-                            disabled={record?.state === 1}
+                            disabled={record?.state === 1||record?.isChanged!==1}
                         >
-                            <Button type="link" disabled={record?.state === 1}>删除</Button>
+                            <Button type="link" disabled={record?.state === 1||record?.isChanged!==1}>删除</Button>
                         </Popconfirm>:
-                            <Button type="link" onClick={()=>{
-                                message.error('计划已下发，不可删除！')
-                            }}>删除</Button>
+                            <Button type="link" disabled>删除</Button>
                         }
                         
                         
@@ -185,6 +188,7 @@ export default () => {
                     name: "configId",
                     label: '周期计划类型',
                     children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                        {/* <Select.Option value='' key="">全部</Select.Option> */}
                         {cyclePlanType && cyclePlanType.map(({ groupId, cyclePlan }, index) => {
                             return <Select.Option key={index} value={groupId}>
                                 {cyclePlan}
@@ -197,6 +201,7 @@ export default () => {
                     label: "周期计划状态",
                     children: <Form.Item name='status' initialValue={1}>
                         <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                            {/* <Select.Option value='' key="">全部</Select.Option> */}
                             <Select.Option value={1}>未下发</Select.Option>
                             <Select.Option value={2}>已下发</Select.Option>
                         </Select>

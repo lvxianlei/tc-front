@@ -22,7 +22,9 @@ export default function PlanTrialList(): React.ReactNode {
         status: string,
         materialLeader: string
     }>();
-    const [filterValue, setFilterValue] = useState({status:1});
+    const [filterValue, setFilterValue] = useState({
+        status:1
+    });
     const [refresh, setRefresh] = useState<boolean>(false);
     const [editorLock, setEditorLock] = useState('编辑');
     const [sum, setSum] = useState<any>({
@@ -291,6 +293,15 @@ export default function PlanTrialList(): React.ReactNode {
                 <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
             )
         },
+        // {
+        //     title: "执行状态",
+        //     dataIndex: "executeStatus",
+        //     editable: true,
+        //     width:120,
+        //     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+        //         <span>{_===1?'正常':_===2?'取消':'-'}</span>
+        //     )
+        // },
         {
             title: "下发日期",
             dataIndex: "issueTime",
@@ -329,6 +340,14 @@ export default function PlanTrialList(): React.ReactNode {
                 ...col,
                 render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                     <span>{_===1?'未下发':_===2?'已下发':_===3?'已完成':'-'}</span>
+                )
+            }
+        }
+        if(col.dataIndex==='status'){
+            return{
+                ...col,
+                render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                    <span>{_===1?'正常':_===2?'暂停':_===3?'取消':'-'}</span>
                 )
             }
         }
@@ -384,6 +403,7 @@ export default function PlanTrialList(): React.ReactNode {
         </Form.Item>
         <Form.Item label='产品类型' name='productTypeId'>
             <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "100px" }}>
+                {/* <Select.Option value='' key="">全部</Select.Option> */}
                 {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                     return <Select.Option key={index} value={id}>
                         {name}
@@ -393,6 +413,7 @@ export default function PlanTrialList(): React.ReactNode {
         </Form.Item>
         <Form.Item label='试装单元' name='productUnitName'>
             <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                {/* <Select.Option value='' key="">全部</Select.Option> */}
                 { productUnitData?.map((item: any) => {
                     return <Select.Option key={ item.id } value={ item.name }>{ item.name }</Select.Option>
                 }) }
@@ -400,6 +421,7 @@ export default function PlanTrialList(): React.ReactNode {
         </Form.Item>
         <Form.Item label='状态' name='status' initialValue={1}>
             <Select placeholder="请选择" style={{ width: "100px" }}>
+                {/* <Select.Option value='' key="">全部</Select.Option> */}
                 <Select.Option value={1} key="1">未下发</Select.Option>
                 <Select.Option value={2} key="2">已下发</Select.Option>
                 <Select.Option value={3} key="3">已完成</Select.Option>
@@ -408,6 +430,13 @@ export default function PlanTrialList(): React.ReactNode {
         <Form.Item label='计划交货日期' name='time'>
             <DatePicker.RangePicker />
         </Form.Item>
+        {/* <Form.Item label='执行状态' name='executeStatus' initialValue={1}>
+            <Select placeholder="请选择" style={{ width: "150px" }}>
+                <Select.Option value={1} key="1">正常</Select.Option>
+                <Select.Option value={2} key="2">暂停</Select.Option>
+                <Select.Option value={3} key="3">取消</Select.Option>
+            </Select>
+        </Form.Item> */}
         <Form.Item>
             <Button type="primary" htmlType="submit">查询</Button>
         </Form.Item>
@@ -484,15 +513,15 @@ export default function PlanTrialList(): React.ReactNode {
                         onConfirm={async () => {
                            
                             if (selectedKeys.length > 0){
-                                let error:boolean = false;
-                                selectedRows.map((item:any)=>{
-                                    if(item.status !==1 ){
-                                        error = true
-                                    }
-                                })
-                                if(error){
-                                    return message.error('已下发、已完成，不可再次下发！')
-                                }
+                                // let error:boolean = false;
+                                // selectedRows.map((item:any)=>{
+                                //     if(item.status !==1 ){
+                                //         error = true
+                                //     }
+                                // })
+                                // if(error){
+                                //     return message.error('已下发、已完成，不可再次下发！')
+                                // }
                                 await RequestUtil.post(`/tower-aps/trialAssemble/distribute`,
                                     selectedRows
                                 ).then(() => {
@@ -506,7 +535,7 @@ export default function PlanTrialList(): React.ReactNode {
                         cancelText="取消"
                         disabled={editorLock === '保存' ? true : !(selectedKeys.length > 0)}
                     >
-                        <Button type="primary" ghost disabled={editorLock === '保存' ? true : !(selectedKeys.length > 0)}>试装下发</Button>
+                        <Button type="primary" ghost disabled={editorLock === '保存' ? true : (!(selectedKeys.length > 0)|| selectedRows.findIndex((item:any)=>item.status!==1)!==-1)}>试装下发</Button>
                     </Popconfirm>
                 </Space>
             }
