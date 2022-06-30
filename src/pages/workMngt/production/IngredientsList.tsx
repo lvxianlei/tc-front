@@ -109,7 +109,7 @@ export default function IngredientsList(): React.ReactNode {
     // 存储仓库id
     const [warehouseId, setWarehouseId] = useState<any>([]);
     // 过滤
-    const [sort, setSort] = useState<string>("");
+    const [sort, setSort] = useState<string>("1");
     let [count, setCount] = useState<number>(0);
     // 配料策略
     const [strategyVisible, setStrategyVisible] = useState<boolean>(false);
@@ -925,7 +925,7 @@ export default function IngredientsList(): React.ReactNode {
         setAlternativeData([]);
         try {
             if (code === 1) {
-                setSort("");
+                setSort("1");
             }
             const serarchData = await serarchForm.validateFields();
             if (selectedRowCheck.length < 1) {
@@ -1147,7 +1147,6 @@ export default function IngredientsList(): React.ReactNode {
                                                                         setSort(res);
                                                                         getScheme(2, res);
                                                                     }}>
-                                                                        <Select.Option value="">默认排序</Select.Option>
                                                                         <Select.Option value="1">完全下料优先</Select.Option>
                                                                         <Select.Option value="2">利用率<ArrowDownOutlined /></Select.Option>
                                                                         <Select.Option value="4">余料长度<ArrowDownOutlined /></Select.Option>
