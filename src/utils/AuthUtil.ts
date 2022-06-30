@@ -121,7 +121,7 @@ export default abstract class AuthUtil {
      * @returns sinzetech auth 
      */
     public static getSinzetechAuth(): string {
-        return Cookies.get(TOKEN_KEY) || ''
+        return sessionStorage.getItem(TOKEN_KEY) || ''
     }
 
     /**
@@ -132,6 +132,7 @@ export default abstract class AuthUtil {
      */
     public static setSinzetechAuth(token: string, refrenshToken: string): void {
         Cookies.set(TOKEN_KEY, token)
+        sessionStorage.setItem(TOKEN_KEY, token)
         sessionStorage.setItem(REFRENSH_TOKEN, refrenshToken)
         this.timer && clearInterval(this.timer)
         this.timer = setTimeout(() => {
@@ -147,6 +148,7 @@ export default abstract class AuthUtil {
      */
     public static removeSinzetechAuth(): void {
         Cookies.remove(TOKEN_KEY);
+        sessionStorage.removeItem(TOKEN_KEY);
         sessionStorage.removeItem(REFRENSH_TOKEN);
         sessionStorage.removeItem(APP_Name);
     }
