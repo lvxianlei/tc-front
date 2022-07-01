@@ -675,8 +675,6 @@ export default function IngredientsList(): React.ReactNode {
             sortChildren: v
         })
         const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === options)[0].children;
-        // 获取新的配料策略
-        handleAnge(angleConfigStrategy, +activeSort.split("_")[1].split("∠")[1].split("*")[0]);
         // 获取构建分类明细
         getSortDetail(params.id, options.split("_")[1], options.split("_")[0]);
         // 获取库存
@@ -731,8 +729,15 @@ export default function IngredientsList(): React.ReactNode {
         setStrategyVisible(false)
     }
 
+    useEffect(() => {
+        if (activeSort) {
+            let test = activeSort;
+            handleAnge(angleConfigStrategy, +test.split("_")[1].split("∠")[1].split("*")[0], activeSort);
+        }
+    }, [JSON.stringify(activeSort)])
+
     // 对配料策略进行处理
-    const handleAnge = (options: any[], key: number) => {
+    const handleAnge = (options: any[], key: number, activeSort: any) => {
         console.log(options, "接受到的数据=====", key, miter)
         const spec = activeSort.split("_")[0];
         for (let i = 0; i < options.length; i += 1) {
@@ -758,7 +763,7 @@ export default function IngredientsList(): React.ReactNode {
 
     useEffect(() => {
         if (angleConfigStrategy.length > 0 && activeSort) {
-            handleAnge(angleConfigStrategy, +activeSort.split("_")[1].split("∠")[1].split("*")[0]);
+            handleAnge(angleConfigStrategy, +activeSort.split("_")[1].split("∠")[1].split("*")[0], activeSort);
         }
     }, [miter])
 
@@ -794,7 +799,7 @@ export default function IngredientsList(): React.ReactNode {
         try {
             const result: any = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredientConfigList`);
             setAngleConfigStrategy((result as any) || [])
-            handleAnge(result, +spec.split("∠")[1].split("*")[0])
+            handleAnge(result, +spec.split("∠")[1].split("*")[0], activeSort)
             resole(result)
         } catch (error) {
             reject(error)
