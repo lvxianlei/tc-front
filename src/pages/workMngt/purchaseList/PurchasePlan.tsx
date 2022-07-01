@@ -42,6 +42,9 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         try {
             const result = handleData();
             if (!result) {
+                dataSource.map((item: any) =>  {
+                    item["warehouseOccupy"] = item.warehouseOccupy ? item.warehouseOccupy : 0;
+                })
                 // 可以保存
                 await saveRun({
                     purchaseType: 1,
