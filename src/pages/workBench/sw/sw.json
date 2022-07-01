@@ -60,7 +60,7 @@
             "workbenchItemVos": [
                 {
                     "title": "待完成",
-                    "dataIndex": "confirmedNum",
+                    "dataIndex": "toBeCompleteNum",
                     "path": {
                         "pathname": "/buyingTask/index",
                         "state": {
