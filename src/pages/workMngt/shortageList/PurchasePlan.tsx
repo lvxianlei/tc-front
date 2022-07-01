@@ -19,7 +19,11 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                 purchaseType: 3
             })
             //TODO 临时初始数据
-            setDataSource(result?.lists.map((item: any, index: number) => ({ ...item, planPurchaseNum: 0, key: `${item.structureSpec}-${index}` })) || [])
+            setDataSource(result?.lists.map((item: any) => ({
+                ...item,
+                planPurchaseNum: item?.planPurchaseNum || "",
+                warehouseOccupy: item?.warehouseOccupy || ""
+            })) || [])
             resole(result)
         } catch (error) {
             reject(error)
