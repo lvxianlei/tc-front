@@ -42,6 +42,9 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         try {
             const result = handleData();
             if (!result) {
+                dataSource.map((item: any) =>  {
+                    item["warehouseOccupy"] = item.warehouseOccupy ? item.warehouseOccupy : 0;
+                })
                 // 可以保存
                 await saveRun({
                     purchaseType: 1,
@@ -66,7 +69,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         const result = dataSource;
         let flag = false;
         for (let i = 0; i < result.length; i += 1) {
-            if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
+            if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || (result[i].availableStock > result[i].num ? result[i].num : result[i].availableStock))) >= result[i].num) {
                 result[i]["isRed"] = false;
             } else {
                 result[i]["isRed"] = true;
