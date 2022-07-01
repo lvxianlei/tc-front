@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useImperativeHandle } from "react"
+import React, { useState, forwardRef, useImperativeHandle, useEffect } from "react"
 import { Spin, Row, Col, InputNumber, message, Input } from "antd"
 import { DetailTitle, CommonTable } from '../../common'
 import { ListIngredients, PlanList } from "../purchaseList/purchaseListData.json"
@@ -91,51 +91,50 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             </Col>
             <Col span={12}>
                 <DetailTitle title="计划列表" />
-                <CommonTable columns={PlanList.map((item: any) => {
-                    if (item.dataIndex === "warehouseOccupy") {
-                        return ({
-                            ...item,
-                            render: (_: any, record: any, index: number) => {
-                                return <Input
-                                    value={record.warehouseOccupy || (record.availableStock > record.num ? record.num : record.availableStock)}
-                                    key={index}
-                                    // max={999}
-                                    // min={0}
-                                    onChange={(e: any) => {
-                                        const result = dataSource;
-                                        let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
-                                        if ((arg || 0) > (record.availableStock || 0)) {
-                                            message.error("本次占用数量过多，请修改！");
-                                            result[index].warehouseOccupy = ""
-                                            setDataSource(result.slice(0));
-                                        } else {
-                                            result[index].warehouseOccupy = arg
-                                            setDataSource(result.slice(0));
-                                        }
-                                        setCout(count + 1);
-                                    }}
-                                    style={{ height: 27 }}
-                                />
-                            }
-                        })
-                    }
-                    if (item.dataIndex === "planPurchaseNum") {
-                        return ({
-                            ...item,
-                            render: (_: any, record: any, index: number) => {
-                                return <InputNumber value={record.planPurchaseNum} key={index}
-                                    onChange={(value: number) => handleInputChange(value, "planPurchaseNum", index)}
-                                    style={{ height: 27 }} />
-                            }
-                        })
-                    }
-                    return item
-                })} dataSource={dataSource || []} pagination={false} />
+                <CommonTable
+                    columns={PlanList.map((item: any) => {
+                        if (item.dataIndex === "warehouseOccupy") {
+                            return ({
+                                ...item,
+                                render: (_: any, record: any, index: number) => {
+                                    return <Input
+                                        value={record.warehouseOccupy || (record.availableStock > record.num ? record.num : record.availableStock)}
+                                        key={index}
+                                        // max={999}
+                                        // min={0}
+                                        onChange={(e: any) => {
+                                            const result = dataSource;
+                                            let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
+                                            if ((arg || 0) > (record.availableStock || 0)) {
+                                                message.error("本次占用数量过多，请修改！");
+                                                result[index].warehouseOccupy = ""
+                                                setDataSource(result.slice(0));
+                                            } else {
+                                                result[index].warehouseOccupy = arg
+                                                setDataSource(result.slice(0));
+                                            }
+                                            setCout(count + 1);
+                                        }}
+                                        style={{ height: 27 }}
+                                    />
+                                }
+                            })
+                        }
+                        if (item.dataIndex === "planPurchaseNum") {
+                            return ({
+                                ...item,
+                                render: (_: any, record: any, index: number) => {
+                                    return <InputNumber value={record.planPurchaseNum} key={index}
+                                        onChange={(value: number) => handleInputChange(value, "planPurchaseNum", index)}
+                                        style={{ height: 27 }} />
+                                }
+                            })
+                        }
+                        return item
+                    })}
+                    dataSource={dataSource || []}
+                    pagination={false} />
             </Col>
         </Row>
     </Spin>
 })
-
-function useEffect(arg0: () => void, arg1: string[]) {
-    throw new Error("Function not implemented.")
-}
