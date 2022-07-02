@@ -363,8 +363,7 @@ export default function Edit() {
                             price: item.price || 1.00,
                             taxTotalAmount: item.taxTotalAmount || 1.00,
                             totalAmount: item.totalAmount || 1.00,
-                            weight: ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1)) / 1000 / 1000).toFixed(3),
-                            totalWeight: ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3)
+                            weight: item.weight || ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1)) / 1000 / 1000).toFixed(3)
                         })) || [])
                     }}
                 />
