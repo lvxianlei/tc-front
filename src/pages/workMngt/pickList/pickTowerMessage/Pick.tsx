@@ -476,7 +476,9 @@ export default function Lofting(): React.ReactNode {
                         >编辑</Button>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${record.id}`).then(() => {
+                            onConfirm={async () => await RequestUtil.post(`/tower-science/drawProductStructure/remove`, {
+                                productStructureIdListL: [record.id]
+                            }).then(() => {
                                 message.success('删除成功！');
                                 history.go(0)
                                 setRefresh(!refresh);
@@ -605,15 +607,17 @@ export default function Lofting(): React.ReactNode {
                         title="确认删除?"
                         onConfirm={async () => {
                             if (selectedKeys.length > 0)
-                                if (!(selectedKeys.length > 100)) {
-                                    await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${selectedKeys.join(',')}`).then(() => {
+                                // if (!(selectedKeys.length > 100)) {
+                                    await RequestUtil.post(`/tower-science/drawProductStructure/remove`,{
+                                        productStructureIdList: selectedKeys
+                                    }).then(() => {
                                         message.success('删除成功！');
                                         setRefresh(!refresh);
                                         history.go(0)
                                     })
-                                } else {
-                                    message.error('当前选择数量过多，请重新选择！')
-                                }
+                                // } else {
+                                //     message.error('当前选择数量过多，请重新选择！')
+                                // }
                             else {
                                 message.warning('请选择要删除的数据')
                             }
