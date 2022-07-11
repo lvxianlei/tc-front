@@ -958,11 +958,11 @@ export default function IngredientsList(): React.ReactNode {
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
                                                             <DetailTitle key="detail" title="构件明细" col={{left: 8, right: 16}} operation={[
-                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => {
+                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} onClick={() => {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
+                                                                <Button type="primary" ghost key="choose" style={{ padding: "6px 16px" }} disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
