@@ -132,7 +132,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     )
                 }]}
                 extraOperation={
-                    <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.quantity}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
+                    <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
                 }
                 filterValue={filterValue}
                 onFilterSubmit={(value: any) => {

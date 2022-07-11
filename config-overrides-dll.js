@@ -1,8 +1,5 @@
 const path = require("path");
-const {
-  override,
-  addWebpackPlugin,
-} = require("customize-cra");
+const { override } = require("customize-cra");
 const { DllPlugin } = require("webpack");
 
 const vendors = [
