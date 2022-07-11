@@ -52,7 +52,7 @@ export default function Edit() {
             setPopDataList(result.records.map(((item: any, index: number) => ({
                 ...item,
                 source: 1,
-                id: `${item.materialName}-${index}`
+                rowKey: `${item.materialName}-${index}`
             }))))
             resole(result)
             setPagenation({ ...pagenation, current: result.page, pageSize: result.size })
@@ -232,9 +232,12 @@ export default function Edit() {
                             if (["planPurchaseNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber
-                                        min={1} value={value}
-                                        onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => {
+                                        const minNum = records.source === 1 ? dataTable?.records.find((item: any) => item.id === records.id)?.planPurchaseNum : 1
+                                        return <InputNumber
+                                            min={minNum} value={value}
+                                            onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    }
                                 })
                             }
                             if (item.dataIndex === "length") {

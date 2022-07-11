@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Spin, Button, Space, Modal, Image } from 'antd';
+import { Spin, Button, Space, Modal, Image, Descriptions } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -35,12 +35,10 @@ const specialColums = [
     {
         "dataIndex": "materialName",
         "title": "产品类型",
-        "type": "textarea"
     },
     {
         "dataIndex": "projectName",
         "title": "工程名称",
-        "type": "textarea"
     },
     {
         "dataIndex": "productCategory",
@@ -50,72 +48,62 @@ const specialColums = [
     {
         "dataIndex": "workPro",
         "title": "责任工序",
-        "type": "textarea"
     },
     {
         "dataIndex": "workUnit",
         "title": "生产单元",
-        "type": "textarea"
     },
     {
         "dataIndex": "responsibleTeamName",
         "title": "责任班组",
-        "type": "textarea"
     },
     {
         "dataIndex": "responsibleUser",
         "title": "责任人",
-        "type": "textarea"
     },
     {
         "dataIndex": "createUserName",
         "title": "质检员",
-        "type": "textarea"
-    },
+    }
+]
+const detailColums = [
     {
         "dataIndex": "pieceCode",
         "title": "构件号",
-        "type": "textarea"
     },
     {
         "dataIndex": "processTypeName",
         "title": "处理类型",
-        "type": "textarea"
     },
     {
         "dataIndex": "checkDate",
         "title": "检测时间",
-        "type": "textarea"
     },
     {
         "dataIndex": "sumNum",
         "title": "数量",
-        "type": "textarea"
     },
     {
         "dataIndex": "fineMoney",
         "title": "罚款金额",
-        "type": "textarea"
     },
     {
         "dataIndex": "unqualifiedProject",
         "title": "不合格检测项",
-        "type": "textarea"
     },
     {
         "dataIndex": "recheckStatusName",
         "title": "复检结果",
-        "type": "textarea"
-    },
+    }
+]
+const questionColums = [
     {
         "dataIndex": "questionDesc",
         "title": "问题描述",
-        "type": "textarea"
-    },
-    {
+        // "type": "textarea"
+    }, {
         "dataIndex": "handleDesc",
-        "title": "处理建议",
-        "type": "textarea"
+        "title": "处理建议"
     }
 ]
 
@@ -142,7 +130,12 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
             </Space>
         ]}>
-            <BaseInfo columns={specialColums} dataSource={detailData} col={2} />
+            <DetailTitle title='处置单信息'/>
+            <BaseInfo columns={specialColums} dataSource={detailData} />
+            <DetailTitle title='基本信息'/>
+            <BaseInfo columns={detailColums} dataSource={detailData}  />
+            <DetailTitle title='其他信息'/>
+            <BaseInfo columns={questionColums} dataSource={detailData}  />
         </DetailContent>
     </>
 }
