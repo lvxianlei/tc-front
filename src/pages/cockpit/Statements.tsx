@@ -5,7 +5,7 @@
  */
 
 import useRequest from '@ahooksjs/use-request';
-import { Select, Spin, Table } from 'antd';
+import { Button, Modal, Select, Spin, Table } from 'antd';
 import * as echarts from 'echarts';
 import React, { useEffect, useState } from 'react'
 import RequestUtil from '../../utils/RequestUtil';
@@ -13,6 +13,7 @@ import styles from './Statements.module.less';
 import { ArrowUpOutlined, ArrowDownOutlined } from '@ant-design/icons';
 
 export default function Statements(): React.ReactNode {
+    const [isFull, setIsFull] = useState<boolean>(false)
     const [firstData, setFirstData] = useState<any>();
     const [secondData, setSecondData] = useState<any>();
     const [pagenation, setPagenation] = useState({
@@ -34,7 +35,7 @@ export default function Statements(): React.ReactNode {
         {
             key: 'productType',
             title: '产品类型',
-            width: 80,
+            width: 100,
             dataIndex: 'productType'
         },
         {
@@ -277,7 +278,7 @@ export default function Statements(): React.ReactNode {
 
     const { data: issuedData, run: getIssuedData } = useRequest<any>((productType: string, page: Record<string, any>) => new Promise(async (resole, reject) => {
         try {
-            const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics`, { productType: productType || '', current: 1, pageSize: 10, ...page });
+            const value: any = await RequestUtil.get<any>(`/tower-statistics/lofting/getLoftingPlanStatistics`, { productType: productType || '', current: 1, size: 10, ...page });
             setPagenation(value);
             resole(value?.records || []);
         } catch (error) {
@@ -822,15 +823,16 @@ export default function Statements(): React.ReactNode {
 
     const paginationChange = (page: number, pageSize?: number | undefined) => {
         setPagenation({ ...pagenation, current: page, pageSize: pageSize || 15 });
-        getIssuedData(productType, { current: page, pageSize: pageSize })
+        getIssuedData(productType, { current: page, size: pageSize })
     }
 
-    return <Spin spinning={loading}>
-        <div className={styles.statement}>
+    const chartsContent = (): React.ReactNode => {
+        return <div className={styles.statement} id={'statement'}>
             <div className={styles.header}>
                 <div className={styles.headerbg}>
                     <span className={styles.headerTitle}>汇金通技术部放样统计数据分析</span>
                 </div>
+                <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button>
             </div>
             <div className={styles.top}>
                 <div className={styles.left}>
@@ -849,7 +851,6 @@ export default function Statements(): React.ReactNode {
                     <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '300px' }} key={'LoftingStatisticalAnalysis'} />
                     <Table
                         bordered
-                        scroll={{ x: true }}
                         pagination={false}
                         dataSource={[...loftingStatisticalAnalysisData || []]}
                         columns={columns}
@@ -893,25 +894,24 @@ export default function Statements(): React.ReactNode {
                     <div id={'productionDistributionStatistics'} style={{ width: '100%', height: '400px' }} key={'productionDistributionStatistics'} />
                 </div>
                 <div className={styles.right}>
-                    <div>
-                        <span className={styles.title}>未生产下达统计分析</span>
-                        <Select key={'productionDistribution'} style={{ marginLeft: '7%' }} dropdownClassName={styles.dropdownStyle} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
-                            getIssuedData(e);
-                            setProductType(e);
-                        }}>
-                            <Select.Option key={0} value={''}>全部</Select.Option>
-                            <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
-                            <Select.Option key={2} value={'钢管杆'}>钢管杆</Select.Option>
-                            <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
-                            <Select.Option key={4} value={'架构'}>架构</Select.Option>
-                            <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
-                        </Select>
-                    </div>
                     <div className={styles.rightContent}>
                         <div style={{ width: "40%" }}>
+                            <span className={styles.title}>未生产下达统计分析</span>
                             <div id={'productionDistribution'} style={{ width: '100%', height: '400px' }} key={'productionDistribution'} />
                         </div>
-                        <div style={{ width: "100%", marginLeft: "2%" }}>
+
+                        <div style={{ width: "100%", marginLeft: "2%", marginTop: '10px' }}>
+                            <Select key={'productionDistribution'} dropdownClassName={styles.dropdownStyle} className={styles.select} defaultValue={''} size="small" onChange={(e) => {
+                                getIssuedData(e);
+                                setProductType(e);
+                            }}>
+                                <Select.Option key={0} value={''}>全部</Select.Option>
+                                <Select.Option key={1} value={'角钢塔'}>角钢塔</Select.Option>
+                                <Select.Option key={2} value={'钢管杆'}>钢管杆</Select.Option>
+                                <Select.Option key={3} value={'四管塔'}>四管塔</Select.Option>
+                                <Select.Option key={4} value={'架构'}>架构</Select.Option>
+                                <Select.Option key={5} value={'钢结构'}>钢结构</Select.Option>
+                            </Select>
                             <Table
                                 bordered
                                 pagination={{
@@ -929,5 +929,17 @@ export default function Statements(): React.ReactNode {
                 </div>
             </div>
         </div>
+    }
+
+    return <Spin spinning={loading}>
+        {
+            isFull ?
+                <Modal width='100%' className={styles.statementsModal} visible={isFull} closable={false} footer={false} onCancel={() => setIsFull(false)}>
+                    {chartsContent()}
+                </Modal>
+                :
+                <>{chartsContent()}</>
+        }
+
     </Spin>
 }

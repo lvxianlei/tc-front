@@ -1,5 +1,3 @@
-
-
 .statement {
     width: 100%;
     background-image: url('../../../public/statementsbg.png');
@@ -10,13 +8,13 @@
 
     .header {
         width: 100%;
-        height: 106px;
+        height: 52px;
         position: relative;
-        margin-bottom: 16px;
+        margin-bottom: 10px;
         
         .headerbg {
             background-image: url('../../../public/statements_header.png');
-            background-position: bottom;
+            background-position: center;
             background-repeat: no-repeat;
             height: 95%;
 
@@ -26,9 +24,22 @@
                 font-size: 25px;
                 position: absolute;
                 left: 50%;
-                top: 10px;
+                top: 6px;
                 transform: translate(-50%);
             }
+        }
+
+        .fullBtn {
+            position: absolute;
+            left: 95%;
+            top: 62%;
+        }
+
+        :global(.ant-btn-background-ghost.ant-btn-primary) {
+            color: #2fdcfb;
+            background-color: #003567;
+            border-color: rgba(1, 167, 226, 0.6);
+            padding: 1.6px 16px;
         }
 
     }
@@ -97,6 +108,8 @@
 
     :global(.ant-table.ant-table-bordered > .ant-table-container) {      
         border: 1px solid #0B1C3D;
+        max-height: 354px;
+        overflow-y: auto;
     }
 
     :global(.ant-table.ant-table-bordered > .ant-table-container > .ant-table-content > table > thead > tr > th) {
@@ -141,15 +154,15 @@
     .top {
         width: 100%;  
         display: flex;
-        margin-bottom: 1%;
-        padding: 0 16px 16px 16px;
+        margin-bottom: 6px;
+        padding: 0 16px;
 
         .left {
             width: 100%;
             border: 1px solid rgba(153, 204, 255, 0.25);
             border-radius: 4px;
-            margin-right: 1%;
-            padding: 16px;
+            margin-right: 6px;
+            padding: 6px 16px 16px 16px;
             background: rgba(11, 28, 61, 0.5);
         }
     
@@ -157,7 +170,7 @@
             width: 100%;
             border: 1px solid rgba(153, 204, 255, 0.25);
             border-radius: 4px;
-            padding: 16px;
+            padding: 6px 16px 16px 16px;
             background: rgba(11, 28, 61, 0.5);
         }
     }
@@ -171,8 +184,8 @@
             width: 50%;
             border: 1px solid rgba(153, 204, 255, 0.25);
             border-radius: 4px;
-            margin-right: 1%;
-            padding: 16px;
+            margin-right: 6px;
+            padding: 6px 16px 16px 16px;
             background: rgba(11, 28, 61, 0.5);
         }
     
@@ -180,7 +193,7 @@
             width: 100%;
             border: 1px solid rgba(153, 204, 255, 0.25);
             border-radius: 4px;
-            padding: 16px;
+            padding: 6px 16px 16px 16px;
             background: rgba(11, 28, 61, 0.5);
 
             .rightContent {
@@ -206,5 +219,19 @@
     :global(.ant-select-item-option-selected:not(.ant-select-item-option-disabled)) {
         color: #3dd7fd !important;
         background-color:  rgba(175, 200, 220, 0.5) !important;
+    }
+}
+
+.statementsModal {
+    top: 0 !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+
+    :global(.ant-modal-body) {
+        padding: 0 !important;
+    }
+
+    :global(.ant-modal-content) {
+        background-color: #000;
     }
 }
