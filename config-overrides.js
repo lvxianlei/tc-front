@@ -18,13 +18,13 @@ const Dotenv = require("dotenv");
 const AntdDayjsWebpackPlugin = require("antd-dayjs-webpack-plugin");
 const MockWebpackPlugin = require("mock-webpack-plugin");
 const mockConfig = require("./mock/config");
-const { DefinePlugin } = require("webpack");
+const { DefinePlugin, DllReferencePlugin } = require("webpack");
+const dllConfig = require("./config-overrides-dll")
 const envConfig = Dotenv.config({
   path: path.join(__dirname, "/env", `.env.${process.env.REACT_APP_ENV}`)
 });
-
 const WebpackBar = require("webpackbar");
-module.exports = {
+module.exports = process.env.REACT_APP_ENV === "dll" ? dllConfig : {
   webpack: override(
     function (config) {
       const scopePluginIndex = config.resolve.plugins.findIndex(
@@ -107,6 +107,10 @@ module.exports = {
     ),
     addWebpackPlugin(new WebpackBar()),
     addWebpackPlugin(new AntdDayjsWebpackPlugin()),
+    process.env.REACT_APP_ENV === "production" ? addWebpackPlugin(new DllReferencePlugin({
+      context: __dirname,
+      manifest: require("./manifest.json")
+    })) : undefined,
     addWebpackPlugin(
       new DefinePlugin({
         "process.env.REACT_APP_ENV": envConfig.parsed.REQUEST_API_PATH_PREFIX

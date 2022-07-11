@@ -3,7 +3,7 @@
  * author: mschange
  * time: 2022/4/21
  */
-import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, message, Modal, Radio, Row, Select, Table, Tabs } from 'antd';
+import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, message, Modal, Radio, Row, Select, Table, Tabs, Tooltip } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -111,6 +111,9 @@ export default function IngredientsList(): React.ReactNode {
 
     let [count, setCount] = useState<number>(0);
 
+    // 记录构建明细改变
+    let [detailCount, setDetailCount] = useState<number>(0);
+
     // 存储配料策略的list
     const [angleConfigStrategy, setAngleConfigStrategy] = useState<any[]>([]);
 
@@ -152,6 +155,7 @@ export default function IngredientsList(): React.ReactNode {
                     message.error("请您先进行方案对比!");
                     return false;
                 }
+                getbatch();
                 handleSaveData(2);
                 break;
             default:
@@ -272,6 +276,7 @@ export default function IngredientsList(): React.ReactNode {
     const rowSelectionCheck = {
         selectedRowKeys: selectedRowKeysCheck,
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
+            console.log(selectedRowKeys, selectedRows, "======")
             setSelectedRowKeysCheck(selectedRowKeys);
             setSelectedRowCheck(selectedRows)
         },
@@ -442,11 +447,17 @@ export default function IngredientsList(): React.ReactNode {
         Statistics()
     }, [JSON.stringify(globallyStoredData), activeKey, activeSort, count])
 
+    // 双击后构建明细发生变化
+    useEffect(() => {
+        if (detailCount > 0) {
+            getScheme(1);
+        }
+    }, [detailCount])
+
 
     const handleModalSure = async() => {
         // 修改当前的配料策略
         const baseData = await serarchForm.validateFields();
-        console.log(baseData, "========>>>>")
         setNowIngre({
             ...baseData
         });
@@ -614,12 +625,8 @@ export default function IngredientsList(): React.ReactNode {
         setActiveKey("fangan1");
         setGloballyStoredData(v)
         const result = globallyStoredData?.filter((v: any) => v.key === options)[0].children;
-        // 重新调用
-        getIngredient(options.split("_")[1]);
         // 获取构建分类明细
         getSortDetail(params.id, options.split("_")[1], options.split("_")[0]);
-        // 获取库存
-        handleAnge(angleConfigStrategy, +activeSort.split("_")[1].split("∠")[1].split("*")[0]);
         if (JSON.stringify(result[0].batchingStrategy) == "{}") {
             serarchForm.resetFields();
         } else {
@@ -639,18 +646,30 @@ export default function IngredientsList(): React.ReactNode {
         getSort(params.id);
     }, [])
 
+    useEffect(() => {
+        if (activeSort) {
+            let test = activeSort;
+            handleAnge(angleConfigStrategy, +test.split("_")[1].split("∠")[1].split("*")[0], activeSort);
+        }
+    }, [JSON.stringify(activeSort)])
+
     // 对配料策略进行处理
-    const handleAnge = (options: any[], key: number) => {
-        console.log(options, "接受到的数据", key)
+    const handleAnge = (options: any[], key: number, activeSort: any) => {
+        console.log(options, "接受到的数据", key, activeSort)
+        const spec = activeSort.split("_")[0];
         for (let i = 0; i < options.length; i += 1) {
             const result = options[i].width.split("~");
             if ((key >= result[0] * 1) && (key <= result[1] * 1)) {
                 setNowIngre({
                     ...options[i],
+                    edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
+                    clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 });
                 serarchForm.setFieldsValue({
                     ...options[i],
+                    edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
+                    clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 })
             }
@@ -689,7 +708,7 @@ export default function IngredientsList(): React.ReactNode {
         try {
             const result: any = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredientConfigList`);
             setAngleConfigStrategy((result as any) || [])
-            handleAnge(result, +spec.split("∠")[1].split("*")[0])
+            handleAnge(result, +spec.split("∠")[1].split("*")[0], activeSort)
             resole(result)
         } catch (error) {
             reject(error)
@@ -762,6 +781,16 @@ export default function IngredientsList(): React.ReactNode {
                 }
                 setGloballyStoredData(v);
             }
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    // 抢占配料任务
+    const { run: getbatch } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any[] = await RequestUtil.post(`/tower-supply/task/batch?batchId=${params.id}`)
+            resole(result || [])
         } catch (error) {
             reject(error)
         }
@@ -846,6 +875,13 @@ export default function IngredientsList(): React.ReactNode {
         }
     }), { manual: true })
 
+    const components = {
+        body: {
+            row: (e: any) => <Tooltip title="双击进行配料~"><tr {...e} /></Tooltip>,
+            cell: "td"
+        }
+    }
+
     return (
         <div className='ingredientsListWrapper'>
             <DetailContent operation={
@@ -921,18 +957,36 @@ export default function IngredientsList(): React.ReactNode {
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
-                                                            <DetailTitle key="detail" title="构件明细" operation={[
-                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => {
+                                                            <DetailTitle key="detail" title="构件明细" col={{left: 8, right: 16}} operation={[
+                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} onClick={() => {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
+                                                                <Button type="primary" ghost key="choose" style={{ padding: "6px 16px" }} disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
                                                                     type: "radio",
                                                                     ...rowSelectionCheck,
+                                                                }}
+                                                                components={components}
+                                                                rowClassName={(record: any) => {
+                                                                    if (+record.notConfigured === 0) return 'table-color-dust';
+                                                                 }}
+                                                                onRow={(record: any) => {
+                                                                    return {
+                                                                        onDoubleClick: async(event: any) => {
+                                                                            if (record.notConfigured > 0) {
+                                                                                setSelectedRowKeysCheck([record.id]);
+                                                                                setSelectedRowCheck([record]);
+                                                                                setDetailCount(detailCount + 1);
+                                                                            } else {
+                                                                                message.error("当前构件已配完！");
+                                                                                return false;
+                                                                            }
+                                                                        }
+                                                                    }
                                                                 }}
                                                                 key={"id"}
                                                                 columns={ConstructionDetailsColumn}

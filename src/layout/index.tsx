@@ -1,10 +1,8 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Avatar, Breadcrumb, Button, Col, Dropdown, Layout, Menu, Popconfirm, Row } from "antd";
-import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined } from "@ant-design/icons"
+import { Avatar, Breadcrumb, Col, Dropdown, Layout, Menu, Row } from "antd";
+import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined, createFromIconfontCN } from "@ant-design/icons"
 import styles from './Layout.module.less';
-// import layoutStyles from './Layout.module.less';
 import { Link, Route, useHistory, useLocation } from "react-router-dom";
-import { UserOutlined, BellOutlined } from '@ant-design/icons';
 import AuthUtil from "../utils/AuthUtil";
 import ctxConfig from "../app-ctx.config.jsonc"
 import ctxRouter from "../app-router.config.jsonc"
@@ -13,8 +11,14 @@ import { useAuthorities, useDictionary, hasAuthority } from "../hooks"
 import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
-import ApplicationContext from "../configuration/ApplicationContext";
 import Cookies from "js-cookie";
+
+const IconFont = createFromIconfontCN({
+    scriptUrl: [
+        "//at.alicdn.com/t/font_2771956_r1mkfqj4xwf.js"
+    ]
+})
+
 const { Header, Sider, Content } = Layout
 const filters = require.context("../filters", true, /.ts$/)
 
@@ -26,14 +30,13 @@ const renderRoute: any = (module: string | undefined, authority: any) => () => (
     </>
 )
 
-const SiderMenu: React.FC = () => {
+const SiderMenu: React.FC<{ isOpend: boolean }> = ({ isOpend }) => {
     const location = useLocation()
     const [selectedSubMenuItem, setSelectedSubMenuItem] = useState<React.Key[]>([location.pathname, `/${location.pathname.split("/")[1]}`])
     const [selectedDarkMenuItem, setSelectedDarkMenuItem] = useState([`/${location.pathname.split("/")[1]}/${location.pathname.split("/")[2]}`])
 
     const getMenuItemForAppName = () => {
         const currentApp = AuthUtil.getCurrentAppName()
-        console.log(ctxConfig.layout.menu)
         return ctxConfig.layout.menu.filter((item: any) => [currentApp, ""].includes(item.appName))
     }
 
@@ -50,7 +53,7 @@ const SiderMenu: React.FC = () => {
         openKeys={selectedSubMenuItem as any}
         selectedKeys={selectedDarkMenuItem}
         onOpenChange={handleOpenChange}
-        style={{ width: ctxConfig.layout.width, backgroundColor: ctxConfig.layout.theme }}
+        style={{ backgroundColor: ctxConfig.layout.theme }}
     >
         {
             getMenuItemForAppName().filter((item: any) => hasAuthority(item.authority)).map((item: any): React.ReactNode => (
@@ -59,11 +62,7 @@ const SiderMenu: React.FC = () => {
                     <Menu.SubMenu
                         key={item.path}
                         title={item.label}
-                        style={{
-                            backgroundColor: ctxConfig.layout.theme,
-                            margin: 0
-                        }}
-                        icon={<i className={`font_family iconfont icon-${item.icon} ${styles.icon}`} style={{ position: "relative", top: 1, marginRight: 6 }}></i>}>
+                        icon={<IconFont type={`icon-${item.icon}`} style={{ fontSize: 16 }} />}>
                         {
                             item.items.map((subItem: any): React.ReactNode => (
                                 hasAuthority(subItem.authority) && <Menu.Item
@@ -92,9 +91,8 @@ const SiderMenu: React.FC = () => {
                                 setSelectedDarkMenuItem([item.path] as any)
                             }
                         }}
-                        className={styles.subMenu}
                         key={item.path}
-                        icon={<i className={`font_family iconfont icon-${item.icon}`} style={{ position: "relative", top: 1, marginRight: 6 }}></i>}>
+                        icon={<IconFont type={`icon-${item.icon}`} style={{ fontSize: 16 }} />}>
                         <Link to={item.path?.split('://')[0] === 'http' ? selectedDarkMenuItem : item.path}>{item.label}</Link>
                     </Menu.Item>
             ))
@@ -102,7 +100,7 @@ const SiderMenu: React.FC = () => {
     </Menu>
 }
 
-const Hbreadcrumb = memo(() => {
+const Hbreadcrumb = memo(({ isOpend, onClick }: { isOpend: boolean, onClick: (opend: boolean) => void }) => {
     const location = useLocation()
     const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
     const selectedMenuItem = getMenuItemByPath(ctxConfig.layout.menu, `/${pathSnippets[0]}`)
@@ -110,14 +108,23 @@ const Hbreadcrumb = memo(() => {
         {
             location.pathname !== "/chooseApply" && (
                 <>
-                    <MenuUnfoldOutlined
+                    {isOpend ? <MenuUnfoldOutlined
+                        onClick={() => onClick(false)}
                         style={{
                             fontSize: "18px",
                             color: "#fff",
                             lineHeight: "40px",
                             verticalAlign: "middle",
                             padding: "0 10px"
-                        }} />
+                        }} /> : <MenuFoldOutlined
+                        style={{
+                            fontSize: "18px",
+                            color: "#fff",
+                            lineHeight: "40px",
+                            verticalAlign: "middle",
+                            padding: "0 10px"
+                        }}
+                        onClick={() => onClick(true)} />}
                     <Breadcrumb separator="/" className={styles.breadcrumb}>
                         {
                             selectedMenuItem
@@ -162,7 +169,7 @@ export default function (): JSX.Element {
     const location = useLocation()
     const authorities = useAuthorities()
     const dictionary = useDictionary()
-
+    const [isOpend, setIsOpend] = useState<boolean>(false)
     const logOut = () => {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
@@ -190,6 +197,8 @@ export default function (): JSX.Element {
         }
         return true;
     }
+    const handleClick = (opend: boolean) => setIsOpend(opend)
+
 
     useEffect(() => {
         doFiltersAll(history)
@@ -222,7 +231,7 @@ export default function (): JSX.Element {
                 onClick={() => history.replace("/chooseApply")}>
                 <img className={styles.logo} src={Logo} />
             </h1>
-            <Hbreadcrumb />
+            <Hbreadcrumb isOpend={isOpend} onClick={handleClick} />
             {
                 location.pathname !== "/chooseApply" && (
                     <>
@@ -261,8 +270,9 @@ export default function (): JSX.Element {
                             width={ctxConfig.layout.width}
                             theme="light"
                             style={{ backgroundColor: ctxConfig.layout.theme }}
+                            collapsed={isOpend}
                         >
-                            <SiderMenu />
+                            <SiderMenu isOpend={isOpend} />
                         </Sider>
                         <Layout style={{ backgroundColor: `${location.pathname === "/cockpit/statements" ? '#071530' : '#fff'}`, height: "100%", overflow: "hidden", position: "relative" }}>
                             <Content

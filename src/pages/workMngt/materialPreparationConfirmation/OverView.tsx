@@ -6,12 +6,8 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Spin, message } from 'antd';
 import { CommonTable } from '../../common';
-import {
-    Details
-} from "./materialPreparation";
-import {
-    tableColumns
-} from "./buyBurdening.json";
+import { Details } from "./materialPreparation";
+import { tableColumns } from "./buyBurdening.json";
 import MaterialPreparationFeedback from "./MaterialPreparationFeedback";
 import "./OverView.less"
 import useRequest from '@ahooksjs/use-request';
@@ -20,11 +16,12 @@ export default function OverViewDetail(props: Details): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
     const [batcherId, setBatcherId] = useState<string>("");
     const [code, setCode] = useState<string>("1");
-    console.log(props, "=====>>")
     // 关闭回调
-    const handleCallBack = () => {
+    const handleCallBack = (res: any) => {
+        if (res.code === 1) {
+            run();
+        }
         setVisible(false);
-        run();
     }
 
     useEffect(() => {
@@ -137,9 +134,9 @@ export default function OverViewDetail(props: Details): JSX.Element {
             >
                 <div className='titleWrapper'>
                     <span className='text'>合计：总件数：</span>
-                    <span className='value'>{ props?.totalNum }</span>
+                    <span className='value'>{props?.totalNum}</span>
                     <span className='text'>总重量（kg）：</span>
-                    <span className='value'>{ props?.totalWeight }</span>
+                    <span className='value'>{props?.totalWeight}</span>
                 </div>
                 <CommonTable
                     columns={
@@ -196,6 +193,6 @@ export default function OverViewDetail(props: Details): JSX.Element {
                 handleCallBack={handleCallBack}
             />
         </Spin>
-        
+
     )
 }
