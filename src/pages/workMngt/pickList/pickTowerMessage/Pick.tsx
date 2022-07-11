@@ -477,7 +477,7 @@ export default function Lofting(): React.ReactNode {
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={async () => await RequestUtil.post(`/tower-science/drawProductStructure/remove`, {
-                                productStructureIdListL: [record.id]
+                                productStructureIdList: [record.id]
                             }).then(() => {
                                 message.success('删除成功！');
                                 history.go(0)
