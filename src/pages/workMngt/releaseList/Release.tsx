@@ -16,6 +16,7 @@ export default function Release(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
     const [tableDataSource, setTableDataSource] = useState<any[]>([]);
     const [aTableDataSource, setATableDataSource] = useState<any[]>([]);
+    const [bTableDataSource, setBTableDataSource] = useState<any[]>([]);
     const location = useLocation<{ state?: number, userId?: string }>();
     const [ form ] = Form.useForm();
     const [ formRef ] = Form.useForm();
@@ -29,11 +30,57 @@ export default function Release(): React.ReactNode {
             trialAssembleSegment:""
         })
     }
+    const [formTable] = Form.useForm()
+    const columnsCommon: any[] = [
+        {
+            title: "批次号",
+            dataIndex: "productionBatchNo",
+            width: 150
+        },
+        {
+            title: "杆塔号",
+            dataIndex: "productNumber",
+            width: 150
+        },
+        {
+            title: "呼高",
+            dataIndex: "basicHeight",
+            width: 150
+        },
+        {
+            title: "状态",
+            dataIndex: "status",
+            width: 150,
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                <span>{_===0?'正常':_===1?'暂停':_===2?'恢复':'-'}</span>
+            )
+        }
+    ]
+    const [columns, setColumns] = useState<any>(columnsCommon)
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
         const value  = data?.loftingBatchProductVOList.filter((item:any)=>{
-            return item.status===0||item.status==='0'
+            return item.isAll===0||item.isAll==='0'
         })
+        console.log(value.map((item:any)=>{
+            return{
+                ...item,
+                batchNum:0
+            }
+        }))
+        setColumns([...columnsCommon, ...data?.segmentNameList?.map(((item: any) => ({
+            title: item,
+            align: "center",
+            key: item,
+            dataIndex: item
+            // children: columnsCommon.map((head: any) => {
+            //     return ({
+            //         ...head,
+            //         dataIndex: `${item.productionLinkIds}-${head.code}`,
+            //         render: (value: any, records: any) => records.unitData[item.productionLinkIds]?.[head.code] || ""
+            //     })
+            // })
+        })))])
         form.setFieldsValue({
             ...data,
             loftingBatchProductDTOList:value.map((item:any)=>{
@@ -54,13 +101,18 @@ export default function Release(): React.ReactNode {
                 batchNum:0
             }
         }))
+        setBTableDataSource(data?.loftingStatisticsVOList.map((item:any)=>{
+            return{
+                ...item,
+                batchNum:0
+            }
+        }))
         setReleaseData(data)
     }), {})
     const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
     }
-
     return (
         <Spin spinning={false}>
             <Modal
@@ -163,6 +215,17 @@ export default function Release(): React.ReactNode {
                             }
                         }):[]
                         console.log(trialValue)
+                        let arr: any[] = [];
+                        tableDataSource.forEach((item:any)=>{
+                            const value = item.loftingBatchSegmentVOList.map((itemItem:any)=>{
+                                return {
+                                    ...itemItem,
+                                    productId: item.productId
+                                }
+                            })
+                            arr.push(...value)
+                        })
+                        console.log(arr)
                         const submitValue ={
                             galvanizeDemand: value.galvanizeDemand,
                             machiningDemand: value.machiningDemand,
@@ -174,12 +237,8 @@ export default function Release(): React.ReactNode {
                             voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
                             weldingDemand: value.weldingDemand,
                             trialAssembleSegments: trialValue,
-                            loftingBatchProductDTOList: value.loftingBatchProductDTOList.map((item:any)=>{
-                                return {
-                                    ...item,
-                                    batchNum: item.batchNum?item.batchNum===null?0:item.batchNum:0
-                                }
-                            })
+                            loftingBatchProductDTOList: arr,
+                            loftingBatchStatisticsDTOList: bTableDataSource
                         }
                         console.log(submitValue)
                         RequestUtil.post(`/tower-science/loftingBatch/save`,submitValue).then(()=>{
@@ -228,7 +287,7 @@ export default function Release(): React.ReactNode {
                             }
                         ]}
                         dataSource={releaseData?.productCategoryVOList} pagination={false}/>
-                    <DetailTitle title='批次信息'/>
+                    {/* <DetailTitle title='批次信息'/>
                     <CommonTable
                         columns={[
                             {
@@ -246,7 +305,7 @@ export default function Release(): React.ReactNode {
                         ]}
                         pagination={false} 
                         dataSource={ releaseData?.loftingBatchDetailVOList}
-                    />
+                    /> */}
                    
                    <Form form={ form } labelCol={{span:4}}>
                         <DetailTitle title='下达信息'/>
@@ -273,6 +332,13 @@ export default function Release(): React.ReactNode {
                             
                                 <Col span={12}>
                                     <Form.Item name="packDemand" label="包装说明">
+                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col span={12}>
+                                    <Form.Item name="galvanizeDemand" label="已取消下达单号">
                                         <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
                                     </Form.Item>
                                 </Col>
@@ -366,7 +432,7 @@ export default function Release(): React.ReactNode {
                         
                     }else{
                         const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
-                            return item.status===0||item.status==='0'
+                            return item.isAll===0||item.isAll==='0'
                         })
                         form.setFieldsValue({
                             loftingBatchProductDTOList:value.map((item:any)=>{
@@ -392,27 +458,179 @@ export default function Release(): React.ReactNode {
                     
                 }}>显示已全部下达</Checkbox>,<Button type="primary" onClick={ ()=>{
                     const value = tableDataSource.map((item:any,index:number)=>{
-                        if(selectedKeys.includes(index.toString())&&item.segmentNum-item.issuedNum!==0){
+                        const segmentItem = item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
                             return {
-                                ...item,
-                                batchNum:item.issuedNum?item.segmentNum-item.issuedNum:item.segmentNum
+                                [itemItem?.segmentName]:selectedKeys.includes(index.toString())?itemItem.releaseNum:0
                             }
-                        }else{
-                            return {
-                                ...item,
-                                batchNum: item.batchNum?item.batchNum:0
-                            }
+                        })
+                        const finalItem = Object.assign({},item,...segmentItem)
+                        return {
+                            ...finalItem,
+                            loftingBatchSegmentVOList: item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
+                                return {
+                                    ...itemItem,
+                                    batchNum: selectedKeys.includes(index.toString())?itemItem.releaseNum:0
+                                }
+                            })
                         }
-                        
                     })
                     form.setFieldsValue({
                         loftingBatchProductDTOList:value,
                         trialAssembleSegments: ''
                     })
                     setTableDataSource(value)
+                    setBTableDataSource(bTableDataSource.map((item:any)=>{
+                        console.log(columns)
+                        const getDataIndex = columns.filter((itemItem:any)=>{
+                            return item.segmentName === itemItem.title
+                        })
+                        console.log(getDataIndex)
+                        const valueArr = getDataIndex.length>0?value.map((item:any)=>{
+                            return item[getDataIndex[0].dataIndex]
+                        }):[]
+                        console.log(valueArr)
+                        return {
+                            ...item,
+                            batchNum:valueArr.reduce((pre: any,cur:any)=>{
+                                console.log(pre,cur)
+                                console.log(parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) )
+                                return parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) 
+                            },0)
+                        }
+                    }))
+                    // setBTableDataSource()
                 }} disabled={!(selectedKeys.length>0)}>输入全部</Button>]}/>
                     <Form form={form}   className={ styles.descripForm }>
-                        <CommonTable  columns={[
+                        <CommonTable  columns={[...columns,
+                            {
+                                key: "operation",
+                                title: "操作",
+                                dataIndex: "operation",
+                                align: "center",
+                                width:80,
+                                fixed: "right",
+                                render: (
+                                    _: undefined,
+                                    records: any,index:number): React.ReactNode => {
+                                    return (
+                                        <Space direction="horizontal" size="small">
+                                            <Button type='link' onClick={async ()=>{
+                                                await formTable.setFieldsValue({
+                                                    ...records,
+                                                })
+                                                Modal.confirm({
+                                                    title: "编辑",
+                                                    icon: null,
+                                                    width: '60%',
+                                                    content: <Form form={formTable} labelCol={{ span: 4 }}>
+                                                        <Form.Item  name='id' style={{display:'none'}}>
+                                                            <Input type="hidden"/>
+                                                        </Form.Item>
+                                                        <Form.Item  name='id' style={{display:'none'}}>
+                                                            <Input type="hidden"/>
+                                                        </Form.Item>
+                                                        <Row>
+                                                        {
+                                                            [...columns].map((item:any,index:number)=>{
+                                                                const maxNum = records?.loftingBatchSegmentVOList.filter((items:any)=> {return items.segmentName ===item.title })
+                                                                // const maxNum=[{releaseNum: 100}];
+                                                                return <Col span={12}>
+                                                                    <Form.Item label={item.title} name={item.dataIndex} >
+                                                                        {
+                                                                            index < 4 ?  <InputNumber disabled={ index < 4 } precision={0}  min={0} style={{width:"100%"}}/>:
+                                                                            <InputNumber disabled={ index < 4 } precision={0} max={maxNum[0]?.releaseNum||0} min={0} style={{width:"100%"}}/>
+                                                                        }
+                                                                        
+                                                                    </Form.Item>
+                                                                </Col>
+                                                            })
+                                                        }
+                                                        </Row>
+                                                    </Form>,
+                                                    onOk: () => new Promise(async (resolve, reject) => {
+                                                        try {
+                                                            const value = await formTable.validateFields()
+                                                            // await run(selectedKeys.map((item: any) => ({
+                                                            //     id: item,
+                                                            //     loftingCompleteTime: loftingCompleteTime.loftingCompleteTime.format("YYYY-MM-DD") + " 00:00:00"
+                                                            // })))
+                                                            console.log(tableDataSource)
+                                                            console.log(value)
+                                                            const loftingBatchSegmentVOListData:any = tableDataSource[index].loftingBatchSegmentVOList
+                                                            const tableData:any = {
+                                                                ...value,
+                                                                loftingBatchSegmentVOList: loftingBatchSegmentVOListData.map((itemItem:any)=>{
+                                                                    return {
+                                                                        ...itemItem,
+                                                                        batchNum: JSON.stringify(value[itemItem?.segmentName])
+                                                                    }
+                                                                })
+                                                            }
+                                                            tableDataSource.splice(index,1,tableData)
+                                                            const arrNew = tableDataSource.filter((item:any)=>{
+                                                                return item.productionBatchNo === value?.productionBatchNo&&item.isAll!==0
+                                                            })
+                                                            console.log(arrNew)
+                                                            setBTableDataSource(bTableDataSource.map((item:any)=>{
+                                                                console.log(columns)
+                                                                const getDataIndex = columns.filter((itemItem:any)=>{
+                                                                    return item.segmentName === itemItem.title
+                                                                })
+                                                                console.log(getDataIndex)
+                                                                console.log(getDataIndex.length)
+                                                                const valueArr = getDataIndex.length>0?arrNew.map((item:any)=>{
+                                                                    console.log('1')
+                                                                    return item[getDataIndex[0].dataIndex]
+                                                                }):[]
+                                                                console.log(valueArr)
+                                                                console.log(item.productionBatchNo == value?.productionBatchNo)
+                                                                return {
+                                                                    ...item,
+                                                                    batchNum:item.productionBatchNo == value?.productionBatchNo?valueArr.reduce((pre: any,cur:any)=>{
+                                                                        console.log(pre,cur)
+                                                                        console.log(parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) )
+                                                                        return parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) 
+                                                                    },0):item?.batchNum
+                                                                }
+                                                            }))
+                                                            console.log(bTableDataSource)
+                                                            console.log(tableDataSource)
+                                                            resolve(true)
+                                                            setSelectedRows([])
+                                                            formTable.resetFields()
+                                                            message.success("编辑成功！")
+
+                                                        } catch (error) {
+                                                            console.log(error)
+                                                            reject(false)
+                                                        }
+                                                    }),
+                                                    onCancel() {
+                                                        formTable.resetFields()
+                                                    }
+                                                })
+                                            }}
+                                            disabled={records?.isALL!==undefined&&records?.isAll!==0}
+                                            >编辑</Button>
+                                        </Space>
+                                    );
+                                }
+                            }]}
+                            dataSource={[...tableDataSource]} 
+                            pagination={false} 
+                            rowSelection={{
+                                selectedRowKeys: selectedKeys,
+                                onChange: SelectChange,
+                                getCheckboxProps: (record: Record<string, any>) => ({
+                                    disabled: record?.loftingBatchSegmentVOList[0].segmentNum===record?.loftingBatchSegmentVOList[0].issuedNum
+                                })
+                            }}
+                            rowKey={(item: any, index:number) => `${index}`}
+                            // rowKey = {'index'}
+                        />
+                        <DetailTitle title='统计信息'/>
+                        <CommonTable
+                            columns={[
                                 {
                                     title: "序号",
                                     dataIndex: "index",
@@ -422,57 +640,26 @@ export default function Release(): React.ReactNode {
                                 {
                                     title: "段号",
                                     dataIndex: "segmentName",
-                                    width: 50,
                                 },
                                 {
                                     title: "批次号",
                                     dataIndex: "productionBatchNo",
-                                    width: 150
                                 },
                                 {
-                                    title: "段数",
+                                    title: "总段数",
                                     dataIndex: "segmentNum",
-                                    width: 150
                                 },
                                 {
                                     title: "已下达数量",
                                     dataIndex: "issuedNum",
-                                    width: 150
                                 },
                                 {
-                                    title: "下达数量",
+                                    title: "本次下达数量",
                                     dataIndex: "batchNum",
-                                    width: 150,
-                                    render:(number: number, record:any, index:number)=>{
-                                        return  <Form.Item name={['loftingBatchProductDTOList',index,'batchNum']} initialValue={number||0} rules={[
-                                            {
-                                                validator: (rule, value, callback) => {
-                                                  let maxPrice = record.segmentNum-record.issuedNum; //拿到最大值
-                                                  if (value > maxPrice) {
-                                                    callback(`不能大于${maxPrice}`);
-                                                  } 
-                                                  else{
-                                                    callback();
-                                                  }
-                                                },
-                                              },
-                                        ]}>
-                                            <InputNumber precision={0} min={0} style={{width:'100%'}} onChange={()=>rowChange(index)} disabled={record.segmentNum===record.issuedNum}/>
-                                        </Form.Item>
-                                    }
                                 }
                             ]}
-                            dataSource={tableDataSource} 
                             pagination={false} 
-                            rowSelection={{
-                                selectedRowKeys: selectedKeys,
-                                onChange: SelectChange,
-                                getCheckboxProps: (record: Record<string, any>) => ({
-                                    disabled: record.segmentNum===record.issuedNum
-                                })
-                            }}
-                            rowKey={(item: any, index:number) => `${index}`}
-                            // rowKey = {'index'}
+                            dataSource={ [...bTableDataSource]}
                         />
                     </Form>
         </DetailContent>
