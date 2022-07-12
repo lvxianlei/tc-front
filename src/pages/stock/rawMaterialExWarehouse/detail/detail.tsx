@@ -600,7 +600,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 footer={
                     <>
                         <Button onClick={() => setIsOutLibraryModal(false)}>关闭</Button>
-                        <Button type='primary' onClick={() => { MaterialShortageApplication() }}>缺料申请</Button>
+                        {/* <Button type='primary' onClick={() => { MaterialShortageApplication() }}>缺料申请</Button> */}
                         <Button type='primary' onClick={IssueSave}>保存</Button>
                     </>
                 }
