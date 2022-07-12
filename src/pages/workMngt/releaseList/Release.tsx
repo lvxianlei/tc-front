@@ -220,7 +220,8 @@ export default function Release(): React.ReactNode {
                             const value = item.loftingBatchSegmentVOList.map((itemItem:any)=>{
                                 return {
                                     ...itemItem,
-                                    productId: item.productId
+                                    productId: item?.productId,
+                                    productNumber: item?.productNumber
                                 }
                             })
                             arr.push(...value)
