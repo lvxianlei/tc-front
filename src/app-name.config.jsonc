@@ -50,7 +50,8 @@
         "description": "生产过程管理相关功能",
         "iconFont": "icon-shengchanzhongxin3", // iconfont
         "color": "#FF8C00", // iconfont的颜色
-        "path": "/workshopManagement/processingTask",
+        "path": "http://49.233.33.74:9005/othersystem.html?saasid=",
+        "corsWeb": true,
         "appName": "MC"
     },
     {
