@@ -237,19 +237,19 @@ export default function TowerInformation(): React.ReactNode {
             title: '段号',
             dataIndex: 'segmentName',
             key: 'segmentName',
-            width: '50%'
+            width: '30%'
         },
         {
             title: '模式',
             dataIndex: 'pattern',
             key: 'pattern',
-            width: '50%',
+            width: '70%',
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, 'pattern']} rules={[{
                     required: true,
                     message: '请选择模式'
                 }]}>
-                    <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={recordStatus === 3}>
+                    <Select style={{ width: '100%' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={recordStatus === 3}>
                         {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
@@ -307,7 +307,7 @@ export default function TowerInformation(): React.ReactNode {
                     null : <Button type="primary" onClick={saveSection} ghost>保存</Button>
             }
         </Space>}>
-            <Form form={form}>
+            <Form form={form} className={styles.sectionModal}>
                 <Table columns={sectionColumns} pagination={false} dataSource={sectionData} />
             </Form>
         </Modal>
