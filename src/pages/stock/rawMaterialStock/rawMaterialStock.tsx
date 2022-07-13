@@ -30,6 +30,7 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
                 source = attachRef.current.getDataSource();
             if (source.length < 1) {
                 message.error("请您先上传附件！");
+                resole(false as any)
                 return false;
             }
             source.map((item: any) => fieldIds.push(item.id));
@@ -38,7 +39,7 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
                 id,
                 fieldIds
             })
-            resole(result?.attachInfoDtos || [])
+            resole(true as any)
         } catch (error) {
             reject(error)
         }
@@ -74,7 +75,11 @@ export default function RawMaterialStock(): React.ReactNode {
 
     const handleAttachOk = async () => {
         setSaveLoading(true)
-        await receiveRef.current.onSubmit()
+        const res = await receiveRef.current.onSubmit()
+        if (!(res as any)) {
+            setSaveLoading(false)
+            return;
+        }
         setSaveLoading(false)
         message.success("保存成功...")
         setVisible(false)
@@ -127,7 +132,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     )
                 }]}
                 extraOperation={
-                    <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.quantity}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
+                    <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
                 }
                 filterValue={filterValue}
                 onFilterSubmit={(value: any) => {
@@ -244,3 +249,4 @@ export default function RawMaterialStock(): React.ReactNode {
         </>
     )
 }
+

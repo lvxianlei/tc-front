@@ -39,52 +39,64 @@
     "particulars": [
         {
             "title": "品名",
-            "dataIndex": "materialName"
+            "dataIndex": "materialName",
+            "width": 100
         },
         {
             "title": "标准",
-            "dataIndex": "standardName"
+            "dataIndex": "materialStandardName",
+            "width": 100
         },
         {
             "title": "规格",
-            "dataIndex": "spec"
+            "dataIndex": "structureSpec",
+            "width": 100
         },
         {
             "title": "材质",
-            "dataIndex": "materialTexture"
+            "dataIndex": "structureTexture",
+            "width": 100
         },
         {
             "title": "长度",
-            "dataIndex": "length"
+            "dataIndex": "length",
+            "width": 100
         },
         {
             "title": "宽度",
-            "dataIndex": "width"
+            "dataIndex": "width",
+            "width": 100
         },
         {
             "title": "数量",
-            "dataIndex": "quantity"
+            "dataIndex": "num",
+            "width": 100
         },
         {
             "title": "合同单价（元/吨）",
-            "dataIndex": "contractUnitPrice",
-            "type": "number"
+            "dataIndex": "taxPrice",
+            "type": "number",
+            "width": 130
         },
         {
             "title": "价税合计（元）",
-            "dataIndex": "price"
+            "dataIndex": "totalTaxPrice",
+            "width": 130
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "width": 110
         },
         {
             "title": "采购状态",
-            "dataIndex": "receiveDetailStatusName"
+            "dataIndex": "receiveDetailStatusName",
+            "width": 120
         },
         {
             "title": "收货单",
-            "dataIndex": "receiveNumber"
+            "dataIndex": "receiveNumber",
+            "width": 120
         }
     ]
 }

@@ -625,12 +625,8 @@ export default function IngredientsList(): React.ReactNode {
         setActiveKey("fangan1");
         setGloballyStoredData(v)
         const result = globallyStoredData?.filter((v: any) => v.key === options)[0].children;
-        // 重新调用
-        getIngredient(options.split("_")[1]);
         // 获取构建分类明细
         getSortDetail(params.id, options.split("_")[1], options.split("_")[0]);
-        // 获取库存
-        handleAnge(angleConfigStrategy, +activeSort.split("_")[1].split("∠")[1].split("*")[0]);
         if (JSON.stringify(result[0].batchingStrategy) == "{}") {
             serarchForm.resetFields();
         } else {
@@ -650,8 +646,15 @@ export default function IngredientsList(): React.ReactNode {
         getSort(params.id);
     }, [])
 
+    useEffect(() => {
+        if (activeSort) {
+            let test = activeSort;
+            handleAnge(angleConfigStrategy, +test.split("_")[1].split("∠")[1].split("*")[0], activeSort);
+        }
+    }, [JSON.stringify(activeSort)])
+
     // 对配料策略进行处理
-    const handleAnge = (options: any[], key: number) => {
+    const handleAnge = (options: any[], key: number, activeSort: any) => {
         console.log(options, "接受到的数据", key, activeSort)
         const spec = activeSort.split("_")[0];
         for (let i = 0; i < options.length; i += 1) {
@@ -705,7 +708,7 @@ export default function IngredientsList(): React.ReactNode {
         try {
             const result: any = await RequestUtil.get(`/tower-supply/angleConfigStrategy/ingredientConfigList`);
             setAngleConfigStrategy((result as any) || [])
-            handleAnge(result, +spec.split("∠")[1].split("*")[0])
+            handleAnge(result, +spec.split("∠")[1].split("*")[0], activeSort)
             resole(result)
         } catch (error) {
             reject(error)
@@ -954,12 +957,12 @@ export default function IngredientsList(): React.ReactNode {
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
-                                                            <DetailTitle key="detail" title="构件明细" operation={[
-                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8 }} onClick={() => {
+                                                            <DetailTitle key="detail" title="构件明细" col={{left: 8, right: 16}} operation={[
+                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} onClick={() => {
                                                                     message.warn("该功能暂未开发！");
                                                                     return false;
                                                                 }}>自动配料</Button>,
-                                                                <Button type="primary" ghost key="choose" disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
+                                                                <Button type="primary" ghost key="choose" style={{ padding: "6px 16px" }} disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
