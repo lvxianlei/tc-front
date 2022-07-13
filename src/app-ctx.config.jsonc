@@ -12,12 +12,12 @@
                 "icon": "customer",
                 "path": "/client",
                 "appName": "SC",
-                "authority": "customer_page",
+                "authority": "tc_erp_sc_customer",
                 "items": [
                     {
                         "label": "客户管理",
                         "path": "/client/mngt",
-                        "authority": "customer_detail"
+                        "authority": "tc_erp_sc_customer"
                     }
                 ]
             },
@@ -62,48 +62,19 @@
                         "path": "/auth/roles",
                         "authority": "auth_section_role"
                     }
-                    // {
-                    //     "label": "部门管理",
-                    //     "path": "/auth/dept",
-                    //     "authority": "auth_section_department"
-                    // }
                 ]
             },
-            // {
-            //     "label": "放样外协服务",
-            //     "icon": "lofting",
-            //     "path": "/outsource",
-            //     "appName": "RD",
-            //     "authority": "entrust_page",
-            //     "items": [
-            //         {
-            //             "label": "委托列表",
-            //             "path": "/outsource/entrust",
-            //             "authority": "entrust_page_list"
-            //         },
-            //         {
-            //             "label": "已完成委托",
-            //             "path": "/outsource/Final",
-            //             "authority": "entrust_page_list"
-            //         },
-            //         {
-            //             "label": "已完成塔型",
-            //             "path": "/outsource/towershape",
-            //             "authority": "entrust_product_category_complete"
-            //         }
-            //     ]
-            // },
             {
                 "label": "招标信息",
                 "icon": "zhaobiao2",
                 "path": "/bidding",
                 "appName": "SC",
-                "authority": "bidding",
+                "authority": "tc_erp_sc_bid",
                 "items": [
                     {
                         "label": "招标信息",
                         "path": "/bidding/information",
-                        "authority": "bidding_info"
+                        "authority": "tc_erp_sc_bid"
                     }
                 ]
             },
@@ -844,31 +815,11 @@
                         "path": "/baseSetting/baseSettingMngt",
                         "authority": "config_list"
                     },
-                    // {
-                    //     "label": "产线管理",
-                    //     "path": "/baseSetting/productionLineMngt",
-                    //     "authority": "basic_settings_production_line_management"
-                    // },
-                    // {
-                    //     "label": "工序管理",
-                    //     "path": "/baseSetting/processMngt",
-                    //     "authority": "basic_settings_process_management"
-                    // },
-                    // {
-                    //     "label": "车间派工设备管理",
-                    //     "path": "/baseSetting/workshopEquipmentMngt",
-                    //     "authority": "basic_settings_workshop_dispatch_equipment_management"
-                    // },
                     {
                         "label": "生产班组管理",
                         "path": "/baseSetting/workshopTeamMngt",
                         "authority": "basic_settings_workshop_team_management"
                     },
-                    // {
-                    //     "label": "成品库配置",
-                    //     "path": "/baseSetting/shippingDepartmentConfig",
-                    //     "authority": "basic_settings_finished_product_warehouse_configuration"
-                    // },
                     {
                         "label": "车辆管理",
                         "path": "/baseSetting/vehicleMngt",

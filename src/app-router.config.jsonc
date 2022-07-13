@@ -36,21 +36,21 @@
       "path": "/client/mngt",
       "module": "./pages/clientMngt/index",
       "exact": true,
-      "authority": "customer_detail"
+      "authority": "tc_erp_sc_customer"
     },
     { // 新增客户
       "name": "新增客户",
       "path": "/client/mngt/eidt/new",
       "module": "./pages/clientMngt/Edit",
       "exact": true,
-      "authority": "customer_detail"
+      "authority": "tc_erp_sc_customer_add"
     },
     { // 编辑客户
       "name": "编辑客户",
       "path": "/client/mngt/edit/:id",
       "module": "./pages/clientMngt/Edit",
       "exact": true,
-      "authority": "customer_detail"
+      "authority": "tc_erp_sc_customer_edit"
     },
     {
       "name": "销售合同管理",
