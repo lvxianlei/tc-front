@@ -586,6 +586,20 @@
                 ]
             },
             {
+                "label": "业务处置管理",
+                "icon": "RD-tuzhitaxing",
+                "path": "/businessDisposal",
+                "appName": "RD",
+                "authority": "rd_product_category",
+                "items": [
+                    {
+                        "label": "取消暂停恢复",
+                        "path": "/businessDisposal/cancelOrPauseOrrestore",
+                        "authority": "rd_product_category"
+                    }
+                ]
+            },
+            {
                 "label": "问题单",
                 "icon": "RD_wentidanwentidan",
                 "path": "/question",

@@ -2713,6 +2713,20 @@
       "module": "./pages/qualityInspection/disposition/DispositionDetail",
       "exact": true,
       "authority": "home_page_person_center"
+    },
+    { // 业务处置管理-取消暂停恢复
+      "name": "取消暂停恢复",
+      "path": "/businessDisposal/cancelOrPauseOrrestore",
+      "module": "./pages/businessDisposal/CancelOrPauseOrrestore",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 业务处置管理-取消暂停恢复-已加工明细
+      "name": "已加工明细",
+      "path": "/businessDisposal/cancelOrPauseOrrestore/processedDetails/:id",
+      "module": "./pages/businessDisposal/ProcessedDetails",
+      "exact": true,
+      "authority": "home_page_person_center"
     }
   ]
 }
