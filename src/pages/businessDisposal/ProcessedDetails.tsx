@@ -4,12 +4,11 @@
  * @description 业务处置管理-取消暂停恢复-已加工明细
  */
 
-import React, { useState } from 'react';
-import { Input, Select } from 'antd';
+import React from 'react';
+import { Input } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import { useLocation } from 'react-router-dom';
-import { voltageGradeOptions } from '../../configuration/DictionaryOptions';
+import { useParams } from 'react-router-dom';
 
 export default function SetOutList(): React.ReactNode {
     const columns = [
@@ -22,122 +21,102 @@ export default function SetOutList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskNum',
+            key: 'issuedNumber',
             title: '下达单号',
             width: 80,
-            dataIndex: 'taskNum'
+            dataIndex: 'issuedNumber'
         },
         {
-            key: 'planNumber',
+            key: 'segmentName',
             title: '段名',
             width: 50,
-            dataIndex: 'planNumber'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'internalNumber',
+            key: 'productCode',
             title: '构件编号',
-            dataIndex: 'internalNumber',
+            dataIndex: 'productCode',
             width: 80
         },
         {
-            key: 'name',
+            key: 'materialName',
             title: '材料名称',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'materialName'
         },
         {
-            key: 'num',
+            key: 'structureTexture',
             title: '材质',
             width: 80,
-            dataIndex: 'num',
+            dataIndex: 'structureTexture',
         },
         {
-            key: 'voltageGradeName',
+            key: 'structureSpec',
             title: '规格',
             width: 80,
-            dataIndex: 'voltageGradeName',
+            dataIndex: 'structureSpec',
         },
         {
-            key: 'plannedDeliveryTime',
+            key: 'standard',
             title: '标准',
-            dataIndex: 'plannedDeliveryTime',
+            dataIndex: 'standard',
             width: 50,
         },
         {
-            key: 'patternName',
+            key: 'width',
             title: '宽度（mm）',
             width: 80,
-            dataIndex: 'patternName'
+            dataIndex: 'width'
         },
         {
-            key: 'loftingLeaderName',
+            key: 'thick',
             title: '厚度（mm）',
             width: 80,
-            dataIndex: 'loftingLeaderName'
+            dataIndex: 'thick'
         },
         {
-            key: 'statusName',
+            key: 'length',
             title: '长度（mm）',
             width: 80,
-            dataIndex: 'statusName'
+            dataIndex: 'length'
         },
         {
-            key: 'updateStatusTime',
+            key: 'processNum',
             title: '加工数',
             width: 50,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'processNum'
         },
         {
-            key: 'updateStatusTime',
+            key: 'reportWorkNum',
             title: '报工数',
             width: 50,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'reportWorkNum'
         },
         {
-            key: 'updateStatusTime',
+            key: 'stopNum',
             title: '暂停数',
             width: 50,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'stopNum'
         },
         {
-            key: 'updateStatusTime',
+            key: 'basicsWeight',
             title: '单件重量（kg）',
             width: 80,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'basicsWeight'
         }
     ]
 
-    const [refresh, setRefresh] = useState(false);
-    const location = useLocation<{ state?: number, userId?: string }>();
+    const params = useParams<{ id: string }>();
 
     return <Page
-        path="/tower-science/loftingList"
-        exportPath={`/tower-science/loftingList`}
+        path={`/tower-science/planChange/record/${params.id}`}
         columns={columns}
         headTabs={[]}
-        requestData={{ status: location.state?.state }}
-        refresh={refresh}
         searchFormItems={[
             {
-                name: 'status',
-                label: '电压等级',
-                children: <Select style={{ width: '150px' }}
-                    showSearch
-                    allowClear
-                    filterOption={(input, option) =>
-                        (option?.props?.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-                    }>
-                    {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={index} value={id}>
-                            {name}
-                        </Select.Option>
-                    })}
-                </Select>
-            },
-            {
-                name: 'fuzzyMsg',
+                name: 'productCode',
                 label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号" />
+                children: <Input placeholder="构件编号" />
             }
         ]}
         onFilterSubmit={(values: Record<string, any>) => {

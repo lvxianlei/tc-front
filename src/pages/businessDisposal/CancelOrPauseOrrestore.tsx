@@ -34,139 +34,170 @@ export interface IResponseData {
 export default function CancelOrPauseOrrestore(): React.ReactNode {
     const columns = [
         {
-            key: 'taskNumber',
+            key: 'planChangeNumber',
             title: '计划变更编号',
             width: 100,
-            dataIndex: 'taskNumber'
+            dataIndex: 'planChangeNumber'
         },
         {
-            key: 'name',
+            key: 'planNumber',
             title: '计划号',
             width: 100,
-            dataIndex: 'name'
+            dataIndex: 'planNumber'
         },
         {
-            key: 'towerPlaceNum',
+            key: 'customerCompany',
             title: '客户名称',
-            dataIndex: 'towerPlaceNum',
+            dataIndex: 'customerCompany',
             width: 80
         },
         {
-            key: 'voltageGrade',
+            key: 'projectName',
             title: '工程名称',
             width: 80,
-            dataIndex: 'voltageGrade'
+            dataIndex: 'projectName'
         },
         {
-            key: 'loftDeliverTime',
+            key: 'changeType',
             title: '变更类型',
             width: 80,
-            dataIndex: 'loftDeliverTime',
+            dataIndex: 'changeType',
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "恢复"
+                },
+                {
+                    "value": 1,
+                    "label": "取消"
+                },
+                {
+                    "value": 2,
+                    "label": "暂停"
+                }
+            ]
         },
         {
-            key: 'pattern',
+            key: 'changeInformation',
             title: '修改内容',
-            dataIndex: 'pattern',
+            dataIndex: 'changeInformation',
             width: 150,
         },
         {
-            key: 'loftLeaderName',
+            key: 'createTime',
             title: '接收时间',
             width: 100,
-            dataIndex: 'loftLeaderName'
+            dataIndex: 'createTime'
         },
         {
-            key: 'updateStatusTime',
+            key: 'productCount',
             title: '基数',
             width: 50,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'productCount'
         },
         {
-            key: 'updateStatusTime',
+            key: 'totalWeight',
             title: '总重量',
             width: 80,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'totalWeight'
         },
         {
-            key: 'updateStatusTime',
+            key: 'businessUserName',
             title: '业务员',
             width: 80,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'businessUserName'
         },
         {
-            key: 'updateStatusTime',
+            key: 'processedTotalWeight',
             title: '已加工总重量',
             width: 80,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'processedTotalWeight'
         },
         {
-            key: 'updateStatusTime',
+            key: 'description',
             title: '备注',
-            width: 100 ,
-            dataIndex: 'updateStatusTime'
+            width: 100,
+            dataIndex: 'description'
         }
     ]
 
     const tableColumns = [
         {
-            key: 'segmentGroupName',
+            key: 'productCategoryName',
             title: '塔型',
             width: 50,
-            dataIndex: 'segmentGroupName'
+            dataIndex: 'productCategoryName'
         },
         {
-            key: 'loftPersonName',
+            key: 'productHeight',
             title: '呼高',
             width: 50,
-            dataIndex: 'loftPersonName'
+            dataIndex: 'productHeight'
         },
         {
-            key: 'checkPersonName',
+            key: 'productCount',
             title: '基数',
             width: 50,
-            dataIndex: 'checkPersonName'
+            dataIndex: 'productCount'
         },
         {
-            key: 'planCompletionDate',
+            key: 'processedWeight',
             title: '单重吨',
             width: 80,
-            dataIndex: 'planCompletionDate'
+            dataIndex: 'processedWeight'
         },
         {
-            key: 'actualCompletionDate',
-            title: '总重吨',
-            width: 80,
-            dataIndex: 'actualCompletionDate'
-        },
-        {
-            key: 'actualCompletionDate',
+            key: 'productCode',
             title: '杆塔号',
             width: 80,
-            dataIndex: 'actualCompletionDate'
+            dataIndex: 'productCode'
         },
         {
-            key: 'actualCompletionDate',
+            key: 'description',
             title: '备注',
             width: 80,
-            dataIndex: 'actualCompletionDate'
+            dataIndex: 'description'
         },
         {
-            key: 'actualCompletionDate',
+            key: 'isIssuedProduction',
             title: '是否生产下达',
             width: 80,
-            dataIndex: 'actualCompletionDate'
+            dataIndex: 'isIssuedProduction',
+            "type": "select",
+            "enum": [
+                {
+                    "value": "0",
+                    "label": "否"
+                },
+                {
+                    "value": "1",
+                    "label": "是"
+                }
+            ]
         },
         {
-            key: 'actualCompletionDate',
+            key: 'isIssuedWorkshop',
             title: '是否下发车间',
             width: 80,
-            dataIndex: 'actualCompletionDate'
+            dataIndex: 'isIssuedWorkshop',
+            "type": "select",
+            "enum": [
+                {
+                    "value": "0",
+                    "label": "否"
+                },
+                {
+                    "value": "1",
+                    "label": "是"
+                }
+            ]
         },
         {
-            key: 'actualCompletionDate',
+            key: 'processedWeight',
             title: '已加工重量吨',
             width: 80,
-            dataIndex: 'actualCompletionDate'
+            dataIndex: 'processedWeight'
         },
         {
             key: 'operation',
@@ -192,29 +223,23 @@ export default function CancelOrPauseOrrestore(): React.ReactNode {
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
     const [rowId, setRowId] = useState<string>('');
     const [status, setStatus] = useState<string>('');
-    const history = useHistory();
-    const [sectionVisible, setSectionVisible] = useState<boolean>(false);
-    const sectionRef = useRef<EditRefProps>();
-    const [recordData, setRecordData] = useState<any>({});
     const [detailData, setDetailData] = useState<any>();
 
     const { loading, data, run } = useRequest<ILofting[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-tdm/loftProcess/projectTowerTypePage`, { current: pagenation?.current || 1, size: pagenation?.size || 10, status: status, ...filterValue });
+        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/planChange`, { current: pagenation?.current || 1, size: pagenation?.size || 10, status: status, ...filterValue });
         setPage({ ...data });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
             setRowId(data.records[0]?.id)
-            setRecordData(data.records[0])
         } else {
             setDetailData([]);
-            setRecordData({})
         }
         resole(data?.records);
     }), {})
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(`/tower-tdm/loftProcess/getSegAssignList/${id}`);
+            const result = await RequestUtil.get<any>(`/tower-science/planChange/${id}/record/list`);
             setDetailData(result)
             resole(result)
         } catch (error) {
@@ -223,11 +248,6 @@ export default function CancelOrPauseOrrestore(): React.ReactNode {
     }), { manual: true })
 
     const onSearch = (values: Record<string, any>) => {
-        if (values.time) {
-            const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-            values.submitStartTime = formatDate[0] + ' 00:00:00';
-            values.submitEndTime = formatDate[1] + ' 23:59:59';
-        }
         setFilterValues(values);
         run({}, { ...values });
     }
@@ -240,27 +260,12 @@ export default function CancelOrPauseOrrestore(): React.ReactNode {
     const onRowChange = async (record: Record<string, any>) => {
         detailRun(record.id)
         setRowId(record.id)
-        setRecordData(record);
     }
 
     return <Spin spinning={loading}>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item name="voltageGradeId" label="电压等级" initialValue={""}>
-                <Select style={{ width: '150px' }}
-                    showSearch
-                    allowClear
-                    filterOption={(input, option) =>
-                        (option?.props?.children as unknown as string).toLowerCase().includes(input.toLowerCase())
-                    }>
-                    {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={index} value={id}>
-                            {name}
-                        </Select.Option>
-                    })}
-                </Select>
-            </Form.Item>
             <Form.Item label='模糊查询项' name="fuzzyMsg">
-                <Input style={{ width: '200px' }} placeholder="" />
+                <Input style={{ width: '400px' }} placeholder="计划号/客户名称/工程名称/业务员" />
             </Form.Item>
             <Form.Item>
                 <Space direction="horizontal">
