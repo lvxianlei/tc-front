@@ -221,7 +221,8 @@ export default function Release(): React.ReactNode {
                                 return {
                                     ...itemItem,
                                     productId: item?.productId,
-                                    productNumber: item?.productNumber
+                                    productNumber: item?.productNumber,
+                                    batchNum: item?.batchNum?item?.batchNum:'0'
                                 }
                             })
                             arr.push(...value)
