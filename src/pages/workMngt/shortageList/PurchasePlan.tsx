@@ -21,8 +21,8 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             //TODO 临时初始数据
             setDataSource(result?.lists.map((item: any) => ({
                 ...item,
-                planPurchaseNum: item?.planPurchaseNum || "",
-                warehouseOccupy: item?.warehouseOccupy || ""
+                planPurchaseNum: item?.planPurchaseNum || (item.num - (item.warehouseOccupy || (item.availableStock > item.num ? item.num : item.availableStock))),
+                warehouseOccupy: item.warehouseOccupy || (item.availableStock > item.num ? item.num : item.availableStock)
             })) || [])
             resole(result)
         } catch (error) {
@@ -81,70 +81,75 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
 
     return <Spin spinning={loading}>
+        <Row style={{marginBottom: 8}}>
+            合并批次： 20220310-001、20220310-002、20220310-003
+        </Row>
+        <div style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "nowrap"
+        }}>
+            <DetailTitle title="配料方案" style={{width: 772}}/>
+            <DetailTitle title="计划列表" style={{width: 200}}/>
+        </div>
         <Row gutter={10}>
-            <Col span={12}>
-                <DetailTitle title="配料方案" />
-                <CommonTable haveIndex
-                    rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
-                    columns={ListIngredients} dataSource={data?.lists || []} pagination={false} />
-            </Col>
-            <Col span={12}>
-                <DetailTitle title="计划列表" />
-                <CommonTable
-                    rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
-                    columns={PlanList.map((item: any) => {
-                        if (item.dataIndex === "planPurchaseNum") {
-                            return ({
-                                ...item,
-                                render: (_: any, record: any, index: number) => {
-                                    return <InputNumber
-                                        value={record.planPurchaseNum || 0}
-                                        key={index}
-                                        max={999}
-                                        min={0}
-                                        onChange={(e: any) => {
-                                            const result = dataSource;
-                                            result[index].planPurchaseNum = e
+            <CommonTable
+                haveIndex
+                rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
+                columns={ListIngredients.map((item: any) => {
+                    if (item.dataIndex === "planPurchaseNum") {
+                        return ({
+                            ...item,
+                            render: (_: any, record: any, index: number) => {
+                                return <InputNumber
+                                    value={record.planPurchaseNum || 0}
+                                    key={index}
+                                    max={999}
+                                    min={0}
+                                    onChange={(e: any) => {
+                                        const result = dataSource;
+                                        result[index].planPurchaseNum = e
+                                        setDataSource(result.slice(0));
+                                        setCout(count + 1);
+                                    }}
+                                    style={{ width: 80, height: 27, border: record?.isRed ? "1px solid red" : "" }}
+                                />
+                            }
+                        })
+                    }
+                    if (item.dataIndex === "warehouseOccupy") {
+                        return ({
+                            ...item,
+                            render: (_: any, record: any, index: number) => {
+                                return <Input
+                                    value={record.warehouseOccupy || 0}
+                                    key={index}
+                                    // max={999}
+                                    // min={0}
+                                    onChange={(e: any) => {
+                                        const result = dataSource;
+                                        let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
+                                        if ((arg || 0) > (record.availableStock || 0)) {
+                                            message.error("本次占用数量过多，请修改！");
+                                            result[index].warehouseOccupy = ""
                                             setDataSource(result.slice(0));
-                                            setCout(count + 1);
-                                        }}
-                                        style={{ height: 27, border: record?.isRed ? "1px solid red" : "" }}
-                                    />
-                                }
-                            })
-                        }
-                        if (item.dataIndex === "warehouseOccupy") {
-                            return ({
-                                ...item,
-                                render: (_: any, record: any, index: number) => {
-                                    return <Input
-                                        value={record.warehouseOccupy || (record.availableStock > record.num ? record.num : record.availableStock)}
-                                        key={index}
-                                        // max={999}
-                                        // min={0}
-                                        onChange={(e: any) => {
-                                            const result = dataSource;
-                                            let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
-                                            if ((arg || 0) > (record.availableStock || 0)) {
-                                                message.error("本次占用数量过多，请修改！");
-                                                result[index].warehouseOccupy = ""
-                                                setDataSource(result.slice(0));
-                                            } else {
-                                                result[index].warehouseOccupy = arg
-                                                setDataSource(result.slice(0));
-                                            }
-                                            setCout(count + 1);
-                                        }}
-                                        style={{ height: 27 }}
-                                    />
-                                }
-                            })
-                        }
-                        return item
-                    })}
-                    dataSource={dataSource || []}
-                    pagination={false} />
-            </Col>
+                                        } else {
+                                            result[index].warehouseOccupy = arg
+                                            setDataSource(result.slice(0));
+                                        }
+                                        setCout(count + 1);
+                                    }}
+                                    style={{ width: 80, height: 27 }}
+                                />
+                            }
+                        })
+                    }
+                    return item;
+                }) }
+                dataSource={dataSource || []}
+                pagination={false}
+                scroll={{ y: document.documentElement.clientHeight - 320 }}
+            />
         </Row>
     </Spin>
 })
