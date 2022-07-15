@@ -814,6 +814,7 @@ export default function IngredientsList(): React.ReactNode {
                         }
                     }
                 }
+                console.log(v, "====>>>")
                 setGloballyStoredData(v);
             }
         } catch (error) {
@@ -930,18 +931,39 @@ export default function IngredientsList(): React.ReactNode {
                 }
                 res.push(v);
             }
-            const result: any[] = await RequestUtil.post(`/tower-supply/task/scheme/auto`, {
+            const result: any = await RequestUtil.post(`/tower-supply/task/scheme/auto/single`, {
                 ...serarchData,
                 ...nowIngre,
                 openNumber: nowIngre?.openNumberList,
                 components: comp, // 构建明细分类
-                purchaseTowerId: params.id, // 采购塔型的id
+                businessKey: params.id, // 采购塔型的id
                 stockDetails: res, // 库存信息
                 structureSpec: activeSort.split("_")[1], // 规格
                 structureTexture: activeSort.split("_")[0], // 材质
                 useStock: false, // 是否使用实际库存
+                sort
             });
             resole(result)
+
+            // 查询当前选中的
+            let v = globallyStoredData;
+            const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
+            const index = globallyStoredData?.findIndex((item: any) => item.key === activeSort);
+            // 全局存储已选方案
+            const index2 = panes.findIndex((item: any) => item.key === activeKey);
+            // selectedScheme
+            panes[index2].selectedScheme = result?.details || []
+            // 页面存储已选方案
+            panes[index2].selectedSchemeSummary = [{
+                numberAll: result.statisticsVo.num,
+                calculation: result.statisticsVo.utilizationRate,
+                surplusMaaterial: result.statisticsVo.plannedSurplusLength,
+                disassemblyNumber: result.statisticsVo.disassemblyNum,
+                meterNumber: result.statisticsVo.meterRange
+            }] || [];
+            v[index].children = panes;
+            console.log(v, "数据")
+            setGloballyStoredData(v.slice(0))
         } catch (error) {
             reject(error)
         }
@@ -1035,10 +1057,7 @@ export default function IngredientsList(): React.ReactNode {
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
                                                             <DetailTitle key="detail" title="构件明细" col={{left: 8, right: 16}} operation={[
-                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} onClick={() => {
-                                                                    message.warn("该功能暂未开发！");
-                                                                    return false;
-                                                                }}>自动配料</Button>,
+                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} disabled={autoLoading} onClick={() => getAuto()}>自动配料</Button>,
                                                                 <Button type="primary" ghost key="choose" style={{ padding: "6px 16px" }} disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
