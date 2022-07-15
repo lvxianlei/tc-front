@@ -83,12 +83,12 @@ export default function Release(): React.ReactNode {
         })))])
         form.setFieldsValue({
             ...data,
-            loftingBatchProductDTOList:value.map((item:any)=>{
-                return{
-                    ...item,
-                    batchNum:0
-                }
-            }),
+            // loftingBatchProductDTOList:value.map((item:any)=>{
+            //     return{
+            //         ...item,
+            //         batchNum:0
+            //     }
+            // }),
             // loftingBatchProductDTOList:[{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}],
         })
         formRef.setFieldsValue({
@@ -212,6 +212,7 @@ export default function Release(): React.ReactNode {
                             }
                         }):[]
                         console.log(trialValue)
+                        console.log(tableDataSource)
                         let arr: any[] = [];
                         tableDataSource.forEach((item:any)=>{
                             const value = item.loftingBatchSegmentVOList.map((itemItem:any)=>{
@@ -219,9 +220,10 @@ export default function Release(): React.ReactNode {
                                     ...itemItem,
                                     productId: item?.productId,
                                     productNumber: item?.productNumber,
-                                    batchNum: item?.batchNum?item?.batchNum:'0'
+                                    batchNum: itemItem?.batchNum?String(itemItem?.batchNum):'0'
                                 }
                             })
+                            console.log(value)
                             arr.push(...value)
                         })
                         console.log(arr)
@@ -237,7 +239,12 @@ export default function Release(): React.ReactNode {
                             weldingDemand: value.weldingDemand,
                             trialAssembleSegments: trialValue,
                             loftingBatchProductDTOList: arr,
-                            loftingBatchStatisticsDTOList: bTableDataSource
+                            loftingBatchStatisticsDTOList: bTableDataSource.map((item:any)=>{
+                                return{
+                                    ...item,
+                                    batchNum: item?.batchNum?String(item?.batchNum):'0'
+                                }
+                            })
                         }
                         console.log(submitValue)
                         RequestUtil.post(`/tower-science/loftingBatch/save`,submitValue).then(()=>{
@@ -375,7 +382,7 @@ export default function Release(): React.ReactNode {
                                         addonAfter={<PlusOutlined onClick={async () => {
                                             await form.validateFields()
                                             form.getFieldsValue(true).trialAssemble===1 && setVisible(true);
-                                            const value = form.getFieldsValue(true)?.loftingBatchProductDTOList.filter((item:any,index:number)=>{
+                                            const value = bTableDataSource.filter((item:any,index:number)=>{
                                                 return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
                                             });
                                             let newArr: any[] = [];
@@ -410,12 +417,12 @@ export default function Release(): React.ReactNode {
                 <DetailTitle title='杆塔信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
                     if(e.target.checked){
                         form.setFieldsValue({
-                            loftingBatchProductDTOList:releaseData?.loftingBatchProductVOList.map((item:any)=>{
-                                return{
-                                    ...item,
-                                    batchNum:0
-                                }
-                            }),
+                            // loftingBatchProductDTOList:releaseData?.loftingBatchProductVOList.map((item:any)=>{
+                            //     return{
+                            //         ...item,
+                            //         batchNum:0
+                            //     }
+                            // }),
                             trialAssembleSegment:''
                         })
                         formRef.setFieldsValue({
@@ -434,12 +441,12 @@ export default function Release(): React.ReactNode {
                             return item.isAll===0||item.isAll==='0'
                         })
                         form.setFieldsValue({
-                            loftingBatchProductDTOList:value.map((item:any)=>{
-                                return{
-                                    ...item,
-                                    batchNum:0
-                                }
-                            }),
+                            // loftingBatchProductDTOList:value.map((item:any)=>{
+                            //     return{
+                            //         ...item,
+                            //         batchNum:0
+                            //     }
+                            // }),
                             trialAssembleSegment:''
                         })
                         formRef.setFieldsValue({
@@ -468,13 +475,13 @@ export default function Release(): React.ReactNode {
                             loftingBatchSegmentVOList: item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
                                 return {
                                     ...itemItem,
-                                    batchNum: selectedKeys.includes(index.toString())?itemItem.releaseNum:0
+                                    batchNum: selectedKeys.includes(index.toString())?itemItem.releaseNum:'0'
                                 }
                             })
                         }
                     })
                     form.setFieldsValue({
-                        loftingBatchProductDTOList:value,
+                        // loftingBatchProductDTOList:value,
                         trialAssembleSegments: ''
                     })
                     setTableDataSource(value)
