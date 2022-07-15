@@ -550,12 +550,7 @@ export default function IngredientsList(): React.ReactNode {
         // selectedScheme
         panes[index2].selectedScheme = [
             ...programme[0].selectedScheme,
-            {
-                ...options,
-                clampLoss: serarchForm.getFieldValue("clampLoss"), 
-                edgeLoss: serarchForm.getFieldValue("edgeLoss"),
-                margin: serarchForm.getFieldValue("margin"),
-            }
+            options
         ]
         // 页面存储已选方案，计算
         const {
