@@ -25,13 +25,13 @@
         },
         {
             "title": "钢管收货量（吨）/总重（吨）",
-            "dataIndex": "roundSteelTotal",
+            "dataIndex": "steelTubeTotal",
             "width": 180,
             "type": "number"
         },
         {
-            "title": "其他收货量（吨）/总重（吨）-----新加",
-            "dataIndex": "roundSteelTotal",
+            "title": "其他收货量（吨）/总重（吨）",
+            "dataIndex": "steelTubeTotal",
             "width": 180,
             "type": "number"
         },

@@ -13,14 +13,14 @@
             "type": "string"
         },
         {
-            "title": "标准-----新加",
-            "dataIndex": "planNumber",
+            "title": "标准",
+            "dataIndex": "materialStandardName",
             "width": 200,
             "type": "string"
         },
         {
-            "title": "工程名称----新加",
-            "dataIndex": "planNumber",
+            "title": "工程名称",
+            "dataIndex": "orderProjectName",
             "width": 200,
             "type": "string"
         },
@@ -41,11 +41,6 @@
             "type": "integer"
         },
         {
-            "title": "圆钢总重（吨）",
-            "dataIndex": "roundSteelTotal",
-            "type": "number"
-        },
-        {
             "title": "角钢总重（吨）",
             "dataIndex": "angleSteelTotal",
             "type": "number"
@@ -53,6 +48,16 @@
         {
             "title": "钢板总重（吨）",
             "dataIndex": "steelPlateTotal",
+            "type": "number"
+        },
+        {
+            "title": "钢管总重（吨）",
+            "dataIndex": "steelTubeTotal",
+            "type": "number"
+        },
+        {
+            "title": "其他总重（吨）",
+            "dataIndex": "elseTotal",
             "type": "number"
         },
         {

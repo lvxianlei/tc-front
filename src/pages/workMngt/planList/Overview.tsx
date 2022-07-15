@@ -290,10 +290,10 @@ export default function Edit() {
                     pagination={false}
                     transformResult={(result: any) => result.purchasePlanListTotalVOS || []}
                     extraOperation={(result: any) => (<div style={{ marginBottom: 12 }}>
-                        采购类型统计： 钢管总重（t）：<span style={{ color: "#FF8C00" }}>{result?.roundSteelTotal === -1 ? "0" : result?.roundSteelTotal}</span>
+                        采购类型统计： 钢管总重（t）：<span style={{ color: "#FF8C00" }}>{result?.steelTubeTotal === -1 ? "0" : result?.steelTubeTotal}</span>
                         <span style={{ margin: "0px 12px" }}>角钢总重（t）：<span style={{ color: "#FF8C00" }}>{result?.angleSteelTotal === -1 ? "0" : result?.angleSteelTotal}</span></span>
                         钢板总重（t）：<span style={{ color: "#FF8C00", marginRight: 12 }}>{result?.steelPlateTotal === -1 ? "0" : result?.steelPlateTotal}</span>
-                        其他总重（t）：<span style={{ color: "#FF8C00" }}>{result?.steelPlateTotal === -1 ? "0" : result?.steelPlateTotal}</span>
+                        其他总重（t）：<span style={{ color: "#FF8C00" }}>{result?.elseTotal === -1 ? "0" : result?.elseTotal}</span>
                     </div>)}
                     searchFormItems={[]} />
             </DetailContent>

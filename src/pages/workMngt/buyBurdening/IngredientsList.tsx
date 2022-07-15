@@ -871,20 +871,22 @@ export default function IngredientsList(): React.ReactNode {
                 return false;
             }
             // 重组构建明细数据
-            const comp = [];
-            for (let i = 0; i < sortDetailList.length; i += 1) {
-                if (selectedRowKeysCheck.includes(sortDetailList[i].id)) {
-                    comp.push({
-                        ...sortDetailList[i],
-                        head: true
-                    })
-                } else {
-                    comp.push({
-                        ...sortDetailList[i],
-                        head: false
-                    })
-                }
-            }
+            // const comp = [];
+            // for (let i = 0; i < sortDetailList.length; i += 1) {
+            //     if (selectedRowKeysCheck.includes(sortDetailList[i].id)) {
+            //         comp.push({
+            //             ...sortDetailList[i],
+            //             head: true
+            //         })
+            //     } else {
+            //         comp.push({
+            //             ...sortDetailList[i],
+            //             head: false
+            //         })
+            //     }
+            // }
+            const comp = selectedRowCheck;
+            comp.map((item: any) => item["head"] = false);
             let res = [];
             for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
                 const v = {
@@ -910,6 +912,36 @@ export default function IngredientsList(): React.ReactNode {
                 return false;
             }
             setAlternativeData(result || []);
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    // 自动配料
+    const { loading: autoLoading, run: getAuto } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const serarchData = await serarchForm.validateFields();
+            const comp = selectedRowCheck;
+            comp.map((item: any) => item["head"] = false);
+            let res = [];
+            for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
+                const v = {
+                    length: nowIngre?.idealRepertoryLengthList[i]
+                }
+                res.push(v);
+            }
+            const result: any[] = await RequestUtil.post(`/tower-supply/task/scheme/auto`, {
+                ...serarchData,
+                ...nowIngre,
+                openNumber: nowIngre?.openNumberList,
+                components: comp, // 构建明细分类
+                purchaseTowerId: params.id, // 采购塔型的id
+                stockDetails: res, // 库存信息
+                structureSpec: activeSort.split("_")[1], // 规格
+                structureTexture: activeSort.split("_")[0], // 材质
+                useStock: false, // 是否使用实际库存
+            });
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -1021,16 +1053,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                  }}
                                                                 onRow={(record: any) => {
                                                                     return {
-                                                                        onDoubleClick: async (event: any) => {
-                                                                            if (record.noIngredients > 0) {
-                                                                                setSelectedRowKeysCheck([record.id]);
-                                                                                setSelectedRowCheck([record]);
-                                                                                setDetailCount(detailCount + 1);
-                                                                            } else {
-                                                                                message.error("当前构件已配完！");
-                                                                                return false;
-                                                                            }
-                                                                        }
+                                                                        onDoubleClick: async (event: any) => getScheme(1)
                                                                     }
                                                                 }}
                                                                 key={"id"}

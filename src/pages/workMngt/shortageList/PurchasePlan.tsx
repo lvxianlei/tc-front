@@ -82,7 +82,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     return <Spin spinning={loading}>
         <Row style={{marginBottom: 8}}>
-            合并批次： 20220310-001、20220310-002、20220310-003
+            合并批次： {data?.mergeBatch}
         </Row>
         <div style={{
             width: "100%",
