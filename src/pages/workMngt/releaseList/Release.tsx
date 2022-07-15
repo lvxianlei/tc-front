@@ -98,7 +98,14 @@ export default function Release(): React.ReactNode {
         setTableDataSource(value.map((item:any)=>{
             return{
                 ...item,
-                batchNum:0
+                batchNum:0,
+                loftingBatchSegmentVOList:item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
+                    console.log(item?.productId)
+                    return {
+                        ...itemItem,
+                        productId: item?.productId
+                    }
+                })
             }
         }))
         setBTableDataSource(data?.loftingStatisticsVOList.map((item:any)=>{
@@ -218,7 +225,7 @@ export default function Release(): React.ReactNode {
                             const value = item.loftingBatchSegmentVOList.map((itemItem:any)=>{
                                 return {
                                     ...itemItem,
-                                    productId: item?.productId,
+                                    // productId: item?.productId,
                                     productNumber: item?.productNumber,
                                     batchNum: itemItem?.batchNum?String(itemItem?.batchNum):'0'
                                 }
@@ -475,6 +482,7 @@ export default function Release(): React.ReactNode {
                             loftingBatchSegmentVOList: item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
                                 return {
                                     ...itemItem,
+                                    productId:item?.productId,
                                     batchNum: selectedKeys.includes(index.toString())?itemItem.releaseNum:'0'
                                 }
                             })
@@ -562,19 +570,22 @@ export default function Release(): React.ReactNode {
                                                             // })))
                                                             console.log(tableDataSource)
                                                             console.log(value)
-                                                            const loftingBatchSegmentVOListData:any = tableDataSource[index].loftingBatchSegmentVOList
+                                                            const loftingBatchSegmentVOListData:any = tableDataSource[index]?.loftingBatchSegmentVOList
                                                             const tableData:any = {
+                                                                isAll: 0,
                                                                 ...value,
                                                                 loftingBatchSegmentVOList: loftingBatchSegmentVOListData.map((itemItem:any)=>{
+                                                                    console.log(tableDataSource[index]?.productId)
                                                                     return {
                                                                         ...itemItem,
+                                                                        productId: tableDataSource[index]?.productId, 
                                                                         batchNum: JSON.stringify(value[itemItem?.segmentName])
                                                                     }
                                                                 })
                                                             }
                                                             tableDataSource.splice(index,1,tableData)
                                                             const arrNew = tableDataSource.filter((item:any)=>{
-                                                                return item.productionBatchNo === value?.productionBatchNo&&item.isAll!==0
+                                                                return item.productionBatchNo === value?.productionBatchNo&&item.isAll===0
                                                             })
                                                             console.log(arrNew)
                                                             setBTableDataSource(bTableDataSource.map((item:any)=>{
@@ -616,7 +627,7 @@ export default function Release(): React.ReactNode {
                                                     }
                                                 })
                                             }}
-                                            disabled={records?.isALL!==undefined&&records?.isAll!==0}
+                                            disabled={records?.isAll!==0}
                                             >编辑</Button>
                                         </Space>
                                     );
