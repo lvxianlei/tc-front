@@ -9,11 +9,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable as CommonTableBeFore, DetailContent, DetailTitle } from '../../common';
 import CommonTable from '../../common/CommonAliTable';
-import { StockColumn, ConstructionDetailsColumn, BatchingScheme } from "./IngredientsList.json";
+import { ConstructionDetailsColumn, BatchingScheme } from "./IngredientsList.json";
 
-import InheritOneIngredient from "./BatchingRelatedPopFrame/InheritOneIngredient"; // 继承一次配料
 import AllocatedScheme from "./BatchingRelatedPopFrame/AllocatedScheme"; // 已配方案
-import SelectMeters from "./BatchingRelatedPopFrame/SelectMeters"; // 选择米数
 import ComparisonOfSelectedSchemes from "./BatchingRelatedPopFrame/ComparisonOfSelectedSchemes"; // 已选方案对比
 import SelectWarehouse from "./BatchingRelatedPopFrame/SelectWarehouse"; // 选择仓库
 
@@ -48,7 +46,7 @@ const formItemLayout = {
 export default function IngredientsList(): React.ReactNode {
     const history = useHistory()
     const [serarchForm] = Form.useForm();
-    // 传递的参数 status: 状态 batchNumber：批次号 productCategoryName： 塔型 materialStandardName： 标准
+    // 传递的参数 status: 状态 batchNumber:批次号 productCategoryName: 塔型 materialStandardName: 标准
     const params = useParams<{ id: string, status: string, batchNumber: string, productCategoryName: string, materialStandardName: string }>();
 
     // 按钮
@@ -122,6 +120,9 @@ export default function IngredientsList(): React.ReactNode {
 
     // 初始米数
     const [miter, setMiter] = useState<any[]>([]);
+
+    // 长度合计
+    const [lengthAll, setLengthAll] = useState<number>(0);
 
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
@@ -279,6 +280,13 @@ export default function IngredientsList(): React.ReactNode {
             console.log(selectedRowKeys, selectedRows, "======")
             setSelectedRowKeysCheck(selectedRowKeys);
             setSelectedRowCheck(selectedRows)
+
+            // 计算构建长度合计
+            let lenth:number = 0;
+            for (let i = 0; i < selectedRows.length; i += 1) {
+                lenth = lenth + (+selectedRows[i].length || 0)
+            }
+            setLengthAll(lenth);
         },
         getCheckboxProps: (record: any) => ({
             disabled: record.notConfigured <= 0, // Column configuration not to be checked
@@ -400,6 +408,8 @@ export default function IngredientsList(): React.ReactNode {
 
         // 当已选方案发生变化，构建明细处理 
         let result: any = sortDetailList;
+        let selectKeys = selectedRowKeysCheck;
+        let selectRows = selectedRowCheck;
         for (let i = 0; i < result.length; i += 1) {
             if (map.has(result[i].code)) {
                 // map对应存在，则需要减少
@@ -408,8 +418,25 @@ export default function IngredientsList(): React.ReactNode {
             } else {
                 result[i].notConfigured = result[i].num;
             }
+            // 处理未配为0的情况
+            if (+result[i].notConfigured=== 0) {
+                if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
+                    // 说明存在
+                    selectKeys = selectKeys.filter((item: any) => item !== result[i].id);
+                    selectRows = selectRows.filter((item: any) => item.id !== result[i].id)
+                }
+            }
         }
+        setSelectedRowKeysCheck(selectKeys);
+        setSelectedRowCheck(selectRows);
         setSortDetailList(result.slice(0))
+
+        // 当已选方案发生改变，导致选中的变换，修改长度合计
+        let lenth:number = 0;
+        for (let i = 0; i < selectRows.length; i += 1) {
+            lenth = lenth + (+selectRows[i].length || 0)
+        }
+        setLengthAll(lenth);
 
         // 库存发生变化
         let resultAvailableInventoryData: any = availableInventoryData;
@@ -485,7 +512,12 @@ export default function IngredientsList(): React.ReactNode {
         // selectedScheme
         panes[index2].selectedScheme = [
             ...programme[0].selectedScheme,
-            options
+            {
+                ...options,
+                clampLoss: serarchForm.getFieldValue("clampLoss"), 
+                edgeLoss: serarchForm.getFieldValue("edgeLoss"),
+                margin: serarchForm.getFieldValue("margin"),
+            }
         ]
         // 页面存储已选方案，计算
         const {
@@ -636,6 +668,9 @@ export default function IngredientsList(): React.ReactNode {
         }
         setCount(++count);
         setAlternativeData([])
+        setSelectedRowKeysCheck([]);
+        setSelectedRowCheck([]);
+        setLengthAll(0);
     }
 
     // 初始获取数据
@@ -779,6 +814,7 @@ export default function IngredientsList(): React.ReactNode {
                         }
                     }
                 }
+                console.log(v, "====>>>")
                 setGloballyStoredData(v);
             }
         } catch (error) {
@@ -824,6 +860,11 @@ export default function IngredientsList(): React.ReactNode {
                 resole({});
                 return false;
             }
+            if (selectedRowCheck.length > 4) {
+                message.error("最多四个构件、辛苦修改后在配料~");
+                resole({});
+                return false;
+            }
             // 当前选中禁用
             if (selectedRowCheck[0].notConfigured <= 0) {
                 message.error("请您更换构件后再进行配料！");
@@ -831,20 +872,22 @@ export default function IngredientsList(): React.ReactNode {
                 return false;
             }
             // 重组构建明细数据
-            const comp = [];
-            for (let i = 0; i < sortDetailList.length; i += 1) {
-                if (sortDetailList[i].id === selectedRowKeysCheck[0]) {
-                    comp.push({
-                        ...sortDetailList[i],
-                        head: true
-                    })
-                } else {
-                    comp.push({
-                        ...sortDetailList[i],
-                        head: false
-                    })
-                }
-            }
+            // const comp = [];
+            // for (let i = 0; i < sortDetailList.length; i += 1) {
+            //     if (selectedRowKeysCheck.includes(sortDetailList[i].id)) {
+            //         comp.push({
+            //             ...sortDetailList[i],
+            //             head: true
+            //         })
+            //     } else {
+            //         comp.push({
+            //             ...sortDetailList[i],
+            //             head: false
+            //         })
+            //     }
+            // }
+            const comp = selectedRowCheck;
+            comp.map((item: any) => item["head"] = false);
             let res = [];
             for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
                 const v = {
@@ -875,6 +918,57 @@ export default function IngredientsList(): React.ReactNode {
         }
     }), { manual: true })
 
+    // 自动配料
+    const { loading: autoLoading, run: getAuto } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const serarchData = await serarchForm.validateFields();
+            const comp = selectedRowCheck;
+            comp.map((item: any) => item["head"] = false);
+            let res = [];
+            for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
+                const v = {
+                    length: nowIngre?.idealRepertoryLengthList[i]
+                }
+                res.push(v);
+            }
+            const result: any = await RequestUtil.post(`/tower-supply/task/scheme/auto/single`, {
+                ...serarchData,
+                ...nowIngre,
+                openNumber: nowIngre?.openNumberList,
+                components: comp, // 构建明细分类
+                businessKey: params.id, // 采购塔型的id
+                stockDetails: res, // 库存信息
+                structureSpec: activeSort.split("_")[1], // 规格
+                structureTexture: activeSort.split("_")[0], // 材质
+                useStock: false, // 是否使用实际库存
+                sort
+            });
+            resole(result)
+
+            // 查询当前选中的
+            let v = globallyStoredData;
+            const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
+            const index = globallyStoredData?.findIndex((item: any) => item.key === activeSort);
+            // 全局存储已选方案
+            const index2 = panes.findIndex((item: any) => item.key === activeKey);
+            // selectedScheme
+            panes[index2].selectedScheme = result?.details || []
+            // 页面存储已选方案
+            panes[index2].selectedSchemeSummary = [{
+                numberAll: result.statisticsVo.num,
+                calculation: result.statisticsVo.utilizationRate,
+                surplusMaaterial: result.statisticsVo.plannedSurplusLength,
+                disassemblyNumber: result.statisticsVo.disassemblyNum,
+                meterNumber: result.statisticsVo.meterRange
+            }] || [];
+            v[index].children = panes;
+            console.log(v, "数据")
+            setGloballyStoredData(v.slice(0))
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const components = {
         body: {
             row: (e: any) => <Tooltip title="双击进行配料~"><tr {...e} /></Tooltip>,
@@ -884,20 +978,25 @@ export default function IngredientsList(): React.ReactNode {
 
     return (
         <div className='ingredientsListWrapper'>
-            <DetailContent operation={
-                btnList.map((item: BtnList) => {
+            <DetailContent operation={[
+                <span className='texts' style={{ marginRight: 4 }}>长度合计:</span>,
+                <span className='values' style={{ marginRight: 16 }}>{ lengthAll }</span>,
+                ...btnList.map((item: BtnList) => {
                     return <Button key={item.key} type={item.type ? item.type : "primary"} style={{ marginRight: 16 }} onClick={() => handleBtnClick(item)}>{item.value}</Button>
                 })
-            }>
-                <DetailTitle title="配料信息" key={"ingre"} />
-                <Descriptions bordered>
-                    <Descriptions.Item label="批次号">{params.batchNumber || ""}</Descriptions.Item>
-                    <Descriptions.Item label="塔型">{params.productCategoryName || ""}</Descriptions.Item>
-                    <Descriptions.Item label="标准">{params.materialStandardName || ""}</Descriptions.Item>
-                </Descriptions>
+            ]}>
+                <div className='top-title-wrapper'>
+                    <span className='title-name'>配料信息</span>
+                    <span className='texts'>批次号:</span>
+                    <span className='values'>{params.batchNumber || ""}</span>
+                    <span className='texts'>塔型:</span>
+                    <span className='values'>{params.productCategoryName || ""}</span>
+                    <span className='texts'>标准:</span>
+                    <span className='values'>{params.materialStandardName || ""}</span>
+                </div>
                 {
                     constructionClassification.length > 0 && <div className='content_wrapper'>
-                        <div className='contentWrapperLeft' style={{ maxHeight: document.documentElement.clientHeight - 240, overflow: "auto" }}>
+                        <div className='contentWrapperLeft' style={{ maxHeight: document.documentElement.clientHeight - 184, overflow: "auto" }}>
                             {/* 构建list */}
                             {
                                 constructionClassification?.map((item: any, index: number) => {
@@ -938,17 +1037,17 @@ export default function IngredientsList(): React.ReactNode {
                                                             setAngleConfigVisible(true)
                                                         }
                                                     }>配料策略设置</Button>
-                                                    <span className='texts'>开数：</span>
+                                                    <span className='texts'>开数:</span>
                                                     <span className='values'>{nowIngre?.openNumberList?.join("、")}</span>
-                                                    <span className='texts'>刀口：</span>
+                                                    <span className='texts'>刀口:</span>
                                                     <span className='values'>{nowIngre.edgeLoss}</span>
-                                                    <span className='texts'> 端口：</span>
+                                                    <span className='texts'> 端口:</span>
                                                     <span className='values'>{nowIngre.clampLoss}</span>
-                                                    <span className='texts'>余量：</span>
+                                                    <span className='texts'>余量:</span>
                                                     <span className='values'>{nowIngre.margin}mm</span>
-                                                    <span className='texts'>利用率：</span>
+                                                    <span className='texts'>利用率:</span>
                                                     <span className='values'>{nowIngre.utilizationRate}%</span>
-                                                    <span className='texts'>原材料米数：</span>
+                                                    <span className='texts'>原材料米数:</span>
                                                     <span className='values'
                                                         title={nowIngre?.idealRepertoryLengthList?.join("、")}>
                                                         {nowIngre?.idealRepertoryLengthList && nowIngre?.idealRepertoryLengthList.length > 2 ? `${nowIngre?.idealRepertoryLengthList[0]}、${nowIngre?.idealRepertoryLengthList[1]}...` : nowIngre?.idealRepertoryLengthList?.join("、")}
@@ -958,16 +1057,13 @@ export default function IngredientsList(): React.ReactNode {
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
                                                             <DetailTitle key="detail" title="构件明细" col={{left: 8, right: 16}} operation={[
-                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} onClick={() => {
-                                                                    message.warn("该功能暂未开发！");
-                                                                    return false;
-                                                                }}>自动配料</Button>,
+                                                                <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} disabled={autoLoading} onClick={() => getAuto()}>自动配料</Button>,
                                                                 <Button type="primary" ghost key="choose" style={{ padding: "6px 16px" }} disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
                                                             <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
-                                                                    type: "radio",
+                                                                    type: "checkbox",
                                                                     ...rowSelectionCheck,
                                                                 }}
                                                                 components={components}
@@ -976,33 +1072,24 @@ export default function IngredientsList(): React.ReactNode {
                                                                  }}
                                                                 onRow={(record: any) => {
                                                                     return {
-                                                                        onDoubleClick: async(event: any) => {
-                                                                            if (record.notConfigured > 0) {
-                                                                                setSelectedRowKeysCheck([record.id]);
-                                                                                setSelectedRowCheck([record]);
-                                                                                setDetailCount(detailCount + 1);
-                                                                            } else {
-                                                                                message.error("当前构件已配完！");
-                                                                                return false;
-                                                                            }
-                                                                        }
+                                                                        onDoubleClick: async (event: any) => getScheme(1)
                                                                     }
                                                                 }}
                                                                 key={"id"}
                                                                 columns={ConstructionDetailsColumn}
                                                                 dataSource={sortDetailList}
                                                                 pagination={false}
-                                                                scroll={{ y: 590 }}
+                                                                scroll={{ y: document.documentElement.clientHeight - 364 }}
                                                             />
                                                         </div>
                                                         <div className='ingredients_content_wrapper_right_programme'>
                                                             <div className='title_wrapper marginTop' style={{ width: document.documentElement.clientWidth - 660 }}>
                                                                 <div>已选方案
-                                                                    <span className='textLabel'>已选米数：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).meterNumber : 0}</span>
-                                                                    <span className='textLabel'>总数量：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).numberAll : 0}</span>
-                                                                    <span className='textLabel'>拆号数：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).disassemblyNumber : 0}</span>
-                                                                    <span className='textLabel'>余料总长：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).surplusMaaterial : 0}mm</span>
-                                                                    <span className='textLabel'>总利用率：</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).calculation : 0}%</span>
+                                                                    <span className='textLabel'>已选米数:</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).meterNumber : 0}</span>
+                                                                    <span className='textLabel'>总数量:</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).numberAll : 0}</span>
+                                                                    <span className='textLabel'>拆号数:</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).disassemblyNumber : 0}</span>
+                                                                    <span className='textLabel'>余料总长:</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).surplusMaaterial : 0}mm</span>
+                                                                    <span className='textLabel'>总利用率:</span><span className='textValue'>{item.selectedSchemeSummary.length > 0 ? (item.selectedSchemeSummary[0] as any).calculation : 0}%</span>
                                                                 </div>
                                                             </div>
                                                             <div style={{ width: document.documentElement.clientWidth - 660 }} className="alternativeWrapper">
@@ -1027,7 +1114,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     dataSource={item.selectedScheme.slice(0)}
                                                                     pagination={false}
                                                                     // scroll={{ x: 1200, y: 320 }}
-                                                                    style={{height: 300, overflow: "auto"}}
+                                                                    style={{height: 200, overflow: "auto"}}
                                                                     code={1}
                                                                 />
                                                             </div>
@@ -1110,7 +1197,8 @@ export default function IngredientsList(): React.ReactNode {
                                                                     dataSource={alternativeData}
                                                                     pagination={false}
                                                                     // scroll={{ x: 1200, y: 310 }}
-                                                                    style={{height: 300, overflow: "auto"}}
+                                                                    style={{ height: document.documentElement.clientHeight - 580, overflow: "auto" }}
+                                                                    code={1}
                                                                 />
                                                             </div>
                                                         </div>
