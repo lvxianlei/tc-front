@@ -1019,7 +1019,10 @@ export default function IngredientsList(): React.ReactNode {
             //     }
             // }
             const comp = selectedRowCheck;
-            comp.map((item: any) => item["head"] = false);
+            comp.map((item: any) => {
+                item["head"] = false;
+                item["notConfigured"] = item.noIngredients
+            });
             console.log(value, "======>>>>", nowIngre)
             let res = [];
             if (value !== "1") {
