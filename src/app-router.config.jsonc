@@ -685,6 +685,13 @@
       "exact": true,
       "authority": "rd_cockpit"
     },
+    { // 驾驶舱-人员工作负荷
+      "name": "人员工作负荷",
+      "path": "/cockpit/personnelLoad",
+      "module": "./pages/cockpit/personnelLoad/List",
+      "exact": true,
+      "authority": "rd_cockpit"
+    },
     { // 驾驶舱-报表
       "name": "报表",
       "path": "/cockpit/statements",

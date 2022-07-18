@@ -1,0 +1,91 @@
+{
+    "columns": [
+        {
+            "key": "supplierName",
+            "title": "姓名",
+            "dataIndex": "supplierName"
+        },
+        {
+            "key": "contractNumber",
+            "title": "工序",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "key": "contractStatusName",
+            "title": "工作状态",
+            "dataIndex": "contractStatusName"
+        },
+        {
+            "key": "updateTime",
+            "title": "累计塔型数",
+            "dataIndex": "updateTime"
+        },
+        {
+            "key": "operatorName",
+            "title": "塔型数",
+            "dataIndex": "operatorName"
+        },
+        {
+            "key": "operatorName",
+            "title": "截止日期",
+            "dataIndex": "operatorName"
+        }
+    ],
+    "tableColumns": [
+        {
+            "key": "materialName",
+            "title": "计划号",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "key": "materialStandardName",
+            "title": "项目名称",
+            "dataIndex": "materialStandardName",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "塔型名称",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "产品类型",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "length",
+            "title": "电压等级",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "width",
+            "title": "模式",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "key": "num",
+            "title": "优先级",
+            "dataIndex": "num",
+            "width": 100
+        },
+        {
+            "key": "taxPrice",
+            "title": "开始日期",
+            "dataIndex": "taxPrice",
+            "type": "number",
+            "width": 130
+        },
+        {
+            "key": "totalTaxPrice",
+            "title": "预计完成日期",
+            "dataIndex": "totalTaxPrice",
+            "width": 130
+        }
+    ]
+}

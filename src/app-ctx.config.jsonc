@@ -229,6 +229,11 @@
                         "authority": "rd_cockpit"
                     },
                     {
+                        "label": "人员工作负荷",
+                        "path": "/cockpit/personnelLoad",
+                        "authority": "rd_cockpit"
+                    },
+                    {
                         "label": "报表",
                         "path": "/cockpit/statements",
                         "authority": "rd_cockpit"
