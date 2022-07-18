@@ -128,6 +128,9 @@ export default function Release(): React.ReactNode {
                 visible={visible} 
                 onCancel={()=>{
                     formRef.resetFields()
+                    form.setFieldsValue({
+                        trialAssembleSegment:''
+                    })
                     setVisible(false)
                 }}
                 onOk={async ()=>{
@@ -215,7 +218,7 @@ export default function Release(): React.ReactNode {
                                 productCategoryId:params.id,
                                 segmentId:item.segmentId,
                                 segmentName:item.segmentName,
-                                trialAssembleNum:item.trialAssembleNum,
+                                trialAssembleNum:item.trialAssembleNum?item.trialAssembleNum:0,
                             }
                         }):[]
                         console.log(trialValue)

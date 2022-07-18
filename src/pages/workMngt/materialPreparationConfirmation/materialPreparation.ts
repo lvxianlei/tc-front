@@ -11,5 +11,5 @@ export interface Detail {
     visible: boolean
     batcherId: string
     code: string
-    handleCallBack: () => void
+    handleCallBack: (value: any) => void
 }

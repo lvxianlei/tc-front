@@ -53,13 +53,13 @@
   "scripts": {
     "start": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",
     "intg": "cross-env REACT_APP_ENV=integration GENERATE_SOURCEMAP=true react-app-rewired start",
-    "build": "cross-env REACT_APP_ENV=production GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
-    "build:dev": "cross-env REACT_APP_ENV=integration GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
-    "build:test": "cross-env REACT_APP_ENV=test GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
-    "build:uat": "cross-env REACT_APP_ENV=uat GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
-    "test": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired test",
+    "build": " GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
+    "build:dev": "cross-env REACT_APP_ENV=integration NODE_OPTIONS=--max-old-space-size=8192 npm run build",
+    "build:test": "cross-env REACT_APP_ENV=test NODE_OPTIONS=--max-old-space-size=8192 npm run build",
+    "build:uat": "cross-env REACT_APP_ENV=uat NODE_OPTIONS=--max-old-space-size=8192 npm run build",
+    "test": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false=8192 react-app-rewired test",
     "eject": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired eject",
-    "gen:ts": "npx ytt -c ytt.config.ts"
+    "dll": "cross-env REACT_APP_ENV=dll GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build"
   },
   "eslintConfig": {
     "extends": [

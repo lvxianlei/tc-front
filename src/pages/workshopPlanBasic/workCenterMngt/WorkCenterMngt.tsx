@@ -18,9 +18,15 @@ export default function ProcessMngt(): React.ReactNode {
     const columns = [
         {
             key: 'code',
-            title: '编码',
+            title: '生产单元编码',
             width: 150,
             dataIndex: 'code'
+        },
+        {
+            key: 'unitName',
+            title: '生产单元名称',
+            width: 150,
+            dataIndex: 'unitName'
         },
         {
             key: 'workCenterName',
@@ -96,6 +102,11 @@ export default function ProcessMngt(): React.ReactNode {
                 }}>新增</Button>}
                 refresh={refresh}
                 searchFormItems={[
+                    {
+                        name: 'unitName',
+                        label: '',
+                        children: <Input placeholder="生产单元名称" />
+                    },
                     {
                         name: 'workCenterName',
                         label: '',

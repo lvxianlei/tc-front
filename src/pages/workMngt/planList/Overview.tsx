@@ -23,39 +23,18 @@ export default function Edit() {
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-    const [pagenation, setPagenation] = useState<PagenationProps>({
-        current: 1,
-        pageSize: 10
-    })
-    const formatSpec = (spec: any): { width: string, length: string } => {
-        if (!spec) {
-            return ({
-                width: "0",
-                length: "0"
-            })
-        }
-        const splitArr = spec.replace("∠", "").split("*")
-        return ({
-            width: splitArr[0] || "0",
-            length: splitArr[1] || "0"
-        })
-    }
-
-    const paginationChange = (page: number, pageSize: number) => run(page, pageSize)
-
-    const { loading, data: dataTable, run } = useRequest<{ [key: string]: any }>((current = 1, size = 10) => new Promise(async (resole, reject) => {
+    const { loading, data: dataTable } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`, {
-                current: current,
-                size: size
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`,{
+                current: 1,
+                size: 1000
             })
             setPopDataList(result.records.map(((item: any, index: number) => ({
                 ...item,
                 source: 1,
-                id: `${item.materialName}-${index}`
+                rowKey: `${item.materialName}-${index}`
             }))))
             resole(result)
-            setPagenation({ ...pagenation, current: result.page, pageSize: result.size })
         } catch (error) {
             reject(error)
         }
@@ -98,8 +77,8 @@ export default function Edit() {
             }
             return item
         })
-        setMaterialList(list.slice(0));
-        setPopDataList(list.slice(0))
+        setMaterialList([...list]);
+        setPopDataList([...list])
     }
 
     const lengthChange = (value: number, id: string) => {
@@ -118,6 +97,20 @@ export default function Edit() {
         setPopDataList(list)
     }
 
+    const widthChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    width: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list);
+        setPopDataList(list)
+    }
+
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.id === maItem.id))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -128,7 +121,8 @@ export default function Edit() {
                 }
             }
         }
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+        console.log("newMaterialList", materialList, newMaterialList)
+        setMaterialList([...popDataList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat(item.offer || "1.00")
@@ -137,14 +131,14 @@ export default function Edit() {
                 planPurchaseNum: num,
                 taxPrice,
                 price,
-                width: formatSpec(item.structureSpec).width,
+                width: 0,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
         })])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
+        setPopDataList([...popDataList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat(item.offer || "1.00")
@@ -153,7 +147,7 @@ export default function Edit() {
                 planPurchaseNum: num,
                 taxPrice,
                 price,
-                width: formatSpec(item.structureSpec).width,
+                width: 0,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
                 taxTotalAmount: (num * taxPrice).toFixed(2),
@@ -203,13 +197,6 @@ export default function Edit() {
                     loading={loading}
                     columns={PurchaseList}
                     dataSource={dataTable?.records || []}
-                    pagination={{
-                        size: "small",
-                        pageSize: pagenation.pageSize,
-                        onChange: paginationChange,
-                        current: pagenation.current,
-                        total: dataTable?.total
-                    }}
                 />}
                 {isEdit && <CommonTable
                     style={{ padding: "0" }}
@@ -218,13 +205,32 @@ export default function Edit() {
                             if (["planPurchaseNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => {
+                                        const minNum = records.source === 1 ? dataTable?.records.find((item: any) => item.id === records.id)?.planPurchaseNum : 1
+                                        return <InputNumber
+                                            min={minNum} value={value}
+                                            onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    }
                                 })
                             }
                             if (item.dataIndex === "length") {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber
+                                        min={1}
+                                        value={value}
+                                        onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                })
+                            }
+                            if (item.dataIndex === "width") {
+                                return ({
+                                    ...item,
+                                    render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber
+                                        min={0}
+                                        max={99999}
+                                        value={value}
+                                        precision={0}
+                                        onChange={(value: number) => widthChange(value, records.id)} key={key} />
                                 })
                             }
                             if (item.dataIndex === "materialStandardName") {
@@ -327,13 +333,13 @@ export default function Edit() {
                             // structureTexture: item.structureTexture,
                             // materialStandardName: item.materialStandardName,
                             length: item.length || 1,
+                            width: 0,
                             // materialStandard: item.materialStandard,
                             taxPrice: item.taxPrice || 1.00,
                             price: item.price || 1.00,
                             taxTotalAmount: item.taxTotalAmount || 1.00,
                             totalAmount: item.totalAmount || 1.00,
-                            weight: ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1)) / 1000 / 1000).toFixed(3),
-                            totalWeight: ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3)
+                            weight: item.weight || ((parseFloat(item?.proportion || 1) * parseFloat(item.length || 1)) / 1000 / 1000).toFixed(3)
                         })) || [])
                     }}
                 />
@@ -346,7 +352,7 @@ export default function Edit() {
                     let keys = [...PurchaseList]
                     return keys
                 }}
-                current={pagenation.current || 1}
+                current={1}
                 size={dataTable?.records.length || 10}
                 total={dataTable?.records.length || 0}
                 url={`/tower-supply/materialPurchasePlan/list/${params.id}`}
