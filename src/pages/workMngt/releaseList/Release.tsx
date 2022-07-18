@@ -250,13 +250,13 @@ export default function Release(): React.ReactNode {
                             <Row >
                                 <Col span={12}>
                                     <Form.Item name="machiningDemand" label="加工要求">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
                                     </Form.Item>
                                 </Col>
                             
                                 <Col span={12}>
                                     <Form.Item name="weldingDemand" label="电焊说明">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
                                     </Form.Item>
                                 </Col>
                             
@@ -264,13 +264,13 @@ export default function Release(): React.ReactNode {
                             <Row>
                                 <Col span={12}>
                                     <Form.Item name="galvanizeDemand" label="镀锌要求">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
                                     </Form.Item>
                                 </Col>
                             
                                 <Col span={12}>
                                     <Form.Item name="packDemand" label="包装说明">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
