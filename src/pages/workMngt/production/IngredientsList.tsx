@@ -991,7 +991,7 @@ export default function IngredientsList(): React.ReactNode {
             }
             const serarchData = await serarchForm.validateFields();
             if (selectedRowCheck.length < 1) {
-                message.error("请您选择构建明细！");
+                message.error("请选择配料构件!");
                 resole({});
                 return false;
             }
@@ -1019,7 +1019,10 @@ export default function IngredientsList(): React.ReactNode {
             //     }
             // }
             const comp = selectedRowCheck;
-            comp.map((item: any) => item["head"] = false);
+            comp.map((item: any) => {
+                item["head"] = false;
+                item["notConfigured"] = item.noIngredients
+            });
             console.log(value, "======>>>>", nowIngre)
             let res = [];
             if (value !== "1") {

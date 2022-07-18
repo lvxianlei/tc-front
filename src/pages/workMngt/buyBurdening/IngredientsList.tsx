@@ -952,6 +952,11 @@ export default function IngredientsList(): React.ReactNode {
             // 全局存储已选方案
             const index2 = panes.findIndex((item: any) => item.key === activeKey);
             // selectedScheme
+            result?.details?.map((item: any) => {
+                item["clampLoss"] = serarchForm.getFieldValue("clampLoss");
+                item["edgeLoss"] = serarchForm.getFieldValue("edgeLoss");
+                item["margin"] = serarchForm.getFieldValue("margin");
+            })
             panes[index2].selectedScheme = result?.details || []
             // 页面存储已选方案
             panes[index2].selectedSchemeSummary = [{
