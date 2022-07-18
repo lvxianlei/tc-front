@@ -1002,28 +1002,30 @@ export default function IngredientsList(): React.ReactNode {
                 return false;
             }
             // 重组构建明细数据
-            // const comp = [];
-            // for (let i = 0; i < sortDetailList.length; i += 1) {
-            //     if (sortDetailList[i].id === selectedRowKeysCheck[0]) {
-            //         comp.push({
-            //             ...sortDetailList[i],
-            //             notConfigured: sortDetailList[i].noIngredients,
-            //             head: true
-            //         })
-            //     } else {
-            //         comp.push({
-            //             ...sortDetailList[i],
-            //             notConfigured: sortDetailList[i].noIngredients,
-            //             head: false
-            //         })
-            //     }
-            // }
-            const comp = selectedRowCheck;
-            comp.map((item: any) => {
-                item["head"] = false;
-                item["notConfigured"] = item.noIngredients
-            });
-            console.log(value, "======>>>>", nowIngre)
+            let comp = [];
+            if (selectedRowCheck.length === 1) {
+                for (let i = 0; i < sortDetailList.length; i += 1) {
+                    if (sortDetailList[i].id === selectedRowKeysCheck[0]) {
+                        comp.push({
+                            ...sortDetailList[i],
+                            notConfigured: sortDetailList[i].noIngredients,
+                            head: true
+                        })
+                    } else {
+                        comp.push({
+                            ...sortDetailList[i],
+                            notConfigured: sortDetailList[i].noIngredients,
+                            head: false
+                        })
+                    }
+                }
+            } else {
+                comp = selectedRowCheck;
+                comp.map((item: any) => {
+                    item["head"] = false;
+                    item["notConfigured"] = item.noIngredients
+                });
+            }
             let res = [];
             if (value !== "1") {
                 for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
