@@ -47,7 +47,7 @@ export default function Invoicing() {
         <Modal
             title="生成采购计划"
             visible={generateVisible}
-            width={1200}
+            width={1300}
             onOk={handlePurChasePlan}
             maskClosable={false}
             confirmLoading={purChasePlanRef.current?.confirmLoading}

@@ -132,72 +132,65 @@
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "width": 40,
             "type": "string"
         },
         {
             "title": "标准",
-            "width": 40,
             "dataIndex": "materialStandardName",   
             "type": "string"
         },
         {
             "title": "规格",
-            "width": 40,
             "dataIndex": "structureSpec",
             "type": "string"
         },
         {
             "title": "配料品名",
-            "width": 60,
             "dataIndex": "materialName",
             "type": "string"
         },
         {
             "title": "搭配长度（mm）",
-            "width": 100,
+            "width": 120,
             "dataIndex": "length",
             "type": "string"
         },
         {
             "title": "搭配数量",
-            "width": 60,
             "dataIndex": "num",
             "type": "number"
         },
         {
             "title": "单重（kg）",
-            "width": 80,
             "dataIndex": "weight",
             "type": "number"
         },
         {
             "title": "汇总重量（kg）",
-            "width": 100,
+            "width": 150,
             "dataIndex": "totalWeight",
             "type": "number"
         },
         {
             "title": "备注",
-            "width": 40,
             "dataIndex": "remarks",
             "type": "textarea"
         },
         {
             "title": "仓库可用库存（支）",
-            "width": 100,
+            "width": 150,
             "dataIndex": "availableStock",
             "type": "number"
         },
         {
             "title": "仓库占用（本次）",
-            "width": 100,
+            "width": 120,
             "dataIndex": "warehouseOccupy",
             "type": "number"
         },
         {
             "title": "计划采购（本次）",
-            "width": 100,
+            "width": 120,
             "dataIndex": "planPurchaseNum",
             "type": "number"
         }
