@@ -4,6 +4,7 @@ import { DetailTitle, CommonTable } from '../../common'
 import { ListIngredients, PlanList } from "../purchaseList/purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { upNumber } from "../../../utils/KeepDecimals"
 interface PurchasePlanProps {
     ids: string[]
 }
@@ -21,7 +22,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             //TODO 临时初始数据
             setDataSource(result?.lists.map((item: any) => ({
                 ...item,
-                planPurchaseNum: item?.planPurchaseNum || (item.num - (item.warehouseOccupy || (item.availableStock > item.num ? item.num : item.availableStock))),
+                planPurchaseNum: item?.planPurchaseNum || (upNumber(item.num - (item.warehouseOccupy || (item.availableStock > item.num ? item.num : item.availableStock)) + "")),
                 warehouseOccupy: item.warehouseOccupy || (item.availableStock > item.num ? item.num : item.availableStock)
             })) || [])
             resole(result)
@@ -89,67 +90,82 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             display: "flex",
             flexWrap: "nowrap"
         }}>
-            <DetailTitle title="配料方案" style={{width: 772}}/>
+            <DetailTitle title="配料方案" style={{width: 858}}/>
             <DetailTitle title="计划列表" style={{width: 200}}/>
         </div>
-        <Row gutter={10}>
+        <div>
             <CommonTable
-                haveIndex
                 rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
-                columns={ListIngredients.map((item: any) => {
-                    if (item.dataIndex === "planPurchaseNum") {
-                        return ({
-                            ...item,
-                            render: (_: any, record: any, index: number) => {
-                                return <InputNumber
-                                    value={record.planPurchaseNum || 0}
-                                    key={index}
-                                    max={999}
-                                    min={0}
-                                    onChange={(e: any) => {
-                                        const result = dataSource;
-                                        result[index].planPurchaseNum = e
-                                        setDataSource(result.slice(0));
-                                        setCout(count + 1);
-                                    }}
-                                    style={{ width: 80, height: 27, border: record?.isRed ? "1px solid red" : "" }}
-                                />
-                            }
-                        })
-                    }
-                    if (item.dataIndex === "warehouseOccupy") {
-                        return ({
-                            ...item,
-                            render: (_: any, record: any, index: number) => {
-                                return <Input
-                                    value={record.warehouseOccupy || 0}
-                                    key={index}
-                                    // max={999}
-                                    // min={0}
-                                    onChange={(e: any) => {
-                                        const result = dataSource;
-                                        let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
-                                        if ((arg || 0) > (record.availableStock || 0)) {
-                                            message.error("本次占用数量过多，请修改！");
-                                            result[index].warehouseOccupy = ""
+                columns={[
+                    {
+                        key: 'index',
+                        title: '序号',
+                        dataIndex: 'index',
+                        fixed: "left",
+                        width: 30,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => {
+                            return (
+                                <span>
+                                    {index + 1}
+                                </span>
+                            )
+                        }
+                    },
+                    ...ListIngredients.map((item: any) => {
+                        if (item.dataIndex === "planPurchaseNum") {
+                            return ({
+                                ...item,
+                                render: (_: any, record: any, index: number) => {
+                                    return <InputNumber
+                                        value={record.planPurchaseNum || 0}
+                                        key={index}
+                                        max={999}
+                                        min={0}
+                                        onChange={(e: any) => {
+                                            const result = dataSource;
+                                            result[index].planPurchaseNum = e
                                             setDataSource(result.slice(0));
-                                        } else {
-                                            result[index].warehouseOccupy = arg
-                                            setDataSource(result.slice(0));
-                                        }
-                                        setCout(count + 1);
-                                    }}
-                                    style={{ width: 80, height: 27 }}
-                                />
-                            }
-                        })
-                    }
-                    return item;
-                }) }
+                                            setCout(count + 1);
+                                        }}
+                                        style={{ width: 80, height: 27, border: record?.isRed ? "1px solid red" : "" }}
+                                    />
+                                }
+                            })
+                        }
+                        if (item.dataIndex === "warehouseOccupy") {
+                            return ({
+                                ...item,
+                                render: (_: any, record: any, index: number) => {
+                                    return <Input
+                                        value={record.warehouseOccupy || 0}
+                                        key={index}
+                                        // max={999}
+                                        // min={0}
+                                        onChange={(e: any) => {
+                                            const result = dataSource;
+                                            let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
+                                            if ((arg || 0) > (record.availableStock || 0)) {
+                                                message.error("本次占用数量过多，请修改！");
+                                                result[index].warehouseOccupy = ""
+                                                setDataSource(result.slice(0));
+                                            } else {
+                                                result[index].warehouseOccupy = arg
+                                                setDataSource(result.slice(0));
+                                            }
+                                            setCout(count + 1);
+                                        }}
+                                        style={{ width: 80, height: 27 }}
+                                    />
+                                }
+                            })
+                        }
+                        return item;
+                    })
+                ]}
                 dataSource={dataSource || []}
                 pagination={false}
                 scroll={{ y: document.documentElement.clientHeight - 320 }}
             />
-        </Row>
+        </div>
     </Spin>
 })

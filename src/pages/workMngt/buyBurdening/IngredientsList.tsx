@@ -872,22 +872,25 @@ export default function IngredientsList(): React.ReactNode {
                 return false;
             }
             // 重组构建明细数据
-            // const comp = [];
-            // for (let i = 0; i < sortDetailList.length; i += 1) {
-            //     if (selectedRowKeysCheck.includes(sortDetailList[i].id)) {
-            //         comp.push({
-            //             ...sortDetailList[i],
-            //             head: true
-            //         })
-            //     } else {
-            //         comp.push({
-            //             ...sortDetailList[i],
-            //             head: false
-            //         })
-            //     }
-            // }
-            const comp = selectedRowCheck;
-            comp.map((item: any) => item["head"] = false);
+            let comp = [];
+            if (selectedRowCheck.length === 1) {
+                 for (let i = 0; i < sortDetailList.length; i += 1) {
+                    if (selectedRowKeysCheck.includes(sortDetailList[i].id)) {
+                        comp.push({
+                            ...sortDetailList[i],
+                            head: true
+                        })
+                    } else {
+                        comp.push({
+                            ...sortDetailList[i],
+                            head: false
+                        })
+                    }
+                }
+            } else {
+                comp = selectedRowCheck;
+                comp.map((item: any) => item["head"] = false);
+            }
             let res = [];
             for (let i = 0; i < nowIngre?.idealRepertoryLengthList.length; i += 1) {
                 const v = {
