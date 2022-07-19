@@ -582,7 +582,7 @@ export default function Release(): React.ReactNode {
                                                                     return {
                                                                         ...itemItem,
                                                                         productId: tableDataSource[index]?.productId, 
-                                                                        batchNum: JSON.stringify(value[itemItem?.segmentName])
+                                                                        batchNum: typeof value[itemItem?.segmentName] ==='number'?JSON.stringify(value[itemItem?.segmentName]):value[itemItem?.segmentName]
                                                                     }
                                                                 })
                                                             }
