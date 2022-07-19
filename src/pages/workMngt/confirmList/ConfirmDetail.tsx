@@ -361,25 +361,37 @@ export default function ConfirmDetail(): React.ReactNode {
         title: '接腿配置A', 
         dataIndex: 'legConfigurationA', 
         width: 80,
-        key: 'legConfigurationA' 
+        key: 'legConfigurationA',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿配置B', 
         dataIndex: 'legConfigurationB', 
         width: 80,
-        key: 'legConfigurationB' 
+        key: 'legConfigurationB',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿配置C', 
         dataIndex: 'legConfigurationC', 
         width: 80,
-        key: 'legConfigurationC' 
+        key: 'legConfigurationC',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿配置D', 
         dataIndex: 'legConfigurationD', 
         width: 80,
-        key: 'legConfigurationD' 
+        key: 'legConfigurationD',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿重A（kg）', 
