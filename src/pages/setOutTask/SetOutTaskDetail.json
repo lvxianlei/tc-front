@@ -40,7 +40,7 @@
     ],
     "specialColums": [
         {
-            "dataIndex": "materialStandardName",
+            "dataIndex": "materialStandard",
             "title": "原材料标准"
         },
         {
