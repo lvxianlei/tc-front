@@ -354,7 +354,7 @@ export default function Release(): React.ReactNode {
                             </Row>
                             <Row>
                                 <Col span={12}>
-                                    <Form.Item name="galvanizeDemand" label="已取消下达单号">
+                                    <Form.Item name="cancelIssuedNumber" label="已取消下达单号">
                                         <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
                                     </Form.Item>
                                 </Col>
@@ -554,7 +554,11 @@ export default function Release(): React.ReactNode {
                                                                 return <Col span={12}>
                                                                     <Form.Item label={item.title} name={item.dataIndex} >
                                                                         {
-                                                                            index < 4 ?  <InputNumber disabled={ index < 4 } precision={0}  min={0} style={{width:"100%"}}/>:
+                                                                            index < 4 ?  index === 3?<Select style={{width:"100%"}} disabled>
+                                                                                <Select.Option key={0} value={0}>正常</Select.Option>
+                                                                                <Select.Option key={1} value={1}>暂停</Select.Option>
+                                                                                <Select.Option key={2} value={2}>恢复</Select.Option>
+                                                                            </Select>:<InputNumber disabled={ index < 4 } precision={0}  min={0} style={{width:"100%"}}/>:
                                                                             <InputNumber disabled={ index < 4 } precision={0} max={maxNum[0]?.releaseNum||0} min={0} style={{width:"100%"}}/>
                                                                         }
                                                                         
