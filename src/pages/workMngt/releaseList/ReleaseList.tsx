@@ -25,6 +25,17 @@ export default function ReleaseList(): React.ReactNode {
     const SelectChange = (selectedRowKeys: React.Key[]): void => {
         setSelectedKeys(selectedRowKeys);
     }
+
+    const {  run: cancelRun } = useRequest<any>((params: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.delete(`/tower-science/loftingBatch/${params?.id}`,{
+                description:params?.description
+            });
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     const releaseColumns = [
         {
             key: 'index',
@@ -153,16 +164,31 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'issuedNumber'
         },
         {
+            key: 'status',
+            title: '下达单状态',
+            width: 100,
+            dataIndex: 'status',
+            render:(text:number)=>{
+                return text===1?'已下达':text===2?'已取消':'-'
+            }
+        },
+        {
+            key: 'updateStatusTime',
+            title: '最新状态变更时间',
+            width: 100,
+            dataIndex: 'updateStatusTime'
+        },
+        {
+            key: 'planNum',
+            title: '计划号',
+            width: 100,
+            dataIndex: 'planNum'
+        },
+        {
             key: 'productCategory',
             title: '塔型',
             width: 100,
             dataIndex: 'productCategory'
-        },
-        {
-            key: 'productionBatchNo',
-            title: '批次号',
-            width: 100,
-            dataIndex: 'productionBatchNo'
         },
         {
             key: 'steelProductShape',
@@ -171,10 +197,16 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'steelProductShape'
         },
         {
-            key: 'planNum',
-            title: '计划号',
+            key: 'productionBatchNo',
+            title: '批次号',
             width: 100,
-            dataIndex: 'planNum'
+            dataIndex: 'productionBatchNo'
+        },
+        {
+            key: 'productNumbers',
+            title: '杆塔号',
+            width: 100,
+            dataIndex: 'productNumbers'
         },
         {
             key: 'allSegmentName',
@@ -257,23 +289,29 @@ export default function ReleaseList(): React.ReactNode {
             width: 200,
             dataIndex: 'galvanizeDemand'
         },
+        // {
+        //     key: 'status',
+        //     title: '配料状态',
+        //     width: 150,
+        //     dataIndex: 'status',
+        //     render:(text:number)=>{
+        //         return text===1?'未配料':text===2?'已配料':'-'
+        //     }
+        // },
+        // {
+        //     key: 'distributionStatus',
+        //     title: '分配状态',
+        //     width: 150,
+        //     dataIndex: 'distributionStatus',
+        //     render:(text:number)=>{
+        //         return text===1?'未分配':text===2?'已分配':'-'
+        //     }
+        // },
         {
-            key: 'status',
-            title: '配料状态',
-            width: 150,
-            dataIndex: 'status',
-            render:(text:number)=>{
-                return text===1?'未配料':text===2?'已配料':'-'
-            }
-        },
-        {
-            key: 'distributionStatus',
-            title: '分配状态',
-            width: 150,
-            dataIndex: 'distributionStatus',
-            render:(text:number)=>{
-                return text===1?'未分配':text===2?'已分配':'-'
-            }
+            key: 'description',
+            title: '取消说明',
+            width: 200,
+            dataIndex: 'description'
         },
         {
             key: 'operation',
@@ -283,7 +321,7 @@ export default function ReleaseList(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small"  >
-                    <Popconfirm
+                    {/* <Popconfirm
                         title="确认删除?"
                         onConfirm={ async () => {
                             await RequestUtil.delete(`/tower-science/loftingBatch/${record.id}`).then(()=>{
@@ -295,11 +333,41 @@ export default function ReleaseList(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                         disabled={record.status===2||record.distributionStatus===2}
-                    >   
+                    >    */}
                         <Button type="link" 
-                            disabled={record.status===2||record.distributionStatus===2}
-                        >删除</Button>
-                    </Popconfirm> 
+                            disabled={record?.issuedStatus===3}
+                            onClick={()=>{
+                                Modal.confirm({
+                                    title: "取消下达",
+                                    icon: null,
+                                    content: <Form form={form} >
+                                        <Form.Item label='取消原因' name='description' >
+                                            <Input.TextArea maxLength={100}/>
+                                        </Form.Item>
+                                    </Form>,
+                                    onOk: () => new Promise(async (resolve, reject) => {
+                                        try {
+                                            const value = await form.validateFields()
+                                            await cancelRun({
+                                                id: record?.id,
+                                                ...value
+                                            });
+                                            resolve(true)
+                                            form.resetFields()
+                                            message.success("取消成功！")
+                                            history.go(0)
+                                        } catch (error) {
+                                            console.log(error)
+                                            reject(false)
+                                        }
+                                    }),
+                                    onCancel() {
+                                        form.resetFields()
+                                    }
+                                })
+                            }}
+                        >取消下达</Button>
+                    {/* </Popconfirm>  */}
                     <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/detail/${record.id}/${record.productCategoryId}`)}}>下达明细</Button>
                     <Button type="link" onClick={()=>{history.push(`/workMngt/releaseList/assemblyWelding/${record.id}/${record.productCategoryId}`)}}>组焊明细</Button>
 

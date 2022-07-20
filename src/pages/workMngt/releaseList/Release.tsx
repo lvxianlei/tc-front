@@ -57,6 +57,7 @@ export default function Release(): React.ReactNode {
         }
     ]
     const [columns, setColumns] = useState<any>(columnsCommon)
+    const [cancelList, setCancelList] = useState<any[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
         const value  = data?.loftingBatchProductVOList.filter((item:any)=>{
@@ -115,6 +116,8 @@ export default function Release(): React.ReactNode {
             }
         }))
         setReleaseData(data)
+        const cancelData:any[] = await RequestUtil.get(`/tower-science/loftingBatch/canceled/batch/list`);
+        setCancelList(cancelData)
     }), {})
     const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
         setSelectedKeys(selectedRowKeys);
@@ -355,7 +358,13 @@ export default function Release(): React.ReactNode {
                             <Row>
                                 <Col span={12}>
                                     <Form.Item name="cancelIssuedNumber" label="已取消下达单号">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                        <Select style={{width:"100%"}}  showSearch allowClear>
+                                            {cancelList && cancelList.map(({ id, issuedNumber }, index) => {
+                                                return <Select.Option key={index} value={id}>
+                                                    {issuedNumber}
+                                                </Select.Option>
+                                            })}
+                                        </Select>
                                     </Form.Item>
                                 </Col>
                             </Row>
