@@ -856,7 +856,7 @@ export default function IngredientsList(): React.ReactNode {
             }
             const serarchData = await serarchForm.validateFields();
             if (selectedRowCheck.length < 1) {
-                message.error("请您选择构建明细！");
+                message.error("请选择配料构件！");
                 resole({});
                 return false;
             }

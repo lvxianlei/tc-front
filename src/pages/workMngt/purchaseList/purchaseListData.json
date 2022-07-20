@@ -162,6 +162,7 @@
         },
         {
             "title": "单重（kg）",
+            "width": 120,
             "dataIndex": "weight",
             "type": "number"
         },

@@ -349,6 +349,7 @@ export default function IngredientsList(): React.ReactNode {
             for (let i = 0; i < selectedRows.length; i += 1) {
                 lenth = lenth + (+selectedRows[i].length || 0)
             }
+            setLengthAll(lenth);
         },
         getCheckboxProps: (record: any) => ({
             disabled: record.noIngredients <= 0, // Column configuration not to be checked
@@ -992,6 +993,11 @@ export default function IngredientsList(): React.ReactNode {
             const serarchData = await serarchForm.validateFields();
             if (selectedRowCheck.length < 1) {
                 message.error("请选择配料构件!");
+                resole({});
+                return false;
+            }
+            if (selectedRowCheck.length > 4) {
+                message.error("最多四个构件、辛苦修改后在配料~");
                 resole({});
                 return false;
             }
