@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
-import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber } from "antd"
+import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
 import { PopTableContent } from "./ComparesModal"
@@ -139,6 +139,17 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const onSubmit = () => new Promise(async (resove, reject) => {
         try {
             const baseData = await form.validateFields()
+            // 添加对长度以及数量的拦截
+            let flag = false;
+            for (let i = 0; i < materialList.length; i += 1) {
+                if (!(materialList[i].length && materialList[i].num)) {
+                    flag = true;
+                }
+            }
+            if (flag) {
+                message.error("请您填写长度或数量！");
+                return false;
+            }
             await saveRun({
                 ...baseData,
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
