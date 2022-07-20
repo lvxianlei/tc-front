@@ -164,13 +164,13 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'issuedNumber'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '下达单状态',
             width: 100,
-            dataIndex: 'status',
-            render:(text:number)=>{
-                return text===1?'已下达':text===2?'已取消':'-'
-            }
+            dataIndex: 'statusName',
+            // render:(text:number)=>{
+            //     return text===1?'已下达':text===2?'已取消':'-'
+            // }
         },
         {
             key: 'updateStatusTime',
@@ -227,13 +227,13 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'createUserName'
         },
         {
-            key: 'trialAssemble',
+            key: 'trialAssembleName',
             title: '试装类型',
             width: 100,
-            dataIndex: 'trialAssemble',
-            render:(text:string)=>{
-                return text==='1'?'试组装':text==='0'?'免试组':'-'
-            }
+            dataIndex: 'trialAssembleName',
+            // render:(text:string)=>{
+            //     return text==='1'?'试组装':text==='0'?'免试组':'-'
+            // }
         },
         { 
             key: 'trialAssembleSegment',
