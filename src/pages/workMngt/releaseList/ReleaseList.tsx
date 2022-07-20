@@ -470,7 +470,7 @@ export default function ReleaseList(): React.ReactNode {
             ]}
         />
         <Page
-            path="/tower-science/loftingBatch/batchResult"
+            path="/tower-science/loftingBatch/count"
             columns={detailColumns}
             onFilterSubmit={onFilterASubmit}
             filterValue={aFilterValue}
