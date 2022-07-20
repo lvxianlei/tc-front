@@ -84,6 +84,7 @@ export default function Release(): React.ReactNode {
         })))])
         form.setFieldsValue({
             ...data,
+            cancelIssuedNumber: data?.cancelIssuedNumber?data?.cancelIssuedNumber.split(','):''
             // loftingBatchProductDTOList:value.map((item:any)=>{
             //     return{
             //         ...item,
@@ -244,7 +245,7 @@ export default function Release(): React.ReactNode {
                             galvanizeDemand: value.galvanizeDemand,
                             machiningDemand: value.machiningDemand,
                             packDemand: value.packDemand,
-                            cancelIssuedNumber: value.cancelIssuedNumber,
+                            cancelIssuedNumber: value.cancelIssuedNumber?value.cancelIssuedNumber.join(','):"",
                             planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
                             productCategoryId: params.id,
                             trialAssemble: value.trialAssemble,
