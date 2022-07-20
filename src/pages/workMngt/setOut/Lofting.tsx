@@ -214,11 +214,8 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'groove',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
-                    pattern: /^[1]*$/,
-                    message: '仅可输入1',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                <Form.Item name={['data', index, "groove"]} initialValue={_}>
+                    <InputNumber min={0} max={999999} size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },
