@@ -142,12 +142,6 @@ export default function CancelOrPauseOrrestore(): React.ReactNode {
             dataIndex: 'productCount'
         },
         {
-            key: 'processedWeight',
-            title: '单重吨',
-            width: 80,
-            dataIndex: 'processedWeight'
-        },
-        {
             key: 'productCode',
             title: '杆塔号',
             width: 80,
