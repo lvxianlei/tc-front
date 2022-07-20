@@ -92,7 +92,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             display: "flex",
             flexWrap: "nowrap"
         }}>
-            <DetailTitle title="配料方案" style={{width: 858}}/>
+            <DetailTitle title="配料方案" style={{width: 854}}/>
             <DetailTitle title="计划列表" style={{width: 200}}/>
         </div>
         <div>
@@ -104,7 +104,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                         title: '序号',
                         dataIndex: 'index',
                         fixed: "left",
-                        width: 30,
+                        width: 40,
                         render: (_a: any, _b: any, index: number): React.ReactNode => {
                             return (
                                 <span>
