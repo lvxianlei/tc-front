@@ -244,6 +244,7 @@ export default function Release(): React.ReactNode {
                             galvanizeDemand: value.galvanizeDemand,
                             machiningDemand: value.machiningDemand,
                             packDemand: value.packDemand,
+                            cancelIssuedNumber: value.cancelIssuedNumber,
                             planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
                             productCategoryId: params.id,
                             trialAssemble: value.trialAssemble,
