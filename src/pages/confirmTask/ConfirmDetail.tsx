@@ -24,24 +24,6 @@ const towerColumns=[
         dataIndex: 'lineName'
     },
     {
-        key: 'name',
-        title: '杆塔号',
-        width: 100,
-        dataIndex: 'name'
-    },
-    {
-        key: 'productCategory',
-        title: '塔型',
-        width: 100,
-        dataIndex: 'productCategory'
-    },
-    {
-        key: 'steelProductShape',
-        title: '塔型钢印号',
-        width: 100,
-        dataIndex: 'steelProductShape'
-    },
-    {
         key: 'productType',
         title: '产品类型',
         width: 100,
@@ -72,22 +54,166 @@ const towerColumns=[
         }
     },
     {
+        key: 'productCategory',
+        title: '塔型',
+        width: 100,
+        dataIndex: 'productCategory'
+    },
+    {
+        key: 'steelProductShape',
+        title: '塔型钢印号',
+        width: 100,
+        dataIndex: 'steelProductShape'
+    },
+    {
+        key: 'name',
+        title: '杆塔号',
+        width: 100,
+        dataIndex: 'name'
+    },
+    {
         key: 'basicHeight',
         title: '呼高（m）',
         width: 100,
         dataIndex: 'basicHeight'
     },
     {
-        key: 'otherWeight',
-        title: '其他增重（kg）',
+        key: 'patternName',
+        title: '模式',
         width: 100,
-        dataIndex: 'otherWeight'
+        dataIndex: 'patternName'
+    },
+    {
+        key: 'structure',
+        title: '结构',
+        width: 100,
+        dataIndex: 'structure'
+    },
+    {
+        key: 'legConfigurationA',
+        title: '接腿配置A',
+        width: 100,
+        dataIndex: 'legConfigurationA'
+    },
+    {
+        key: 'legConfigurationB',
+        title: '接腿配置B',
+        width: 100,
+        dataIndex: 'legConfigurationB'
+    },
+    {
+        key: 'legConfigurationC',
+        title: '接腿配置C',
+        width: 100,
+        dataIndex: 'legConfigurationC'
+    },
+    {
+        key: 'legConfigurationD',
+        title: '接腿配置D',
+        width: 100,
+        dataIndex: 'legConfigurationD'
+    },
+    {
+        key: 'legWeightA',
+        title: '接腿重A（kg）',
+        width: 100,
+        dataIndex: 'legWeightA'
+    },
+    {
+        key: 'legWeightB',
+        title: '接腿重B（kg）',
+        width: 100,
+        dataIndex: 'legWeightB'
+    },
+    {
+        key: 'legWeightC',
+        title: '接腿重C（kg）',
+        width: 100,
+        dataIndex: 'legWeightC'
+    },
+    {
+        key: 'legWeightD',
+        title: '接腿重D（kg）',
+        width: 100,
+        dataIndex: 'legWeightD'
+    },
+    {
+        key: 'bodyWeight',
+        title: '本体重量（kg）',
+        width: 100,
+        dataIndex: 'bodyWeight'
+    },
+    {
+        key: 'monomerWeight',
+        title: '单重（kg）',
+        width: 100,
+        dataIndex: 'monomerWeight'
     },
     {
         key: 'totalWeight',
         title: '总重（kg）',
         width: 100,
         dataIndex: 'totalWeight'
+    },
+    {
+        key: 'otherWeightBg',
+        title: '其他增重-抱箍（kg）',
+        width: 100,
+        dataIndex: 'otherWeightBg'
+    },
+    {
+        key: 'otherWeightPt',
+        title: '其他增重-平台（kg）',
+        width: 100,
+        dataIndex: 'otherWeightPt'
+    },
+    {
+        key: 'otherWeightXxp',
+        title: '其他增重-相序牌（kg）',
+        width: 100,
+        dataIndex: 'otherWeightXxp'
+    },
+    {
+        key: 'otherWeightPat',
+        title: '其他增重-爬梯（kg）',
+        width: 100,
+        dataIndex: 'otherWeightPat'
+    },
+    {
+        key: 'otherWeightFd',
+        title: '其他增重-防盗（kg）',
+        width: 100,
+        dataIndex: 'otherWeightFd'
+    },
+    {
+        key: 'otherWeightDdssgkb',
+        title: '其他增重-兜底绳施工孔板（kg）',
+        width: 100,
+        dataIndex: 'otherWeightDdssgkb'
+    },
+    {
+        key: 'otherWeightGdxg',
+        title: '其他增重-挂点修改（kg）',
+        width: 100,
+        dataIndex: 'otherWeightGdxg'
+    },
+    {
+        key: 'otherWeightXg',
+        title: '其他增重-修改（kg）',
+        width: 100,
+        dataIndex: 'otherWeightXg'
+    },
+    {
+        key: 'otherWeightQtsm',
+        title: '其他增重-全塔双帽（kg）',
+        width: 100,
+        dataIndex: 'otherWeightQtsm'
+    },
+    {
+        key: 'otherWeightLs',
+        title: '其他增重-螺栓（kg）',
+        width: 100,
+        dataIndex: 'otherWeightLs'
     },
     {
         key: 'description',
