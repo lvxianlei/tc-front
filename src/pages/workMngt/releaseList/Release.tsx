@@ -116,7 +116,7 @@ export default function Release(): React.ReactNode {
             }
         }))
         setReleaseData(data)
-        const cancelData:any[] = await RequestUtil.get(`/tower-science/loftingBatch/canceled/batch/list`);
+        const cancelData:any[] = await RequestUtil.get(`/tower-science/loftingBatch/canceled/batch/list/${params.id}`);
         setCancelList(cancelData)
     }), {})
     const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
@@ -358,7 +358,7 @@ export default function Release(): React.ReactNode {
                             <Row>
                                 <Col span={12}>
                                     <Form.Item name="cancelIssuedNumber" label="已取消下达单号">
-                                        <Select style={{width:"100%"}}  showSearch allowClear>
+                                        <Select style={{width:"100%"}}  showSearch allowClear  mode="multiple">
                                             {cancelList && cancelList.map(({ id, issuedNumber }, index) => {
                                                 return <Select.Option key={index} value={id}>
                                                     {issuedNumber}
