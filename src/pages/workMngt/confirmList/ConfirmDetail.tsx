@@ -601,7 +601,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         id: record?.id
                     })
                     setVisible(true)
-                }}>编辑</Button>
+                }} disabled={params?.status==='4'}>编辑</Button>
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={async () => {
@@ -611,8 +611,9 @@ export default function ConfirmDetail(): React.ReactNode {
                     }}
                     okText="确认"
                     cancelText="取消"
+                    disabled={params?.status==='4'}
                 >
-                    <Button type="link">删除</Button>
+                    <Button type="link" disabled={params?.status==='4'}>删除</Button>
                 </Popconfirm>
             </Space>
         )
