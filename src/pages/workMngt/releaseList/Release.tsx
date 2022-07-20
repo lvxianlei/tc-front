@@ -362,7 +362,7 @@ export default function Release(): React.ReactNode {
                                     <Form.Item name="cancelIssuedNumber" label="已取消下达单号">
                                         <Select style={{width:"100%"}}  showSearch allowClear  mode="multiple">
                                             {cancelList && cancelList.map(({ id, issuedNumber }, index) => {
-                                                return <Select.Option key={index} value={id}>
+                                                return <Select.Option key={index} value={issuedNumber}>
                                                     {issuedNumber}
                                                 </Select.Option>
                                             })}
