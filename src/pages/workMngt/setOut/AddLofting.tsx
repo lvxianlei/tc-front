@@ -164,7 +164,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
                     required: true,
                     message: '请输入单段件数'
                 }]}>
-                    <InputNumber min={0} max={99} size="small" onChange={(e) => {
+                    <InputNumber min={0} max={999} size="small" onChange={(e) => {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],
