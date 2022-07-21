@@ -3,7 +3,7 @@
  */
 import React, { useState } from 'react';
 import { Form, Button, message, Spin, Radio } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { BaseInfo, DetailContent, DetailTitle, EditableTable } from '../../common';
 import { baseInfo, payment } from "./sale_order.json";
 import { doNumber } from "../../../utils/KeepDecimals";
@@ -23,21 +23,24 @@ const initData = {
     foreignPrice: "0",
     guaranteeAmount: "0"
 }
+
 export default function SeeGuarantee(): JSX.Element {
     const history = useHistory();
+    const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/management/:type/order")
     const [contratId, setContratId] = useState<string>()
     const [planType, setPlanType] = useState<1 | 2>(1)
     const [editFormData, setEditFormData] = useState<any[]>([])
     const [addCollectionForm] = Form.useForm();
     const [editform] = Form.useForm();
     const params = useParams<{ projectId: string, id: string }>();
+    const type = routerMatch?.params?.type
     // 新增保存
     const { loading: saveLoaing, run } = useRequest((postData: { data: {} }) => new Promise(async (resolve, reject) => {
         try {
-            const result: any = await RequestUtil[params.id === "new" ? "post" : "put"]("/tower-market/saleOrder", postData.data)
+            const result: any = await RequestUtil[type === "new" ? "post" : "put"]("/tower-market/saleOrder", postData.data)
             resolve(result);
             if (result) {
-                message.success(`${params.id === "new" ? "新增订单成功" : "修改订单成功"}`);
+                message.success(`${type === "new" ? "新增订单成功" : "修改订单成功"}`);
                 history.goBack()
             }
         } catch (error) {
@@ -63,7 +66,7 @@ export default function SeeGuarantee(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { manual: params.id === "new" })
+    }), { manual: type === "new" })
 
     const { loading: contratLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -216,7 +219,7 @@ export default function SeeGuarantee(): JSX.Element {
             paymentPlanOrderDTOS: editformData.submit
         }
         await run({
-            data: params.id === "new" ? result : {
+            data: type === "new" ? result : {
                 ...result,
                 id: params.id
             }

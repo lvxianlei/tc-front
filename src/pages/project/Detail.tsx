@@ -107,24 +107,6 @@ export default function ManagementDetail(): React.ReactNode {
         }
     }), { manual: true })
 
-    const { loading: noticeAdoptLoading, run: noticeAdoptRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/taskNotice/adopt?taskNoticeId=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { loading: noticeRejectLoading, run: noticeRejectRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/taskNotice/reject?taskNoticeId=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
     const deleteProductGroupItem = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -191,7 +173,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_bidResult: <BidResult id={params.id} />,
         tab_frameAgreement: <FrameAgreement id={params.id} />,
         tab_contract: <>
-            <div style={{ padding: "24px 0 10px 24px", boxSizing: "border-box" }}>
+            <div style={{ paddingTop: 16 }}>
                 <Radio.Group defaultValue={"contract"} onChange={operationChange}>
                     <Radio.Button value={"contract"} key={`contract`}>合同</Radio.Button>
                     <Radio.Button value={"order"} key={"order"}>订单</Radio.Button>

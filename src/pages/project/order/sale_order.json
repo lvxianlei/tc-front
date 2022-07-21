@@ -266,5 +266,199 @@
             "maxLength": 300,
             "showCount": false
         }
+    ],
+    "productInfo": [
+        {
+            "title": "状态",
+            "dataIndex": "productStatus",
+            "width": 50,
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未下发",
+                    "value": 0
+                },
+                {
+                    "label": "已下发",
+                    "value": 1
+                },
+                {
+                    "label": "审批中",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "线路名称",
+            "dataIndex": "lineName",
+            "width": 80
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
+            "width": 80
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 50
+        },
+        {
+            "title": "基数",
+            "dataIndex": "number",
+            "width": 50
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "title": "电压等级（KV）",
+            "dataIndex": "voltageGradeName",
+            "width": 80
+        },
+        {
+            "title": "呼高（m）",
+            "dataIndex": "productHeight",
+            "width": 60
+        },
+        {
+            "title": "单重（kg）",
+            "dataIndex": "singleWeight",
+            "width": 60
+        },
+        {
+            "title": "其他重量（kg）",
+            "dataIndex": "otherWeight",
+            "width": 80
+        },
+        {
+            "title": "总重（kg）",
+            "dataIndex": "totalWeight",
+            "width": 60
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ],
+    "detaiBaseInfo": [
+        {
+            "title": "采购订单号",
+            "dataIndex": "purchaseOrderNumber"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName"
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "signContractTime"
+        },
+        {
+            "title": "合同要求交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "订单重量",
+            "dataIndex": "orderWeight"
+        },
+        {
+            "title": "含税金额",
+            "dataIndex": "taxAmount"
+        },
+        {
+            "title": "不含税金额",
+            "dataIndex": "amount"
+        },
+        {
+            "title": "含税单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "不含税单价",
+            "dataIndex": "price"
+        },
+        {
+            "title": "税率",
+            "dataIndex": "taxRate"
+        },
+        {
+            "title": "外汇金额",
+            "dataIndex": "foreignExchangeAmount"
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleType"
+        },
+        {
+            "title": "外汇单价",
+            "dataIndex": "foreignPrice"
+        },
+        {
+            "title": "销售业务员",
+            "dataIndex": "salesman"
+        },
+        {
+            "title": "保函金额",
+            "dataIndex": "guaranteeAmount"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "system": [
+        {
+            "title": "最后编辑人",
+            "dataIndex": "updateUserName"
+        },
+        {
+            "title": "最后编辑时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        }
     ]
 }

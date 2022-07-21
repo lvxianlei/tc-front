@@ -6,9 +6,7 @@ import { useHistory, useParams, Link } from 'react-router-dom';
 import { Button, Space } from 'antd';
 import { Page } from '../../common';
 import RequestUtil from "../../../utils/RequestUtil";
-import { IResponseData } from "../../common/Page";
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
-import { ITableDataItem } from "../../prom/order/SaleOrder";
 import ConfirmableButton from "../../../components/ConfirmableButton";
 import AuthorityComponent from "../../../components/AuthorityComponent";
 export default function SaleOrder(): JSX.Element {
@@ -24,13 +22,12 @@ export default function SaleOrder(): JSX.Element {
     const columns = [{
         title: "销售订单编号",
         dataIndex: "saleOrderNumber",
-        render: (_: undefined, record: object): React.ReactNode => {
+        render: (_: undefined, record: any): React.ReactNode => {
             return (
                 <Link
-                    to={`/project/order/detail/${params.id}/${(record as ITableDataItem).id
-                        }`}
+                    to={`/project/management/detail/order/${params.id}/${record?.id}`}
                 >
-                    {(record as ITableDataItem).saleOrderNumber}
+                    {record.saleOrderNumber}
                 </Link>
             );
         },
@@ -61,13 +58,13 @@ export default function SaleOrder(): JSX.Element {
         title: "内部合同编号",
         dataIndex: "internalNumber",
         width: 140,
-        render: (_: undefined, record: object): React.ReactNode => {
+        render: (_: undefined, record: any): React.ReactNode => {
             return (
                 <Link
-                    to={`/project/contract/detail/${params.id}/${(record as ITableDataItem).contractId
+                    to={`/project/contract/detail/${params.id}/${record.contractId
                         }`}
                 >
-                    {(record as ITableDataItem).internalNumber}
+                    {record.internalNumber}
                 </Link>
             );
         },
@@ -143,7 +140,7 @@ export default function SaleOrder(): JSX.Element {
                 filterValue={filterValue}
                 extraOperation={(data: any) => <>
                     <Button type="primary" onClick={() => {
-                        history.push(`/project/order/new/${params.id}/new`);
+                        history.push(`/project/management/new/order/${params.id}`);
                     }}>新增订单</Button>
                 </>}
                 columns={[
@@ -164,16 +161,15 @@ export default function SaleOrder(): JSX.Element {
                                 <Button
                                     type="link"
                                     disabled={record.isProductGroupRef !== 0}
-                                    onClick={() => history.push(`/project/order/setting/${params.id}/${(record as ITableDataItem).id}`)}>编辑</Button>
+                                    onClick={() => history.push(`/project/management/edit/order/${params.id}/${record.id}`)}>编辑</Button>
                                 <AuthorityComponent permissions="sale_order_del">
                                     <ConfirmableButton
                                         confirmTitle="要删除该订单吗？"
                                         type="link"
-
                                         placement="topRight"
                                         onConfirm={async () => {
-                                            let id = (record as ITableDataItem).id;
-                                            const resData: IResponseData = await RequestUtil.delete(
+                                            let id = record.id;
+                                            const resData = await RequestUtil.delete(
                                                 `/tower-market/saleOrder?id=${id}`
                                             );
                                             setRefresh(true);

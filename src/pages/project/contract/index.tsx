@@ -26,7 +26,7 @@ export default function ContractList(): JSX.Element {
       render: (_: undefined, record: object): React.ReactNode => {
         return (
           <Link
-            to={`/project/contract/detail/${params.id}/${(record as IContract).id}`}
+            to={`/project/management/detail/contract/${params.id}/${(record as IContract).id}`}
           >
             {(record as IContract).contractNumber}
           </Link>
@@ -39,7 +39,7 @@ export default function ContractList(): JSX.Element {
       dataIndex: "internalNumber",
       render: (_: undefined, record: object): React.ReactNode => {
         return (
-          <Link to={`/project/contract/detail/${params.id}/${(record as IContract).id}`}>
+          <Link to={`/project/management/detail/contract/${params.id}/${(record as IContract).id}`}>
             {(record as IContract).internalNumber}
           </Link>
         );
