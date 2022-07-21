@@ -231,11 +231,11 @@ export default function WorkCenterSetting(): React.ReactNode{
                             specificationName: record?.specificationName.indexOf(',')>-1?record?.specificationName.split(','):record?.specificationName,
                             materialTextureName: record?.materialTextureName.indexOf(',')>-1?record?.materialTextureName.split(','):record?.materialTextureName,
                         })
-                        if(record?.materialName==='钢板'){
-                            setMode('多选')
-                        }else{
-                            setMode('单选')
-                        }
+                        // if(record?.materialName==='钢板'){
+                        //     setMode('多选')
+                        // }else{
+                        //     setMode('单选')
+                        // }
                         await specificationGet(record?.materialName)
                         console.log(form.getFieldsValue(true))
                     }}>编辑</Button>
@@ -456,11 +456,11 @@ export default function WorkCenterSetting(): React.ReactNode{
                         "message": "请选择材料"
                     }]}>
                         <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} onChange={async (e: string) => {
-                            if(e==='钢板'){
-                                setMode('多选')
-                            }else{
-                                setMode('单选')
-                            }
+                            // if(e==='钢板'){
+                            //     setMode('多选')
+                            // }else{
+                            //     setMode('单选')
+                            // }
                             await specificationGet(e)
                         }}>
                             {materialList?.map((item: any) => {
@@ -472,30 +472,21 @@ export default function WorkCenterSetting(): React.ReactNode{
                         "required": true,
                         "message": "请选择规格"
                     }]}>
-                        {mode==='多选'?<Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} mode={'multiple'}>
+                        <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} mode={'multiple'}>
                             <Select.Option key='全部' value='全部' >全部</Select.Option>
                             {specifications?.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
                             })}
-                        </Select>:
-                        <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} >
-                            <Select.Option key='全部' value='全部'>全部</Select.Option>
-                            {specifications?.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
-                            })}
-                        </Select>}
+                        </Select>
                     </Form.Item>
                     <Form.Item name="materialTextureName" label='材质' rules={[{
                         "required": true,
                         "message": "请选择材质"
                     }]}>
-                        {mode==='多选'?<Select style={{ width: '100%' }} size="small" showSearch mode={'multiple'}>
+                        <Select style={{ width: '100%' }} size="small" showSearch mode={'multiple'}>
                             <Select.Option key='全部' value='全部'>全部</Select.Option>
                             {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
-                        </Select>:<Select style={{ width: '100%' }} size="small" showSearch>
-                            <Select.Option key='全部' value='全部'>全部</Select.Option>
-                            {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
-                        </Select>}
+                        </Select>
                     </Form.Item>
                     <Form.Item name="workHour" label='标准工时' rules={[{
                         "required": true,
