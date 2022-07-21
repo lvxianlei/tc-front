@@ -28,9 +28,7 @@ export default function ReleaseList(): React.ReactNode {
 
     const {  run: cancelRun } = useRequest<any>((params: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.delete(`/tower-science/loftingBatch/${params?.id}`,{
-                description:params?.description
-            });
+            const result: any = await RequestUtil.delete(`/tower-science/loftingBatch/${params?.id}/${params?.description}`);
             resole(result)
         } catch (error) {
             reject(error)
