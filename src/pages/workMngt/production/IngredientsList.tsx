@@ -722,6 +722,10 @@ export default function IngredientsList(): React.ReactNode {
         setSelectedRowKeysCheck([]);
         setSelectedRowCheck([]);
         setLengthAll(0);
+        
+        // 回滚到顶部
+        var dom = document.querySelector('.ant-table-body');
+        (dom as any).scrollTop = 0;
     }
 
     // 初始获取数据
