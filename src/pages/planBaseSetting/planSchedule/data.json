@@ -60,6 +60,11 @@
             "width": 120
         },
         {
+            "title": "生产单元组",
+            "dataIndex": "unitGroupName",
+            "width": 100
+        },
+        {
             "title": "电压等级（kv）",
             "dataIndex": "voltageGradeName",
             "width": 110
