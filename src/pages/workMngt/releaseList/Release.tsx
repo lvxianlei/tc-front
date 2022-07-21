@@ -84,7 +84,7 @@ export default function Release(): React.ReactNode {
         })))])
         form.setFieldsValue({
             ...data,
-            cancelIssuedNumber: data?.cancelIssuedNumber?data?.cancelIssuedNumber.split(','):''
+            cancelIssuedNumber: data?.cancelIssuedNumber.indexOf(',')>-1?data?.cancelIssuedNumber.split(','):''
             // loftingBatchProductDTOList:value.map((item:any)=>{
             //     return{
             //         ...item,
