@@ -468,7 +468,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                 </Form.Item>
                 <Form.Item
                     label='包装备注'
-                    name="galvanizedDescription"
+                    name="packageDescription"
                 >
                     <TextArea
                         size="small"
