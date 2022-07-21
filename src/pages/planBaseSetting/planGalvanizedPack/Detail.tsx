@@ -29,6 +29,12 @@ const pack=[
         dataIndex: 'productionBatchNo'
     },
     {
+        key: 'totalWeight',
+        title: '总重量（t）',
+        width: 100,
+        dataIndex: 'totalWeight'
+    },
+    {
         key: 'angleWeight',
         title: '角钢重量（t）',
         width: 100,
@@ -129,6 +135,12 @@ const galvanized=[
         title: '批次号',
         width: 100,
         dataIndex: 'productionBatchNo'
+    },
+    {
+        key: 'totalWeight',
+        title: '总重量（t）',
+        width: 100,
+        dataIndex: 'totalWeight'
     },
     {
         key: 'angleWeight',
@@ -1201,6 +1213,7 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                 <DetailTitle title="镀锌计划" operation={[<Button type='primary' onClick={useGalvanized} disabled={!(galvanizedSelectedKeys.length>0)}>批量设置镀锌计划</Button>]}/>
                 <Space>
                     <span>合计：</span>
+                    <span>总重量（t）：{detailData?.totalWeight}</span>
                     <span>角钢重量（t）：{detailData?.totalAngleWeight}</span>
                     <span>钢板重量（t）：{detailData?.totalPlateWeight}</span>
                     <span>角钢总件数：{detailData?.totalAngleNumber}</span>
