@@ -339,7 +339,10 @@ export default function ReleaseList(): React.ReactNode {
                                     title: "取消下达",
                                     icon: null,
                                     content: <Form form={form} >
-                                        <Form.Item label='取消原因' name='description' >
+                                        <Form.Item label='取消原因' name='description' rules={[{
+                                            "required": true,
+                                            "message": "请填写取消原因"
+                                        }]}>
                                             <Input.TextArea maxLength={100}/>
                                         </Form.Item>
                                     </Form>,
