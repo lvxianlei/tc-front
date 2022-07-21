@@ -101,11 +101,11 @@ export default function SetOutList(): React.ReactNode {
             width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Link to={`/workMngt/setOutList/setOutInformation/${record.id}`}>放样信息</Link>
+                    <Link to={`/workMngt/setOutList/setOutInformation/${record.id}`}>任务说明</Link>
                     <Link to={{
                         pathname: `/workMngt/setOutList/towerInformation/${record.id}`,
                         state: { loftingLeader: record.loftingLeader, status: record.status }
-                    }}>塔型信息</Link>
+                    }}>工作目录</Link>
                     <Link to={{
                         pathname: `/workMngt/setOutList/poleInformation/${record.id}`,
                         state: { loftingLeader: record.loftingLeader, status: record.status }

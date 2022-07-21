@@ -1168,63 +1168,63 @@
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-放样信息
-      "name": "放样信息",
+    { // 工作管理-任务说明
+      "name": "任务说明",
       "path": "/workMngt/setOutList/setOutInformation/:id",
       "module": "./pages/workMngt/setOut/SetOutInformation",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息
-      "name": "塔型信息",
+    { // 工作管理-工作目录
+      "name": "工作目录",
       "path": "/workMngt/setOutList/towerInformation/:id",
       "module": "./pages/workMngt/setOut/TowerInformation",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息-放样
+    { // 工作管理-工作目录-放样
       "name": "放样",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:productSegmentId",
       "module": "./pages/workMngt/setOut/Lofting",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息-模型
+    { // 工作管理-工作目录-模型
       "name": "模型",
       "path": "/workMngt/setOutList/towerInformation/:id/modalList",
       "module": "./pages/workMngt/setOut/ModelList",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息-大样图工艺卡
+    { // 工作管理-工作目录-大样图工艺卡
       "name": "大样图工艺卡",
       "path": "/workMngt/setOutList/towerInformation/:id/processCardList",
       "module": "./pages/workMngt/setOut/ProcessCardList",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息-NC程序
+    { // 工作管理-工作目录-NC程序
       "name": "NC程序",
       "path": "/workMngt/setOutList/towerInformation/:id/NCProgram",
       "module": "./pages/workMngt/setOut/NCProgram",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息-校核
+    { // 工作管理-工作目录-校核
       "name": "校核",
       "path": "/workMngt/setOutList/towerInformation/:id/towerCheck/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerCheck",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息-塔型放样明细
+    { // 工作管理-工作目录-塔型放样明细
       "name": "塔型放样明细",
       "path": "/workMngt/setOutList/towerInformation/:id/towerLoftingDetails/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerLoftingDetails",
       "exact": true,
       "authority": "rd_loft_task_list"
     },
-    { // 工作管理-塔型信息-放样-放样塔型套用
+    { // 工作管理-工作目录-放样-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId/loftingTowerApplication",
       "module": "./pages/workMngt/setOut/LoftingTowerApplication",

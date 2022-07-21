@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2022 
- * @description 工作管理-放样列表-塔型信息-塔型放样指派
+ * @description 工作管理-放样列表-塔型信息-塔型放样分派
  */
 
 import React from 'react';
@@ -203,11 +203,11 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     */
     public render(): React.ReactNode {
         return <>
-            <Button type={this.props.title === "塔型放样指派" ? "primary" : 'link'} onClick={() => this.modalShow()} ghost>{this.props.title}</Button>
+            <Button type={this.props.title === "塔型放样分派" ? "primary" : 'link'} onClick={() => this.modalShow()} ghost>{this.props.title}</Button>
             <Modal
                 visible={this.state.visible}
                 width="60%"
-                title="塔型放样指派"
+                title="塔型放样分派"
                 footer={
                     <Space direction="horizontal" className={styles.bottomBtn}>
                         <Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>
