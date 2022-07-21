@@ -330,7 +330,7 @@ export default function PickTowerMessage(): React.ReactNode {
                         label:'',
                         children:   <Select style={{width:'100px'}} allowClear>
                                         { checkLeader && checkLeader.map((item:any)=>{
-                                            return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                            return <Select.Option key={item.id} value={item.userId}>{item.name}</Select.Option>
                                         }) }
                                     </Select>
                     },
