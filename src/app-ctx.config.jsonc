@@ -856,7 +856,7 @@
                     {
                         "label": "基础设置",
                         "path": "/baseSetting/baseSettingMngt",
-                        "authority": "config_list"
+                        "authority": "rd_config"
                     },
                     // {
                     //     "label": "产线管理",
