@@ -344,38 +344,40 @@ export default function GalvanizedPackDetail(): React.ReactNode {
                 await form.validateFields()
                 const value = form.getFieldsValue(true)
                 const submitData = {
-                    galvanizedPlanDTOList: value?.galvanizedPlanDTOList.map((item:any,index:number)=>{
-                        return {
-                            ...detailData?.galvanizedPlanVOList[index]?.id,
-                            ...item,
-                            galvanizedFirstUnitId:item?.galvanizedFirst.split(',')[0],
-                            galvanizedFirstUnitName:item?.galvanizedFirst.split(',')[1],
-                            galvanizedSecondUnitId:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[0]:'',
-                            galvanizedSecondUnitName:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[1]:'',
-                            galvanizedThirdUnitId:item?.galvanizedThird?item?.galvanizedThird.split(',')[0]:"",
-                            galvanizedThirdUnitName:item?.galvanizedThird?item?.galvanizedThird.split(',')[1]:'',
-                            transferStartTime: item?.transferStartTime?moment(item?.transferStartTime).format('YYYY-MM-DD'):'',
-                            transferEndTime: item?.transferEndTime?moment(item?.transferEndTime).format('YYYY-MM-DD'):'',
-                            galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime).format('YYYY-MM-DD'):'',
-                            galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime).format('YYYY-MM-DD'):'',
-                            galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime).format('YYYY-MM-DD'):'',
-                        }
-                    }),
-                    packagePlanDTOList:  value?.packagePlanDTOList.map((item:any,index:number)=>{
-                        return {
-                            ...detailData?.packagePlanVOList[index],
-                            ...item,
-                            packageFirstUnitId:item?.packageFirst.split(',')[0],
-                            packageFirstUnitName:item?.packageFirst.split(',')[1],
-                            packageSecondUnitId:item?.packageSecond?item?.packageSecond.split(',')[0]:'',
-                            packageSecondUnitName:item?.packageSecond?item?.packageSecond.split(',')[1]:'',
-                            storageTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
-                            reportTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
-                            packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime).format('YYYY-MM-DD'):'',
-                            packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime).format('YYYY-MM-DD'):'',
-                            packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime).format('YYYY-MM-DD'):'',
-                        }
-                    }),
+                    galvanizedPlanDTOList: detailData?.galvanizedPlanVOList,
+                    packagePlanDTOList:  detailData?.packagePlanVOList
+                    // galvanizedPlanDTOList: value?.galvanizedPlanDTOList.map((item:any,index:number)=>{
+                    //     return {
+                    //         ...detailData?.galvanizedPlanVOList[index]?.id,
+                    //         ...item,
+                    //         galvanizedFirstUnitId:item?.galvanizedFirst.split(',')[0],
+                    //         galvanizedFirstUnitName:item?.galvanizedFirst.split(',')[1],
+                    //         galvanizedSecondUnitId:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[0]:'',
+                    //         galvanizedSecondUnitName:item?.galvanizedSecond?item?.galvanizedSecond.split(',')[1]:'',
+                    //         galvanizedThirdUnitId:item?.galvanizedThird?item?.galvanizedThird.split(',')[0]:"",
+                    //         galvanizedThirdUnitName:item?.galvanizedThird?item?.galvanizedThird.split(',')[1]:'',
+                    //         transferStartTime: item?.transferStartTime?moment(item?.transferStartTime).format('YYYY-MM-DD'):'',
+                    //         transferEndTime: item?.transferEndTime?moment(item?.transferEndTime).format('YYYY-MM-DD'):'',
+                    //         galvanizedFirstCompleteTime: item?.galvanizedFirstCompleteTime?moment(item?.galvanizedFirstCompleteTime).format('YYYY-MM-DD'):'',
+                    //         galvanizedSecondCompleteTime: item?.galvanizedSecondCompleteTime?moment(item?.galvanizedSecondCompleteTime).format('YYYY-MM-DD'):'',
+                    //         galvanizedThirdCompleteTime: item?.galvanizedThirdCompleteTime?moment(item?.galvanizedThirdCompleteTime).format('YYYY-MM-DD'):'',
+                    //     }
+                    // }),
+                    // packagePlanDTOList:  value?.packagePlanDTOList.map((item:any,index:number)=>{
+                    //     return {
+                    //         ...detailData?.packagePlanVOList[index],
+                    //         ...item,
+                    //         packageFirstUnitId:item?.packageFirst.split(',')[0],
+                    //         packageFirstUnitName:item?.packageFirst.split(',')[1],
+                    //         packageSecondUnitId:item?.packageSecond?item?.packageSecond.split(',')[0]:'',
+                    //         packageSecondUnitName:item?.packageSecond?item?.packageSecond.split(',')[1]:'',
+                    //         storageTime: item?.storageTime?moment(item?.storageTime).format('YYYY-MM-DD'):'',
+                    //         reportTime: item?.reportTime?moment(item?.reportTime).format('YYYY-MM-DD'):'',
+                    //         packageCompleteTime: item?.packageCompleteTime?moment(item?.packageCompleteTime).format('YYYY-MM-DD'):'',
+                    //         packageFirstStartTime: item?.packageFirstStartTime?moment(item?.packageFirstStartTime).format('YYYY-MM-DD'):'',
+                    //         packageSecondStartTime: item?.packageSecondStartTime?moment(item?.packageSecondStartTime).format('YYYY-MM-DD'):'',
+                    //     }
+                    // }),
                 }
                 RequestUtil.put(`/tower-aps/galvanizedPackage/issue`,submitData).then(async ()=>{
                     message.success('下发成功！')
