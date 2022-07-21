@@ -1,0 +1,464 @@
+{
+    "baseInfo": [
+        {
+            "title": "采购订单号",
+            "dataIndex": "purchaseOrderNumber",
+            "disabled": true
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber",
+            "type": "popTable",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入内部合同编号..."
+                }
+            ],
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "internalNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                },
+                {
+                    "title": "采购订单编号",
+                    "dataIndex": "purchaseOrderNumber",
+                    "search": true
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber",
+                    "search": true
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName",
+                    "search": true
+                },
+                {
+                    "title": "销售类型",
+                    "dataIndex": "saleTypeName"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "search": true
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "要求交货日期",
+                    "dataIndex": "deliveryTime"
+                }
+            ]
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入订单工程名称"
+                }
+            ]
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany",
+            "disabled": true
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName",
+            "disabled": true
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "signContractTime",
+            "disabled": true
+        },
+        {
+            "title": "合同要求交货日期",
+            "dataIndex": "deliveryTime",
+            "disabled": true
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productType",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择产品类型"
+                }
+            ]
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltageGrade",
+            "type": "select"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyType",
+            "type": "select",
+            "disabled": true
+        },
+        {
+            "title": "订单重量",
+            "dataIndex": "orderWeight",
+            "type": "text",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入订单重量"
+                }
+            ]
+        },
+        {
+            "title": "含税金额",
+            "dataIndex": "taxAmount",
+            "type": "text",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入含税金额"
+                }
+            ]
+        },
+        {
+            "title": "不含税金额",
+            "dataIndex": "amount",
+            "type": "number",
+            "disabled": true,
+            "precision": 2
+        },
+        {
+            "title": "含税单价",
+            "dataIndex": "taxPrice",
+            "type": "text",
+            "disabled": true
+        },
+        {
+            "title": "不含税单价",
+            "dataIndex": "price",
+            "type": "number",
+            "disabled": true,
+            "precision": 4
+        },
+        {
+            "title": "税率",
+            "dataIndex": "taxRate",
+            "type": "number",
+            "precision": 2,
+            "min": 0,
+            "max": 100,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入税率"
+                }
+            ]
+        },
+        {
+            "title": "外汇金额",
+            "dataIndex": "foreignExchangeAmount",
+            "type": "number",
+            "precision": 2,
+            "min": 0,
+            "max": 999999999999.99
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate",
+            "type": "number",
+            "precision": 4,
+            "min": 0,
+            "max": 999999999999.99
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleType",
+            "type": "select",
+            "disabled": true
+        },
+        {
+            "title": "外汇单价",
+            "dataIndex": "foreignPrice",
+            "type": "number",
+            "precision": 2
+        },
+        {
+            "title": "销售业务员",
+            "dataIndex": "salesman"
+        },
+        {
+            "title": "保函金额",
+            "dataIndex": "guaranteeAmount",
+            "type": "number",
+            "precision": 2
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "payment": [
+        {
+            "title": "期次",
+            "dataIndex": "period",
+            "width": 50,
+            "disabled": true,
+            "edit": false
+        },
+        {
+            "title": "计划名称",
+            "dataIndex": "name",
+            "width": 100,
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "计划回款日期",
+            "dataIndex": "returnedTime",
+            "width": 100,
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "计划回款占比(%)",
+            "dataIndex": "returnedRate",
+            "width": 70,
+            "type": "number",
+            "min": 0.00,
+            "max": 100.00,
+            "step": 0.01
+        },
+        {
+            "title": "计划回款金额",
+            "dataIndex": "returnedAmount",
+            "type": "number",
+            "width": 100,
+            "min": "0.00",
+            "max": "10000000000.00",
+            "step": "0.01",
+            "precision": 2
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea",
+            "width": 200,
+            "rows": 1,
+            "maxLength": 300,
+            "showCount": false
+        }
+    ],
+    "productInfo": [
+        {
+            "title": "状态",
+            "dataIndex": "productStatus",
+            "width": 50,
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未下发",
+                    "value": 0
+                },
+                {
+                    "label": "已下发",
+                    "value": 1
+                },
+                {
+                    "label": "审批中",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "线路名称",
+            "dataIndex": "lineName",
+            "width": 80
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
+            "width": 80
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 50
+        },
+        {
+            "title": "基数",
+            "dataIndex": "number",
+            "width": 50
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "title": "电压等级（KV）",
+            "dataIndex": "voltageGradeName",
+            "width": 80
+        },
+        {
+            "title": "呼高（m）",
+            "dataIndex": "productHeight",
+            "width": 60
+        },
+        {
+            "title": "单重（kg）",
+            "dataIndex": "singleWeight",
+            "width": 60
+        },
+        {
+            "title": "其他重量（kg）",
+            "dataIndex": "otherWeight",
+            "width": 80
+        },
+        {
+            "title": "总重（kg）",
+            "dataIndex": "totalWeight",
+            "width": 60
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ],
+    "detaiBaseInfo": [
+        {
+            "title": "采购订单号",
+            "dataIndex": "purchaseOrderNumber"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName"
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "signContractTime"
+        },
+        {
+            "title": "合同要求交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "订单重量",
+            "dataIndex": "orderWeight"
+        },
+        {
+            "title": "含税金额",
+            "dataIndex": "taxAmount"
+        },
+        {
+            "title": "不含税金额",
+            "dataIndex": "amount"
+        },
+        {
+            "title": "含税单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "不含税单价",
+            "dataIndex": "price"
+        },
+        {
+            "title": "税率",
+            "dataIndex": "taxRate"
+        },
+        {
+            "title": "外汇金额",
+            "dataIndex": "foreignExchangeAmount"
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleType"
+        },
+        {
+            "title": "外汇单价",
+            "dataIndex": "foreignPrice"
+        },
+        {
+            "title": "销售业务员",
+            "dataIndex": "salesman"
+        },
+        {
+            "title": "保函金额",
+            "dataIndex": "guaranteeAmount"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "system": [
+        {
+            "title": "最后编辑人",
+            "dataIndex": "updateUserName"
+        },
+        {
+            "title": "最后编辑时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        }
+    ]
+}

@@ -261,7 +261,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
     }
     const componentProps: any = {}
     Object.keys(data).forEach((item: any) => {
-        if (!["title", "dataIndex", "width", "type", "enum", "dependencies", "value", "path", "search", "columns"].includes(item)) {
+        if (!["title", "dataIndex", "width", "type", "enum", "dependencies", "value", "path", "edit", "search", "columns"].includes(item)) {
             componentProps[item] = data[item]
         }
     })
