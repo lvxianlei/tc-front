@@ -503,15 +503,15 @@
     },
     { // 新增合同
       "name": "新增合同",
-      "path": "/project/contract/new/:projectId",
-      "module": "./pages/project/contract/ContractNew",
-      // "exact": true,
+      "path": "/project/management/new/contract/:projectId",
+      "module": "./pages/project/contract/Edit",
+      "exact": true,
       "authority": "contract"
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/contract/setting/:projectId/:id",
-      "module": "./pages/project/contract/ContractSetting",
+      "path": "/project/management/edit/contract/:projectId/:id",
+      "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "contract"
     },

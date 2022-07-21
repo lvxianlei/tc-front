@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Row, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link, useRouteMatch, useLocation } from 'react-router-dom'
+import { Button, Row, Radio, Spin, Modal, message } from 'antd'
 import { DetailContent, CommonTable } from '../common'
 import CostDetail from './cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
-    productGroupColumns, paths, taskNotice,
-    productAssist,
+    productGroupColumns, paths, taskNotice, productAssist
 } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -17,9 +16,8 @@ import QualificationReview from "./qualificationReview/Overview"
 import BidResult from "./bidResult/Overview"
 import FrameAgreement from './frameAgreement/Overview'
 // 合同列表
-import ContractList from "./contract/ContractList";
-import SaleOrder from './order/Index'
-
+import ContractList from "./contract";
+import SaleOrder from "./order";
 import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
@@ -65,7 +63,7 @@ export default function ManagementDetail(): React.ReactNode {
             resole(result)
             return
         }
-        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement","qualificationReview"].includes(params.tab as string)) {
+        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement", "qualificationReview"].includes(params.tab as string)) {
             resole({})
             return
         }
@@ -201,10 +199,7 @@ export default function ManagementDetail(): React.ReactNode {
             </div>
             <Spin spinning={contractLoading}>
                 {
-                    contractStatus === "contract" ?
-                        <ContractList />
-                        :
-                        <SaleOrder />
+                    contractStatus === "contract" ? <ContractList /> : <SaleOrder />
                 }
             </Spin>
         </>,
