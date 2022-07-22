@@ -132,7 +132,6 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
             className={`bottom ${classStyle}`}
         >
-            {/* <Prompt when={true} message={`Are you sure you want to go to ......`} /> */}
             <Row wrap={true} style={{ width: "100%" }}>
                 {columns.map((item: any, index: number) => item.hidden ? <Form.Item
                     key={`form_item_${index}`}
