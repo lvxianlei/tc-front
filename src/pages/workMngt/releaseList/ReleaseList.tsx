@@ -333,7 +333,7 @@ export default function ReleaseList(): React.ReactNode {
                         disabled={record.status===2||record.distributionStatus===2}
                     >    */}
                         <Button type="link" 
-                            disabled={record?.issuedStatus===3}
+                            disabled={record?.status===2}
                             onClick={()=>{
                                 Modal.confirm({
                                     title: "取消下达",
