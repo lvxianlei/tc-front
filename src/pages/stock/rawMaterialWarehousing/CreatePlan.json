@@ -152,6 +152,7 @@
         "path": "/tower-storage/receiveStock/info/inStock",
         "width": 1011,
         "selectType": "checkbox",
+        "rowKey": "receiveStockDetailId",
         "dependencies": true,
         "readOnly": true,
         "search": [
@@ -177,7 +178,7 @@
             },
             {
                 "title": "标准",
-                "dataIndex": "materialStandard"
+                "dataIndex": "materialStandardName"
             },
             {
                 "title": "材质",

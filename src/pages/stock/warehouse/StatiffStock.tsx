@@ -3,7 +3,7 @@
  * time: 2022/07/21
  * author: mschange
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, message, Form, Input, InputNumber, Table, Button, Select } from 'antd';
 import RequestUtil from "../../../utils/RequestUtil"
 import useRequest from '@ahooksjs/use-request';
@@ -14,12 +14,23 @@ interface Props {
     isModal: boolean,
     cancelModal: Function,
     id: string | null,
+    warehouseDetails: any[]
+    name: string
 }
 
 const StatiffStock = (props: Props) => {
     const [dataSource, setDataSource] = useState<any[]>([]);
     const [form] = Form.useForm();
     let [count, setCount] = useState<number>(1);
+
+    useEffect(() => {
+        if (props.isModal) {
+            props.warehouseDetails?.map((item: any) => item["source"] = "1");
+            const result = props.warehouseDetails.filter((item: any) => item.type !== 1)
+            setDataSource(result || []);
+        }
+    }, [props.isModal])
+    
     const columns = [
         {
             key: 'id',
@@ -50,8 +61,8 @@ const StatiffStock = (props: Props) => {
                         <Form.Item
                             name={['data', index, "segmentName"]}
                             style={{width: 150}}
-                            initialValue={record.segmentName}>
-                                <span>{record?.segmentName}</span>
+                            initialValue={record.locatorName}>
+                                <span>{record?.locatorName}</span>
                         </Form.Item>
                     : <Form.Item
                             name={['data', index, "segmentName"]}
@@ -62,9 +73,10 @@ const StatiffStock = (props: Props) => {
                                 message: '请选择库位'
                             },]}
                         >
-                            <Select placeholder="请选择库位" onChange={(val) => rowChange("segmentName", record.id, val)}>
-                                <Select.Option key={ "1" } value={ "1_1" }>库位1</Select.Option>
-                                <Select.Option key={ "2" } value={ "2_2" }>库位2</Select.Option>
+                        <Select placeholder="请选择库位" onChange={(val) => rowChange("segmentName", record.id, val)}>
+                                {
+                                    props.warehouseDetails?.filter((v: any) => v.type === 1)?.map((item: any) => <Select.Option key={"1"} value={`${item.locatorName}_${item.id}`}>{ item.locatorName }</Select.Option>)
+                                }
                             </Select>
                         </Form.Item>
             }
@@ -107,7 +119,21 @@ const StatiffStock = (props: Props) => {
 
     const { loading: saveLoading, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[props.id ? "put" : "post"](`/tower-storage/warehouse`, props.id ? ({ ...params, id: props.id }) : params)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/warehouse/saveWarehouseDetail`, params)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/warehouse/warehouseDetailById?id=${params.id}`)
+            if (result) {
+                const result = dataSource;
+                let v = result.filter((item: any) => item.id !== params.id);
+                setDataSource(v.slice(0));
+            }
             resole(result)
         } catch (error) {
             reject(error)
@@ -120,12 +146,13 @@ const StatiffStock = (props: Props) => {
             dataSource?.map((item: any) => {
                 item["type"] = 0;
                 item["warehouseId"] = props.id;
-                item["locatorName"] = item.segmentName.split("_")[0];
-                item["id"] = item.source && item.source === "2" ? item.segmentName.split("_")[1] : item.id;
+                item["locatorName"] = item?.source === "1" ? item.locatorName : item.segmentName.split("_")[0];
+                item["id"] = item?.source === "1" ? item.id : "";
+                item["name"] = props.name;
             })
             await run(dataSource)
             message.success("保存成功...")
-            props.cancelModal()
+            props.cancelModal({code: 1})
         } catch (error) {
             console.log(error)
         }
@@ -144,7 +171,7 @@ const StatiffStock = (props: Props) => {
                 onCancel={() => {
                     setDataSource([])
                     form.resetFields()
-                    props.cancelModal()
+                    props.cancelModal({code: 0})
                 }}
                 okText='保存'
                 cancelText='取消'
@@ -152,7 +179,7 @@ const StatiffStock = (props: Props) => {
                 <div className='buttonWrapper'>
                     <p>
                         <span>仓库:</span>
-                        <span>原材料仓库A</span>
+                        <span>{ props.name }</span>
                     </p>
                     <Button
                         type='primary'
@@ -182,13 +209,23 @@ const StatiffStock = (props: Props) => {
                                 <>
                                     <Button type="link"
                                         onClick={()=>{
-                                            console.log([record])
+                                            /**
+                                             * 如果source为1需调用接口 为2不用
+                                             */
+                                            if (record.source === "1") {
+                                                deleteRun({id: record.id})
+                                            } else {
+                                                const result = dataSource;
+                                                let v = result.filter((item: any) => item.id !== record.id);
+                                                setDataSource(v.slice(0));
+                                            }
                                         }}
                                     >删除</Button>
                                 </>
                             )
                         }]}
                         dataSource={dataSource}
+                        pagination={false}
                     />
                 </Form>
             </Modal>

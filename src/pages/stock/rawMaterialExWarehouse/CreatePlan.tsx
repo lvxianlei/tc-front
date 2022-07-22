@@ -13,6 +13,7 @@ import { materialStandardOptions, materialTextureOptions } from "../../../config
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import moment from 'moment';
 
 export default function CreatePlan(props: any): JSX.Element {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -109,6 +110,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.wareHouseId) {
+            console.log(fields, "filedd")
             setWarehouseId(fields.wareHouseId);
             return;
         }
@@ -146,7 +148,7 @@ export default function CreatePlan(props: any): JSX.Element {
         if (props.visible) {
             getBatchingStrategy();
             addCollectionForm.setFieldsValue({
-                pickingTime: new Date()
+                pickingTime: moment(new Date()).format("YYYY-MM-DD")
             })
         } 
     }, [props.visible])
@@ -266,7 +268,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <PopTableContent
                     data={{
                         ...addMaterial as any,
-                        path: `${addMaterial.path}/${setWarehouseId}`
+                        path: `${addMaterial.path}/${warehouseId}`
                     }}
                     value={{
                         id: "",

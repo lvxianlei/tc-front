@@ -94,7 +94,7 @@ export default function CreatePlan(props: any): JSX.Element {
             return;
         }
         if (fields.supplierId) {
-            setSupplierId(fields.supplierId);
+            setSupplierId(fields.supplierId?.id);
             return;
         }
     }
@@ -203,10 +203,7 @@ export default function CreatePlan(props: any): JSX.Element {
             <DetailTitle title="入库明细" />
             <div className='btnWrapper'>
                 <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisible(true)}>选择</Button>
-                <Button type='primary' key="clear" ghost onClick={() => {
-                    setMaterialList([]);
-                    setPopDataList([]);
-                }}>导入</Button>
+                <Button type='primary' key="clear" ghost onClick={() => message.warning("暂无此功能！")}>导入</Button>
             </div>
             <CommonTable
                 rowKey={"id"}

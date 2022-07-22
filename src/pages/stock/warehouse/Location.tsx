@@ -3,7 +3,7 @@
  * time: 2022/07/21
  * author: mschange
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, message, Form, Input, InputNumber, Table, Button } from 'antd';
 import RequestUtil from "../../../utils/RequestUtil"
 import useRequest from '@ahooksjs/use-request';
@@ -14,12 +14,23 @@ interface Props {
     isModal: boolean,
     cancelModal: Function,
     id: string | null,
+    warehouseDetails: any[]
+    name: string
 }
 
 const Location = (props: Props) => {
     const [dataSource, setDataSource] = useState<any[]>([]);
     const [form] = Form.useForm();
     let [count, setCount] = useState<number>(1);
+
+    useEffect(() => {
+        if (props.isModal) {
+            props.warehouseDetails?.map((item: any) => item["source"] = "1");
+            const result = props.warehouseDetails.filter((item: any) => item.type === 1)
+            setDataSource(result || []);
+        }
+    }, [props.isModal])
+
     const columns = [
         {
             key: 'id',
@@ -60,7 +71,7 @@ const Location = (props: Props) => {
                                 message: '请输入库位'
                             }]}
                         >
-                            <Input size="small" maxLength={10} onChange={(e) => rowChange("reservoirName", record.id, e.target.value)} />
+                            <Input size="small" maxLength={10} onChange={(e) => rowChange("locatorName", record.id, e.target.value)} />
                         </Form.Item>
             }
         }
@@ -76,7 +87,21 @@ const Location = (props: Props) => {
 
     const { loading: saveLoading, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage//warehouse/saveWarehouseDetail`, params)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/warehouse/saveWarehouseDetail`, params)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: deleteRun } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/warehouse/warehouseDetailById?id=${params.id}`)
+            if (result) {
+                const result = dataSource;
+                let v = result.filter((item: any) => item.id !== params.id);
+                setDataSource(v.slice(0));
+            }
             resole(result)
         } catch (error) {
             reject(error)
@@ -89,14 +114,16 @@ const Location = (props: Props) => {
             dataSource?.map((item: any) => {
                 item["type"] = 1;
                 item["warehouseId"] = props.id;
+                item["id"] = item?.source === "1" ? item.id : ""
             })
             await run(dataSource)
             message.success("保存成功...")
-            props.cancelModal()
+            props.cancelModal({code: 1})
         } catch (error) {
             console.log(error)
         }
     }
+
     return (
         <div>
             <Modal
@@ -111,7 +138,7 @@ const Location = (props: Props) => {
                 onCancel={() => {
                     form.resetFields()
                     setDataSource([])
-                    props.cancelModal()
+                    props.cancelModal({code: 0})
                 }}
                 okText='保存'
                 cancelText='取消'
@@ -119,7 +146,7 @@ const Location = (props: Props) => {
                 <div className='buttonWrapper'>
                     <p>
                         <span>仓库:</span>
-                        <span>原材料仓库A</span>
+                        <span>{ props.name }</span>
                     </p>
                     <Button
                         type='primary'
@@ -133,7 +160,7 @@ const Location = (props: Props) => {
                                     source: "2",
                                     locatorName: ""
                                 }
-                            ])
+                            ].slice(0))
                             setCount(count + 1)
                         }
                     }>添加</Button>
@@ -149,13 +176,23 @@ const Location = (props: Props) => {
                                 <>
                                     <Button type="link"
                                         onClick={()=>{
-                                            console.log([record])
+                                            /**
+                                             * 如果source为1需调用接口 为2不用
+                                             */
+                                            if (record.source === "1") {
+                                                deleteRun({id: record.id})
+                                            } else {
+                                                const result = dataSource;
+                                                let v = result.filter((item: any) => item.id !== record.id);
+                                                setDataSource(v.slice(0));
+                                            }
                                         }}
                                     >删除</Button>
                                 </>
                             )
                         }]}
                         dataSource={dataSource}
+                        pagination={false}
                     />
                 </Form>
             </Modal>
