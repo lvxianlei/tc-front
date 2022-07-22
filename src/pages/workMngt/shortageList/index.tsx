@@ -80,7 +80,7 @@ export default function Invoicing() {
                     name="reason"><Input.TextArea maxLength={400} /></Form.Item>
             </Form>
         </Modal>
-        <Modal title="生成采购计划" visible={generateVisible} width={1011} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
+        <Modal title="生成采购计划" visible={generateVisible} width={1300} onOk={handlePurChasePlan} onCancel={() => setGenerateVisible(false)}>
             <PurchasePlan ids={generateIds} ref={purChasePlanRef} />
         </Modal>
         <Page
