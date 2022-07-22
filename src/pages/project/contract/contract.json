@@ -232,7 +232,8 @@
         },
         {
             "title": "国家",
-            "dataIndex": "country"
+            "dataIndex": "country",
+            "hidden": true
         },
         {
             "title": "币种",

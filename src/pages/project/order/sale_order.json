@@ -119,7 +119,6 @@
         {
             "title": "订单重量",
             "dataIndex": "orderWeight",
-            "type": "text",
             "rules": [
                 {
                     "required": true,
@@ -130,7 +129,6 @@
         {
             "title": "含税金额",
             "dataIndex": "taxAmount",
-            "type": "text",
             "rules": [
                 {
                     "required": true,
@@ -212,7 +210,7 @@
         },
         {
             "title": "交货地点",
-            "dataIndex": "-----------------",
+            "dataIndex": "deliveryAddress",
             "required": true
         },
         {

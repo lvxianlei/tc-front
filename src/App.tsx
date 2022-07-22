@@ -27,15 +27,7 @@ const PrivateRoute = ({ component: Component }: any) => (
 
 export default function App() {
   return (
-    <Router getUserConfirmation={(message: any, callback: any) => {
-      const formatMessage = message.split("/")
-      Modal.confirm({
-        title: formatMessage[0],
-        content: formatMessage[1],
-        onOk: () => callback(true),
-        onCancel: () => callback(false)
-      })
-    }}>
+    <Router>
       <Switch>
         <Route exact path="/login" component={Login} />
         <PrivateRoute path="/" component={Layout} />

@@ -543,26 +543,6 @@
             "title": "合同签订单位",
             "dataIndex": "signCustomerName",
             "width": 100
-        },
-        {
-            "title": "产品类型",
-            "dataIndex": "productTypeName",
-            "width": 50
-        },
-        {
-            "title": "电压等级",
-            "dataIndex": "voltageGradeName",
-            "width": 50
-        },
-        {
-            "title": "订单重量",
-            "dataIndex": "orderWeight",
-            "width": 50
-        },
-        {
-            "title": "订单单价",
-            "dataIndex": "taxPrice",
-            "width": 50
         }
     ],
     "productAssist": [

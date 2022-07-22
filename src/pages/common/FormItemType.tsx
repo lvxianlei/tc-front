@@ -189,7 +189,10 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
 
-    useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: [] })), [JSON.stringify(props.value || "")])
+    useEffect(() => {
+        setValue(props.value || ({ value: (props as any).value, id: "", records: [] }))
+        setPopContent(props.value || ({ value: (props as any).value, id: "", records: [] }))
+    }, [JSON.stringify(props.value || "")])
 
     const handleChange = (event: any) => {
         const itemContentId = typeof data.rowKey === "function" ? data.rowKey(event[0]) : event[0]?.[data.rowKey || "id"]
