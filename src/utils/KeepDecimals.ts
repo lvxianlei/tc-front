@@ -32,3 +32,17 @@
     }
     return s;
 }
+
+
+/**
+ * 向上取整数
+ */
+
+export function upNumber(value: string) {
+  const isCeil = value.split("")[value.split("").length - 1]
+  if (isCeil === "0") return value;
+  const val = (+value) + 10;
+  const str = (val + "").split("");
+  str[str.length - 1] = "0";
+  return str.join("")
+}
