@@ -19,6 +19,8 @@ export default function CreatePlan(props: any): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
+    
+    let [count, setCount] = useState<number>(1);
 
     const formatSpec = (spec: any): { width: string, length: string } => {
         if (!spec) {
@@ -68,8 +70,29 @@ export default function CreatePlan(props: any): JSX.Element {
 
     // 移除
     const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
-        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+        setMaterialList(materialList.filter((item: any) => item.id !== id))
+        setPopDataList(materialList.filter((item: any) => item.id !== id))
+    }
+
+    // 复制
+    const handleCopy = (options: any) => {
+        const result = {
+            ...options,
+            width: "",
+            length: "",
+            planPurchaseNum: "",
+            totalWeight: "",
+            id: count + ""
+        }
+        setCount(count + 1)
+        setMaterialList([
+            ...materialList,
+            result
+        ])
+        setPopDataList([
+            ...popDataList,
+            result
+        ])
     }
 
     const handleNumChange = (value: number, id: string) => {
@@ -123,6 +146,17 @@ export default function CreatePlan(props: any): JSX.Element {
             const baseInfo = await addCollectionForm.validateFields();
             if (materialList.length < 1) {
                 message.error("请您选择原材料明细!");
+                return false;
+            }
+            // 添加对长度以及数量的拦截
+            let flag = false;
+            for (let i = 0; i < materialList.length; i += 1) {
+                if (!(materialList[i].length && materialList[i].planPurchaseNum && materialList[i].width)) {
+                    flag = true;
+                }
+            }
+            if (flag) {
+                message.error("请您填写长度、宽度、数量！");
                 return false;
             }
             saveRun({
@@ -213,13 +247,13 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (["planPurchaseNum"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                             })
                         }
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                             })
                         }
                         if (item.dataIndex === "width") {
@@ -285,7 +319,10 @@ export default function CreatePlan(props: any): JSX.Element {
                         title: "操作",
                         fixed: "right",
                         dataIndex: "opration",
-                        render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                        render: (_: any, records: any) => <>
+                            <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button>
+                            <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
+                        </>
                     }]}
                 pagination={false}
                 dataSource={popDataList} />
@@ -314,11 +351,11 @@ export default function CreatePlan(props: any): JSX.Element {
                             materialId: item.id,
                             code: item.materialCode,
                             materialCategoryId: item.materialCategory,
-                            planPurchaseNum: item.planPurchaseNum || "1",
+                            planPurchaseNum: item.planPurchaseNum || "",
                             source: 2,
                             standardName: item.standardName,
-                            length: item.length || 1,
-                            width: 0,
+                            length: item.length || "",
+                            width: item.width || "",
                             materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
                             materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                             structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
