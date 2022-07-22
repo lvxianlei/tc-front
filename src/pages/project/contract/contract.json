@@ -10,7 +10,8 @@
         },
         {
             "title": "合同编号",
-            "dataIndex": "contractNumber"
+            "dataIndex": "contractNumber",
+            "required": true
         },
         {
             "title": "内部合同编号",

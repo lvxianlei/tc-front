@@ -2,7 +2,7 @@ import React, { memo, useCallback, useEffect, useState } from "react"
 import { Avatar, Breadcrumb, Col, Dropdown, Layout, Menu, Row } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined, createFromIconfontCN } from "@ant-design/icons"
 import styles from './Layout.module.less';
-import { Link, Route, useHistory, useLocation } from "react-router-dom";
+import { Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import AuthUtil from "../utils/AuthUtil";
 import ctxConfig from "../app-ctx.config.jsonc"
 import ctxRouter from "../app-router.config.jsonc"
@@ -282,18 +282,20 @@ export default function (): JSX.Element {
                                     padding: `${location.pathname === "/cockpit/statements" ? '0' : '16px'}`,
                                     overflowY: "auto"
                                 }}>
-                                {
-                                    ctxRouter.routers.map((router: any): React.ReactNode => {
-                                        return (
-                                            router.path && <Route
-                                                path={router.path}
-                                                key={router.path}
-                                                exact={router.exact}
-                                                component={renderRoute(router.module, router.authority)}
-                                            />
-                                        )
-                                    })
-                                }
+                                <Switch>
+                                    {
+                                        ctxRouter.routers.map((router: any): React.ReactNode => {
+                                            return (
+                                                router.path ? <Route
+                                                    path={router.path}
+                                                    key={router.path}
+                                                    exact={router.exact}
+                                                    component={renderRoute(router.module, router.authority)}
+                                                /> : null
+                                            )
+                                        })
+                                    }
+                                </Switch>
                             </Content>
                         </Layout>
                     </>
