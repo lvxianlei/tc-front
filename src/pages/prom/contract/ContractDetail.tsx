@@ -47,7 +47,7 @@ export class ContractDetail extends AbstractDetailComponent<IContractDetailRoute
      * @param filterValues 
      */
     protected async fetchTableData() {
-        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${this.props.match.params.id}`);
+        const resData: IDetail = await RequestUtil.get<IDetail>(`${this.requestPath}/${this.props.match?.params?.id}`);
         this.setState({
             detail: resData
         });
@@ -120,14 +120,14 @@ export class ContractDetail extends AbstractDetailComponent<IContractDetailRoute
     public renderOperationArea(): React.ReactNode | React.ReactNode[] {
         return [
             <Button key="new" href="/prom/contract/new">新增</Button>,
-            <Button key="setting" href={`/prom/contract/setting/${this.props.match.params.id}`} disabled={this.state.detail.contractStatus === 1}>编辑</Button>,
+            <Button key="setting" href={`/prom/contract/setting/${this.props?.match?.params?.id}`} disabled={this.state.detail.contractStatus === 1}>编辑</Button>,
             <Popconfirm
                 key="delete"
                 title="要删除该合同吗？"
                 okText="确认"
                 cancelText="取消"
                 onConfirm={async () => {
-                    const resData: IResponseData = await RequestUtil.delete(`/tower-market/contract?id=${this.props.match.params.id}`);
+                    const resData: IResponseData = await RequestUtil.delete(`/tower-market/contract?id=${this.props.match?.params?.id}`);
                     if (resData) {
                         this.props.history.push(`/prom/contract`);
                     }

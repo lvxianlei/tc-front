@@ -93,7 +93,7 @@ export default function Edit() {
     const {
       totalReturnedRate,
       totalReturnedAmount
-    } = editformData.submit.reduce((
+    } = (editformData.submit || []).reduce((
       { totalReturnedRate, totalReturnedAmount }: any,
       item: any
     ) => ({
@@ -104,7 +104,7 @@ export default function Edit() {
         (Number(item.returnedAmount || 0) + Number(totalReturnedAmount || 0)).toString()
       ).toFixed(2)
     }), { totalReturnedRate: 0, totalReturnedAmount: 0 })
-    if (editformData.submit.length <= 0) {
+    if ((editformData.submit || []).length <= 0) {
       message.error('回款计划无数据，需新增！');
       return
     }
@@ -126,7 +126,7 @@ export default function Edit() {
       salesmanId: baseInfo.salesman.id,
       ascriptionName: baseInfo.ascription.value,
       ascriptionId: baseInfo.ascription.id,
-      payType: baseInfo.payType.join(","),
+      payType: baseInfo.payType?.join(","),
       planType,
       customerInfoDto: {
         customerCompany: baseInfo.customerCompany.value,
@@ -134,7 +134,7 @@ export default function Edit() {
         customerLinkman: baseInfo.customerLinkman,
         customerPhone: baseInfo.customerPhone
       },
-      paymentPlanDtos: editformData.submit.map((item: any) => ({
+      paymentPlanDtos: editformData.submit?.map((item: any) => ({
         ...item,
         contractId: params.id
       })),
@@ -155,7 +155,7 @@ export default function Edit() {
       if (fields.contractAmount) {
         const editFormData = editform.getFieldsValue()
         editform.setFieldsValue({
-          submit: editFormData.submit.map((item: any) => {
+          submit: editFormData.submit?.map((item: any) => {
             if (planType === 1) {
               return ({
                 ...item,

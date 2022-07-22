@@ -10,7 +10,6 @@ import AuthUtil from "./utils/AuthUtil"
 import Login from "./pages/login/Login"
 import Layout from "./layout"
 import './App.module.less'
-import { Modal } from 'antd';
 
 const PrivateRoute = ({ component: Component }: any) => (
   <Route
