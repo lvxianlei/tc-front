@@ -657,7 +657,7 @@ export default function Release(): React.ReactNode {
                                 selectedRowKeys: selectedKeys,
                                 onChange: SelectChange,
                                 getCheckboxProps: (record: Record<string, any>) => ({
-                                    disabled: record?.loftingBatchSegmentVOList[0].segmentNum===record?.loftingBatchSegmentVOList[0].issuedNum
+                                    disabled: record?.isAll=== 1
                                 })
                             }}
                             rowKey={(item: any, index:number) => `${index}`}
