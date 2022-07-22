@@ -132,7 +132,17 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             className={`bottom ${classStyle}`}
         >
             <Row wrap={true} style={{ width: "100%" }}>
-                {columns.map((item: any, index: number) => <Col
+                {columns.map((item: any, index: number) => item.hidden ? <Form.Item
+                    key={`form_item_${index}`}
+                    className="baseInfoForm"
+                    name={item.dataIndex}
+                    label={item.title}
+                    hidden={item.hidden}
+                    validateTrigger={item.validateTrigger}
+                    rules={generateRules(item.type, item)}
+                >
+                    <FormItemType type={item.type} data={item} placeholder={generatePlaceholder(item)} render={item.render} />
+                </Form.Item> : <Col
                     key={`form_item_${index}`}
                     {...{
                         xs: {

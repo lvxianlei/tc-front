@@ -1,0 +1,411 @@
+{
+    "setting": [
+        {
+            "title": "采购订单编号",
+            "dataIndex": "purchaseOrderNumber"
+        },
+        {
+            "title": "ECP合同编号",
+            "dataIndex": "ecpContractNumber"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber",
+            "required": true
+        },
+        {
+            "title": "合同/工程名称",
+            "dataIndex": "contractName",
+            "required": true
+        },
+        {
+            "title": "合同总重(吨)",
+            "dataIndex": "contractTotalWeight",
+            "type": "number",
+            "required": true,
+            "min": 0
+        },
+        {
+            "title": "合同单价(元/吨)",
+            "dataIndex": "contractPrice",
+            "disabled": true,
+            "min": "0.01",
+            "max": "10000000000.00",
+            "step": "0.01",
+            "precision": 2,
+            "prefix": "￥"
+        },
+        {
+            "title": "合同总价(元)",
+            "dataIndex": "contractAmount",
+            "type": "number",
+            "required": true,
+            "min": "0.01",
+            "max": "10000000000.00",
+            "step": "0.01",
+            "stringMode": false,
+            "precision": 2,
+            "prefix": "￥"
+        },
+        {
+            "title": "中标类型",
+            "dataIndex": "winBidType",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleType",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany",
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
+        },
+        {
+            "title": "业主联系人",
+            "dataIndex": "customerLinkman"
+        },
+        {
+            "title": "业主联系电话",
+            "dataIndex": "customerPhone"
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomer",
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType",
+            "type": "select",
+            "mode": "multiple",
+            "enum": [
+                {
+                    "label": "转账",
+                    "value": 1
+                },
+                {
+                    "label": "现金",
+                    "value": 2
+                },
+                {
+                    "label": "支票",
+                    "value": 3
+                },
+                {
+                    "label": "电汇",
+                    "value": 4
+                },
+                {
+                    "label": "承兑",
+                    "value": 5
+                }
+            ]
+        },
+        {
+            "title": "结算单位",
+            "dataIndex": "payCompany",
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "signContractTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "required": true
+        },
+        {
+            "title": "签订人",
+            "dataIndex": "signUserName",
+            "required": true
+        },
+        {
+            "title": "要求交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "required": true
+        },
+        {
+            "title": "有无技术协议",
+            "dataIndex": "isIta",
+            "type": "select",
+            "required": true,
+            "enum": [
+                {
+                    "label": "无",
+                    "value": 0
+                },
+                {
+                    "label": "原件",
+                    "value": 1
+                },
+                {
+                    "label": "复印件",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "所属区域",
+            "dataIndex": "region",
+            "disabled": true
+        },
+        {
+            "title": "国家",
+            "dataIndex": "country",
+            "hidden": true
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyType",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "跟单业务员",
+            "dataIndex": "salesman",
+            "type": "popTable",
+            "width": 1101,
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "deptName"
+                }
+            ]
+        },
+        {
+            "title": "合同接管人",
+            "dataIndex": "takeOverUser"
+        },
+        {
+            "title": "合同接管日期",
+            "dataIndex": "takeOverTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "收到合同形式",
+            "dataIndex": "receivedContractShape",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "合同份数",
+            "dataIndex": "contractFraction",
+            "type": "number",
+            "required": true
+        },
+        {
+            "title": "合同页数",
+            "dataIndex": "contractPage",
+            "type": "number",
+            "required": true
+        },
+        {
+            "title": "合同计划状态",
+            "dataIndex": "contractPlanStatus",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "交货方式",
+            "dataIndex": "deliveryWay",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "交货地点",
+            "dataIndex": "deliveryAddress",
+            "required": true
+        },
+        {
+            "title": "招标批次",
+            "dataIndex": "bidBatch",
+            "disabled": true
+        },
+        {
+            "title": "归属业务经理",
+            "dataIndex": "ascription",
+            "type": "popTable",
+            "width": 1101,
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "deptName"
+                }
+            ]
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "payment": [
+        {
+            "title": "期次",
+            "dataIndex": "period",
+            "width": 50,
+            "disabled": true,
+            "edit": false
+        },
+        {
+            "title": "计划名称",
+            "dataIndex": "name",
+            "width": 100,
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "计划回款日期",
+            "dataIndex": "returnedTime",
+            "width": 100,
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "计划回款占比(%)",
+            "dataIndex": "returnedRate",
+            "width": 70,
+            "type": "number",
+            "min": 0.00,
+            "max": 100.00,
+            "step": 0.01
+        },
+        {
+            "title": "计划回款金额",
+            "dataIndex": "returnedAmount",
+            "type": "number",
+            "width": 100,
+            "min": "0.00",
+            "max": "10000000000.00",
+            "step": "0.01",
+            "precision": 2
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea",
+            "width": 200,
+            "rows": 1,
+            "maxLength": 300,
+            "showCount": false
+        }
+    ]
+}
