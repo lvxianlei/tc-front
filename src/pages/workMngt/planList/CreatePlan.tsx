@@ -40,8 +40,8 @@ export default function CreatePlan(props: any): JSX.Element {
         for (let i = 0; i < popDataList.length; i += 1) {
             for (let p = 0; p < materialList.length; p += 1) {
                 if (popDataList[i].id === materialList[p].id) {
+                    materialList[p].structureTextureId = popDataList[i].structureTextureId;
                     materialList[p].structureTexture = popDataList[i].structureTexture;
-                    materialList[p].materialTexture = popDataList[i].materialTexture;
                 }
             }
         }
@@ -295,14 +295,14 @@ export default function CreatePlan(props: any): JSX.Element {
                                 ...item,
                                 render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
                                     style={{ width: '150px' }}
-                                    value={popDataList[key]?.structureTexture && popDataList[key]?.structureTexture + ',' + popDataList[key]?.materialTexture}
+                                    value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
                                     onChange={(e: string) => {
                                         const newData = popDataList.map((item: any, index: number) => {
                                             if (index === key) {
                                                 return {
                                                     ...item,
-                                                    structureTexture: e.split(',')[0],
-                                                    materialTexture: e.split(',')[1]
+                                                    structureTextureId: e.split(',')[0],
+                                                    structureTexture: e.split(',')[1]
                                                 }
                                             }
                                             return item
@@ -358,8 +358,8 @@ export default function CreatePlan(props: any): JSX.Element {
                             width: item.width || "",
                             materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
                             materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
-                            structureTexture: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
-                            materialTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
+                            structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                            structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
                             weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
                             totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3),
                         })) || [])

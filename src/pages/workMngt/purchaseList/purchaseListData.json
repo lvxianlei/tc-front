@@ -13,6 +13,18 @@
             "type": "string"
         },
         {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 200,
+            "type": "string"
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "orderProjectName",
+            "width": 200,
+            "type": "string"
+        },
+        {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanNumber",
             "width": 200,
@@ -29,11 +41,6 @@
             "type": "integer"
         },
         {
-            "title": "圆钢总重（吨）",
-            "dataIndex": "roundSteelTotal",
-            "type": "number"
-        },
-        {
             "title": "角钢总重（吨）",
             "dataIndex": "angleSteelTotal",
             "type": "number"
@@ -41,6 +48,16 @@
         {
             "title": "钢板总重（吨）",
             "dataIndex": "steelPlateTotal",
+            "type": "number"
+        },
+        {
+            "title": "钢管总重（吨）",
+            "dataIndex": "steelTubeTotal",
+            "type": "number"
+        },
+        {
+            "title": "其他总重（吨）",
+            "dataIndex": "elseTotal",
             "type": "number"
         },
         {
@@ -134,6 +151,7 @@
         },
         {
             "title": "搭配长度（mm）",
+            "width": 120,
             "dataIndex": "length",
             "type": "string"
         },
@@ -144,11 +162,13 @@
         },
         {
             "title": "单重（kg）",
+            "width": 120,
             "dataIndex": "weight",
             "type": "number"
         },
         {
             "title": "汇总重量（kg）",
+            "width": 150,
             "dataIndex": "totalWeight",
             "type": "number"
         },
@@ -156,6 +176,24 @@
             "title": "备注",
             "dataIndex": "remarks",
             "type": "textarea"
+        },
+        {
+            "title": "仓库可用库存（支）",
+            "width": 150,
+            "dataIndex": "availableStock",
+            "type": "number"
+        },
+        {
+            "title": "仓库占用（本次）",
+            "width": 120,
+            "dataIndex": "warehouseOccupy",
+            "type": "number"
+        },
+        {
+            "title": "计划采购（本次）",
+            "width": 120,
+            "dataIndex": "planPurchaseNum",
+            "type": "number"
         }
     ],
     "BatchingScheme": [
