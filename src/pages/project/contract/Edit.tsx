@@ -152,6 +152,26 @@ export default function Edit() {
     if (fields.contractTotalWeight || fields.contractAmount) {
       const contractPrice = (contractAmount / contractTotalWeight).toFixed(2)
       form.setFieldsValue({ contractPrice })
+      if (fields.contractAmount) {
+        const editFormData = editform.getFieldsValue()
+        editform.setFieldsValue({
+          submit: editFormData.submit.map((item: any) => {
+            if (planType === 1) {
+              return ({
+                ...item,
+                returnedAmount: (item.returnedRate * (fields.contractAmount || 0) / 100).toFixed(2)
+              })
+            }
+            if (planType === 2) {
+              return ({
+                ...item,
+                returnedRate: (item.returnedAmount / (fields.contractAmount || 0) * 100).toFixed(2)
+              })
+            }
+            return item
+          })
+        })
+      }
     }
   }
 
@@ -218,12 +238,21 @@ export default function Edit() {
               return ({ ...item, enum: deliverywayEnum })
             case "currencyType":
               return ({ ...item, enum: currencyTypeEnum })
+            case "country":
+              return ({ ...item, hidden: projectData?.address !== "其他-国外" })
             default:
               return item
           }
         })]}
         form={form}
-        dataSource={data || {}}
+        dataSource={{
+          ...data,
+          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? "" : `${projectData.bigRegion || ""}-${projectData.address || ""}`),
+          country: projectData?.country || ""
+        } || {
+          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? "" : `${projectData.bigRegion || ""}-${projectData.address || ""}`),
+          country: projectData?.country || ""
+        }}
         edit />
       <DetailTitle title="回款计划" />
       <EditableTable

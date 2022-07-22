@@ -27,6 +27,7 @@ const initData = {
 export default function SeeGuarantee(): JSX.Element {
     const history = useHistory();
     const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/management/:type/order")
+    const [when, setWhen] = useState<boolean>(true)
     const [contratId, setContratId] = useState<string>()
     const [planType, setPlanType] = useState<1 | 2>(1)
     const [editFormData, setEditFormData] = useState<any[]>([])
@@ -40,6 +41,7 @@ export default function SeeGuarantee(): JSX.Element {
             const result: any = await RequestUtil[type === "new" ? "post" : "put"]("/tower-market/saleOrder", postData.data)
             resolve(result);
             if (result) {
+                setWhen(false)
                 message.success(`${type === "new" ? "新增订单成功" : "修改订单成功"}`);
                 history.goBack()
             }
@@ -105,6 +107,7 @@ export default function SeeGuarantee(): JSX.Element {
                 saleType: result.saleType, // 销售类型
                 orderProjectName: result.contractName, // 订单工程名称
                 contractName: result.contractName, // 合同名称
+                deliveryAddress: result.deliveryAddress // 交货地点
             })
             return;
         }
@@ -259,18 +262,18 @@ export default function SeeGuarantee(): JSX.Element {
             }
         }
     }
-
+    
     return (
-        <Spin spinning={loading}>
-            <DetailContent operation={[
-                <Button loading={saveLoaing} key="save" type="primary" style={{ marginRight: "16px" }} onClick={handleSave}>保存</Button>,
-                <Button key="goback" type="default" onClick={() => history.goBack()}>返回</Button>
-            ]}>
+        <DetailContent when={when} operation={[
+            <Button loading={saveLoaing} key="save" type="primary" style={{ marginRight: "16px" }} onClick={handleSave}>保存</Button>,
+            <Button key="goback" type="default" onClick={() => history.goBack()}>返回</Button>
+        ]}>
+            <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo
                     form={addCollectionForm}
                     onChange={performanceBondChange}
-                    dataSource={orderData || initData}
+                    dataSource={{ ...initData, ...orderData } || initData}
                     col={4}
                     columns={[
                         ...baseInfo.map((item: any) => {
@@ -391,7 +394,8 @@ export default function SeeGuarantee(): JSX.Element {
                         return item
                     })]}
                     dataSource={editFormData} />
-            </DetailContent>
-        </Spin>
+            </Spin>
+        </DetailContent>
+
     )
 }

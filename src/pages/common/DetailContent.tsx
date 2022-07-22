@@ -10,7 +10,7 @@ interface DetailContentProps {
 }
 const DetailContent: React.FC<DetailContentProps> = ({ title, operation, when, ...props }) => {
    return (<>
-        <Prompt when={!!when} message="当前内容未保存，确认继续操作吗？/继续操作后当前内容将丢失" />
+        <Prompt when={!!when} message="当前内容未保存，确认继续操作吗？/继续操作后当前修改内容将无效" />
         <div {...props} style={{ width: "100%", ...props.style }}>
             <section className={operation ? styles.detailContentP : styles.detailContent}>
                 {title && <div className={styles.title}>{title}</div>}
