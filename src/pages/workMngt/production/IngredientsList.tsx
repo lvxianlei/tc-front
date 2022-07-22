@@ -50,7 +50,7 @@ export default function IngredientsList(): React.ReactNode {
     const history = useHistory()
     const [ serarchForm ] = Form.useForm();
     // 传递的参数 status: 状态 productionBatchNo：批次号 productCategoryName： 塔型 materialStandardName： 标准
-    const params = useParams<{ id: string, status: string, productionBatchNo: string, productCategoryName: string, materialStandardName: string, materialStandard: string }>();
+    const params = useParams<{ id: string, status: string, productionBatchNo: string, productCategoryName: string, materialStandardName: string, materialStandard: string, planNumber: string }>();
 
     // 按钮
     const btnList: BtnList[] = [
@@ -920,6 +920,8 @@ export default function IngredientsList(): React.ReactNode {
                 length,
                 inRoadInventory, // 是否使用在途库存（1:使用 2:不使用）
                 materialStandard: params.materialStandard, // 标准id
+                productCategoryName: params.productCategoryName,
+                planNumber: params.planNumber
             });
             let v: any[] = [];
             let s: any[] = [];
@@ -1315,16 +1317,16 @@ export default function IngredientsList(): React.ReactNode {
                 setVisibleAllocatedScheme(false);
             }} />
             {/* 选择米数 */}
-            <SelectMeters visible={visibleSelectMeters} meterNumber={meterNumber} hanleInheritSure={(res) => {
+            <SelectMeters visible={visibleSelectMeters} meterNumber={meterNumber} hanleInheritSure={(res: { code: any; data: any[]; }) => {
                 if (res.code) {
                     getAvailableInventoryList("", 2, res.data.join(","), warehouseId.join(","), activeSort.split("_")[0],activeSort.split("_")[1]);
                 }
                 setVisibleSelectMeters(false);
             }} />
             {/* 已选方案对比 */}
-            <ComparisonOfSelectedSchemes visible={visibleComparisonOfSelectedSchemes} schemeComparison={schemeComparison} hanleInheritSure={(res) => handleComparisonOfSelectedSchemes(res)} />
+            <ComparisonOfSelectedSchemes visible={visibleComparisonOfSelectedSchemes} schemeComparison={schemeComparison} hanleInheritSure={(res: any) => handleComparisonOfSelectedSchemes(res)} />
             {/* 选择仓库 */}
-            <SelectWarehouse visible={visibleSelectWarehouse} hanleInheritSure={(res) => {
+            <SelectWarehouse visible={visibleSelectWarehouse} hanleInheritSure={(res: { code: any; data: { selectedRowKeysCheck: any[]; inventory: any; inventoryTime: any; }; }) => {
                 if (res.code) {
                     setWarehouseId(res.data.selectedRowKeysCheck);
                     if (res.data.inventory) {

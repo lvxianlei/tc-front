@@ -161,7 +161,7 @@ const Edit = (props: Props) => {
                         </Form.List>
                     </Form>
                 </div>
-                <DetailTitle title="库区库位信息" operation={[<Button key="new" type="primary" onClick={() => setWarehouseData([{
+                {/* <DetailTitle title="库区库位信息" operation={[<Button key="new" type="primary" onClick={() => setWarehouseData([{
                     id: (Math.random() * 1000000).toFixed(0),
                     reservoirName: "",
                     locatorName: ""
@@ -207,7 +207,7 @@ const Edit = (props: Props) => {
                             setWarehouseData(warehouseData.filter(item => item.id !== records?.id))
                         }}>删除</Button>
                     }
-                ]} dataSource={warehouseData} />
+                ]} dataSource={warehouseData} /> */}
             </Modal>
         </div>
     )

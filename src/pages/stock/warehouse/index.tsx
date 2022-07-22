@@ -6,14 +6,26 @@ import Edit from './Edit'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { pages } from "./warehouse.json"
+import Location from "./Location";
+import StatiffStock from "./StatiffStock"
 const Warehouse = () => {
     const history = useHistory()
     const [isModal, setIsModal] = useState(false);
     const [id, setId] = useState<string | null>(null);
+    const [isModalVisitle, setIsModalVisitle] = useState<boolean>(false);
+    const [isStatiffStockVisitle, setIsStatiffStockVisitle] = useState<boolean>(false);
 
     const cancelModal = () => {
         setIsModal(false)
         setId(null)
+    }
+
+    const cancelModalLocation = () => {
+        setIsModalVisitle(false);
+    }
+
+    const cancelModalStatiffStock = () => {
+        setIsStatiffStockVisitle(false);
     }
 
     const deleteItem = async (id: string) => {
@@ -60,13 +72,18 @@ const Warehouse = () => {
                                 setId(item.id)
                             }}
                         >编辑</Button>
+                        <Button type="link" className="btn-operation-link" onClick={() => setIsModalVisitle(true)}>库位设置</Button>
+                        <Button type="link" className="btn-operation-link" onClick={() => setIsStatiffStockVisitle(true)}>区位设置</Button>
                         <Button type="link" onClick={() => deleteItem(item.id)}
                         >删除</Button>
                     </>
                 }
             ]}
             searchFormItems={[]}
-        /></>)
+        />
+        <Location isModal={isModalVisitle} id="" cancelModal={() => cancelModalLocation()} />
+        <StatiffStock isModal={isStatiffStockVisitle} id="" cancelModal={() => cancelModalStatiffStock()} />
+    </>)
 }
 
 export default Warehouse;
