@@ -146,7 +146,6 @@
         {
             "title": "含税单价",
             "dataIndex": "taxPrice",
-            "type": "text",
             "disabled": true
         },
         {
