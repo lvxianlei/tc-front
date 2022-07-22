@@ -5,14 +5,12 @@
  */
 
 import React from 'react';
-import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, TreeSelect, Select, message } from 'antd';
+import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, Select, message, InputNumber } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { TreeNode } from 'antd/lib/tree-select';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import moment from 'moment';
 
 export interface TowerLoftingAssignProps { }
@@ -36,7 +34,6 @@ export interface TowerLoftingAssignState {
     readonly selectKey?: number;
     readonly user?: any[];
     readonly checkUser?: any[];
-    readonly departmentData?: SelectDataNode[];
     time: any;
 }
 
@@ -77,7 +74,6 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         repeatModal: false,
         user: [],
         checkUser: [],
-        departmentData: [],
         time: '',
     }
 
@@ -90,9 +86,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
 
     private async modalShow(): Promise<void> {
         const data = await RequestUtil.get<IAppointed>(`/tower-science/productSegment/${this.props.id}`);
-        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         this.setState({
-            departmentData: departmentData,
             visible: true,
             appointed: data,
             time: moment(data?.plannedDeliveryTime)
@@ -174,29 +168,6 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         this.getForm()?.setFieldsValue({ ...appointed })
     }
 
-    public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles && roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                this.wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
-
-    public renderTreeNodes = (data: any) => data.map((item: any) => {
-        if (item.children) {
-            return (<TreeNode key={item.id} title={item.name} value={item.id} className={styles.node} >
-                {this.renderTreeNodes(item.children)}
-            </TreeNode>);
-        }
-        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
-    });
-
-
     /**
     * @description Renders AbstractDetailComponent
     * @returns render 
@@ -225,6 +196,20 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                             <Descriptions.Item label="模式">
                                 {this.props.patternName || this.state.appointed?.patternName}
                             </Descriptions.Item>
+                            <Descriptions.Item label="优先级*">
+                                <Form.Item name="priority"
+                                    rules={[{
+                                        required: true,
+                                        message: '请选择优先级'
+                                    }]} style={{ width: '100%', display: 'inline-block' }}>
+                                    <Select placeholder="请选择" style={{ width: '120px' }}>
+                                        <Select.Option value={1} key={1}>紧急</Select.Option>
+                                        <Select.Option value={2} key={2}>高</Select.Option>
+                                        <Select.Option value={3} key={3}>中</Select.Option>
+                                        <Select.Option value={4} key={4}>低</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                            </Descriptions.Item>
                             {this.props.type === 'detail' ?
                                 <>
                                     <Descriptions.Item label="试组装">
@@ -241,91 +226,188 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     </Descriptions.Item>
                                     <Descriptions.Item label="交付时间">
                                         {this.props.detailData?.plannedDeliveryTime || ''}
-                                    </Descriptions.Item></>
+                                    </Descriptions.Item>
+                                </>
                                 : <>
-                                    <Descriptions.Item label="试组装">
-                                        <Form.Item name="trialAssemble"
-                                            rules={[{
-                                                required: true,
-                                                message: '请选择试组装'
-                                            }]} style={{ width: '50%', display: 'inline-block' }}>
-                                            <Select placeholder="请选择" style={{ width: '120px' }}>
-                                                <Select.Option key={'1'} value={1}>是</Select.Option>
-                                                <Select.Option key={'0'} value={0}>否</Select.Option>
-                                            </Select>
-                                        </Form.Item>
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="段信息">
-                                        <Form.Item name="name" initialValue={this.props.detailData?.name}
-                                            rules={[{
-                                                required: true,
-                                                message: '请输入段信息'
-                                            },
-                                            {
-                                                pattern: /^[^\s]*$/,
-                                                message: '禁止输入空格',
-                                            }, {
-                                                pattern: /^[0-9a-zA-Z-\u4e00-\u9fa5,]*$/,
-                                                message: '仅可输入数字/字母/-/汉字/,',
-                                            }]}>
-                                            <Input placeholder="请输入（1-3，5，ac，w）" />
-                                        </Form.Item>
-                                    </Descriptions.Item>
-                                    <Descriptions.Item label="放样人">
-                                        <Form.Item name="loftingUserDepartment" initialValue={this.props.detailData?.loftingUserDepartment}
-                                            rules={[{
-                                                required: true,
-                                                message: '请选择部门'
-                                            }]} style={{ width: '50%', display: 'inline-block' }}>
-                                            <TreeSelect placeholder="请选择" style={{ width: '120px' }} onChange={(value: string) => { this.onDepartmentChange(value, '放样') }} className={styles.width200}>
-                                                {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData))}
-                                            </TreeSelect>
-                                        </Form.Item>
+                                    <Descriptions.Item label="放样员">
                                         <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser}
                                             rules={[{
                                                 required: true,
                                                 message: '请选择人员'
                                             }]} style={{ width: '50%', display: 'inline-block' }}>
-                                            <Select placeholder="请选择" style={{ width: '120px' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择完成时间'
+                                            }]} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                            <DatePicker showTime />
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="编程负责人(生产下达)">
+                                        <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择完成时间'
+                                            }]} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                            <DatePicker showTime />
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item children={[]} />
+                                    <Descriptions.Item label="放样互审">
+                                        <Form.Item name="loftingUser" initialValue={0}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                <Select.Option key={0} value={0}>同上</Select.Option>
                                                 {this.state?.user && this.state.user.map((item: any) => {
                                                     return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
                                                 })}
                                             </Select>
                                         </Form.Item>
                                     </Descriptions.Item>
-                                    <Descriptions.Item label="校核人">
-                                        <Form.Item name="checkUserDepartment" initialValue={this.props.detailData?.checkUserDepartment}
-                                            rules={[{
-                                                required: true,
-                                                message: '请选择部门'
-                                            }]} style={{ width: '50%', display: 'inline-block' }}>
-                                            <TreeSelect placeholder="请选择" style={{ width: '120px' }} onChange={(value: any) => { this.onDepartmentChange(value, '校对') }} className={styles.width200}>
-                                                {this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData))}
-                                            </TreeSelect>
-                                        </Form.Item>
-                                        <Form.Item name="checkUser" initialValue={this.props.detailData?.checkUser}
+                                    <Descriptions.Item label="NC程序">
+                                        <Form.Item name="loftingUser" initialValue={0}
                                             rules={[{
                                                 required: true,
                                                 message: '请选择人员'
                                             }]} style={{ width: '50%', display: 'inline-block' }}>
-                                            <Select placeholder="请选择" style={{ width: '120px' }}>
-                                                {this.state?.checkUser && this.state.checkUser.map((item: any) => {
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                <Select.Option key={0} value={0}>同上</Select.Option>
+                                                {this.state?.user && this.state.user.map((item: any) => {
                                                     return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
                                                 })}
                                             </Select>
                                         </Form.Item>
                                     </Descriptions.Item>
-                                    <Descriptions.Item label="交付时间">
-                                        <Form.Item name="plannedDeliveryTime" initialValue={moment(this.props.detailData?.plannedDeliveryTime)}
+                                    <Descriptions.Item children={[]} />
+                                    <Descriptions.Item label="组焊清单">
+                                        <Form.Item name="loftingUser" initialValue={0}
                                             rules={[{
                                                 required: true,
-                                                message: '请选择交付时间'
-                                            }]}>
-                                            <DatePicker disabledDate={(current) => {
-                                                return current && current < moment(this.state.time);
-                                            }} showTime />
+                                                message: '请选择人员'
+                                            }]} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                <Select.Option key={0} value={0}>同上</Select.Option>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
                                         </Form.Item>
-                                    </Descriptions.Item></>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="杆塔配段">
+                                        <Form.Item name="loftingUser" initialValue={0}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                <Select.Option key={0} value={0}>同上</Select.Option>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item children={[]} />
+                                    <Descriptions.Item label="高低腿配置编制">
+                                        <Form.Item name="loftingUser" initialValue={0} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择完成时间'
+                                            }]} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                            <Input disabled placeholder="自动计算" />
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="包装清单">
+                                        <Form.Item name="loftingUser" initialValue={0}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                <Select.Option key={0} value={0}>同上</Select.Option>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item children={[]} />
+                                    <Descriptions.Item label="高低腿配置校核">
+                                        <Form.Item name="loftingUser" initialValue={0} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择完成时间'
+                                            }]} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                            <Input disabled placeholder="自动获取" />
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="编程高低腿">
+                                        <Form.Item name="loftingUser" initialValue={0} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                <Select.Option key={0} value={0}>同上</Select.Option>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser}
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择完成时间'
+                                            }]} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                            <Input disabled placeholder="自动获取" />
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item children={[]} />
+                                    <Descriptions.Item label="挂线板校核">
+                                        <Form.Item name="loftingUser" initialValue={0} style={{ width: '50%', display: 'inline-block' }}>
+                                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                                {this.state?.user && this.state.user.map((item: any) => {
+                                                    return <Select.Option key={item.userId} value={item.userId + '-' + item.name}>{item.name}</Select.Option>
+                                                })}
+                                            </Select>
+                                        </Form.Item>
+                                        <Form.Item name="loftingUser" initialValue={this.props.detailData?.loftingUser} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                            <InputNumber min={1} max={9999} placeholder="请输入数量" />
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item children={[]} />
+                                    <Descriptions.Item children={[]} />
+                                </>
                             }
                         </Descriptions>
                     </Form>

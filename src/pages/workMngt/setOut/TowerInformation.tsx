@@ -19,6 +19,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import { patternTypeOptions, productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
+import ChooseMaterials from './ChooseMaterials';
 
 interface ISectionData {
 
@@ -373,34 +374,34 @@ export default function TowerInformation(): React.ReactNode {
         }
     ]
 
-    const sectionColumns = [
-        {
-            title: '段号',
-            dataIndex: 'segmentName',
-            key: 'segmentName',
-            width: '50%'
-        },
-        {
-            title: '模式',
-            dataIndex: 'pattern',
-            key: 'pattern',
-            width: '50%',
-            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, 'pattern']} rules={[{
-                    required: true,
-                    message: '请选择模式'
-                }]}>
-                    <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={recordStatus === 3}>
-                        {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
-                                {name}
-                            </Select.Option>
-                        })}
-                    </Select>
-                </Form.Item>
-            )
-        }
-    ]
+    // const sectionColumns = [
+    //     {
+    //         title: '段号',
+    //         dataIndex: 'segmentName',
+    //         key: 'segmentName',
+    //         width: '50%'
+    //     },
+    //     {
+    //         title: '模式',
+    //         dataIndex: 'pattern',
+    //         key: 'pattern',
+    //         width: '50%',
+    //         render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+    //             <Form.Item name={['data', index, 'pattern']} rules={[{
+    //                 required: true,
+    //                 message: '请选择模式'
+    //             }]}>
+    //                 <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={recordStatus === 3}>
+    //                     {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+    //                         return <Select.Option key={index} value={id}>
+    //                             {name}
+    //                         </Select.Option>
+    //                     })}
+    //                 </Select>
+    //             </Form.Item>
+    //         )
+    //     }
+    // ]
 
     const onRefresh = () => {
         setRefresh(!refresh);
@@ -471,10 +472,9 @@ export default function TowerInformation(): React.ReactNode {
     const [loftingUser, setLoftingUser] = useState([]);
     const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
-    // const [visible, setVisible] = useState(false);
-    // const [sectionData, setSectionData] = useState<ISectionData[]>([]);
+    const [visible, setVisible] = useState(false);
+    const [rowId, setRowId] = useState<string>('');
     const [editForm] = useForm();
-    const [recordStatus, setRecordStatus] = useState();
     const [loading1, setLoading1] = useState(false);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     const [editorLock, setEditorLock] = useState('编辑');
@@ -493,6 +493,18 @@ export default function TowerInformation(): React.ReactNode {
                 <Table columns={sectionColumns} pagination={false} dataSource={sectionData} />
             </Form>
         </Modal> */}
+        <Modal
+            destroyOnClose
+            key='DetailsQuestionnaire'
+            visible={visible}
+            width="80%"
+            title="挑料清单"
+            footer={<Button onClick={() => setVisible(false)}>关闭</Button>}
+            onCancel={() => {
+                setVisible(false);
+            }}>
+            <ChooseMaterials id={rowId} />
+        </Modal>
         <Form layout="inline" onFinish={(value: Record<string, any>) => {
             if (value.updateStatusTime) {
                 const formatDate = value.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
@@ -552,7 +564,7 @@ export default function TowerInformation(): React.ReactNode {
                     <span>塔型：<span>{ }1</span></span>
                     <span>计划号：<span>{ }1</span></span>
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
-                        <Button type='primary' ghost>挑料清单</Button>
+                        <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
                         <Button type='primary' ghost>放样</Button>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
@@ -578,11 +590,7 @@ export default function TowerInformation(): React.ReactNode {
                                     >
                                         <Button type="primary" loading={loading1} disabled={!(location.state?.status < 3)} ghost>提交</Button>
                                     </Popconfirm>
-                                    {
-                                        location.state?.status < 3 ?
-                                            <TowerLoftingAssign title="塔型放样分派" id={params.id} update={onRefresh} type="edit" />
-                                            : <Button type="primary" disabled ghost>塔型放样分派</Button>
-                                    }
+                                    <TowerLoftingAssign title="塔型放样分派" id={params.id} update={onRefresh} type="edit" />
                                 </>
                                 : null
                         }
