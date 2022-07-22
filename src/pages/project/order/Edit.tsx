@@ -215,6 +215,7 @@ export default function SeeGuarantee(): JSX.Element {
                 ...baseData?.internalNumber.records[0],
                 contractId: baseData?.internalNumber?.records[0]?.id || baseData?.internalNumber?.records[0]?.contractId
             },
+            planType,
             contractNumber: baseData?.internalNumber?.records[0]?.contractNumber,
             paymentPlanOrderDTOS: editformData.submit
         }

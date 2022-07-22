@@ -31,6 +31,14 @@ export default function Edit() {
   const [form] = Form.useForm()
   const [editform] = Form.useForm()
   const type = routerMatch?.params?.type
+  const { loading: projectLoading, data: projectData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    try {
+      const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.projectId}`)
+      resole(result)
+    } catch (error) {
+      reject(error)
+    }
+  }))
 
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
@@ -192,7 +200,7 @@ export default function Edit() {
       >保存</Button>,
       <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
     ]}>
-    <Spin spinning={loading}>
+    <Spin spinning={loading || projectLoading}>
       <DetailTitle title="基础信息" />
       <BaseInfo
         onChange={handleBaseInfoChange}

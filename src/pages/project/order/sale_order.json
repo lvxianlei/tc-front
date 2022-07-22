@@ -211,6 +211,11 @@
             "precision": 2
         },
         {
+            "title": "交货地点",
+            "dataIndex": "-----------------",
+            "required": true
+        },
+        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea"
