@@ -489,7 +489,7 @@ export default function TowerInformation(): React.ReactNode {
                     null : <Button type="primary" onClick={saveSection} ghost>保存</Button>
             }
         </Space>}>
-            <Form form={form}>
+            <Form form={form} className={styles.sectionModal}>
                 <Table columns={sectionColumns} pagination={false} dataSource={sectionData} />
             </Form>
         </Modal> */}

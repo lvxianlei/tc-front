@@ -50,7 +50,7 @@ const tableColumns = [
 
 const specialColums = [
     {
-        "dataIndex": "materialStandard",
+        "dataIndex": "materialStandardName",
         "title": "原材料标准"
     },
     {

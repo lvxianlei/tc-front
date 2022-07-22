@@ -8,6 +8,8 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import Edit from "./Edit"
 import OprationInfo from "./OprationInfo"
+
+import "./price.less"
 interface EditRef {
     onSubmit: () => void
     resetFields: () => void
@@ -78,7 +80,7 @@ export default function ContractMngt() {
     })
 
     return (
-        <>
+        <div className='enquiryComareWrapper'>
             <Modal destroyOnClose title={oprationType === "new" ? "创建" : "编辑"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
                 editRef.current?.resetFields()
                 setVisible(false)
@@ -188,6 +190,6 @@ export default function ContractMngt() {
                     }
                 ]}
             />
-        </>
+        </div>
     )
 }
