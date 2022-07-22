@@ -57,6 +57,7 @@ export default function Release(): React.ReactNode {
         }
     ]
     const [columns, setColumns] = useState<any>(columnsCommon)
+    const [cancelList, setCancelList] = useState<any[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
         const value  = data?.loftingBatchProductVOList.filter((item:any)=>{
@@ -83,6 +84,7 @@ export default function Release(): React.ReactNode {
         })))])
         form.setFieldsValue({
             ...data,
+            cancelIssuedNumber: data?.cancelIssuedNumber&&data?.cancelIssuedNumber!==null&&data?.cancelIssuedNumber.indexOf(',')>-1?data?.cancelIssuedNumber.split(','):undefined
             // loftingBatchProductDTOList:value.map((item:any)=>{
             //     return{
             //         ...item,
@@ -115,6 +117,8 @@ export default function Release(): React.ReactNode {
             }
         }))
         setReleaseData(data)
+        const cancelData:any[] = await RequestUtil.get(`/tower-science/loftingBatch/canceled/batch/list/${params.id}`);
+        setCancelList(cancelData)
     }), {})
     const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
         setSelectedKeys(selectedRowKeys);
@@ -241,6 +245,7 @@ export default function Release(): React.ReactNode {
                             galvanizeDemand: value.galvanizeDemand,
                             machiningDemand: value.machiningDemand,
                             packDemand: value.packDemand,
+                            cancelIssuedNumber: value.cancelIssuedNumber?value.cancelIssuedNumber.join(','):"",
                             planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
                             productCategoryId: params.id,
                             trialAssemble: value.trialAssemble,
@@ -354,8 +359,14 @@ export default function Release(): React.ReactNode {
                             </Row>
                             <Row>
                                 <Col span={12}>
-                                    <Form.Item name="galvanizeDemand" label="已取消下达单号">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 200 } showCount rows={1}/>
+                                    <Form.Item name="cancelIssuedNumber" label="已取消下达单号">
+                                        <Select style={{width:"100%"}}  showSearch allowClear  mode="multiple">
+                                            {cancelList && cancelList.map(({ id, issuedNumber }, index) => {
+                                                return <Select.Option key={index} value={issuedNumber}>
+                                                    {issuedNumber}
+                                                </Select.Option>
+                                            })}
+                                        </Select>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -554,7 +565,11 @@ export default function Release(): React.ReactNode {
                                                                 return <Col span={12}>
                                                                     <Form.Item label={item.title} name={item.dataIndex} >
                                                                         {
-                                                                            index < 4 ?  <InputNumber disabled={ index < 4 } precision={0}  min={0} style={{width:"100%"}}/>:
+                                                                            index < 4 ?  index === 3?<Select style={{width:"100%"}} disabled>
+                                                                                <Select.Option key={0} value={0}>正常</Select.Option>
+                                                                                <Select.Option key={1} value={1}>暂停</Select.Option>
+                                                                                <Select.Option key={2} value={2}>恢复</Select.Option>
+                                                                            </Select>:<InputNumber disabled={ index < 4 } precision={0}  min={0} style={{width:"100%"}}/>:
                                                                             <InputNumber disabled={ index < 4 } precision={0} max={maxNum[0]?.releaseNum||0} min={0} style={{width:"100%"}}/>
                                                                         }
                                                                         
@@ -582,7 +597,7 @@ export default function Release(): React.ReactNode {
                                                                     return {
                                                                         ...itemItem,
                                                                         productId: tableDataSource[index]?.productId, 
-                                                                        batchNum: JSON.stringify(value[itemItem?.segmentName])
+                                                                        batchNum: typeof value[itemItem?.segmentName] ==='number'?JSON.stringify(value[itemItem?.segmentName]):value[itemItem?.segmentName]
                                                                     }
                                                                 })
                                                             }
@@ -642,7 +657,7 @@ export default function Release(): React.ReactNode {
                                 selectedRowKeys: selectedKeys,
                                 onChange: SelectChange,
                                 getCheckboxProps: (record: Record<string, any>) => ({
-                                    disabled: record?.loftingBatchSegmentVOList[0].segmentNum===record?.loftingBatchSegmentVOList[0].issuedNum
+                                    disabled: record?.isAll=== 1
                                 })
                             }}
                             rowKey={(item: any, index:number) => `${index}`}
