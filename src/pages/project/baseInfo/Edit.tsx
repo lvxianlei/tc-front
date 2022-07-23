@@ -14,6 +14,7 @@ export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
     const [address, setAddress] = useState<string>("")
+    const [when, setWhen] = useState<boolean>(true)
     const [baseInfoForm] = Form.useForm()
     const [cargoVOListForm] = Form.useForm()
     const [portedCargoForm] = Form.useForm()
@@ -84,6 +85,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 biddingAgency
             })
             if (result) {
+                setWhen(false)
                 message.success("保存成功...")
                 history.goBack()
             }
@@ -116,7 +118,7 @@ export default function BaseInfoEdit(): JSX.Element {
 
     return <>
         {params.id !== "new" && <ManagementDetailTabsTitle />}
-        <DetailContent operation={[
+        <DetailContent when={when} operation={[
             <Button
                 key="save"
                 type="primary"
