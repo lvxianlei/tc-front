@@ -68,10 +68,11 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleNumChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
+                console.log(item, "=====", id)
                 return ({
                     ...item,
-                    planPurchaseNum: value,
-                    weight: ((item.proportion * (item.length || 1)) / 1000 / 1000).toFixed(3),
+                    num: value,
+                    weight: (((item.proportion || 0) * (item.length || 1)) / 1000 / 1000).toFixed(3),
                     totalWeight: ((item.proportion * value * (item.length || 1)) / 1000 / 1000).toFixed(3)
                 })
             }
