@@ -15,10 +15,7 @@ export default function ManagementDetailTabsTitle(): JSX.Element {
         params = detailParams
     }
     return <Row className={styles.operation}>
-        <span className={(!params.tab || params.tab === 'base') ? styles.default : ""} key="base" onClick={() => {
-            console.log(location, "location", history)
-            history.push(`/project/management/detail/base/${params.id}`)
-        }}>基础信息</span>
+        <span className={(!params.tab || params.tab === 'base') ? styles.default : ""} key="base" onClick={() => history.push(`/project/management/detail/base/${params.id}`)}>基础信息</span>
         <span className={(params.tab && params.tab === 'cost') ? styles.default : ""} key="cost" onClick={() => history.push(`/project/management/detail/cost/${params.id}`)}>成本评估</span>
         <span className={(params.tab && params.tab === 'qualificationReview') ? styles.default : ""} key="qualificationReview" onClick={() => history.push(`/project/management/detail/qualificationReview/${params.id}`)}>资审文件</span>
         <span className={(params.tab && params.tab === 'bidDoc') ? styles.default : ""} key="bidDoc" onClick={() => history.push(`/project/management/detail/bidDoc/${params.id}`)}>标书制作</span>

@@ -12,6 +12,7 @@ export default function Edit() {
     const [returnType, setReturnType] = useState<ReturnType | string>(-1)
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: "", id: "", records: {} })
     const [visible, setVisible] = useState<boolean>(false)
+    const [when, setWhen] = useState<boolean>(true)
     //存取已选中回款计划信息
     const [selectedConstarct, setSelectedConstranct] = useState<string[]>([])
     const [baseForm] = Form.useForm()
@@ -63,6 +64,7 @@ export default function Edit() {
                 }))
             })
             if (result) {
+                setWhen(false)
                 message.success("保存成功")
                 history.go(-1)
             }
@@ -121,10 +123,12 @@ export default function Edit() {
         })
     }
 
-    return <DetailContent operation={[
-        <Button key="save" type="primary" loading={saveLoading} style={{ marginRight: 16 }} onClick={handleSubmit}>确认回款信息</Button>,
-        <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
-    ]}>
+    return <DetailContent
+        when={when}
+        operation={[
+            <Button key="save" type="primary" loading={saveLoading} style={{ marginRight: 16 }} onClick={handleSubmit}>确认回款信息</Button>,
+            <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
+        ]}>
         <Modal width={1011} title="选择合同" destroyOnClose visible={visible} onOk={handleOk} onCancel={handleCancel}>
             <PopTableContent data={contract as any} onChange={handleChange} />
         </Modal>

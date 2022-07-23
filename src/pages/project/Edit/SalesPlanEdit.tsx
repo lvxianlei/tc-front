@@ -13,6 +13,7 @@ export default function SalesPlanEdit() {
     const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/:type/salesPlan/:projectId/:id")
     const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/:type/salesPlan/:projectId")
     const match = editMatch || newMatch
+    const [when, setWhen] = useState<boolean>(true)
     const [select, setSelect] = useState<string[]>([])
     const [selectRows, setSelectRows] = useState<any[]>([])
     const [productDetails, setProductDetails] = useState<any[]>([])
@@ -24,20 +25,19 @@ export default function SalesPlanEdit() {
     const [cargoDtoForm] = Form.useForm()
     const [productDetailsForm] = Form.useForm()
     const [deliveryTimeForm] = Form.useForm()
-    const { loading, data } :any= useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data }: any = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
-            console.log(result)
-            baseInfoForm.setFieldsValue({
-                
-                ...result,
-                issueTime: result?.issueTime?moment(result?.issueTime):'',
-            })
-            cargoDtoForm.setFieldsValue(result)
             setSaleOrderId(result.saleOrderId)
             setContractId(result.contractId)
             setProductDetails(result.productInfos || [])
-            resole(result)
+            resole({
+                ...result,
+                saleOrderNumber: {
+                    value: result.saleOrderNumber,
+                    id: result.saleOrderId,
+                }
+            })
         } catch (error) {
             reject(error)
         }
@@ -90,20 +90,22 @@ export default function SalesPlanEdit() {
                 ...cargoDtoData,
                 projectId: match.params.projectId,
                 contractId,
-                saleOrderId,
+                saleOrderNumber: baseInfoData.saleOrderNumber?.value,
+                saleOrderId: baseInfoData.saleOrderNumber?.id,
                 deliveryTime: `${moment(baseInfoData.deliveryTime).format("YYYY-MM-DD")} 00:00:00`,
                 saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
-                productInfoList: submitProductDetailsData,
-                saleOrderNumber: baseInfoData.saleOrderNumber.value || baseInfoData.saleOrderNumber
+                productInfoList: submitProductDetailsData
             }
             if (type === "save") {
                 await run(submitData)
+                setWhen(false)
                 message.success("保存成功...")
                 history.goBack()
                 return
             }
             if (type === "saveAndApprove") {
                 await saveAndApproveRun(submitData)
+                setWhen(false)
                 message.success("保存并提交审核成功...")
                 history.goBack()
                 return
@@ -113,7 +115,7 @@ export default function SalesPlanEdit() {
         }
     }
 
-    const handleBaseInfoChange = (changedFields: any, allFields: any) => {
+    const handleBaseInfoChange = (changedFields: any) => {
         if (Object.keys(changedFields)[0] === "saleOrderNumber") {
             const {
                 internalNumber,
@@ -232,17 +234,19 @@ export default function SalesPlanEdit() {
         }
     }
 
-    return <DetailContent operation={[
-        <Button
-            key="save" type="primary"
-            style={{ marginRight: "12px" }}
-            onClick={() => handleSubmit("save")} loading={saveStatus || saveAndApproveLoading} >保存</Button>,
-        <Button key="saveOr" type="primary"
-            style={{ marginRight: "12px" }}
-            loading={saveStatus || saveAndApproveLoading}
-            onClick={() => handleSubmit("saveAndApprove")}>保存并提交审核</Button>,
-        <Button key="cacel" onClick={() => history.goBack()} >取消</Button>
-    ]}>
+    return <DetailContent
+        when={when}
+        operation={[
+            <Button
+                key="save" type="primary"
+                style={{ marginRight: "12px" }}
+                onClick={() => handleSubmit("save")} loading={saveStatus || saveAndApproveLoading} >保存</Button>,
+            <Button key="saveOr" type="primary"
+                style={{ marginRight: "12px" }}
+                loading={saveStatus || saveAndApproveLoading}
+                onClick={() => handleSubmit("saveAndApprove")}>保存并提交审核</Button>,
+            <Button key="cacel" onClick={() => history.goBack()} >取消</Button>
+        ]}>
         <Modal title="设置杆塔交货日期"
             visible={settingVisible}
             width={506}
@@ -284,22 +288,22 @@ export default function SalesPlanEdit() {
             <BaseInfo
                 form={baseInfoForm}
                 onChange={handleBaseInfoChange}
-                columns={taskNoticeEditBaseInfo.map((item: any) =>{
-                    if(item.dataIndex === "saleOrderNumber"){
+                columns={taskNoticeEditBaseInfo.map((item: any) => {
+                    if (item.dataIndex === "saleOrderNumber") {
                         return ({
                             ...item,
                             path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
-                        }) 
+                        })
                     }
-                    if(item.dataIndex === "issueTime"&& match.params.type === "new"){
+                    if (item.dataIndex === "issueTime" && match.params.type === "new") {
                         return ({
                             ...item,
                             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name="issueTime"  initialValue={moment(new Date())}>
-                                    <DatePicker format={'YYYY-MM-DD'} style={{ width: '105%' }}/>
+                                <Form.Item name="issueTime" initialValue={moment(new Date())}>
+                                    <DatePicker format={'YYYY-MM-DD'} style={{ width: '105%' }} />
                                 </Form.Item>
                             )
-                        }) 
+                        })
                     }
                     return item
                 })} dataSource={data || {}} edit col={3} />

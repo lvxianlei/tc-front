@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable } from "../../common"
@@ -12,6 +12,7 @@ import { winBidTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function FrameAgreementEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
+    const [when, setWhen] = useState<boolean>(true)
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
     const bidType = winBidTypeOptions
@@ -54,6 +55,7 @@ export default function FrameAgreementEdit(): JSX.Element {
                 contractCargoDtos: contractCargoDtosData.submit
             })
             if (result) {
+                setWhen(false)
                 message.success("保存成功...")
                 history.goBack()
             }
@@ -84,10 +86,12 @@ export default function FrameAgreementEdit(): JSX.Element {
 
     return <>
         <ManagementDetailTabsTitle />
-        <DetailContent operation={[
-            <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
-            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-        ]}>
+        <DetailContent
+            when={when}
+            operation={[
+                <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={handleSubmit} loading={saveStatus}>保存</Button>,
+                <Button key="goback" onClick={() => history.goBack()}>返回</Button>
+            ]}>
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo form={baseInfoForm}
