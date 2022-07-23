@@ -165,7 +165,7 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
      */
     public getFormItemGroups(): IFormItemGroup[][] {
         const paymentRecord: IPaymentRecord | undefined = this.state.paymentRecord;
-        const params: any = this.props.match.params
+        const params: any = this.props?.match?.params
         return [[{
             title: '回款计划',
             itemCol: {
@@ -174,19 +174,19 @@ export default abstract class AbstractPaymentRecordSetting<P extends RouteCompon
             itemProps: [{
                 label: '关联合同',
                 name: 'contractNumber',
-                initialValue: params.contractNumber,
+                initialValue: params?.contractNumber,
                 rules: [{
                     required: true,
                     message: '请选择合同'
                 }],
                 children:
                     <>
-                        <Input value={params.contractNumber} disabled />
+                        <Input value={params?.contractNumber} disabled />
                     </>
             }, {
                 label: '合同名称',
                 name: 'contractName',
-                initialValue: params.contractName,
+                initialValue: params?.contractName,
                 children: (
                     <Input disabled />
                 )

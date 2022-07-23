@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Spin, Form, message, Modal } from 'antd'
-import { EditTable, EditableTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
+import { EditableTable, DetailTitle, BaseInfo, DetailContent, Attachment, AttachmentRef } from '../common'
 import { baseInfoData, detaiBidStatus, bidPageInfo } from './bidding.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-
+// import Prompt from "../common/Prompt"
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string }>()
@@ -118,7 +118,7 @@ export default function InfomationNew(): JSX.Element {
 
             await bidResultRun({
                 ...submitData,
-                 biddingStatus: 1,
+                biddingStatus: 1,
                 projectLeaderId: submitData.projectLeaderId?.id,
                 bigPackageIds: submitData.bigPackageIds?.records.map((item: any) => item.id)
             })
@@ -157,30 +157,32 @@ export default function InfomationNew(): JSX.Element {
             onOk: () => history.goBack()
         })
     }
-    return <DetailContent
-        operation={[
-            <Button
-                key="save"
-                type="primary"
-                onClick={handleSave}
-                loading={saveStatus}
-                style={{ marginRight: 16 }}
-            >保存</Button>,
-            <Button key="cancel" onClick={handelCancel}>取消</Button>
-        ]}
-    >
-        <Modal zIndex={15} visible={visible} title="应标" okText="确定" onOk={handleModalOk} onCancel={handleModalCancel} >
-            <BaseInfo edit form={form} columns={detaiBidStatus.map((item: any) => {
-                if (item.dataIndex === "bigPackageIds") {
-                    return ({ ...item, path: `${item.path}?bidInfoId=${params.id}` })
-                }
-                return item
-            })} dataSource={{}} col={1} />
-        </Modal>
-        <DetailTitle title="基础信息" />
-        <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
-        <DetailTitle title="物资清单" />
-        <EditableTable form={bidForm} columns={bidPageInfo} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
-        <Attachment title="附件" ref={attachRef} dataSource={data?.attachVos} edit />
-    </DetailContent>
+    return <>
+        <DetailContent
+            operation={[
+                <Button
+                    key="save"
+                    type="primary"
+                    onClick={handleSave}
+                    loading={saveStatus}
+                    style={{ marginRight: 16 }}
+                >保存</Button>,
+                <Button key="cancel" onClick={handelCancel}>取消</Button>
+            ]}
+        >
+            <Modal zIndex={15} visible={visible} title="应标" okText="确定" onOk={handleModalOk} onCancel={handleModalCancel} >
+                <BaseInfo edit form={form} columns={detaiBidStatus.map((item: any) => {
+                    if (item.dataIndex === "bigPackageIds") {
+                        return ({ ...item, path: `${item.path}?bidInfoId=${params.id}` })
+                    }
+                    return item
+                })} dataSource={{}} col={1} />
+            </Modal>
+            <DetailTitle title="基础信息" />
+            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={filterBaseInfoData(baseInfoData)} dataSource={detailData} edit />
+            <DetailTitle title="物资清单" />
+            <EditableTable form={bidForm} columns={bidPageInfo} dataSource={detailData.bidPackageInfoVOS} onChange={handleBindChange} />
+            <Attachment title="附件" ref={attachRef} dataSource={data?.attachVos} edit />
+        </DetailContent>
+    </>
 }

@@ -28,6 +28,7 @@ export default function WorkCenterSetting(): React.ReactNode{
     const [visible,setVisible] =  useState<boolean>(false);
     const [specifications, setSpecifications] = useState<any[]>([]);
     const [title,setTitle] = useState<string>('新增');
+    const [mode,setMode] = useState<string>('单选');
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-aps/work/center/info/${params?.id}`)
@@ -219,15 +220,23 @@ export default function WorkCenterSetting(): React.ReactNode{
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={()=>{
+                    <Button type="link" onClick={async ()=>{
                         setVisible(true)
                         console.log(record)
                         setTitle('编辑')
                         form.setFieldsValue({
                             ...record,
                             index:index,
-                            process: record?.processId+','+record?.processName
+                            process: record?.processId+','+record?.processName,
+                            specificationName: record?.specificationName.indexOf(',')>-1?record?.specificationName.split(','):record?.specificationName,
+                            materialTextureName: record?.materialTextureName.indexOf(',')>-1?record?.materialTextureName.split(','):record?.materialTextureName,
                         })
+                        // if(record?.materialName==='钢板'){
+                        //     setMode('多选')
+                        // }else{
+                        //     setMode('单选')
+                        // }
+                        await specificationGet(record?.materialName)
                         console.log(form.getFieldsValue(true))
                     }}>编辑</Button>
                     <Popconfirm
@@ -399,6 +408,12 @@ export default function WorkCenterSetting(): React.ReactNode{
                         value.processName = value.process.split(',')[1]
                         delete value.process
                     }
+                    if(Array.isArray(value.materialTextureName)){
+                        value.materialTextureName = value.materialTextureName.join(',')
+                    }
+                    if(Array.isArray(value.specificationName)){
+                        value.specificationName = value.specificationName.join(',')
+                    }
                     console.log(value)
                     setVisible(false)
                     if(title==='新增'){
@@ -441,6 +456,11 @@ export default function WorkCenterSetting(): React.ReactNode{
                         "message": "请选择材料"
                     }]}>
                         <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} onChange={async (e: string) => {
+                            // if(e==='钢板'){
+                            //     setMode('多选')
+                            // }else{
+                            //     setMode('单选')
+                            // }
                             await specificationGet(e)
                         }}>
                             {materialList?.map((item: any) => {
@@ -452,7 +472,8 @@ export default function WorkCenterSetting(): React.ReactNode{
                         "required": true,
                         "message": "请选择规格"
                     }]}>
-                        <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} >
+                        <Select showSearch placeholder="请选择" size="small" style={{ width: '100%' }} mode={'multiple'}>
+                            <Select.Option key='全部' value='全部' >全部</Select.Option>
                             {specifications?.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.structureSpec}>{item.structureSpec}</Select.Option>
                             })}
@@ -462,7 +483,8 @@ export default function WorkCenterSetting(): React.ReactNode{
                         "required": true,
                         "message": "请选择材质"
                     }]}>
-                        <Select style={{ width: '100%' }} size="small" showSearch>
+                        <Select style={{ width: '100%' }} size="small" showSearch mode={'multiple'}>
+                            <Select.Option key='全部' value='全部'>全部</Select.Option>
                             {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
                         </Select>
                     </Form.Item>
