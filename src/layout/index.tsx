@@ -290,8 +290,7 @@ export default function (): JSX.Element {
                                                     path={router.path}
                                                     key={router.path}
                                                     exact={router.exact}
-                                                    component={renderRoute(router.module, router.authority)}
-                                                /> : null
+                                                >{renderRoute(router.module, router.authority)}</Route> : null
                                             )
                                         })
                                     }

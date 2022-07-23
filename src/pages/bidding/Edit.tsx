@@ -5,14 +5,13 @@ import { EditableTable, DetailTitle, BaseInfo, DetailContent, Attachment, Attach
 import { baseInfoData, detaiBidStatus, bidPageInfo } from './bidding.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-// import Prompt from "../common/Prompt"
 export default function InfomationNew(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const attachRef = useRef<AttachmentRef>()
+    const [when, setWhen] = useState<boolean>(true)
     const [binddingStatus, setBinddingStatus] = useState<number>(0)
     const [visible, setVisible] = useState<boolean>(false)
-    const [isEdit, setIsEdit] = useState<boolean>(false)
     const [baseInfoForm] = Form.useForm()
     const [bidForm] = Form.useForm()
     const [form] = Form.useForm()
@@ -35,6 +34,7 @@ export default function InfomationNew(): JSX.Element {
             reject(error)
         }
     }), { manual: true })
+
     const { run: bidResultRun } = useRequest((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const data: any = await RequestUtil.post(`/tower-market/bidInfo/bidResponse`, { id: params.id, ...postData })
@@ -45,6 +45,7 @@ export default function InfomationNew(): JSX.Element {
         }
     }), { manual: true })
     const detailData: any = data
+
     const handleSave = async () => {
         const baseInfoResult = await baseInfoForm.validateFields()
         const bidPackageInfoDTOList = await bidForm.validateFields()
@@ -58,6 +59,7 @@ export default function InfomationNew(): JSX.Element {
         delete postData.attachVos
         const result = await run(postData)
         if (result) {
+            setWhen(false)
             message.success('保存成功...')
             history.goBack()
         }
@@ -70,7 +72,6 @@ export default function InfomationNew(): JSX.Element {
     }
 
     const handleBaseInfoChange = (changeFiled: any) => {
-        setIsEdit(true)
         if (Object.keys(changeFiled)[0] === "biddingStatus") {
             const { biddingStatus } = changeFiled
             if (biddingStatus === 2) {
@@ -115,7 +116,6 @@ export default function InfomationNew(): JSX.Element {
     const handleModalOk = async () => {
         try {
             const submitData = await form.validateFields()
-
             await bidResultRun({
                 ...submitData,
                 biddingStatus: 1,
@@ -134,9 +134,7 @@ export default function InfomationNew(): JSX.Element {
         setVisible(false)
         baseInfoForm.setFieldsValue({ biddingStatus: 2 })
     }
-    const handleChange = (fields: any, allFields: any) => {
-        setIsEdit(true)
-    }
+
     const handleBindChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
             const result = allFields.submit[fields.submit.length - 1];
@@ -146,19 +144,12 @@ export default function InfomationNew(): JSX.Element {
             }
         }
     }
-    const handelCancel = () => {
-        if (!isEdit) {
-            history.goBack();
-            return;
-        }
-        Modal.confirm({
-            title: "离开提醒",
-            content: "确定要离开吗？",
-            onOk: () => history.goBack()
-        })
-    }
+
+    const handelCancel = () => history.goBack()
+
     return <>
         <DetailContent
+            when={when}
             operation={[
                 <Button
                     key="save"
