@@ -26,7 +26,7 @@ const Location = (props: Props) => {
     useEffect(() => {
         if (props.isModal) {
             props.warehouseDetails?.map((item: any) => item["source"] = "1");
-            const result = props.warehouseDetails.filter((item: any) => item.type === 1)
+            const result = props.warehouseDetails.filter((item: any) => item.type === 0)
             setDataSource(result || []);
         }
     }, [props.isModal])
@@ -112,7 +112,7 @@ const Location = (props: Props) => {
         try {
             const data = await form.validateFields();
             dataSource?.map((item: any) => {
-                item["type"] = 1;
+                item["type"] = 0;
                 item["warehouseId"] = props.id;
                 item["id"] = item?.source === "1" ? item.id : ""
             })

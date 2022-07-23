@@ -532,7 +532,7 @@ export default function IngredientsList(): React.ReactNode {
     // 当已选方案发生改变
     useEffect(() => {
         Statistics()
-    }, [JSON.stringify(globallyStoredData), activeKey, activeSort, count])
+    }, [JSON.stringify(globallyStoredData), activeKey, activeSort, count, JSON.stringify(sortDetailList)])
     
     // 双击后构建明细发生变化
     useEffect(() => {
