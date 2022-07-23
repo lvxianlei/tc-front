@@ -12,6 +12,7 @@ export default function BidResultEdit(): JSX.Element {
     const history = useHistory()
     const ref = useRef()
     const params = useParams<{ id: string, tab: string }>()
+    const [when, setWhen] = useState<boolean>(true)
     const [bidOpenRecordVos, setBidOpenRecordVos] = useState<any[]>([{ round: 1, roundName: "第 1 轮", fixed: true, bidOpenRecordVos: [] }])
     const [baseInfoForm] = Form.useForm()
 
@@ -114,6 +115,7 @@ export default function BidResultEdit(): JSX.Element {
             })
 
             if (result) {
+                setWhen(false)
                 message.success("保存成功...")
                 history.goBack()
             }
@@ -122,13 +124,8 @@ export default function BidResultEdit(): JSX.Element {
             console.log(error)
         }
     }
-    const handelCancel = () => {
-        Modal.confirm({
-            title: "离开提醒",
-            content: "确定要离开吗？",
-            onOk: () => history.goBack()
-        })
-    }
+    const handelCancel = () => history.goBack()
+
 
     const handleTabsCanEditChange = (removeKey: string) => setBidOpenRecordVos(bidOpenRecordVos.filter((bid: any) => bid.round !== parseFloat(removeKey)))
 
@@ -263,16 +260,18 @@ export default function BidResultEdit(): JSX.Element {
 
     return (<>
         <ManagementDetailTabsTitle />
-        <DetailContent operation={[
-            <Button
-                key="save"
-                type="primary"
-                onClick={handleSubmit}
-                loading={saveStatus}
-                style={{ marginRight: 16 }}
-            >保存</Button>,
-            <Button key="goback" onClick={handelCancel}>取消</Button>,
-        ]}>
+        <DetailContent
+            when={when}
+            operation={[
+                <Button
+                    key="save"
+                    type="primary"
+                    onClick={handleSubmit}
+                    loading={saveStatus}
+                    style={{ marginRight: 16 }}
+                >保存</Button>,
+                <Button key="goback" onClick={handelCancel}>取消</Button>,
+            ]}>
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo form={baseInfoForm} edit columns={setting} dataSource={data || {}} />

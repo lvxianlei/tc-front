@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Spin, Button, Form, message } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from '../../common'
@@ -11,6 +11,7 @@ import { bidTypeOptions, tenderDeliveryMethodOptions } from "../../../configurat
 export default function BaseInfoEdit(): JSX.Element {
     const history = useHistory()
     const params = useParams<{ tab: TabTypes, id: string }>()
+    const [when, setWhen] = useState<boolean>(true)
     const [baseInfoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -48,6 +49,7 @@ export default function BaseInfoEdit(): JSX.Element {
                 projectId: params.id
             })
             if (result) {
+                setWhen(false)
                 message.success("保存成功...")
                 history.goBack()
             }
@@ -58,6 +60,7 @@ export default function BaseInfoEdit(): JSX.Element {
     return <>
         <ManagementDetailTabsTitle />
         <DetailContent
+            when={when}
             operation={[
                 <Button key="edit" type="primary" onClick={handleSubmit} loading={saveStatus} style={{ marginRight: 16 }}>保存</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>

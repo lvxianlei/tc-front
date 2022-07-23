@@ -406,14 +406,12 @@
       "name": "新增招标信息",
       "path": "/bidding/information/edit/new",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_detail"
     },
     { // 招标信息编辑
       "name": "编辑招标信息",
       "path": "/bidding/information/edit/:id",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_edit"
     },
     { // 项目管理
@@ -496,22 +494,22 @@
     },
     { // 合同详情
       "name": "合同详情",
-      "path": "/project/contract/detail/:projectId/:id",
+      "path": "/project/management/detail/contract/:projectId/:id",
       "module": "./pages/project/contract/ContractDetail",
       "exact": true,
       "authority": "contract"
     },
     { // 新增合同
       "name": "新增合同",
-      "path": "/project/contract/new/:projectId",
-      "module": "./pages/project/contract/ContractNew",
-      // "exact": true,
+      "path": "/project/management/new/contract/:projectId",
+      "module": "./pages/project/contract/Edit",
+      "exact": true,
       "authority": "contract"
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/contract/setting/:projectId/:id",
-      "module": "./pages/project/contract/ContractSetting",
+      "path": "/project/management/edit/contract/:projectId/:id",
+      "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "contract"
     },
@@ -524,22 +522,22 @@
     },
     {
       "name": "新增订单",
-      "path": "/project/order/new/:projectId/:id",
+      "path": "/project/management/new/order/:projectId",
       "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "sale_order"
     },
     {
       "name": "编辑订单",
-      "path": "/project/order/setting/:projectId/:id",
+      "path": "/project/management/edit/order/:projectId/:id",
       "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "sale_order"
     },
     { // 订单详情
       "name": "订单详情",
-      "path": "/project/order/detail/:projectId/:id",
-      "module": "./pages/project/order/SaleOrderDetail",
+      "path":"/project/management/detail/order/:projectId/:id",
+      "module": "./pages/project/order/Detail",
       "exact": true,
       "authority": "sale_order"
     },

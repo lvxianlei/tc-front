@@ -189,7 +189,10 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
     const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
     const [value, setValue] = useState<{ id: string, value: string, records: any }>({ value: (props as any).value, id: "", records: [] })
 
-    useEffect(() => setValue(props.value || ({ value: (props as any).value, id: "", records: [] })), [JSON.stringify(props.value || "")])
+    useEffect(() => {
+        setValue(props.value || ({ value: (props as any).value, id: "", records: [] }))
+        setPopContent(props.value || ({ value: (props as any).value, id: "", records: [] }))
+    }, [JSON.stringify(props.value || "")])
 
     const handleChange = (event: any) => {
         const itemContentId = typeof data.rowKey === "function" ? data.rowKey(event[0]) : event[0]?.[data.rowKey || "id"]
@@ -261,7 +264,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
     }
     const componentProps: any = {}
     Object.keys(data).forEach((item: any) => {
-        if (!["title", "dataIndex", "width", "type", "enum", "dependencies", "value", "path", "search", "columns"].includes(item)) {
+        if (!["title", "dataIndex", "width", "type", "enum", "dependencies", "value", "path", "edit", "search", "columns"].includes(item)) {
             componentProps[item] = data[item]
         }
     })

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Button, Row, Radio, Spin, Modal, message } from 'antd'
 import { useHistory, useParams, Link, useRouteMatch, useLocation } from 'react-router-dom'
+import { Button, Row, Radio, Spin, Modal, message } from 'antd'
 import { DetailContent, CommonTable } from '../common'
 import CostDetail from './cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
 import {
-    productGroupColumns, paths, taskNotice,
-    productAssist,
+    productGroupColumns, paths, taskNotice, productAssist
 } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
@@ -17,9 +16,8 @@ import QualificationReview from "./qualificationReview/Overview"
 import BidResult from "./bidResult/Overview"
 import FrameAgreement from './frameAgreement/Overview'
 // 合同列表
-import ContractList from "./contract/ContractList";
-import SaleOrder from './order'
-
+import ContractList from "./contract";
+import SaleOrder from "./order";
 import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
 const productAssistStatistics = [
@@ -65,7 +63,7 @@ export default function ManagementDetail(): React.ReactNode {
             resole(result)
             return
         }
-        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement","qualificationReview"].includes(params.tab as string)) {
+        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement", "qualificationReview"].includes(params.tab as string)) {
             resole({})
             return
         }
@@ -103,24 +101,6 @@ export default function ManagementDetail(): React.ReactNode {
     const { loading: deleteNoticeLoading, run: deleteNoticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/taskNotice?taskNoticeId=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { loading: noticeAdoptLoading, run: noticeAdoptRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/taskNotice/adopt?taskNoticeId=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { loading: noticeRejectLoading, run: noticeRejectRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-market/taskNotice/reject?taskNoticeId=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -193,7 +173,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_bidResult: <BidResult id={params.id} />,
         tab_frameAgreement: <FrameAgreement id={params.id} />,
         tab_contract: <>
-            <div style={{ padding: "24px 0 10px 24px", boxSizing: "border-box" }}>
+            <div style={{ paddingTop: 16 }}>
                 <Radio.Group defaultValue={"contract"} onChange={operationChange}>
                     <Radio.Button value={"contract"} key={`contract`}>合同</Radio.Button>
                     <Radio.Button value={"order"} key={"order"}>订单</Radio.Button>
@@ -201,10 +181,7 @@ export default function ManagementDetail(): React.ReactNode {
             </div>
             <Spin spinning={contractLoading}>
                 {
-                    contractStatus === "contract" ?
-                        <ContractList />
-                        :
-                        <SaleOrder />
+                    contractStatus === "contract" ? <ContractList /> : <SaleOrder />
                 }
             </Spin>
         </>,

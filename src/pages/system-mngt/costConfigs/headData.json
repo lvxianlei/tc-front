@@ -38,7 +38,7 @@
             "title": "镀锌成本(元/吨)",
             "dataIndex": "cost",
             "type": "number",
-            "maxLebgth":11
+            "maxLength": 11
         },
         {
             "title": "加工费(元/吨)",
