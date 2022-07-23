@@ -22,6 +22,7 @@ const StatiffStock = (props: Props) => {
     const [dataSource, setDataSource] = useState<any[]>([]);
     const [form] = Form.useForm();
     let [count, setCount] = useState<number>(1);
+    const [flag, setFlag] = useState<boolean>(false);
 
     useEffect(() => {
         if (props.isModal) {
@@ -61,8 +62,8 @@ const StatiffStock = (props: Props) => {
                         <Form.Item
                             name={['data', index, "segmentName"]}
                             style={{width: 150}}
-                            initialValue={record.locatorName}>
-                                <span>{record?.locatorName}</span>
+                            initialValue={record.reservoirName}>
+                                <span>{record?.reservoirName}</span>
                         </Form.Item>
                     : <Form.Item
                             name={['data', index, "segmentName"]}
@@ -75,35 +76,35 @@ const StatiffStock = (props: Props) => {
                         >
                         <Select placeholder="请选择库位" onChange={(val) => rowChange("segmentName", record.id, val)}>
                                 {
-                                    props.warehouseDetails?.filter((v: any) => v.type === 0)?.map((item: any) => <Select.Option key={"1"} value={`${item.locatorName}_${item.id}`}>{ item.locatorName }</Select.Option>)
+                                    props.warehouseDetails?.filter((v: any) => v.type === 0)?.map((item: any) => <Select.Option key={"1"} value={`${item.reservoirName}_${item.id}`}>{ item.reservoirName }</Select.Option>)
                                 }
                             </Select>
                         </Form.Item>
             }
         },
         {
-            key: 'reservoirName',
+            key: 'locatorName',
             title: '区位',
             editable: true,
-            dataIndex: 'reservoirName',
+            dataIndex: 'locatorName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
                 return record?.source === "1" ?
                         <Form.Item
-                            name={['data', index, "reservoirName"]}
+                            name={['data', index, "locatorName"]}
                             style={{width: 150}}
-                            initialValue={record.reservoirName}>
-                                <span>{record?.reservoirName}</span>
+                            initialValue={record.locatorName}>
+                                <span>{record?.locatorName}</span>
                         </Form.Item>
                     : <Form.Item
-                            name={['data', index, "reservoirName"]}
-                            initialValue={record.reservoirName}
+                            name={['data', index, "locatorName"]}
+                            initialValue={record.locatorName}
                             style={{width: 150}}
                             rules={[{
                                 required: true,
                                 message: '请输入段号'
                             },]}
                         >
-                        <Input size="small" maxLength={10} onChange={(e) => rowChange("reservoirName", record.id, e.target.value)} />
+                        <Input size="small" maxLength={10} onChange={(e) => rowChange("locatorName", record.id, e.target.value)} />
                     </Form.Item>
             }
         }
@@ -133,6 +134,8 @@ const StatiffStock = (props: Props) => {
                 const result = dataSource;
                 let v = result.filter((item: any) => item.id !== params.id);
                 setDataSource(v.slice(0));
+                // 记录从表里面删除了
+                setFlag(true);
             }
             resole(result)
         } catch (error) {
@@ -146,7 +149,8 @@ const StatiffStock = (props: Props) => {
             dataSource?.map((item: any) => {
                 item["type"] = 1;
                 item["warehouseId"] = props.id;
-                item["locatorName"] = item?.source === "1" ? item.locatorName : item.segmentName.split("_")[0];
+                item["reservoirName"] = item?.source === "1" ? item.reservoirName : item.segmentName.split("_")[0];
+                item["reservoirId"] = item?.source === "1" ? item.id : item.segmentName.split("_")[1];
                 item["id"] = item?.source === "1" ? item.id : "";
                 item["name"] = props.name;
             })
@@ -171,7 +175,8 @@ const StatiffStock = (props: Props) => {
                 onCancel={() => {
                     setDataSource([])
                     form.resetFields()
-                    props.cancelModal({code: 0})
+                    let code = flag ? 1 : 0
+                    props.cancelModal({code})
                 }}
                 okText='保存'
                 cancelText='取消'
@@ -191,7 +196,7 @@ const StatiffStock = (props: Props) => {
                                     id: count + "",
                                     source: "2",
                                     segmentName: "",
-                                    reservoirName: ""
+                                    locatorName: ""
                                 }
                             ])
                             setCount(count + 1)

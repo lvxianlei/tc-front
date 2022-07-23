@@ -22,6 +22,7 @@ const Location = (props: Props) => {
     const [dataSource, setDataSource] = useState<any[]>([]);
     const [form] = Form.useForm();
     let [count, setCount] = useState<number>(1);
+    const [flag, setFlag] = useState<boolean>(false);
 
     useEffect(() => {
         if (props.isModal) {
@@ -52,26 +53,26 @@ const Location = (props: Props) => {
             )
         },
         {
-            key: 'locatorName',
+            key: 'reservoirName',
             title: '库位',
             editable: true,
-            dataIndex: 'locatorName',
+            dataIndex: 'reservoirName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
                 return record?.source === "1" ?
                         <Form.Item
-                            name={['data', index, "locatorName"]}
+                            name={['data', index, "reservoirName"]}
                             style={{width: 300}}>
-                                <span>{record?.locatorName}</span>
+                                <span>{record?.reservoirName}</span>
                         </Form.Item>
                     : <Form.Item
-                            name={['data', index, "locatorName"]}
+                            name={['data', index, "reservoirName"]}
                             style={{width: 300}}
                             rules={[{
                                 required: true,
                                 message: '请输入库位'
                             }]}
                         >
-                            <Input size="small" maxLength={10} onChange={(e) => rowChange("locatorName", record.id, e.target.value)} />
+                            <Input size="small" maxLength={10} onChange={(e) => rowChange("reservoirName", record.id, e.target.value)} />
                         </Form.Item>
             }
         }
@@ -101,6 +102,9 @@ const Location = (props: Props) => {
                 const result = dataSource;
                 let v = result.filter((item: any) => item.id !== params.id);
                 setDataSource(v.slice(0));
+
+                // 记录从表里面删除了
+                setFlag(true);
             }
             resole(result)
         } catch (error) {
@@ -138,7 +142,8 @@ const Location = (props: Props) => {
                 onCancel={() => {
                     form.resetFields()
                     setDataSource([])
-                    props.cancelModal({code: 0})
+                    let code = flag ? 1 : 0
+                    props.cancelModal({code})
                 }}
                 okText='保存'
                 cancelText='取消'
@@ -158,7 +163,7 @@ const Location = (props: Props) => {
                                 {
                                     id: count + "",
                                     source: "2",
-                                    locatorName: ""
+                                    reservoirName: ""
                                 }
                             ].slice(0))
                             setCount(count + 1)
