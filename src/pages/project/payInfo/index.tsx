@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Result, Spin, Modal, Button } from "antd"
-import { useHistory, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { DetailContent, CommonTable } from '../../common'
 import { payInfoListHead } from './payInfo.json'
 import type { TabTypes } from "../Detail"

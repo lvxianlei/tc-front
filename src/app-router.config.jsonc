@@ -406,14 +406,12 @@
       "name": "新增招标信息",
       "path": "/bidding/information/edit/new",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_detail"
     },
     { // 招标信息编辑
       "name": "编辑招标信息",
       "path": "/bidding/information/edit/:id",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_edit"
     },
     { // 项目管理
