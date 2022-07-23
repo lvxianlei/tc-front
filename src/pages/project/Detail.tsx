@@ -18,7 +18,7 @@ import BidResult from "./bidResult/Overview"
 import FrameAgreement from './frameAgreement/Overview'
 // 合同列表
 import ContractList from "./contract/ContractList";
-import SaleOrder from './order/Index'
+import SaleOrder from './order'
 
 import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
