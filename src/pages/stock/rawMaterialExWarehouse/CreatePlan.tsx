@@ -49,7 +49,6 @@ export default function CreatePlan(props: any): JSX.Element {
             }
         }
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
-            console.log(item, "====>>>")
             return ({
                 ...item,
                 weight: item.weight || ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
@@ -74,7 +73,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     ...item,
                     num: value,
                     weight: (((item.proportion || 1) * (item.length || 1)) / 1000 / 1000).toFixed(3),
-                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000 / 1000).toFixed(3)
+                    totalWeight: ((item.proportion * value * (item.length || 1) * (item.num || 1)) / 1000 / 1000).toFixed(3)
                 })
             }
             return item
@@ -281,7 +280,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
                             weight: item.weight || ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
-                            totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000 / 1000).toFixed(3),
+                            totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.num || 1)) / 1000 / 1000).toFixed(3),
                         })) || [])
                     }}
                 />
