@@ -51,14 +51,14 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             return ({
                 ...item,
-                weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
+                weight: item.weight || ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
                 totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.num || 1)) / 1000 / 1000).toFixed(3),
             })
         })])
         setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
             return ({
                 ...item,
-                weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
+                weight: item.weight || ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3),
                 totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.num || 1)) / 1000 / 1000).toFixed(3),
             })
         })])
@@ -72,7 +72,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    weight: (((item.proportion || 0) * (item.length || 1)) / 1000 / 1000).toFixed(3),
+                    weight: (((item.proportion || 1) * (item.length || 1)) / 1000 / 1000).toFixed(3),
                     totalWeight: ((item.proportion * value * (item.length || 1)) / 1000 / 1000).toFixed(3)
                 })
             }
