@@ -26,7 +26,7 @@ const StatiffStock = (props: Props) => {
     useEffect(() => {
         if (props.isModal) {
             props.warehouseDetails?.map((item: any) => item["source"] = "1");
-            const result = props.warehouseDetails.filter((item: any) => item.type !== 1)
+            const result = props.warehouseDetails.filter((item: any) => item.type !== 0)
             setDataSource(result || []);
         }
     }, [props.isModal])
@@ -75,7 +75,7 @@ const StatiffStock = (props: Props) => {
                         >
                         <Select placeholder="请选择库位" onChange={(val) => rowChange("segmentName", record.id, val)}>
                                 {
-                                    props.warehouseDetails?.filter((v: any) => v.type === 1)?.map((item: any) => <Select.Option key={"1"} value={`${item.locatorName}_${item.id}`}>{ item.locatorName }</Select.Option>)
+                                    props.warehouseDetails?.filter((v: any) => v.type === 0)?.map((item: any) => <Select.Option key={"1"} value={`${item.locatorName}_${item.id}`}>{ item.locatorName }</Select.Option>)
                                 }
                             </Select>
                         </Form.Item>
@@ -144,7 +144,7 @@ const StatiffStock = (props: Props) => {
         try {
             const data = await form.validateFields();
             dataSource?.map((item: any) => {
-                item["type"] = 0;
+                item["type"] = 1;
                 item["warehouseId"] = props.id;
                 item["locatorName"] = item?.source === "1" ? item.locatorName : item.segmentName.split("_")[0];
                 item["id"] = item?.source === "1" ? item.id : "";
