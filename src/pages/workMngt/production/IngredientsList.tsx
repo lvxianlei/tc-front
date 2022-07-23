@@ -479,7 +479,7 @@ export default function IngredientsList(): React.ReactNode {
                 result[i].noIngredients = result[i].num;
             }
             // 处理未配为0的情况
-            if (+result[i].notConfigured=== 0) {
+            if (+result[i].noIngredients=== 0) {
                 if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
                     // 说明存在
                     selectKeys = selectKeys.filter((item: any) => item !== result[i].id);
@@ -487,6 +487,7 @@ export default function IngredientsList(): React.ReactNode {
                 }
             }
         }
+        console.log(result, "======>>>>配料明细数据")
         setSelectedRowKeysCheck(selectKeys);
         setSelectedRowCheck(selectRows);
         setSortDetailList(result.slice(0))
