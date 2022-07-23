@@ -487,6 +487,7 @@ export default function IngredientsList(): React.ReactNode {
                 }
             }
         }
+        console.log(result, "======>>>>配料明细数据")
         setSelectedRowKeysCheck(selectKeys);
         setSelectedRowCheck(selectRows);
         setSortDetailList(result.slice(0))
