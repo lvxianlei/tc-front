@@ -4,8 +4,8 @@
  * @description 工作管理-放样列表-塔型信息-塔型放样明细
 */
 
-import React from 'react';
-import { Space, Button } from 'antd';
+import React, { useState } from 'react';
+import { Space, Button, Input } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -283,6 +283,7 @@ const columns = [
 export default function TowerLoftingDetails(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
+    const [filterValue, setFilterValue] = useState({});
 
     return <Page
         path="/tower-science/productStructure/list"
@@ -295,6 +296,34 @@ export default function TowerLoftingDetails(): React.ReactNode {
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
         }
-        searchFormItems={[]}
+        searchFormItems={
+            [
+                {
+                    name: 'materialName',
+                    label: '材料名称',
+                    children: <Input maxLength={50} />
+                },
+                {
+                    name: 'structureTexture',
+                    label: '材质',
+                    children: <Input maxLength={50} />
+                },
+                {
+                    name: 'segmentName',
+                    label: '段名',
+                    children: <Input maxLength={50} />
+                },
+                {
+                    name: 'code',
+                    label: '查询',
+                    children: <Input placeholder="请输入构件编号查询" maxLength={50} />
+                },
+            ]
+        }
+        filterValue={filterValue}
+        onFilterSubmit={(values: Record<string, any>) => {
+            setFilterValue(values);
+            return values;
+        }}
     />
 }
