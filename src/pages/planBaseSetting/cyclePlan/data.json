@@ -56,9 +56,7 @@
         },
         {
             "title": "计划交货日期",
-            "dataIndex": "planDeliveryTime",
-            "type": "date",
-            "format": "YYYY-MM-DD"
+            "dataIndex": "planDeliveryTime"
         },
         {
             "title": "试装类型",
