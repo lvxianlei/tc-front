@@ -48,7 +48,7 @@ export default function Management(): React.ReactNode {
                                 }}
                             > {_a}</Typography.Text>
                         </Link>
-                        
+
                     })
                 }
                 return item
@@ -88,8 +88,18 @@ export default function Management(): React.ReactNode {
             },
             {
                 name: 'saleOrderNumber',
-                label: '订单编号',
-                children: <Input placeholder="订单编号" style={{ width: 210 }} />
+                label: '采购订单编号',
+                children: <Input placeholder="采购订单编号" style={{ width: 210 }} />
+            },
+            {
+                name: 'contractName',
+                label: '合同工程名称',
+                children: <Input placeholder="合同工程名称" style={{ width: 210 }} />
+            },
+            {
+                name: 'orderProjectName',
+                label: '订单工程名称',
+                children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
             },
             {
                 name: 'taskNumber',

@@ -69,30 +69,6 @@
                     // }
                 ]
             },
-            // {
-            //     "label": "放样外协服务",
-            //     "icon": "lofting",
-            //     "path": "/outsource",
-            //     "appName": "RD",
-            //     "authority": "entrust_page",
-            //     "items": [
-            //         {
-            //             "label": "委托列表",
-            //             "path": "/outsource/entrust",
-            //             "authority": "entrust_page_list"
-            //         },
-            //         {
-            //             "label": "已完成委托",
-            //             "path": "/outsource/Final",
-            //             "authority": "entrust_page_list"
-            //         },
-            //         {
-            //             "label": "已完成塔型",
-            //             "path": "/outsource/towershape",
-            //             "authority": "entrust_product_category_complete"
-            //         }
-            //     ]
-            // },
             {
                 "label": "招标信息",
                 "icon": "zhaobiao2",
@@ -1152,7 +1128,6 @@
                         "path": "/workshopPlanBasic/assemblyWeld",
                         "authority": "approvalm"
                     }
-                    
                 ]
             },
             {
