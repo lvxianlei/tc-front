@@ -541,20 +541,7 @@ export default function Lofting(): React.ReactNode {
                     }}>添加</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`) }}>图纸塔型套用</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`) }}>放样塔型套用</Button>
-                    <Popconfirm
-                        title="确认完成提料?"
-                        onConfirm={async () => {
-                            await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?segmentGroupId=${params.productSegmentId}`).then(() => {
-                                message.success('提料成功！')
-                            }).then(() => {
-                                history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)
-                            })
-                        }}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="primary" ghost>完成提料</Button>
-                    </Popconfirm>
+                    
                     <Button type="primary" ghost
                     onClick={()=>{
                         setEditVisible(true)
