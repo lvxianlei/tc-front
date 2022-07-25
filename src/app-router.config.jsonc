@@ -1049,7 +1049,7 @@
     },
     { // 工作管理-生产配料-生产配料
       "name": "生产配料",
-      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard",
+      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard/:planNumber",
       "module": "./pages/workMngt/production/IngredientsList",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"

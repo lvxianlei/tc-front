@@ -11,6 +11,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { baseColumn } from "./RawMaterialWarehousing.json";
 // 引入新增纸质单号
 import PaperOrderModal from './PaperOrderModal';
+import CreatePlan from "./CreatePlan";
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -21,6 +22,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [id, setId] = useState<string>();
     const addRef = useRef<EditRefProps>();
+    const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<any>({
         fuzzyQuery: "",
         receiveStatus: "",
@@ -51,6 +53,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             reject(false)
         }
     })
+
+    const handleCreate = (options: any) => {
+        if (options?.code === 1) {
+            history.go(0);
+        }
+        setIsOpenId(false);
+    }
+    
     return (
         <>
             <Page
@@ -84,6 +94,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
+                extraOperation={
+                    <>
+                        <Button type='primary' ghost onClick={() => setIsOpenId(true)}>创建</Button>
+                    </>
+                }
                 searchFormItems={[
                     {
                         name: 'startRefundTime',
@@ -98,6 +113,17 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="0">待完成</Select.Option>
                                 <Select.Option value="1">已完成</Select.Option>
+                            </Select>
+                        )
+                    },
+                    {
+                        name: 'warehousingType',
+                        label: '入库类型',
+                        children: (
+                            <Select placeholder="请选择入库类型" style={{ width: "140px" }}>
+                                <Select.Option value="">全部</Select.Option>
+                                <Select.Option value="1">采购入库</Select.Option>
+                                <Select.Option value="2">盘点入库</Select.Option>
                             </Select>
                         )
                     },
@@ -131,6 +157,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             >
                 <PaperOrderModal ref={addRef} id={id} />
             </Modal>
+            
+            <CreatePlan
+                visible={isOpenId}
+                handleCreate={handleCreate}
+            />
         </>
     )
 }
