@@ -54,7 +54,7 @@ const StatiffStock = (props: Props) => {
         },
         {
             key: 'segmentName',
-            title: '库位',
+            title: '库区',
             editable: true,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
@@ -84,7 +84,7 @@ const StatiffStock = (props: Props) => {
         },
         {
             key: 'locatorName',
-            title: '区位',
+            title: '库位',
             editable: true,
             dataIndex: 'locatorName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
