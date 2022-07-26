@@ -85,13 +85,13 @@ const Warehouse = () => {
                             setWarehouseDetails(item.warehouseDetails);
                             setName(item.name)
                             setIsModalVisitle(true)
-                        }}>库位设置</Button>
+                        }}>库区设置</Button>
                         <Button type="link" className="btn-operation-link" onClick={() => {
                             setId(item.id);
                             setWarehouseDetails(item.warehouseDetails);
                             setName(item.name)
                             setIsStatiffStockVisitle(true)
-                        }}>区位设置</Button>
+                        }}>库位设置</Button>
                         <Button type="link" onClick={() => deleteItem(item.id)}
                         >删除</Button>
                     </>
