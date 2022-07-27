@@ -1,15 +1,17 @@
-import React from 'react'
-import { LockOutlined, SafetyCertificateOutlined, UserOutlined } from '@ant-design/icons'
-import { Button, Form, Input, Layout, Space, notification, Carousel } from 'antd'
+import React, { useRef, useState } from 'react'
+import { Button, Form, Input, Layout, notification, Carousel, message } from 'antd'
+import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { useHistory } from 'react-router-dom'
+import ReactSimpleVerify from 'react-simple-verify'
 import ctxConfig from "../../app-ctx.config.jsonc"
-import layoutStyles from '../../layout/Layout.module.less'
 import AuthUtil from '../../utils/AuthUtil'
-import RequestUtil from '../../utils/RequestUtil'
-import style from './Login.module.less'
-import Cookies from 'js-cookie'
 import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../utils/RequestUtil'
+import Cookies from 'js-cookie'
 import MD5 from 'crypto-js/md5'
+import 'react-simple-verify/dist/react-simple-verify.css'
+import layoutStyles from '../../layout/Layout.module.less'
+import style from './Login.module.less'
 const ossUrl = "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87"
 interface ITenant {
     readonly tenantId: string;
@@ -28,6 +30,8 @@ interface ILoginState {
 
 export default function Login(): JSX.Element {
     const history = useHistory()
+    const verifyRef = useRef<any>()
+    const [verify, setVerify] = useState<boolean>(false)
     const [loginForm] = Form.useForm();
     const { data, run: updateRun } = useRequest<ILoginState>(() => new Promise(async (resole, reject) => {
         try {
@@ -63,6 +67,10 @@ export default function Login(): JSX.Element {
     const onSubmit = async (values: Record<string, any>) => {
         AuthUtil.setTenantId(data!.tenant.tenantId, { expires: 7 })
         //values.password = MD5(values.password).toString()
+        if (!verify) {
+            message.error("请先按住滑块，拖动至最右边完成验证")
+            return
+        }
         const { access_token, refresh_token, user_id, tenant_id, tenant_name, ...result } = await run(values)
         if (result.error) {
             // 错误提示
@@ -121,29 +129,10 @@ export default function Login(): JSX.Element {
                             ]}>
                                 <Input.Password placeholder="请输入密码" size="large" prefix={<LockOutlined />} />
                             </Form.Item>
-                            <Form.Item>
-                                <Space direction="horizontal" className={layoutStyles.width100}>
-                                    <Form.Item name="code" noStyle={true}
-                                        rules={[{
-                                            required: true,
-                                            message: '请输入验证码'
-                                        }, {
-                                            pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
-                                            message: '请输入正确的验证码',
-                                        }]}
-                                    >
-                                        <Input placeholder="请输入验证码" size="large" prefix={<SafetyCertificateOutlined />} />
-                                    </Form.Item>
-                                    {
-                                        data?.captcha.image
-                                            ?
-                                            <img src={data?.captcha.image} className={style.captcha} />
-                                            :
-                                            null
-                                    }
-                                </Space>
+                            <Form.Item name="verify">
+                                <ReactSimpleVerify ref={verifyRef} success={() => setVerify(true)} />
                             </Form.Item>
-                            <Form.Item name="grant_type" initialValue="captcha" className={layoutStyles.hidden}>
+                            <Form.Item name="grant_type" initialValue="password" className={layoutStyles.hidden}>
                                 <Input type="hidden" />
                             </Form.Item>
                             <Form.Item name="type" initialValue="account" className={layoutStyles.hidden}>
