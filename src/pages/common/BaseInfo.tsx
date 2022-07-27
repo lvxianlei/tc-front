@@ -1,10 +1,9 @@
 import React, { useEffect } from "react"
-import { Descriptions, Form, FormInstance, Row, Col } from "antd"
+import { Descriptions, Form, FormInstance, Row, Col, Typography } from "antd"
 import { FormItemType } from '../common'
 import { FormItemTypesType } from "./FormItemType"
 import moment from "moment"
 import './BaseInfo.less'
-import { Prompt } from "react-router-dom"
 export interface BaseInfoItemProps {
     name: string
     label: string
@@ -74,8 +73,12 @@ const popTableTransform = (value: any) => {
     if ((value && value.value)) {
         return value.value
     }
+    if (value && !value.value && value.id) {
+        return "-"
+    }
     return value
 }
+
 export const generateRules = (type: string, columnItems: any) => {
     let rules = columnItems.rules || []
     if (columnItems.required) {
@@ -128,8 +131,9 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             form={form}
             initialValues={formatData(columns, dataSource)}
             labelAlign="right"
-            layout="inline"
-            labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
+            scrollToFirstError
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 18 }}
             className={`bottom ${classStyle}`}
         >
             <Row wrap={true} style={{ width: "100%" }}>
@@ -171,7 +175,28 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                             <Form.Item
                                 className="baseInfoForm"
                                 name={item.dataIndex}
-                                label={item.title}
+                                label={<Typography.Text
+                                    style={{ width: "100%" }}
+                                    ellipsis={{ tooltip: item.title }}
+                                >{item.title}</Typography.Text>}
+                                {...(item.type === "textarea" ? {
+                                    labelCol: {
+                                        xs: { span: 8 },
+                                        sm: { span: 8 },
+                                        md: { span: 4 },
+                                        lg: { span: 2 },
+                                        xl: { span: 2 },
+                                        xxl: { span: 2 }
+                                    },
+                                    wrapperCol: {
+                                        xs: { span: 16 },
+                                        sm: { span: 16 },
+                                        md: { span: 20 },
+                                        lg: { span: 22 },
+                                        xl: { span: 22 },
+                                        xxl: { span: 22 }
+                                    }
+                                } : {})}
                                 validateTrigger={item.validateTrigger}
                                 rules={generateRules(item.type, item)}
                             >

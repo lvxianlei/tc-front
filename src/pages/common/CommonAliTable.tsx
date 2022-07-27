@@ -4,7 +4,7 @@ import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
 import AliTable from "./AliTable"
-import { useTablePipeline, features } from "ali-react-table"
+import { useTablePipeline, features, TablePipeline } from "ali-react-table"
 const { Text } = Typography
 export type ColumnsItemsType = "string" | "text" | "date" | "popTable" | "select" | "number" | undefined
 export interface columnsProps {
@@ -13,6 +13,7 @@ export interface columnsProps {
     type?: ColumnsItemsType
     format?: string
     enum?: EnumObject[]
+    editable?: boolean
     render?: (value: any, records: { [key: string]: any }, index: number) => JSX.Element | React.ReactNode
     [key: string]: any
 }
@@ -28,6 +29,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
+                editable: data.editable || true,
                 render: (text: string) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -40,6 +42,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
+                editable: data.editable || true,
                 render: (text: string | number) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -53,6 +56,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
+                editable: data.editable || true,
                 render: (text: number) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -65,6 +69,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
+                editable: data.editable || true,
                 render: data.render || ((text: number) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -77,6 +82,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 name: data.title,
                 code: data.dataIndex,
                 lock: data.fixed,
+                editable: data.editable || true,
                 render: data.render || ((text: number) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{ tooltip: text && !["-1", -1].includes(text) ? text : "-" }}>{text && !["-1", -1].includes(text) ? text : "-"}</Text>),
@@ -94,16 +100,17 @@ interface CommonTableProps {
     isPage?: boolean
 }
 
-export default function CommonTable({ columns, dataSource = [], rowKey, haveIndex = false, isPage = false, ...props }: CommonTableProps): JSX.Element {
+export default function CommonAliTable({ columns, dataSource = [], rowKey, haveIndex = false, isPage = false, ...props }: CommonTableProps): JSX.Element {
     const formatColumns = columns.map((item: any) => generateRender(item.type || "text", item))
-    const columnsResult = haveIndex ? [{
-        title: "序号",
-        dataIndex: "index",
-        width: 50,
-        fixed: "left",
-        onCell: () => ({ className: styles.tableCell }),
-        render: (_: any, _a: any, index: number) => <>{index + 1}</>
-    }, ...formatColumns] : formatColumns
+    const columnsResult = haveIndex ? [
+        {
+            title: "序号",
+            dataIndex: "index",
+            width: 50,
+            fixed: "left",
+            onCell: () => ({ className: styles.tableCell }),
+            render: (_: any, _a: any, index: number) => <>{index + 1}</>
+        }, ...formatColumns] : formatColumns
     const pipeline = useTablePipeline({ components: { Checkbox } })
         .input({ dataSource, columns: columnsResult as any })
         .primaryKey(rowKey || "id")
@@ -124,7 +131,7 @@ export default function CommonTable({ columns, dataSource = [], rowKey, haveInde
         checkboxColumn: { width: 40, lock: true, align: "left", ...props?.rowSelection?.checkboxColumn }
     }));
     pipeline.use(features.autoRowSpan());
-    return <nav className={styles.componentsTable} style={{paddingBottom: props.code && props.code === 1 ? "0px" : "88px"}}>
+    return <nav className={styles.componentsTable} style={{ paddingBottom: props.code && props.code === 1 ? "0px" : "88px" }}>
         <AliTable
             size="small"
             className={styles.components}
