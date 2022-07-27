@@ -764,7 +764,7 @@ export default function Lofting(): React.ReactNode {
 
     const history = useHistory();
     const params = useParams<{ id: string, productSegmentId: string }>();
-    const [editorLock, setEditorLock] = useState('编辑');
+    // const [editorLock, setEditorLock] = useState('编辑');
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     // const [tableColumns, setColumns] = useState(columnsSetting);
     const [form] = Form.useForm();
@@ -878,9 +878,8 @@ export default function Lofting(): React.ReactNode {
                         onConfirm={del}
                         okText="确认"
                         cancelText="取消"
-                        disabled={editorLock === '锁定'}
                     >
-                        <Button type="primary" disabled={editorLock === '锁定'} ghost>删除</Button>
+                        <Button type="primary" ghost>删除</Button>
                     </Popconfirm>
                     <Upload
                         action={() => {
@@ -896,10 +895,9 @@ export default function Lofting(): React.ReactNode {
                         }
                         data={{ productSegmentGroupId: params.productSegmentId }}
                         showUploadList={false}
-                        disabled={editorLock === '锁定'}
                         onChange={(info) => uploadChange(info)}
                     >
-                        <Button type="primary" disabled={editorLock === '锁定'} ghost>导入</Button>
+                        <Button type="primary" ghost>导入</Button>
                     </Upload>
                     <Button type="primary" key='2' onClick={async () => { setMissVisible(true) }} ghost>漏件检查</Button>
                     <Dropdown overlay={menu} trigger={['click']}>
