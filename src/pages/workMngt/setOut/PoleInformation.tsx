@@ -19,6 +19,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import Modal from 'antd/lib/modal/Modal';
 import { allotModalProps, IAllot } from './ISetOut';
 import AllotModal from './AllotModal';
+import WeldingVerify from './WeldingVerify';
 
 export default function PoleInformation(): React.ReactNode {
     const columns = [
@@ -33,19 +34,19 @@ export default function PoleInformation(): React.ReactNode {
         {
             key: 'productNumber',
             title: '杆塔号',
-            width: 150,
+            width: 120,
             dataIndex: 'productNumber'
         },
         {
             key: 'productHeight',
             title: '呼高',
-            width: 150,
+            width: 80,
             dataIndex: 'productHeight'
         },
         {
             key: 'voltageGradeName',
             title: '电压等级',
-            width: 150,
+            width: 100,
             dataIndex: 'voltageGradeName'
         },
         {
@@ -57,7 +58,7 @@ export default function PoleInformation(): React.ReactNode {
         {
             key: 'loftingDeliverTime',
             title: '计划交付时间',
-            width: 200,
+            width: 150,
             dataIndex: 'loftingDeliverTime'
         },
         {
@@ -70,12 +71,12 @@ export default function PoleInformation(): React.ReactNode {
             key: 'loftingStatusName',
             title: '杆塔放样状态',
             dataIndex: 'loftingStatusName',
-            width: 200
+            width: 150
         },
         {
             key: 'loftingUpdateStatusTime',
             title: '最新状态变更时间',
-            width: 200,
+            width: 150,
             dataIndex: 'loftingUpdateStatusTime'
         },
         {
@@ -148,8 +149,6 @@ export default function PoleInformation(): React.ReactNode {
                                 setProductId(record.id);
                                 await editRef.current?.visibleData()
                                 setAllotVisible(true);
-
-
                             }}>特殊件号</Button>
                             : <Button type="link" disabled>特殊件号</Button>
                     }
@@ -176,6 +175,7 @@ export default function PoleInformation(): React.ReactNode {
     const [productId, setProductId] = useState<string>('');
     const [allotData, setAllotData] = useState<IAllot>();
     const [loftingStatus, setLoftingStatus] = useState<number>(0);
+    const [visible, setVisible] = useState<boolean>(false);
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -206,6 +206,7 @@ export default function PoleInformation(): React.ReactNode {
                 return setMaterialUser(userData.records);
         };
     }
+
     const onTip = () => new Promise(async (resolve, reject) => {
         try {
             await editRef.current?.onCheck()
@@ -223,6 +224,7 @@ export default function PoleInformation(): React.ReactNode {
             reject(false)
         }
     })
+
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             setButtonName('保存')
@@ -260,6 +262,19 @@ export default function PoleInformation(): React.ReactNode {
     }
 
     return <>
+        <Modal
+            // destroyOnClose
+            visible={visible}
+            width="60%"
+            title="电焊件验证"
+            footer={
+                <Button type="ghost" onClick={() => setVisible(false)}>关闭</Button>
+            }
+            onCancel={() => setVisible(false)}
+            className={styles.tryAssemble}
+        >
+            <WeldingVerify id={params.id}/>
+        </Modal>
         <Modal title='提示' okText='是' cancelText='否' visible={tipVisible} onCancel={() => {
             setButtonName('')
             setTipVisible(false)
@@ -317,6 +332,7 @@ export default function PoleInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
+                <Button type='primary' onClick={() => setVisible(true)} ghost>电焊件验证</Button>
                 <WithSectionModal type="batch" productCategoryId={params.id} updateList={() => setRefresh(!refresh)} />
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
