@@ -40,7 +40,7 @@ export default function ModelList(): React.ReactNode {
         },
         {
             key: 'segmentName',
-            title: '段包信息',
+            title: '段信息',
             dataIndex: 'segmentName',
             width: 120
         },
