@@ -151,7 +151,7 @@ export default function CreatePlan(props: any): JSX.Element {
             // 添加对长度以及数量的拦截
             let flag = false;
             for (let i = 0; i < materialList.length; i += 1) {
-                if (!(materialList[i].length && materialList[i].planPurchaseNum && materialList[i].width)) {
+                if (!(materialList[i].length && materialList[i].planPurchaseNum && (materialList[i].width !== ""))) {
                     flag = true;
                 }
             }
