@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table } from 'antd';
+import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table, Checkbox } from 'antd';
 import { SearchTable as Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
@@ -25,6 +25,8 @@ export default function Lofting(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
+    const [isBig, setIsBig] = useState<boolean>(true);
+    const [isAuto, setIsAuto] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [editorLock, setEditorLock] = useState('添加');
     const [form] = Form.useForm();
@@ -724,6 +726,24 @@ export default function Lofting(): React.ReactNode {
                     console.log(value)
                     form.setFieldsValue({ dataV: [...value] })
                 }} type='primary' ghost>添加一行</Button>}
+                <Checkbox onChange={(e)=>{
+                    setIsBig(e.target.checked)
+                    if(e.target.checked){
+                        const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                            return {
+                                ...item,
+                                structureTexture:item?.structureTexture.toUpperCase()
+                            }
+                        })
+                        setTableDataSource([...value])
+                        form.setFieldsValue({dataV: value})
+                    }
+                    // setTableDataSource(tableDataSource)
+                }} checked={isBig}>件号字母自动转换成大写</Checkbox>
+                <Checkbox onChange={(e)=>{
+                    setIsAuto(e.target.checked)
+                    // setTableDataSource(tableDataSource)
+                }} checked={isAuto}>保存时自动计算重量</Checkbox>
                 <Table
                     scroll={{x:1200}}
                     columns={editorLock==='添加'?[
@@ -791,7 +811,19 @@ export default function Lofting(): React.ReactNode {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                        if(isBig){
+                                            const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                                                return {
+                                                    ...item,
+                                                    structureTexture:item?.structureTexture.toUpperCase()
+                                                }
+                                            })
+                                            console.log(value)
+                                            setTableDataSource([...value])
+                                            form.setFieldsValue({dataV: value})
+                                        }
+                                    }}/>
                                 </Form.Item>
                             )
                         },
@@ -893,7 +925,7 @@ export default function Lofting(): React.ReactNode {
                             key: 'basicsWeight', 
                             width: 120,
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: true, message: '请输入单件重量' }]}>
+                                <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: !isAuto, message: '请输入单件重量' }]}>
                                     <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
                                         if (data[index].basicsPartNum) {
@@ -904,7 +936,7 @@ export default function Lofting(): React.ReactNode {
                                             form?.setFieldsValue({ dataV: data })
                                             setTableDataSource(data)
                                         }
-                                    }} />
+                                    }} disabled={isAuto}/>
                                 </Form.Item>
                             )
                         },
