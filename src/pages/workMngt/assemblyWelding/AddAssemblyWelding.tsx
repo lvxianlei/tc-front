@@ -39,6 +39,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             getComponentList({})
         } else {
             setWeldingDetailedStructureList([]);
+            segmentChange(['all'], data)
         }
         resole(data);
     }), {})
@@ -440,6 +441,38 @@ export default function AddAssemblyWelding(): React.ReactNode {
         }
     }
 
+    const segmentChange = (values: Record<string, any>, segmentNames: ISegmentNameList[]) => {
+        if (values.length > 0) {
+            if (values.findIndex((value: string) => value === 'all') !== -1) {
+                
+        
+                const selected = segmentNames?.map(item => {
+                    return item.name + ',' + item.id
+                })
+                form.setFieldsValue({
+                    segmentName: ['all', ...selected]
+                })
+                values = selected.map((res: string) => {
+                    return {
+                        segmentName: res.split(',')[0],
+                        segmentId: res.split(',')[1],
+                    }
+                })
+                getComponentList(values)
+            } else {
+                values = values.map((res: string) => {
+                    return {
+                        segmentName: res.split(',')[0],
+                        segmentId: res.split(',')[1],
+                    }
+                })
+                getComponentList(values)
+            }
+        } else {
+            setComponentList([]);
+        }
+    }
+
     return <Spin spinning={loading}>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" className={styles.bottomBtn}>
@@ -459,39 +492,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 }]}>
                     <Input placeholder="自动计算" disabled />
                 </Form.Item>
-                <Form.Item name="segmentName" label="段号">
+                <Form.Item name="segmentName" label="段号" initialValue={"all"}>
                     <Select placeholder="请选择" style={{ width: '150px' }}
-                        mode="multiple" onChange={() => {
-                            // setWeldingDetailedStructureList([]);
-                            let values = form.getFieldsValue(true)?.segmentName;
-                            if (values.length > 0) {
-                                if (values.findIndex((value: string) => value === 'all') !== -1) {
-                                    const selected = segmentNameList?.map(item => {
-                                        return item.name + ',' + item.id
-                                    })
-                                    form.setFieldsValue({
-                                        segmentName: ['all', ...selected]
-                                    })
-                                    values = selected.map((res: string) => {
-                                        return {
-                                            segmentName: res.split(',')[0],
-                                            segmentId: res.split(',')[1],
-                                        }
-                                    })
-                                    getComponentList(values)
-                                } else {
-                                    values = values.map((res: string) => {
-                                        return {
-                                            segmentName: res.split(',')[0],
-                                            segmentId: res.split(',')[1],
-                                        }
-                                    })
-                                    getComponentList(values)
-                                }
-                            } else {
-                                setComponentList([]);
-                            }
-                        }} >
+                        mode="multiple" onChange={() => segmentChange(form.getFieldsValue(true)?.segmentName, segmentNameList)} >
                         <Select.Option key={'all'} value={'all'}>全部</Select.Option>
                         {segmentNameList.map((item: any) => {
                             return <Select.Option key={item.name + ',' + item.id} value={item.name + ',' + item.id}>{item.name}</Select.Option>

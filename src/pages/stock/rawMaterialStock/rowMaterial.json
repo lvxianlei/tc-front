@@ -12,12 +12,12 @@
         },
         {
             "title": "库位",
-            "dataIndex": "locatorName",
+            "dataIndex": "reservoirName",
             "width": 60
         },
         {
             "title": "区位",
-            "dataIndex": "reservoirName",
+            "dataIndex": "locatorName",
             "width": 60
         },
         {
