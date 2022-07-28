@@ -641,7 +641,22 @@
         },
         {
             "title": "下发状态",
-            "dataIndex": "taskStatus"
+            "dataIndex": "taskStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "部分下发"
+                },
+                {
+                    "value": 2,
+                    "label": "全部下发"
+                }
+            ]
         },
         {
             "title": "采购订单号",
