@@ -41,7 +41,12 @@ export default function Detail() {
             <Tabs>
                 <Tabs.TabPane tab="概况信息" key="1">
                     <DetailTitle title="基本信息" />
-                    <BaseInfo columns={contractDetail} dataSource={data || {}} />
+                    <BaseInfo columns={contractDetail.filter((item: any) => {
+                        if (item.dataIndex === "country") {
+                            return data?.region === "其他-国外"
+                        }
+                        return true
+                    })} dataSource={data || {}} />
                     <DetailTitle title="订单信息" />
                     <CommonAliTable columns={orderDetail} dataSource={data?.orderInfo || []} />
                     <DetailTitle title="系统信息" />
