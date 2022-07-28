@@ -247,6 +247,7 @@ export default function Edit() {
         form={form}
         dataSource={{
           ...data,
+          bidBatch: projectData?.bidBatch,
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? "" : `${projectData.bigRegion || ""}-${projectData.address || ""}`),
           country: projectData?.country || ""
         } || {
