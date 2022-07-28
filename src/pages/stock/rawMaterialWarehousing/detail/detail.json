@@ -81,6 +81,11 @@
             "width": 120
         },
         {
+            "title": "不含税装卸费（元）----新加",
+            "dataIndex": "unTransportTaxPrice",
+            "width": 120
+        },
+        {
             "title": "供应商",
             "dataIndex": "supplierName",
             "width": 120

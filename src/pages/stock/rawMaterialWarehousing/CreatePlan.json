@@ -26,6 +26,19 @@
             "value": "supplierName",
             "dependencies": true,
             "readOnly": true,
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "编号/名称/联系人/联系人电话"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssurance",
+                    "type": "select",
+                    "placeholder": "请选择"
+                }
+            ],
             "columns": [
                 {
                     "title": "供应商编号",
@@ -42,6 +55,10 @@
                 {
                     "title": "联系电话",
                     "dataIndex": "contactManTel"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssuranceName"
                 },
                 {
                     "title": "供货产品",
@@ -201,7 +218,11 @@
                 "dataIndex": "num"
             },
             {
-                "title": "重量",
+                "title": "理算重量",
+                "dataIndex": "totalWeight"
+            },
+            {
+                "title": "结算重量----新加",
                 "dataIndex": "totalWeight"
             },
             {
@@ -222,6 +243,10 @@
             },
             {
                 "title": "不含税运费（元）",
+                "dataIndex": "unTransportTaxPrice"
+            },
+            {
+                "title": "不含税装卸费（元）----新加",
                 "dataIndex": "unTransportTaxPrice"
             },
             {

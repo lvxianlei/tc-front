@@ -140,6 +140,22 @@
         {
             "title": "重量（吨）",
             "dataIndex": "weight"
+        },
+        {
+            "title": "库位---新加",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "区位----新加",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "炉批号----新加",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "质保书号----新加",
+            "dataIndex": "weight"
         }
     ],
     "addMaterial": {

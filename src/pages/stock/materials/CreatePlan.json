@@ -1,0 +1,221 @@
+{
+    "applicationdetails": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "productNum",
+            "type": "select",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "purchaseNumber",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "steelPlateTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "width": 100,
+            "type": "string"
+        }
+    ],
+    "material": [
+        {
+            "title": "收货批次",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialCategoryName"
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "length"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "width"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "账目数量",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "账目重量（吨）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "盘点数量",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "盘点重量（吨）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "盈亏数量",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "盈亏重量（吨）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "单价（元/吨）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "账目金额（元）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "盘点金额（元）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "盈亏金额（元）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "planPurchaseNum"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "planPurchaseNum"
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-system/material",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "查询",
+                "type": "string",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "收货批次/品名/规格"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "materialCode"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialTypeName"
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialCategoryName"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "长度",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "宽度",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "重量（吨）",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "炉批号",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "质保书号",
+                "dataIndex": "structureSpec"
+            }
+        ]
+    }
+}
