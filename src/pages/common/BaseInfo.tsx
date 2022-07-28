@@ -129,6 +129,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             style={{ width: "100%" }}
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
             form={form}
+            size="middle"
             initialValues={formatData(columns, dataSource)}
             labelAlign="right"
             scrollToFirstError
@@ -160,7 +161,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                             span: item.type === "textarea" ? 24 : 12
                         },
                         lg: {
-                            span: item.type === "textarea" ? 24 : (24 / col)
+                            span: item.type === "textarea" ? 24 : 8
                         },
                         xl: {
                             span: item.type === "textarea" ? 24 : (24 / col)
@@ -184,19 +185,36 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                                         xs: { span: 8 },
                                         sm: { span: 8 },
                                         md: { span: 4 },
-                                        lg: { span: 2 },
+                                        lg: { span: 3 },
                                         xl: { span: 2 },
                                         xxl: { span: 2 }
                                     },
                                     wrapperCol: {
                                         xs: { span: 16 },
                                         sm: { span: 16 },
-                                        md: { span: 20 },
-                                        lg: { span: 22 },
+                                        md: { span: 22 },
+                                        lg: { span: 21 },
                                         xl: { span: 22 },
                                         xxl: { span: 22 }
                                     }
-                                } : {})}
+                                } : {
+                                    labelCol: {
+                                        xs: { span: 8 },
+                                        sm: { span: 8 },
+                                        md: { span: 8 },
+                                        lg: { span: 8 },
+                                        xl: { span: 8 },
+                                        xxl: { span: 8 }
+                                    },
+                                    wrapperCol: {
+                                        xs: { span: 16 },
+                                        sm: { span: 16 },
+                                        md: { span: 16 },
+                                        lg: { span: 16 },
+                                        xl: { span: 16 },
+                                        xxl: { span: 16 }
+                                    }
+                                })}
                                 validateTrigger={item.validateTrigger}
                                 rules={generateRules(item.type, item)}
                             >
