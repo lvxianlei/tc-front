@@ -138,23 +138,23 @@
             "enum": [
                 {
                     "label": "转账",
-                    "value": 1
+                    "value": "1"
                 },
                 {
                     "label": "现金",
-                    "value": 2
+                    "value": "2"
                 },
                 {
                     "label": "支票",
-                    "value": 3
+                    "value": "3"
                 },
                 {
                     "label": "电汇",
-                    "value": 4
+                    "value": "4"
                 },
                 {
                     "label": "承兑",
-                    "value": 5
+                    "value": "5"
                 }
             ]
         },
@@ -468,7 +468,31 @@
         },
         {
             "title": "付款方式",
-            "dataIndex": ""
+            "dataIndex": "payType",
+            "type": "select",
+            "mode": "multiple",
+            "enum": [
+                {
+                    "label": "转账",
+                    "value": "1"
+                },
+                {
+                    "label": "现金",
+                    "value": "2"
+                },
+                {
+                    "label": "支票",
+                    "value": "3"
+                },
+                {
+                    "label": "电汇",
+                    "value": "4"
+                },
+                {
+                    "label": "承兑",
+                    "value": "5"
+                }
+            ]
         },
         {
             "title": "结算单位",
@@ -488,7 +512,23 @@
         },
         {
             "title": "有无技术协议",
-            "dataIndex": "isIta"
+            "dataIndex": "isIta",
+            "type": "select",
+            "required": true,
+            "enum": [
+                {
+                    "label": "无",
+                    "value": 0
+                },
+                {
+                    "label": "原件",
+                    "value": 1
+                },
+                {
+                    "label": "复印件",
+                    "value": 2
+                }
+            ]
         },
         {
             "title": "所属区域",
@@ -547,12 +587,13 @@
             "dataIndex": "takeOverUser"
         },
         {
-            "title": "备注",
-            "dataIndex": "description"
-        },
-        {
             "title": "归属业务经理",
             "dataIndex": "ascriptionName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "paymentDetail": [

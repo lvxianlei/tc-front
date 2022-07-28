@@ -28,11 +28,23 @@ interface BaseInfoProps {
     classStyle?: string
 }
 
+function formatSelectData(dataItem: any, value: string | number | boolean): string {
+    if (dataItem.mode === "multiple") {
+        const result = `${value}`.split(",")
+            .map((item: string) => dataItem.enum.find((dItem: {
+                value: string,
+                label: string
+            }) => dItem.value === item)?.label || "-")
+        return result.join(",")
+    }
+    return ((value || value === 0 || value === false) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-"
+}
+
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
         number: (value && value !== -1) ? value : 0,
-        select: ((value || value === 0 || value === false) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
+        select: formatSelectData(dataItem, value),
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         text: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
