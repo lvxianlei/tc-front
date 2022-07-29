@@ -1,9 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
 import { Button, Row, Modal, Spin, Form, InputNumber, message, Select } from "antd"
-import { BaseInfo, DetailTitle, Attachment, CommonTable, IntgSelect } from "../common"
+import { BaseInfo, DetailTitle, Attachment, CommonTable } from "../common"
 import { contractBaseInfo, material, addMaterial } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
+import AuthUtil from "../../utils/AuthUtil"
 import { PopTableContent } from "./enquiryCompare/ComparesModal"
 import { deliverywayOptions, materialStandardOptions, materialTextureOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
 
@@ -13,6 +14,49 @@ interface EditProps {
     id: string
     type: "new" | "edit"
 }
+
+const oneFreight = [{
+    "title": "运输承担",
+    "dataIndex": "transportBear",
+    "type": "select",
+    "enum": [
+        {
+            "value": 1,
+            "label": "供方"
+        },
+        {
+            "value": 2,
+            "label": "需方"
+        }
+    ],
+    "rules": [
+        {
+            "required": true,
+            "message": "请选择运输承担..."
+        }
+    ]
+}]
+const oneStevedoring = [{
+    "title": "卸车承担",
+    "dataIndex": "unloadBear",
+    "type": "select",
+    "enum": [
+        {
+            "value": 1,
+            "label": "供方"
+        },
+        {
+            "value": 2,
+            "label": "需方"
+        }
+    ],
+    "rules": [
+        {
+            "required": true,
+            "message": "请选择卸车承担..."
+        }
+    ]
+}]
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -21,7 +65,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialList, setMaterialList] = useState<any[]>([])
     const [supplierId, setSupplierId] = useState<string>("")
-    const [purchasePlanId, setPurchasePlanId] = useState<string>("")
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
@@ -29,51 +72,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const [colunmnBase, setColunmnBase] = useState<any[]>(contractBaseInfo);
     // 运费的数组
-    const [newfreightInformation, setNewfreightInformation] = useState<any>(freightInformation); // 运费信息
+    const [newfreightInformation, setNewfreightInformation] = useState<any>(oneFreight); // 运费信息
     // 装卸费
-    const [newHandlingChargesInformation, setNewHandlingChargesInformation] = useState<any>(HandlingChargesInformation); // 装卸费信息
-    const oneFreight = [{
-        "title": "运输承担",
-        "dataIndex": "transportBear",
-        "type": "select",
-        "enum": [
-            {
-                "value": 1,
-                "label": "供方"
-            },
-            {
-                "value": 2,
-                "label": "需方"
-            }
-        ],
-        "rules": [
-            {
-                "required": true,
-                "message": "请选择运输承担..."
-            }
-        ]
-    }]
-    const oneStevedoring = [{
-        "title": "卸车承担",
-        "dataIndex": "unloadBear",
-        "type": "select",
-        "enum": [
-            {
-                "value": 1,
-                "label": "供方"
-            },
-            {
-                "value": 2,
-                "label": "需方"
-            }
-        ],
-        "rules": [
-            {
-                "required": true,
-                "message": "请选择卸车承担..."
-            }
-        ]
-    }]
+    const [newHandlingChargesInformation, setNewHandlingChargesInformation] = useState<any>(oneStevedoring); // 装卸费信息
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
@@ -141,7 +143,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }
             }) || [])
             setSupplierId(result.supplierId);
-            setPurchasePlanId(result.comparisonPriceId);
             resove(result)
         } catch (error) {
             reject(error)
@@ -203,7 +204,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleAddModalOk = () => {
         // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         const newMaterialList: any[] = []
-        console.log(materialStandardOptions, "====>>", materialList)
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
@@ -256,7 +256,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorId: baseInfo.operator?.id,
+                operatorId: AuthUtil.getUserId(),
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
                 purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
@@ -274,8 +274,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
                 },
                 materialContractDetailDtos: materialList.map((item: any) => {
-                    // const id = item.materialTextureId;
-                    // const name = item.materialTexture;
                     delete item.id
                     return ({
                         ...item,
@@ -283,8 +281,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: item.price,
                         taxTotalAmount: item.taxTotalAmount,
                         totalAmount: item.totalAmount,
-                        // materialTexture: item.source === 1 ? id : item.materialTexture,
-                        // materialTextureId: item.source === 1 ? name : item.materialTextureId,
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
                     })
@@ -300,10 +296,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const resetFields = () => {
         baseForm.resetFields()
         attchsRef.current?.resetFields()
-        const result = contractBaseInfo;
-        const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
-        result[index].disabled = true;
-        setColunmnBase(result.slice(0))
         setMaterialList([])
         setPopDataList([])
     }
@@ -335,7 +327,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
         }
         if (fields.purchasePlan) {
-            console.log(fields, "点击了采购计划", allFields)
             if (allFields?.supplier) {
                 const result = colunmnBase;
                 const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
@@ -345,7 +336,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
         }
         if (fields.supplier) {
-            console.log(fields, "供应商", allFields)
             if (allFields?.purchasePlan) {
                 const result = colunmnBase;
                 const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
@@ -355,54 +345,43 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
         }
         if (fields.comparisonPriceNumber) {
-            setPurchasePlanId(fields.comparisonPriceNumber.id);
             const meterialList: any[] = await getComparisonPrice(fields.comparisonPriceNumber.id)
-            setMaterialList(meterialList.map((item: any) => {
-                const num = parseFloat(item.num || "1")
-                const weight = parseFloat(item.weight || "1.00")
-                const totalWeight = parseFloat(item.totalWeight || "1.00")
-                const taxPrice = parseFloat(item.taxOffer || "1.00")
-                const price = parseFloat(item.offer || "1.00")
-                return ({
-                    ...item,
-                    source: 1,
-                    num,
-                    taxPrice,
-                    price,
-                    // spec: item.structureSpec,
-                    // 之前从规格拿宽度，后续添加了width字段
-                    // width: formatSpec(item.structureSpec).width,
-                    structureTexture: item.structureTexture,
-                    structureTextureId: item.structureTextureId,
-                    // length: formatSpec(item.structureSpec).length,
-                    weight: item.weight || "1.00",
-                    taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-                    totalAmount: (totalWeight * price).toFixed(2)
-                })
-            }))
-            setPopDataList(meterialList.map((item: any) => {
-                const num = parseFloat(item.num || "1")
-                const weight = parseFloat(item.weight || "1.00")
-                const totalWeight = parseFloat(item.totalWeight || "1.00")
-                const taxPrice = parseFloat(item.taxOffer || "1.00")
-                const price = parseFloat(item.offer || "1.00")
-                return ({
-                    ...item,
-                    source: 1,
-                    num,
-                    taxPrice,
-                    price,
-                    // spec: item.structureSpec,
-                    // 之前从规格拿宽度，后续添加了width字段
-                    // width: formatSpec(item.structureSpec).width,
-                    structureTexture: item.structureTexture,
-                    structureTextureId: item.structureTextureId,
-                    // length: formatSpec(item.structureSpec).length,
-                    weight: item.weight || "1.00",
-                    taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-                    totalAmount: (totalWeight * price).toFixed(2)
-                })
-            }))
+            // setMaterialList(meterialList.map((item: any) => {
+            //     const num = parseFloat(item.num || "1")
+            //     const totalWeight = parseFloat(item.totalWeight || "1.00")
+            //     const taxPrice = parseFloat(item.taxOffer || "1.00")
+            //     const price = parseFloat(item.offer || "1.00")
+            //     return ({
+            //         ...item,
+            //         source: 1,
+            //         num,
+            //         taxPrice,
+            //         price,
+            //         structureTexture: item.structureTexture,
+            //         structureTextureId: item.structureTextureId,
+            //         weight: item.weight || "1.00",
+            //         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+            //         totalAmount: (totalWeight * price).toFixed(2)
+            //     })
+            // }))
+            // setPopDataList(meterialList.map((item: any) => {
+            //     const num = parseFloat(item.num || "1")
+            //     const totalWeight = parseFloat(item.totalWeight || "1.00")
+            //     const taxPrice = parseFloat(item.taxOffer || "1.00")
+            //     const price = parseFloat(item.offer || "1.00")
+            //     return ({
+            //         ...item,
+            //         source: 1,
+            //         num,
+            //         taxPrice,
+            //         price,
+            //         structureTexture: item.structureTexture,
+            //         structureTextureId: item.structureTextureId,
+            //         weight: item.weight || "1.00",
+            //         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+            //         totalAmount: (totalWeight * price).toFixed(2)
+            //     })
+            // }))
         }
     }
 
@@ -438,7 +417,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     ...item,
                     length: value,
                     totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
-                    // weight:  ((item.proportion * value) / 1000).toFixed(3)
                     weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
                 })
             }
@@ -525,17 +503,17 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }}
-            value={{
-                id: "",
-                records: popDataList,
-                value: ""
-            }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
                 onChange={(fields: any[]) => {
                     fields.map((element: any, index: number) => {
                         if (element.structureSpec) {
                             element["spec"] = element.structureSpec;
-                            element["weight"]  = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
-                            element["totalWeight"]  = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
+                            element["weight"] = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
+                            element["totalWeight"] = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
                         }
                     });
                     setMaterialList(fields.map((item: any) => ({
@@ -546,17 +524,16 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         length: item.length || 1,
                         taxPrice: item.taxPrice || 1.00,
                         price: item.price || 1.00,
-                        width:item.width || 0,
+                        width: item.width || 0,
                         taxTotalAmount: item.taxTotalAmount || 1.00,
                         totalAmount: item.totalAmount || 1.00,
-                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ?  materialStandardOptions[0]?.name : "",
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                         materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
-                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.id : "",
-                        structureTexture:item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ?  materialTextureOptions[0]?.name : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                        structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
                         weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
                         totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })))
-                    // setMaterialList(fields || [])
                 }} />
         </Modal>
         <DetailTitle title="合同基本信息" />
@@ -571,16 +548,16 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return ({ ...item, enum: deliveryMethodEnum })
                     case "transportMethod":
                         return ({ ...item, enum: transportMethodEnum })
-                    // case "comparisonPriceNumber":
-                    //     return ({ ...item, path: `${item.path}?supplierId=${supplierId}&comparisonStatus=2&purchasePlanId=${purchasePlanId}` })
                     default:
                         return item
                 }
             })}
-            dataSource={{}} edit />
+            dataSource={{ operator: AuthUtil.getRealName() }} edit />
         <DetailTitle title="运费信息" />
         <BaseInfo
-            form={freightForm} col={2} classStyle={"overall-form-class-padding0"}
+            form={freightForm}
+            col={2}
+            classStyle="overall-form-class-padding0"
             onChange={handleBaseInfoChangeFreight}
             columns={
                 newfreightInformation.map((item: any) => {
@@ -593,10 +570,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }
-            dataSource={{}} edit />
+            dataSource={{ transportBear: 1 }} edit />
         <DetailTitle title="装卸费信息" />
         <BaseInfo
-            form={stevedoringForm} col={2} classStyle={"overall-form-class-padding0"}
+            form={stevedoringForm}
+            col={2}
+            classStyle="overall-form-class-padding0"
             onChange={handleBaseInfoChangeStevedoring}
             columns={
                 newHandlingChargesInformation.map((item: any) => {
@@ -609,7 +588,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return item
                 })
             }
-            dataSource={{}} edit />
+            dataSource={{ unloadBear: 1 }} edit />
         <DetailTitle
             title="原材料信息"
             operation={[<Button
@@ -624,9 +603,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         setVisible(true)
                     }
                 }}>添加</Button>]} />
-        <Row></Row>
         <CommonTable
-            // rowKey={"id"}
             rowKey={(records: any) => `${records.materialName}${records.structureSpec}${records.length}`}
             style={{ padding: "0" }}
             columns={[

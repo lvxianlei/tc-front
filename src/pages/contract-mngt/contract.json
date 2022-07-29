@@ -170,6 +170,59 @@
             "disabled": true
         },
         {
+            "title": "询比价名称",
+            "dataIndex": "comparisonPriceNumber",
+            "type": "popTable",
+            "path": "/tower-supply/comparisonPrice",
+            "width": 1011,
+            "value": "comparisonPriceNumber",
+            "dependencies": true,
+            "readOnly": true,
+            "columns": [
+                {
+                    "title": "询比价编号",
+                    "dataIndex": "comparisonPriceNumber"
+                },
+                {
+                    "title": "用途",
+                    "dataIndex": "purpose"
+                },
+                {
+                    "title": "询比价状态",
+                    "dataIndex": "comparisonStatus",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "label": "询价中",
+                            "value": 1
+                        },
+                        {
+                            "label": "已询价",
+                            "value": 2
+                        },
+                        {
+                            "label": "取消",
+                            "value": 3
+                        }
+                    ]
+                },
+                {
+                    "title": "最新状态变更时间",
+                    "dataIndex": "updateTime"
+                },
+                {
+                    "title": "询价人",
+                    "dataIndex": "comparisonPersonName"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择询比价信息..."
+                }
+            ]
+        },
+        {
             "title": "关联采购计划",
             "dataIndex": "purchasePlan",
             "type": "popTable",
@@ -266,119 +319,15 @@
             ]
         },
         {
-            "title": "询比价名称",
-            "dataIndex": "comparisonPriceNumber",
-            "type": "popTable",
-            "path": "/tower-supply/comparisonPrice",
-            "width": 1011,
-            "value": "comparisonPriceNumber",
-            "disabled": true,
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
-                {
-                    "title": "询比价编号",
-                    "dataIndex": "comparisonPriceNumber"
-                },
-                {
-                    "title": "用途",
-                    "dataIndex": "purpose"
-                },
-                {
-                    "title": "询比价状态",
-                    "dataIndex": "comparisonStatus",
-                    "type": "select",
-                    "enum": [
-                        {
-                            "label": "询价中",
-                            "value": 1
-                        },
-                        {
-                            "label": "已询价",
-                            "value": 2
-                        },
-                        {
-                            "label": "取消",
-                            "value": 3
-                        }
-                    ]
-                },
-                {
-                    "title": "最新状态变更时间",
-                    "dataIndex": "updateTime"
-                },
-                {
-                    "title": "询价人",
-                    "dataIndex": "comparisonPersonName"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择询比价信息..."
-                }
-            ]
-        },
-        {
             "title": "经办人",
             "dataIndex": "operator",
             "required": true,
-            "type": "popTable",
-            "width": 1101,
-            "readOnly": true,
-            "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/employee",
-            "rowKey": "userId",
-            "columns": [
-                {
-                    "title": "部门",
-                    "dataIndex": "deptName"
-                },
-                {
-                    "title": "姓名",
-                    "dataIndex": "name"
-                },
-                {
-                    "title": "账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "手机号",
-                    "dataIndex": "phone"
-                },
-                {
-                    "title": "角色",
-                    "dataIndex": "roleName"
-                },
-                {
-                    "title": "工号",
-                    "dataIndex": "number"
-                },
-                {
-                    "title": "邮箱",
-                    "dataIndex": "email"
-                }
-            ],
-            "search": [
-                {
-                    "title": "",
-                    "dataIndex": "fuzzyQuery",
-                    "width": 200,
-                    "placeholder": "账号/手机号/姓名/工号/邮箱"
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "交货方式",
             "dataIndex": "deliveryMethod",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择交货方式..."
-                }
-            ]
+            "type": "select"
         },
         {
             "title": "签订时间",
@@ -394,13 +343,7 @@
         {
             "title": "运输方式",
             "dataIndex": "transportMethod",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择运输方式..."
-                }
-            ]
+            "type": "select"
         },
         {
             "title": "交货时间",
