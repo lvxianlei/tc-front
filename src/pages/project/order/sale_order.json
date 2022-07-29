@@ -146,7 +146,6 @@
         {
             "title": "含税单价",
             "dataIndex": "taxPrice",
-            "type": "text",
             "disabled": true
         },
         {
@@ -426,7 +425,7 @@
         },
         {
             "title": "销售类型",
-            "dataIndex": "saleType"
+            "dataIndex": "saleTypeName"
         },
         {
             "title": "外汇单价",

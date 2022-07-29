@@ -10,7 +10,8 @@
         },
         {
             "title": "合同编号",
-            "dataIndex": "contractNumber"
+            "dataIndex": "contractNumber",
+            "required": true
         },
         {
             "title": "内部合同编号",
@@ -137,23 +138,23 @@
             "enum": [
                 {
                     "label": "转账",
-                    "value": 1
+                    "value": "1"
                 },
                 {
                     "label": "现金",
-                    "value": 2
+                    "value": "2"
                 },
                 {
                     "label": "支票",
-                    "value": 3
+                    "value": "3"
                 },
                 {
                     "label": "电汇",
-                    "value": 4
+                    "value": "4"
                 },
                 {
                     "label": "承兑",
-                    "value": 5
+                    "value": "5"
                 }
             ]
         },
@@ -406,6 +407,446 @@
             "rows": 1,
             "maxLength": 300,
             "showCount": false
+        }
+    ],
+    "contractDetail": [
+        {
+            "title": "采购订单编号",
+            "dataIndex": "purchaseOrderNumber"
+        },
+        {
+            "title": "ECP合同编号",
+            "dataIndex": "ecpContractNumber"
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "合同/工程名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "合同总重(吨)",
+            "dataIndex": "contractTotalWeight"
+        },
+        {
+            "title": "合同单价(元/吨)",
+            "dataIndex": "contractPrice"
+        },
+        {
+            "title": "合同总价(元)",
+            "dataIndex": "contractAmount"
+        },
+        {
+            "title": "中标类型",
+            "dataIndex": "winBidTypeName"
+        },
+        {
+            "title": "销售类型",
+            "dataIndex": "saleTypeName"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "业主联系人",
+            "dataIndex": "customerLinkman"
+        },
+        {
+            "title": "业主联系电话",
+            "dataIndex": "customerPhone"
+        },
+        {
+            "title": "合同签订单位",
+            "dataIndex": "signCustomerName"
+        },
+        {
+            "title": "付款方式",
+            "dataIndex": "payType",
+            "type": "select",
+            "mode": "multiple",
+            "enum": [
+                {
+                    "label": "转账",
+                    "value": "1"
+                },
+                {
+                    "label": "现金",
+                    "value": "2"
+                },
+                {
+                    "label": "支票",
+                    "value": "3"
+                },
+                {
+                    "label": "电汇",
+                    "value": "4"
+                },
+                {
+                    "label": "承兑",
+                    "value": "5"
+                }
+            ]
+        },
+        {
+            "title": "结算单位",
+            "dataIndex": "payCompanyName"
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "signContractTime"
+        },
+        {
+            "title": "签订人",
+            "dataIndex": "signUserName"
+        },
+        {
+            "title": "要求交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "有无技术协议",
+            "dataIndex": "isIta",
+            "type": "select",
+            "required": true,
+            "enum": [
+                {
+                    "label": "无",
+                    "value": 0
+                },
+                {
+                    "label": "原件",
+                    "value": 1
+                },
+                {
+                    "label": "复印件",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "所属区域",
+            "dataIndex": "region"
+        },
+        {
+            "title": "国家",
+            "dataIndex": "country"
+        },
+        {
+            "title": "合同接管日期",
+            "dataIndex": "takeOverTime"
+        },
+        {
+            "title": "收到合同形式",
+            "dataIndex": "receivedContractShapeName"
+        },
+        {
+            "title": "合同份数",
+            "dataIndex": "contractFraction"
+        },
+        {
+            "title": "合同页数",
+            "dataIndex": "contractPage"
+        },
+        {
+            "title": "合同计划状态",
+            "dataIndex": "contractPlanStatusName"
+        },
+        {
+            "title": "合同重量与计划重量差值",
+            "dataIndex": "contractWeightDiff"
+        },
+        {
+            "title": "交货方式",
+            "dataIndex": "deliveryWayName"
+        },
+        {
+            "title": "交货地点",
+            "dataIndex": "deliveryAddress"
+        },
+        {
+            "title": "招标批次",
+            "dataIndex": "bidBatch"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "跟单业务员",
+            "dataIndex": "salesman"
+        },
+        {
+            "title": "合同接管人",
+            "dataIndex": "takeOverUser"
+        },
+        {
+            "title": "归属业务经理",
+            "dataIndex": "ascriptionName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "paymentDetail": [
+        {
+            "title": "来款时间",
+            "dataIndex": "refundTime"
+        },
+        {
+            "title": "来款单位",
+            "dataIndex": "customerName"
+        },
+        {
+            "title": "来款方式",
+            "dataIndex": "refundModeName"
+        },
+        {
+            "title": "来款金额（￥）",
+            "dataIndex": "refundAmount"
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyTypeName"
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "foreignExchangeAmount"
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "refundBank"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
+    "orderDetail": [
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "下发状态",
+            "dataIndex": "taskStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "部分下发"
+                },
+                {
+                    "value": 2,
+                    "label": "全部下发"
+                }
+            ]
+        },
+        {
+            "title": "采购订单号",
+            "dataIndex": "purchaseOrderNumber"
+        },
+        {
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "title": "含税金额(元)",
+            "dataIndex": "taxAmount"
+        },
+        {
+            "title": "合同重量(吨)",
+            "dataIndex": "orderWeight"
+        },
+        {
+            "title": "含税单价(元/吨)",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "签订日期",
+            "dataIndex": "signContractTime"
+        },
+        {
+            "title": "要求交货日期",
+            "dataIndex": "deliveryTime"
+        },
+        {
+            "title": "业主单位",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "title": "制单人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": "createTime"
+        }
+    ],
+    "paymentRecord": [
+        {
+            "title": "关联合同",
+            "dataIndex": "contractNumber",
+            "required": true,
+            "disabled": true
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "disabled": true
+        },
+        {
+            "title": "来款单位",
+            "dataIndex": "customerName",
+            "type": "popTable",
+            "width": 1101,
+            "path": "/tower-market/customer",
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
+        },
+        {
+            "title": "回款计划",
+            "dataIndex": "period",
+            "type": "popTable",
+            "width": 1101,
+            "path": "/tower-market/contract/",
+            "readOnly": true,
+            "value": "name",
+            "data": "paymentPlanVos",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "期次",
+                    "dataIndex": "period"
+                },
+                {
+                    "title": "计划名称",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "计划回款日期",
+                    "dataIndex": "returnedTime"
+                },
+                {
+                    "title": "计划回款占比(%)",
+                    "dataIndex": "returnedRate"
+                },
+                {
+                    "title": "计划回款金额",
+                    "dataIndex": "returnedAmount"
+                },
+                {
+                    "title": "备注",
+                    "dataIndex": "description"
+                }
+            ]
+        },
+        {
+            "title": "计划回款日期",
+            "dataIndex": "returnedTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm",
+            "disabled": true
+        },
+        {
+            "title": "计划回款占比",
+            "dataIndex": "returnedRate",
+            "disabled": true
+        },
+        {
+            "title": "计划回款金额（￥）",
+            "dataIndex": "returnedAmount",
+            "disabled": true
+        }
+    ],
+    "paymentInfo": [
+        {
+            "title": "来款时间",
+            "dataIndex": "refundTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm",
+            "required": true
+        },
+        {
+            "title": "来款方式",
+            "dataIndex": "refundMode",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "来款金额（￥）",
+            "dataIndex": "refundAmount",
+            "required": true
+        },
+        {
+            "title": "币种",
+            "dataIndex": "currencyType",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate"
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "foreignExchangeAmount"
+        },
+        {
+            "title": "收款银行",
+            "dataIndex": "refundBank"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ]
 }

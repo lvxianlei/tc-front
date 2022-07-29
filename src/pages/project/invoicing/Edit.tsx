@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import { Button, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, EditTable, formatData, Attachment, AttachmentRef } from '../../common'
@@ -15,6 +15,7 @@ export default function Edit() {
     const params = useParams<{ id: string }>()
     const history = useHistory()
     const attchRef = useRef<AttachmentRef>()
+    const [when, setWhen] = useState<boolean>(true)
     const [baseInfo] = Form.useForm()
     const [invoiceForm] = Form.useForm()
     const [billingForm] = Form.useForm()
@@ -91,6 +92,7 @@ export default function Edit() {
             }
             const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
             if (result) {
+                setWhen(false)
                 message.success("数据保存成功...")
                 history.go(-1)
             }
@@ -163,19 +165,21 @@ export default function Edit() {
         }
     }
 
-    return <DetailContent operation={[
-        <Button
-            type="primary" key="save"
-            style={{ marginRight: 16 }}
-            loading={saveLoading || creteLoading}
-            onClick={() => handleSave(1)}>保存</Button>,
-        <Button
-            type="primary" key="saveOrSubmit"
-            style={{ marginRight: 16 }}
-            loading={saveLoading || creteLoading}
-            onClick={() => handleSave(2)}>保存并发起审批</Button>,
-        <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
-    ]}>
+    return <DetailContent
+        when={when}
+        operation={[
+            <Button
+                type="primary" key="save"
+                style={{ marginRight: 16 }}
+                loading={saveLoading || creteLoading}
+                onClick={() => handleSave(1)}>保存</Button>,
+            <Button
+                type="primary" key="saveOrSubmit"
+                style={{ marginRight: 16 }}
+                loading={saveLoading || creteLoading}
+                onClick={() => handleSave(2)}>保存并发起审批</Button>,
+            <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
+        ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo

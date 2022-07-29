@@ -52,69 +52,6 @@
       "exact": true,
       "authority": "customer_detail"
     },
-    {
-      "name": "销售合同管理",
-      "path": "/prom/contract",
-      "module": "./pages/prom/contract/PromContract",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 新增合同
-      "name": "新增合同",
-      "path": "/prom/contract/new",
-      "module": "./pages/prom/contract/ContractNew",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 编辑合同
-      "name": "编辑合同",
-      "path": "/prom/contract/setting/:id",
-      "module": "./pages/prom/contract/ContractSetting",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 新增回款计划
-      "name": "新增回款记录",
-      "path": "/prom/contract/paymentRecord/:id/:projectName/:signCustomerId/:signCustomerName",
-      "module": "./pages/prom/contract/PaymentRecordNew",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 合同详情
-      "name": "合同详情",
-      "path": "/prom/contract/detail/:id",
-      "module": "./pages/prom/contract/ContractDetail",
-      "exact": true,
-      "authority": "contract"
-    },
-    {
-      "name": "销售订单管理",
-      "path": "/prom/order",
-      "module": "./pages/prom/order/SaleOrder",
-      "exact": true,
-      "authority": "sale_order"
-    },
-    {
-      "name": "新增订单",
-      "path": "/prom/order/new",
-      "module": "./pages/prom/order/SaleOrderNew",
-      "exact": true,
-      "authority": "sale_order"
-    },
-    {
-      "name": "编辑订单",
-      "path": "/prom/order/setting/:id",
-      "module": "./pages/prom/order/SaleOrderSetting",
-      "exact": true,
-      "authority": "sale_order"
-    },
-    { // 订单详情
-      "name": "订单详情",
-      "path": "/prom/order/detail/:id",
-      "module": "./pages/prom/order/SaleOrderDetail",
-      "exact": true,
-      "authority": "sale_order"
-    },
     { // 字典管理
       "name": "字典管理",
       "path": "/sys/dxnry",
@@ -406,14 +343,12 @@
       "name": "新增招标信息",
       "path": "/bidding/information/edit/new",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_detail"
     },
     { // 招标信息编辑
       "name": "编辑招标信息",
       "path": "/bidding/information/edit/:id",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_edit"
     },
     { // 项目管理
@@ -497,7 +432,7 @@
     { // 合同详情
       "name": "合同详情",
       "path": "/project/management/detail/contract/:projectId/:id",
-      "module": "./pages/project/contract/ContractDetail",
+      "module": "./pages/project/contract/Detail",
       "exact": true,
       "authority": "contract"
     },
@@ -517,8 +452,8 @@
     },
     { // 新增回款计划
       "name": "新增回款记录",
-      "path": "/project/contract/paymentRecord/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
-      "module": "./pages/project/contract/PaymentRecordNew",
+      "path": "/project/management/pamentRecord/contract/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
+      "module": "./pages/project/contract/PaymentNew",
       "exact": true,
       "authority": "contract"
     },
@@ -1051,7 +986,7 @@
     },
     { // 工作管理-生产配料-生产配料
       "name": "生产配料",
-      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard",
+      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard/:planNumber",
       "module": "./pages/workMngt/production/IngredientsList",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"

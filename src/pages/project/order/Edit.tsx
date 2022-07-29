@@ -262,7 +262,7 @@ export default function SeeGuarantee(): JSX.Element {
             }
         }
     }
-    
+
     return (
         <DetailContent when={when} operation={[
             <Button loading={saveLoaing} key="save" type="primary" style={{ marginRight: "16px" }} onClick={handleSave}>保存</Button>,
