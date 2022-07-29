@@ -458,8 +458,8 @@
             "disabled": true
         },
         {
-            "title": "过磅重量（吨）",
-            "dataIndex": "ponderationWeight",
+            "title": "结算重量（吨）",
+            "dataIndex": "---------------------------",
             "type": "number",
             "max": 99999.99,
             "required": true

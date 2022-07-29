@@ -438,29 +438,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         })
         setCargoData(dataSource)
         setVisible(false);
-        // 选择完货物明细，
-        // let transportPriceCount = "0",
-        //     unloadPriceCount = "0",
-        //     weightAll = 0,
-        //     priceAll = 0;
-        // if (dataSource.length > 0) {
-        //     for (let i = 0; i < dataSource.length; i += 1) {
-        //         weightAll = weightAll + (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
-        //         priceAll = dataSource[i].price * 1 + priceAll;
-        //     }
-        //     // 运费价税合计 = 总重量 * 单价
-        //     transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
-        //     // 装卸费合计 = 总重量 * 单价
-        //     unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
-        // }
-        // setFreightInformation({
-        //     ...freightInformation,
-        //     transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
-        // })
-        // setHandlingCharges({
-        //     ...handlingCharges,
-        //     unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
-        // })
     }
 
     const { run: getSupplier } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {

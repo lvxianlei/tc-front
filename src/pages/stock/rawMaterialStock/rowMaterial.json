@@ -74,6 +74,26 @@
             "title": "重量",
             "dataIndex": "weight",
             "width": 50
+        },
+        {
+            "title": "含税单价(元/吨)",
+            "dataIndex": "-------------",
+            "width": 120
+        },
+        {
+            "title": "含税金额(元)",
+            "dataIndex": "=-=====",
+            "width": 120
+        },
+        {
+            "title": "不含税单价(元/吨)",
+            "dataIndex": "-------------",
+            "width": 120
+        },
+        {
+            "title": "不含税金额(元)",
+            "dataIndex": "-------------",
+            "width": 120
         }
     ]
 }

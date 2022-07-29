@@ -1,7 +1,6 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
 import { Input, Select, Form, Row, Modal, message, Spin } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
-import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"
 import '../StockPublicStyle.less';
@@ -53,7 +52,6 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
 })
 
 export default function RawMaterialStock(): React.ReactNode {
-    const history = useHistory()
     const [attchType, setAttachType] = useState<1 | 2>(1)
     const [detailId, setDetailId] = useState<string>("")
     const [visible, setVisible] = useState<boolean>(false)
