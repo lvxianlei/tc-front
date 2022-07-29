@@ -11,7 +11,7 @@
     {
         "authority": "",
         "title": "计划中心",
-        "description": "包含客户、合同、订单等",
+        "description": "各工序统筹计划",
         "iconFont": "icon-jihuazhongxin2", // iconfont
         "color": "#FCCD06", // iconfont的颜色
         "path": "/planProd/planMgmt",
