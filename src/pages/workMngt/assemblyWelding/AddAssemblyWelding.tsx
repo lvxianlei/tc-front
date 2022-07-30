@@ -7,15 +7,13 @@
 import React, { useState } from 'react';
 import { Space, Input, Select, Button, Form, Row, Col, InputNumber, Radio, Popconfirm, message, Spin, Checkbox, Modal } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
-import { FixedType, TriggerEventHandler } from 'rc-table/lib/interface';
+import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IComponentList, IResponseData, ISegmentNameList } from './IAssemblyWelding';
 import { compoundTypeOptions } from '../../../configuration/DictionaryOptions';
-import { StringGradients } from 'antd/lib/progress/progress';
-
 
 export default function AddAssemblyWelding(): React.ReactNode {
     const params = useParams<{ id: string, productCategoryId: string, segmentId?: string }>();
@@ -33,6 +31,10 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const [title, setTitle] = useState<string>('');
     const [moveRecord, setMoveRecord] = useState<any>({});
     const [removeIndex, setRemoveIndex] = useState<number>(0);
+    const [leftSelectedRowKeys, setLeftSelectedRowKeys] = useState<string[]>([]);
+    const [leftSelectedRows, setLeftSelectedRows] = useState<any[]>([]);
+    const [rightSelectedRowKeys, setRightSelectedRowKeys] = useState<string[]>([]);
+    const [rightSelectedRows, setRightSelectedRows] = useState<any[]>([]);
 
     const { loading, data } = useRequest<ISegmentNameList[]>(() => new Promise(async (resole, reject) => {
         const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);
@@ -146,27 +148,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
         {
             title: '电焊长度（mm）',
             dataIndex: 'weldingLength',
-            key: 'weldingLength',
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <InputNumber
-            //         min={0}
-            //         max={99999}
-            //         key={record.structureId}
-            //         defaultValue={record.weldingLength}
-            //         placeholder="请输入"
-            // onChange={(e) => {
-            //     const newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
-            //     const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
-            //     newWeldingDetailedStructureList[index] = {
-            //         ...newWeldingDetailedStructureList[index],
-            //         weldingLength: Number(e)
-            //     }
-            //     setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
-            //     form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
-            // }}
-            //         bordered={false} 
-            //         disabled/>
-            // )
+            key: 'weldingLength'
         },
         {
             title: '操作',
@@ -508,6 +490,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
         setMoveNum(0)
     }
 
+    const batchMove = () => {
+        const selectedRow = rightSelectedRows || leftSelectedRows;
+        console.log(selectedRow)
+    }
+
     return <Spin spinning={loading}>
         <Modal
             visible={visible}
@@ -581,7 +568,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             style={{ fontSize: '14px', paddingLeft: '16px', fontWeight: 'lighter' }}
                         >显示剩余数量为0的构件
                         </Checkbox>
-                        <Button type='primary' style={{ left: '38%' }} ghost>批量移动</Button>
+                        <Button type='primary' style={{ left: '38%' }} onClick={batchMove} ghost>批量移动</Button>
                     </div>
                 }
             />
@@ -594,6 +581,16 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     width: '40%',
                     position: 'absolute'
                 }}
+                rowSelection={{
+                    selectedRowKeys: leftSelectedRowKeys,
+                    onChange: (selectedRowKeys: string[], selectRows: any[]) => {
+                        setLeftSelectedRowKeys(selectedRowKeys);
+                        setLeftSelectedRows(selectRows)
+                    },
+                    getCheckboxProps: ()=> ({
+                        disabled: rightSelectedRows.length > 0
+                    })
+                }}
             />
             <CommonTable
                 columns={columns}
@@ -605,6 +602,16 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 rowKey="structureId"
                 dataSource={[...(weldingDetailedStructureList || [])]}
                 pagination={false}
+                rowSelection={{
+                    selectedRowKeys: rightSelectedRowKeys,
+                    onChange: (selectedRowKeys: string[], selectRows: any[]) => {
+                        setRightSelectedRowKeys(selectedRowKeys);
+                        setRightSelectedRows(selectRows)
+                    },
+                    getCheckboxProps: ()=> ({
+                        disabled: leftSelectedRows.length > 0
+                    })
+                }}
             />
         </DetailContent>
     </Spin>
