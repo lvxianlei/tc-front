@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { Button, Input, message, Popconfirm } from 'antd'
+import React from 'react'
+import { Input, message, Popconfirm } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import RequestUtil from '../../utils/RequestUtil'
 import { clientMegt } from "./clientMegt.json"
-import { SearchTable as Page } from '../common'
+import { SearchTable as Page, AuthButton } from '../common'
 import useRequest from '@ahooksjs/use-request'
 
 export default function Index(): JSX.Element {
@@ -20,7 +20,7 @@ export default function Index(): JSX.Element {
     return <Page
         path="/tower-market/customer"
         extraOperation={
-            <Button type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></Button>
+            <AuthButton type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></AuthButton>
         }
         columns={[
             {
@@ -49,7 +49,7 @@ export default function Index(): JSX.Element {
                             okText="确认"
                             cancelText="取消"
                         >
-                            <Button type="link">删除</Button>
+                            <AuthButton type="link">删除</AuthButton>
                         </Popconfirm>
                     </>
                 )
