@@ -83,32 +83,32 @@
                 "icon": "xiangmuguanli",
                 "path": "/project",
                 "appName": "SC",
-                "authority": "project",
+                "authority": "tc_erp_sc_project",
                 "items": [
                     {
                         "label": "项目管理",
                         "path": "/project/management",
-                        "authority": "project_management"
+                        "authority": "tc_erp_sc_project"
                     },
                     {
                         "label": "开票申请",
                         "path": "/project/invoicing",
-                        "authority": "project_invoicing_requisition"
+                        "authority": "tc_erp_sc_invoicing"
                     },
                     {
                         "label": "请款申请",
                         "path": "/project/payment",
-                        "authority": "project_payment_application"
+                        "authority": "tc_erp_sc_pay_apply"
                     },
                     {
                         "label": "回款确认",
                         "path": "/project/collection",
-                        "authority": "project_collection_confirmation"
+                        "authority": "tc_erp_sc_back_money"
                     },
                     {
                         "label": "图纸确认任务",
                         "path": "/project/drawing",
-                        "authority": "project_collection_confirmation"
+                        "authority": "tc_erp_sc_drawing"
                     }
                 ]
             },
@@ -145,12 +145,12 @@
                 "icon": "examine",
                 "path": "/approvalm",
                 "appName": "SC",
-                "authority": "approval_management",
+                "authority": "tc_erp_sc_approval",
                 "items": [
                     {
                         "label": "审批管理",
                         "path": "/approvalm/management",
-                        "authority": "approval_management_list"
+                        "authority": "tc_erp_sc_approval"
                     }
                 ]
             },
@@ -159,12 +159,12 @@
                 "icon": "technology",
                 "path": "/workBench",
                 "appName": "RD",
-                "authority": "workbench",
+                "authority": "tc_erp_rd_workbench",
                 "items": [
                     {
                         "label": "工作台",
                         "path": "/workBench/workBenchMngt",
-                        "authority": "rd_workbench"
+                        "authority": "tc_erp_rd_workbench_work"
                     }
                 ]
             },
@@ -173,12 +173,12 @@
                 "icon": "gongying-gongzuotai_gongzuotai",
                 "path": "/supply",
                 "appName": "SW",
-                "authority": "workbench",
+                "authority": "tc_erp_sw_workBench",
                 "items": [
                     {
                         "label": "供应工作台",
                         "path": "/supply/sw",
-                        "authority": "workbench_supply"
+                        "authority": "tc_erp_sw_workBench"
                     }
                 ]
             },
@@ -187,22 +187,22 @@
                 "icon": "gongying-jiashicang_jiashichang",
                 "path": "/cockpit",
                 "appName": "RD",
-                "authority": "cockpit",
+                "authority": "tc_erp_rd_cockpit",
                 "items": [
                     {
                         "label": "计划跟踪",
                         "path": "/cockpit/planTrack",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_cockpit_track"
                     },
                     {
                         "label": "放样计划",
                         "path": "/cockpit/planSetOut",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_cockpit_loft"
                     },
                     {
                         "label": "报表",
                         "path": "/cockpit/statements",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_cockpit_report"
                     }
                 ]
             },
@@ -211,27 +211,27 @@
                 "icon": "gongying-jiashicang_jiashichang",
                 "path": "/bulletin",
                 "appName": "SW",
-                "authority": "cockpit",
+                "authority": "tc_erp_sw_cockpit",
                 "items": [
                     {
                         "label": "库存看板",
                         "path": "/bulletin/viewPanel",
-                        "authority": "cockpit_inventory_kanban"
+                        "authority": "tc_erp_sw_cockpit_stock"
                     },
                     {
                         "label": "原材料看板",
                         "path": "/bulletin/rawMaterial",
-                        "authority": "cockpit_raw_material_kanban"
+                        "authority": "tc_erp_sw_cockpit_material"
                     },
                     {
                         "label": "收货单看板",
                         "path": "/bulletin/receiveTask",
-                        "authority": "cockpit_receipt_kanban"
+                        "authority": "tc_erp_sw_cockpit_receipt"
                     },
                     {
                         "label": "合同看板",
                         "path": "/bulletin/contract",
-                        "authority": "cockpit_contract_kanban"
+                        "authority": "tc_erp_sw_cockpit_contract"
                     }
                 ]
             },
@@ -240,12 +240,12 @@
                 "icon": "gongying-gongchengbaojiarenwugongchengbaojiarenwu",
                 "path": "/enquiryTask",
                 "appName": "SW",
-                "authority": "enquiryTask",
+                "authority": "tc_erp_sw_rfq",
                 "items": [
                     {
                         "label": "工程报价任务",
                         "path": "/enquiryTask/index",
-                        "authority": "enquiryTask_list"
+                        "authority": "tc_erp_sw_rfq_inquiry_task"
                     }
                 ]
             },
@@ -273,7 +273,7 @@
                 "icon": "gongying-hetongguanli_hetongguanli",
                 "path": "/contract-mngt",
                 "appName": "SW",
-                "authority": "contract_mngt",
+                "authority": "tc_erp_sw_contract",
                 "items": [
                     {
                         "label": "原材料合同管理",
@@ -283,7 +283,7 @@
                     {
                         "label": "询比价",
                         "path": "/contract-mngt/enquiryCompare",
-                        "authority": "contract_mngt_inquiry_price_comparison"
+                        "authority": "tc_erp_sw_contract_comparison"
                     }
                 ]
             },
@@ -292,32 +292,32 @@
                 "icon": "gongying-kucunguanli_kucunguanli",
                 "path": "/stock",
                 "appName": "SW",
-                "authority": "inventory_management",
+                "authority": "tc_erp_sw_stock",
                 "items": [
                     {
                         "label": "原材料库存",
                         "path": "/stock/rawMaterialStock",
-                        "authority": "inventory_management_raw_material"
+                        "authority": "tc_erp_sw_stock_material"
                     },
                     {
                         "label": "原材料收货单",
                         "path": "/stock/receiving",
-                        "authority": "work_management_receiving_list"
+                        "authority": "tc_erp_sw_stock_material_receive"
                     },
                     {
                         "label": "原材料入库",
                         "path": "/stock/rawMaterialWarehousing",
-                        "authority": "inventory_management_warehousing"
+                        "authority": "tc_erp_sw_stock_material_in"
                     },
                     {
                         "label": "原材料出库",
                         "path": "/stock/rawMaterialExWarehouse",
-                        "authority": "inventory_management_ex_warehouse"
+                        "authority": "tc_erp_sw_stock_material_out"
                     },
                     {
                         "label": "余料入库",
                         "path": "/stock/surplusMaterialWarehousing",
-                        "authority": "inventory_management_surplus_material_warehousing"
+                        "authority": "tc_erp_sw_stock_material_surplus"
                     }
                 ]
             },
@@ -326,17 +326,17 @@
                 "icon": "gongying-caiwuguanli_caiwuguanli1",
                 "path": "/financial",
                 "appName": "SW",
-                "authority": "financial_management",
+                "authority": "tc_erp_sw_finance",
                 "items": [
                     {
                         "label": "票据管理",
                         "path": "/financial/bill",
-                        "authority": "financial_management_bill_management"
+                        "authority": "tc_erp_sw_finance_invoice"
                     },
                     {
                         "label": "请款申请",
                         "path": "/financial/prepare",
-                        "authority": "financial_management_application_payment"
+                        "authority": "tc_erp_sw_finance_requestFunds"
                     }
                 ]
             },
@@ -345,27 +345,27 @@
                 "icon": "RD_pinggurenwu",
                 "path": "/taskMngt",
                 "appName": "RD",
-                "authority": "rd_assess_task_management",
+                "authority": "tc_erp_rd_task",
                 "items": [
                     {
                         "label": "评估任务",
                         "path": "/taskMngt/assessmentTaskList",
-                        "authority": "rd_assess_task_management"
+                        "authority": "tc_erp_rd_task_assess"
                     },
                     {
                         "label": "确认任务",
                         "path": "/taskMngt/ConfirmTaskMngt",
-                        "authority": "rd_draw"
+                        "authority": "tc_erp_rd_task_draw"
                     },
                     {
                         "label": "放样任务",
                         "path": "/taskMngt/setOutTaskList",
-                        "authority": "rd_lofting_task"
+                        "authority": "tc_erp_rd_task_loft"
                     },
                     {
                         "label": "提料任务",
                         "path": "/taskMngt/materialTaskList",
-                        "authority": "rd_lofting_task"
+                        "authority": "tc_erp_rd_task_material"
                     }
                 ]
             },
@@ -416,12 +416,12 @@
                 "icon": "gongying-caigourenwu_caigourenwu",
                 "path": "/buyingTask",
                 "appName": "SW",
-                "authority": "procurement_task",
+                "authority": "tc_erp_sw_purchaseTask",
                 "items": [
                     {
                         "label": "原材料",
                         "path": "/buyingTask/index",
-                        "authority": "procurement_task_raw_material"
+                        "authority": "tc_erp_sw_purchaseTask_material"
                     }
                 ]
             },
@@ -430,57 +430,57 @@
                 "icon": "RD_gongzuoguanli-gongzuobaogao",
                 "path": "/workMngt",
                 "appName": "RD",
-                "authority": "work_management",
+                "authority": "tc_erp_rd_work",
                 "items": [
                     {
                         "label": "评估列表",
                         "path": "/workMngt/evaluationList",
-                        "authority": "rd_assessment_task_list"
+                        "authority": "tc_erp_rd_work_assess"
                     },
                     {
                         "label": "确认列表",
                         "path": "/workMngt/confirmList",
-                        "authority": "rd_draw_product_detail"
+                        "authority": "tc_erp_rd_work_draw"
                     },
                     {
                         "label": "指派列表",
                         "path": "/workMngt/scheduleList",
-                        "authority": "rd_lofting_task_assign"
+                        "authority": "tc_erp_rd_work_assign"
                     },
                     {
                         "label": "提料列表",
                         "path": "/workMngt/pickList",
-                        "authority": "rd_product_material_list"
+                        "authority": "tc_erp_rd_work_material"
                     },
                     {
                         "label": "放样列表",
                         "path": "/workMngt/setOutList",
-                        "authority": "rd_loft_task_list"
+                        "authority": "tc_erp_rd_work_loft"
                     },
                     {
                         "label": "组焊列表",
                         "path": "/workMngt/assemblyWeldingList",
-                        "authority": "rd_welding"
+                        "authority": "tc_erp_rd_work_weld"
                     },
                     {
                         "label": "小样图列表",
                         "path": "/workMngt/sampleDrawList",
-                        "authority": "rd_small_sample_management"
+                        "authority": "tc_erp_rd_work_sample"
                     },
                     {
                         "label": "螺栓列表",
                         "path": "/workMngt/boltList",
-                        "authority": "rd_bolt_management"
+                        "authority": "tc_erp_rd_work_bolt"
                     },
                     {
                         "label": "样板列表",
                         "path": "/workMngt/templateList",
-                        "authority": "rd_template_record"
+                        "authority": "tc_erp_rd_work_template"
                     },
                     {
                         "label": "下达列表",
                         "path": "/workMngt/releaseList",
-                        "authority": "rd_template_record"
+                        "authority": "tc_erp_rd_work_release"
                     }
                 ]
             },
@@ -489,7 +489,7 @@
                 "icon": "gongying-gongzuoguanli_gongzuoguanli",
                 "path": "/ingredients",
                 "appName": "SW",
-                "authority": "work_management",
+                "authority": "tc_erp_sw_work",
                 "items": [
                     {
                         "label": "工程报价列表",
@@ -499,32 +499,32 @@
                     {
                         "label": "采购配料",
                         "path": "/ingredients/buyBurdening",
-                        "authority": "work_management_purchase_ingredients"
+                        "authority": "tc_erp_sw_work_purchase"
                     },
                     {
                         "label": "配料方案",
                         "path": "/ingredients/purchaseList",
-                        "authority": "work_management_purchase_list"
+                        "authority": "tc_erp_sw_work_scheme"
                     },
                     {
                         "label": "计划列表",
                         "path": "/ingredients/planList",
-                        "authority": "work_management_plan_list"
+                        "authority": "tc_erp_sw_work_plan"
                     },
                     {
                         "label": "生产配料",
                         "path": "/ingredients/production",
-                        "authority": "work_management_production_ingredients"
+                        "authority": "tc_erp_sw_work_produce"
                     },
                     {
                         "label": "备料确认",
                         "path": "/ingredients/materialPreparationConfirmation",
-                        "authority": "work_management_production_ingredients"
+                        "authority": "tc_erp_sw_work_confirm"
                     },
                     {
                         "label": "缺料列表",
                         "path": "/ingredients/shortageList",
-                        "authority": "work_management_shortage_list"
+                        "authority": "tc_erp_sw_work_lackMaterial"
                     }
                 ]
             },
@@ -533,12 +533,12 @@
                 "icon": "technology",
                 "path": "/drawTower",
                 "appName": "RD",
-                "authority": "rd_draw_product_category_management",
+                "authority": "tc_erp_rd_drawing",
                 "items": [
                     {
                         "label": "图纸塔型",
                         "path": "/drawTower/drawTowerMngt",
-                        "authority": "rd_draw_product_category_management"
+                        "authority": "tc_erp_rd_drawing_tower"
                     }
                 ]
             },
@@ -547,12 +547,12 @@
                 "icon": "RD-tuzhitaxing",
                 "path": "/setOutTower",
                 "appName": "RD",
-                "authority": "rd_product_category",
+                "authority": "tc_erp_rd_loft_tower",
                 "items": [
                     {
                         "label": "放样塔型",
                         "path": "/setOutTower/setOutTowerMngt",
-                        "authority": "rd_product_category"
+                        "authority": "tc_erp_rd_loft_tower_loft"
                     }
                 ]
             },
@@ -575,12 +575,12 @@
                 "icon": "RD_wentidanwentidan",
                 "path": "/question",
                 "appName": "RD",
-                "authority": "rd_issue",
+                "authority": "tc_erp_rd_problem",
                 "items": [
                     {
                         "label": "问题单",
                         "path": "/question/questionMngt",
-                        "authority": "rd_issue"
+                        "authority": "tc_erp_rd_problem_problem"
                     }
                 ]
             },
@@ -808,12 +808,12 @@
                 "icon": "gongying-peizhiguanli_peizhiguanli1",
                 "path": "/config",
                 "appName": "SW",
-                "authority": "configuration_management",
+                "authority": "tc_erp_sw_config",
                 "items": [
                     {
                         "label": "配置管理列表",
                         "path": "/config/configList",
-                        "authority": "configuration_management_lists"
+                        "authority": "tc_erp_sw_config_list"
                     }
                 ]
             },
@@ -1139,7 +1139,7 @@
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "RD",
                 "path": "http://erp-tdm-hjt-uat.dhwy.cn/login",
-                "authority": "tdm-rd-jump"
+                "authority": "tc_erp_rd_tdm"
             }
         ]
     },

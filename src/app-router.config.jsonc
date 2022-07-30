@@ -36,7 +36,7 @@
       "path": "/client/mngt",
       "module": "./pages/clientMngt/index",
       "exact": true,
-      "authority": "tc_erp_sc_customer"
+      "authority": "tc_erp_sc_customer_list"
     },
     { // 新增客户
       "name": "新增客户",
@@ -253,14 +253,14 @@
       "path": "/config/configList/materialType",
       "module": "./pages/system-mngt/material/MaterialTypeMngt",
       "exact": true,
-      "authority": "material_category_management"
+      "authority": "tc_erp_sw_config_list_type"
     },
     { // 原材料管理
       "name": "原材料管理",
       "path": "/config/configList/material",
       "module": "./pages/system-mngt/materialMngt/MaterialMngt",
       "exact": true,
-      "authority": "material_management"
+      "authority": "tc_erp_sw_config_list_materials"
     },
     { // 新增原材料
       "name": "新增原材料",
@@ -330,96 +330,90 @@
       "path": "/bidding/information",
       "module": "./pages/bidding/index",
       "exact": true,
-      "authority": "bidding_info"
+      "authority": "tc_erp_sc_bid_list"
     },
     { // 招标信息详情
       "name": "招标信息详情",
       "path": "/bidding/information/detail/:id",
       "module": "./pages/bidding/Detail",
       "exact": true,
-      "authority": "bidding_detail"
-    },
-    { // 招标信息新增
-      "name": "新增招标信息",
-      "path": "/bidding/information/edit/new",
-      "module": "./pages/bidding/Edit",
-      "authority": "bidding_detail"
+      "authority": "tc_erp_sc_bid_view"
     },
     { // 招标信息编辑
       "name": "编辑招标信息",
       "path": "/bidding/information/edit/:id",
       "module": "./pages/bidding/Edit",
-      "authority": "bidding_edit"
+      "authority": "tc_erp_sc_bid_view_edit"
     },
     { // 项目管理
       "name": "项目管理",
       "path": "/project/management",
       "module": "./pages/project/index",
       "exact": true,
-      "authority": "project_management"
+      "authority": "tc_erp_sc_project_list"
     },
     { // 开票申请
       "name": "开票申请",
       "path": "/project/invoicing",
       "module": "./pages/project/invoicing/index",
       "exact": true,
-      "authority": "project_invoicing_requisition"
+      "authority": "tc_erp_sc_invoicing_list"
     },
     { // 开票申请详情
       "name": "开票申请详情",
       "path": "/project/invoicing/detail/:id",
       "module": "./pages/project/invoicing/Overview",
       "exact": true,
-      "authority": "project"
+      "authority": "tc_erp_sc_invoicing_detail"
     },
     { // 开票申请
       "name": "新增开票申请",
       "path": "/project/invoicing/new/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,
-      "authority": "project"
+      "authority": "tc_erp_sc_invoicing_add"
     },
     { // 编辑开票申请
       "name": "编辑开票申请",
       "path": "/project/invoicing/edit/:id",
       "module": "./pages/project/invoicing/Edit",
       "exact": true,
-      "authority": "project"
+      "authority": "tc_erp_sc_invoicing_edit"
     },
     { // 付款申请
-      "name": "付款申请",
+      "name": "请款申请",
       "path": "/project/payment",
       "module": "./pages/project/payment/index",
       "exact": true,
-      "authority": "project_payment_application"
+      "authority": "tc_erp_sc_pay_apply_list"
     },
     { // 付款申请详情
-      "name": "付款申请详情",
+      "name": "请款款申请详情",
       "path": "/project/payment/detail/:id",
       "module": "./pages/project/payment/Overview",
       "exact": true,
-      "authority": "project"
+      "authority": "tc_erp_sc_pay_apply_detail"
     },
     { // 回款申请
       "name": "回款确认",
       "path": "/project/collection",
       "module": "./pages/project/collection/index",
       "exact": true,
-      "authority": "project_collection_confirmation"
+      "authority": "tc_erp_sc_back_money_list"
     },
     { // 回款申请详情
       "name": "回款确认详情",
       "path": "/project/collection/detail/:id",
       "module": "./pages/project/collection/Overview",
       "exact": true,
-      "authority": "project"
+      "authority": "tc_erp_sc_back_money_confirm"
     },
     { // 回款申请详情
-      "name": "回款确认",
+      "name": "编辑回款确认",
       "path": "/project/collection/edit/:id",
       "module": "./pages/project/collection/Edit",
       "exact": true,
-      "authority": "project"
+      "authority": "tc_erp_sc_back_money_confirm"
     },
     // 图纸确认信息
     {
@@ -427,183 +421,170 @@
       "path": "/project/drawing",
       "module": "./pages/project/drawing",
       "exact": true,
-      "authority": "project"
+      "authority": "tc_erp_sc_drawing_list"
     },
     { // 合同详情
       "name": "合同详情",
       "path": "/project/management/detail/contract/:projectId/:id",
       "module": "./pages/project/contract/Detail",
       "exact": true,
-      "authority": "contract"
+      "authority": "tc_erp_sc_project_view_contract_detail"
     },
     { // 新增合同
       "name": "新增合同",
       "path": "/project/management/new/contract/:projectId",
       "module": "./pages/project/contract/Edit",
       "exact": true,
-      "authority": "contract"
+      "authority": "tc_erp_sc_project_view_contract_add"
     },
     { // 编辑合同
       "name": "编辑合同",
       "path": "/project/management/edit/contract/:projectId/:id",
       "module": "./pages/project/contract/Edit",
       "exact": true,
-      "authority": "contract"
+      "authority": "tc_erp_sc_project_view_contract_edit"
     },
     { // 新增回款计划
       "name": "新增回款记录",
       "path": "/project/management/pamentRecord/contract/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
       "module": "./pages/project/contract/PaymentNew",
       "exact": true,
-      "authority": "contract"
+      "authority": "tc_erp_sc_project_view_contract_back_money"
     },
     {
       "name": "新增订单",
       "path": "/project/management/new/order/:projectId",
       "module": "./pages/project/order/Edit",
       "exact": true,
-      "authority": "sale_order"
+      "authority": "tc_erp_sc_project_view_contract_sale_order_add"
     },
     {
       "name": "编辑订单",
       "path": "/project/management/edit/order/:projectId/:id",
       "module": "./pages/project/order/Edit",
       "exact": true,
-      "authority": "sale_order"
+      "authority": "tc_erp_sc_project_view_contract_sale_order_edit"
     },
     { // 订单详情
       "name": "订单详情",
       "path":"/project/management/detail/order/:projectId/:id",
       "module": "./pages/project/order/Detail",
       "exact": true,
-      "authority": "sale_order"
+      "authority": "tc_erp_sc_project_view_contract_sale_order_detail"
     },
     {
       // 项目编辑
-      "name": "新增/编辑项目",
+      "name": "新增项目",
+      "path": "/project/management/edit/base/new",
+      "module": "./pages/project/baseInfo/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_add"
+    },
+    {
+      // 项目编辑
+      "name": "编辑项目",
       "path": "/project/management/edit/base/:id",
       "module": "./pages/project/baseInfo/Edit",
       "exact": true,
-      "authority": "project_edit"
+      "authority": "tc_erp_sc_project_edit"
     },
     { // 项目管理子项详情
       "name": "项目管理子项详情",
       "path": "/project/management/detail/:tab/:id",
       "module": "./pages/project/Detail",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view"
     },
-    { // 项目管理成本评估编辑
-      "name": "成本评估编辑",
-      "path": "/project/management/new/cost/:projectId",
-      "module": "./pages/project/cost/Edit",
-      "exact": true,
-      "authority": "project_detail"
-    },
+    // { // 项目管理成本评估编辑
+    //   "name": "成本评估编辑",
+    //   "path": "/project/management/new/cost/:projectId",
+    //   "module": "./pages/project/cost/Edit",
+    //   "exact": true,
+    //   "authority": "tc_erp_sc_project_view_ask_edit"
+    // },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/edit/cost/:projectId",
       "module": "./pages/project/cost/Edit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_ask_edit"
     },
     { // 项目管理资审文件编辑
       "name": "资审文件编辑",
       "path": "/project/management/edit/qualificationReview/:id",
       "module": "./pages/project/qualificationReview/Edit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_doc_edit"
     },
     { // 项目管理标书制作编辑
       "name": "标书制作编辑",
       "path": "/project/management/edit/bidDoc/:id",
       "module": "./pages/project/bidDoc/Edit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_bid_doc_edit"
     },
     { // 项目管理招标结果编辑
       "name": "招标结果编辑",
       "path": "/project/management/edit/bidResult/:id",
       "module": "./pages/project/bidResult/Edit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_bid_base_edit"
     },
     { // 项目管理框架协议编辑
       "name": "框架协议编辑",
       "path": "/project/management/edit/frameAgreement/:id",
       "module": "./pages/project/frameAgreement/Edit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_frame_edit"
     },
     { // 杆塔明细编辑
       "name": "杆塔明细编辑",
       "path": "/project/management/edit/productGroup/:projectId/:id",
       "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_product_edit"
     },
     { // 查看杆塔明细
       "name": "杆塔明细",
       "path": "/project/management/productGroup/item/:projectId/:id",
       "module": "./pages/project/ProductDetail",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_product"
     },
     { // 新增杆塔明细
       "name": "新增杆塔明细",
       "path": "/project/management/new/productGroup/:id",
       "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_product_add"
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
       "path": "/project/management/edit/salesPlan/:projectId/:id",
       "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_task_notice_add"
     },
     { // 新增销售计划编辑
       "name": "新增销售计划",
       "path": "/project/management/new/salesPlan/:id",
       "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_task_notice_add"
     },
     { // 销售计划详情
       "name": "销售计划详情",
       "path": "/project/management/cat/salesPlan/:projectId/:id",
       "module": "./pages/project/SalesPlanDetail",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_task_notice_detail"
     },
     { // 审批管理
       "name": "审批管理",
       "path": "/approvalm/management",
       "module": "./pages/approval-mngt/index",
       "exact": true,
-      "authority": "approval_management_list"
-    },
-    { // 审批管理详情
-      "name": "审批管理详情",
-      "path": "/approvalm/management/detail/:id",
-      "module": "./pages/approval-mngt/Overview",
-      "exact": true,
-      "authority": "approvalm_detail"
-    },
-    { // 审批管理新建
-      "name": "审批管理详情",
-      "path": "/approvalm/management/edit/new/:type",
-      "module": "./pages/approval-mngt/Edit",
-      "exact": true,
-      "authority": "approvalm_edit"
-    },
-    { // 审批管理详情
-      "name": "审批管理详情",
-      "path": "/approvalm/management/edit/:id",
-      "module": "./pages/approval-mngt/Edit",
-      "exact": true,
-      "authority": "approvalm_edit"
+      "authority": "tc_erp_sc_approval_list"
     },
     //rd
     { // 驾驶舱-计划跟踪
@@ -611,35 +592,35 @@
       "path": "/cockpit/planTrack",
       "module": "./pages/cockpit/PlanTrack",
       "exact": true,
-      "authority": "rd_cockpit"
+      "authority": "tc_erp_rd_cockpit_track_list"
     },
     { // 驾驶舱-放样计划
       "name": "放样计划",
       "path": "/cockpit/planSetOut",
       "module": "./pages/cockpit/PlanSetOut",
       "exact": true,
-      "authority": "rd_cockpit"
+      "authority": "tc_erp_rd_cockpit_loft_list"
     },
     { // 驾驶舱-报表
       "name": "报表",
       "path": "/cockpit/statements",
       "module": "./pages/cockpit/Statements",
       "exact": true,
-      "authority": "rd_cockpit"
+      "authority": "tc_erp_rd_cockpit_report"
     },
     { // 驾驶舱-库存看板
       "name": "库存看板",
       "path": "/bulletin/viewPanel",
       "module": "./pages/stock/viewPanel/viewPanel",
       "exact": true,
-      "authority": "cockpit_inventory_kanban"
+      "authority": "tc_erp_sw_cockpit_stock"
     },
     { // 驾驶舱-原材料看板
       "name": "原材料看板",
       "path": "/bulletin/rawMaterial",
       "module": "./pages/cockpit/rawMaterial/index",
       "exact": true,
-      "authority": "cockpit_raw_material_kanban"
+      "authority": "tc_erp_sw_cockpit_material"
     },
     { // 驾驶舱-原材料看板-价格维护
       "name": "价格维护",
@@ -653,14 +634,14 @@
       "path": "/bulletin/receiveTask",
       "module": "./pages/cockpit/receiveTask/index",
       "exact": true,
-      "authority": "cockpit_receipt_kanban"
+      "authority": "tc_erp_sw_cockpit_receipt"
     },
     { // 驾驶舱-合同看板
       "name": "合同看板",
       "path": "/bulletin/contract",
       "module": "./pages/cockpit/contract/index",
       "exact": true,
-      "authority": "cockpit_contract_kanban"
+      "authority": "tc_erp_sw_cockpit_contract"
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
@@ -674,7 +655,7 @@
       "path": "/enquiryTask/index",
       "module": "./pages/enquiryTask/index",
       "exact": true,
-      "authority": "enquiryTask_list"
+      "authority": "tc_erp_sw_rfq_inquiry_task"
     },
     { //供应商管理
       "name": "供应商管理",
@@ -701,267 +682,267 @@
       "name": "询比价",
       "path": "/contract-mngt/enquiryCompare",
       "module": "./pages/contract-mngt/enquiryCompare/index",
-      "exact": true,
-      "authority": "contract_mngt_inquiry_price_comparison"
+      "exact": true, 
+      "authority": "tc_erp_sw_contract_comparison_list"
     },
     { //合同管理-询比价-询价信息
       "name": "询价信息",
       "path": "/contract-mngt/enquiryCompare/enquiry/:id",
       "module": "./pages/contract-mngt/enquiryCompare/Overview",
       "exact": true,
-      "authority": "sw_contract_management_price_inquiry_and_comparison_information"
+      "authority": "tc_erp_sw_contract_comparison_details"
     },
     { // 库存管理-原材料库存
       "name": "原材料库存",
       "path": "/stock/rawMaterialStock",
       "module": "./pages/stock/rawMaterialStock/rawMaterialStock",
       "exact": true,
-      "authority": "inventory_management_raw_material"
+      "authority": "tc_erp_sw_stock_material_list"
     },
     { // 库存管理-原材料入库
       "name": "原材料入库",
       "path": "/stock/rawMaterialWarehousing",
       "module": "./pages/stock/rawMaterialWarehousing/rawMaterialWarehousing",
       "exact": true,
-      "authority": "inventory_management_warehousing"
+      "authority": "tc_erp_sw_stock_material_in_list"
     },
     { // 库存管理-原材料入库-详情
       "name": "原材料入库明细",
       "path": "/stock/rawMaterialWarehousing/detail/:id",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
-      "authority": "sw_inventory_management_raw_material_warehousing_details"
+      "authority": "tc_erp_sw_stock_material_in_info"
     },
     { // 库存管理-原材料出库
       "name": "原材料出库",
       "path": "/stock/rawMaterialExWarehouse",
       "module": "./pages/stock/rawMaterialExWarehouse/rawMaterialExWarehouse",
       "exact": true,
-      "authority": "inventory_management_ex_warehouse"
+      "authority": "tc_erp_sw_stock_material_out_list"
     },
     { // 库存管理-原材料出-详情
       "name": "原材料出库详情",
       "path": "/stock/rawMaterialExWarehouse/detail/:id",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
       "exact": true,
-      "authority": "sw_approInventory_management_raw_material_delivery_detail_valm"
+      "authority": "tc_erp_sw_stock_material_out_info"
     },
     { // 库存管理-余料入库
       "name": "余料入库",
       "path": "/stock/surplusMaterialWarehousing",
       "module": "./pages/stock/surplusMaterialWarehousing/index",
       "exact": true,
-      "authority": "inventory_management_surplus_material_warehousing"
+      "authority": "tc_erp_sw_stock_material_surplus_list"
     },
     {
       "name": "配置管理",
       "path": "/config/configList",
       "module": "./pages/config/index",
       "exact": true,
-      "authority": "configuration_management_lists"
+      "authority": "tc_erp_sw_config_list"
     },
     { // 配置管理-仓库管理
       "name": "仓库管理",
       "path": "/config/configList/warehouse",
       "module": "./pages/stock/warehouse/index",
       "exact": true,
-      "authority": "sw_configuration_management_warehouse_management"
+      "authority": "tc_erp_sw_config_list_storage"
     },
     { // 配置管理-安全库存配置
       "name": "安全库存配置",
       "path": "/config/configList/securitySetting",
       "module": "./pages/stock/securitySetting/index",
       "exact": true,
-      "authority": "sw_configuration_management_safety_stock_configuration"
+      "authority": "tc_erp_sw_config_list_safety"
     },
     { // 配置管理-税率参数配置
       "name": "税率参数配置",
       "path": "/config/configList/taxRate",
       "module": "./pages/stock/taxRate",
       "exact": true,
-      "authority": "configuration_management_lists"
+      "authority": "tc_erp_sw_config_list_storage_tax"
     },
     { // 配置管理-角钢配料策略
       "name": "角钢配料策略",
       "path": "/config/configList/angleSteel",
       "module": "./pages/stock/angleSteel/index",
       "exact": true,
-      "authority": "sw_configuration_management_angle_steel_batching_strategy"
+      "authority": "tc_erp_sw_config_list_angle"
     },
     { // 配置管理-其他参数配置
       "name": "其他参数配置",
       "path": "/config/configList/otherParameters",
       "module": "./pages/stock/otherParameters/OtherParameters",
       "exact": true,
-      "authority": "sw_configuration_management_other_parameter_configuration"
+      "authority": "tc_erp_sw_config_list_else"
     },
     { // 确认任务
       "name": "确认任务",
       "path": "/taskMngt/ConfirmTaskMngt",
       "module": "./pages/confirmTask/ConfirmTaskMngt",
       "exact": true,
-      "authority": "rd_draw"
+      "authority": "tc_erp_rd_task_draw_list"
     },
     { // 确认任务详情
       "name": "确认任务详情",
       "path": "/taskMngt/ConfirmTaskMngt/ConfirmTaskDetail/:id/:status",
       "module": "./pages/confirmTask/ConfirmTaskDetail",
       "exact": true,
-      "authority": "rd_draw"
+      "authority": "tc_erp_rd_task_draw_details"
     },
     { // 确认任务明细
       "name": "确认任务明细",
       "path": "/taskMngt/ConfirmTaskMngt/ConfirmDetail/:id",
       "module": "./pages/confirmTask/ConfirmDetail",
       "exact": true,
-      "authority": "rd_draw"
+      "authority": "tc_erp_rd_task_draw_massage"
     },
     { // 工作管理-确认列表
       "name": "确认列表",
       "path": "/workMngt/confirmList",
       "module": "./pages/workMngt/confirmList/ConfirmList",
       "exact": true,
-      "authority": "rd_draw_product_detail"
+      "authority": "tc_erp_rd_work_draw_list"
     },
     { // 工作管理-确认列表-确认信息
       "name": "确认信息",
       "path": "/workMngt/confirmList/confirmMessage/:id",
       "module": "./pages/workMngt/confirmList/ConfirmMessage",
       "exact": true,
-      "authority": "rd_draw_product_detail"
+      "authority": "tc_erp_rd_work_draw_details"
     },
     { // 工作管理-确认列表-确认明细
       "name": "确认明细",
       "path": "/workMngt/confirmList/confirmDetail/:id/:status",
       "module": "./pages/workMngt/confirmList/ConfirmDetail",
       "exact": true,
-      "authority": "rd_draw_product_detail"
+      "authority": "tc_erp_rd_work_draw_massage"
     },
     { // 工作管理-指派列表
       "name": "指派列表",
       "path": "/workMngt/scheduleList",
       "module": "./pages/workMngt/scheduleList/ScheduleList",
       "exact": true,
-      "authority": "rd_lofting_task_assign"
+      "authority": "tc_erp_rd_work_assign_list"
     },
     { // 工作管理-指派列表
       "name": "指派查看",
       "path": "/workMngt/scheduleList/scheduleView/:id/:status",
       "module": "./pages/workMngt/scheduleList/ScheduleView",
       "exact": true,
-      "authority": "rd_lofting_task_assign"
+      "authority": "tc_erp_rd_work_assign_select"
     },
     { // 评估任务
       "name": "评估任务",
       "path": "/taskMngt/assessmentTaskList",
       "module": "./pages/assessmentTask/AssessmentTaskList",
       "exact": true,
-      "authority": "rd_assess_task_management"
+      "authority": "tc_erp_rd_task_assess_list"
     },
     { // 评估任务详情
       "name": "评估任务详情",
       "path": "/taskMngt/assessmentTaskList/assessmentTaskDetail/:id",
       "module": "./pages/assessmentTask/AssessmentTaskDetail",
       "exact": true,
-      "authority": "rd_assess_task_management"
+      "authority": "tc_erp_rd_task_assess_details"
     },
     { // 工作管理-提料列表
       "name": "提料列表",
       "path": "/workMngt/pickList",
       "module": "./pages/workMngt/pickList/PickList",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_list"
     },
     { // 工作管理-提料-提料信息
       "name": "提料信息",
       "path": "/workMngt/pickList/pickMessage/:id",
       "module": "./pages/workMngt/pickList/PickMessage",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_details"
     },
     { // 工作管理-提料-塔型信息
       "name": "塔型信息",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader",
       "module": "./pages/workMngt/pickList/PickTowerMessage",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_tower"
     },
     { // 工作管理-提料-塔型信息-提料
       "name": "提料",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_tower_material"
     },
     { // 工作管理-提料-塔型信息-提料-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/setOutApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/SetOutApply",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_tower_material_loft_apply"
     },
     { // 工作管理-提料-塔型信息-提料-图形塔型套用
       "name": "图形塔型套用",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/drawApply",
       "module": "./pages/workMngt/pickList/pickTowerMessage/DrawApply",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_tower_material_drawing_apply"
     },
     { // 工作管理-提料-塔型信息-提料-识别
       "name": "识别",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId/recognize",
       "module": "./pages/workMngt/pickList/pickTowerMessage/ImageRecognize",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_tower_material_ocr"
     },
     { // 工作管理-提料-塔型信息-校核
       "name": "校核",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/check/:productSegmentId/:materialLeaderId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Check",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_tower_check"
     },
     { // 工作管理-提料-塔型信息-明细
       "name": "明细",
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/detail/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Detail",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_tower_detailed"
     },
     { // 工作管理-提料-杆塔配段
       "name": "杆塔配段",
       "path": "/workMngt/pickList/pickTower/:id/:status",
       "module": "./pages/workMngt/pickList/PickTower",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_product_list"
     },
     { // 工作管理-提料-杆塔配段-杆塔信息
       "name": "杆塔提料明细",
       "path": "/workMngt/pickList/pickTower/:id/:status/pickTowerDetail/:productId",
       "module": "./pages/workMngt/pickList/PickTowerDetail",
       "exact": true,
-      "authority": "rd_product_material_list"
+      "authority": "tc_erp_rd_work_material_product_detailed"
     },
     { // 工作管理-评估列表
       "name": "评估列表",
       "path": "/workMngt/evaluationList",
       "module": "./pages/workMngt/evaluation/EvaluationList",
       "exact": true,
-      "authority": "rd_assessment_task_list"
+      "authority": "tc_erp_rd_work_assess_list"
     },
     { // 工作管理-采购列表
       "name": "配料方案",
       "path": "/ingredients/purchaseList",
       "module": "./pages/workMngt/purchaseList/index",
       "exact": true,
-      "authority": "work_management_purchase_list"
+      "authority": "tc_erp_sw_work_scheme_list"
     },
     { // 工作管理-计划列表
       "name": "计划列表",
       "path": "/ingredients/planList",
       "module": "./pages/workMngt/planList/index",
       "exact": true,
-      "authority": "work_management_plan_list"
+      "authority": "tc_erp_sw_work_plan_list"
     },
     { // 工作管理-计划列表-采购清单
       "name": "采购清单",
@@ -982,7 +963,7 @@
       "path": "/ingredients/production",
       "module": "./pages/workMngt/production/index",
       "exact": true,
-      "authority": "work_management_production_ingredients"
+      "authority": "tc_erp_sw_work_produce_list"
     },
     { // 工作管理-生产配料-生产配料
       "name": "生产配料",
@@ -999,88 +980,88 @@
       "authority": "sw_work_management_production_ingredients_component_details"
     },
     { // 工作管理-收货列表
-      "name": "收货列表",
+      "name": "原材料收货单",
       "path": "/stock/receiving",
       "module": "./pages/workMngt/receivingList/index",
       "exact": true,
-      "authority": "work_management_receiving_list"
+      "authority": "tc_erp_sw_stock_material_receive_list"
     },
     { // 工作管理-收获列表-详情
       "name": "收货列表明细",
       "path": "/stock/receiving/detail/:id",
       "module": "./pages/workMngt/receivingList/Overview",
       "exact": true,
-      "authority": "sw_work_management_receiving_list_details"
+      "authority": "tc_erp_sw_stock_material_receive_info"
     },
     { // 工作管理-收获列表-编辑
       "name": "收货列表编辑",
       "path": "/stock/receiving/edit/:id",
       "module": "./pages/workMngt/receivingList/Edit",
       "exact": true,
-      "authority": "sw_work_management_receiving_list_edits"
+      "authority": "tc_erp_sw_stock_material_receive_edit"
     },
     { // 工作管理-缺料列表
       "name": "缺料列表",
       "path": "/ingredients/shortageList",
       "module": "./pages/workMngt/shortageList/index",
       "exact": true,
-      "authority": "work_management_shortage_list"
+      "authority": "tc_erp_sw_work_lackMaterial_list"
     },
     { // 工作管理-样板列表
       "name": "样板列表",
       "path": "/workMngt/templateList",
       "module": "./pages/workMngt/templateList/templateList",
       "exact": true,
-      "authority": "rd_template_record"
+      "authority": "tc_erp_rd_work_template_list"
     },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
       "path": "/workMngt/templateList/detail/:id/:productCategoryId",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
-      "authority": "rd_template_record"
+      "authority": "tc_erp_rd_work_template_select"
     },
     { // 放样任务
       "name": "放样任务",
       "path": "/taskMngt/setOutTaskList",
       "module": "./pages/setOutTask/SetOutTaskList",
       "exact": true,
-      "authority": "rd_lofting_task"
+      "authority": "tc_erp_rd_task_loft_list"
     },
     { // 放样任务详情
       "name": "放样任务详情",
       "path": "/taskMngt/setOutTaskList/setOutTaskDetail/:id",
       "module": "./pages/setOutTask/SetOutTaskDetail",
       "exact": true,
-      "authority": "rd_lofting_task"
+      "authority": "tc_erp_rd_task_loft_details"
     },
-    { // 放样任务-塔型
-      "name": "塔型",
-      "path": "/taskMngt/setOutTaskList/setOutTaskTower/:id",
-      "module": "./pages/setOutTask/SetOutTaskTower",
-      "exact": true,
-      "authority": "rd_lofting_task"
-    },
-    { // 放样任务-杆塔
-      "name": "杆塔",
-      "path": "/taskMngt/setOutTaskList/setOutTaskPole/:id",
-      "module": "./pages/setOutTask/SetOutTaskPole",
-      "exact": true,
-      "authority": "rd_lofting_task"
-    },
+    // { // 放样任务-塔型
+    //   "name": "塔型",
+    //   "path": "/taskMngt/setOutTaskList/setOutTaskTower/:id",
+    //   "module": "./pages/setOutTask/SetOutTaskTower",
+    //   "exact": true,
+    //   "authority": "rd_lofting_task"
+    // },
+    // { // 放样任务-杆塔
+    //   "name": "杆塔",
+    //   "path": "/taskMngt/setOutTaskList/setOutTaskPole/:id",
+    //   "module": "./pages/setOutTask/SetOutTaskPole",
+    //   "exact": true,
+    //   "authority": "rd_lofting_task"
+    // },
     { // 提料任务
       "name": "提料任务",
       "path": "/taskMngt/materialTaskList",
       "module": "./pages/materialTask/MaterialTaskList",
       "exact": true,
-      "authority": "rd_lofting_task"
+      "authority": "tc_erp_rd_task_material_list"
     },
     { //采购任务-原材料
       "name": "采购任务",
       "path": "/buyingTask/index",
       "module": "./pages/buyingTask/index",
       "exact": true,
-      "authority": "procurement_task_raw_material"
+      "authority": "tc_erp_sw_purchaseTask_material_list"
     },
     { //采购任务-原材料-用料清单
       "name": "用料清单",
@@ -1094,266 +1075,266 @@
       "path": "/workMngt/setOutList",
       "module": "./pages/workMngt/setOut/SetOutList",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_list"
     },
     { // 工作管理-放样信息
       "name": "放样信息",
       "path": "/workMngt/setOutList/setOutInformation/:id",
       "module": "./pages/workMngt/setOut/SetOutInformation",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_details"
     },
     { // 工作管理-塔型信息
       "name": "塔型信息",
       "path": "/workMngt/setOutList/towerInformation/:id",
       "module": "./pages/workMngt/setOut/TowerInformation",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower"
     },
     { // 工作管理-塔型信息-放样
       "name": "放样",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:productSegmentId",
       "module": "./pages/workMngt/setOut/Lofting",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower_loft"
     },
     { // 工作管理-塔型信息-模型
       "name": "模型",
       "path": "/workMngt/setOutList/towerInformation/:id/modalList",
       "module": "./pages/workMngt/setOut/ModelList",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower_mode"
     },
     { // 工作管理-塔型信息-大样图工艺卡
       "name": "大样图工艺卡",
       "path": "/workMngt/setOutList/towerInformation/:id/processCardList",
       "module": "./pages/workMngt/setOut/ProcessCardList",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower_sketch"
     },
     { // 工作管理-塔型信息-NC程序
       "name": "NC程序",
       "path": "/workMngt/setOutList/towerInformation/:id/NCProgram",
       "module": "./pages/workMngt/setOut/NCProgram",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower_nc"
     },
     { // 工作管理-塔型信息-校核
       "name": "校核",
       "path": "/workMngt/setOutList/towerInformation/:id/towerCheck/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerCheck",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower_check"
     },
     { // 工作管理-塔型信息-塔型放样明细
       "name": "塔型放样明细",
       "path": "/workMngt/setOutList/towerInformation/:id/towerLoftingDetails/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerLoftingDetails",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower_detailed"
     },
     { // 工作管理-塔型信息-放样-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId/loftingTowerApplication",
       "module": "./pages/workMngt/setOut/LoftingTowerApplication",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_tower_loft_apply"
     },
     { // 工作管理-杆塔信息
       "name": "杆塔信息",
       "path": "/workMngt/setOutList/poleInformation/:id",
       "module": "./pages/workMngt/setOut/PoleInformation",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_product"
     },
     { // 工作管理-杆塔信息-杆塔放样明细
       "name": "杆塔放样明细",
       "path": "/workMngt/setOutList/poleInformation/:id/poleLoftingDetails/:productId",
       "module": "./pages/workMngt/setOut/PoleLoftingDetails",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_product_detailed"
     },
     { // 工作管理-杆塔信息-包装清单
       "name": "包装清单",
       "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId",
       "module": "./pages/workMngt/setOut/PackingList",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_product_package_list"
     },
     { // 工作管理-杆塔信息-添加包装清单
       "name": "添加包装清单",
       "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListNew",
       "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_product_package_add"
     },
     { // 工作管理-杆塔信息-编辑包装清单
       "name": "编辑包装清单",
       "path": "/workMngt/setOutList/poleInformation/:id/packingList/:productId/packingListSetting/:packId",
       "module": "./pages/workMngt/setOut/PackingListNew",
       "exact": true,
-      "authority": "rd_loft_task_list"
+      "authority": "tc_erp_rd_work_loft_product_package_edit"
     },
     { // 工作管理-组焊列表
       "name": "组焊列表",
       "path": "/workMngt/assemblyWeldingList",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingList",
       "exact": true,
-      "authority": "rd_welding"
+      "authority": "tc_erp_rd_work_weld_list"
     },
     { // 工作管理-组焊列表-组焊信息
       "name": "组焊信息",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingInformation/:id",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingInformation",
       "exact": true,
-      "authority": "rd_welding"
+      "authority": "tc_erp_rd_work_weld_details"
     },
     { // 工作管理-组焊列表-组焊清单
       "name": "组焊清单",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingListing",
       "exact": true,
-      "authority": "rd_welding"
+      "authority": "tc_erp_rd_work_weld_detailed"
     },
     { // 工作管理-组焊列表-组焊清单-添加组焊
       "name": "添加组焊",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/new",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
-      "authority": "rd_welding"
+      "authority": "tc_erp_rd_work_weld_detailed_add"
     },
     { // 工作管理-组焊列表-组焊清单-编辑
       "name": "编辑",
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/edit/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
-      "authority": "rd_welding"
+      "authority": "tc_erp_rd_work_weld_detailed_add"
     },
-    { // 工作管理-组焊列表-校核
-      "name": "校核",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId",
-      "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingCheck",
-      "exact": true,
-      "authority": "rd_welding"
-    },
-    { // 工作管理-组焊列表-校核-问题单
-      "name": "问题单",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnaire/:segmentId",
-      "module": "./pages/workMngt/assemblyWelding/Questionnaire",
-      "exact": true,
-      "authority": "rd_welding"
-    },
-    { // 工作管理-组焊列表-校核-查看问题单
-      "name": "查看问题单",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnairedetail/:segmentId",
-      "module": "./pages/workMngt/assemblyWelding/QuestionnaireDetail",
-      "exact": true,
-      "authority": "rd_welding"
-    },
+    // { // 工作管理-组焊列表-校核
+    //   "name": "校核",
+    //   "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId",
+    //   "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingCheck",
+    //   "exact": true,
+    //   "authority": "rd_welding"
+    // },
+    // { // 工作管理-组焊列表-校核-问题单
+    //   "name": "问题单",
+    //   "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnaire/:segmentId",
+    //   "module": "./pages/workMngt/assemblyWelding/Questionnaire",
+    //   "exact": true,
+    //   "authority": "rd_welding"
+    // },
+    // { // 工作管理-组焊列表-校核-查看问题单
+    //   "name": "查看问题单",
+    //   "path": "/workMngt/assemblyWeldingList/assemblyWeldingCheck/:id/:productCategoryId/questionnairedetail/:segmentId",
+    //   "module": "./pages/workMngt/assemblyWelding/QuestionnaireDetail",
+    //   "exact": true,
+    //   "authority": "rd_welding"
+    // },
     { // 工作管理-螺栓列表
       "name": "螺栓列表",
       "path": "/workMngt/boltList",
       "module": "./pages/workMngt/bolt/BoltList",
       "exact": true,
-      "authority": "rd_bolt_management"
+      "authority": "tc_erp_rd_work_bolt_list"
     },
-    { // 工作管理-螺栓列表-螺栓信息
-      "name": "螺栓信息",
-      "path": "/workMngt/boltList/boltInformation/:loftId/:id",
-      "module": "./pages/workMngt/bolt/BoltInformation",
-      "exact": true,
-      "authority": "rd_bolt_management"
-    },
+    // { // 工作管理-螺栓列表-螺栓信息
+    //   "name": "螺栓信息",
+    //   "path": "/workMngt/boltList/boltInformation/:loftId/:id",
+    //   "module": "./pages/workMngt/bolt/BoltInformation",
+    //   "exact": true,
+    //   "authority": "rd_bolt_management"
+    // },
     { // 工作管理-螺栓列表-螺栓清单
       "name": "螺栓清单",
       "path": "/workMngt/boltList/boltListing/:id/:boltLeader/:status",
       "module": "./pages/workMngt/bolt/BoltDetailList",
       "exact": true,
-      "authority": "rd_bolt_management"
+      "authority": "tc_erp_rd_work_bolt_detailed"
     },
     { // 工作管理-螺栓列表-螺栓明细
       "name": "螺栓明细",
       "path": "/workMngt/boltList/boltListing/:boltId/:id/:boltLeader/:status",
       "module": "./pages/workMngt/bolt/BoltListing",
       "exact": true,
-      "authority": "rd_bolt_management"
+      "authority": "tc_erp_rd_work_bolt_detailed_detailed"
     },
     { // 工作管理-螺栓列表-校核
       "name": "校核",
       "path": "/workMngt/boltList/boltCheck/:id",
       "module": "./pages/workMngt/bolt/check",
       "exact": true,
-      "authority": "rd_bolt_management"
+      "authority": "tc_erp_rd_work_bolt_check"
     },
     { // 工作管理-螺栓列表-校核-螺栓明细
       "name": "螺栓明细",
       "path": "/workMngt/boltList/boltCheck/:boltId/:id",
       "module": "./pages/workMngt/bolt/BoltCheck",
       "exact": true,
-      "authority": "rd_bolt_management"
+      "authority": "tc_erp_rd_work_bolt_check_detailed"
     },
     { // 工作管理-小样图列表
       "name": "小样图列表",
       "path": "/workMngt/sampleDrawList",
       "module": "./pages/workMngt/sampleDrawList/SampleDrawList",
       "exact": true,
-      "authority": "rd_small_sample_management"
+      "authority": "tc_erp_rd_work_sample_list"
     },
-    { // 工作管理-小样图信息
-      "name": "小样图信息",
-      "path": "/workMngt/sampleDrawList/sampleDrawMessage/:id",
-      "module": "./pages/workMngt/sampleDrawList/SampleDrawMessage",
-      "exact": true,
-      "authority": "rd_small_sample_management"
-    },
+    // { // 工作管理-小样图信息
+    //   "name": "小样图信息",
+    //   "path": "/workMngt/sampleDrawList/sampleDrawMessage/:id",
+    //   "module": "./pages/workMngt/sampleDrawList/SampleDrawMessage",
+    //   "exact": true,
+    //   "authority": "rd_small_sample_management"
+    // },
     { // 工作管理-小样图
       "name": "小样图",
       "path": "/workMngt/sampleDrawList/sampleDraw/:id/:status",
       "module": "./pages/workMngt/sampleDrawList/SampleDraw",
       "exact": true,
-      "authority": "rd_small_sample_management"
+      "authority": "tc_erp_rd_work_sample_sample_list"
     },
     { // 工作管理-小样图
       "name": "小样图下载",
       "path": "/workMngt/sampleDrawList/sampleDraw/:id/:status/downLoad",
       "module": "./pages/workMngt/sampleDrawList/DownLoadSampleDraw",
       "exact": true,
-      "authority": "rd_small_sample_management"
+      "authority": "tc_erp_rd_work_sample_sample_download"
     },
-    { // 工作管理-校核
-      "name": "小样图校核",
-      "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",
-      "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
-      "exact": true,
-      "authority": "rd_small_sample_management"
-    },
+    // { // 工作管理-校核
+    //   "name": "小样图校核",
+    //   "path": "/workMngt/sampleDrawList/sampleDrawCheck/:id/:status",
+    //   "module": "./pages/workMngt/sampleDrawList/SampleDrawCheck",
+    //   "exact": true,
+    //   "authority": "rd_small_sample_management"
+    // },
     { // 工作管理-下达列表
       "name": "下达列表",
       "path": "/workMngt/releaseList",
       "module": "./pages/workMngt/releaseList/ReleaseList",
       "exact": true,
-      "authority": "rd_small_sample_management"
+      "authority": "tc_erp_rd_work_release_tower_list"
     },
     { // 工作管理-下达列表-生产下达
       "name": "生产下达",
       "path": "/workMngt/releaseList/release/:id",
       "module": "./pages/workMngt/releaseList/Release",
       "exact": true,
-      "authority": "rd_small_sample_management"
+      "authority": "tc_erp_rd_work_release_batch_list"
     },
     { // 工作管理-下达列表-下达明细
       "name": "下达明细",
       "path": "/workMngt/releaseList/detail/:id/:productCategoryId",
       "module": "./pages/workMngt/releaseList/ReleaseDetail",
       "exact": true,
-      "authority": "rd_small_sample_management"
+      "authority": "tc_erp_rd_work_release_batch_detailed"
     },
     { // 工作管理-组焊明细-组焊明细
       "name": "组焊明细",
       "path": "/workMngt/releaseList/assemblyWelding/:id/:weldingId",
       "module": "./pages/workMngt/releaseList/ReleaseAssemblyWeldingDetail",
       "exact": true,
-      "authority": "rd_small_sample_management"
+      "authority": "tc_erp_rd_work_release_weld_detailed"
     },
     { // 工作管理-询价列表
       "name": "工程报价列表",
@@ -1367,7 +1348,7 @@
       "path": "/ingredients/buyBurdening",
       "module": "./pages/workMngt/buyBurdening/index",
       "exact": true,
-      "authority": "work_management_purchase_ingredients"
+      "authority": "tc_erp_sw_work_purchase_list"
     },
     { // 工作管理-采购配料重写
       "name": "配料明细",
@@ -1388,42 +1369,42 @@
       "path": "/ingredients/materialPreparationConfirmation",
       "module": "./pages/workMngt/materialPreparationConfirmation/index",
       "exact": true,
-      "authority": "work_management_production_ingredients"
+      "authority": "tc_erp_sw_work_confirm_list"
     },
     { // 问题单
       "name": "问题单列表",
       "path": "/question/questionMngt",
       "module": "./pages/questionMngt/QuestionMngt",
       "exact": true,
-      "authority": "rd_issue"
+      "authority": "tc_erp_rd_problem_problem_list"
     },
     { // 问题单-提料/放样/螺栓
       "name": "问题单详情",
       "path": "/question/questionMngt/otherDetail/:id/:type/:status",
       "module": "./pages/questionMngt/OtherDetail",
       "exact": true,
-      "authority": "rd_issue"
+      "authority": "tc_erp_rd_problem_problem_details"
     },
     { // 问题单-组焊
       "name": "问题单详情",
       "path": "/question/questionMngt/assemblyWeldDetail/:id/:status",
       "module": "./pages/questionMngt/AssemblyWeldDetail",
       "exact": true,
-      "authority": "rd_issue"
+      "authority": "tc_erp_rd_problem_problem_details"
     },
     { // 问题单-小样图详情
       "name": "问题单详情",
       "path": "/question/questionMngt/sampleDrawDetail/:id/:status",
       "module": "./pages/questionMngt/SampleDrawDetail",
       "exact": true,
-      "authority": "rd_issue"
+      "authority": "tc_erp_rd_problem_problem_details"
     },
     { // 放样塔型
       "name": "放样塔型列表",
       "path": "/setOutTower/setOutTowerMngt",
       "module": "./pages/setOutTower/SetOutTowerMngt",
       "exact": true,
-      "authority": "rd_product_category"
+      "authority": "tc_erp_rd_loft_tower_loft_list"
     },
     { // 放样塔型-塔型详情
       "name": "塔型详情",
@@ -1431,7 +1412,7 @@
       "module": "./pages/setOutTower/TowerDetail",
       "exact": true,
       // "authority": "rd_product_category_lofting_detail"
-      "authority": "rd_product_category"
+      "authority": "tc_erp_rd_loft_tower_loft_details"
     },
     { // 放样塔型-塔型构件
       "name": "塔型构件",
@@ -1439,7 +1420,7 @@
       "module": "./pages/setOutTower/TowerMemberList",
       "exact": true,
       // "authority": "rd_product_structure_page"
-      "authority": "rd_product_category"
+      "authority": "tc_erp_rd_loft_tower_loft_part"
     },
     { // 放样塔型-组焊清单
       "name": "组焊清单",
@@ -1447,7 +1428,7 @@
       "module": "./pages/setOutTower/AssemblyWeldList",
       "exact": true,
       // "authority": "rd_product_category_welding"
-      "authority": "rd_product_category"
+      "authority": "tc_erp_rd_loft_tower_loft_weld"
     },
     { // 放样塔型-螺栓清单
       "name": "螺栓清单",
@@ -1455,7 +1436,7 @@
       "module": "./pages/setOutTower/BoltList",
       "exact": true,
       // "authority": "bolt_record_lofting_list"
-      "authority": "rd_product_category"
+      "authority": "tc_erp_rd_loft_tower_loft_bolt"
     },
     { // 基础设置
       "name": "基础设置",
@@ -1470,7 +1451,7 @@
       "module": "./pages/drawTower/DrawTowerMngt",
       "exact": true,
       // "authority": "rd_draw_product_category_management"
-      "authority": "rd_draw_product_category_management"
+      "authority": "tc_erp_rd_drawing_tower_drawing_list"
     },
     { // 图纸塔型-塔型信息
       "name": "塔型信息",
@@ -1478,45 +1459,44 @@
       "module": "./pages/drawTower/TowerInformation",
       "exact": true,
       // "authority": "rd_draw_product_category_management"
-      "authority": "rd_draw_product_category_management"
+      "authority": "tc_erp_rd_drawing_tower_drawing_details"
     },
-    { // 图纸塔型-塔型信息-构件详情
-      "name": "构件详情",
-      "path": "/drawTower/drawTowerMngt/towerInformation/:id/componentDetail/:segmentId/:data",
-      "module": "./pages/drawTower/ComponentDetail",
-      "exact": true,
-      // "authority": "rd_draw_product_category_management"
-      "authority": "rd_draw_product_category_management"
-    },
-    { // 图纸塔型-塔型构件
-      "name": "塔型构件",
-      "path": "/drawTower/drawTowerMngt/componentInformation/:id/:structureCount",
-      "module": "./pages/drawTower/ComponentInformation",
-      "exact": true,
-      // "authority": "rd_draw_product_category_management"
-      "authority": "rd_draw_product_category_management"
-    },
+    // { // 图纸塔型-塔型信息-构件详情
+    //   "name": "构件详情",
+    //   "path": "/drawTower/drawTowerMngt/towerInformation/:id/componentDetail/:segmentId/:data",
+    //   "module": "./pages/drawTower/ComponentDetail",
+    //   "exact": true,
+    //   // "authority": "rd_draw_product_category_management"
+    //   "authority": "rd_draw_product_category_management"
+    // },
+    // { // 图纸塔型-塔型构件
+    //   "name": "塔型构件",
+    //   "path": "/drawTower/drawTowerMngt/componentInformation/:id/:structureCount",
+    //   "module": "./pages/drawTower/ComponentInformation",
+    //   "exact": true,
+    //   // "authority": "rd_draw_product_category_management"
+    //   "authority": "rd_draw_product_category_management"
+    // },
     { // 图纸塔型-配段信息
       "name": "配段信息",
       "path": "/drawTower/drawTowerMngt/withSectionInformation/:id",
       "module": "./pages/drawTower/WithSectionInformation",
       "exact": true,
       // "authority": "rd_draw_product_category_management"
-      "authority": "rd_draw_product_category_management"
+      "authority": "tc_erp_rd_drawing_tower_drawing_segment"
     },
     { // 工作台
       "name": "工作台",
       "path": "/workBench/workBenchMngt",
       "module": "./pages/workBench/rd/WorkBenchMngt",
       "exact": true,
-      "authority": "rd_workbench"
+      "authority": "tc_erp_rd_workbench_work"
     },
     { // 工作台-供应
       "name": "供应工作台",
       "path": "/supply/sw",
       "module": "./pages/workBench/sw/index",
       "exact": true,
-      // "authority": "rd_workbench"
       "authority": "workbench_supply"
     },
     //财务管理
@@ -1525,14 +1505,14 @@
       "path": "/financial/bill",
       "module": "./pages/financial/bills/index",
       "exact": true,
-      "authority": "financial_management_bill_management"
+      "authority": "tc_erp_sw_finance_invoice_list"
     },
     { // 请款申请
       "name": "请款申请",
       "path": "/financial/prepare",
       "module": "./pages/financial/prepares/index",
       "exact": true,
-      "authority": "financial_management_application_payment"
+      "authority": "tc_erp_sw_finance_requestFunds_list"
     },
     //MC
     { // 车间工作管理-加工任务面板
