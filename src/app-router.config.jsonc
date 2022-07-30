@@ -487,13 +487,13 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view"
     },
-    // { // 项目管理成本评估编辑
-    //   "name": "成本评估编辑",
-    //   "path": "/project/management/new/cost/:projectId",
-    //   "module": "./pages/project/cost/Edit",
-    //   "exact": true,
-    //   "authority": "tc_erp_sc_project_view_ask_edit"
-    // },
+    { // 项目管理成本评估编辑
+      "name": "成本评估编辑",
+      "path": "/project/management/new/cost/:projectId",
+      "module": "./pages/project/cost/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_ask_add"
+    },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/edit/cost/:projectId",
@@ -619,7 +619,7 @@
       "path": "/bulletin/rawMaterial/price",
       "module": "./pages/cockpit/rawMaterial/Overview",
       "exact": true,
-      "authority": "sw_cockpit_raw_material_anban_price_maintenance"
+      "authority": "tc_erp_sw_cockpit_material_maintain"
     },
     { // 驾驶舱-收货单看板
       "name": "收货单看板",
@@ -668,7 +668,7 @@
       "path": "/contract-mngt/index",
       "module": "./pages/contract-mngt/index",
       "exact": true,
-      "authority": "contract_mngt_raw_material"
+      "authority": "tc_erp_sw_contract_material_list"
     },
     { //合同管理-询比价
       "name": "询比价",
@@ -1354,7 +1354,7 @@
       "path": "/ingredients/buyBurdening/batchingScheme/:id/:batcheTaskStatus",
       "module": "./pages/workMngt/buyBurdening/BatchingScheme",
       "exact": true,
-      "authority": "work_management_purchase_ingredients"
+      "authority": "tc_erp_sw_work_scheme_list"
     },
     { // 工作管理-备料确认
       "name": "备料确认",

@@ -20,7 +20,7 @@ export default function Index(): JSX.Element {
     return <Page
         path="/tower-market/customer"
         extraOperation={
-            <AuthButton type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></AuthButton>
+            <AuthButton auth="tc_erp_sc_customer_add" type="primary"><Link to="/client/mngt/edit/new">新增客户</Link></AuthButton>
         }
         columns={[
             {
@@ -49,7 +49,7 @@ export default function Index(): JSX.Element {
                             okText="确认"
                             cancelText="取消"
                         >
-                            <AuthButton type="link">删除</AuthButton>
+                            <AuthButton auth="tc_erp_sc_customer_delete" type="link">删除</AuthButton>
                         </Popconfirm>
                     </>
                 )

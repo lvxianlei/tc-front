@@ -162,22 +162,20 @@ export default function SaleOrder(): JSX.Element {
                                     type="link"
                                     disabled={record.isProductGroupRef !== 0}
                                     onClick={() => history.push(`/project/management/edit/order/${params.id}/${record.id}`)}>编辑</Button>
-                                <AuthorityComponent permissions="sale_order_del">
-                                    <ConfirmableButton
-                                        confirmTitle="要删除该订单吗？"
-                                        type="link"
-                                        placement="topRight"
-                                        onConfirm={async () => {
-                                            let id = record.id;
-                                            const resData = await RequestUtil.delete(
-                                                `/tower-market/saleOrder?id=${id}`
-                                            );
-                                            setRefresh(true);
-                                        }}
-                                    >
-                                        <Button type="link" disabled={record.isProductGroupRef !== 0}>删除</Button>
-                                    </ConfirmableButton>
-                                </AuthorityComponent>
+                                <ConfirmableButton
+                                    confirmTitle="要删除该订单吗？"
+                                    type="link"
+                                    placement="topRight"
+                                    onConfirm={async () => {
+                                        let id = record.id;
+                                        const resData = await RequestUtil.delete(
+                                            `/tower-market/saleOrder?id=${id}`
+                                        );
+                                        setRefresh(true);
+                                    }}
+                                >
+                                    <Button type="link" disabled={record.isProductGroupRef !== 0}>删除</Button>
+                                </ConfirmableButton>
                             </Space>
                         ),
                     },
