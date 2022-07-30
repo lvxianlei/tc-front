@@ -159,12 +159,12 @@
                 "icon": "technology",
                 "path": "/workBench",
                 "appName": "RD",
-                "authority": "workbench",
+                "authority": "tc_erp_rd_workbench",
                 "items": [
                     {
                         "label": "工作台",
                         "path": "/workBench/workBenchMngt",
-                        "authority": "rd_workbench"
+                        "authority": "tc_erp_rd_workbench_work"
                     }
                 ]
             },
@@ -187,22 +187,22 @@
                 "icon": "gongying-jiashicang_jiashichang",
                 "path": "/cockpit",
                 "appName": "RD",
-                "authority": "cockpit",
+                "authority": "tc_erp_rd_cockpit",
                 "items": [
                     {
                         "label": "计划跟踪",
                         "path": "/cockpit/planTrack",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_cockpit_track"
                     },
                     {
                         "label": "放样计划",
                         "path": "/cockpit/planSetOut",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_cockpit_loft"
                     },
                     {
                         "label": "报表",
                         "path": "/cockpit/statements",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_cockpit_report"
                     }
                 ]
             },
@@ -345,27 +345,27 @@
                 "icon": "RD_pinggurenwu",
                 "path": "/taskMngt",
                 "appName": "RD",
-                "authority": "rd_assess_task_management",
+                "authority": "tc_erp_rd_task",
                 "items": [
                     {
                         "label": "评估任务",
                         "path": "/taskMngt/assessmentTaskList",
-                        "authority": "rd_assess_task_management"
+                        "authority": "tc_erp_rd_task_assess"
                     },
                     {
                         "label": "确认任务",
                         "path": "/taskMngt/ConfirmTaskMngt",
-                        "authority": "rd_draw"
+                        "authority": "tc_erp_rd_task_draw"
                     },
                     {
                         "label": "放样任务",
                         "path": "/taskMngt/setOutTaskList",
-                        "authority": "rd_lofting_task"
+                        "authority": "tc_erp_rd_task_loft"
                     },
                     {
                         "label": "提料任务",
                         "path": "/taskMngt/materialTaskList",
-                        "authority": "rd_lofting_task"
+                        "authority": "tc_erp_rd_task_material"
                     }
                 ]
             },
@@ -430,57 +430,57 @@
                 "icon": "RD_gongzuoguanli-gongzuobaogao",
                 "path": "/workMngt",
                 "appName": "RD",
-                "authority": "work_management",
+                "authority": "tc_erp_rd_work",
                 "items": [
                     {
                         "label": "评估列表",
                         "path": "/workMngt/evaluationList",
-                        "authority": "rd_assessment_task_list"
+                        "authority": "tc_erp_rd_work_assess"
                     },
                     {
                         "label": "确认列表",
                         "path": "/workMngt/confirmList",
-                        "authority": "rd_draw_product_detail"
+                        "authority": "tc_erp_rd_work_draw"
                     },
                     {
                         "label": "指派列表",
                         "path": "/workMngt/scheduleList",
-                        "authority": "rd_lofting_task_assign"
+                        "authority": "tc_erp_rd_work_assign"
                     },
                     {
                         "label": "提料列表",
                         "path": "/workMngt/pickList",
-                        "authority": "rd_product_material_list"
+                        "authority": "tc_erp_rd_work_material"
                     },
                     {
                         "label": "放样列表",
                         "path": "/workMngt/setOutList",
-                        "authority": "rd_loft_task_list"
+                        "authority": "tc_erp_rd_work_loft"
                     },
                     {
                         "label": "组焊列表",
                         "path": "/workMngt/assemblyWeldingList",
-                        "authority": "rd_welding"
+                        "authority": "tc_erp_rd_work_weld"
                     },
                     {
                         "label": "小样图列表",
                         "path": "/workMngt/sampleDrawList",
-                        "authority": "rd_small_sample_management"
+                        "authority": "tc_erp_rd_work_sample"
                     },
                     {
                         "label": "螺栓列表",
                         "path": "/workMngt/boltList",
-                        "authority": "rd_bolt_management"
+                        "authority": "tc_erp_rd_work_bolt"
                     },
                     {
                         "label": "样板列表",
                         "path": "/workMngt/templateList",
-                        "authority": "rd_template_record"
+                        "authority": "tc_erp_rd_work_template"
                     },
                     {
                         "label": "下达列表",
                         "path": "/workMngt/releaseList",
-                        "authority": "rd_template_record"
+                        "authority": "tc_erp_rd_work_release"
                     }
                 ]
             },
@@ -533,12 +533,12 @@
                 "icon": "technology",
                 "path": "/drawTower",
                 "appName": "RD",
-                "authority": "rd_draw_product_category_management",
+                "authority": "tc_erp_rd_drawing",
                 "items": [
                     {
                         "label": "图纸塔型",
                         "path": "/drawTower/drawTowerMngt",
-                        "authority": "rd_draw_product_category_management"
+                        "authority": "tc_erp_rd_drawing_tower"
                     }
                 ]
             },
@@ -547,12 +547,12 @@
                 "icon": "RD-tuzhitaxing",
                 "path": "/setOutTower",
                 "appName": "RD",
-                "authority": "rd_product_category",
+                "authority": "tc_erp_rd_loft_tower",
                 "items": [
                     {
                         "label": "放样塔型",
                         "path": "/setOutTower/setOutTowerMngt",
-                        "authority": "rd_product_category"
+                        "authority": "tc_erp_rd_loft_tower_loft"
                     }
                 ]
             },
@@ -575,12 +575,12 @@
                 "icon": "RD_wentidanwentidan",
                 "path": "/question",
                 "appName": "RD",
-                "authority": "rd_issue",
+                "authority": "tc_erp_rd_problem",
                 "items": [
                     {
                         "label": "问题单",
                         "path": "/question/questionMngt",
-                        "authority": "rd_issue"
+                        "authority": "tc_erp_rd_problem_problem"
                     }
                 ]
             },
@@ -617,42 +617,42 @@
                 "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
                 "path": "/planProd",
                 "appName": "PC",
-                "authority": "approvalm",
+                "authority": "tc_erp_aps_plan",
                 "items": [
                     {
                         "label": "计划排产",
                         "path": "/planProd/planMgmt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan"
                     },
                     {
                         "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_lofting"
                     },
                     {
                         "label": "分配生产单元",
                         "path": "/planProd/publishWorkshop",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_unit_distribution"
                     },
                     {
                         "label": "周期计划",
                         "path": "/planProd/cyclePlan",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_cycle_plan"
                     },
                     {
                         "label": "试装计划",
                         "path": "/planProd/planTrial",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_trial"
                     },
                     {
                         "label": "镀锌包装计划",
                         "path": "/planProd/planGalvanizedPack",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_galvanize_package"
                     },
                     {
                         "label": "计划变更",
                         "path": "/planProd/planChange",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_change"
                     }
                 ]
             },
@@ -661,17 +661,17 @@
                 "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
                 "path": "/planPanal",
                 "appName": "PC",
-                "authority": "approvalm",
+                "authority": "tc_erp_aps_board",
                 "items": [
                     {
                         "label": "计划看板",
                         "path": "/planPanal/list",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_board_plan_board"
                     },
                     {
                         "label": "数据统计",
                         "path": "/planPanal/dataStatistics",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_board_statistics"
                     }
                 ]
             },
@@ -827,7 +827,7 @@
                     {
                         "label": "基础设置",
                         "path": "/baseSetting/baseSettingMngt",
-                        "authority": "rd_config"
+                        "authority": "config_list"
                     },
                     {
                         "label": "生产班组管理",
@@ -1051,27 +1051,27 @@
                 "icon": "zhujihuapaichan-chejianjihuajichupeizhi_chejianjihuajichupeizhi",
                 "appName": "PC",
                 "path": "/workshopPlanBasic",
-                "authority": "approvalm",
+                "authority": "tc_erp_aps_config",
                 "items": [
                     {
                         "label": "生产环节管理",
                         "path": "/workshopPlanBasic/prodLink",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_link"
                     },
                     {
                         "label": "生产单元管理",
                         "path": "/workshopPlanBasic/prodUnit",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_unit"
                     },
                     {
                         "label": "生产工序管理",
                         "path": "/workshopPlanBasic/processMngt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_process"
                     },
                     {
                         "label": "工作中心管理",
                         "path": "/workshopPlanBasic/workCenterMngt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_center"
                     },
                     // {
                     //     "label": "分配车间配置管理",
@@ -1081,23 +1081,24 @@
                     {
                         "label": "周期计划类型配置管理",
                         "path": "/workshopPlanBasic/cyclePlanConfig",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_cycle_plan"
                     },
                     {
                         "label": "计划看板配置管理",
                         "path": "/workshopPlanBasic/kanBanPlanConfig",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_board"
                     },
                     {
                         "label": "生产单元分组管理",
                         "path": "/workshopPlanBasic/workUnit",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_unit_group"
                     },
                     {
                         "label": "组焊单元配置管理",
                         "path": "/workshopPlanBasic/assemblyWeld",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_welding_unit"
                     }
+                    
                 ]
             },
             {
@@ -1138,7 +1139,7 @@
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "RD",
                 "path": "http://erp-tdm-hjt-uat.dhwy.cn/login",
-                "authority": "tdm-rd-jump"
+                "authority": "tc_erp_rd_tdm"
             }
         ]
     },
