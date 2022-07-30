@@ -557,6 +557,20 @@
                 ]
             },
             {
+                "label": "业务处置管理",
+                "icon": "RD-tuzhitaxing",
+                "path": "/businessDisposal",
+                "appName": "RD",
+                "authority": "rd_product_category",
+                "items": [
+                    {
+                        "label": "取消暂停恢复",
+                        "path": "/businessDisposal/cancelOrPauseOrrestore",
+                        "authority": "rd_product_category"
+                    }
+                ]
+            },
+            {
                 "label": "问题单",
                 "icon": "RD_wentidanwentidan",
                 "path": "/question",
@@ -813,7 +827,7 @@
                     {
                         "label": "基础设置",
                         "path": "/baseSetting/baseSettingMngt",
-                        "authority": "config_list"
+                        "authority": "rd_config"
                     },
                     {
                         "label": "生产班组管理",
@@ -1084,7 +1098,6 @@
                         "path": "/workshopPlanBasic/assemblyWeld",
                         "authority": "approvalm"
                     }
-                    
                 ]
             },
             {

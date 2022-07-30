@@ -4,6 +4,7 @@ import { DetailTitle, CommonTable } from '../../common'
 import { ListIngredients, PlanList } from "./purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { upNumber } from "../../../utils/KeepDecimals"
 interface PurchasePlanProps {
     ids: string[]
 }
@@ -21,8 +22,8 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             //TODO 临时初始数据
             setDataSource(result?.lists.map((item: any) => ({
                 ...item,
-                planPurchaseNum: item?.planPurchaseNum || "",
-                warehouseOccupy: item?.warehouseOccupy || ""
+                planPurchaseNum: item?.planPurchaseNum || (upNumber(item.num - (item.warehouseOccupy || (item.availableStock > item.num ? item.num : item.availableStock)) + "")),
+                warehouseOccupy: item.warehouseOccupy || (item.availableStock > item.num ? item.num : item.availableStock)
             })) || [])
         } catch (error) {
             reject(error)
@@ -69,7 +70,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         const result = dataSource;
         let flag = false;
         for (let i = 0; i < result.length; i += 1) {
-            if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || (result[i].availableStock > result[i].num ? result[i].num : result[i].availableStock))) >= result[i].num) {
+            if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
                 result[i]["isRed"] = false;
             } else {
                 result[i]["isRed"] = true;
@@ -83,18 +84,36 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     useImperativeHandle(ref, () => ({ onSubmit: handleSubmit, confirmLoading }), [handleSubmit, confirmLoading])
 
     return <Spin spinning={loading}>
-        <Row gutter={10}>
-            <Col span={12}>
-                <DetailTitle title="配料方案" />
-                <CommonTable haveIndex
-                    rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
-                    columns={ListIngredients} dataSource={data?.lists || []} pagination={false} />
-            </Col>
-            <Col span={12}>
-                <DetailTitle title="计划列表" />
-                <CommonTable
-                    rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
-                    columns={PlanList.map((item: any) => {
+        <Row style={{marginBottom: 8}}>
+            合并批次： {data?.mergeBatch}
+        </Row>
+        <div style={{
+            width: "100%",
+            display: "flex",
+            flexWrap: "nowrap"
+        }}>
+            <DetailTitle title="配料方案" style={{width: 854}}/>
+            <DetailTitle title="计划列表" style={{width: 200}}/>
+        </div>
+        <div>
+            <CommonTable
+                rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
+                columns={[
+                    {
+                        key: 'index',
+                        title: '序号',
+                        dataIndex: 'index',
+                        fixed: "left",
+                        width: 40,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => {
+                            return (
+                                <span>
+                                    {index + 1}
+                                </span>
+                            )
+                        }
+                    },
+                    ...ListIngredients.map((item: any) => {
                         if (item.dataIndex === "planPurchaseNum") {
                             return ({
                                 ...item,
@@ -110,7 +129,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                             setDataSource(result.slice(0));
                                             setCout(count + 1);
                                         }}
-                                        style={{ height: 27, border: record?.isRed ? "1px solid red" : "" }}
+                                        style={{ width: 80, height: 27, border: record?.isRed ? "1px solid red" : "" }}
                                     />
                                 }
                             })
@@ -120,7 +139,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                 ...item,
                                 render: (_: any, record: any, index: number) => {
                                     return <Input
-                                        value={record.warehouseOccupy || (record.availableStock > record.num ? record.num : record.availableStock)}
+                                        value={record.warehouseOccupy || 0}
                                         key={index}
                                         // max={999}
                                         // min={0}
@@ -137,16 +156,18 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                             }
                                             setCout(count + 1);
                                         }}
-                                        style={{ height: 27 }}
+                                        style={{ width: 80, height: 27 }}
                                     />
                                 }
                             })
                         }
-                        return item
-                    })}
-                    dataSource={dataSource || []}
-                    pagination={false} />
-            </Col>
-        </Row>
+                        return item;
+                    })
+                ]}
+                dataSource={dataSource || []}
+                pagination={false}
+                scroll={{ y: document.documentElement.clientHeight - 320 }}
+            />
+        </div>
     </Spin>
 })

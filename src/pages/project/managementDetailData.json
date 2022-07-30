@@ -218,49 +218,62 @@
     ],
     "newProductGroup": [
         {
-            "title": "销售订单编号",
+            "title": "订单",
             "dataIndex": "saleOrderNumber",
             "type": "popTable",
             "path": "/tower-market/saleOrder",
             "width": 1011,
             "value": "saleOrderNumber",
             "dependencies": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择销售订单编号"
-                },
-                {
-                    "type": "string",
-                    "min": 1,
-                    "message": "请选择销售订单编号"
-                }
-            ],
+            "required": true,
             "columns": [
                 {
-                    "title": "销售订单编号",
+                    "title": "采购订单编号",
                     "dataIndex": "saleOrderNumber",
-                    "search": true
+                    "width": 100
                 },
                 {
                     "title": "内部合同编号",
-                    "dataIndex": "internalNumber"
+                    "dataIndex": "internalNumber",
+                    "width": 100
                 },
                 {
-                    "title": "订单工程名称",
-                    "dataIndex": "orderProjectName"
+                    "title": "工程名称",
+                    "dataIndex": "orderProjectName",
+                    "width": 100
                 },
                 {
                     "title": "合同签订单位",
-                    "dataIndex": "signCustomerName"
+                    "dataIndex": "signCustomerName",
+                    "width": 100
                 },
                 {
-                    "title": "签订日期",
-                    "dataIndex": "signContractTime"
+                    "title": "产品类型",
+                    "dataIndex": "productTypeName",
+                    "width": 50
                 },
                 {
-                    "title": "合同交货日期",
-                    "dataIndex": "deliveryTime"
+                    "title": "电压等级",
+                    "dataIndex": "voltageGradeName",
+                    "width": 50
+                },
+                {
+                    "title": "订单重量",
+                    "dataIndex": "orderWeight",
+                    "width": 50
+                },
+                {
+                    "title": "订单单价",
+                    "dataIndex": "taxPrice",
+                    "width": 50
+                }
+            ],
+            "search": [
+                {
+                    "title": "模糊查询",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 240,
+                    "placeholder": "采购订单编号/内部合同号/工程名称"
                 }
             ]
         },
@@ -501,34 +514,25 @@
     ],
     "contract": [
         {
-            "title": "合同编号",
-            "dataIndex": "contractNumber",
+            "title": "采购订单编号",
+            "dataIndex": "purchaseOrderNumber",
+            "width": 100,
             "search": true
         },
         {
-            "title": "合同名称",
-            "dataIndex": "contractName"
+            "title": "内部合同编号",
+            "dataIndex": "internalNumber",
+            "width": 100
         },
         {
-            "title": "销售类型",
-            "dataIndex": "saleTypeName"
-        },
-        {
-            "title": "业主单位",
-            "dataIndex": "customerCompany",
-            "search": true
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
         },
         {
             "title": "合同签订单位",
-            "dataIndex": "signCustomerName"
-        },
-        {
-            "title": "合同签订日期",
-            "dataIndex": "signContractTime"
-        },
-        {
-            "title": "要求交货日期",
-            "dataIndex": "deliveryTime"
+            "dataIndex": "signCustomerName",
+            "width": 100
         }
     ],
     "productAssist": [

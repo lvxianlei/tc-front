@@ -130,7 +130,7 @@ export default function Invoicing() {
                                 className="btn-operation-link" 
                                 disabled={record.batcheTaskStatus !== 1 && (record?.updateUser)}
                             >
-                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}/${record.materialStandard}`}>配料</Link>
+                                <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}/${record.materialStandard}/${record.planNumber}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'
                                  disabled={record.batcheTaskStatus !== 3}

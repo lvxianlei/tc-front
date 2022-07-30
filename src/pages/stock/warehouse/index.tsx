@@ -6,14 +6,34 @@ import Edit from './Edit'
 import { useHistory } from 'react-router-dom'
 import { Page } from '../../common'
 import { pages } from "./warehouse.json"
+import Location from "./Location";
+import StatiffStock from "./StatiffStock"
 const Warehouse = () => {
     const history = useHistory()
     const [isModal, setIsModal] = useState(false);
     const [id, setId] = useState<string | null>(null);
+    const [isModalVisitle, setIsModalVisitle] = useState<boolean>(false);
+    const [isStatiffStockVisitle, setIsStatiffStockVisitle] = useState<boolean>(false);
+    const [warehouseDetails, setWarehouseDetails] = useState<any[]>([]);
+    const [name, setName] = useState<string>("");
 
     const cancelModal = () => {
         setIsModal(false)
         setId(null)
+    }
+
+    const cancelModalLocation = (res: any) => {
+        setIsModalVisitle(false);
+        if (res.code === 1) {
+            history.go(0);
+        }
+    }
+
+    const cancelModalStatiffStock = (res: any) => {
+        setIsStatiffStockVisitle(false);
+        if (res.code === 1) {
+            history.go(0);
+        }
     }
 
     const deleteItem = async (id: string) => {
@@ -60,13 +80,28 @@ const Warehouse = () => {
                                 setId(item.id)
                             }}
                         >编辑</Button>
+                        <Button type="link" className="btn-operation-link" onClick={() => {
+                            setId(item.id);
+                            setWarehouseDetails(item.warehouseDetails);
+                            setName(item.name)
+                            setIsModalVisitle(true)
+                        }}>库区设置</Button>
+                        <Button type="link" className="btn-operation-link" onClick={() => {
+                            setId(item.id);
+                            setWarehouseDetails(item.warehouseDetails);
+                            setName(item.name)
+                            setIsStatiffStockVisitle(true)
+                        }}>库位设置</Button>
                         <Button type="link" onClick={() => deleteItem(item.id)}
                         >删除</Button>
                     </>
                 }
             ]}
             searchFormItems={[]}
-        /></>)
+        />
+        <Location isModal={isModalVisitle} id={id} name={name} warehouseDetails={warehouseDetails} cancelModal={(res: any) => cancelModalLocation(res)} />
+        <StatiffStock isModal={isStatiffStockVisitle} id={id} name={name} warehouseDetails={warehouseDetails} cancelModal={(res: any) => cancelModalStatiffStock(res)} />
+    </>)
 }
 
 export default Warehouse;

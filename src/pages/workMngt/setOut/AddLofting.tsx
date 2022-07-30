@@ -164,7 +164,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
                     required: true,
                     message: '请输入单段件数'
                 }]}>
-                    <InputNumber min={0} max={99} size="small" onChange={(e) => {
+                    <InputNumber min={0} max={999} size="small" onChange={(e) => {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],
@@ -235,11 +235,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             editable: true,
             dataIndex: 'groove',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
-                    pattern: /^[1]*$/,
-                    message: '仅可输入1',
-                }]}>
-                    <InputNumber size="small" min={0} maxLength={1}/>
+                <Form.Item name={['data', index, "groove"]} initialValue={_}>
+                    <InputNumber min={0} max={999999} size="small" />
                 </Form.Item>
             )
         },

@@ -12,6 +12,7 @@ interface EditableTableProps {
     haveIndex?: boolean
     form?: FormInstance
     opration?: React.ReactNode[]
+    addData?: { [key: string]: any } | ((data: any) => { [key: string]: any })
     onChange?: (data: any[], allFields: any[]) => void
     rowKey?: string | ((row: any) => string)
 }
@@ -23,7 +24,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
             return ({
                 title: `${item.required ? "*" : ""} ${item.title}`,
                 code: item.dataIndex,
-                render: (value: any, record: any, index: number) => <Form.Item
+                render: (_value: any, _record: any, index: number) => <Form.Item
                     style={{ margin: 0 }}
                     rules={rules}
                     name={['submit', index, item.dataIndex]}>
@@ -35,12 +36,21 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
             ...item,
             title: `${item.required ? "*" : ""} ${item.title}`,
             code: item.dataIndex,
-            render: (value: any, record: any, index: number) => {
-                return <Form.Item
+            render: (value: any, _record: any, index: number) => {
+                return item.edit === false ? <>
+                    {value}
+                    <Form.Item
+                        style={{ margin: 0 }}
+                        hidden
+                        rules={rules}
+                        name={['submit', index, item.dataIndex]}>
+                        <FormItemType data={{ ...item, width: "100%" }} type={item.type} />
+                    </Form.Item>
+                </> : <Form.Item
                     style={{ margin: 0 }}
                     rules={rules}
                     name={['submit', index, item.dataIndex]}>
-                    <FormItemType data={item} type={item.type} />
+                    <FormItemType data={{ ...item, title: "", width: "100%" }} type={item.type} />
                 </Form.Item>
             }
         })
@@ -58,7 +68,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
             title: "",
             code: "id",
             width: 0,
-            render: (value: any, record: any, index: number) => {
+            render: (_value: any, _record: any, index: number) => {
                 return <Form.Item
                     hidden
                     name={['submit', index, "id"]}>
@@ -70,7 +80,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
 
 
 export default function EditableTable({
-    columns, dataSource = [], onChange, form, haveNewButton = true,
+    columns, dataSource = [], onChange, form, haveNewButton = true, addData = {},
     newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration, rowKey
 }: EditableTableProps): JSX.Element {
     const [editableDataSource, setEditableDataSource] = useState<any[]>(dataSource.map(item => ({
@@ -92,8 +102,12 @@ export default function EditableTable({
 
     const removeItem = useCallback((id: string) => {
         const removedDataSource = editableDataSource.filter(item => item.id !== id);
-        setEditableDataSource(removedDataSource)
         form && form.setFieldsValue({ submit: removedDataSource })
+        onFormChange && onFormChange({
+            submit: [editableDataSource.find((item: any) => item.id === id)],
+            type: "remove"
+        }, { submit: removedDataSource })
+        setEditableDataSource(removedDataSource)
     }, [editableDataSource, setEditableDataSource, form])
 
     const onFormChange = useCallback((changedValues: any, allChangeValues: any) => {
@@ -104,23 +118,28 @@ export default function EditableTable({
         onChange && onChange(changedValues, allChangeValues)
     }, [setEditableDataSource, onChange, editableDataSource])
 
+    const handleNewButtonClick = async () => {
+        try {
+            form && await form.validateFields();
+            const newRowData = {
+                id: (Math.random() * 1000000).toFixed(0),
+                ...(typeof addData === "function" ? addData(editableDataSource) : addData)
+            }
+            const addedEditDataSource = [newRowData, ...editableDataSource]
+            form && form.setFieldsValue({ submit: addedEditDataSource })
+            onFormChange && onFormChange({ submit: [newRowData], type: "add" }, { submit: addedEditDataSource })
+            setEditableDataSource(addedEditDataSource)
+        } catch (error) {
+            console.log(error)
+            message.warning("所有数据校验通过才能继续新增...")
+        }
+    }
     return <Form
         form={form}
         onValuesChange={onFormChange}
     >
         {(haveNewButton || opration) && <Space size={16} style={{ height: 32, margin: "0 16px 16px 0" }}>{haveNewButton && <Button
-            onClick={async () => {
-                try {
-                    form && await form.validateFields();
-                    const newRowData = { id: (Math.random() * 1000000).toFixed(0) }
-                    const addedEditDataSource = [newRowData, ...editableDataSource]
-                    setEditableDataSource(addedEditDataSource)
-                    form && form.setFieldsValue({ submit: addedEditDataSource })
-                    onFormChange && onFormChange({ submit: [newRowData] }, { submit: addedEditDataSource })
-                } catch (error) {
-                    message.warning("所有数据校验通过才能继续新增...")
-                }
-            }}
+            onClick={handleNewButtonClick}
             type="primary"
         >{newButtonTitle}</Button>}
             {opration}

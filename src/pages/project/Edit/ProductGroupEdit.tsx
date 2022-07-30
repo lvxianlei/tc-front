@@ -13,6 +13,7 @@ export default function ProductGroupEdit() {
     const match = editMatch || newMatch
     const [visible, setVisible] = useState<boolean>(false)
     const [select, setSelect] = useState<any[]>([])
+    const [when, setWhen] = useState<boolean>(true)
     const [contractId, setContractId] = useState<string>("")
     const [saleOrderId, setSaleOrderId] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
@@ -25,7 +26,13 @@ export default function ProductGroupEdit() {
             setContractId(result.contractId)
             setSaleOrderId(result.saleOrderId)
             setSelect(result.productDetails)
-            resole(result)
+            resole({
+                ...result,
+                saleOrderNumber: {
+                    value: result.saleOrderNumber,
+                    id: result.saleOrderId
+                }
+            })
         } catch (error) {
             reject(error)
         }
@@ -51,13 +58,16 @@ export default function ProductGroupEdit() {
                 message.error("当前杆塔明细未关联确认明细，请关联后再保存...")
             } else {
                 await run({
-                    ...data, ...baseInfoData,
+                    ...data,
+                    ...baseInfoData,
                     projectId: match.params.projectId,
                     contractId,
+                    saleOrderNumber: baseInfoData.saleOrderNumber?.value,
                     saleOrderId,
                     contractCargoDtos: contractCargoDtosData.submit,
                     productIds: select.map(item => item.id)
                 })
+                setWhen(false)
                 history.goBack()
             }
         } catch (error) {
@@ -69,7 +79,8 @@ export default function ProductGroupEdit() {
         if (Object.keys(changedFields)[0] === "saleOrderNumber") {
             baseInfoForm.setFieldsValue({
                 ...allFields,
-                ...changedFields.saleOrderNumber.records[0]
+                ...changedFields.saleOrderNumber.records[0],
+                saleOrderNumber: changedFields.saleOrderNumber
             })
             setContractId(changedFields.saleOrderNumber.records[0]?.contractId || "")
             setSaleOrderId(changedFields.saleOrderNumber.records[0]?.id || "")
@@ -81,11 +92,10 @@ export default function ProductGroupEdit() {
         setVisible(false)
     }
 
-    const deleteProject = (id: string) => {
-        setSelect(select.filter((item: any) => item.id !== id))
-    }
+    const deleteProject = (id: string) => setSelect(select.filter((item: any) => item.id !== id))
 
     return <DetailContent
+        when={when}
         title={[<Button key="pro" type="primary" onClick={() => setVisible(true)}>导入确认明细</Button>]}
         operation={[
             <Button key="save" type="primary" style={{ marginRight: "12px" }} onClick={handleSubmit} loading={saveStatus}>保存</Button>,
@@ -100,20 +110,25 @@ export default function ProductGroupEdit() {
                 onCancel={() => setVisible(false)}
                 onOk={handleModalOk} />
             <DetailTitle title="基本信息" />
-            <BaseInfo form={baseInfoForm} onChange={handleBaseInfoChange} columns={newProductGroup.map((item: any) => {
-                switch (item.dataIndex) {
-                    case "saleOrderNumber":
-                        return ({
-                            ...item,
-                            disabled: [1, 2].includes(data?.status),
-                            path: `${item.path}?projectId=${match.params.projectId}`
-                        })
-                    case "description":
-                        return ({ ...item, disabled: [1, 2].includes(data?.status) })
-                    default:
-                        return item
-                }
-            })} dataSource={data || {}} edit />
+            <BaseInfo
+                form={baseInfoForm}
+                onChange={handleBaseInfoChange}
+                columns={newProductGroup.map((item: any) => {
+                    switch (item.dataIndex) {
+                        case "saleOrderNumber":
+                            return ({
+                                ...item,
+                                disabled: [1, 2].includes(data?.status),
+                                path: `${item.path}?projectId=${match.params.projectId}`
+                            })
+                        case "description":
+                            return ({ ...item, disabled: [1, 2].includes(data?.status) })
+                        default:
+                            return item
+                    }
+                })}
+                dataSource={data || {}}
+                edit />
             <DetailTitle title="明细" />
             <CommonTable columns={[{
                 title: "操作",

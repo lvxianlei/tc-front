@@ -4,13 +4,15 @@
  * 时间：2022/01/11
  */
 import React, { useState } from 'react';
-import { Input, Select, DatePicker } from 'antd';
+import { Input, Select, DatePicker, Button } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
 import { baseColumn } from "./rawMaterialExWarehouse.json";
+import CreatePlan from "./CreatePlan";
 export default function RawMaterialWarehousing(): React.ReactNode {
     const history = useHistory()
+    const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<any>({
         selectName: "",
         status: "",
@@ -35,6 +37,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         setFilterValue({ ...value })
         return value
     }
+
+    const handleCreate = (options: any) => {
+        if (options?.code === 1) {
+            history.go(0);
+        }
+        setIsOpenId(false);
+    }
+
     return (
         <>
             <Page
@@ -64,6 +74,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 ]}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
+                extraOperation={
+                    <>
+                        <Button type='primary' ghost onClick={() => setIsOpenId(true)}>创建</Button>
+                    </>
+                }
                 searchFormItems={[
                     {
                         name: 'startRefundTime',
@@ -91,6 +106,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <Input placeholder="请输入领料编号/生产批次进行查询" style={{ width: 300 }} />
                     }
                 ]}
+            />
+            <CreatePlan
+                visible={isOpenId}
+                handleCreate={handleCreate}
             />
         </>
     )

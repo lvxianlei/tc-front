@@ -155,6 +155,7 @@ export default function CostEdit() {
     const [baseInfo] = Form.useForm()
     const formRef = useRef([])
     const params = useRouteMatch("/project/management/:type/:tab/:projectId")?.params as any
+    const [when, setWhen] = useState<boolean>(true)
     const [visible, setVisible] = useState<boolean>(false)
     const [askProductDtos, setAskProductDtos] = useState<any[]>([])
     const [form] = Form.useForm()
@@ -247,6 +248,7 @@ export default function CostEdit() {
                 }))
             }
             await saveRun(submitData)
+            setWhen(false)
             message.success("保存成功...")
             history.go(-1)
         } catch (error: any) {
@@ -300,7 +302,7 @@ export default function CostEdit() {
             </Form>
         </Modal>
         <Spin spinning={loading}>
-            <DetailContent operation={[
+            <DetailContent when={when} operation={[
                 <Button key="save" style={{ marginRight: '16px' }} type="primary" loading={saveLoading} onClick={handleSave}>保存</Button>,
                 <Button key="goback" onClick={() => history.go(-1)}>取消</Button>
             ]}>

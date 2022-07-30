@@ -317,7 +317,7 @@ export default function Lofting(): React.ReactNode {
                         size="small"
                         precision={0}
                         min={1}
-                        max={99}
+                        max={999}
                         onChange={() => rowChange(index)}
                     />
                 </Form.Item>
@@ -476,7 +476,9 @@ export default function Lofting(): React.ReactNode {
                         >编辑</Button>
                         <Popconfirm
                             title="确认删除?"
-                            onConfirm={async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${record.id}`).then(() => {
+                            onConfirm={async () => await RequestUtil.post(`/tower-science/drawProductStructure/remove`, {
+                                productStructureIdList: [record.id]
+                            }).then(() => {
                                 message.success('删除成功！');
                                 history.go(0)
                                 setRefresh(!refresh);
@@ -605,15 +607,17 @@ export default function Lofting(): React.ReactNode {
                         title="确认删除?"
                         onConfirm={async () => {
                             if (selectedKeys.length > 0)
-                                if (!(selectedKeys.length > 100)) {
-                                    await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${selectedKeys.join(',')}`).then(() => {
+                                // if (!(selectedKeys.length > 100)) {
+                                    await RequestUtil.post(`/tower-science/drawProductStructure/remove`,{
+                                        productStructureIdList: selectedKeys
+                                    }).then(() => {
                                         message.success('删除成功！');
                                         setRefresh(!refresh);
                                         history.go(0)
                                     })
-                                } else {
-                                    message.error('当前选择数量过多，请重新选择！')
-                                }
+                                // } else {
+                                //     message.error('当前选择数量过多，请重新选择！')
+                                // }
                             else {
                                 message.warning('请选择要删除的数据')
                             }
@@ -882,7 +886,7 @@ export default function Lofting(): React.ReactNode {
                             width: 120,
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "basicsPartNum"]} initialValue={_} rules={[{ required: true, message: '请输入单段件数' }]}>
-                                    <InputNumber size="small" min={1} precision={0} max={99} onChange={(e: any) => {
+                                    <InputNumber size="small" min={1} precision={0} max={999} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
                                         if (data[index].basicsWeight) {
                                             data[index] = {
@@ -1101,7 +1105,7 @@ export default function Lofting(): React.ReactNode {
                             width: 120,
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "basicsPartNum"]} initialValue={_} rules={[{ required: true, message: '请输入单段件数' }]}>
-                                    <InputNumber size="small" min={1} precision={0} max={99} onChange={(e: any) => {
+                                    <InputNumber size="small" min={1} precision={0} max={999} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
                                         if (data[index].basicsWeight) {
                                             data[index] = {

@@ -21,6 +21,16 @@
             "width": 80
         },
         {
+            "title": "入库类型",
+            "dataIndex": "warehousingTypeName",
+            "width": 80
+        },
+        {
+            "title": "入库日期",
+            "dataIndex": "warehousingTime",
+            "width": 80
+        },
+        {
             "title": "最新状态变更时间",
             "dataIndex": "updateTime",
             "type": "date",

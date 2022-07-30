@@ -17,20 +17,24 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         console.log(selectedRows)
+        const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(3) 
+        },0)
         const totalAngleWeight = selectedRows.reduce((pre: any,cur: { angleWeight: any; })=>{
-            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0)).toFixed(4) 
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleWeight!==null?cur.angleWeight:0)).toFixed(3) 
         },0)
         const totalPlateWeight = selectedRows.reduce((pre: any,cur: { plateWeight: any; })=>{
-            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )).toFixed(4)
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.plateWeight!==null?cur.plateWeight:0 )).toFixed(3)
         },0)
         const totalAngleNumber = selectedRows.reduce((pre: any,cur: { angleNumber: any; })=>{
-            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)).toFixed(4)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.angleNumber!==null?cur.angleNumber:0)).toFixed(3)
         },0)
         const totalPlateNumber = selectedRows.reduce((pre: any,cur: { plateNumber: any; })=>{
-            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)).toFixed(4)
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.plateNumber!==null?cur.plateNumber:0)).toFixed(3)
         },0)
         setSum({
             ...sum,
+            totalWeight,
             totalAngleWeight,
             totalPlateWeight,
             totalAngleNumber,
@@ -38,8 +42,9 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         })
     }
     const [sum, setSum] = useState<any>({
-        totalAngleWeight:0.00,
-        totalPlateWeight:0.00,
+        totalWeight:0.000,
+        totalAngleWeight:0.000,
+        totalPlateWeight:0.000,
         totalAngleNumber:0,
         totalPlateNumber:0,
     })
@@ -86,6 +91,7 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         extraOperation={<Space>
             <Space>
                 <span>合计：</span>
+                <span>总重量（t）：{sum?.totalWeight}</span>
                 <span>角钢重量（t）：{sum?.totalAngleWeight}</span>
                 <span>钢板重量（t）：{sum?.totalPlateWeight}</span>
                 <span>角钢总件数：{sum?.totalAngleNumber}</span>
@@ -166,8 +172,18 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
                 </Form.Item>
             },
             {
-                name: 'time',
-                label: '计划交货日期',
+                name: 'transTime',
+                label: '开始转运日期',
+                children: <DatePicker.RangePicker />
+            },
+            {
+                name: 'completeTime',
+                label: '镀锌计划完成日期',
+                children: <DatePicker.RangePicker />
+            },
+            {
+                name: 'packTime',
+                label: '入库日期',
                 children: <DatePicker.RangePicker />
             },
             // {
@@ -185,10 +201,20 @@ export default function PlanGalvanizedPackMngt(): React.ReactNode {
         ]}
         filterValue={filterValue}
         onFilterSubmit={(values: any) => {
-            if (values.time) {
-                const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-                values.planDeliveryStartTime = formatDate[0] + ' 00:00:00';
-                values.planDeliveryEndTime = formatDate[1] + ' 23:59:59';
+            if (values.transTime) {
+                const formatDate = values.transTime.map((item: any) => item.format("YYYY-MM-DD"))
+                values.transferStartTime = formatDate[0] + ' 00:00:00';
+                values.transferEndTime = formatDate[1] + ' 23:59:59';
+            }
+            if (values.completeTime) {
+                const formatDate = values.completeTime.map((item: any) => item.format("YYYY-MM-DD"))
+                values.galvanizedCompleteStartTime = formatDate[0] + ' 00:00:00';
+                values.galvanizedCompleteEndTime = formatDate[1] + ' 23:59:59';
+            }
+            if (values.packTime) {
+                const formatDate = values.packTime.map((item: any) => item.format("YYYY-MM-DD"))
+                values.storageStartTime = formatDate[0] + ' 00:00:00';
+                values.storageEndTime = formatDate[1] + ' 23:59:59';
             }
             setFilterValue(values);
             return values;
