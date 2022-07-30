@@ -12,12 +12,6 @@
             "width": 100
         },
         {
-            "title": "圆钢收货量（吨）/总重（吨）",
-            "dataIndex": "roundSteelTotal",
-            "width": 180,
-            "type": "number"
-        },
-        {
             "title": "角钢收货量（吨）/总重（吨）",
             "dataIndex": "angleSteelTotal",
             "width": 180,
@@ -26,6 +20,18 @@
         {
             "title": "钢板收货量（吨）/总重（吨）",
             "dataIndex": "steelPlateTotal",
+            "width": 180,
+            "type": "number"
+        },
+        {
+            "title": "钢管收货量（吨）/总重（吨）",
+            "dataIndex": "steelTubeTotal",
+            "width": 180,
+            "type": "number"
+        },
+        {
+            "title": "其他收货量（吨）/总重（吨）",
+            "dataIndex": "steelTubeTotal",
             "width": 180,
             "type": "number"
         },

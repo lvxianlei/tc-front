@@ -1,0 +1,23 @@
+@import "../../App.module.less";
+
+.tableRow{
+    height: @tableRowHeight;
+    border: none;
+    &:nth-child(odd){
+        background-color: @backgroundColor;
+       :global(.ant-table-cell-fix-right) {
+            background: @backgroundColor !important;
+        }
+        :global(.ant-table-cell-fix-left) {
+            background: @backgroundColor !important;
+        }
+    }
+}
+
+.search {
+    margin-bottom: 16px;
+}
+
+.bottomTable {
+    margin-top: 16px;
+}

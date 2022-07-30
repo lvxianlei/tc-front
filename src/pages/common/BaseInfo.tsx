@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Descriptions, Form, FormInstance, Row, Col } from "antd"
+import { Descriptions, Form, FormInstance, Row, Col, Typography } from "antd"
 import { FormItemType } from '../common'
 import { FormItemTypesType } from "./FormItemType"
 import moment from "moment"
@@ -28,11 +28,23 @@ interface BaseInfoProps {
     classStyle?: string
 }
 
+function formatSelectData(dataItem: any, value: string | number | boolean): string {
+    if (dataItem.mode === "multiple") {
+        const result = `${value}`.split(",")
+            .map((item: string) => dataItem.enum.find((dItem: {
+                value: string,
+                label: string
+            }) => dItem.value === item)?.label || "-")
+        return result.join(",")
+    }
+    return ((value || value === 0 || value === false) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-"
+}
+
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
         number: (value && value !== -1) ? value : 0,
-        select: ((value || value === 0 || value === false) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-",
+        select: formatSelectData(dataItem, value),
         date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : "-",
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         text: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
@@ -73,8 +85,12 @@ const popTableTransform = (value: any) => {
     if ((value && value.value)) {
         return value.value
     }
+    if (value && !value.value && value.id) {
+        return "-"
+    }
     return value
 }
+
 export const generateRules = (type: string, columnItems: any) => {
     let rules = columnItems.rules || []
     if (columnItems.required) {
@@ -125,14 +141,26 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             style={{ width: "100%" }}
             onValuesChange={(changedFields, allFields) => onChange(changedFields, allFields, dataSource)}
             form={form}
+            size="middle"
             initialValues={formatData(columns, dataSource)}
             labelAlign="right"
-            layout="inline"
-            labelCol={{ style: { width: '100px', whiteSpace: "break-spaces" } }}
+            scrollToFirstError
+            labelCol={{ span: 6 }}
+            wrapperCol={{ span: 18 }}
             className={`bottom ${classStyle}`}
         >
             <Row wrap={true} style={{ width: "100%" }}>
-                {columns.map((item: any, index: number) => <Col
+                {columns.map((item: any, index: number) => item.hidden ? <Form.Item
+                    key={`form_item_${index}`}
+                    className="baseInfoForm"
+                    name={item.dataIndex}
+                    label={item.title}
+                    hidden={item.hidden}
+                    validateTrigger={item.validateTrigger}
+                    rules={generateRules(item.type, item)}
+                >
+                    <FormItemType type={item.type} data={item} placeholder={generatePlaceholder(item)} render={item.render} />
+                </Form.Item> : <Col
                     key={`form_item_${index}`}
                     {...{
                         xs: {
@@ -145,7 +173,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                             span: item.type === "textarea" ? 24 : 12
                         },
                         lg: {
-                            span: item.type === "textarea" ? 24 : (24 / col)
+                            span: item.type === "textarea" ? 24 : 8
                         },
                         xl: {
                             span: item.type === "textarea" ? 24 : (24 / col)
@@ -160,7 +188,45 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                             <Form.Item
                                 className="baseInfoForm"
                                 name={item.dataIndex}
-                                label={item.title}
+                                label={<Typography.Text
+                                    style={{ width: "100%" }}
+                                    ellipsis={{ tooltip: item.title }}
+                                >{item.title}</Typography.Text>}
+                                {...(item.type === "textarea" ? {
+                                    labelCol: {
+                                        xs: { span: 8 },
+                                        sm: { span: 8 },
+                                        md: { span: 4 },
+                                        lg: { span: 3 },
+                                        xl: { span: 2 },
+                                        xxl: { span: 2 }
+                                    },
+                                    wrapperCol: {
+                                        xs: { span: 16 },
+                                        sm: { span: 16 },
+                                        md: { span: 22 },
+                                        lg: { span: 21 },
+                                        xl: { span: 22 },
+                                        xxl: { span: 22 }
+                                    }
+                                } : {
+                                    labelCol: {
+                                        xs: { span: 8 },
+                                        sm: { span: 8 },
+                                        md: { span: 8 },
+                                        lg: { span: 8 },
+                                        xl: { span: 8 },
+                                        xxl: { span: 8 }
+                                    },
+                                    wrapperCol: {
+                                        xs: { span: 16 },
+                                        sm: { span: 16 },
+                                        md: { span: 16 },
+                                        lg: { span: 16 },
+                                        xl: { span: 16 },
+                                        xxl: { span: 16 }
+                                    }
+                                })}
                                 validateTrigger={item.validateTrigger}
                                 rules={generateRules(item.type, item)}
                             >

@@ -5,7 +5,7 @@
 */
 
 import React, { useRef, useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal, Dropdown, Menu } from 'antd';
+import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal, Dropdown, Menu, InputNumber } from 'antd';
 import { DetailContent, Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
@@ -153,11 +153,11 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "basicsPartNum"]} initialValue={_}>
-                    <Input type="number" min={0} size="small" onChange={(e) => {
+                    <InputNumber min={0} max={999} size="small" onChange={(e) => {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],
-                            totalWeight: Number(e.target.value) * Number(data[index].basicsWeight)
+                            totalWeight: Number(e) * Number(data[index].basicsWeight)
                         }
                         form.setFieldsValue({ data: [...data] })
                         rowChange(index);
@@ -214,11 +214,8 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'groove',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "groove"]} initialValue={_} rules={[{
-                    pattern: /^[1]*$/,
-                    message: '仅可输入1',
-                }]}>
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={1} />
+                <Form.Item name={['data', index, "groove"]} initialValue={_}>
+                    <InputNumber min={0} max={999999} size="small" onChange={() => rowChange(index)} />
                 </Form.Item>
             )
         },

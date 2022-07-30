@@ -361,25 +361,37 @@ export default function ConfirmDetail(): React.ReactNode {
         title: '接腿配置A', 
         dataIndex: 'legConfigurationA', 
         width: 80,
-        key: 'legConfigurationA' 
+        key: 'legConfigurationA',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿配置B', 
         dataIndex: 'legConfigurationB', 
         width: 80,
-        key: 'legConfigurationB' 
+        key: 'legConfigurationB',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿配置C', 
         dataIndex: 'legConfigurationC', 
         width: 80,
-        key: 'legConfigurationC' 
+        key: 'legConfigurationC',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿配置D', 
         dataIndex: 'legConfigurationD', 
         width: 80,
-        key: 'legConfigurationD' 
+        key: 'legConfigurationD',
+        render:(text:string)=>{
+            return  text==='-1'?'-':text
+        }
       },
       { 
         title: '接腿重A（kg）', 
@@ -565,7 +577,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         confirmList: [record].map((item:any)=>{
                             return{
                                 ...item,
-                                A: item.name.indexOf(',')>-1||item.name.indexOf('/')>-1?item.name.split(/\/|,/).filter((item:any)=>item).length:1,
+                                A: item.name.indexOf('，')>-1||item.name.indexOf('、')>-1||item.name.indexOf(',')>-1||item.name.indexOf('/')>-1?item.name.split(/\/|,|，|、/).filter((item:any)=>item).length:1,
                                 basicHeight:Number(item.basicHeight),
                                 bodyWeight:Number(item.bodyWeight),
                                 legWeightA:Number(item.legWeightA),
@@ -589,7 +601,7 @@ export default function ConfirmDetail(): React.ReactNode {
                         id: record?.id
                     })
                     setVisible(true)
-                }}>编辑</Button>
+                }} disabled={params?.status==='4'}>编辑</Button>
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={async () => {
@@ -599,8 +611,9 @@ export default function ConfirmDetail(): React.ReactNode {
                     }}
                     okText="确认"
                     cancelText="取消"
+                    disabled={params?.status==='4'}
                 >
-                    <Button type="link">删除</Button>
+                    <Button type="link" disabled={params?.status==='4'}>删除</Button>
                 </Popconfirm>
             </Space>
         )
@@ -874,7 +887,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                                     const otherH:number = legValueSum[index]?.otherWeightGdxg?legValueSum[index]?.otherWeightGdxg:0;
                                                     const otherI:number = legValueSum[index]?.otherWeightXg?legValueSum[index]?.otherWeightXg:0;
                                                     const otherJ:number = legValueSum[index]?.otherWeightQtsm?legValueSum[index]?.otherWeightQtsm:0;
-                                                    legValueSum[index].A = legValueSum[index].name.indexOf('，')>-1||legValueSum[index].name.indexOf(',')>-1||legValueSum[index].name.indexOf('/')>-1?legValueSum[index].name.split(/\/|,|，/).filter((item:any)=>{return item}).length:1
+                                                    legValueSum[index].A = legValueSum[index].name.indexOf('、')>-1||legValueSum[index].name.indexOf('，')>-1||legValueSum[index].name.indexOf(',')>-1||legValueSum[index].name.indexOf('/')>-1?legValueSum[index].name.split(/\/|,|，|、/).filter((item:any)=>{return item}).length:1
                                                     legValueSum[index].monomerWeight = data+dataA+dataB+dataC+dataD+otherA+otherB+otherC+otherD+otherE+otherF+otherG+otherH+otherI+otherJ
                                                     legValueSum[index].totalWeight = legValueSum[index].A*legValueSum[index].monomerWeight
                                                     

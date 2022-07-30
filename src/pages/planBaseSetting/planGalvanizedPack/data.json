@@ -54,6 +54,11 @@
             "width":100
         },
         {
+            "title": "总重量（t）",
+            "width":100,
+            "dataIndex": "totalWeight"
+        },
+        {
             "title": "角钢重量（t）",
             "width":100,
             "dataIndex": "angleWeight"
@@ -106,6 +111,11 @@
             "title": "包装生产单元",
             "width":100,
             "dataIndex": "packageUnitName"
+        },
+        {
+            "title": "包装计划开始日期",
+            "width":120,
+            "dataIndex": "packageStartTime"
         },
         {
             "title": "包装计划完成日期",

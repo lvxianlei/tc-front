@@ -47,8 +47,9 @@ export default function Invoicing() {
         <Modal
             title="生成采购计划"
             visible={generateVisible}
-            width={1011}
+            width={1300}
             onOk={handlePurChasePlan}
+            maskClosable={false}
             confirmLoading={purChasePlanRef.current?.confirmLoading}
             onCancel={() => setGenerateVisible(false)}>
             <PurchasePlan ids={generateIds} ref={purChasePlanRef} />

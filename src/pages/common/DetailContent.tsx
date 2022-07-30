@@ -1,22 +1,25 @@
-import React from "react"
+import React, { memo } from "react"
+import { Prompt } from "react-router-dom"
 import styles from './DetailContent.module.less'
 interface DetailContentProps {
     title?: React.ReactNode
     operation?: React.ReactNode[]
     style?: React.CSSProperties
     className?: string
+    when?: boolean
 }
-const DetailContent: React.FC<DetailContentProps> = ({ title, operation, ...props }) => {
-    return (
-        <div {...props} style={{ width: "100%", ...props.style }}>
-            <section className={operation ? styles.detailContentP : styles.detailContent}>
-                {title && <div className={styles.title}>{title}</div>}
-                <div>{props.children}</div>
-            </section>
-            {operation && <div className={styles.fixFooter}>
-                {operation}
-            </div>}
-        </div>)
-}
+const DetailContent: React.FC<DetailContentProps> = memo(({ title, operation, when, ...props }) => (<>
+    <Prompt when={!!when} message="当前内容未保存，确认继续操作吗？/继续操作后当前内容将丢失" />
+    <div {...props} style={{ width: "100%", ...props.style }}>
+        <section className={operation ? styles.detailContentP : styles.detailContent}>
+            {title && <div className={styles.title}>{title}</div>}
+            <div>{props.children}</div>
+        </section>
+        {operation && <div className={styles.fixFooter}>
+            {operation}
+        </div>}
+    </div>
+</>
+))
 
 export default DetailContent

@@ -53,7 +53,7 @@ class ManagementContractDetail extends ContractDetail {
           `}>添加回款记录</Link>
       </Button>,
       <Button key="setting">
-        <Link to={`/project/contract/setting/${(this.props.match.params as any).projectId}/${this.props.match.params.id}`}>
+        <Link to={`/project/contract/setting/${(this.props.match?.params as any).projectId}/${this.props.match?.params.id}`}>
           编辑
         </Link>
       </Button>,
@@ -64,7 +64,7 @@ class ManagementContractDetail extends ContractDetail {
         cancelText="取消"
         onConfirm={async () => {
           const resData: IResponseData = await RequestUtil.delete(
-            `/tower-market/contract?id=${this.props.match.params.id}`
+            `/tower-market/contract?id=${this.props.match?.params.id}`
           );
           if (resData) {
             this.props.history.goBack();

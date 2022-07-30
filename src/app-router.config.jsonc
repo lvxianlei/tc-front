@@ -52,69 +52,6 @@
       "exact": true,
       "authority": "tc_erp_sc_customer_edit"
     },
-    {
-      "name": "销售合同管理",
-      "path": "/prom/contract",
-      "module": "./pages/prom/contract/PromContract",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 新增合同
-      "name": "新增合同",
-      "path": "/prom/contract/new",
-      "module": "./pages/prom/contract/ContractNew",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 编辑合同
-      "name": "编辑合同",
-      "path": "/prom/contract/setting/:id",
-      "module": "./pages/prom/contract/ContractSetting",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 新增回款计划
-      "name": "新增回款记录",
-      "path": "/prom/contract/paymentRecord/:id/:projectName/:signCustomerId/:signCustomerName",
-      "module": "./pages/prom/contract/PaymentRecordNew",
-      "exact": true,
-      "authority": "contract"
-    },
-    { // 合同详情
-      "name": "合同详情",
-      "path": "/prom/contract/detail/:id",
-      "module": "./pages/prom/contract/ContractDetail",
-      "exact": true,
-      "authority": "contract"
-    },
-    {
-      "name": "销售订单管理",
-      "path": "/prom/order",
-      "module": "./pages/prom/order/SaleOrder",
-      "exact": true,
-      "authority": "sale_order"
-    },
-    {
-      "name": "新增订单",
-      "path": "/prom/order/new",
-      "module": "./pages/prom/order/SaleOrderNew",
-      "exact": true,
-      "authority": "sale_order"
-    },
-    {
-      "name": "编辑订单",
-      "path": "/prom/order/setting/:id",
-      "module": "./pages/prom/order/SaleOrderSetting",
-      "exact": true,
-      "authority": "sale_order"
-    },
-    { // 订单详情
-      "name": "订单详情",
-      "path": "/prom/order/detail/:id",
-      "module": "./pages/prom/order/SaleOrderDetail",
-      "exact": true,
-      "authority": "sale_order"
-    },
     { // 字典管理
       "name": "字典管理",
       "path": "/sys/dxnry",
@@ -406,14 +343,12 @@
       "name": "新增招标信息",
       "path": "/bidding/information/edit/new",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_detail"
     },
     { // 招标信息编辑
       "name": "编辑招标信息",
       "path": "/bidding/information/edit/:id",
       "module": "./pages/bidding/Edit",
-      "exact": true,
       "authority": "bidding_edit"
     },
     { // 项目管理
@@ -496,50 +431,50 @@
     },
     { // 合同详情
       "name": "合同详情",
-      "path": "/project/contract/detail/:projectId/:id",
-      "module": "./pages/project/contract/ContractDetail",
+      "path": "/project/management/detail/contract/:projectId/:id",
+      "module": "./pages/project/contract/Detail",
       "exact": true,
       "authority": "contract"
     },
     { // 新增合同
       "name": "新增合同",
-      "path": "/project/contract/new/:projectId",
-      "module": "./pages/project/contract/ContractNew",
-      // "exact": true,
+      "path": "/project/management/new/contract/:projectId",
+      "module": "./pages/project/contract/Edit",
+      "exact": true,
       "authority": "contract"
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/contract/setting/:projectId/:id",
-      "module": "./pages/project/contract/ContractSetting",
+      "path": "/project/management/edit/contract/:projectId/:id",
+      "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "contract"
     },
     { // 新增回款计划
       "name": "新增回款记录",
-      "path": "/project/contract/paymentRecord/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
-      "module": "./pages/project/contract/PaymentRecordNew",
+      "path": "/project/management/pamentRecord/contract/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
+      "module": "./pages/project/contract/PaymentNew",
       "exact": true,
       "authority": "contract"
     },
     {
       "name": "新增订单",
-      "path": "/project/order/new/:projectId/:id",
+      "path": "/project/management/new/order/:projectId",
       "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "sale_order"
     },
     {
       "name": "编辑订单",
-      "path": "/project/order/setting/:projectId/:id",
+      "path": "/project/management/edit/order/:projectId/:id",
       "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "sale_order"
     },
     { // 订单详情
       "name": "订单详情",
-      "path": "/project/order/detail/:projectId/:id",
-      "module": "./pages/project/order/SaleOrderDetail",
+      "path":"/project/management/detail/order/:projectId/:id",
+      "module": "./pages/project/order/Detail",
       "exact": true,
       "authority": "sale_order"
     },
@@ -1051,7 +986,7 @@
     },
     { // 工作管理-生产配料-生产配料
       "name": "生产配料",
-      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard",
+      "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard/:planNumber",
       "module": "./pages/workMngt/production/IngredientsList",
       "exact": true,
       "authority": "sw_work_management_production_ingredients_component_details"
@@ -1527,7 +1462,7 @@
       "path": "/baseSetting/baseSettingMngt",
       "module": "./pages/baseSetting/BaseSettingMngt",
       "exact": true,
-      "authority": "config_list"
+      "authority": "rd_config"
     },
     { // 图纸塔型
       "name": "图纸塔型",
@@ -2711,6 +2646,20 @@
       "name": "详情",
       "path": "/qualityInspection/disposition/detail/:id",
       "module": "./pages/qualityInspection/disposition/DispositionDetail",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 业务处置管理-取消暂停恢复
+      "name": "取消暂停恢复",
+      "path": "/businessDisposal/cancelOrPauseOrrestore",
+      "module": "./pages/businessDisposal/CancelOrPauseOrrestore",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // 业务处置管理-取消暂停恢复-已加工明细
+      "name": "已加工明细",
+      "path": "/businessDisposal/cancelOrPauseOrrestore/processedDetails/:id",
+      "module": "./pages/businessDisposal/ProcessedDetails",
       "exact": true,
       "authority": "home_page_person_center"
     }
