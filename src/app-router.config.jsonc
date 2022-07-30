@@ -474,14 +474,6 @@
     },
     {
       // 项目编辑
-      "name": "新增项目",
-      "path": "/project/management/edit/base/new",
-      "module": "./pages/project/baseInfo/Edit",
-      "exact": true,
-      "authority": "tc_erp_sc_project_add"
-    },
-    {
-      // 项目编辑
       "name": "编辑项目",
       "path": "/project/management/edit/base/:id",
       "module": "./pages/project/baseInfo/Edit",
@@ -970,14 +962,14 @@
       "path": "/ingredients/production/ingredientsList/:id/:status/:productionBatchNo/:productCategoryName/:materialStandardName/:materialStandard/:planNumber",
       "module": "./pages/workMngt/production/IngredientsList",
       "exact": true,
-      "authority": "sw_work_management_production_ingredients_component_details"
+      "authority": "tc_erp_sw_work_produce_batching"
     },
     { // 工作管理-生产配料-配料单
       "name": "配料单",
       "path": "/ingredients/production/batchingScheme/:id",
       "module": "./pages/workMngt/production/BatchingScheme",
       "exact": true,
-      "authority": "sw_work_management_production_ingredients_component_details"
+      "authority": "tc_erp_sw_work_produce_schemeInfo"
     },
     { // 工作管理-收货列表
       "name": "原材料收货单",
@@ -1355,7 +1347,7 @@
       "path": "/ingredients/buyBurdening/ingredientsList/:id/:status/:batchNumber/:productCategoryName/:materialStandardName",
       "module": "./pages/workMngt/buyBurdening/IngredientsList",
       "exact": true,
-      "authority": "buy_burdening_detail"
+      "authority": "tc_erp_sw_work_purchase_batching"
     },
     { // 工作管理-采购配料-配料方案
       "name": "配料方案",
