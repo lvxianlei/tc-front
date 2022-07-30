@@ -278,7 +278,7 @@
                     {
                         "label": "原材料合同管理",
                         "path": "/contract-mngt/index",
-                        "authority": "contract_mngt_raw_material"
+                        "authority": "tc_erp_sw_contract_material"
                     },
                     {
                         "label": "询比价",

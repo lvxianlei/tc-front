@@ -177,10 +177,7 @@ export default function ContractList(): JSX.Element {
                 </Popconfirm>
                 <Button type="link">
                   <Link
-                    to={`/project/contract/paymentRecord/${(record as IContract).id
-                      }/${(record as any).contractName}/${(record as IContract).signCustomerId
-                      }/${(record as IContract).signCustomerName
-                      }/${(record as any).contractNumber}/${params.id}`}
+                    to={`/project/management/pamentRecord/contract/${record?.contractId}/${record?.contractName}/${record?.signCustomerId}/${record?.signCustomerName}/${record?.contractNumber}/${params.id}`}
                   >
                     添加回款记录
                   </Link>
