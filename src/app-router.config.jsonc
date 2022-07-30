@@ -1666,203 +1666,203 @@
       "path": "/planProd/planMgmt",
       "module": "./pages/planBaseSetting/planProd/PlanProd",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan"
     },
     { // 计划排产-子详情
       "name": "计划详情",
       "path": "/planProd/planMgmt/detail/:id/:planId",
       "module": "./pages/planBaseSetting/planProd/Detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan"
     },
     { // 计划排产-环节新增
       "name": "环节新增",
       "path": "/planProd/planMgmt/detail/:id/:planId/add",
       "module": "./pages/planBaseSetting/planProd/Add",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan"
     },
     { // 计划排产-环节查看
       "name": "环节查看",
       "path": "/planProd/planMgmt/detail/:id/:planId/view/:productCategoryId",
       "module": "./pages/planBaseSetting/planProd/View",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan"
     },
     { // 计划排产-环节编辑
       "name": "环节调整",
       "path": "/planProd/planMgmt/detail/:id/:planId/edit/:productCategoryId",
       "module": "./pages/planBaseSetting/planProd/Add",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan"
     },
     { // 计划排产-环节详情
       "name": "环节详情",
       "path": "/planProd/planMgmt/edit/:id",
       "module": "./pages/planBaseSetting/planProd/Edit",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan"
     },
     { // 计划排产-技术下发
       "name": "技术派工",
       "path": "/planProd/planScheduleMngt",
       "module": "./pages/planBaseSetting/planSchedule/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_lofting_list"
     },
     { // 计划排产-拆分批次
       "name": "拆分批次",
       "path": "/planProd/planScheduleMngt/SplitBatch/:id",
       "module": "./pages/planBaseSetting/planSchedule/SplitBatch",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_lofting_divide"
     },
     { // 计划排产-下发技术
       "name": "技术派工",
       "path": "/planProd/planScheduleMngt/distributedTech/:ids",
       "module": "./pages/planBaseSetting/planSchedule/DistributedTech",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_lofting_issue"
     },
     { // 计划排产-计划交货期
       "name": "计划交货期",
       "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids",
       "module": "./pages/planBaseSetting/planSchedule/PlanDeliveryTime",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_lofting_updateTime"
     },
     { // 计划排产-计划交货期
       "name": "变更记录",
       "path": "/planProd/planScheduleMngt/planDeliveryTime/:ids/:id",
       "module": "./pages/planBaseSetting/planSchedule/ChangeRecord",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_lofting_updateTime"
     },
     { // 计划排产-分配车间
       "name": "分配生产单元",
       "path": "/planProd/publishWorkshop",
       "module": "./pages/planBaseSetting/publishWorkshop/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_unit_distribution_list"
     },
     { // 计划排产-分配车间-构件明细
       "name": "组焊明细",
       "path": "/planProd/publishWorkshop/welding/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/welding",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_unit_distribution_welding"
     },
     { // 计划排产-分配车间-组焊明细
       "name": "构件明细",
       "path": "/planProd/publishWorkshop/structure/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/structure",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_unit_distribution_structure"
     },
     { // 计划排产-分配车间
       "name": "手动分配生产单元",
       "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_unit_distribution_manual"
     },
     { // 计划排产-周期计划
       "name": "周期计划",
       "path": "/planProd/cyclePlan",
       "module": "./pages/planBaseSetting/cyclePlan/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_cycle_plan_list"
     },
     { // 计划排产-周期计划-详情
       "name": "详情",
       "path": "/planProd/cyclePlan/detail/:id/:configId",
       "module": "./pages/planBaseSetting/cyclePlan/Detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_cycle_plan_detail"
     },
     { // 计划排产-周期计划-变更
       "name": "变更",
       "path": "/planProd/cyclePlan/change/:id/:configId",
       "module": "./pages/planBaseSetting/cyclePlan/Change",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_cycle_plan_change"
     },
     { // 计划排产-车间计划基础配置-周期计划类型配置
       "name": "周期计划类型配置管理",
       "path": "/workshopPlanBasic/cyclePlanConfig",
       "module": "./pages/planBaseSetting/configMngt/CyclePlanConfig",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_cycle_plan_list"
     },
     { // 计划排产-车间计划基础配置-计划看板配置
       "name": "计划看板配置管理",
       "path": "/workshopPlanBasic/kanBanPlanConfig",
       "module": "./pages/planBaseSetting/configMngt/KanBanPlanConfig",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_board_list"
     },
     { // 计划排产-车间计划基础配置-生产单元分组管理
       "name": "生产单元分组管理",
       "path": "/workshopPlanBasic/workUnit",
       "module": "./pages/planBaseSetting/workUnitMngt/WorkUnitList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_unit_group_list"
     },
     { // 计划排产-车间计划基础配置-组焊单元配置管理
       "name": "组焊单元配置管理",
       "path": "/workshopPlanBasic/assemblyWeld",
       "module": "./pages/planBaseSetting/assemblyWeldingMngt/AssemblyWeldingList",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_welding_unit_list"
     },
     { // 计划排产-计划看板
       "name": "计划看板",
       "path": "/planPanal/list",
       "module": "./pages/planBaseSetting/planPanal/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_board_plan_board_list"
     },
     { // 计划排产-数据统计
       "name": "数据统计",
       "path": "/planPanal/dataStatistics",
       "module": "./pages/planBaseSetting/dataStatistics/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_board_statistics_list"
     },
     { // 计划排产-试装计划
       "name": "试装计划",
       "path": "/planProd/planTrial",
       "module": "./pages/planBaseSetting/planTrial/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_trial_list"
     },
     { // 计划排产-镀锌包装计划
       "name": "镀锌包装计划",
       "path": "/planProd/planGalvanizedPack",
       "module": "./pages/planBaseSetting/planGalvanizedPack/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_galvanize_package_list"
     },
     { // 计划排产-镀锌包装计划-下发
       "name": "镀锌包装下发",
       "path": "/planProd/planGalvanizedPack/:id",
       "module": "./pages/planBaseSetting/planGalvanizedPack/Detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_galvanize_package_issue"
     },
     { // 计划排产-计划变更
       "name": "计划变更",
       "path": "/planProd/planChange",
       "module": "./pages/planBaseSetting/planChange/index",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_change_list"
     },
     { // 计划排产-计划变更-明细
       "name": "计划变更明细",
       "path": "/planProd/planChange/:id/:status",
       "module": "./pages/planBaseSetting/planChange/Detail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_plan_change_detail"
     },
     { // 包装车间-加工任务面板
       "name": "包装计划列表",
@@ -2563,28 +2563,28 @@
       "path": "/workshopPlanBasic/processMngt",
       "module": "./pages/workshopPlanBasic/processMngt/ProcessMngt",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_process_list"
     },
     { // 工作中心管理
       "name": "工作中心管理",
       "path": "/workshopPlanBasic/workCenterMngt",
       "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterMngt",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_center_list"
     },
     { // 工作中心管理-新增
       "name": "新增",
       "path": "/workshopPlanBasic/workCenterMngt/add",
       "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterSetting",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_center_add"
     },
     { // 工作中心管理-编辑
       "name": "编辑",
       "path": "/workshopPlanBasic/workCenterMngt/edit/:id",
       "module": "./pages/workshopPlanBasic/workCenterMngt/WorkCenterSetting",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_center_update"
     },
     { // 工作中心管理
       "name": "分配车间配置管理",
@@ -2598,14 +2598,14 @@
       "path": "/workshopPlanBasic/prodLink",
       "module": "./pages/planBaseSetting/prodLink/prodLink",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_aps_config_link_list"
     },
     { // 生产单元管理
       "name": "生产单元管理",
       "path": "/workshopPlanBasic/prodUnit",
       "module": "./pages/planBaseSetting/prodUnit/prodUnit",
       "exact": true,
-      "authority": "production_unit_management"
+      "authority": "tc_erp_aps_config_unit_list"
     },
     { // 修改密码
       "name": "修改密码",

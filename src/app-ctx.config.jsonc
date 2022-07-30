@@ -617,42 +617,42 @@
                 "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
                 "path": "/planProd",
                 "appName": "PC",
-                "authority": "approvalm",
+                "authority": "tc_erp_aps_plan",
                 "items": [
                     {
                         "label": "计划排产",
                         "path": "/planProd/planMgmt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan"
                     },
                     {
                         "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_lofting"
                     },
                     {
                         "label": "分配生产单元",
                         "path": "/planProd/publishWorkshop",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_unit_distribution"
                     },
                     {
                         "label": "周期计划",
                         "path": "/planProd/cyclePlan",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_cycle_plan"
                     },
                     {
                         "label": "试装计划",
                         "path": "/planProd/planTrial",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_trial"
                     },
                     {
                         "label": "镀锌包装计划",
                         "path": "/planProd/planGalvanizedPack",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_galvanize_package"
                     },
                     {
                         "label": "计划变更",
                         "path": "/planProd/planChange",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_plan_change"
                     }
                 ]
             },
@@ -661,17 +661,17 @@
                 "icon": "zhujihuapaichan-jihuapaichan_jihuapaichan",
                 "path": "/planPanal",
                 "appName": "PC",
-                "authority": "approvalm",
+                "authority": "tc_erp_aps_board",
                 "items": [
                     {
                         "label": "计划看板",
                         "path": "/planPanal/list",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_board_plan_board"
                     },
                     {
                         "label": "数据统计",
                         "path": "/planPanal/dataStatistics",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_board_statistics"
                     }
                 ]
             },
@@ -827,7 +827,7 @@
                     {
                         "label": "基础设置",
                         "path": "/baseSetting/baseSettingMngt",
-                        "authority": "rd_config"
+                        "authority": "config_list"
                     },
                     {
                         "label": "生产班组管理",
@@ -1051,27 +1051,27 @@
                 "icon": "zhujihuapaichan-chejianjihuajichupeizhi_chejianjihuajichupeizhi",
                 "appName": "PC",
                 "path": "/workshopPlanBasic",
-                "authority": "approvalm",
+                "authority": "tc_erp_aps_config",
                 "items": [
                     {
                         "label": "生产环节管理",
                         "path": "/workshopPlanBasic/prodLink",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_link"
                     },
                     {
                         "label": "生产单元管理",
                         "path": "/workshopPlanBasic/prodUnit",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_unit"
                     },
                     {
                         "label": "生产工序管理",
                         "path": "/workshopPlanBasic/processMngt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_process"
                     },
                     {
                         "label": "工作中心管理",
                         "path": "/workshopPlanBasic/workCenterMngt",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_center"
                     },
                     // {
                     //     "label": "分配车间配置管理",
@@ -1081,23 +1081,24 @@
                     {
                         "label": "周期计划类型配置管理",
                         "path": "/workshopPlanBasic/cyclePlanConfig",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_cycle_plan"
                     },
                     {
                         "label": "计划看板配置管理",
                         "path": "/workshopPlanBasic/kanBanPlanConfig",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_board"
                     },
                     {
                         "label": "生产单元分组管理",
                         "path": "/workshopPlanBasic/workUnit",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_unit_group"
                     },
                     {
                         "label": "组焊单元配置管理",
                         "path": "/workshopPlanBasic/assemblyWeld",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_aps_config_welding_unit"
                     }
+                    
                 ]
             },
             {
