@@ -57,28 +57,28 @@
       "path": "/sys/dxnry",
       "module": "./pages/system-mngt/DictMngt",
       "exact": true,
-      "authority": "dxnry"
+      "authority": "tc_erp_sys_system_dic_list"
     },
     { // 角色管理
       "name": "角色管理",
       "path": "/auth/roles",
       "module": "./pages/auth/role/RoleMngtList",
       "exact": true,
-      "authority": "auth_section_role"
+      "authority": "tc_erp_sys_power_role_list"
     },
     { // 添加角色
       "name": "添加角色",
       "path": "/auth/roles/new",
       "module": "./pages/auth/role/RoleNew",
       "exact": true,
-      "authority": "auth_section"
+      "authority": "tc_erp_sys_power_role_add"
     },
     { // 编辑角色
       "name": "编辑角色",
       "path": "/auth/roles/setting/:id",
       "module": "./pages/auth/role/RoleSetting",
       "exact": true,
-      "authority": "auth_section"
+      "authority": "tc_erp_sys_power_role_edit"
     },
     { // 部门管理
       "name": "部门管理",
@@ -106,21 +106,21 @@
       "path": "/sys/costconfig",
       "module": "./pages/system-mngt/costConfigs/index",
       "exact": true,
-      "authority": "costconfig"
+      "authority": "tc_erp_sys_system_cost_list"
     },
     { // 成本评估配置编辑
       "name": "成本评估配置编辑",
       "path": "/sys/costconfig/edit/:id",
       "module": "./pages/system-mngt/costConfigs/CostEdit",
       "exact": true,
-      "authority": "auth_section"
+      "authority": "tc_erp_sys_system_cost_add"
     },
     { // 成本评估配置编辑
       "name": "成本评估配置编辑",
       "path": "/sys/costconfig/detail/:id",
       "module": "./pages/system-mngt/costConfigs/CostDetail",
       "exact": true,
-      "authority": "auth_section"
+      "authority": "tc_erp_sys_system_cost_view"
     },
     { // 销售任务单管理
       "name": "销售任务单管理",
@@ -654,14 +654,14 @@
       "path": "/cooperative/supplier-mngt",
       "module": "./pages/cooperative/supplier-mngt/index",
       "exact": true,
-      "authority": "supplier_mngt_list"
+      "authority": "tc_erp_sys_business_supplier_list"
     },
     { //装卸公司管理
       "name": "装卸公司管理",
       "path": "/cooperative/stevedoring-company-mngt",
       "module": "./pages/cooperative/stevedoring-company-mngt/StevedoringCompanyMngt",
       "exact": true,
-      "authority": "supplier_mngt_list"
+      "authority": "tc_erp_sys_business_load_unload_company_list"
     },
     { //合同管理-原材料合同管理
       "name": "原材料合同管理",
@@ -2016,7 +2016,7 @@
       "path": "/baseSetting/workshopTeamMngt",
       "module": "./pages/baseSetting/WorkshopTeamMngt",
       "exact": true,
-      "authority": "basic_settings_workshop_team_management"
+      "authority": "tc_erp_sys_base_production_team_list"
     },
     // { // 基础配置-成品库配置
     //   "name": "成品库配置",
@@ -2030,7 +2030,7 @@
       "path": "/baseSetting/vehicleMngt",
       "module": "./pages/baseSetting/VehicleMngt",
       "exact": true,
-      "authority": "basic_settings_vehicle_management"
+      "authority": "tc_erp_sys_base_car_list"
     },
     // 通用
     { // 选择应用
@@ -2066,154 +2066,154 @@
       "path": "/announcement/list",
       "module": "./pages/announcement/AnnouncementMngt",
       "exact": true,
-      "authority": "announcement_management_list"
+      "authority": "tc_erp_sys_notice_notice_list"
     },
     { // 公告管理-新发布
       "name": "新发布",
       "path": "/announcement/list/new",
       "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_notice_notice_add"
     },
     { // 公告管理-编辑
       "name": "编辑",
       "path": "/announcement/list/edit/:id",
       "module": "./pages/announcement/AnnouncementNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_notice_notice_edit"
     },
     { // 公告管理-详情
       "name": "详情",
       "path": "/announcement/list/detail/:id",
       "module": "./pages/announcement/AnnouncementDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_notice_notice_detail"
     },
     { // 档案管理-资料管理
       "name": "资料管理",
       "path": "/archivesMngt/dataMngt",
       "module": "./pages/archives/datas/DataMngt",
       "exact": true,
-      "authority": "file_management_data_management"
+      "authority": "tc_erp_sys_files_means_list"
     },
     { // 档案管理-资料管理-录入
       "name": "录入",
       "path": "/archivesMngt/dataMngt/dataNew",
       "module": "./pages/archives/datas/DataNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_files_means_add"
     },
     { // 档案管理-资料管理-编辑
       "name": "编辑",
       "path": "/archivesMngt/dataMngt/datasetting",
       "module": "./pages/archives/datas/DataNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_files_means_edit"
     },
     { // 档案管理-资料管理-详情
       "name": "详情",
       "path": "/archivesMngt/dataMngt/detail/:id",
       "module": "./pages/archives/datas/DataDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_files_means_detail"
     },
     { // 档案管理-证件管理
       "name": "证件管理",
       "path": "/archivesMngt/certificateMngt",
       "module": "./pages/archives/certificates/CertificateMngt",
       "exact": true,
-      "authority": "file_management_certificate_management"
+      "authority": "tc_erp_sys_files_certificates_list"
     },
     { // 档案管理-证件管理-录入
       "name": "录入",
       "path": "/archivesMngt/certificateMngt/certificateNew",
       "module": "./pages/archives/certificates/CertificateNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_files_certificates_add"
     },
     { // 档案管理-证件管理-编辑
       "name": "编辑",
       "path": "/archivesMngt/certificateMngt/certificateSetting",
       "module": "./pages/archives/certificates/CertificateNew",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_files_certificates_edit"
     },
     { // 档案管理-证件管理-详情
       "name": "详情",
       "path": "/archivesMngt/certificateMngt/certificateDetail/:id",
       "module": "./pages/archives/certificates/CertificateDetail",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_files_certificates_detail"
     },
     { // 部门管理
       "name": "部门管理",
       "path": "/dept/deptMngt",
       "module": "./pages/dept/dept/DepartmentMngt",
       "exact": true,
-      "authority": "department_management_list"
+      "authority": "tc_erp_sys_dept_list"
     },
     { // 部门修改
       "name": "部门修改",
       "path": "/dept/deptMngt/setting/:id",
       "module": "./pages/dept/dept/DepartmentSetting",
       "exact": true,
-      "authority": "auth_section"
+      "authority": "tc_erp_sys_dept_edit"
     },
-    { // 部门新增
-      "name": "部门新增",
-      "path": "/dept/deptMngt/new/:id",
-      "module": "./pages/dept/dept/DepartmentNew",
-      "exact": true,
-      "authority": "auth_section"
-    },
+    // { // 部门新增
+    //   "name": "部门新增",
+    //   "path": "/dept/deptMngt/new/:id",
+    //   "module": "./pages/dept/dept/DepartmentNew",
+    //   "exact": true,
+    //   "authority": "auth_section"
+    // },
     { // 岗位管理
       "name": "岗位管理",
       "path": "/dept/jobsMngt",
       "module": "./pages/dept/jobs/JobsMngt",
       "exact": true,
-      "authority": "department_management_post_management"
+      "authority": "tc_erp_sys_dept_post_list"
     },
     { // 员工管理
       "name": "员工管理",
       "path": "/dept/staffMngt",
       "module": "./pages/dept/staff/StaffMngt",
       "exact": true,
-      "authority": "department_management_employee_management"
+      "authority": "tc_erp_sys_dept_staff_list"
     },
     { // 员工管理-新增
       "name": "新增",
       "path": "/dept/staffMngt/new",
       "module": "./pages/dept/staff/StaffNew",
       "exact": true,
-      "authority": "auth_section"
+      "authority": "tc_erp_sys_dept_staff_add"
     },
     { // 员工管理-编辑
       "name": "编辑",
       "path": "/dept/staffMngt/setting",
       "module": "./pages/dept/staff/StaffNew",
       "exact": true,
-      "authority": "auth_section"
+      "authority": "tc_erp_sys_dept_staff_edit"
     },
     { // 基础数据-资料库管理
       "name": "资料库管理",
       "path": "/basicData/databaseMngt",
       "module": "./pages/basicData/database/DatabaseMngt",
       "exact": true,
-      "authority": "basic_data_database_management"
+      "authority": "tc_erp_sys_base_data_means_stock_list"
     },
     { // 系统日志-操作日志
       "name": "操作日志",
       "path": "/journal/operationLog",
       "module": "./pages/system-log/OperationLog",
       "exact": true,
-      "authority": "approvalm"
+      "authority": "tc_erp_sys_log_operation_list"
     },
     { // 系统日志-登录日志
       "name": "登录日志",
       "path": "/journal/login",
       "module": "./pages/system-log/Login",
       "exact": true,
-      "authority": "system_log_login_log"
+      "authority": "tc_erp_sys_log_login_list"
     },
     { // 请款申请管理
       "name": "请款申请管理",
@@ -2591,7 +2591,7 @@
       "path": "/sys/quotaConfig",
       "module": "./pages/system-mngt/quotaConfig/List",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_sys_system_quota_list"
     },
     { // 工序配置
       "name": "工序配置列表",

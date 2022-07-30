@@ -26,7 +26,7 @@
                 "icon": "xitongguanliTY_xitongguanli",
                 "path": "/sys",
                 "appName": "COMM",
-                "authority": "dictionary_type_list",
+                "authority": "tc_erp_sys_system",
                 "items": [
                     // {
                     //     "label": "用户管理",
@@ -36,17 +36,17 @@
                     {
                         "label": "字典管理",
                         "path": "/sys/dxnry",
-                        "authority": "dxnry"
+                        "authority": "tc_erp_sys_system_dic"
                     },
                     {
                         "label": "成本评估配置",
                         "path": "/sys/costconfig",
-                        "authority": "costconfig"
+                        "authority": "tc_erp_sys_system_cost"
                     },
                     {
                         "label": "定额配置",
                         "path": "/sys/quotaConfig",
-                        "authority": "costconfig"
+                        "authority": "tc_erp_sys_system_quota"
                     }
                 ]
             },
@@ -55,12 +55,12 @@
                 "icon": "quanxianguanliTY_quanxianguanli",
                 "path": "/auth",
                 "appName": "COMM",
-                "authority": "auth_section",
+                "authority": "tc_erp_sys_power",
                 "items": [
                     {
                         "label": "角色管理",
                         "path": "/auth/roles",
-                        "authority": "auth_section_role"
+                        "authority": "tc_erp_sys_system_dic"
                     }
                 ]
             },
@@ -254,17 +254,17 @@
                 "icon": "hezuoqiyeguanliTY_hezuoqiyeguanli",
                 "path": "/cooperative",
                 "appName": "COMM",
-                "authority": "supplier_mngt",
+                "authority": "tc_erp_sys_business",
                 "items": [
                     {
                         "label": "供应商管理",
                         "path": "/cooperative/supplier-mngt",
-                        "authority": "supplier_mngt_list"
+                        "authority": "tc_erp_sys_business_supplier"
                     },
                     {
                         "label": "装卸公司管理",
                         "path": "/cooperative/stevedoring-company-mngt",
-                        "authority": "supplier_mngt_list"
+                        "authority": "tc_erp_sys_business_load_unload_company"
                     }
                 ]
             },
@@ -822,22 +822,22 @@
                 "icon": "jichuguanliTY_jichuguanli",
                 "path": "/baseSetting",
                 "appName": "COMM",
-                "authority": "basic_settings",
+                "authority": "tc_erp_sys_base",
                 "items": [
                     {
                         "label": "基础设置",
                         "path": "/baseSetting/baseSettingMngt",
-                        "authority": "config_list"
+                        "authority": "tc_erp_sys_base"
                     },
                     {
                         "label": "生产班组管理",
                         "path": "/baseSetting/workshopTeamMngt",
-                        "authority": "basic_settings_workshop_team_management"
+                        "authority": "tc_erp_sys_base_production_team"
                     },
                     {
                         "label": "车辆管理",
                         "path": "/baseSetting/vehicleMngt",
-                        "authority": "basic_settings_vehicle_management"
+                        "authority": "tc_erp_sys_base_car"
                     }
                 ]
             },
@@ -846,12 +846,12 @@
                 "icon": "gonggaoguanliTY_gonggaoguanli",
                 "path": "/announcement",
                 "appName": "COMM",
-                "authority": "announcement_management",
+                "authority": "tc_erp_sys_notice",
                 "items": [
                     {
                         "label": "公告管理",
                         "path": "/announcement/list",
-                        "authority": "announcement_management_list"
+                        "authority": "tc_erp_sys_notice_notice"
                     }
                 ]
             },
@@ -860,17 +860,17 @@
                 "icon": "danganguanliTY_danganguanli",
                 "path": "/archivesMngt",
                 "appName": "COMM",
-                "authority": "file_management",
+                "authority": "tc_erp_sys_files",
                 "items": [
                     {
                         "label": "资料管理",
                         "path": "/archivesMngt/dataMngt",
-                        "authority": "file_management_data_management"
+                        "authority": "tc_erp_sys_files_means"
                     },
                     {
                         "label": "证件管理",
                         "path": "/archivesMngt/certificateMngt",
-                        "authority": "file_management_certificate_management"
+                        "authority": "tc_erp_sys_files_certificates"
                     }
                 ]
             },
@@ -879,22 +879,22 @@
                 "icon": "bumenguanliTY_bumenguanli",
                 "path": "/dept",
                 "appName": "COMM",
-                "authority": "department_management",
+                "authority": "tc_erp_sys_dept",
                 "items": [
                     {
                         "label": "部门管理",
                         "path": "/dept/deptMngt",
-                        "authority": "department_management_list"
+                        "authority": "tc_erp_sys_dept_dept"
                     },
                     {
                         "label": "岗位管理",
                         "path": "/dept/jobsMngt",
-                        "authority": "department_management_post_management"
+                        "authority": "tc_erp_sys_dept_post"
                     },
                     {
                         "label": "员工管理",
                         "path": "/dept/staffMngt",
-                        "authority": "department_management_employee_management"
+                        "authority": "tc_erp_sys_dept_staff"
                     }
                 ]
             },
@@ -903,12 +903,12 @@
                 "icon": "jichushujuTY_jichushuju",
                 "path": "/basicData",
                 "appName": "COMM",
-                "authority": "basic_data",
+                "authority": "tc_erp_sys_base_data",
                 "items": [
                     {
                         "label": "资料库管理",
                         "path": "/basicData/databaseMngt",
-                        "authority": "basic_data_database_management"
+                        "authority": "tc_erp_sys_base_data_means_stock"
                     }
                 ]
             },
@@ -917,17 +917,17 @@
                 "icon": "xitongrizhiTY_xitongrizhi",
                 "path": "/journal",
                 "appName": "COMM",
-                "authority": "system_log",
+                "authority": "tc_erp_sys_log",
                 "items": [
                     {
                         "label": "操作日志",
                         "path": "/journal/operationLog",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_sys_log_operation"
                     },
                     {
                         "label": "登录日志",
                         "path": "/journal/login",
-                        "authority": "system_log_login_log"
+                        "authority": "tc_erp_sys_log_login"
                     }
                 ]
             },
