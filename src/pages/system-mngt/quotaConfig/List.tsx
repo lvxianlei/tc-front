@@ -14,6 +14,8 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { useHistory, useParams } from 'react-router-dom';
 import LoftQuotaNew from './LoftQuotaNew';
 import { useForm } from 'antd/es/form/Form';
+import MaterialQuotaNew from './MaterialQuotaNew';
+import BoltQuotaNew from './BoltQuotaNew';
 
 export interface ILofting {
     readonly id?: string;
@@ -93,16 +95,16 @@ export default function List(): React.ReactNode {
             dataIndex: 'projectEntries'
         },
         {
-            key: 'partLabelRange',
+            key: 'materialCategory',
             title: '提料',
             width: 100,
-            dataIndex: 'partLabelRange'
+            dataIndex: 'materialCategory'
         },
         {
-            key: 'fileType',
+            key: 'proofread',
             title: '校核',
             width: 150,
-            dataIndex: 'fileType'
+            dataIndex: 'proofread'
         },
         {
             key: 'operation',
@@ -112,8 +114,8 @@ export default function List(): React.ReactNode {
             width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type="link" onClick={() => { }}>编辑</Button>
-                    <Button type="link" onClick={() => { }}>删除</Button>
+                    <Button type="link" onClick={() => { setMaterialRowData(record); setMaterialVisible(true); setMaterialType('edit'); }}>编辑</Button>
+                    <Button type="link" onClick={() => delRow(record.id)}>删除</Button>
                 </Space>
             )
         }
@@ -133,39 +135,45 @@ export default function List(): React.ReactNode {
             dataIndex: 'projectEntries'
         },
         {
-            key: 'a',
+            key: 'boltCheck',
             title: '螺栓清点',
             width: 80,
-            dataIndex: 'a'
+            dataIndex: 'boltCheck'
         },
         {
-            key: 'b',
+            key: 'boltProofread',
             title: '螺栓校核',
             width: 150,
-            dataIndex: 'b'
+            dataIndex: 'boltProofread'
         },
         {
-            key: 'c',
+            key: 'boltPlanCome',
             title: '螺栓计划-出',
             width: 150,
-            dataIndex: 'c'
+            dataIndex: 'boltPlanCome'
         },
         {
-            key: 'd',
+            key: 'boltPlanProofread',
             title: '螺栓计划-校',
             width: 150,
-            dataIndex: 'd'
+            dataIndex: 'boltPlanProofread'
         },
         {
-            key: 'e',
+            key: 'boltCheckApply',
             title: '螺栓清点套用',
             width: 150,
-            dataIndex: 'e'
+            dataIndex: 'boltCheckApply'
         },
         {
-            key: 'a',
+            key: 'boltCheckProofread',
+            title: '螺栓清点校核',
+            width: 150,
+            dataIndex: 'boltCheckProofread'
+        },
+        {
+            key: 'boltPlanApply',
             title: '螺栓计划套用',
-            dataIndex: 'a',
+            dataIndex: 'boltPlanApply',
             width: 120
         },
         {
@@ -176,8 +184,8 @@ export default function List(): React.ReactNode {
             width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type="link" onClick={() => { }}>编辑</Button>
-                    <Button type="link" onClick={() => { }}>删除</Button>
+                    <Button type="link" onClick={() => { setBoltRowData(record); setBoltVisible(true); setBoltType('edit'); }}>编辑</Button>
+                    <Button type="link" onClick={() => delRow(record.id)}>删除</Button>
                 </Space>
             )
         }
@@ -217,15 +225,21 @@ export default function List(): React.ReactNode {
     })
 
     const [status, setStatus] = useState<string>('1');
-    const [visible, setVisible] = useState<boolean>(false);
     const history = useHistory();
     const newRef = useRef<EditRefProps>();
     const [nowColumns, setNowColumns] = useState<any>(columns);
+    const [visible, setVisible] = useState<boolean>(false);
     const [type, setType] = useState<'edit' | 'new'>('new');
     const [form] = useForm();
     const [rowData, setRowData] = useState<any>();
-
-
+    const materialRef = useRef<EditRefProps>();
+    const [materialVisible, setMaterialVisible] = useState<boolean>(false);
+    const [materialType, setMaterialType] = useState<'edit' | 'new'>('new');
+    const [materialRowData, setMaterialRowData] = useState<any>();
+    const boltRef = useRef<EditRefProps>();
+    const [boltVisible, setBoltVisible] = useState<boolean>(false);
+    const [boltType, setBoltType] = useState<'edit' | 'new'>('new');
+    const [boltRowData, setBoltRowData] = useState<any>();
 
     const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status });
@@ -263,11 +277,10 @@ export default function List(): React.ReactNode {
                 })
             }
         })
-        
     }
 
     const otherEdit = (record: Record<string, any>) => {
-        form.setFieldsValue({price: record?.price})
+        form.setFieldsValue({ price: record?.price })
         Modal.confirm({
             title: "编辑",
             icon: null,
@@ -286,7 +299,7 @@ export default function List(): React.ReactNode {
                     const value = await form.validateFields();
                     RequestUtil.post(`/tower-science/projectPrice/other`, { ...record, ...value }).then(res => {
                         message.success("编辑成功！")
-                        form.setFieldsValue({price: ''})
+                        form.setFieldsValue({ price: '' })
                         history.go(0)
                     })
                     resove(true)
@@ -295,10 +308,34 @@ export default function List(): React.ReactNode {
                 }
             }),
             onCancel() {
-                form.setFieldsValue({price: ''})
+                form.setFieldsValue({ price: '' })
             }
         })
     }
+
+    const materialHandleOk = () => new Promise(async (resove, reject) => {
+        try {
+            await materialRef.current?.onSubmit()
+            message.success("保存成功！")
+            setMaterialVisible(false)
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const boltHandleOk = () => new Promise(async (resove, reject) => {
+        try {
+            await boltRef.current?.onSubmit()
+            message.success("保存成功！")
+            setBoltVisible(false)
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     return <Spin spinning={loading}>
         <Modal
@@ -309,6 +346,24 @@ export default function List(): React.ReactNode {
             onOk={handleOk}
             onCancel={() => setVisible(false)}>
             <LoftQuotaNew type={type} record={rowData} ref={newRef} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            key='MaterialQuotaNew'
+            visible={materialVisible}
+            title={materialType === 'new' ? '新增' : '编辑'}
+            onOk={materialHandleOk}
+            onCancel={() => setMaterialVisible(false)}>
+            <MaterialQuotaNew type={materialType} record={materialRowData} ref={materialRef} />
+        </Modal>
+        <Modal
+            destroyOnClose
+            key='boltQuotaNew'
+            visible={boltVisible}
+            title={boltType === 'new' ? '新增' : '编辑'}
+            onOk={boltHandleOk}
+            onCancel={() => setBoltVisible(false)}>
+            <BoltQuotaNew type={boltType} record={boltRowData} ref={boltRef} />
         </Modal>
         <Row className={styles.search}>
             <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
@@ -323,10 +378,21 @@ export default function List(): React.ReactNode {
                 <Radio.Button value={'4'} key="4">其他定额配置</Radio.Button>
             </Radio.Group>
             {
-                status === '1' ?
-                    <Button type="primary" className={styles.topBtn} onClick={() => { setVisible(true); setType('new') }} ghost>新增</Button>
-                    :
+                status === '4' ?
                     null
+                    :
+                    <Button type="primary" className={styles.topBtn} onClick={() => {
+                        if (status === '1') {
+                            setVisible(true);
+                            setType('new');
+                        } else if (status === '2') {
+                            setMaterialVisible(true);
+                            setMaterialType('new');
+                        } else {
+                            setBoltVisible(true);
+                            setBoltType('new');
+                        }
+                    }} ghost>新增</Button>
             }
         </Row>
         <CommonTable
