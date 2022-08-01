@@ -301,6 +301,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             value={props.value ? moment(props.value) : null}
             format={data.format || "YYYY-MM-DD HH:mm:ss"}
             disabled={data.disabled}
+            showTime={data?.isShowTime || false}
             style={{ width: data.width || "100%", height: "100%", ...props.style }}
             {...componentProps}
         />,
