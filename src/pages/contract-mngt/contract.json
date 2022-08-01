@@ -349,12 +349,49 @@
             "title": "交货时间",
             "dataIndex": "arrivalTime",
             "type": "date",
-            "rules": [
+            "required": true
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementMode",
+            "type": "select",
+            "required": true
+        },
+        {
+            "title": "开票性质",
+            "dataIndex": "invoiceCharacter",
+            "type": "select",
+            "enum": [
                 {
-                    "required": true,
-                    "message": "请选择交货时间..."
+                    "label": "一票制",
+                    "value": 1
+                },
+                {
+                    "label": "二票制",
+                    "value": 2
+                },
+                {
+                    "label": "三票制",
+                    "value": 3
                 }
-            ]
+            ],
+            "required": true
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringMode",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "理重",
+                    "value": 1
+                },
+                {
+                    "label": "过磅",
+                    "value": 2
+                }
+            ],
+            "required": true
         },
         {
             "title": "备注",
@@ -457,6 +494,32 @@
             "title": "交货时间",
             "dataIndex": "arrivalTime",
             "type": "date"
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementMode",
+            "type": "select",
+            "required": true
+        },
+        {
+            "title": "开票性质",
+            "dataIndex": "invoiceCharacterName"
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringMode",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "理重",
+                    "value": 1
+                },
+                {
+                    "label": "过磅",
+                    "value": 2
+                }
+            ],
+            "required": true
         },
         {
             "title": "备注",

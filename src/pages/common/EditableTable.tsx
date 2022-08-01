@@ -22,7 +22,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
         const rules = generateRules(item.type, item)
         if (item.type === "popTable") {
             return ({
-                title: `${item.required ? "*" : ""} ${item.title}`,
+                title: item.required ? <><span style={{ color: "#ff4d4f", padding: "0px 4px" }}>*</span>{item.title}</> : item.title,
                 code: item.dataIndex,
                 render: (_value: any, _record: any, index: number) => <Form.Item
                     style={{ margin: 0 }}
@@ -34,7 +34,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
         }
         return ({
             ...item,
-            title: `${item.required ? "*" : ""} ${item.title}`,
+            title: item.required ? <><span style={{ color: "#ff4d4f", padding: "0px 4px" }}>*</span>{item.title}</> : item.title,
             code: item.dataIndex,
             render: (value: any, _record: any, index: number) => {
                 return item.edit === false ? <>

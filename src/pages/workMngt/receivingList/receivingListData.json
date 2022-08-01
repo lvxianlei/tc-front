@@ -103,6 +103,7 @@
             "value": "contractNumber",
             "dependencies": true,
             "readOnly": true,
+            "required": true,
             "columns": [
                 {
                     "title": "合同编号",
@@ -167,12 +168,6 @@
                         }
                     ]
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择合同编号"
-                }
             ]
         },
         {
@@ -202,22 +197,12 @@
             "dataIndex": "receiveTime",
             "type": "date",
             "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择到货时间"
-                }
-            ]
+            "required": true
         },
         {
             "title": "车辆牌照",
             "dataIndex": "carNumber",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入车辆牌照"
-                }
-            ]
+            "required": true
         },
         {
             "title": "卸车方式",
@@ -306,6 +291,11 @@
             "type": "select",
             "enum": [],
             "required": true
+        },
+        {
+            "title": "过磅重量(吨)",
+            "dataIndex": "totalPonderationWeight",
+            "type": "number"
         },
         {
             "title": "备注",
@@ -459,7 +449,7 @@
         },
         {
             "title": "结算重量（吨）",
-            "dataIndex": "---------------------------",
+            "dataIndex": "balanceTotalWeight",
             "type": "number",
             "max": 99999.99,
             "required": true
@@ -487,17 +477,34 @@
         {
             "title": "炉批号",
             "dataIndex": "furnaceBatchNumber",
-            "maxLength": 30
+            "maxLength": 30,
+            "required": true
         },
         {
             "title": "质保书号",
             "dataIndex": "warrantyNumber",
+            "required": true,
             "maxLength": 30
         },
         {
             "title": "轧制批号",
             "dataIndex": "rollingNumber",
             "maxLength": 30
+        },
+        {
+            "title": "肢宽",
+            "dataIndex": "limbWidth",
+            "maxLength": 50
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness",
+            "maxLength": 50
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber",
+            "maxLength": 50
         },
         {
             "title": "外观检验结果",

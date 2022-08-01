@@ -6,7 +6,11 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
 import { PopTableContent } from "./enquiryCompare/ComparesModal"
-import { deliverywayOptions, materialStandardOptions, materialTextureOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
+import {
+    deliverywayOptions, materialStandardOptions,
+    materialTextureOptions, transportationTypeOptions,
+    settlementModeOptions
+} from "../../configuration/DictionaryOptions"
 
 // 新加运费信息
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
@@ -57,10 +61,12 @@ const oneStevedoring = [{
         }
     ]
 }]
+const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
+const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
+const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
+const settlementModeEnum = settlementModeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
+
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const [visible, setVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialList, setMaterialList] = useState<any[]>([])
@@ -548,6 +554,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return ({ ...item, enum: deliveryMethodEnum })
                     case "transportMethod":
                         return ({ ...item, enum: transportMethodEnum })
+                    case "settlementMode":
+                        return ({ ...item, enum: settlementModeEnum })
                     default:
                         return item
                 }

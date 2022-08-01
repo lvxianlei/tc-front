@@ -4,23 +4,16 @@ import { BaseInfo, DetailTitle, Attachment, CommonTable } from "../common"
 import { contractOverview, materialOverview, freightOverview, stevedoringOverview } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { deliverywayOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
+import { deliverywayOptions, settlementModeOptions, transportationTypeOptions } from "../../configuration/DictionaryOptions"
 
 interface OverviewProps {
     id: string
 }
+const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+const settlementModeEnum = settlementModeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
 
 export default function Overview({ id }: OverviewProps): JSX.Element {
-
-    const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
-    const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
@@ -30,6 +23,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
             reject(error)
         }
     }), { refreshDeps: [id] })
+
     return <Spin spinning={loading}>
         <DetailTitle title="合同基本信息" />
         <BaseInfo
@@ -40,6 +34,8 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                         return ({ ...item, enum: deliveryMethodEnum })
                     case "transportMethod":
                         return ({ ...item, enum: transportMethodEnum })
+                    case "settlementMode":
+                        return ({ ...item, enum: settlementModeEnum })
                     default:
                         return item
                 }

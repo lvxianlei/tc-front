@@ -403,11 +403,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleModalOk = () => {
         const meteringMode = form.getFieldValue("meteringMode")
+        const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
         let num: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             num = (parseFloat(num) + parseFloat(item.num || "0.00")).toFixed(2)
             const totalTaxPrice = (item.ponderationWeight || "0") * item.taxPrice
             const totalPrice = ((item.weight || "0") * item.num) * item.taxPrice
+            const totalWeight = (item.weight * item.num).toFixed(4)
             const postData = {
                 ...item,
                 id: item.id,
@@ -419,7 +421,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 /** 理算重量 */
                 weight: item.weight,
                 /** 理算总重量 */
-                totalWeight: (item.weight * item.num).toFixed(4),
+                totalWeight,
+                balanceTotalWeight: meteringMode === 1 ? totalWeight : totalPonderationWeight,
                 /***
                  * 计算价税合计 
                  *      总重 = 单个重量 * 数量
@@ -683,6 +686,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return ({
                             ...item,
                             enum: warehouseData || []
+                        })
+                    case "totalPonderationWeight":
+                        return ({
+                            ...item,
+                            required: form.getFieldValue("meteringMode") === 2
                         })
                     default:
                         return item
