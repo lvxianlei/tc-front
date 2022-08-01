@@ -299,6 +299,12 @@
             "dataIndex": "noPaymentReceived",
             "disabled": true,
             "width": "100%"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "disabled": true,
+            "width": "100%"
         }
     ],
     "contractInformationDetail": [
@@ -355,6 +361,7 @@
         "type": "popTable",
         "path": "/tower-market/contract",
         "width": 1011,
+        "selectType":"checkbox",
         "value": "contractName",
         "dependencies": true,
         "readOnly": true,
