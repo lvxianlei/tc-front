@@ -108,12 +108,12 @@ export default function SaleOrder(): JSX.Element {
     },
     {
         title: "已下计划重量(吨)",
-        dataIndex: "orderWeight",
+        dataIndex: "released",
         width: 120,
     },
     {
         title: "未下计划重量(吨)",
-        dataIndex: "orderWeight",
+        dataIndex: "notReleased",
         width: 120,
     },
     {
