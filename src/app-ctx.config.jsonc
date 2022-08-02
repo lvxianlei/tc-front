@@ -1106,12 +1106,12 @@
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "QMS",
                 "path": "/qualityInspection",
-                "authority": "approvalm",
+                "authority": "tc_erp_qa_quality",
                 "items": [
                     {
                         "label": "不合格处置单",
                         "path": "/qualityInspection/disposition",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_qa_quality_rework"
                     }
                 ]
             },
@@ -1120,17 +1120,17 @@
                 "icon": "zhujihuapaichan-zhushengchanjihua_zhushengchanjihua",
                 "appName": "QMS",
                 "path": "/unqualifiedAmount",
-                "authority": "approvalm",
+                "authority": "tc_erp_qa_config_workpro",
                 "items": [
                     {
                         "label": "工序配置列表",
                         "path": "/unqualifiedAmount/processConfigurationList",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_qa_config_workpro_list"
                     },
                     {
                         "label": "不合格项目金额配置列表",
                         "path": "/unqualifiedAmount/list",
-                        "authority": "approvalm"
+                        "authority": "tc_erp_qa_config_unproject"
                     }
                 ]
             },
