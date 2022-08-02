@@ -117,12 +117,12 @@
                 "icon": "caiwuzhongxin_kaipiaoshenqing",
                 "path": "/invoicing",
                 "appName": "FC",
-                "authority": "approvalm_invoicing",
+                "authority": "tc_erp_fc_invoicing",
                 "items": [
                     {
                         "label": "开票申请列表",
                         "path": "/invoicing/billList",
-                        "authority": "approvalm_invoicing_list"
+                        "authority": "tc_erp_fc_invoicing_manage"
                     }
                 ]
             },
@@ -131,12 +131,12 @@
                 "icon": "a-caiwuzhongxin_yingshouzhangkuan2",
                 "path": "/receivables",
                 "appName": "FC",
-                "authority": "approvalm_invoicing",
+                "authority": "tc_erp_fc_statistics",
                 "items": [
                     {
                         "label": "合同回款统计",
                         "path": "/receivables/constract",
-                        "authority": "approvalm_invoicing_list"
+                        "authority": "tc_erp_fc_statistics_contract"
                     }
                 ]
             },
@@ -936,17 +936,17 @@
                 "icon": "caiwuzhongxin_qingkuanshenqing",
                 "path": "/fundApply",
                 "appName": "FC",
-                "authority": "payment_application_management",
+                "authority": "tc_erp_fc_pay",
                 "items": [
                     {
                         "label": "请款申请列表",
                         "path": "/fundApply/infomation",
-                        "authority": "payment_application_management_list"
+                        "authority": "tc_erp_fc_pay_paylist"
                     },
                     {
                         "label": "付款记录",
                         "path": "/fundApply/record",
-                        "authority": "payment_application_management_payment_record"
+                        "authority": "tc_erp_fc_pay_payment"
                     }
                 ]
             },
@@ -955,12 +955,12 @@
                 "icon": "caiwuzhongxin_huikuanxinxi",
                 "path": "/collection",
                 "appName": "FC",
-                "authority": "collection_information_management",
+                "authority": "tc_erp_fc_backmoney",
                 "items": [
                     {
                         "label": "回款信息列表",
                         "path": "/collection/infomation",
-                        "authority": "collection_information_management_list"
+                        "authority": "tc_erp_fc_backmoney_backlist"
                     }
                 ]
             },
@@ -969,12 +969,12 @@
                 "icon": "caiwuzhongxin_baohanshenqing",
                 "path": "/application",
                 "appName": "FC",
-                "authority": "guarantee_application_management",
+                "authority": "tc_erp_fc_guarantee",
                 "items": [
                     {
                         "label": "保函申请列表",
                         "path": "/application/guarantee",
-                        "authority": "guarantee_application_management_list"
+                        "authority": "tc_erp_fc_guaranteelist"
                     }
                 ]
             },

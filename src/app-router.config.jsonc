@@ -2220,63 +2220,63 @@
       "path": "/fundApply/infomation",
       "module": "./pages/fundApplyInfomation/index",
       "exact": true,
-      "authority": "payment_application_management_list"
+      "authority": "tc_erp_fc_pay_paylist_list"
     },
     { // 请款申请管理
       "name": "付款记录",
       "path": "/fundApply/record",
       "module": "./pages/fundApplyInfomation/fundRecord",
       "exact": true,
-      "authority": "payment_application_management_payment_record"
+      "authority": "tc_erp_fc_pay_payment_list"
     },
     { // 回款信息列表
       "name": "回款信息管理",
       "path": "/collection/infomation",
       "module": "./pages/collectionInfomation/index",
       "exact": true,
-      "authority": "collection_information_management_list"
+      "authority": "tc_erp_fc_backmoney_backlist"
     },
     { // 保函申请管理
       "name": "保函申请管理",
       "path": "/application/guarantee",
       "module": "./pages/applicationGuarantee/index",
       "exact": true,
-      "authority": "guarantee_application_management_list"
+      "authority": "tc_erp_fc_guaranteelist_list"
     },
     { // 开票申请列表
       "name": "开票申请列表",
       "path": "/invoicing/billList",
       "module": "./pages/invoicing/index",
       "exact": true,
-      "authority": "approvalm_invoicing_list"
+      "authority": "tc_erp_fc_invoicing_manage_list"
     },
     { // 查看开票申请
       "name": "开票信息",
       "path": "/invoicing/detail/:invoicingId",
       "module": "./pages/invoicing/Overview",
       "exact": true,
-      "authority": "sw_approvalm_invoicing_list_search"
+      "authority": "tc_erp_fc_invoicing_manage_detail"
     },
     { // 合同回款统计
       "name": "合同回款统计",
       "path": "/receivables/constract",
       "module": "./pages/receivables/constract/index",
       "exact": true,
-      "authority": "approvalm_invoicing_list"
+      "authority": "tc_erp_fc_statistics_contract"
     },
     { // 查看任务信息
       "name": "任务信息",
       "path": "/invoicing/billList/taskInfo/:invoicingId",
       "module": "./pages/invoicing/TaskInfo",
       "exact": true,
-      "authority": "fc_view_task_information"
+      "authority": "tc_erp_fc_invoicing_manage_task"
     },
     { // 填写开票申请信息
       "name": "填写开票信息",
       "path": "/invoicing/billList/edit/:invoicingId",
       "module": "./pages/invoicing/Edit",
       "exact": true,
-      "authority": "fc_approvalm_invoicing_list_edit"
+      "authority": "tc_erp_fc_invoicing_manage_write"
     },
     { // 人资-员工关系-招聘入职
       "name": "招聘入职",
