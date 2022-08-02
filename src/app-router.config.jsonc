@@ -2598,28 +2598,28 @@
       "path": "/unqualifiedAmount/processConfigurationList",
       "module": "./pages/processConfiguration/ProcessConfigurationList",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_qa_config_workpro"
     },
     { // 不合格项目金额配置
       "name": "不合格项目金额配置列表",
       "path": "/unqualifiedAmount/list",
       "module": "./pages/unqualifiedAmount/UnqualifiedAmountList",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_qa_config_unproject_list"
     },
     { // 处置单列表
-      "name": "处置单列表",
+      "name": "不合格处置单",
       "path": "/qualityInspection/disposition",
       "module": "./pages/qualityInspection/disposition/DispositionList",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_qa_quality_rework"
     },
     { // 处置单详情
       "name": "详情",
       "path": "/qualityInspection/disposition/detail/:id",
       "module": "./pages/qualityInspection/disposition/DispositionDetail",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_qa_quality_rework_detail"
     },
     { // 业务处置管理-取消暂停恢复
       "name": "取消暂停恢复",

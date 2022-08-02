@@ -36,7 +36,7 @@
         "appName": "SW"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_qa",
         "title": "质检中心",
         "description": "质检过程相关功能",
         "iconFont": "icon-zhijianzhongxin2", // iconfont
