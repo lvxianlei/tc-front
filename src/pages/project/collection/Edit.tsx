@@ -10,7 +10,7 @@ export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [returnType, setReturnType] = useState<ReturnType | string>(-1)
-    const [popContent, setPopContent] = useState<{ id: string, value: string, records: any }>({ value: "", id: "", records: {} })
+    const [popContent, setPopContent] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
     const [when, setWhen] = useState<boolean>(true)
     //存取已选中回款计划信息
@@ -84,10 +84,7 @@ export default function Edit() {
         contractInfosForm.setFieldsValue({
             submit: [
                 ...contractInfos.submit,
-                {
-                    ...popContent.records,
-                    key: popContent?.id
-                }
+                ...popContent.map((item:any)=>{return item.records}),
             ]
         })
         setVisible(false)
@@ -96,7 +93,14 @@ export default function Edit() {
     const handleCancel = () => setVisible(false)
 
     const handleChange = (event: any) => {
-        setPopContent({ id: event[0].id, value: event[0][contract.value || "name" || "id"], records: event[0] })
+        const value = event.map((item:any)=>{
+            return {
+                id: item?.id,
+                value: item[contract.value || "name" || "id"], 
+                records: {...item, key: item?.id}
+            }
+        })
+        setPopContent(value)
     }
 
     const handleContractInfosChange = (fields: any, allFields: any) => {
