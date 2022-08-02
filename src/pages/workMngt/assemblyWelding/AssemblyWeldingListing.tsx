@@ -77,6 +77,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                         <Button type="link">删除</Button>
                     </Popconfirm>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/edit/${record.id}`}>编辑</Link>
+                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/apply/${record.id}`}>套用</Link>
                     {/* <Button type="link" onClick={() => { setVisible(true); setName('编辑'); setRecord(record) }}>编辑</Button> */}
                 </Space>
             )
