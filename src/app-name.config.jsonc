@@ -9,7 +9,7 @@
         "appName": "SC"           //应用name
     },
     {
-        "authority": "",
+        "authority": "tc_erp_aps",
         "title": "计划中心",
         "description": "各工序统筹计划",
         "iconFont": "icon-jihuazhongxin2", // iconfont
@@ -97,7 +97,7 @@
         "appName": "HR"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_fc",
         "title": "财务中心",
         "description": "财务管理相关功能",
         "iconFont": "icon-caiwuzhongxin2", // iconfont
@@ -106,7 +106,7 @@
         "appName": "FC"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_sys",
         "title": "通用中心",
         "description": "必备基础功能",
         "iconFont": "icon-tongyong2", // iconfont
