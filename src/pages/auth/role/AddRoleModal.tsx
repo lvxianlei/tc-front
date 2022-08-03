@@ -37,7 +37,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
             addCollectionForm.setFieldsValue({
                 name: result && result.name
             })
-            setCheckedKeys(result.functionIdList || []);
+            setCheckedKeys(result.componentList || []);
         } catch (error) {
             reject(error)
         }
@@ -46,7 +46,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     // 获取树结构
     const { loading: loadingTree, run: getUser, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: IAuthority[] = await RequestUtil.get<IAuthority[]>(`/sinzetech-system/function/tree`);
+            const result: IAuthority[] = await RequestUtil.get<IAuthority[]>(`/sinzetech-system/role/component/tree`);
             resole(result);
             const key = await expandKeysByValue(result);
             setExpandedKeys(key);
@@ -70,7 +70,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     const wrapAuthority2DataNode = (authorities: (IAuthority & DataNode)[] = []): DataNode[] => {
         authorities.forEach((authority: (IAuthority & DataNode)): void => {
             authority.title = authority.name;
-            authority.key = authority.id;
+            authority.key = authority.code;
             authority.selectable = authority.checked;
             if (authority.children && authority.children.length) {
                 wrapAuthority2DataNode(authority.children as (IAuthority & DataNode)[]);
@@ -86,8 +86,8 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 message.error("至少选择一个功能权限");
                 return;
             }
-            id ? await run({ path: "/sinzetech-system/role", data: { ...baseData, functionIdList: checkedKeys, id }, type: 2 }) :
-                await run({ path: "/sinzetech-system/role", data: { ...baseData, functionIdList: checkedKeys }, type: 1 })
+            id ? await run({ path: "/sinzetech-system/role", data: { ...baseData, components: checkedKeys, roleId: id }, type: 2 }) :
+                await run({ path: "/sinzetech-system/role", data: { ...baseData, components: checkedKeys }, type: 1 })
             resolve(true)
         } catch (error) {
             reject(false)
@@ -131,7 +131,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 </Form.Item>
                 <Form.Item
                     label="功能权限"
-                    name="functionIdList"
+                    name="components"
                 // rules={[{ type: 'array', required: true, message: 'Please input your username!' }]}
                 >
                     <div style={{ height: "500px", overflow: 'auto', }}>
