@@ -3,7 +3,7 @@
         {
             "title": "招标信息",
             "path": "招标信息",
-            "dataIndex": "inquiryTaskWorkBenchVo",
+            "dataIndex": "bidInfoNum",
             "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%B7%A5%E7%A8%8B%E6%8A%A5%E4%BB%B7%E4%BB%BB%E5%8A%A1.png",
             "workbenchItemVos": [
                 {
@@ -21,7 +21,7 @@
         },
         {
             "title": "开票申请",
-            "dataIndex": "materialPurchaseTaskWorkBenchVo",
+            "dataIndex": "invoicingNum",
             "path": "项目管理-开票申请",
             "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%8E%9F%E6%9D%90%E6%96%99%E9%87%87%E8%B4%AD%E4%BB%BB%E5%8A%A1.png",
             "workbenchItemVos": [
@@ -92,7 +92,7 @@
         },
         {
             "title": "回款申请",
-            "dataIndex": "purchaseIngredientsWorkBenchVo",
+            "dataIndex": "backMoneyNum",
             "col": 2,
             "path": "项目管理-回款申请",
             "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E9%87%87%E8%B4%AD%E9%85%8D%E6%96%99.png",
