@@ -8,6 +8,7 @@ import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import styles from './confirm.module.less';
+import { FixedType } from 'rc-table/lib/interface';
 
 export default function ConfirmTaskMngt(): React.ReactNode {
     const [user, setUser] = useState<any[] | undefined>([]);
@@ -22,6 +23,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const location = useLocation<{ state?: {} }>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [assignType, setAssignType] = useState<'batch' | 'single'>('single');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
@@ -31,9 +33,9 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const handleAssignModalOk = async () => {
         try {
             const submitData = await form.validateFields();
-            submitData.drawTaskId = drawTaskId;
+            submitData.drawTaskIds = assignType === 'single' ? [drawTaskId] : selectedKeys;
             submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format("YYYY-MM-DD HH:ss:mm");
-            await RequestUtil.post('/tower-science/drawTask/assignDrawTask', submitData).then(() => {
+            await RequestUtil.post('/tower-science/drawTask/batchAssignDrawTask', submitData).then(() => {
                 message.success('指派成功！')
             }).then(() => {
                 setVisible(false);
@@ -113,16 +115,16 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'confirmName'
         },
         {
-            key: 'confirmName',
+            key: 'contractNum',
             title: '内部合同编号',
             width: 200,
-            dataIndex: 'confirmName'
+            dataIndex: 'contractNum'
         },
         {
-            key: 'confirmName',
+            key: 'projectName',
             title: '工程名称',
             width: 200,
-            dataIndex: 'confirmName'
+            dataIndex: 'projectName'
         },
         {
             key: 'contractName',
@@ -139,7 +141,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         {
             key: 'operation',
             title: '操作',
-            // fixed: 'right' as FixedType,
+            fixed: 'right' as FixedType,
             width: 250,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
@@ -151,6 +153,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                             plannedDeliveryTime: record.plannedDeliveryTime ? moment(record.plannedDeliveryTime) : ''
                         })
                         setVisible(true);
+                        setAssignType('single');
                     }} disabled={record.status !== 2 && record.status !== 3}>指派</Button>
                     <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmDetail/${record.id}`)} disabled={record.status < 4}>明细</Button>
                     <Popconfirm
@@ -264,7 +267,13 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             exportPath="/tower-science/drawTask"
             extraOperation={
                 <Button type="primary" onClick={async () => {
-                    setVisible(true);
+                    const rows: number[] = selectedRows.map(res => res.status);
+                    if (rows.findIndex((value) => value === 1) !== -1 || rows.findIndex((value) => value === 4) !== -1 || rows.findIndex((value) => value === 5) !== -1 || rows.findIndex((value) => value === 0) !== -1) {
+                        message.warning('待指派或待完成状态可进行指派！')
+                    } else {
+                        setVisible(true);
+                        setAssignType('batch');
+                    }
                 }} ghost>批量指派</Button>
             }
             filterValue={filterValue}
