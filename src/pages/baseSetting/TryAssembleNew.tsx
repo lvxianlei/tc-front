@@ -37,7 +37,7 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/trial/save `, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/trial/save`, data)
             resove(result)
         } catch (error) {
             reject(error)
@@ -62,7 +62,11 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
         }
     })
 
-    useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit]);
+    const resetFields = () => {
+        form.resetFields()
+    }
+
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     const [form] = Form.useForm();
 

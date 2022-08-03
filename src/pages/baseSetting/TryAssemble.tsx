@@ -12,20 +12,6 @@ import RequestUtil from '../../utils/RequestUtil';
 import TryAssembleNew from './TryAssembleNew';
 import { useHistory } from 'react-router-dom';
 
-interface IDetail {
-    readonly name?: string;
-    readonly id?: string;
-    readonly workshopDeptName?: string;
-    readonly deptProcessesName?: string;
-    readonly deptProcessesId?: string;
-    readonly productionLinesName?: string;
-    readonly accountEquipmentId?: string | number;
-    readonly accountEquipmentName?: string;
-    readonly status?: string;
-    readonly workshopDeptId?: string;
-    readonly productionLinesId?: string;
-}
-
 export interface EditRefProps {
     onSubmit: () => void
     resetFields: () => void
@@ -169,10 +155,12 @@ export default function TryAssemble(): React.ReactNode {
                 path="/tower-science/trial/list"
                 columns={columns}
                 headTabs={[]}
-                extraOperation={<Button type="primary" onClick={() => {
-                    setVisible(true);
-                    setType("new");
-                }} ghost>新增试装条件</Button>}
+                extraOperation={
+                    <Button type="primary" onClick={() => {
+                        setVisible(true);
+                        setType("new");
+                    }} ghost>新增试装条件</Button>
+                }
                 refresh={refresh}
                 searchFormItems={[]}
                 tableProps={{
