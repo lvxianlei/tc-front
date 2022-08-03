@@ -7,20 +7,6 @@
         "width": 250, // 导航面板宽度
         "theme": "#F8F8F8",
         "menu": [
-            { // 菜单项配置
-                "label": "客户管理",
-                "icon": "customer",
-                "path": "/client",
-                "appName": "SC",
-                "authority": "customer_page",
-                "items": [
-                    {
-                        "label": "客户管理",
-                        "path": "/client/mngt",
-                        "authority": "customer_detail"
-                    }
-                ]
-            },
             { // 
                 "label": "工作台",
                 "icon": "customer",
@@ -31,6 +17,20 @@
                     {
                         "label": "工作台",
                         "path": "/workBenchSC/sc",
+                        "authority": "customer_detail"
+                    }
+                ]
+            },
+            { // 菜单项配置
+                "label": "客户管理",
+                "icon": "customer",
+                "path": "/client",
+                "appName": "SC",
+                "authority": "customer_page",
+                "items": [
+                    {
+                        "label": "客户管理",
+                        "path": "/client/mngt",
                         "authority": "customer_detail"
                     }
                 ]
