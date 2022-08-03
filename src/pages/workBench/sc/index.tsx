@@ -35,7 +35,7 @@ export default function SWWorkBench(): React.ReactNode {
                     {item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((workbenchItem: any, index: number) => {
                         return <div key={index} className={styles.content}>
                             <div style={{ cursor: "pointer" }} onClick={() => history.push(workbenchItem.path)}>
-                                <p className={styles.total}>{ typeof(data?.[item.dataIndex]) == "string"?data?.[item.dataIndex] : data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
+                                <p className={styles.total}>{ typeof(data?.[item.dataIndex]) == "number"?data?.[item.dataIndex] : data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
                                 <p style={{ textAlign: "center" }}>{workbenchItem.title}</p>
                             </div>
                         </div>
