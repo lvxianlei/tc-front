@@ -442,7 +442,7 @@ export default function CyclePlanChange(): React.ReactNode {
                         <Button type="primary" ghost disabled={detail.status===2}>周期计划下发</Button>
                     </Popconfirm>
                     <Button type="primary" ghost onClick={() => {
-                        downloadTemplate(`/tower-aps/cycPlan/download/${params.id}`, '周期计划压缩包', {}, true)
+                        downloadTemplate(`/tower-aps/cyclePlan/download/${params.id}`, '周期计划压缩包', {}, true)
                     }}>下载</Button>
                 </Space>
             ]}>
