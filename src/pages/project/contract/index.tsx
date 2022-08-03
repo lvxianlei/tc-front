@@ -56,6 +56,16 @@ export default function ContractList(): JSX.Element {
       dataIndex: "contractTotalWeight",
     },
     {
+      title: "已下计划重量(吨)",
+      dataIndex: "released",
+      width: 120,
+    },
+    {
+        title: "未下计划重量(吨)",
+        dataIndex: "notReleased",
+        width: 120,
+    },
+    {
       title: "合同金额(元)",
       width: 100,
       dataIndex: "contractAmount",

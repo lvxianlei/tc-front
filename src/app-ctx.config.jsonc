@@ -21,6 +21,20 @@
                     }
                 ]
             },
+            { // 
+                "label": "工作台",
+                "icon": "customer",
+                "path": "/workBenchSC",
+                "appName": "SC",
+                "authority": "customer_page",
+                "items": [
+                    {
+                        "label": "工作台",
+                        "path": "/workBenchSC/sc",
+                        "authority": "customer_detail"
+                    }
+                ]
+            },
             {
                 "label": "系统管理",
                 "icon": "xitongguanliTY_xitongguanli",
