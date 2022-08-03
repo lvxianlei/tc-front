@@ -1,90 +1,90 @@
 {
     "columns": [
         {
-            "key": "supplierName",
+            "key": "userName",
             "title": "姓名",
-            "dataIndex": "supplierName"
+            "dataIndex": "userName"
         },
         {
-            "key": "contractNumber",
+            "key": "process",
             "title": "工序",
-            "dataIndex": "contractNumber"
+            "dataIndex": "process"
         },
         {
-            "key": "contractStatusName",
+            "key": "workStatus",
             "title": "工作状态",
-            "dataIndex": "contractStatusName"
+            "dataIndex": "workStatus"
         },
         {
-            "key": "updateTime",
+            "key": "totalProductCategoryNum",
             "title": "累计塔型数",
-            "dataIndex": "updateTime"
+            "dataIndex": "totalProductCategoryNum"
         },
         {
-            "key": "operatorName",
+            "key": "productCategoryNum",
             "title": "塔型数",
-            "dataIndex": "operatorName"
+            "dataIndex": "productCategoryNum"
         },
         {
-            "key": "operatorName",
+            "key": "endTime",
             "title": "截止日期",
-            "dataIndex": "operatorName"
+            "dataIndex": "endTime"
         }
     ],
     "tableColumns": [
         {
-            "key": "materialName",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "materialName",
+            "dataIndex": "planNumber",
             "width": 100
         },
         {
-            "key": "materialStandardName",
+            "key": "programName",
             "title": "项目名称",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "programName",
             "width": 100
         },
         {
-            "key": "structureSpec",
+            "key": "productCategoryName",
             "title": "塔型名称",
-            "dataIndex": "structureSpec",
+            "dataIndex": "productCategoryName",
             "width": 100
         },
         {
-            "key": "structureTexture",
+            "key": "productType",
             "title": "产品类型",
-            "dataIndex": "structureTexture",
+            "dataIndex": "productType",
             "width": 100
         },
         {
-            "key": "length",
+            "key": "voltageGrade",
             "title": "电压等级",
-            "dataIndex": "length",
+            "dataIndex": "voltageGrade",
             "width": 100
         },
         {
-            "key": "width",
+            "key": "patternName",
             "title": "模式",
-            "dataIndex": "width",
+            "dataIndex": "patternName",
             "width": 100
         },
         {
-            "key": "num",
+            "key": "priority",
             "title": "优先级",
-            "dataIndex": "num",
+            "dataIndex": "priority",
             "width": 100
         },
         {
-            "key": "taxPrice",
+            "key": "startTime",
             "title": "开始日期",
-            "dataIndex": "taxPrice",
-            "type": "number",
+            "dataIndex": "startTime",
+            "type": "date",
             "width": 130
         },
         {
-            "key": "totalTaxPrice",
+            "key": "expectCompleteTime",
             "title": "预计完成日期",
-            "dataIndex": "totalTaxPrice",
+            "dataIndex": "expectCompleteTime",
             "width": 130
         }
     ]

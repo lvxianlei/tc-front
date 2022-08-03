@@ -33,11 +33,11 @@ export default function List(): React.ReactNode {
     const [form] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
     const [rowId, setRowId] = useState<string>('');
-    const [status, setStatus] = useState<string>('');
+    const [status, setStatus] = useState<number>(1);
     const [detailData, setDetailData] = useState<any>();
 
     const { loading, data, run } = useRequest<IPersonnelLoad[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-tdm/loftProcess/projectTowerTypePage`, { current: pagenation?.current || 1, size: pagenation?.size || 10, status: status, ...filterValue });
+        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/personal/work/load`, { current: pagenation?.current || 1, size: pagenation?.size || 10, type: status, ...filterValue });
         setPage({ ...data });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
@@ -50,7 +50,10 @@ export default function List(): React.ReactNode {
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(`/tower-tdm/loftProcess/getSegAssignList/${id}`);
+            const result = await RequestUtil.post<any>(`/tower-science/personal/work/load/detail/list`, {
+                userId: rowId,
+                type: status
+            });
             setDetailData(result)
             resole(result)
         } catch (error) {
@@ -75,7 +78,7 @@ export default function List(): React.ReactNode {
 
     return <Spin spinning={loading}>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item name="fuzzyMsg">
+            <Form.Item name="userNme">
                 <Input style={{ width: '200px' }} placeholder="姓名" />
             </Form.Item>
             <Form.Item>
@@ -85,17 +88,17 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Row className={styles.search}>
+        <Row>
             <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
                 setStatus(event.target.value);
-                setFilterValues({ status: event.target.value });
-                run({}, { status: event.target.value })
+                setFilterValues({ type: event.target.value });
+                run({}, { type: event.target.value })
             }}>
-                <Radio.Button value={''} key="0">全部</Radio.Button>
-                <Radio.Button value={'1'} key="1">放样</Radio.Button>
-                <Radio.Button value={'2'} key="2">提料</Radio.Button>
-                <Radio.Button value={'3'} key="3">编程</Radio.Button>
-                <Radio.Button value={'3'} key="3">螺栓</Radio.Button>
+                <Radio.Button value={1} key="1">全部</Radio.Button>
+                <Radio.Button value={2} key="2">放样</Radio.Button>
+                <Radio.Button value={3} key="3">提料</Radio.Button>
+                <Radio.Button value={4} key="4">编程</Radio.Button>
+                <Radio.Button value={5} key="5">螺栓</Radio.Button>
             </Radio.Group>
         </Row>
         <CommonTable
