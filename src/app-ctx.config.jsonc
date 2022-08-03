@@ -839,6 +839,16 @@
                         "path": "/baseSetting/baseSettingMngt",
                         "authority": "rd_config"
                     },
+                    {
+                        "label": "试组装配置",
+                        "path": "/baseSetting/tryAssemble",
+                        "authority": "rd_config"
+                    },
+                    {
+                        "label": "返修件条目配置",
+                        "path": "/baseSetting/itemRepair",
+                        "authority": "rd_config"
+                    },
                     // {
                     //     "label": "产线管理",
                     //     "path": "/baseSetting/productionLineMngt",

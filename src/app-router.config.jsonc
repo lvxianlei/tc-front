@@ -2739,6 +2739,20 @@
       "module": "./pages/businessDisposal/ProcessedDetails",
       "exact": true,
       "authority": "home_page_person_center"
+    },
+    { // RD-系统设置-试组装配置
+      "name": "试组装配置",
+      "path": "/baseSetting/tryAssemble",
+      "module": "./pages/baseSetting/TryAssemble",
+      "exact": true,
+      "authority": "home_page_person_center"
+    },
+    { // RD-系统设置-返修件条目配置
+      "name": "返修件条目配置",
+      "path": "/baseSetting/itemRepair",
+      "module": "./pages/baseSetting/ItemRepair",
+      "exact": true,
+      "authority": "home_page_person_center"
     }
   ]
 }
