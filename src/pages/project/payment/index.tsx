@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, message, Popconfirm } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { Button, Input, DatePicker, Select, message, Popconfirm, Form } from 'antd'
+import { useHistory, useLocation } from 'react-router-dom'
 import { SearchTable as Page } from '../../common'
 import { paymentListHead } from "./payment.json"
 import useRequest from '@ahooksjs/use-request'
@@ -8,6 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import { costTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Payment() {
     const history = useHistory()
+    const location = useLocation<{ payStatus?: string, applyStatus?:string }> ();
     const [filterValue, setFilterValue] = useState({
         ...history.location.state as object
     })
@@ -76,21 +77,25 @@ export default function Payment() {
             {
                 name: 'payStatus',
                 label: '请款状态',
-                children: <Select style={{ width: 100 }}>
-                    <Select.Option value="0">待付款</Select.Option>
-                    <Select.Option value="1">已付款</Select.Option>
-                </Select>
+                children: <Form.Item name='payStatus' initialValue={location.state?.payStatus||''}>
+                    <Select style={{ width: 100 }} >
+                        <Select.Option value="0">待付款</Select.Option>
+                        <Select.Option value="1">已付款</Select.Option>
+                    </Select>
+                </Form.Item>
             },
             {
                 name: 'applyStatus',
                 label: '审批状态',
-                children: <Select style={{ width: 100 }}>
-                    <Select.Option value="1">审批中</Select.Option>
-                    <Select.Option value="2">已通过</Select.Option>
-                    <Select.Option value="3">已驳回</Select.Option>
-                    <Select.Option value="4">已撤销</Select.Option>
-                    <Select.Option value="6">通过后撤销</Select.Option>
-                </Select>
+                children: <Form.Item name='applyStatus' initialValue={location.state?.applyStatus||''}>
+                    <Select style={{ width: 100 }}>
+                        <Select.Option value="1">审批中</Select.Option>
+                        <Select.Option value="2">已通过</Select.Option>
+                        <Select.Option value="3">已驳回</Select.Option>
+                        <Select.Option value="4">已撤销</Select.Option>
+                        <Select.Option value="6">通过后撤销</Select.Option>
+                    </Select>
+                </Form.Item>
             },
             {
                 name: 'startApplicantTime',

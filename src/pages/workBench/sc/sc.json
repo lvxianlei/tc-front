@@ -12,7 +12,7 @@
                     "path": {
                         "pathname": "/bidding/information",
                         "state": {
-                            "biddingStatus": "0"
+                            "biddingStatus": 0
                         }
                     },
                     "authority": "workbench_data"
@@ -50,7 +50,7 @@
                     "path": {
                         "pathname": "/project/payment",
                         "state": {
-                            "applyStatus": "0"
+                            "payStatus": "0"
                         }
                     },
                     "authority": "workbench_data4"
@@ -103,7 +103,7 @@
                     "path": {
                         "pathname": "/project/collection",
                         "state": {
-                            "confirmStatus": "0"
+                            "confirmStatus": 0
                         }
                     },
                     "authority": "workbench_data7"
@@ -123,7 +123,7 @@
                     "path": {
                         "pathname": "/project/drawing",
                         "state": {
-                            "auditStatus": "0"
+                            "auditStatus": 0
                         }
                     },
                     "authority": "workbench_data8"
@@ -134,7 +134,7 @@
                     "path": {
                         "pathname": "/project/drawing",
                         "state": {
-                            "auditStatus": "1"
+                            "auditStatus": 1
                         }
                     },
                     "authority": "workbench_data8"
@@ -145,18 +145,7 @@
                     "path": {
                         "pathname": "/project/drawing",
                         "state": {
-                            "auditStatus": "2"
-                        }
-                    },
-                    "authority": "workbench_data8"
-                },
-                {
-                    "title": "已拒绝",
-                    "dataIndex": "refuseNum",
-                    "path": {
-                        "pathname": "/project/drawing",
-                        "state": {
-                            "auditStatus": "3"
+                            "auditStatus": 2
                         }
                     },
                     "authority": "workbench_data8"
@@ -177,7 +166,7 @@
                         "pathname": "/approvalm/management",
                         "state": {
                             "auditStatus": 0,
-                            "processTypeId": "1438044673787949057"
+                            "processName": "履约保证金申请"
                         }
                     },
                     "authority": "workbench_data9"
@@ -189,7 +178,7 @@
                         "pathname": "/approvalm/management",
                         "state": {
                             "auditStatus": 2,
-                            "processTypeId": "1438044673787949057"
+                            "processName": "履约保证金申请"
                         }
                     },
                     "authority": "workbench_data8"
@@ -210,19 +199,7 @@
                         "pathname": "/approvalm/management",
                         "state": {
                             "auditStatus": 0,
-                            "processTypeId": "1438044867434770433"
-                        }
-                    },
-                    "authority": "workbench_data10"
-                },
-                {
-                    "title": "已驳回",
-                    "dataIndex": "rejectedNum",
-                    "path": {
-                        "pathname": "/approvalm/management",
-                        "state": {
-                            "auditStatus": 2,
-                            "processTypeId": "1438044867434770433"
+                            "processName": "招标评审申请"
                         }
                     },
                     "authority": "workbench_data10"
@@ -243,7 +220,7 @@
                         "pathname": "/approvalm/management",
                         "state": {
                             "auditStatus": 0,
-                            "processTypeId": "1438044867434770434"
+                            "processName": "出厂价申请"
                         }
                     },
                     "authority": "workbench_data12"
@@ -255,7 +232,7 @@
                         "pathname": "/approvalm/management",
                         "state": {
                             "auditStatus": 2,
-                            "processTypeId": "1438044867434770434"
+                            "processName": "出厂价申请"
                         }
                     },
                     "authority": "workbench_data12"
@@ -276,19 +253,7 @@
                         "pathname": "/approvalm/management",
                         "state": {
                             "auditStatus": 0,
-                            "processTypeId": "1438044867434770435"
-                        }
-                    },
-                    "authority": "workbench_data13"
-                },
-                {
-                    "title": "已驳回",
-                    "dataIndex": "rejectedNum",
-                    "path": {
-                        "pathname": "/approvalm/management",
-                        "state": {
-                            "auditStatus": 0,
-                            "processTypeId": "1438044867434770435"
+                            "processName": "保函申请"
                         }
                     },
                     "authority": "workbench_data13"

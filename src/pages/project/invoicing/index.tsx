@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
-import { Link, useHistory } from 'react-router-dom'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form } from 'antd'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { SearchTable as Page } from '../../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -11,6 +11,7 @@ export default function Invoicing() {
     const history = useHistory()
     const modalRef = useRef<{ onSubmit: () => void, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
+    const location = useLocation<{ state?: number }> ();
     const [filterValue, setFilterValue] = useState({
         ...history.location.state as object
     });
@@ -135,10 +136,14 @@ export default function Invoicing() {
                 {
                     name: 'state',
                     label: '状态',
-                    children:<Select style={{ width: 200 }}>
-                        <Select.Option value="1">审批中</Select.Option>
-                        <Select.Option value="2">审批通过</Select.Option>
-                    </Select>
+                    children: <Form.Item name='auditStatus' initialValue={location.state?.state||''}>
+                        <Select style={{ width: 200 }}>
+                            <Select.Option value={0}>已创建</Select.Option>
+                            <Select.Option value={1}>审批中</Select.Option>
+                            <Select.Option value={2}>审批通过</Select.Option>
+                            <Select.Option value={3}>被驳回</Select.Option>
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'fuzzyQuery',
