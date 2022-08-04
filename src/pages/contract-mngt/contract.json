@@ -65,57 +65,7 @@
     ],
     "material": [
         {
-            "title": "材料名称",
-            "dataIndex": "materialName"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandard"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTextureId"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec"
-        },
-        {
-            "title": "长度（mm）",
-            "dataIndex": "length"
-        },
-        {
-            "title": "宽度（mm）",
-            "dataIndex": "width"
-        },
-        {
-            "title": "重量（吨）",
-            "dataIndex": "weight"
-        },
-        {
-            "title": "数量",
-            "dataIndex": "num"
-        },
-        {
-            "title": "含税单价",
-            "dataIndex": "taxPrice"
-        },
-        {
-            "title": "含税金额（元）合计",
-            "dataIndex": "taxTotalAmount"
-        },
-        {
-            "title": "不含税单价",
-            "dataIndex": "price"
-        },
-        {
-            "title": "不含税单价（元）合计",
-            "dataIndex": "totalAmount"
-        }
-    ],
-    "materialOverview": [
-        {
-            "title": "材料名称",
+            "title": "品名",
             "dataIndex": "materialName"
         },
         {
@@ -139,27 +89,77 @@
             "dataIndex": "width"
         },
         {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
             "title": "重量（吨）",
             "dataIndex": "weight"
+        },
+        {
+            "title": "含税单价(元/吨)",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额合计(元)",
+            "dataIndex": "taxTotalAmount"
+        },
+        {
+            "title": "不含税单价(元/吨)",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税金额合计(元)",
+            "dataIndex": "totalAmount"
+        }
+    ],
+    "materialOverview": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
         },
         {
             "title": "数量",
             "dataIndex": "num"
         },
         {
-            "title": "含税单价",
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "含税单价(元/吨)",
             "dataIndex": "taxPrice"
         },
         {
-            "title": "含税金额（元）合计",
+            "title": "含税金额合计(元)",
             "dataIndex": "taxTotalAmount"
         },
         {
-            "title": "不含税单价",
+            "title": "不含税单价(元/吨)",
             "dataIndex": "price"
         },
         {
-            "title": "不含税单价（元）合计",
+            "title": "不含税金额合计(元)",
             "dataIndex": "totalAmount"
         }
     ],
@@ -226,69 +226,19 @@
             "title": "关联采购计划",
             "dataIndex": "purchasePlan",
             "type": "popTable",
-            "path": "/tower-supply/materialPurchasePlan?planStatus=1",
-            "width": 1011,
-            "value": "purchasePlanCode",
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
-                {
-                    "title": "采购计划编号",
-                    "dataIndex": "purchasePlanCode",
-                    "width": 200,
-                    "type": "string",
-                    "search": true
-                },
-                {
-                    "title": "采购类型",
-                    "dataIndex": "purchaseType",
-                    "type": "select",
-                    "width": 100,
-                    "search": true,
-                    "enum": [
-                        {
-                            "label": "配料采购",
-                            "value": 1
-                        },
-                        {
-                            "label": "库存采购",
-                            "value": 2
-                        },
-                        {
-                            "label": "缺料采购",
-                            "value": 3
-                        }
-                    ]
-                },
-                {
-                    "title": "塔型（个）",
-                    "dataIndex": "productCategoryNum",
-                    "width": 100,
-                    "type": "integer"
-                },
-                {
-                    "title": "杆塔（基）",
-                    "dataIndex": "productNum",
-                    "width": 100,
-                    "type": "integer"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请关联采购计划..."
-                }
-            ]
+            "disabled": true,
+            "required": true
         },
         {
             "title": "供应商",
             "dataIndex": "supplier",
             "type": "popTable",
-            "path": "/tower-supply/supplier",
+            "path": "/tower-supply/comparisonPrice/getComparisonPrice/",
             "width": 1011,
             "value": "supplierName",
             "dependencies": true,
             "readOnly": true,
+            "disabled": true,
             "columns": [
                 {
                     "title": "供应商编号",
@@ -320,7 +270,7 @@
         },
         {
             "title": "经办人",
-            "dataIndex": "operator",
+            "dataIndex": "operatorName",
             "required": true,
             "disabled": true
         },

@@ -70,7 +70,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialList, setMaterialList] = useState<any[]>([])
-    const [supplierId, setSupplierId] = useState<string>("")
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
@@ -82,9 +81,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     // 装卸费
     const [newHandlingChargesInformation, setNewHandlingChargesInformation] = useState<any>(oneStevedoring); // 装卸费信息
 
+    const { loading: taxLoading, data: taxData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+        try {
+            const taxNum: any = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
+            resove(taxNum)
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
+            const taxNum = await RequestUtil.get(`/tower-storage/tax`)
             baseForm.setFieldsValue({
                 ...result,
                 operator: { id: result.operatorId, value: result.operatorName },
@@ -148,8 +157,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     structureTextureId: id,
                 }
             }) || [])
-            setSupplierId(result.supplierId);
-            resove(result)
+            resove({ ...result, tax: taxNum })
         } catch (error) {
             reject(error)
         }
@@ -198,7 +206,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
     }), { manual: true })
 
-    const { run: getComparisonPrice } = useRequest<any[]>((comparisonPriceId: string) => new Promise(async (resove, reject) => {
+    const { run: getComparisonPrice } = useRequest<any[]>((comparisonPriceId: string, supplierId: string) => new Promise(async (resove, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/comparisonPrice/getComparisonPriceDetailById?comparisonPriceId=${comparisonPriceId}&supplierId=${supplierId}`)
             resove(result)
@@ -293,6 +301,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 })
             }
             await saveRun(values)
+            message.success("保存成功...")
             resove(true)
         } catch (error) {
             reject(false)
@@ -322,72 +331,64 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleBaseInfoChange = async (fields: any, allFields: any) => {
         if (fields.supplier) {
-            setSupplierId(fields.supplier.id)
-            setMaterialList([])
-            baseForm.setFieldsValue({
-                comparisonPriceNumber: {
-                    value: "",
-                    id: "",
-                    records: []
-                }
-            })
-        }
-        if (fields.purchasePlan) {
-            if (allFields?.supplier) {
-                const result = colunmnBase;
-                const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
-                result[index].path = `/tower-supply/comparisonPrice?supplierId=${allFields?.supplier?.id}&comparisonStatus=2&purchasePlanId=${fields.purchasePlan.id}`
-                result[index].disabled = false;
-                setColunmnBase(result.slice(0))
-            }
-        }
-        if (fields.supplier) {
             if (allFields?.purchasePlan) {
-                const result = colunmnBase;
-                const index = result.findIndex((item: any) => item.dataIndex === "comparisonPriceNumber")
-                result[index].path = `/tower-supply/comparisonPrice?supplierId=${fields?.supplier?.id}&comparisonStatus=2&purchasePlanId=${allFields?.purchasePlan?.id}`
-                result[index].disabled = false;
-                setColunmnBase(result.slice(0))
+                const comparisonPriceNumberId = baseForm.getFieldValue("comparisonPriceNumber").id
+                const meterialList: any[] = await getComparisonPrice(comparisonPriceNumberId, fields.supplier.id)
+                setMaterialList(meterialList.map((item: any) => {
+                    const num = parseFloat(item.num || "1")
+                    const totalWeight = parseFloat(item.totalWeight || "1.00")
+                    const taxPrice = parseFloat(item.taxOffer || "1.00")
+                    // const price = parseFloat(item.offer || "1.00")
+                    return ({
+                        ...item,
+                        source: 1,
+                        num,
+                        taxPrice,
+                        price: (taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(6),
+                        structureTexture: item.structureTexture,
+                        structureTextureId: item.structureTextureId,
+                        weight: item.weight || "1.00",
+                        taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                        totalAmount: (totalWeight * taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(2)
+                    })
+                }))
+                setPopDataList(meterialList.map((item: any) => {
+                    const num = parseFloat(item.num || "1")
+                    const totalWeight = parseFloat(item.totalWeight || "1.00")
+                    const taxPrice = parseFloat(item.taxOffer || "1.00")
+                    // const price = parseFloat(item.offer || "1.00")
+                    return ({
+                        ...item,
+                        source: 1,
+                        num,
+                        taxPrice,
+                        price: (taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(6),
+                        structureTexture: item.structureTexture,
+                        structureTextureId: item.structureTextureId,
+                        weight: item.weight || "1.00",
+                        taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                        totalAmount: (totalWeight * taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(2)
+                    })
+                }))
             }
         }
         if (fields.comparisonPriceNumber) {
-            const meterialList: any[] = await getComparisonPrice(fields.comparisonPriceNumber.id)
-            // setMaterialList(meterialList.map((item: any) => {
-            //     const num = parseFloat(item.num || "1")
-            //     const totalWeight = parseFloat(item.totalWeight || "1.00")
-            //     const taxPrice = parseFloat(item.taxOffer || "1.00")
-            //     const price = parseFloat(item.offer || "1.00")
-            //     return ({
-            //         ...item,
-            //         source: 1,
-            //         num,
-            //         taxPrice,
-            //         price,
-            //         structureTexture: item.structureTexture,
-            //         structureTextureId: item.structureTextureId,
-            //         weight: item.weight || "1.00",
-            //         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-            //         totalAmount: (totalWeight * price).toFixed(2)
-            //     })
-            // }))
-            // setPopDataList(meterialList.map((item: any) => {
-            //     const num = parseFloat(item.num || "1")
-            //     const totalWeight = parseFloat(item.totalWeight || "1.00")
-            //     const taxPrice = parseFloat(item.taxOffer || "1.00")
-            //     const price = parseFloat(item.offer || "1.00")
-            //     return ({
-            //         ...item,
-            //         source: 1,
-            //         num,
-            //         taxPrice,
-            //         price,
-            //         structureTexture: item.structureTexture,
-            //         structureTextureId: item.structureTextureId,
-            //         weight: item.weight || "1.00",
-            //         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-            //         totalAmount: (totalWeight * price).toFixed(2)
-            //     })
-            // }))
+            baseForm.setFieldsValue({
+                purchasePlan: {
+                    id: fields.comparisonPriceNumber.records?.[0]?.purchasePlanId,
+                    value: fields.comparisonPriceNumber.records?.[0]?.purchasePlanCode
+                }
+            })
+            setColunmnBase(colunmnBase.map(((item: any) => {
+                if (item.dataIndex === "supplier") {
+                    return ({
+                        ...item,
+                        disabled: false,
+                        path: `/tower-supply/comparisonPrice/getComparisonPrice/${fields.comparisonPriceNumber.id}`
+                    })
+                }
+                return item
+            })))
         }
     }
 
@@ -493,7 +494,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
         }
     }
-    return <Spin spinning={loading}>
+
+    return <Spin spinning={loading && taxLoading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
@@ -560,7 +562,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return item
                 }
             })}
-            dataSource={{ operator: AuthUtil.getRealName() }} edit />
+            dataSource={{ operatorName: AuthUtil.getRealName() }} edit />
         <DetailTitle title="运费信息" />
         <BaseInfo
             form={freightForm}
@@ -599,81 +601,86 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             dataSource={{ unloadBear: 1 }} edit />
         <DetailTitle
             title="原材料信息"
-            operation={[<Button
-                type="primary"
-                ghost
-                key="add"
-                onClick={async () => {
-                    const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
-                    if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
-                        message.warning("请先选择询比价信息...")
-                    } else {
-                        setVisible(true)
-                    }
-                }}>添加</Button>]} />
+            operation={[
+                // <Button
+                // type="primary"
+                // ghost
+                // key="add"
+                // onClick={async () => {
+                //     const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
+                //     if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
+                //         message.warning("请先选择询比价信息...")
+                //     } else {
+                //         setVisible(true)
+                //     }
+                // }}>添加</Button>
+            ]} />
         <CommonTable
             rowKey={(records: any) => `${records.materialName}${records.structureSpec}${records.length}`}
             style={{ padding: "0" }}
             columns={[
                 ...material.map((item: any) => {
-                    if (["num", "taxPrice", "price"].includes(item.dataIndex)) {
+                    if ([
+                        "num",
+                        //  "taxPrice", "price"
+                    ].includes(item.dataIndex)) {
                         return ({
                             ...item,
                             render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
-                    if (item.dataIndex === "length") {
-                        return ({
-                            ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
-                        })
-                    }
-                    if (item.dataIndex === "materialStandard") {
-                        return ({
-                            ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
-                                style={{ width: '150px' }}
-                                value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName}
-                                onChange={(e: string) => {
-                                    const newData = materialList.map((item: any, index: number) => {
-                                        if (index === key) {
-                                            return {
-                                                ...item,
-                                                materialStandard: e.split(',')[0],
-                                                materialStandardName: e.split(',')[1]
-                                            }
-                                        }
-                                        return item
-                                    })
-                                    setMaterialList(newData)
-                                }}>
-                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
-                            </Select>
-                        })
-                    }
-                    if (item.dataIndex === "structureTextureId") {
-                        return ({
-                            ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? records.structureTexture : <Select
-                                style={{ width: '150px' }}
-                                value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture}
-                                onChange={(e: string) => {
-                                    const newData = materialList.map((item: any, index: number) => {
-                                        if (index === key) {
-                                            return {
-                                                ...item,
-                                                structureTextureId: e.split(',')[0],
-                                                structureTexture: e.split(',')[1]
-                                            }
-                                        }
-                                        return item
-                                    })
-                                    setMaterialList(newData)
-                                }}>
-                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
-                            </Select>
-                        })
-                    }
+                    // if (item.dataIndex === "length") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                    //     })
+                    // }
+                    // if (item.dataIndex === "materialStandard") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
+                    //             style={{ width: '150px' }}
+                    //             value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName}
+                    //             onChange={(e: string) => {
+                    //                 const newData = materialList.map((item: any, index: number) => {
+                    //                     if (index === key) {
+                    //                         return {
+                    //                             ...item,
+                    //                             materialStandard: e.split(',')[0],
+                    //                             materialStandardName: e.split(',')[1]
+                    //                         }
+                    //                     }
+                    //                     return item
+                    //                 })
+                    //                 setMaterialList(newData)
+                    //             }}>
+                    //             {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                    //         </Select>
+                    //     })
+                    // }
+                    // if (item.dataIndex === "structureTextureId") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (value: number, records: any, key: number) => records.source === 1 ? records.structureTexture : <Select
+                    //             style={{ width: '150px' }}
+                    //             value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture}
+                    //             onChange={(e: string) => {
+                    //                 const newData = materialList.map((item: any, index: number) => {
+                    //                     if (index === key) {
+                    //                         return {
+                    //                             ...item,
+                    //                             structureTextureId: e.split(',')[0],
+                    //                             structureTexture: e.split(',')[1]
+                    //                         }
+                    //                     }
+                    //                     return item
+                    //                 })
+                    //                 setMaterialList(newData)
+                    //             }}>
+                    //             {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                    //         </Select>
+                    //     })
+                    // }
                     return item
                 }),
                 {

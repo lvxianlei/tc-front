@@ -445,12 +445,15 @@
         {
             "title": "理算重量（吨）",
             "dataIndex": "totalWeight",
+            "type": "number",
+            "precision": 4,
             "disabled": true
         },
         {
             "title": "结算重量（吨）",
             "dataIndex": "balanceTotalWeight",
             "type": "number",
+            "precision": 4,
             "max": 99999.99,
             "required": true
         },

@@ -431,8 +431,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 // price: ((item.weight * item.num) * item.num * item.price).toFixed(2),
                 taxPrice: item.taxPrice,
                 totalTaxPrice: meteringMode === 1 ? totalPrice.toFixed(2) : totalTaxPrice.toFixed(2),
-                totalUnTaxPrice: meteringMode === 1 ? (totalPrice - totalPrice * (materialData!.taxVal / 100)).toFixed(2)
-                    : (totalTaxPrice - totalTaxPrice * (materialData!.taxVal / 100)).toFixed(2),
+                totalUnTaxPrice: meteringMode === 1 ? (totalPrice / (1 + materialData!.taxVal / 100)).toFixed(2)
+                    : (totalTaxPrice / (1 + materialData!.taxVal / 100)).toFixed(2),
                 unTaxPrice: item.price,
                 appearance: item.appearance || 1
             }
