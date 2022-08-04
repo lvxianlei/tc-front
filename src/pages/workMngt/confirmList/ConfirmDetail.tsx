@@ -7,7 +7,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 import { Table, Input, InputNumber, Popconfirm, Select } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
-import { patternTypeOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { patternTypeOptions, productTypeOptions, towerStructureOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import styles from './confirm.module.less'
 import { FixedType } from 'rc-table/lib/interface';
@@ -552,18 +552,18 @@ export default function ConfirmDetail(): React.ReactNode {
         },
         {
             title: '其他增重-电缆支架（kg）',
-            dataIndex: 'otherWeightLs',
+            dataIndex: 'otherWeightDlzj',
             width: 200,
-            key: 'otherWeightLs',
+            key: 'otherWeightDlzj',
             render: (value: any) => {
                 return parseFloat(value).toFixed(2)
             }
         },
         {
             title: '其他增重-其他（kg）',
-            dataIndex: 'otherWeightLs',
+            dataIndex: 'otherWeightOther',
             width: 200,
-            key: 'otherWeightLs',
+            key: 'otherWeightOther',
             render: (value: any) => {
                 return parseFloat(value).toFixed(2)
             }
@@ -614,6 +614,8 @@ export default function ConfirmDetail(): React.ReactNode {
                                     otherWeightXg: Number(item.otherWeightXg),
                                     otherWeightXxp: Number(item.otherWeightXxp),
                                     totalWeight: Number(item.totalWeight),
+                                    otherWeightDlzj: Number(item.totalWeight),
+                                    otherWeightOther: Number(item.otherWeightOther),
                                 }
                             }),
                             id: record?.id
@@ -623,7 +625,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={async () => {
-                            await RequestUtil.delete(`/tower-science/drawProductDetail?id=${record.id}`)
+                            await RequestUtil.delete(`/tower-science/drawProductDetail`, { ids: record.id })
                             message.success('删除成功！')
                             run()
                         }}
@@ -777,7 +779,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     }}>添加</Button> : null}
                     <Button type='primary' disabled={selectedKeys.length <= 0} onClick={
                         async () => {
-                            await RequestUtil.delete(``)
+                            await RequestUtil.delete(`/tower-science/drawProductDetail`, { ids: selectedKeys.join(',') })
                             message.success('删除成功！')
                             run()
                         }
@@ -868,7 +870,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     <Descriptions.Item label="结构" span={2}>
                         <Form.Item name="structure" style={{ width: '100%' }} wrapperCol={{ span: 24 }}>
                             <Select getPopupContainer={triggerNode => triggerNode.parentNode}>
-                                {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                {towerStructureOptions && towerStructureOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id}>
                                         {name}
                                     </Select.Option>
@@ -927,8 +929,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightGdxg ? legValueSum[index]?.otherWeightGdxg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             legValueSum[index].A = legValueSum[index].name.indexOf('，') > -1 || legValueSum[index].name.indexOf(',') > -1 || legValueSum[index].name.indexOf('/') > -1 ? legValueSum[index].name.split(/\/|,|，/).filter((item: any) => { return item }).length : 1
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL
                                             legValueSum[index].totalWeight = legValueSum[index].A * legValueSum[index].monomerWeight
 
                                             form.setFieldsValue({
@@ -972,8 +976,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             form.setFieldsValue({
                                                 confirmList: [...legValueSum]
@@ -1031,8 +1037,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1060,8 +1068,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1089,8 +1099,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1118,8 +1130,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1163,8 +1177,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1192,8 +1208,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1222,8 +1240,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1251,8 +1271,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1280,8 +1302,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1309,8 +1333,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1338,8 +1364,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1367,8 +1395,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightGdxg ? legValueSum[index]?.otherWeightGdxg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1396,8 +1426,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightGdxg ? legValueSum[index]?.otherWeightGdxg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1425,8 +1457,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherH: number = legValueSum[index]?.otherWeightGdxg ? legValueSum[index]?.otherWeightGdxg : 0;
                                             const otherI: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
+                                            const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1437,7 +1471,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="其他增重-电缆支架(kg)" span={2}>
-                                    <Form.Item name={["confirmList", index, "otherWeightLs"]} initialValue={0} wrapperCol={{ span: 24 }}>
+                                    <Form.Item name={["confirmList", index, "otherWeightDlzj"]} initialValue={0} wrapperCol={{ span: 24 }}>
                                         <InputNumber precision={2} min={0} style={{ width: '100%' }} onChange={(value: number) => {
                                             const legValueSum = form.getFieldsValue(true)?.confirmList;
                                             const data: number = legValueSum[index]?.bodyWeight ? legValueSum[index]?.bodyWeight : 0;
@@ -1455,8 +1489,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherI: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherK: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({
@@ -1467,7 +1502,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="其他增重-其他(kg)" span={2}>
-                                    <Form.Item name={["confirmList", index, "otherWeightLs"]} initialValue={0} wrapperCol={{ span: 24 }}>
+                                    <Form.Item name={["confirmList", index, "otherWeightOther"]} initialValue={0} wrapperCol={{ span: 24 }}>
                                         <InputNumber precision={2} min={0} style={{ width: '100%' }} onChange={(value: number) => {
                                             const legValueSum = form.getFieldsValue(true)?.confirmList;
                                             const data: number = legValueSum[index]?.bodyWeight ? legValueSum[index]?.bodyWeight : 0;
@@ -1485,8 +1520,9 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherI: number = legValueSum[index]?.otherWeightXg ? legValueSum[index]?.otherWeightXg : 0;
                                             const otherJ: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherK: number = legValueSum[index]?.otherWeightLs ? legValueSum[index]?.otherWeightLs : 0;
+                                            const otherL: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
                                             const A = legValueSum[index]?.A ? legValueSum[index]?.A : 0;
-                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + value
+                                            legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL + value
                                             legValueSum[index].totalWeight = A * legValueSum[index].monomerWeight
                                             console.log(legValueSum)
                                             form.setFieldsValue({

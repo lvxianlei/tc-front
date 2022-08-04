@@ -37,14 +37,14 @@ export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
 
     const { loading, data, run } = useRequest<IPersonnelLoad[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/personal/work/load`, { current: pagenation?.current || 1, size: pagenation?.size || 10, type: status, ...filterValue });
+        const data: IResponseData = await RequestUtil.post<IResponseData>(`/tower-science/personal/work/load`, { current: pagenation?.current || 1, size: pagenation?.size || 10, type: status, ...filterValue });
         setPage({ ...data });
-        if (data.records.length > 0 && data.records[0]?.id) {
-            detailRun(data.records[0]?.id)
-            setRowId(data.records[0]?.id)
-        } else {
-            setDetailData([]);
-        }
+        // if (data.records.length > 0 && data.records[0]?.id) {
+        //     detailRun(data.records[0]?.id)
+        //     setRowId(data.records[0]?.id)
+        // } else {
+        //     setDetailData([]);
+        // }
         resole(data?.records);
     }), {})
 
@@ -101,6 +101,8 @@ export default function List(): React.ReactNode {
                 <Radio.Button value={5} key="5">螺栓</Radio.Button>
             </Radio.Group>
         </Row>
+        <div className={styles.left}>
+
         <CommonTable
             haveIndex
             columns={[
@@ -127,7 +129,8 @@ export default function List(): React.ReactNode {
                 className: styles.tableRow
             })}
         />
-        <div className={styles.bottomTable}>
+        </div>
+        <div className={styles.right}>
             <CommonTable
                 haveIndex
                 columns={tableColumns}
