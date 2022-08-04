@@ -43,6 +43,7 @@ export default function Materials(): React.ReactNode {
 
     // 新建盘点关闭
     const handleCreate = (options: any) => {
+        console.log("handleCreate")
         if (options?.code === 1) {
             history.go(0);
         }
