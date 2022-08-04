@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Typography } from 'antd'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { SearchTable as Page } from '../common'
 import { base } from "./bidding.json"
 import { sourceOptions } from '../../configuration/DictionaryOptions'
 const { Paragraph } = Typography
 export default function Information(): React.ReactNode {
+    const history = useHistory()
+    const [filterValue, setFilterValue] = useState<object>({
+        ...history.location.state as object
+    });
     const dictionaryOptions: any = sourceOptions
     const onFilterSubmit = (value: any) => {
         if (value.startBidBuyEndTime) {
@@ -26,6 +30,7 @@ export default function Information(): React.ReactNode {
         if (value.source) {
             value.source = value.source.join(",")
         }
+        setFilterValue(value)
         return value
     }
 
@@ -37,6 +42,7 @@ export default function Information(): React.ReactNode {
 
     return <Page
         path="/tower-market/bidInfo"
+        filterValue={filterValue}
         columns={[
             {
                 title: '序号',

@@ -12,7 +12,9 @@ interface EditRefProps {
 }
 export default function Drawing(): React.ReactNode {
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState({})
+    const [filterValue, setFilterValue] = useState({
+        ...history.location.state as object
+    })
     const [visible, setVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [connectVisible, setConnectVisible] = useState<boolean>(false)
