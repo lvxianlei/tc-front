@@ -42,6 +42,7 @@ export default function PackingListNew(): React.ReactNode {
     const [reuse, setReuse] = useState<any>();
     // const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
     const [packageWeight, setPackageWeight] = useState<number>(0);
+    const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
     useEffect(() => setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0), [JSON.stringify([...packagingData])])
 
@@ -522,13 +523,18 @@ export default function PackingListNew(): React.ReactNode {
                 productIdList: reuse,
                 packageRecordSaveDTOList: showParts ? packagingData : dataShowParts(packagingData)
             };
+            setBtnLoading(true);
             RequestUtil.post(`/tower-science/packageStructure`, value).then(res => {
                 message.success('包装清单保存成功');
+                setBtnLoading(false);
                 if (tip === 0) {
                     history.goBack();
                 } else {
                     history.go(0)
                 }
+            }).catch((error) => {
+                console.log(error);
+                setBtnLoading(false);
             })
         }
     }
@@ -576,10 +582,10 @@ export default function PackingListNew(): React.ReactNode {
         <DetailContent key="packinglistnew" operation={[
             <Space direction="horizontal" size="small" >
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
-                <Button type="primary" onClick={() => {
+                <Button type="primary" loading={btnLoading} onClick={() => {
                     save(0);
                 }}>保存并关闭</Button>
-                {params.packId ? null : <Button type="primary" onClick={() => {
+                {params.packId ? null : <Button loading={btnLoading} type="primary" onClick={() => {
                     save(1);
                 }}>保存并继续</Button>}
             </Space>

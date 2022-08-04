@@ -19,7 +19,13 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: string | number) => <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>,
+                render: (text: string | number) => {
+                    if (data.mode === "multiple") {
+                        const result = `${text}`.split(",").map((item: string) => data.enum.find((dItem: { value: string, label: string }) => dItem.value === item))
+                        return result.join(",")
+                    }
+                    return <>{((text || text === 0) && data.enum) ? data.enum.find((item: { value: string, label: string }) => item.value === text)?.label : text}</>
+                },
                 ...data
             })
         case "number":

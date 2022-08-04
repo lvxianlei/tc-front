@@ -54,7 +54,7 @@ const Location = (props: Props) => {
         },
         {
             key: 'reservoirName',
-            title: '库位',
+            title: '库区',
             editable: true,
             dataIndex: 'reservoirName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => {
