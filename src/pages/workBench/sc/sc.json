@@ -31,7 +31,7 @@
                     "path": {
                         "pathname": "/project/invoicing",
                         "state": {
-                            "taskStatus": 1
+                            "state": 1
                         }
                     },
                     "authority": "workbench_data4"
@@ -50,7 +50,7 @@
                     "path": {
                         "pathname": "/project/payment",
                         "state": {
-                            "payStatus": "0"
+                            "applyStatus": "0"
                         }
                     },
                     "authority": "workbench_data4"
@@ -164,10 +164,10 @@
             ]
         },
         {
-            "title": "履行保证金",
+            "title": "履约保证金",
             "col": 2,
             "dataIndex": "performanceBondWorkVO",
-            "path": "审批管理-履行保证金",
+            "path": "审批管理-履约保证金",
             "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E9%85%8D%E6%96%99%E6%96%B9%E6%A1%88.png",
             "workbenchItemVos": [
                 {
