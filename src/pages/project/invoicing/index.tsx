@@ -131,6 +131,14 @@ export default function Invoicing() {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
+                    name: 'state',
+                    label: '状态',
+                    children:<Select style={{ width: 200 }}>
+                        <Select.Option value="1">审批中</Select.Option>
+                        <Select.Option value="2">审批通过</Select.Option>
+                    </Select>
+                },
+                {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
                     children: <Input placeholder="编号/内部合同编号/工程名称/票面单位/业务经理" style={{ width: 300 }} />
