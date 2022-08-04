@@ -9,7 +9,7 @@ import { Col, Form, Input, InputNumber, Row, Select } from 'antd';
 import { DetailContent } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { compoundTypeOptions, productTypeOptions, towerStructureOptions, voltageGradeOptions } from "../../configuration/DictionaryOptions";
+import { compoundTypeOptions, patternTypeOptions, productTypeOptions, towerStructureOptions, voltageGradeOptions } from "../../configuration/DictionaryOptions";
 
 interface modalProps {
     readonly record?: any;
@@ -19,7 +19,14 @@ interface modalProps {
 export default forwardRef(function TryAssembleNew({ record, type }: modalProps, ref) {
     const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            form.setFieldsValue({ ...record })
+            form.setFieldsValue({
+                ...record,
+                towerStructureIds: record?.towerStructureIds && record?.towerStructureIds.split('、'),
+                voltageGradeIds: record?.voltageGradeIds && record?.voltageGradeIds.split('、'),
+                areaNames: record?.areaNames && record?.areaNames.split('、'),
+                segmentModeIds: record?.segmentModeIds && record?.segmentModeIds.split('、'),
+                weldingTypes: record?.weldingTypes && record?.weldingTypes.split('、')
+            })
             resole(true);
         } catch (error) {
             reject(error)
@@ -50,11 +57,11 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
             await saveRun({
                 ...value,
                 id: record?.id || '',
-                towerStructureIds: value?.towerStructureIds.join(','),
-                voltageGradeIds: value?.voltageGradeIds.join(','),
-                areaNames: value?.areaNames.join(','),
-                segmentModeIds: value?.segmentModeIds.join(','),
-                weldingTypes: value?.weldingTypes.join(',')
+                towerStructureIds: value?.towerStructureIds && value?.towerStructureIds.join('、'),
+                voltageGradeIds: value?.voltageGradeIds && value?.voltageGradeIds.join('、'),
+                areaNames: value?.areaNames && value?.areaNames.join('、'),
+                segmentModeIds: value?.segmentModeIds && value?.segmentModeIds.join('、'),
+                weldingTypes: value?.weldingTypes && value?.weldingTypes.join('、')
             })
             resolve(true);
         } catch (error) {
@@ -134,7 +141,7 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
                     <Form.Item name={'segmentModeIds'} label="段模式">
                         <Select style={{ width: '100%' }} mode="multiple">
                             {
-                                voltageGradeOptions?.map((item: any, index: number) =>
+                                patternTypeOptions?.map((item: any, index: number) =>
                                     <Select.Option value={item.id} key={index}>
                                         {item.name}
                                     </Select.Option>

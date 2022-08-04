@@ -9,7 +9,7 @@ import { Form, Input, InputNumber, Select } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { productTypeOptions } from "../../../configuration/DictionaryOptions";
+import { productTypeOptions, towerStructureOptions } from "../../../configuration/DictionaryOptions";
 
 interface modalProps {
     readonly record?: any;
@@ -70,7 +70,7 @@ export default forwardRef(function BoltQuotaNew({ record, type }: modalProps, re
                 <Select style={{ width: '100%' }} >
                     {/* 字典-铁塔结构 */}
                     {
-                        productTypeOptions?.map((item: any, index: number) =>
+                        towerStructureOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
                                 {item.name}
                             </Select.Option>
@@ -78,25 +78,25 @@ export default forwardRef(function BoltQuotaNew({ record, type }: modalProps, re
                     }
                 </Select>
             </Form.Item>
-            <Form.Item name={'materialCategory'} label="螺栓清点" rules={[{ required: true, message: '请输入螺栓清点' }]}>
+            <Form.Item name={'boltCheck'} label="螺栓清点" rules={[{ required: true, message: '请输入螺栓清点' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
-            <Form.Item name={'proofread'} label="螺栓校核" rules={[{ required: true, message: '请输入螺栓校核' }]}>
+            <Form.Item name={'boltProofread'} label="螺栓校核" rules={[{ required: true, message: '请输入螺栓校核' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
-            <Form.Item name={'proofread'} label="螺栓计划-出" rules={[{ required: true, message: '请输入螺栓计划-出' }]}>
+            <Form.Item name={'boltPlanCome'} label="螺栓计划-出" rules={[{ required: true, message: '请输入螺栓计划-出' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
-            <Form.Item name={'proofread'} label="螺栓计划-校" rules={[{ required: true, message: '请输入螺栓计划-校' }]}>
+            <Form.Item name={'boltPlanProofread'} label="螺栓计划-校" rules={[{ required: true, message: '请输入螺栓计划-校' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
-            <Form.Item name={'proofread'} label="螺栓清点套用" rules={[{ required: true, message: '请输入螺栓清点套用' }]}>
+            <Form.Item name={'boltCheckApply'} label="螺栓清点套用" rules={[{ required: true, message: '请输入螺栓清点套用' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
-            <Form.Item name={'proofread'} label="螺栓清点校核" rules={[{ required: true, message: '请输入螺栓清点校核' }]}>
+            <Form.Item name={'boltCheckProofread'} label="螺栓清点校核" rules={[{ required: true, message: '请输入螺栓清点校核' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
-            <Form.Item name={'proofread'} label="螺栓计划套用" rules={[{ required: true, message: '请输入螺栓计划套用' }]}>
+            <Form.Item name={'boltPlanApply'} label="螺栓计划套用" rules={[{ required: true, message: '请输入螺栓计划套用' }]}>
                 <InputNumber min={0} max={99} style={{ width: '100%' }} />
             </Form.Item>
         </Form>

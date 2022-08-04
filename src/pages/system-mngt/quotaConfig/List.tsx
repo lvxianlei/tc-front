@@ -83,10 +83,10 @@ export default function List(): React.ReactNode {
 
     const pickColumns = [
         {
-            key: 'productType',
+            key: 'productTypeName',
             title: '产品类型',
             width: 80,
-            dataIndex: 'productType'
+            dataIndex: 'productTypeName'
         },
         {
             key: 'projectEntries',
@@ -123,10 +123,10 @@ export default function List(): React.ReactNode {
 
     const boltColumns = [
         {
-            key: 'productType',
+            key: 'productTypeName',
             title: '产品类型',
             width: 80,
-            dataIndex: 'productType'
+            dataIndex: 'productTypeName'
         },
         {
             key: 'projectEntries',
