@@ -219,11 +219,11 @@
             },
             {
                 "title": "理算重量",
-                "dataIndex": "totalWeight"
+                "dataIndex": "weight"
             },
             {
-                "title": "结算重量----新加",
-                "dataIndex": "totalWeight"
+                "title": "结算重量",
+                "dataIndex": "balanceTotalWeight"
             },
             {
                 "title": "含税单价（元/吨）",
@@ -246,8 +246,8 @@
                 "dataIndex": "unTransportTaxPrice"
             },
             {
-                "title": "不含税装卸费（元）----新加",
-                "dataIndex": "unTransportTaxPrice"
+                "title": "不含税装卸费（元）",
+                "dataIndex": "unUnloadTaxPrice"
             },
             {
                 "title": "库位",

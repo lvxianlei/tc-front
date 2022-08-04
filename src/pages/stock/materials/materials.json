@@ -2,23 +2,23 @@
     "baseInfoColumn": [
         {
             "title": "盘点单号",
-            "dataIndex": "guaranteeNumber"
+            "dataIndex": "stockTakingNumber"
         },
         {
             "title": "盘点状态",
-            "dataIndex": "applyNumber"
+            "dataIndex": "takingNumberStatusName"
         },
         {
             "title": "盘点日期",
-            "dataIndex": "applyTime"
+            "dataIndex": "takingTime"
         },
         {
             "title": "盘点仓库",
-            "dataIndex": "applyDeptName"
+            "dataIndex": "warehouseName"
         },
         {
             "title": "盘点人",
-            "dataIndex": "projectName"
+            "dataIndex": "takingUserName"
         }
     ]
 }

@@ -259,7 +259,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     }]}
                 pagination={false}
                 dataSource={popDataList} />
-            <Modal width={1100} title={`选择出库明细`} destroyOnClose
+            <Modal width={1100} title={`选择库存`} destroyOnClose
                 visible={visible}
                 onOk={handleAddModalOk}
                 onCancel={() => {
