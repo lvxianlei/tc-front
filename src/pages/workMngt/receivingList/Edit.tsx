@@ -403,11 +403,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const handleModalOk = () => {
         const meteringMode = form.getFieldValue("meteringMode")
+        const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
         let num: string = "0.00"
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             num = (parseFloat(num) + parseFloat(item.num || "0.00")).toFixed(2)
             const totalTaxPrice = (item.ponderationWeight || "0") * item.taxPrice
             const totalPrice = ((item.weight || "0") * item.num) * item.taxPrice
+            const totalWeight = (item.weight * item.num).toFixed(4)
             const postData = {
                 ...item,
                 id: item.id,
@@ -419,7 +421,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 /** 理算重量 */
                 weight: item.weight,
                 /** 理算总重量 */
-                totalWeight: (item.weight * item.num).toFixed(4),
+                totalWeight,
+                balanceTotalWeight: meteringMode === 1 ? totalWeight : totalPonderationWeight,
                 /***
                  * 计算价税合计 
                  *      总重 = 单个重量 * 数量
@@ -428,8 +431,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 // price: ((item.weight * item.num) * item.num * item.price).toFixed(2),
                 taxPrice: item.taxPrice,
                 totalTaxPrice: meteringMode === 1 ? totalPrice.toFixed(2) : totalTaxPrice.toFixed(2),
-                totalUnTaxPrice: meteringMode === 1 ? (totalPrice - totalPrice * (materialData!.taxVal / 100)).toFixed(2)
-                    : (totalTaxPrice - totalTaxPrice * (materialData!.taxVal / 100)).toFixed(2),
+                totalUnTaxPrice: meteringMode === 1 ? (totalPrice / (1 + materialData!.taxVal / 100)).toFixed(2)
+                    : (totalTaxPrice / (1 + materialData!.taxVal / 100)).toFixed(2),
                 unTaxPrice: item.price,
                 appearance: item.appearance || 1
             }
@@ -438,29 +441,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         })
         setCargoData(dataSource)
         setVisible(false);
-        // 选择完货物明细，
-        // let transportPriceCount = "0",
-        //     unloadPriceCount = "0",
-        //     weightAll = 0,
-        //     priceAll = 0;
-        // if (dataSource.length > 0) {
-        //     for (let i = 0; i < dataSource.length; i += 1) {
-        //         weightAll = weightAll + (((dataSource[i].weight) * 1 <= 0 ? 0 : dataSource[i].weight) * 1);
-        //         priceAll = dataSource[i].price * 1 + priceAll;
-        //     }
-        //     // 运费价税合计 = 总重量 * 单价
-        //     transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
-        //     // 装卸费合计 = 总重量 * 单价
-        //     unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
-        // }
-        // setFreightInformation({
-        //     ...freightInformation,
-        //     transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
-        // })
-        // setHandlingCharges({
-        //     ...handlingCharges,
-        //     unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
-        // })
     }
 
     const { run: getSupplier } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
@@ -706,6 +686,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return ({
                             ...item,
                             enum: warehouseData || []
+                        })
+                    case "totalPonderationWeight":
+                        return ({
+                            ...item,
+                            required: form.getFieldValue("meteringMode") === 2
                         })
                     default:
                         return item

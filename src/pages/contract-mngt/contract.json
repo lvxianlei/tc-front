@@ -65,57 +65,7 @@
     ],
     "material": [
         {
-            "title": "材料名称",
-            "dataIndex": "materialName"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandard"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTextureId"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec"
-        },
-        {
-            "title": "长度（mm）",
-            "dataIndex": "length"
-        },
-        {
-            "title": "宽度（mm）",
-            "dataIndex": "width"
-        },
-        {
-            "title": "重量（吨）",
-            "dataIndex": "weight"
-        },
-        {
-            "title": "数量",
-            "dataIndex": "num"
-        },
-        {
-            "title": "含税单价",
-            "dataIndex": "taxPrice"
-        },
-        {
-            "title": "含税金额（元）合计",
-            "dataIndex": "taxTotalAmount"
-        },
-        {
-            "title": "不含税单价",
-            "dataIndex": "price"
-        },
-        {
-            "title": "不含税单价（元）合计",
-            "dataIndex": "totalAmount"
-        }
-    ],
-    "materialOverview": [
-        {
-            "title": "材料名称",
+            "title": "品名",
             "dataIndex": "materialName"
         },
         {
@@ -139,27 +89,77 @@
             "dataIndex": "width"
         },
         {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
             "title": "重量（吨）",
             "dataIndex": "weight"
+        },
+        {
+            "title": "含税单价(元/吨)",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额合计(元)",
+            "dataIndex": "taxTotalAmount"
+        },
+        {
+            "title": "不含税单价(元/吨)",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税金额合计(元)",
+            "dataIndex": "totalAmount"
+        }
+    ],
+    "materialOverview": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
         },
         {
             "title": "数量",
             "dataIndex": "num"
         },
         {
-            "title": "含税单价",
+            "title": "重量（吨）",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "含税单价(元/吨)",
             "dataIndex": "taxPrice"
         },
         {
-            "title": "含税金额（元）合计",
+            "title": "含税金额合计(元)",
             "dataIndex": "taxTotalAmount"
         },
         {
-            "title": "不含税单价",
+            "title": "不含税单价(元/吨)",
             "dataIndex": "price"
         },
         {
-            "title": "不含税单价（元）合计",
+            "title": "不含税金额合计(元)",
             "dataIndex": "totalAmount"
         }
     ],
@@ -170,109 +170,12 @@
             "disabled": true
         },
         {
-            "title": "关联采购计划",
-            "dataIndex": "purchasePlan",
-            "type": "popTable",
-            "path": "/tower-supply/materialPurchasePlan?planStatus=1",
-            "width": 1011,
-            "value": "purchasePlanCode",
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
-                {
-                    "title": "采购计划编号",
-                    "dataIndex": "purchasePlanCode",
-                    "width": 200,
-                    "type": "string",
-                    "search": true
-                },
-                {
-                    "title": "采购类型",
-                    "dataIndex": "purchaseType",
-                    "type": "select",
-                    "width": 100,
-                    "search": true,
-                    "enum": [
-                        {
-                            "label": "配料采购",
-                            "value": 1
-                        },
-                        {
-                            "label": "库存采购",
-                            "value": 2
-                        },
-                        {
-                            "label": "缺料采购",
-                            "value": 3
-                        }
-                    ]
-                },
-                {
-                    "title": "塔型（个）",
-                    "dataIndex": "productCategoryNum",
-                    "width": 100,
-                    "type": "integer"
-                },
-                {
-                    "title": "杆塔（基）",
-                    "dataIndex": "productNum",
-                    "width": 100,
-                    "type": "integer"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请关联采购计划..."
-                }
-            ]
-        },
-        {
-            "title": "供应商",
-            "dataIndex": "supplier",
-            "type": "popTable",
-            "path": "/tower-supply/supplier",
-            "width": 1011,
-            "value": "supplierName",
-            "dependencies": true,
-            "readOnly": true,
-            "columns": [
-                {
-                    "title": "供应商编号",
-                    "dataIndex": "supplierCode"
-                },
-                {
-                    "title": "供应商名称",
-                    "dataIndex": "supplierName"
-                },
-                {
-                    "title": "联系人",
-                    "dataIndex": "contactMan"
-                },
-                {
-                    "title": "联系电话",
-                    "dataIndex": "contactManTel"
-                },
-                {
-                    "title": "供货产品",
-                    "dataIndex": "supplyProductsName"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择供应商..."
-                }
-            ]
-        },
-        {
             "title": "询比价名称",
             "dataIndex": "comparisonPriceNumber",
             "type": "popTable",
             "path": "/tower-supply/comparisonPrice",
             "width": 1011,
             "value": "comparisonPriceNumber",
-            "disabled": true,
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -320,65 +223,61 @@
             ]
         },
         {
-            "title": "经办人",
-            "dataIndex": "operator",
-            "required": true,
+            "title": "关联采购计划",
+            "dataIndex": "purchasePlan",
             "type": "popTable",
-            "width": 1101,
-            "readOnly": true,
+            "disabled": true,
+            "required": true
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplier",
+            "type": "popTable",
+            "path": "/tower-supply/comparisonPrice/getComparisonPrice/",
+            "width": 1011,
+            "value": "supplierName",
             "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/employee",
-            "rowKey": "userId",
+            "readOnly": true,
+            "disabled": true,
             "columns": [
                 {
-                    "title": "部门",
-                    "dataIndex": "deptName"
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
                 },
                 {
-                    "title": "姓名",
-                    "dataIndex": "name"
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
                 },
                 {
-                    "title": "账号",
-                    "dataIndex": "account"
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
                 },
                 {
-                    "title": "手机号",
-                    "dataIndex": "phone"
+                    "title": "联系电话",
+                    "dataIndex": "contactManTel"
                 },
                 {
-                    "title": "角色",
-                    "dataIndex": "roleName"
-                },
-                {
-                    "title": "工号",
-                    "dataIndex": "number"
-                },
-                {
-                    "title": "邮箱",
-                    "dataIndex": "email"
+                    "title": "供货产品",
+                    "dataIndex": "supplyProductsName"
                 }
             ],
-            "search": [
+            "rules": [
                 {
-                    "title": "",
-                    "dataIndex": "fuzzyQuery",
-                    "width": 200,
-                    "placeholder": "账号/手机号/姓名/工号/邮箱"
+                    "required": true,
+                    "message": "请选择供应商..."
                 }
             ]
         },
         {
+            "title": "经办人",
+            "dataIndex": "operatorName",
+            "required": true,
+            "disabled": true
+        },
+        {
             "title": "交货方式",
             "dataIndex": "deliveryMethod",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择交货方式..."
-                }
-            ]
+            "type": "select"
         },
         {
             "title": "签订时间",
@@ -394,24 +293,55 @@
         {
             "title": "运输方式",
             "dataIndex": "transportMethod",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择运输方式..."
-                }
-            ]
+            "type": "select"
         },
         {
             "title": "交货时间",
             "dataIndex": "arrivalTime",
             "type": "date",
-            "rules": [
+            "required": true
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementMode",
+            "type": "select",
+            "required": true
+        },
+        {
+            "title": "开票性质",
+            "dataIndex": "invoiceCharacter",
+            "type": "select",
+            "enum": [
                 {
-                    "required": true,
-                    "message": "请选择交货时间..."
+                    "label": "一票制",
+                    "value": 1
+                },
+                {
+                    "label": "二票制",
+                    "value": 2
+                },
+                {
+                    "label": "三票制",
+                    "value": 3
                 }
-            ]
+            ],
+            "required": true
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringMode",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "理重",
+                    "value": 1
+                },
+                {
+                    "label": "过磅",
+                    "value": 2
+                }
+            ],
+            "required": true
         },
         {
             "title": "备注",
@@ -514,6 +444,32 @@
             "title": "交货时间",
             "dataIndex": "arrivalTime",
             "type": "date"
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementMode",
+            "type": "select",
+            "required": true
+        },
+        {
+            "title": "开票性质",
+            "dataIndex": "invoiceCharacterName"
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringMode",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "理重",
+                    "value": 1
+                },
+                {
+                    "label": "过磅",
+                    "value": 2
+                }
+            ],
+            "required": true
         },
         {
             "title": "备注",

@@ -187,7 +187,7 @@ export default function (): JSX.Element {
         const doFilterHandlers: Promise<boolean>[] = filters
             .keys().filter((item: string) => item !== "./IFilter.ts")
             .map<Promise<boolean>>((filter: any): Promise<boolean> => {
-                return filters(filter).default?.prototype?.doFilter?.(props)
+                return filters(filter).default?.prototype?.doFilter?.({ ...props, history })
             });
         const permits: boolean[] = await Promise.all(doFilterHandlers);
         for (let permit of permits) {

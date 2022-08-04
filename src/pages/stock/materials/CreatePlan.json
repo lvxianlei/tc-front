@@ -1,0 +1,252 @@
+{
+    "applicationdetails": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "productNum",
+            "type": "select",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "purchaseNumber",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "steelPlateTotal",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "roundSteelTotal",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "weight",
+            "width": 100,
+            "type": "string"
+        }
+    ],
+    "material": [
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width"
+        },
+        {
+            "title": "账面数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "账面重量（吨）",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "盘点数量",
+            "dataIndex": "stockTakingNum"
+        },
+        {
+            "title": "盘点重量（吨）",
+            "dataIndex": "stockTakingWeight"
+        },
+        {
+            "title": "盈亏数量",
+            "dataIndex": "profitAndLossNum"
+        },
+        {
+            "title": "盈亏重量（吨）",
+            "dataIndex": "profitAndLossWeight"
+        },
+        {
+            "title": "单价（元/吨）",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "账面金额（元）",
+            "dataIndex": "totalTaxPrice"
+        },
+        {
+            "title": "盘点金额（元）",
+            "dataIndex": "stockTakingPrice"
+        },
+        {
+            "title": "盈亏金额（元）",
+            "dataIndex": "profitAndLossPrice"
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice"
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "reservoirName"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorName"
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/materialStock/outDetails",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "查询",
+                "type": "string",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "收货批次/品名/规格"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "receiveBatchNumber"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialStandardName"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "structureTexture"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length"
+            },
+            {
+                "title": "宽度",
+                "dataIndex": "width"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "重量（吨）",
+                "dataIndex": "weight"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
+            },
+            {
+                "title": "炉批号",
+                "dataIndex": "furnaceBatchNumber"
+            },
+            {
+                "title": "质保书号",
+                "dataIndex": "warrantyNumber"
+            }
+        ]
+    },
+    "baseInfoColumn": [
+        {
+            "title": "盘点仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择盘点仓库"
+                }
+            ]
+        }
+    ],
+    "baseInfoEditColumn": [
+        {
+            "title": "盘点单号",
+            "dataIndex": "stockTakingNumber",
+            "disabled": true
+        },
+        {
+            "title": "盘点仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择盘点仓库"
+                }
+            ]
+        }
+    ]
+}

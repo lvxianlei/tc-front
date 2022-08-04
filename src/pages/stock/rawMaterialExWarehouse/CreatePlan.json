@@ -140,6 +140,22 @@
         {
             "title": "重量（吨）",
             "dataIndex": "weight"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "reservoirName"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorName"
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
         }
     ],
     "addMaterial": {
@@ -159,6 +175,10 @@
             }
         ],
         "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "receiveBatchNumber"
+            },
             {
                 "title": "品名",
                 "dataIndex": "materialName"
@@ -190,6 +210,38 @@
             {
                 "title": "重量（吨）",
                 "dataIndex": "weight"
+            },
+            {
+                "title": "单价（元/吨）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "不含税单价（元/吨）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
+            },
+            {
+                "title": "炉批号",
+                "dataIndex": "furnaceBatchNumber"
+            },
+            {
+                "title": "质保书号",
+                "dataIndex": "warrantyNumber"
             }
         ]
     }
