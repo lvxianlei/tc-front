@@ -52,105 +52,105 @@
     "material": [
         {
             "title": "收货批次",
-            "dataIndex": "materialName"
+            "dataIndex": "receiveBatchNumber"
         },
         {
             "title": "标准",
-            "dataIndex": "materialCategoryName"
+            "dataIndex": "materialStandardName"
         },
         {
             "title": "物料编码",
-            "dataIndex": "materialStandard"
+            "dataIndex": "materialCode"
         },
         {
             "title": "品名",
-            "dataIndex": "structureTexture"
+            "dataIndex": "materialName"
         },
         {
             "title": "材质",
-            "dataIndex": "structureSpec"
+            "dataIndex": "structureTexture"
         },
         {
             "title": "规格",
-            "dataIndex": "length"
+            "dataIndex": "structureSpec"
         },
         {
             "title": "长度",
-            "dataIndex": "width"
+            "dataIndex": "length"
         },
         {
             "title": "宽度",
+            "dataIndex": "width"
+        },
+        {
+            "title": "账面数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "账面重量（吨）",
             "dataIndex": "totalWeight"
         },
         {
-            "title": "账目数量",
-            "dataIndex": "planPurchaseNum"
-        },
-        {
-            "title": "账目重量（吨）",
-            "dataIndex": "planPurchaseNum"
-        },
-        {
             "title": "盘点数量",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "stockTakingNum"
         },
         {
             "title": "盘点重量（吨）",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "stockTakingWeight"
         },
         {
             "title": "盈亏数量",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "profitAndLossNum"
         },
         {
             "title": "盈亏重量（吨）",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "profitAndLossWeight"
         },
         {
             "title": "单价（元/吨）",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "taxPrice"
         },
         {
-            "title": "账目金额（元）",
-            "dataIndex": "planPurchaseNum"
+            "title": "账面金额（元）",
+            "dataIndex": "totalTaxPrice"
         },
         {
             "title": "盘点金额（元）",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "stockTakingPrice"
         },
         {
             "title": "盈亏金额（元）",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "profitAndLossPrice"
         },
         {
             "title": "不含税单价（元/吨）",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "unTaxPrice"
         },
         {
             "title": "不含税金额（元）",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "totalUnTaxPrice"
         },
         {
             "title": "库位",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "reservoirName"
         },
         {
             "title": "区位",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "locatorName"
         },
         {
             "title": "炉批号",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "furnaceBatchNumber"
         },
         {
             "title": "质保书号",
-            "dataIndex": "planPurchaseNum"
+            "dataIndex": "warrantyNumber"
         }
     ],
     "addMaterial": {
         "title": "原材料",
         "type": "popTable",
-        "path": "/tower-system/material",
+        "path": "/tower-storage/materialStock/outDetails",
         "width": 1011,
         "selectType": "checkbox",
         "dependencies": true,
@@ -166,19 +166,19 @@
         "columns": [
             {
                 "title": "收货批次",
-                "dataIndex": "materialCode"
+                "dataIndex": "receiveBatchNumber"
             },
             {
                 "title": "品名",
-                "dataIndex": "materialTypeName"
+                "dataIndex": "materialName"
             },
             {
                 "title": "标准",
-                "dataIndex": "materialCategoryName"
+                "dataIndex": "materialStandardName"
             },
             {
                 "title": "材质",
-                "dataIndex": "materialName"
+                "dataIndex": "structureTexture"
             },
             {
                 "title": "规格",
@@ -186,36 +186,67 @@
             },
             {
                 "title": "长度",
-                "dataIndex": "structureSpec"
+                "dataIndex": "length"
             },
             {
                 "title": "宽度",
-                "dataIndex": "structureSpec"
+                "dataIndex": "width"
             },
             {
                 "title": "数量",
-                "dataIndex": "structureSpec"
+                "dataIndex": "num"
             },
             {
                 "title": "重量（吨）",
-                "dataIndex": "structureSpec"
+                "dataIndex": "weight"
             },
             {
                 "title": "库位",
-                "dataIndex": "structureSpec"
+                "dataIndex": "reservoirName"
             },
             {
                 "title": "区位",
-                "dataIndex": "structureSpec"
+                "dataIndex": "locatorName"
             },
             {
                 "title": "炉批号",
-                "dataIndex": "structureSpec"
+                "dataIndex": "furnaceBatchNumber"
             },
             {
                 "title": "质保书号",
-                "dataIndex": "structureSpec"
+                "dataIndex": "warrantyNumber"
             }
         ]
-    }
+    },
+    "baseInfoColumn": [
+        {
+            "title": "盘点仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择盘点仓库"
+                }
+            ]
+        }
+    ],
+    "baseInfoEditColumn": [
+        {
+            "title": "盘点单号",
+            "dataIndex": "stockTakingNumber",
+            "disabled": true
+        },
+        {
+            "title": "盘点仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择盘点仓库"
+                }
+            ]
+        }
+    ]
 }
