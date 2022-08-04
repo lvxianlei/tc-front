@@ -625,7 +625,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={async () => {
-                            await RequestUtil.delete(`/tower-science/drawProductDetail`, { ids: record.id })
+                            await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${record.id }`)
                             message.success('删除成功！')
                             run()
                         }}
@@ -779,7 +779,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     }}>添加</Button> : null}
                     <Button type='primary' disabled={selectedKeys.length <= 0} onClick={
                         async () => {
-                            await RequestUtil.delete(`/tower-science/drawProductDetail`, { ids: selectedKeys.join(',') })
+                            await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',') }`, )
                             message.success('删除成功！')
                             run()
                         }
