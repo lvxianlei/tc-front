@@ -11,7 +11,9 @@ export default function Invoicing() {
     const history = useHistory()
     const modalRef = useRef<{ onSubmit: () => void, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({
+        ...history.location.state as object
+    });
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
