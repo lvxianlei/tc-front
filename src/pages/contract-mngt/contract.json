@@ -283,6 +283,7 @@
             "title": "签订时间",
             "dataIndex": "signingTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
@@ -299,6 +300,7 @@
             "title": "交货时间",
             "dataIndex": "arrivalTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "required": true
         },
         {
