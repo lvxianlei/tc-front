@@ -260,7 +260,7 @@
                 },
                 {
                     "title": "回款计划名称",
-                    "dataIndex": "name"
+                    "dataIndex": "planName"
                 },
                 {
                     "title": "计划回款日期",
