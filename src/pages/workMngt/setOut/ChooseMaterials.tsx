@@ -10,9 +10,11 @@ import { FixedType } from 'rc-table/lib/interface';
 
 interface modalProps {
     readonly id?: string;
+    readonly name?: string;
+    readonly planNumber?: string;
 }
 
-export default forwardRef(function ChooseMaterials({ id }: modalProps, ref) {
+export default forwardRef(function ChooseMaterials({ id, name, planNumber }: modalProps, ref) {
 
     const columns = [
         {
@@ -24,60 +26,60 @@ export default forwardRef(function ChooseMaterials({ id }: modalProps, ref) {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskNum',
+            key: 'segmentName',
             title: '段号',
             width: 150,
-            dataIndex: 'taskNum'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'planNumber',
+            key: 'code',
             title: '构件号',
             width: 150,
-            dataIndex: 'planNumber'
+            dataIndex: 'code'
         },
         {
-            key: 'internalNumber',
+            key: 'materialName',
             title: '材料名称',
-            dataIndex: 'internalNumber',
+            dataIndex: 'materialName',
             width: 120
         },
         {
-            key: 'name',
+            key: 'structureTexture',
             title: '材质',
             width: 200,
-            dataIndex: 'name'
+            dataIndex: 'structureTexture'
+        },
+        {
+            key: 'structureSpec',
+            title: '规格',
+            width: 150,
+            dataIndex: 'structureSpec',
+        },
+        {
+            key: 'length',
+            title: '长（mm）',
+            width: 150,
+            dataIndex: 'length',
         },
         {
             key: 'num',
-            title: '规格',
-            width: 150,
-            dataIndex: 'num',
-        },
-        {
-            key: 'voltageGradeName',
-            title: '长（mm）',
-            width: 150,
-            dataIndex: 'voltageGradeName',
-        },
-        {
-            key: 'plannedDeliveryTime',
             title: '件数',
-            dataIndex: 'plannedDeliveryTime',
+            dataIndex: 'num',
             width: 200,
         }
     ]
 
     return <DetailContent key='ChooseMaterials'>
         <Page
-            path=""
-            exportPath={``}
+            path={`/tower-science/productCategory/picking/list?productCategoryId=${id}`}
+            exportPath={`/tower-science/productCategory/picking/list?productCategoryId=${id}`}
             columns={columns}
             headTabs={[]}
             requestData={{}}
             searchFormItems={[]}
             extraOperation={<p>
-                <span>计划号：<span></span></span>
-                <span>塔型名：<span></span></span>
+                <span>计划号：<span>{name}</span></span>
+                <span>塔型名：<span>{planNumber}</span></span>
             </p>}
         />
     </DetailContent>

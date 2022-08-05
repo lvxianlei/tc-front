@@ -4,8 +4,8 @@
  * @description 工作管理-放样列表-工作目录
 */
 
-import React, { useRef, useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal, Table, Input, InputNumber } from 'antd';
+import React, { useState } from 'react';
+import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal, Input, InputNumber } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -16,7 +16,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
-import { patternTypeOptions, productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { patternTypeOptions, productTypeOptions, towerStructureOptions } from '../../../configuration/DictionaryOptions';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
@@ -37,10 +37,10 @@ export default function TowerInformation(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
 
-    const { data: otherQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-        const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=4`);
-        resole(result?.records || [])
-    }), {})
+    // const { data: otherQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+    //     const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=4`);
+    //     resole(result?.records || [])
+    // }), {})
 
 
     const { data: loftingQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
@@ -93,40 +93,44 @@ export default function TowerInformation(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'name',
+            key: 'segmentName',
             title: '段信息',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'name',
+            key: 'isExternalModel',
             title: '外来模型',
             width: 80,
-            dataIndex: 'name',
+            dataIndex: 'isExternalModel',
+            type: 'select',
+            enum: [
+                { "value": "1", "label": "是" },
+                { "value": "0", "label": "否" }
+            ],
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_} rules={[{
+                <Form.Item name={['data', index, "isExternalModel"]} initialValue={_} rules={[{
                     required: true,
                     message: '请选择外来模型'
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择外来模型">
-                        {otherQuota && otherQuota?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.id}>{item.projectEntries}</Select.Option>
-                        })}
+                        <Select.Option value="1" key="1">是</Select.Option>
+                        <Select.Option value="0" key="0">否</Select.Option>
                     </Select>
                 </Form.Item>
             )
         },
         {
-            key: 'name',
+            key: 'structure',
             title: '结构',
             width: 50,
-            dataIndex: 'name',
+            dataIndex: 'structure',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "structure"]} initialValue={_}>
                     {
-                        productTypeOptions?.map((item: any, index: number) =>
+                        towerStructureOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
                                 {item.name}
                             </Select.Option>
@@ -136,19 +140,19 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'name',
+            key: 'completeTime',
             title: '完成放样时间',
             width: 120,
-            dataIndex: 'name'
+            dataIndex: 'completeTime'
         },
         {
-            key: 'name',
+            key: 'loftingUser',
             title: '放样人',
             width: 80,
-            dataIndex: 'name',
+            dataIndex: 'loftingUser',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "loftingUser"]} initialValue={_}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -160,13 +164,13 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'name',
+            key: 'loftingMutualReview',
             title: '放样互审',
             width: 80,
-            dataIndex: 'name',
+            dataIndex: 'loftingMutualReview',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "loftingMutualReview"]} initialValue={_}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -178,13 +182,13 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'name',
+            key: 'checkUser',
             title: '校核人',
             width: 80,
-            dataIndex: 'name',
+            dataIndex: 'checkUser',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "checkUser"]} initialValue={_}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -196,34 +200,34 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'name',
+            key: 'statusName',
             title: '放样状态',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'statusName'
         },
         {
-            key: 'name',
+            key: 'codeCount',
             title: '件号总数',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'codeCount'
         },
         {
-            key: 'name',
+            key: 'totalNum',
             title: '总件数',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'totalNum'
         },
         {
-            key: 'name',
+            key: 'totalWeight',
             title: '总重kg',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'totalWeight'
         },
         {
-            key: 'name',
+            key: 'projectEntries',
             title: '定额条目',
             width: 80,
-            dataIndex: 'name',
+            dataIndex: 'projectEntries',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
@@ -236,35 +240,34 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'name',
+            key: 'price',
             title: '放样单价',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'price'
         },
         {
-            key: 'name',
+            key: 'cadDrawingType',
             title: '辅助设计出图类型',
             width: 80,
-            dataIndex: 'name',
+            dataIndex: 'cadDrawingType',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "cadDrawingType"]} initialValue={_}>
                     <Select style={{ width: '120px' }} placeholder="请选择辅助设计出图类型">
-                        {otherQuota && otherQuota?.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.id}>{item.projectEntries}</Select.Option>
-                        })}
+                        <Select.Option value="普通图纸" key="1">普通图纸</Select.Option>
+                        <Select.Option value="核算重量图纸" key="0">核算重量图纸</Select.Option>
                     </Select>
                 </Form.Item>
             )
         },
         {
-            key: 'name',
+            key: 'drawPageNum',
             title: '图纸页数',
             width: 80,
-            dataIndex: 'name',
+            dataIndex: 'drawPageNum',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} rules={editForm.getFieldsValue(true).a ? [{
+                <Form.Item name={['data', index, "drawPageNum"]} rules={editForm.getFieldsValue(true).cadDrawingType ? [{
                     required: true,
                     message: '请输入图纸页数'
                 }] : []} initialValue={_}>
@@ -273,13 +276,13 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'name',
+            key: 'description',
             title: '备注',
             width: 120,
-            dataIndex: 'name',
+            dataIndex: 'description',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "description"]} initialValue={_}>
                     <Input.TextArea maxLength={400} onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -466,7 +469,7 @@ export default function TowerInformation(): React.ReactNode {
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
     const [loftingUser, setLoftingUser] = useState([]);
-    const location = useLocation<{ loftingLeader: string, status: number }>();
+    const location = useLocation<{ loftingLeader: string, status: number, name: string, planNumber: string }>();
     const userId = AuthUtil.getUserId();
     const [visible, setVisible] = useState(false);
     const [rowId, setRowId] = useState<string>('');
@@ -499,7 +502,7 @@ export default function TowerInformation(): React.ReactNode {
             onCancel={() => {
                 setVisible(false);
             }}>
-            <ChooseMaterials id={rowId} />
+            <ChooseMaterials id={params.id} name={location.state.name} planNumber={location.state.planNumber} />
         </Modal>
         <Form layout="inline" onFinish={(value: Record<string, any>) => {
             if (value.updateStatusTime) {
@@ -557,8 +560,8 @@ export default function TowerInformation(): React.ReactNode {
                 exportPath={`/tower-science/productSegment`}
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={<>
-                    <span>塔型：<span>{ }1</span></span>
-                    <span>计划号：<span>{ }1</span></span>
+                    <span>塔型：<span>{location.state.name}</span></span>
+                    <span>计划号：<span>{location.state.planNumber}</span></span>
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>

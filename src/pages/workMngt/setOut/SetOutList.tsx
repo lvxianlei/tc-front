@@ -5,7 +5,7 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, Spin, Modal, message } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, Spin } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -14,8 +14,6 @@ import Deliverables from './Deliverables';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import TryAssemble from './TryAssemble';
-import { TryAssembleProps } from './ISetOut';
 
 export default function SetOutList(): React.ReactNode {
     const columns = [
@@ -104,7 +102,7 @@ export default function SetOutList(): React.ReactNode {
                     <Link to={`/workMngt/setOutList/setOutInformation/${record.id}`}>任务说明</Link>
                     <Link to={{
                         pathname: `/workMngt/setOutList/towerInformation/${record.id}`,
-                        state: { loftingLeader: record.loftingLeader, status: record.status }
+                        state: { loftingLeader: record.loftingLeader, status: record.status, name: record.name, planNumber: record.planNumber }
                     }}>工作目录</Link>
                     <Link to={{
                         pathname: `/workMngt/setOutList/poleInformation/${record.id}`,

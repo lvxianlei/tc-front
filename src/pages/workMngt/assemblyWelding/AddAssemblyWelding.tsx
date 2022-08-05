@@ -423,7 +423,6 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 if (weldingDetailedStructureList && weldingDetailedStructureList?.filter(item => item && item['isMainPart'] === 1).length < 1) {
                     message.warning('请选择主件');
                 } else {
-                    console.log(type)
                     const value = {
                         weldingId: params.id,
                         ...values,
