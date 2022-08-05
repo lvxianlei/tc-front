@@ -28,13 +28,10 @@ interface CreateInterface {
 
 export default function CreatePlan(props: CreateInterface): JSX.Element {
     const [addCollectionForm] = Form.useForm();
-                console.log(addCollectionForm.getFieldsValue(), "=============>>>")
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-    
     const [warehouseId, setWarehouseId] = useState<string>("");
-
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -310,7 +307,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 <Button key="create" type="primary" onClick={() => handleSuccessClick()}>
                     完成盘点
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="save" type="primary" onClick={() => handleCreateClick()}>
                     保存
                 </Button>
             ]}
