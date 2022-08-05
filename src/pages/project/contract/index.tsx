@@ -187,7 +187,7 @@ export default function ContractList(): JSX.Element {
                 </Popconfirm>
                 <Button type="link">
                   <Link
-                    to={`/project/contract/paymentRecord/${(record as IContract).id
+                    to={`/project/management/pamentRecord/contract/${(record as IContract).id
                       }/${(record as any).contractName}/${(record as IContract).signCustomerId
                       }/${(record as IContract).signCustomerName
                       }/${(record as any).contractNumber}/${params.id}`}
