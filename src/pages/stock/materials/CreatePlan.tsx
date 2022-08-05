@@ -155,7 +155,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 return false;
             }
             materialList.forEach((item: any) => {
-                if (item.id && item.source && item.source === 2) {
+                if (item.id) {
                     // 删除id属性
                     delete item.id;
                 }
@@ -444,7 +444,6 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                         value: ""
                     }}
                     onChange={(fields: any[]) => {
-                        console.log(fields, "==============>>>")
                         setMaterialList([
                             // ...materialList,
                             ...fields.map((item: any) => ({
