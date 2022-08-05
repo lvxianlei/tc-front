@@ -35,9 +35,9 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const [leftSelectedRows, setLeftSelectedRows] = useState<any[]>([]);
     const [rightSelectedRowKeys, setRightSelectedRowKeys] = useState<string[]>([]);
     const [rightSelectedRows, setRightSelectedRows] = useState<any[]>([]);
+    const type = window.location.pathname.split('/')[6];
 
     const { loading, data } = useRequest<ISegmentNameList[]>(() => new Promise(async (resole, reject) => {
-        const type = window.location.pathname.split('/')[6];
         const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);
         if (params.segmentId) {
             const result: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: params.segmentId, flag: type === 'apply' ? 1 : 0 });
@@ -423,11 +423,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 if (weldingDetailedStructureList && weldingDetailedStructureList?.filter(item => item && item['isMainPart'] === 1).length < 1) {
                     message.warning('请选择主件');
                 } else {
+                    console.log(type)
                     const value = {
                         weldingId: params.id,
-                        id: params.segmentId,
-                        // ...params.record,
                         ...values,
+                        id: type === 'apply' ? '' : params.segmentId,
                         componentId: mainPartId,
                         mainPartId: mainPartId,
                         segmentName: segmentList[1],
