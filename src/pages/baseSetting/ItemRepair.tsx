@@ -75,9 +75,9 @@ export default function ItemRepair(): React.ReactNode {
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
-                                    RequestUtil.delete(`/tower-production/equipment?equipmentId=${record.id}`).then(res => {
+                                    RequestUtil.delete(`/tower-science/config/fixItem/${record.id}`).then(res => {
                                         message.success('删除成功');
-                                        setRefresh(!refresh);
+                                        history.go(0);
                                     });
                                 }}
                                 okText="确认"
@@ -101,7 +101,7 @@ export default function ItemRepair(): React.ReactNode {
     const history = useHistory();
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            let resData: any[] = await RequestUtil.get(`/tower-science/fixItemConfig`);
+            let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
             resData = resData.map((item: any) => {
                 if (item.fixItemConfigList && item.fixItemConfigList?.length > 0) {
                     return {

@@ -27,7 +27,7 @@ export default forwardRef(function ItemRepairNew({ record, type }: modalProps, r
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === 'new' ? 'post' : 'put'](`/tower-science/fixItemConfig`, data)
+            const result: { [key: string]: any } = await RequestUtil[type === 'new' ? 'post' : 'put'](`/tower-science/config/fixItem`, data)
             resove(result)
         } catch (error) {
             reject(error)
@@ -39,7 +39,8 @@ export default forwardRef(function ItemRepairNew({ record, type }: modalProps, r
             const value = await form.validateFields();
             await saveRun({
                 ...value,
-                typeId: record?.typeId
+                typeId: record?.typeId,
+                id: record?.id || ''
             })
             resolve(true);
         } catch (error) {

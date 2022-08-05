@@ -42,11 +42,13 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 form.resetFields();
             }).then(() => {
                 setRefresh(!refresh);
+                history.go(0)
             })
         } catch (error) {
             console.log(error)
         }
     }
+
     const columns = [
         {
             key: 'index',
@@ -176,11 +178,16 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         }
     ]
 
-    const handleAssignModalCancel = () => { setVisible(false); form.resetFields(); };
+    const handleAssignModalCancel = () => { 
+        setVisible(false); 
+        form.resetFields(); 
+    };
+
     const formItemLayout = {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
+
     const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
         const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
         switch (title) {
@@ -191,6 +198,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 return setUser(userData.records);
         }
     }
+    
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
@@ -202,6 +210,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             }
             return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
         });
+
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
@@ -212,6 +221,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         });
         return roles;
     }
+
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
