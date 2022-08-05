@@ -195,7 +195,8 @@
         },
         {
             "title": "拆号次数",
-            "dataIndex": "disassemblyNumber"
+            "dataIndex": "disassemblyNumber",
+            "type": "number"
         },
         {
             "title": "原材料米数",
