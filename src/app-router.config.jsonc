@@ -1489,7 +1489,7 @@
       "path": "/supply/sw",
       "module": "./pages/workBench/sw/index",
       "exact": true,
-      "authority": "workbench_supply"
+      "authority": "tc_erp_sw_workBench_list"
     },
     //财务管理
     { // 票据管理
