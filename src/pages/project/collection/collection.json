@@ -250,7 +250,7 @@
             "type": "popTable",
             "path": "/tower-market/contract/getPaymentPlansByContractId?contractId=",
             "width": 1011,
-            "value": "name",
+            "value": "planName",
             "dependencies": true,
             "readOnly": true,
             "columns": [
