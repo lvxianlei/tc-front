@@ -1,0 +1,264 @@
+{
+    "scWork": [
+        {
+            "title": "招标信息",
+            "path": "招标信息",
+            "dataIndex": "bidInfoNum",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%B7%A5%E7%A8%8B%E6%8A%A5%E4%BB%B7%E4%BB%BB%E5%8A%A1.png",
+            "workbenchItemVos": [
+                {
+                    "title": "未决定",
+                    "dataIndex": "bidInfoNum",
+                    "path": {
+                        "pathname": "/bidding/information",
+                        "state": {
+                            "biddingStatus": 0
+                        }
+                    },
+                    "authority": "workbench_data"
+                }
+            ]
+        },
+        {
+            "title": "开票申请",
+            "dataIndex": "invoicingNum",
+            "path": "项目管理-开票申请",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%8E%9F%E6%9D%90%E6%96%99%E9%87%87%E8%B4%AD%E4%BB%BB%E5%8A%A1.png",
+            "workbenchItemVos": [
+                {
+                    "title": "审批中",
+                    "dataIndex": "invoicingNum",
+                    "path": {
+                        "pathname": "/project/invoicing",
+                        "state": {
+                            "state": 1
+                        }
+                    },
+                    "authority": "workbench_data4"
+                }
+            ]
+        },
+        {
+            "title": "请款申请",
+            "dataIndex": "payApplyWorkVO",
+            "path": "项目管理-请款申请",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%A4%87%E6%96%99%E7%A1%AE%E8%AE%A4.png",
+            "workbenchItemVos": [
+                {
+                    "title": "待付款",
+                    "dataIndex": "notPayNum",
+                    "path": {
+                        "pathname": "/project/payment",
+                        "state": {
+                            "payStatus": "0"
+                        }
+                    },
+                    "authority": "workbench_data4"
+                },
+                {
+                    "title": "审批中",
+                    "dataIndex": "approvalNum",
+                    "path": {
+                        "pathname": "/project/payment",
+                        "state": {
+                            "applyStatus": "1"
+                        }
+                    },
+                    "authority": "workbench_data4"
+                },
+                {
+                    "title": "已驳回",
+                    "dataIndex": "rejectedNum",
+                    "path": {
+                        "pathname": "/project/payment",
+                        "state": {
+                            "applyStatus": "3"
+                        }
+                    },
+                    "authority": "workbench_data4"
+                },
+                {
+                    "title": "已撤销",
+                    "dataIndex": "undoneNum",
+                    "path": {
+                        "pathname": "/project/payment",
+                        "state": {
+                            "applyStatus": "4"
+                        }
+                    },
+                    "authority": "workbench_data4"
+                }
+            ]
+        },
+        {
+            "title": "回款申请",
+            "dataIndex": "backMoneyNum",
+            "col": 2,
+            "path": "项目管理-回款申请",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E9%87%87%E8%B4%AD%E9%85%8D%E6%96%99.png",
+            "workbenchItemVos": [
+                {
+                    "title": "未确认",
+                    "dataIndex": "backMoneyNum",
+                    "path": {
+                        "pathname": "/project/collection",
+                        "state": {
+                            "confirmStatus": 0
+                        }
+                    },
+                    "authority": "workbench_data7"
+                }
+            ]
+        },
+        {
+            "title": "图纸确认任务",
+            "col": 2,
+            "dataIndex": "drawingConfirmationWorkVO",
+            "path": "项目管理-图纸确认任务",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E7%94%9F%E4%BA%A7%E9%85%8D%E6%96%99.png",
+            "workbenchItemVos": [
+                {
+                    "title": "待发起",
+                    "dataIndex": "notLaunchNum",
+                    "path": {
+                        "pathname": "/project/drawing",
+                        "state": {
+                            "auditStatus": 0
+                        }
+                    },
+                    "authority": "workbench_data8"
+                },
+                {
+                    "title": "已发起",
+                    "dataIndex": "launchNum",
+                    "path": {
+                        "pathname": "/project/drawing",
+                        "state": {
+                            "auditStatus": 1
+                        }
+                    },
+                    "authority": "workbench_data8"
+                },
+                {
+                    "title": "待完成",
+                    "dataIndex": "notCompleteNum",
+                    "path": {
+                        "pathname": "/project/drawing",
+                        "state": {
+                            "auditStatus": 2
+                        }
+                    },
+                    "authority": "workbench_data8"
+                }
+            ]
+        },
+        {
+            "title": "履约保证金",
+            "col": 2,
+            "dataIndex": "performanceBondWorkVO",
+            "path": "审批管理-履约保证金",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E9%85%8D%E6%96%99%E6%96%B9%E6%A1%88.png",
+            "workbenchItemVos": [
+                {
+                    "title": "审批中",
+                    "dataIndex": "approvalNum",
+                    "path": {
+                        "pathname": "/approvalm/management",
+                        "state": {
+                            "auditStatus": 0,
+                            "processName": "履约保证金申请"
+                        }
+                    },
+                    "authority": "workbench_data9"
+                },
+                {
+                    "title": "已驳回",
+                    "dataIndex": "rejectedNum",
+                    "path": {
+                        "pathname": "/approvalm/management",
+                        "state": {
+                            "auditStatus": 2,
+                            "processName": "履约保证金申请"
+                        }
+                    },
+                    "authority": "workbench_data8"
+                }
+            ]
+        },
+        {
+            "title": "招标评审",
+            "col": 2,
+            "dataIndex": "biddingEvaluationWorkVO",
+            "path": "审批管理-招标评审",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E9%87%87%E8%B4%AD%E8%AE%A1%E5%88%92.png",
+            "workbenchItemVos": [
+                {
+                    "title": "审批中",
+                    "dataIndex": "approvalNum",
+                    "path": {
+                        "pathname": "/approvalm/management",
+                        "state": {
+                            "auditStatus": 0,
+                            "processName": "招标评审申请"
+                        }
+                    },
+                    "authority": "workbench_data10"
+                }
+            ]
+        },
+        {
+            "title": "出厂价申请",
+            "dataIndex": "outFactoryWorkVO",
+            "col": 2,
+            "path": "审批管理-出厂价申请",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E7%BC%BA%E6%96%99%E5%A4%84%E7%90%86.png",
+            "workbenchItemVos": [
+                {
+                    "title": "审批中",
+                    "dataIndex": "approvalNum",
+                    "path": {
+                        "pathname": "/approvalm/management",
+                        "state": {
+                            "auditStatus": 0,
+                            "processName": "出厂价申请"
+                        }
+                    },
+                    "authority": "workbench_data12"
+                },
+                {
+                    "title": "已驳回",
+                    "dataIndex": "rejectedNum",
+                    "path": {
+                        "pathname": "/approvalm/management",
+                        "state": {
+                            "auditStatus": 2,
+                            "processName": "出厂价申请"
+                        }
+                    },
+                    "authority": "workbench_data12"
+                }
+            ]
+        },
+        {
+            "title": "保函申请",
+            "dataIndex": "guaranteeWorkVO",
+            "col": 2,
+            "path": "审批管理-保函申请",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%8E%9F%E6%9D%90%E6%96%99%E5%85%A5%E5%BA%93.png",
+            "workbenchItemVos": [
+                {
+                    "title": "审批中",
+                    "dataIndex": "approvalNum",
+                    "path": {
+                        "pathname": "/approvalm/management",
+                        "state": {
+                            "auditStatus": 0,
+                            "processName": "保函申请"
+                        }
+                    },
+                    "authority": "workbench_data13"
+                }
+            ]
+        }
+    ]
+}
