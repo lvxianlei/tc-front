@@ -35,11 +35,18 @@ export default function OverView(props: DetailInterface): JSX.Element {
 
     const { run: stockTakingRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
+            detailData?.forEach((item: any) => {
+                if (item.id) {
+                    // 删除id属性
+                    delete item.id;
+                }
+            })
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/stockTaking/finish`, {
                 stockTakingDetailDTOList: detailData,
                 id: props.id,
                 warehouseName: props.warehouseName,
-                warehouseId: props.warehouseId
+                warehouseId: props.warehouseId,
+                stockTakingNumber: props.stockTakingNumber
             })
             message.success("完成盘点！");
             props?.handleCreate({ code: 1 })

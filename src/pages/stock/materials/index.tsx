@@ -91,6 +91,7 @@ export default function Materials(): React.ReactNode {
                                             setId(record?.id);
                                             setWarehouseName(record?.warehouseName);
                                             setStockTakingNumber(record?.stockTakingNumber);
+                                            setTakingNumberStatus(record?.takingNumberStatus)
                                             setWarehouseId(record?.warehouseId)
                                         }}>详情</Button>
                                     <Button
@@ -117,9 +118,9 @@ export default function Materials(): React.ReactNode {
                                         }}
                                         okText="确认"
                                         cancelText="取消"
-                                        disabled={record.state === 1}
+                                        disabled={(+record?.takingNumberStatus) !== 0}
                                     >
-                                        <Button type="link" disabled={record.state === 1}>删除</Button>
+                                        <Button type="link" disabled={(+record?.takingNumberStatus) !== 0}>删除</Button>
                                     </Popconfirm>
                                 </>
                             )
