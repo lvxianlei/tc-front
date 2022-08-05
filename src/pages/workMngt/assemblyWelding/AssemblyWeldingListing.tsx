@@ -165,7 +165,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         resole(data);
     });
     const getParagraphData = async (id: string) => {
-        const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: id });
+        const resData: [] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: id, flag: 0 });
         setParagraphData([...resData]);
     }
 

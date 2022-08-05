@@ -35,7 +35,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
         {
             key: 'priorityName',
             title: '优先级',
-            width: 150,
+            width: 100,
             dataIndex: 'priorityName'
         },
         {
@@ -71,19 +71,19 @@ export default function AssemblyWeldingList(): React.ReactNode {
         {
             key: 'weldingLeaderName',
             title: '组焊负责人',
-            width: 200,
+            width: 120,
             dataIndex: 'weldingLeaderName'
         },
         {
             key: 'weldingOperatorName',
             title: '作业员',
-            width: 200,
+            width: 120,
             dataIndex: 'weldingOperatorName'
         },
         {
             key: 'statusName',
             title: '组焊清单状态',
-            width: 200,
+            width: 120,
             dataIndex: 'statusName'
         },
         {

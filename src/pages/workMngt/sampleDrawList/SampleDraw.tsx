@@ -199,7 +199,7 @@ export default function SampleDraw(): React.ReactNode {
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
                         <Upload
-                            accept=".zip,.rar,.7z"
+                            // accept=".zip,.rar,.7z"
                             multiple={true}
                             action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
                             headers={{

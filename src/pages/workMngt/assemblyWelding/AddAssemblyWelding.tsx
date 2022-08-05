@@ -16,7 +16,7 @@ import { IComponentList, IResponseData, ISegmentNameList } from './IAssemblyWeld
 import { compoundTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export default function AddAssemblyWelding(): React.ReactNode {
-    const params = useParams<{ id: string, productCategoryId: string, segmentId?: string, type?: string }>();
+    const params = useParams<{ id: string, productCategoryId: string, segmentId?: string }>();
     const [weldingDetailedStructureList, setWeldingDetailedStructureList] = useState<IComponentList[]>();
     const [mainPartId, setMainPartId] = useState<string>('');
     const [componentList, setComponentList] = useState<IComponentList[]>([]);
@@ -37,11 +37,10 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const [rightSelectedRows, setRightSelectedRows] = useState<any[]>([]);
 
     const { loading, data } = useRequest<ISegmentNameList[]>(() => new Promise(async (resole, reject) => {
-        // params.type = apply 套用
         const type = window.location.pathname.split('/')[6];
         const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);
         if (params.segmentId) {
-            const result: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: params.segmentId });
+            const result: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: params.segmentId, flag: type === 'apply' ? 1 : 0 });
             setWeldingDetailedStructureList([...result]);
             setSettingData([...result]);
             const baseData = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, segmentId: params.segmentId });
