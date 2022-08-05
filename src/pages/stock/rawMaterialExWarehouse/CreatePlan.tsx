@@ -111,7 +111,6 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.wareHouseId) {
-            console.log(fields, "filedd")
             setWarehouseId(fields.wareHouseId);
             return;
         }
