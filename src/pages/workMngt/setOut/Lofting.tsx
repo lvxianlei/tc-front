@@ -763,7 +763,7 @@ export default function Lofting(): React.ReactNode {
     }
 
     const history = useHistory();
-    const params = useParams<{ id: string, productSegmentId: string }>();
+    const params = useParams<{ id: string, segmentId: string }>();
     // const [editorLock, setEditorLock] = useState('编辑');
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     // const [tableColumns, setColumns] = useState(columnsSetting);
@@ -795,7 +795,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setVisible(false);
             }}>
-            <StructureTextureAbbreviations id={params.productSegmentId} ref={editRef} />
+            <StructureTextureAbbreviations id={params.id} ref={editRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -807,7 +807,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setEditVisible(false);
             }}>
-            <StructureTextureEdit id={params.productSegmentId} ref={editModalRef} />
+            <StructureTextureEdit id={params.id} ref={editModalRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -819,7 +819,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setMissVisible(false);
             }}>
-            <MissCheck id={params.productSegmentId} />
+            <MissCheck id={params.id} />
         </Modal>
         <Modal
             destroyOnClose
@@ -831,7 +831,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setAddVisible(false);
             }}>
-            <AddLofting id={params.id} type={type} rowData={rowData || []} productSegmentId={params.productSegmentId} ref={addModalRef} />
+            <AddLofting id={params.id} type={type} rowData={rowData || []} productSegmentId={params.segmentId} ref={addModalRef} />
         </Modal>
         {/* <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
@@ -870,7 +870,7 @@ export default function Lofting(): React.ReactNode {
                         onChange: SelectChange
                     }
                 }}
-                requestData={{ productSegmentGroupId: params.productSegmentId, ...filterValue }}
+                requestData={{ segmentId: params.segmentId, ...filterValue, productCategoryId: params.id }}
                 extraOperation={<Space direction="horizontal" size="small">
                     <Button type="primary" key='1' onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
                     <Popconfirm
@@ -893,7 +893,7 @@ export default function Lofting(): React.ReactNode {
                                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                             }
                         }
-                        data={{ productSegmentGroupId: params.productSegmentId }}
+                        data={{ productCategoryId: params.id }}
                         showUploadList={false}
                         onChange={(info) => uploadChange(info)}
                     >
@@ -922,7 +922,7 @@ export default function Lofting(): React.ReactNode {
                     >
                         <Button type="primary" loading={loading1} disabled={editorLock === '锁定'} ghost>完成放样</Button>
                     </Popconfirm> */}
-                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
+                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.segmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
                     {/* <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button> */}
                     {/* <Button type="primary" loading={loading2} onClick={() => {
                         setLoading2(true);

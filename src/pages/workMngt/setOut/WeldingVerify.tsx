@@ -24,50 +24,63 @@ export default forwardRef(function WeldingVerify({ id }: modalProps, ref) {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskNum',
+            key: 'segmentName',
             title: '段名',
             width: 80,
-            dataIndex: 'taskNum'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'planNumber',
+            key: 'code',
             title: '构件号',
             width: 100,
-            dataIndex: 'planNumber'
+            dataIndex: 'code'
         },
         {
-            key: 'internalNumber',
+            key: 'partNum',
             title: '构件数',
-            dataIndex: 'internalNumber',
+            dataIndex: 'partNum',
             width: 80
         },
         {
-            key: 'name',
+            key: 'weldingNum',
             title: '电焊配置数',
             width: 80,
-            dataIndex: 'name'
+            dataIndex: 'weldingNum'
         },
         {
-            key: 'num',
+            key: 'configStatus',
             title: '配置情况',
             width: 80,
-            dataIndex: 'num',
+            dataIndex: 'configStatus',
+            type: 'select',
+            enum: [
+                { "value": 1, "label": "已完成" },
+                { "value": 2, "label": "未完成" }
+            ]
         },
         {
             key: 'voltageGradeName',
             title: '是否主件',
             width: 80,
             dataIndex: 'voltageGradeName',
+            type: 'select',
+            enum: [
+                { "value": 1, "label": "是" },
+                { "value": 0, "label": "否" }
+            ]
         }
     ]
 
     return <DetailContent key='ChooseMaterials'>
         <Page
-            path=""
+            path="/tower-science/productCategory/welding/check/list"
             columns={columns}
             headTabs={[]}
-            requestData={{}}
+            requestData={{ productCategoryId: id }}
             searchFormItems={[]}
+            tableProps={{
+                pagination: false
+            }}
         />
     </DetailContent>
 })

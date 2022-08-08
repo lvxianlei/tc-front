@@ -637,7 +637,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     return {
                         ...res,
                         productCategoryId: id,
-                        segmentGroupId: productSegmentId,
+                        segmentId: productSegmentId,
                         type: res?.type?.split(',')[1],
                         typeDictId: res?.type?.split(',')[0]
                     }

@@ -16,14 +16,10 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
-import { patternTypeOptions, productTypeOptions, towerStructureOptions } from '../../../configuration/DictionaryOptions';
+import { productTypeOptions, towerStructureOptions } from '../../../configuration/DictionaryOptions';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
-
-interface ISectionData {
-
-}
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -248,7 +244,7 @@ export default function TowerInformation(): React.ReactNode {
         {
             key: 'cadDrawingType',
             title: '辅助设计出图类型',
-            width: 80,
+            width: 120,
             dataIndex: 'cadDrawingType',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -334,9 +330,33 @@ export default function TowerInformation(): React.ReactNode {
                     }
                     <Popconfirm
                         title="确认完成放样?"
-                        onConfirm={() => RequestUtil.post(``).then(res => {
-                            onRefresh();
-                        })}
+                        onConfirm={() => {
+                            RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
+                                console.log(res)
+                                if (res) {
+                                    RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
+                                        onRefresh();
+                                        message.success('放样完成！')
+                                    })
+                                } else {
+                                    Modal.confirm({
+                                        title: "当前存在未上传的大样图或工艺卡，是否完成放样？",
+                                        onOk: async () => new Promise(async (resove, reject) => {
+                                            try {
+                                                RequestUtil.put(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
+                                                    message.success('放样完成！');
+                                                    setRefresh(!refresh);
+                                                })
+                                                resove(true)
+                                            } catch (error) {
+                                                reject(error)
+                                            }
+                                        })
+                                    })
+                                }
+                            })
+                        }
+                        }
                         okText="确认"
                         cancelText="取消"
                     >
@@ -344,8 +364,9 @@ export default function TowerInformation(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认完成校核?"
-                        onConfirm={() => RequestUtil.post(``).then(res => {
+                        onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check`).then(res => {
                             onRefresh();
+                            message.success('校核成功！')
                         })}
                         okText="确认"
                         cancelText="取消"
@@ -502,7 +523,7 @@ export default function TowerInformation(): React.ReactNode {
             onCancel={() => {
                 setVisible(false);
             }}>
-            <ChooseMaterials id={params.id} name={location.state.name} planNumber={location.state.planNumber} />
+            <ChooseMaterials id={params.id} name={location.state?.name || ''} planNumber={location.state?.planNumber || ''} />
         </Modal>
         <Form layout="inline" onFinish={(value: Record<string, any>) => {
             if (value.updateStatusTime) {
@@ -560,12 +581,12 @@ export default function TowerInformation(): React.ReactNode {
                 exportPath={`/tower-science/productSegment`}
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={<>
-                    <span>塔型：<span>{location.state.name}</span></span>
-                    <span>计划号：<span>{location.state.planNumber}</span></span>
+                    <span>塔型：<span>{location.state?.name}</span></span>
+                    <span>计划号：<span>{location.state?.planNumber}</span></span>
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
-                        <Button type='primary' ghost>放样</Button>
+                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/null`}><Button type='primary' ghost>放样</Button> </Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
