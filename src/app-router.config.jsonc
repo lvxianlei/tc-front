@@ -1489,7 +1489,7 @@
       "path": "/supply/sw",
       "module": "./pages/workBench/sw/index",
       "exact": true,
-      "authority": "workbench_supply"
+      "authority": "tc_erp_sw_workBench_list"
     },
     { // 工作台-营销
       "name": "营销工作台",
@@ -2299,252 +2299,252 @@
       "path": "/employeeRelation/recruit",
       "module": "./pages/employeeRelation/recruit/RecruitList",
       "exact": true,
-      "authority": "hr_employee_information_management"
+      "authority": "tc_erp_hr_employee_induction_list"
     },
     { // 人资-员工关系-招聘入职-查看
       "name": "查看",
       "path": "/employeeRelation/recruit/view/:id",
       "module": "./pages/employeeRelation/recruit/View",
       "exact": true,
-      "authority": "hr_employee_information_management"
+      "authority": "tc_erp_hr_employee_induction_view"
     },
     { // 人资-员工关系-招聘入职-新增
       "name": "新增",
       "path": "/employeeRelation/recruit/new",
       "module": "./pages/employeeRelation/recruit/Edit",
       "exact": true,
-      "authority": "hr_employee_information_management"
+      "authority": "tc_erp_hr_employee_induction_add"
     },
     { // 人资-员工关系-招聘入职-编辑
       "name": "编辑",
       "path": "/employeeRelation/recruit/edit/:id/:status",
       "module": "./pages/employeeRelation/recruit/Edit",
       "exact": true,
-      "authority": "hr_employee_information_management"
+      "authority": "tc_erp_hr_employee_induction_edit"
     },
     { // 人资-员工关系-员工档案
       "name": "员工档案",
       "path": "/employeeRelation/archives",
       "module": "./pages/employeeRelation/archives/index",
       "exact": true,
-      "authority": "hr_employee_archives_management"
+      "authority": "tc_erp_hr_employee_archives_list"
     },
     { // 人资-员工关系-员工档案-查看
       "name": "详情",
       "path": "/employeeRelation/archives/detail/:archiveId",
       "module": "./pages/employeeRelation/archives/Overview",
       "exact": true,
-      "authority": "hr_employee_archives_management"
+      "authority": "tc_erp_hr_employee_archives_view"
     },
     { // 人资-员工关系-员工档案-编辑
       "name": "员工档案编辑",
       "path": "/employeeRelation/archives/edit/:archiveId",
       "module": "./pages/employeeRelation/archives/Edit",
       "exact": true,
-      "authority": "hr_employee_archives_management"
+      "authority": "tc_erp_hr_employee_archives_edit"
     },
     { // 人资-员工关系-劳动合同
       "name": "劳动合同",
       "path": "/employeeRelation/labour",
       "module": "./pages/employeeRelation/labour/LabourList",
       "exact": true,
-      "authority": "hr_employee_labor_contract_management"
+      "authority": "tc_erp_hr_employee_contract_list"
     },
     { // 人资-员工关系-劳动合同-查看
       "name": "查看",
       "path": "/employeeRelation/labour/view/:id",
       "module": "./pages/employeeRelation/labour/View",
       "exact": true,
-      "authority": "hr_employee_labor_contract_management"
+      "authority": "tc_erp_hr_employee_contract_view"
     },
-    { // 人资-员工关系-劳动合同-查看-合同详情
-      "name": "合同详情",
-      "path": "/employeeRelation/labour/view/:id/:contractId",
-      "module": "./pages/employeeRelation/labour/Detail",
-      "exact": true,
-      "authority": "hr_employee_labor_contract_management"
-    },
+    // { // 人资-员工关系-劳动合同-查看-合同详情
+    //   "name": "合同详情",
+    //   "path": "/employeeRelation/labour/view/:id/:contractId",
+    //   "module": "./pages/employeeRelation/labour/Detail",
+    //   "exact": true,
+    //   "authority": "hr_employee_labor_contract_management"
+    // },
     { // 人资-员工关系-劳动合同-调整
       "name": "调整",
       "path": "/employeeRelation/labour/edit/:id/:status",
       "module": "./pages/employeeRelation/labour/Edit",
       "exact": true,
-      "authority": "hr_employee_labor_contract_management"
+      "authority": "tc_erp_hr_employee_contract_edit"
     },
-    { // 人资-员工关系-劳动合同-调整-合同详情
-      "name": "合同详情",
-      "path": "/employeeRelation/labour/edit/:id/:status/:contractId",
-      "module": "./pages/employeeRelation/labour/Detail",
-      "exact": true,
-      "authority": "hr_employee_labor_contract_management"
-    },
+    // { // 人资-员工关系-劳动合同-调整-合同详情
+    //   "name": "合同详情",
+    //   "path": "/employeeRelation/labour/edit/:id/:status/:contractId",
+    //   "module": "./pages/employeeRelation/labour/Detail",
+    //   "exact": true,
+    //   "authority": "hr_employee_labor_contract_management"
+    // },
     { // 人资-员工关系-转正考核
       "name": "转正考核",
       "path": "/employeeRelation/full",
       "module": "./pages/employeeRelation/full/FullList",
       "exact": true,
-      "authority": "hr_employee_labor_contract_management"
+      "authority": "tc_erp_hr_employee_assess_list"
     },
     { // 人资-员工关系-转正考核-查看
       "name": "查看",
       "path": "/employeeRelation/full/view/:id",
       "module": "./pages/employeeRelation/full/View",
       "exact": true,
-      "authority": "hr_employee_labor_contract_management"
+      "authority": "tc_erp_hr_employee_assess_view"
     },
     { // 人资-员工关系-转正考核-转正
       "name": "转正",
       "path": "/employeeRelation/full/sure/:id",
       "module": "./pages/employeeRelation/full/Sure",
       "exact": true,
-      "authority": "hr_employee_labor_contract_management"
+      "authority": "tc_erp_hr_employee_assess_transfer"
     },
     { // 人资-员工关系-员工调动
       "name": "员工调动",
       "path": "/employeeRelation/transfer",
       "module": "./pages/employeeRelation/transfer/index",
       "exact": true,
-      "authority": "hr_employee_transfer_management"
+      "authority": "tc_erp_hr_employee_transfer_list"
     },
     { // 人资-员工关系-员工调动
       "name": "查看员工调动",
       "path": "/employeeRelation/transfer/detail/:transferId",
       "module": "./pages/employeeRelation/transfer/Overview",
       "exact": true,
-      "authority": "hr_employee_transfer_management"
+      "authority": "tc_erp_hr_employee_transfer_view"
     },
     { // 人资-员工关系-员工调动
       "name": "新增员工调动",
       "path": "/employeeRelation/transfer/new",
       "module": "./pages/employeeRelation/transfer/Edit",
       "exact": true,
-      "authority": "hr_employee_transfer_management"
+      "authority": "tc_erp_hr_employee_transfer_add"
     },
     { // 人资-员工关系-员工调动
       "name": "编辑员工调动",
       "path": "/employeeRelation/transfer/edit/:transferId",
       "module": "./pages/employeeRelation/transfer/Edit",
       "exact": true,
-      "authority": "hr_employee_transfer_management"
+      "authority": "tc_erp_hr_employee_transfer_edit"
     },
     { // 人资-员工关系-员工离职
       "name": "员工离职",
       "path": "/employeeRelation/quit",
       "module": "./pages/employeeRelation/quit/QuitList",
       "exact": true,
-      "authority": "hr_employee_departurenc_management"
+      "authority": "tc_erp_hr_employee_quit_list"
     },
     { // 人资-员工关系-员工离职-新增/编辑
       "name": "员工离职",
       "path": "/employeeRelation/quit/edit/:id",
       "module": "./pages/employeeRelation/quit/Quit",
       "exact": true,
-      "authority": "hr_employee_departurenc_management"
+      "authority": "tc_erp_hr_employee_quit_add"
     },
     { // 人资-员工关系-员工离职-查看
       "name": "查看",
       "path": "/employeeRelation/quit/view/:id",
       "module": "./pages/employeeRelation/quit/View",
       "exact": true,
-      "authority": "hr_employee_departurenc_management"
+      "authority": "tc_erp_hr_employee_quit_view"
     },
     { // 人资-员工关系-办理离职
       "name": "办理离职",
       "path": "/employeeRelation/quitProcedures",
       "module": "./pages/employeeRelation/quitProcedures/QuitProceduresList",
       "exact": true,
-      "authority": "hr_handle_departurenc_management"
+      "authority": "tc_erp_hr_employee_handle_quit_list"
     },
     { // 人资-员工关系-办理离职-办理离职
       "name": "办理离职",
       "path": "/employeeRelation/quitProcedures/operation/:id",
       "module": "./pages/employeeRelation/quitProcedures/Operation",
       "exact": true,
-      "authority": "hr_handle_departurenc_management"
+      "authority": "tc_erp_hr_employee_handle_quit_handle_detail"
     },
     { // 人资-员工关系-办理离职-查看
       "name": "查看",
       "path": "/employeeRelation/quitProcedures/view/:id",
       "module": "./pages/employeeRelation/quitProcedures/View",
       "exact": true,
-      "authority": "hr_handle_departurenc_management"
+      "authority": "tc_erp_hr_employee_handle_quit_detail"
     },
     { // 人资-员工关系-员工复职
       "name": "员工复职",
       "path": "/employeeRelation/reinstate",
       "module": "./pages/employeeRelation/reinstate/ReinstateList",
       "exact": true,
-      "authority": "hr_employee_reinstatement_management"
+      "authority": "tc_erp_hr_employee_reinstated_list"
     },
     { // 人资-员工关系-员工复职-查看
       "name": "查看",
       "path": "/employeeRelation/reinstate/View/:id",
       "module": "./pages/employeeRelation/reinstate/View",
       "exact": true,
-      "authority": "hr_employee_reinstatement_management"
+      "authority": "tc_erp_hr_employee_reinstated_view"
     },
     { // 人资-员工关系-员工复职-编辑
       "name": "调整",
       "path": "/employeeRelation/reinstate/Edit/:id/:status",
       "module": "./pages/employeeRelation/reinstate/Edit",
       "exact": true,
-      "authority": "hr_employee_reinstatement_management"
+      "authority": "tc_erp_hr_employee_reinstated_edit"
     },
     { // 人资-员工关系-员工复职-新增
       "name": "新增",
       "path": "/employeeRelation/reinstate/add",
       "module": "./pages/employeeRelation/reinstate/Edit",
       "exact": true,
-      "authority": "hr_employee_reinstatement_management"
+      "authority": "tc_erp_hr_employee_reinstated_add"
     },
     { // 人资-社保福利-保险方案
       "name": "保险方案",
       "path": "/socialSecurity/plan",
       "module": "./pages/socialSecurity/plan/index",
       "exact": true,
-      "authority": "hr_insurance_plan_management"
+      "authority": "tc_erp_hr_social_scheme_list"
     },
     { // 人资-社保福利-保险方案-查看
       "name": "保险方案",
       "path": "/socialSecurity/plan/detail/:planId",
       "module": "./pages/socialSecurity/plan/Overview",
       "exact": true,
-      "authority": "hr_insurance_plan_management"
+      "authority": "tc_erp_hr_social_scheme_view"
     },
     { // 人资-社保福利-保险方案-新增
       "name": "新增保险方案",
       "path": "/socialSecurity/plan/new",
       "module": "./pages/socialSecurity/plan/Edit",
       "exact": true,
-      "authority": "hr_insurance_plan_management"
+      "authority": "tc_erp_hr_social_scheme_add"
     },
     { // 人资-社保福利-保险方案-编辑
       "name": "编辑保险方案",
       "path": "/socialSecurity/plan/edit/:planId",
       "module": "./pages/socialSecurity/plan/Edit",
       "exact": true,
-      "authority": "hr_insurance_plan_management"
+      "authority": "tc_erp_hr_social_scheme_edit"
     },
     { // 人资-社保福利-员工保险档案
       "name": "员工保险档案",
       "path": "/socialSecurity/archives",
       "module": "./pages/socialSecurity/archives/index",
       "exact": true,
-      "authority": "hr_insurance_archives_management"
+      "authority": "tc_erp_hr_social_employee_archives_add"
     },
     { // 人资-社保福利-员工保险档案-查看
       "name": "查看员工保险档案",
       "path": "/socialSecurity/archives/detail/:archiveId",
       "module": "./pages/socialSecurity/archives/Overview",
       "exact": true,
-      "authority": "hr_insurance_archives_management"
+      "authority": "tc_erp_hr_social_employee_archives_view"
     },
     { // 人资-社保福利-员工保险档案-编辑
       "name": "编辑员工保险档案",
       "path": "/socialSecurity/archives/edit/:archiveId",
       "module": "./pages/socialSecurity/archives/Edit",
       "exact": true,
-      "authority": "hr_insurance_archives_management"
+      "authority": "tc_erp_hr_social_employee_archives_edit"
     },
     { // 生产工序管理
       "name": "生产工序管理",
@@ -2642,14 +2642,14 @@
       "path": "/businessDisposal/cancelOrPauseOrrestore",
       "module": "./pages/businessDisposal/CancelOrPauseOrrestore",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_rd_order_adjustment_list"
     },
     { // 业务处置管理-取消暂停恢复-已加工明细
       "name": "已加工明细",
       "path": "/businessDisposal/cancelOrPauseOrrestore/processedDetails/:id",
       "module": "./pages/businessDisposal/ProcessedDetails",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_rd_order_adjustment_see"
     }
   ]
 }

@@ -575,12 +575,12 @@
                 "icon": "RD-tuzhitaxing",
                 "path": "/businessDisposal",
                 "appName": "RD",
-                "authority": "rd_product_category",
+                "authority": "tc_erp_rd_business",
                 "items": [
                     {
                         "label": "取消暂停恢复",
                         "path": "/businessDisposal/cancelOrPauseOrrestore",
-                        "authority": "rd_product_category"
+                        "authority": "tc_erp_rd_order_adjustment"
                     }
                 ]
             },
@@ -997,47 +997,47 @@
                 "icon": "a-renzi_renliziyuan2",
                 "appName": "HR",
                 "path": "/employeeRelation",
-                "authority": "approvalm",
+                "authority": "tc_erp_hr_employee",
                 "items": [
                     {
                         "label": "招聘入职",
                         "path": "/employeeRelation/recruit",
-                        "authority": "hr_employee_information_management"
+                        "authority": "tc_erp_hr_employee_induction"
                     },
                     {
                         "label": "员工档案",
                         "path": "/employeeRelation/archives",
-                        "authority": "hr_employee_archives_management"
+                        "authority": "tc_erp_hr_employee_archives"
                     },
                     {
                         "label": "劳动合同",
                         "path": "/employeeRelation/labour",
-                        "authority": "hr_employee_labor_contract_management"
+                        "authority": "tc_erp_hr_employee_contract"
                     },
                     {
                         "label": "转正考核",
                         "path": "/employeeRelation/full",
-                        "authority": "hr_employee_labor_contract_management"
+                        "authority": "tc_erp_hr_employee_assess"
                     },
                     {
                         "label": "员工调动",
                         "path": "/employeeRelation/transfer",
-                        "authority": "hr_employee_transfer_management"
+                        "authority": "tc_erp_hr_employee_transfer"
                     },
                     {
                         "label": "员工离职",
                         "path": "/employeeRelation/quit",
-                        "authority": "hr_employee_departurenc_management"
+                        "authority": "tc_erp_hr_employee_quit"
                     },
                     {
                         "label": "办理离职",
                         "path": "/employeeRelation/quitProcedures",
-                        "authority": "hr_handle_departurenc_management"
+                        "authority": "tc_erp_hr_employee_handle_quit"
                     },
                     {
                         "label": "员工复职",
                         "path": "/employeeRelation/reinstate",
-                        "authority": "hr_employee_reinstatement_management"
+                        "authority": "tc_erp_hr_employee_reinstated"
                     }
                 ]
             },
@@ -1046,17 +1046,17 @@
                 "icon": "renzi_shebaofuli",
                 "appName": "HR",
                 "path": "/socialSecurity",
-                "authority": "approvalm",
+                "authority": "tc_erp_hr_social",
                 "items": [
                     {
                         "label": "保险方案",
                         "path": "/socialSecurity/plan",
-                        "authority": "hr_insurance_plan_management"
+                        "authority": "tc_erp_hr_social_scheme"
                     },
                     {
                         "label": "员工保险档案",
                         "path": "/socialSecurity/archives",
-                        "authority": "hr_insurance_archives_management"
+                        "authority": "tc_erp_hr_social_employee_archives"
                     }
                 ]
             },
