@@ -24,11 +24,11 @@ export interface IResponseData {
 }
 
 export default function List(): React.ReactNode {
-    const [page, setPage] = useState({
-        current: 1,
-        size: 10,
-        total: 0
-    })
+    // const [page, setPage] = useState({
+    //     current: 1,
+    //     size: 10,
+    //     total: 0
+    // })
 
     const [form] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
@@ -36,16 +36,16 @@ export default function List(): React.ReactNode {
     const [status, setStatus] = useState<number>(1);
     const [detailData, setDetailData] = useState<any>();
 
-    const { loading, data, run } = useRequest<IPersonnelLoad[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.post<IResponseData>(`/tower-science/personal/work/load`, { current: pagenation?.current || 1, size: pagenation?.size || 10, type: status, ...filterValue });
-        setPage({ ...data });
+    const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: any[] = await RequestUtil.post<any[]>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
+        // setPage({ ...data });
         // if (data.records.length > 0 && data.records[0]?.id) {
         //     detailRun(data.records[0]?.id)
         //     setRowId(data.records[0]?.id)
         // } else {
         //     setDetailData([]);
         // }
-        resole(data?.records);
+        resole(data);
     }), {})
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
@@ -63,13 +63,13 @@ export default function List(): React.ReactNode {
 
     const onSearch = (values: Record<string, any>) => {
         setFilterValues(values);
-        run({}, { ...values });
+        run({ ...values });
     }
 
-    const handleChangePage = (current: number, pageSize: number) => {
-        setPage({ ...page, current: current, size: pageSize });
-        run({ current: current, size: pageSize }, { ...filterValues })
-    }
+    // const handleChangePage = (current: number, pageSize: number) => {
+    //     setPage({ ...page, current: current, size: pageSize });
+    //     run({ current: current, size: pageSize }, { ...filterValues })
+    // }
 
     const onRowChange = async (record: Record<string, any>) => {
         detailRun(record.id)
@@ -92,7 +92,7 @@ export default function List(): React.ReactNode {
             <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
                 setStatus(event.target.value);
                 setFilterValues({ type: event.target.value });
-                run({}, { type: event.target.value })
+                run({ type: event.target.value })
             }}>
                 <Radio.Button value={1} key="1">全部</Radio.Button>
                 <Radio.Button value={2} key="2">放样</Radio.Button>
@@ -102,33 +102,33 @@ export default function List(): React.ReactNode {
             </Radio.Group>
         </Row>
         <div className={styles.left}>
-
-        <CommonTable
-            haveIndex
-            columns={[
-                ...columns.map((item: any) => {
-                    if (item.dataIndex === 'segmentName') {
-                        return ({
-                            ...item,
-                            sorter: (a: any, b: any) => a.segmentName - b.segmentName
-                        })
-                    }
-                    return item
-                })
-            ]}
-            dataSource={data}
-            pagination={{
-                current: page.current,
-                pageSize: page.size,
-                total: page?.total,
-                showSizeChanger: true,
-                onChange: handleChangePage
-            }}
-            onRow={(record: Record<string, any>) => ({
-                onClick: () => onRowChange(record),
-                className: styles.tableRow
-            })}
-        />
+            <CommonTable
+                haveIndex
+                columns={[
+                    ...columns.map((item: any) => {
+                        if (item.dataIndex === 'segmentName') {
+                            return ({
+                                ...item,
+                                sorter: (a: any, b: any) => a.segmentName - b.segmentName
+                            })
+                        }
+                        return item
+                    })
+                ]}
+                dataSource={data}
+                // pagination={{
+                //     current: page.current,
+                //     pageSize: page.size,
+                //     total: page?.total,
+                //     showSizeChanger: true,
+                //     onChange: handleChangePage
+                // }}
+                pagination={false}
+                onRow={(record: Record<string, any>) => ({
+                    onClick: () => onRowChange(record),
+                    className: styles.tableRow
+                })}
+            />
         </div>
         <div className={styles.right}>
             <CommonTable
