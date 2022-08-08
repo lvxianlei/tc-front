@@ -568,6 +568,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 signingTime: moment(),
                 invoiceCharacter: 1,
                 meteringMode: 2,
+                deliveryMethod: deliveryMethodEnum?.[1].value,
                 settlementMode: settlementModeEnum?.[0].value
             }} edit />
         <DetailTitle title="运费信息" />
