@@ -452,18 +452,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     }), { manual: true })
 
-    const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
-            form.setFieldsValue({
-                ...formatData(BasicInformation, result),
-                supplierName: result.supplierName,
-                contractNumber: { id: result.contractId, value: result.contractNumber },
-                unloadUsersName: {
-                    value: result.unloadUsersName,
-                    records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
-                }
-            })
             let v = [];
             if (result.lists) {
                 for (let i = 0; i < result.lists.length; i += 1) {
@@ -477,20 +468,29 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setContractId(result?.contractId)
             setSupplierId(result?.supplierId)
             setCargoData(v || [])
-            // // 编辑回显
-            // setFreightInformation({
-            //     transportBear: result?.transportBear, // 运输承担
-            //     transportCompany: result?.transportCompany, // 运输公司
-            //     transportTaxPrice: result?.transportTaxPrice, // 合同单价
-            //     transportPriceCount: result?.transportPriceCount, // 运费价税合计（元）
-            // })
-            // setHandlingCharges({
-            //     unloadBear: result?.unloadBear,
-            //     unloadCompany: result?.unloadCompany,
-            //     unloadTaxPrice: result?.unloadTaxPrice,
-            //     unloadPriceCount: result?.unloadPriceCount
-            // })
-            resole(result)
+            resole({
+                ...formatData(BasicInformation, result),
+                supplierName: result.supplierName,
+                contractNumber: {
+                    id: result.contractId,
+                    value: result.contractNumber,
+                    records: [{
+                        id: result.contractId,
+                        transportBear: result?.transportBear, // 运输承担
+                        transportCompany: result?.transportCompany, // 运输公司
+                        transportTaxPrice: result?.transportTaxPrice, // 合同单价
+                        transportPriceCount: result?.transportPriceCount, // 运费价税合计（元）
+                        unloadBear: result?.unloadBear,
+                        unloadCompany: result?.unloadCompany,
+                        unloadTaxPrice: result?.unloadTaxPrice,
+                        unloadPriceCount: result?.unloadPriceCount
+                    }]
+                },
+                unloadUsersName: {
+                    value: result.unloadUsersName,
+                    records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
+                }
+            })
         } catch (error) {
             reject(error)
         }
@@ -516,10 +516,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
             await saveRun({
                 ...baseFormData,
-                // ...freightInformation,
-                // ...handlingCharges,
-                // transportBear: freightInformation?.transportBear,
-                // unloadBear: handlingCharges.unloadBear,
+                transportBear: contractNumberData?.transportBear, // 运输承担
+                transportTaxPrice: contractNumberData?.transportTaxPrice, // 合同单价
+                unloadBear: contractNumberData?.unloadBear,
+                unloadTaxPrice: contractNumberData?.unloadTaxPrice,
                 supplierId,
                 supplierName: baseFormData.supplierName,
                 contractId: baseFormData.contractNumber.id,
@@ -579,7 +579,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 supplierName: supplierData.supplierName,
                 contactsUser: supplierData.contactMan,
                 contactsPhone: supplierData.contactManTel,
-
+                meteringMode: fields.contractNumber.records?.[0]?.meteringMode,
+                settlementMode: fields.contractNumber.records?.[0]?.settlementMode
             })
         }
         if (fields.meteringMode) {
@@ -697,20 +698,23 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })}
             dataSource={{
                 meteringMode: 1,
-                receiveTime: moment()
+                receiveTime: moment(),
+                ...data
             }} />
-        {/* <DetailTitle title="运费信息" />
-        <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
-        <DetailTitle title="装卸费信息" />
-        <BaseInfo col={2} columns={handlingChargesInfo} dataSource={(handlingCharges as any)} /> */}
-        <DetailTitle title="货物明细" operation={[<Button type="primary" key="choose" ghost
-            onClick={() => {
-                if (!contractId) {
-                    message.warning("请先选择合同编号...")
-                    return
-                }
-                setVisible(true)
-            }}>选择</Button>]} />
+        <DetailTitle
+            title="货物明细"
+            operation={[
+                <Button
+                    type="primary"
+                    key="choose"
+                    ghost
+                    onClick={() => {
+                        if (!contractId) {
+                            message.warning("请先选择合同编号...")
+                            return
+                        }
+                        setVisible(true)
+                    }}>选择</Button>]} />
         <EditableTable
             haveIndex
             form={editForm}
