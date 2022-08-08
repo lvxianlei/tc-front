@@ -33,12 +33,6 @@ export default function TowerInformation(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
 
-    // const { data: otherQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-    //     const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=4`);
-    //     resole(result?.records || [])
-    // }), {})
-
-
     const { data: loftingQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1`);
         resole(result?.records || [])
@@ -81,9 +75,9 @@ export default function TowerInformation(): React.ReactNode {
 
     const columns = [
         {
-            key: 'index',
+            key: 'id',
             title: '序号',
-            dataIndex: 'index',
+            dataIndex: 'id',
             width: 50,
             fixed: 'left' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
@@ -124,7 +118,7 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'structure',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "structure"]} initialValue={_}>
+                <Form.Item name={['data', index, "structureId"]} initialValue={record?.structureId}>
                     {
                         towerStructureOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -226,7 +220,7 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'projectEntries',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "projectEntries"]} initialValue={_}>
                     <Select style={{ width: '120px' }} placeholder="请选择定额条目">
                         {loftingQuota && loftingQuota?.map((item: any) => {
                             return <Select.Option key={item.id} value={item.id}>{item.projectEntries}</Select.Option>
@@ -448,17 +442,13 @@ export default function TowerInformation(): React.ReactNode {
                 })
                 if (changeValues && changeValues.length > 0) {
                     console.log(changeValues)
-                    // RequestUtil.post(`/tower-science/productStructure/save`, changeValues.map((res: any) => {
-                    //     return {
-                    //         ...res, productCategoryId: params.id
-                    //     }
-                    // })).then(res => {
-                    //     setTableColumns(columnsSetting);
-                    //     setEditorLock('编辑');
-                    //     setRowChangeList([]);
-                    //     editForm.resetFields();
-                    //     setRefresh(!refresh);
-                    // });
+                    RequestUtil.post(`/tower-science/productSegment`, changeValues).then(res => {
+                        setTableColumns(columnsSetting);
+                        setEditorLock('编辑');
+                        setRowChangeList([]);
+                        editForm.resetFields();
+                        setRefresh(!refresh);
+                    });
                 } else {
                     setTableColumns(columnsSetting);
                     setEditorLock('编辑');
@@ -493,7 +483,6 @@ export default function TowerInformation(): React.ReactNode {
     const location = useLocation<{ loftingLeader: string, status: number, name: string, planNumber: string }>();
     const userId = AuthUtil.getUserId();
     const [visible, setVisible] = useState(false);
-    const [rowId, setRowId] = useState<string>('');
     const [editForm] = useForm();
     const [loading1, setLoading1] = useState(false);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);

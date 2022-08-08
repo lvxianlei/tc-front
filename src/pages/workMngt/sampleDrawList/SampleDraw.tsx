@@ -153,9 +153,7 @@ export default function SampleDraw(): React.ReactNode {
 
     const del = () => {
         if (selectedKeys.length > 0) {
-            RequestUtil.post(``, {
-                productStructureIdList: selectedKeys
-            }).then(res => {
+            RequestUtil.delete(`/tower-science/smallSample/sampleDelete?ids=${selectedKeys.join(',')}`).then(res => {
                 message.success('删除成功');
                 history.go(0);
             })
@@ -185,7 +183,7 @@ export default function SampleDraw(): React.ReactNode {
                         <Button type="primary" onClick={() => {
                             downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {}, true)
                         }} ghost>导出</Button>
-                        <Button type='primary' onClick={del} ghost>批量删除</Button>
+                        <Button type='primary' onClick={del} disabled={selectedKeys.length === 0} ghost>批量删除</Button>
                         {params.status === '1' ? <Popconfirm
                             title="确认完成小样图?"
                             onConfirm={async () => await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(() => {
