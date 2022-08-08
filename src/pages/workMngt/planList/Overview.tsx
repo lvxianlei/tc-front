@@ -25,7 +25,7 @@ export default function Edit() {
     const [popDataList, setPopDataList] = useState<any[]>([])
     const { loading, data: dataTable } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`,{
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`, {
                 current: 1,
                 size: 1000
             })
@@ -112,17 +112,16 @@ export default function Edit() {
     }
 
     const handleAddModalOk = () => {
-        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.id === maItem.id))
-        for (let i = 0; i < popDataList.length; i += 1) {
-            for (let p = 0; p < materialList.length; p += 1) {
-                if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].structureTextureId = popDataList[i].structureTextureId;
-                    materialList[p].structureTexture = popDataList[i].structureTexture;
+        const newMaterialList = materialList.filter((item: any) => !!materialList.find((maItem: any) => item.id === maItem.id))
+        for (let i = 0; i < popDataList.length; i++) {
+            for (let p = 0; p < newMaterialList.length; p++) {
+                if (popDataList[i].id === newMaterialList[p].id) {
+                    newMaterialList[p].structureTextureId = popDataList[i].structureTextureId;
+                    newMaterialList[p].structureTexture = popDataList[i].structureTexture;
                 }
             }
         }
-        console.log("newMaterialList", materialList, newMaterialList)
-        setMaterialList([...popDataList, ...newMaterialList.map((item: any) => {
+        setMaterialList(newMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat(item.offer || "1.00")
@@ -137,8 +136,8 @@ export default function Edit() {
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
-        })])
-        setPopDataList([...popDataList, ...newMaterialList.map((item: any) => {
+        }))
+        setPopDataList(newMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat(item.offer || "1.00")
@@ -153,7 +152,7 @@ export default function Edit() {
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
-        })])
+        }))
         setVisible(false)
     }
 

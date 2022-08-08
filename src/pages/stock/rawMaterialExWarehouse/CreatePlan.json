@@ -74,32 +74,12 @@
             ]
         },
         {
-            "title": "下达单号",
-            "dataIndex": "issuedNumber",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择下达单号"
-                }
-            ]
-        },
-        {
             "title": "工程名称",
             "dataIndex": "projectName",
             "rules": [
                 {
                     "required": true,
                     "message": "请输入工程名称"
-                }
-            ]
-        },
-        {
-            "title": "塔型",
-            "dataIndex": "productCategoryName",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入塔型"
                 }
             ]
         }

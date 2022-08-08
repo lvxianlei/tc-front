@@ -386,20 +386,20 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             reject(error)
         }
     }))
-    // 运费信息
-    const [freightInformation, setFreightInformation] = useState<Freight>({
-        transportBear: "",
-        transportCompany: "",
-        transportTaxPrice: "0",
-        transportPriceCount: "0"
-    });
-    // 装卸费信息
-    const [handlingCharges, setHandlingCharges] = useState<HandLing>({
-        unloadBear: "",
-        unloadCompany: "",
-        unloadTaxPrice: "0",
-        unloadPriceCount: "0"
-    });
+    // // 运费信息
+    // const [freightInformation, setFreightInformation] = useState<Freight>({
+    //     transportBear: "",
+    //     transportCompany: "",
+    //     transportTaxPrice: "0",
+    //     transportPriceCount: "0"
+    // });
+    // // 装卸费信息
+    // const [handlingCharges, setHandlingCharges] = useState<HandLing>({
+    //     unloadBear: "",
+    //     unloadCompany: "",
+    //     unloadTaxPrice: "0",
+    //     unloadPriceCount: "0"
+    // });
 
     const handleModalOk = () => {
         const meteringMode = form.getFieldValue("meteringMode")
@@ -452,18 +452,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     }), { manual: true })
 
-    const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
-            form.setFieldsValue({
-                ...formatData(BasicInformation, result),
-                supplierName: result.supplierName,
-                contractNumber: { id: result.contractId, value: result.contractNumber },
-                unloadUsersName: {
-                    value: result.unloadUsersName,
-                    records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
-                }
-            })
             let v = [];
             if (result.lists) {
                 for (let i = 0; i < result.lists.length; i += 1) {
@@ -477,20 +468,29 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setContractId(result?.contractId)
             setSupplierId(result?.supplierId)
             setCargoData(v || [])
-            // 编辑回显
-            setFreightInformation({
-                transportBear: result?.transportBear, // 运输承担
-                transportCompany: result?.transportCompany, // 运输公司
-                transportTaxPrice: result?.transportTaxPrice, // 合同单价
-                transportPriceCount: result?.transportPriceCount, // 运费价税合计（元）
+            resole({
+                ...formatData(BasicInformation, result),
+                supplierName: result.supplierName,
+                contractNumber: {
+                    id: result.contractId,
+                    value: result.contractNumber,
+                    records: [{
+                        id: result.contractId,
+                        transportBear: result?.transportBear, // 运输承担
+                        transportCompany: result?.transportCompany, // 运输公司
+                        transportTaxPrice: result?.transportTaxPrice, // 合同单价
+                        transportPriceCount: result?.transportPriceCount, // 运费价税合计（元）
+                        unloadBear: result?.unloadBear,
+                        unloadCompany: result?.unloadCompany,
+                        unloadTaxPrice: result?.unloadTaxPrice,
+                        unloadPriceCount: result?.unloadPriceCount
+                    }]
+                },
+                unloadUsersName: {
+                    value: result.unloadUsersName,
+                    records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
+                }
             })
-            setHandlingCharges({
-                unloadBear: result?.unloadBear,
-                unloadCompany: result?.unloadCompany,
-                unloadTaxPrice: result?.unloadTaxPrice,
-                unloadPriceCount: result?.unloadPriceCount
-            })
-            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -512,12 +512,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const baseFormData = await form.validateFields()
             const listsFormData = await editForm.validateFields()
+            const contractNumberData = baseFormData.contractNumber.records[0]
+
             await saveRun({
                 ...baseFormData,
-                ...freightInformation,
-                ...handlingCharges,
-                transportBear: freightInformation?.transportBear,
-                unloadBear: handlingCharges.unloadBear,
+                transportBear: contractNumberData?.transportBear, // 运输承担
+                transportTaxPrice: contractNumberData?.transportTaxPrice, // 合同单价
+                unloadBear: contractNumberData?.unloadBear,
+                unloadTaxPrice: contractNumberData?.unloadTaxPrice,
                 supplierId,
                 supplierName: baseFormData.supplierName,
                 contractId: baseFormData.contractNumber.id,
@@ -546,37 +548,39 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setContractId(fields.contractNumber.id);
             setSupplierId(fields.contractNumber.records[0].supplierId)
             const supplierData: any = await getSupplier(fields.contractNumber.records[0].supplierId)
-            // 设置运费信息以及装卸费信息
-            let transportPriceCount = "0",
-                unloadPriceCount = "0",
-                weightAll = 0;
-            if (cargoData.length > 0) {
-                for (let i = 0; i < cargoData.length; i += 1) {
-                    weightAll = weightAll += (((cargoData[i].weight) * 1 <= 0 ? 0 : cargoData[i].weight) * 1);
-                }
-                // 运费价税合计 = 总重量 * 单价
-                transportPriceCount = weightAll * (fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0") + "";
-                // 装卸费合计 = 总重量 * 单价
-                unloadPriceCount = (weightAll * (fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0")) + "";
-            }
-            setFreightInformation({
-                transportBear: fields.contractNumber.records[0].transportBear, // 运输承担
-                transportCompany: fields.contractNumber.records[0].transportCompany ? fields.contractNumber.records[0].transportCompany : "", // 运输公司
-                transportTaxPrice: fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0", // 合同单价
-                transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
-            })
-            setHandlingCharges({
-                unloadBear: fields.contractNumber.records[0].unloadBear,
-                unloadCompany: fields.contractNumber.records[0].unloadCompany ? fields.contractNumber.records[0].unloadCompany : "",
-                unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
-                unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
-            })
+            // // 设置运费信息以及装卸费信息
+            // let transportPriceCount = "0",
+            //     unloadPriceCount = "0",
+            //     weightAll = 0;
+            // if (cargoData.length > 0) {
+            //     for (let i = 0; i < cargoData.length; i += 1) {
+            //         weightAll = weightAll += (((cargoData[i].weight) * 1 <= 0 ? 0 : cargoData[i].weight) * 1);
+            //     }
+            //     // 运费价税合计 = 总重量 * 单价
+            //     transportPriceCount = weightAll * (fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0") + "";
+            //     // 装卸费合计 = 总重量 * 单价
+            //     unloadPriceCount = (weightAll * (fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0")) + "";
+            // }
+            // setFreightInformation({
+            //     transportBear: fields.contractNumber.records[0].transportBear, // 运输承担
+            //     transportCompany: fields.contractNumber.records[0].transportCompany ? fields.contractNumber.records[0].transportCompany : "", // 运输公司
+            //     transportTaxPrice: fields.contractNumber.records[0].transportTaxPrice ? fields.contractNumber.records[0].transportTaxPrice : "0", // 合同单价
+            //     transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
+            // })
+            // setHandlingCharges({
+            //     unloadBear: fields.contractNumber.records[0].unloadBear,
+            //     unloadCompany: fields.contractNumber.records[0].unloadCompany ? fields.contractNumber.records[0].unloadCompany : "",
+            //     unloadTaxPrice: fields.contractNumber.records[0].unloadTaxPrice ? fields.contractNumber.records[0].unloadTaxPrice : "0",
+            //     unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
+            // })
             setCargoData([])
             modalRef.current?.resetFields()
             form.setFieldsValue({
                 supplierName: supplierData.supplierName,
                 contactsUser: supplierData.contactMan,
-                contactsPhone: supplierData.contactManTel
+                contactsPhone: supplierData.contactManTel,
+                meteringMode: fields.contractNumber.records?.[0]?.meteringMode,
+                settlementMode: fields.contractNumber.records?.[0]?.settlementMode
             })
         }
         if (fields.meteringMode) {
@@ -599,10 +603,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     }
 
-    useEffect(() => {
-        type === "new" && form.setFieldsValue({ meteringMode: 1, receiveTime: moment() })
-    }, [type])
-
     const handleEditableChange = (data: any, allValues: any) => {
         if (data.submit[data.submit.length - 1].ponderationWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
@@ -618,20 +618,20 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
                 return item
             })
-            const weightAll = newFields.reduce((count: string, item: any) => (parseFloat(count) + parseFloat(`${item.ponderationWeight}`)).toFixed(2), "0")
+            // const weightAll = newFields.reduce((count: string, item: any) => (parseFloat(count) + parseFloat(`${item.ponderationWeight}`)).toFixed(2), "0")
             editForm.setFieldsValue({ submit: newFields })
-            // 运费价税合计 = 过磅重量 * 单价
-            const transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
-            // 装卸费合计 = 过磅重量 * 单价
-            const unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
-            setFreightInformation({
-                ...freightInformation,
-                transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
-            })
-            setHandlingCharges({
-                ...handlingCharges,
-                unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
-            })
+            // // 运费价税合计 = 过磅重量 * 单价
+            // const transportPriceCount = weightAll * ((freightInformation as any).transportTaxPrice * 1) + "";
+            // // 装卸费合计 = 过磅重量 * 单价
+            // const unloadPriceCount = (weightAll * ((handlingCharges as any).unloadTaxPrice * 1)) + "";
+            // setFreightInformation({
+            //     ...freightInformation,
+            //     transportPriceCount: changeTwoDecimal_f(transportPriceCount) + "", // 运费价税合计（元）
+            // })
+            // setHandlingCharges({
+            //     ...handlingCharges,
+            //     unloadPriceCount: changeTwoDecimal_f(unloadPriceCount) + ""
+            // })
         }
     }
 
@@ -696,19 +696,25 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return item
                 }
             })}
-            dataSource={{}} />
-        <DetailTitle title="运费信息" />
-        <BaseInfo col={2} columns={freightInfo} dataSource={(freightInformation as any)} />
-        <DetailTitle title="装卸费信息" />
-        <BaseInfo col={2} columns={handlingChargesInfo} dataSource={(handlingCharges as any)} />
-        <DetailTitle title="货物明细" operation={[<Button type="primary" key="choose" ghost
-            onClick={() => {
-                if (!contractId) {
-                    message.warning("请先选择合同编号...")
-                    return
-                }
-                setVisible(true)
-            }}>选择</Button>]} />
+            dataSource={{
+                meteringMode: 1,
+                receiveTime: moment(),
+                ...data
+            }} />
+        <DetailTitle
+            title="货物明细"
+            operation={[
+                <Button
+                    type="primary"
+                    key="choose"
+                    ghost
+                    onClick={() => {
+                        if (!contractId) {
+                            message.warning("请先选择合同编号...")
+                            return
+                        }
+                        setVisible(true)
+                    }}>选择</Button>]} />
         <EditableTable
             haveIndex
             form={editForm}
