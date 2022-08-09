@@ -105,7 +105,24 @@ export default function OverView(props: DetailInterface): JSX.Element {
             <CommonTable
                 rowKey={"id"}
                 style={{ padding: "0" }}
-                columns={material}
+                columns={[
+                    ...material.map((item: any) => {
+                        if (item.dataIndex === "profitAndLossNum") {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => {
+                                    return (
+                                        <span>
+                                            {record.profitAndLossNum + "  "}
+                                        </span>)
+                                }
+                            })
+                        }
+                        return item;
+                    })
+                ]}
                 pagination={false}
                 dataSource={(detailData as any) || []} />
         </Modal>

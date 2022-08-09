@@ -100,11 +100,13 @@
         },
         {
             "title": "盈亏数量",
-            "dataIndex": "profitAndLossNum"
+            "dataIndex": "profitAndLossNum",
+            "type": "string"
         },
         {
             "title": "盈亏重量（吨）",
-            "dataIndex": "profitAndLossWeight"
+            "dataIndex": "profitAndLossWeight",
+            "type": "number"
         },
         {
             "title": "单价（元/吨）",
