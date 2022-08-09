@@ -283,6 +283,7 @@
             "title": "签订时间",
             "dataIndex": "signingTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "rules": [
                 {
                     "required": true,
@@ -299,6 +300,7 @@
             "title": "交货时间",
             "dataIndex": "arrivalTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "required": true
         },
         {
@@ -453,7 +455,22 @@
         },
         {
             "title": "开票性质",
-            "dataIndex": "invoiceCharacterName"
+            "dataIndex": "invoiceCharacter",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "一票制",
+                    "value": 1
+                },
+                {
+                    "label": "二票制",
+                    "value": 2
+                },
+                {
+                    "label": "三票制",
+                    "value": 3
+                }
+            ]
         },
         {
             "title": "计量方式",

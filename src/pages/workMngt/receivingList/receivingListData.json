@@ -295,7 +295,8 @@
         {
             "title": "过磅重量(吨)",
             "dataIndex": "totalPonderationWeight",
-            "type": "number"
+            "type": "number",
+            "precision": 4
         },
         {
             "title": "备注",
@@ -359,6 +360,11 @@
             "width": 100
         },
         {
+            "title": "结算重量",
+            "dataIndex": "balanceTotalWeight",
+            "width": 100
+        },
+        {
             "title": "含税单价（元/吨）",
             "dataIndex": "taxPrice",
             "width": 120
@@ -400,6 +406,11 @@
         }
     ],
     "editCargoDetails": [
+        {
+            "title": "理算单重",
+            "dataIndex": "weight",
+            "hidden": true
+        },
         {
             "title": "品名",
             "dataIndex": "materialName",
@@ -453,8 +464,8 @@
             "title": "结算重量（吨）",
             "dataIndex": "balanceTotalWeight",
             "type": "number",
-            "precision": 4,
-            "max": 99999.99,
+            "precision": 3,
+            "max": 99999.999,
             "required": true
         },
         {

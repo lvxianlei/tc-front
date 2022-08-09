@@ -5,6 +5,7 @@ import { contractBaseInfo, material, addMaterial } from "./contract.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
+import moment from "moment"
 import { PopTableContent } from "./enquiryCompare/ComparesModal"
 import {
     deliverywayOptions, materialStandardOptions,
@@ -562,7 +563,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return item
                 }
             })}
-            dataSource={{ operatorName: AuthUtil.getRealName() }} edit />
+            dataSource={{
+                operatorName: AuthUtil.getRealName(),
+                signingTime: moment(),
+                invoiceCharacter: 1,
+                meteringMode: 2,
+                deliveryMethod: deliveryMethodEnum?.[1].value,
+                settlementMode: settlementModeEnum?.[0].value
+            }} edit />
         <DetailTitle title="运费信息" />
         <BaseInfo
             form={freightForm}
