@@ -60,7 +60,6 @@ const calcObj = {
         if (meteringMode === 1) {
             return currentWeight
         }
-        console.log(totalPonderationWeight, currentWeight, allTotalWeight)
         return (totalPonderationWeight * (currentWeight / allTotalWeight)) || "0"
     },
     /**
