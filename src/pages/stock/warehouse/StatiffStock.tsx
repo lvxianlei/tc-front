@@ -150,7 +150,7 @@ const StatiffStock = (props: Props) => {
                 item["type"] = 1;
                 item["warehouseId"] = props.id;
                 item["reservoirName"] = item?.source === "1" ? item.reservoirName : item.segmentName.split("_")[0];
-                item["reservoirId"] = item?.source === "1" ? item.id : item.segmentName.split("_")[1];
+                item["reservoirId"] = item?.source === "1" ? item.reservoirId : item.segmentName.split("_")[1];
                 item["id"] = item?.source === "1" ? item.id : "";
                 item["name"] = props.name;
             })
