@@ -22,6 +22,7 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { CheckboxValueType } from 'antd/lib/checkbox/Group';
 import layoutStyles from '../../../layout/Layout.module.less';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 interface Panes {
     title?: string
@@ -127,6 +128,12 @@ export default function IngredientsList(): React.ReactNode {
 
     // 长度合计
     const [lengthAll, setLengthAll] = useState<number>(0);
+
+    const [indeterminate, setIndeterminate] = useState(true);
+    const [checkAll, setCheckAll] = useState(false);
+
+    const [indeterminateStock, setIndeterminateStock] = useState(true);
+    const [checkAllStock, setCheckAllStock] = useState(false);
 
 
     // 操作按钮
@@ -728,6 +735,38 @@ export default function IngredientsList(): React.ReactNode {
         var dom = document.querySelector('.ant-table-body');
         (dom as any).scrollTop = 0;
     }
+
+    const onCheckAllChange = (e: CheckboxChangeEvent) => {
+        const lists = ["6000", "6500", "7000", "7500", "8000", "8500", "9000", "9500", "10000", "10500", "11000", "11500", "12000", "12500"]
+        serarchForm.setFieldsValue({
+            idealRepertoryLengthList: e.target.checked ? lists : []
+        })
+        setIndeterminate(false);
+        setCheckAll(e.target.checked);
+    };
+
+    const onCheckChange = (list: CheckboxValueType[]) => {
+        // setCheckedList(list);
+        setIndeterminate(!!list.length && list.length < 14);
+        setCheckAll(list.length === 14);
+    };
+
+    const onCheckAllChangeStock = (e: CheckboxChangeEvent) => {
+        const list = [];
+        for (let i = 0; i < AvailableInventoryData?.length; i += 1) {
+            list.push(AvailableInventoryData?.[i].length)
+        }
+        serarchForm.setFieldsValue({
+            idealRepertoryLengthList: e.target.checked ? list : []
+        })
+        setIndeterminate(false);
+        setCheckAll(e.target.checked);
+    };
+
+    const onCheckChangeStock = (list: CheckboxValueType[]) => {
+        setIndeterminate(!!list.length && list.length < AvailableInventoryData?.length);
+        setCheckAll(list.length === AvailableInventoryData?.length);
+    };
 
     // 初始获取数据
     useEffect(() => {
@@ -1568,9 +1607,17 @@ export default function IngredientsList(): React.ReactNode {
                         />
                     </Form.Item>
                 
-                <DetailTitle title="原材料米数" key={"strategy"}  operation={[
-                    <Button></Button>
-                ]}/>
+                <DetailTitle title="原材料米数" key={"strategy"}  operation={
+                    value === "2" ? [
+                        <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+                            全选
+                        </Checkbox>
+                    ] : [
+                        <Checkbox indeterminate={indeterminateStock} onChange={onCheckAllChangeStock} checked={checkAllStock}>
+                            全选
+                        </Checkbox>
+                    ]
+                }/>
                 <Radio.Group onChange={onRaioChange} value={value} style={{marginBottom: 8}}>
                     <Radio value={"1"}>可用库存</Radio>
                     <Radio value={"2"}>理想库存</Radio>
@@ -1586,7 +1633,7 @@ export default function IngredientsList(): React.ReactNode {
                                 }
                             ]}
                         >
-                            <Checkbox.Group style={{ width: '100%' }}>
+                            <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChangeStock}>
                                 <Row>
                                     {
                                         AvailableInventoryData?.map((item: any) => {
@@ -1611,7 +1658,7 @@ export default function IngredientsList(): React.ReactNode {
                                 }
                             ]}
                         >
-                            <Checkbox.Group style={{ width: '100%' }}>
+                            <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
                                 <Row>
                                     <Col span={8} style={{marginBottom: 8}}>
                                         <Checkbox value="6000">6000</Checkbox>
