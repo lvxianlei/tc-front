@@ -291,7 +291,7 @@ export default function IngredientsList(): React.ReactNode {
         // 清除配料策略 构建明细
         setSelectedRowKeysCheck([]);
         setSelectedRowCheck([]);
-        serarchForm.resetFields();
+        // serarchForm.resetFields();
         // 存储数据
         setActiveKey(`fangan${+(panes[panes.length - 1].key?.split("fangan")[1] as any) + 1}`);
         setGloballyStoredData({
