@@ -183,7 +183,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
             const postData = {
                 ...item,
-                id: item.id,
+                materialContractDetailId: item.id,
                 materialName: item.materialName,
                 materialStandard: item.materialStandard,
                 materialStandardName: item.materialStandardName,
@@ -229,7 +229,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 lists: listsFormData.submit?.map((item: any, index: number) => ({
                     ...cargoData[index],
                     ...item,
-                    materialContractDetailId: item.id
+                    materialContractDetailId: cargoData[index].materialContractDetailId
                 })),
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,

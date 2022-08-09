@@ -15,8 +15,8 @@ interface ChooseModalProps {
 export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({
         ...item,
-        materialStandardName: item.materialStandardName,
-        price: item.unTaxPrice
+        price: item.unTaxPrice,
+        id: item.materialContractDetailId
     })))
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
@@ -45,12 +45,14 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             setSelectList(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
-                id: item.materialContractDetailId
+                id: item.id,
+                materialContractDetailId: item.id
             })).filter((item: any) => item.num))
             setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
-                id: item.id
+                id: item.id,
+                materialContractDetailId: item.id
             })).filter((item: any) => item.num))
             resole(result)
         } catch (error) {
