@@ -80,7 +80,7 @@ export default function Materials(): React.ReactNode {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 100,
+                        width: 150,
                         render: (_: any, record: any) => {
                             return (
                                 <>
@@ -116,10 +116,11 @@ export default function Materials(): React.ReactNode {
                                             });
                                         }}
                                         okText="确认"
+                                        className="btn-operation-link"
                                         cancelText="取消"
                                         disabled={(+record?.takingNumberStatus) !== 0}
                                     >
-                                        <Button type="link" disabled={(+record?.takingNumberStatus) !== 0}>删除</Button>
+                                        <Button type="link" className="btn-operation-link" disabled={(+record?.takingNumberStatus) !== 0}>删除</Button>
                                     </Popconfirm>
                                 </>
                             )
