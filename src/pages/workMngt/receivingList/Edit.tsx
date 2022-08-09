@@ -221,6 +221,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 unloadTaxPrice: contractNumberData?.unloadTaxPrice,
                 transportPrice: contractNumberData?.transportPrice,
                 unloadPrice: contractNumberData?.unloadPrice,
+                transportCompany: contractNumberData?.transportCompany,
+                unloadCompany: contractNumberData?.unloadCompany,
                 supplierId,
                 supplierName: baseFormData.supplierName,
                 contractId: baseFormData.contractNumber.id,
@@ -297,13 +299,26 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }
 
     const handleEditableChange = (data: any, allValues: any) => {
-        if (data.submit[data.submit.length - 1].balanceTotalWeight) {
+        const changeIndex = data.submit.length - 1
+        const changeFiled = data.submit[changeIndex]
+        if (changeFiled.balanceTotalWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
+            const dataSource: any[] = [...allValues?.submit]
+            const totalTaxPrice = calcObj.totalTaxPrice(
+                dataSource[changeIndex].taxPrice,
+                changeFiled.balanceTotalWeight)
+            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
+            dataSource[changeIndex] = {
+                ...dataSource[changeIndex],
+                totalTaxPrice,
+                totalUnTaxPrice
+            }
             if (meteringMode === 2) {
                 const totalPonderationWeight = allValues.submit?.reduce((count: string, item: any) =>
                     (parseFloat(count) + parseFloat(`${item.balanceTotalWeight}`)).toFixed(3), "0")
                 form.setFieldsValue({ totalPonderationWeight })
             }
+            setCargoData(dataSource || [])
         }
     }
 
