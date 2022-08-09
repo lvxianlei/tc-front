@@ -71,7 +71,7 @@
             "width": 160
         },
         {
-            "title": "不含税金额（元/吨）",
+            "title": "不含税金额（元）",
             "dataIndex": "totalUnTaxPrice",
             "width": 160
         },

@@ -60,7 +60,6 @@ const calcObj = {
         if (meteringMode === 1) {
             return currentWeight
         }
-        console.log(totalPonderationWeight, currentWeight, allTotalWeight)
         return (totalPonderationWeight * (currentWeight / allTotalWeight)) || "0"
     },
     /**
@@ -69,7 +68,7 @@ const calcObj = {
      * 保留六位小数
      */
     unTaxPrice: (taxPrice: any = 0, taxMode: any = 0) =>
-        (taxPrice / (1 + taxMode / 100)).toFixed(2),
+        (taxPrice / (1 + taxMode / 100)).toFixed(6),
     /**
      *  理算总重量
      * 单重 * 数量
@@ -229,7 +228,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contractNumber: baseFormData.contractNumber.value,
                 lists: listsFormData.submit?.map((item: any, index: number) => ({
                     ...cargoData[index],
-                    ...item
+                    ...item,
+                    materialContractDetailId: item.id
                 })),
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,

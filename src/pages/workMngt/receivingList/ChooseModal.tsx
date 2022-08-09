@@ -45,7 +45,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             setSelectList(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
-                id: item.id
+                id: item.materialContractDetailId
             })).filter((item: any) => item.num))
             setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
                 ...item,

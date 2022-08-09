@@ -67,6 +67,21 @@ const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: st
 const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
 const settlementModeEnum = settlementModeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
 
+const calcFun = {
+    /** 
+     *  运费-不含税价格 
+     * 运费不含税价格=运费含税价格 /（ 1 + 运费税率 / 100 )
+     */
+    transportPrice: (taxPrice: any = 0, tax: any = 0) =>
+        (taxPrice / (1 + tax / 100)).toFixed(6),
+    /** 
+    *  装卸费-不含税价格 
+    * 装卸费不含税价格=装卸费含税价格/（1+运费税率/100)
+    */
+    unloadPrice: (taxPrice: any = 0, tax: any = 0) =>
+        (taxPrice / (1 + tax / 100)).toFixed(6)
+}
+
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -463,6 +478,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 transportPrice: ''
             })
         }
+        if (changeFiled.transportTaxPrice) {
+            freightForm.setFieldsValue({
+                transportPrice: calcFun.transportPrice(changeFiled.transportTaxPrice, taxData?.taxVal)
+            })
+        }
     }
 
     // 装卸费信息
@@ -492,6 +512,11 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 unloadCompanyId: '',
                 unloadTaxPrice: '',
                 unloadPrice: ''
+            })
+        }
+        if (changeFiled.unloadTaxPrice) {
+            stevedoringForm.setFieldsValue({
+                unloadPrice: calcFun.unloadPrice(changeFiled.unloadTaxPrice, taxData?.taxVal)
             })
         }
     }

@@ -72,7 +72,7 @@
         },
         {
             "title": "重量",
-            "dataIndex": "weight",
+            "dataIndex": "totalWeight",
             "width": 50
         },
         {
