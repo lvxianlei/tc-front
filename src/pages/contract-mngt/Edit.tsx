@@ -99,8 +99,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const { loading: taxLoading, data: taxData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
-            const taxNum: any = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
-            resove(taxNum)
+            const materialTax: any = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
+            const freightTax: any = await RequestUtil.get(`/tower-storage/tax/taxMode/freight`)
+            const loadUnloadTax: any = await RequestUtil.get(`/tower-storage/tax/taxMode/load_unload`)
+            resove({
+                materialTax: materialTax?.taxVal,
+                freightTax: freightTax?.taxVal,
+                loadUnloadTax: loadUnloadTax?.taxVal
+            })
         } catch (error) {
             reject(error)
         }
@@ -360,12 +366,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         source: 1,
                         num,
                         taxPrice,
-                        price: (taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(6),
+                        price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
                         weight: item.weight || "1.00",
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-                        totalAmount: (totalWeight * taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(2)
+                        totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
                 }))
                 setPopDataList(meterialList.map((item: any) => {
@@ -378,12 +384,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         source: 1,
                         num,
                         taxPrice,
-                        price: (taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(6),
+                        price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
                         weight: item.weight || "1.00",
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-                        totalAmount: (totalWeight * taxPrice / (taxData?.taxVal / 100 + 1)).toFixed(2)
+                        totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
                 }))
             }
@@ -480,7 +486,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
         if (changeFiled.transportTaxPrice) {
             freightForm.setFieldsValue({
-                transportPrice: calcFun.transportPrice(changeFiled.transportTaxPrice, taxData?.taxVal)
+                transportPrice: calcFun.transportPrice(changeFiled.transportTaxPrice, taxData?.freightTax)
             })
         }
     }
@@ -516,7 +522,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
         if (changeFiled.unloadTaxPrice) {
             stevedoringForm.setFieldsValue({
-                unloadPrice: calcFun.unloadPrice(changeFiled.unloadTaxPrice, taxData?.taxVal)
+                unloadPrice: calcFun.unloadPrice(changeFiled.unloadTaxPrice, taxData?.loadUnloadTax)
             })
         }
     }
