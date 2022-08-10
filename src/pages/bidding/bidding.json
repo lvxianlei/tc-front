@@ -120,13 +120,14 @@
         },
         {
             "dataIndex": "bidBuyEndTime",
-            "title": "标书购买截止时间",
+            "title": "招标文件获取截止时间",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "isShowTime" : true,
+            "format": "YYYY-MM-DD HH:mm:ss",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入标书购买截止时间..."
+                    "message": "请输入招标文件获取截止时间..."
                 }
             ]
         },
@@ -152,13 +153,14 @@
         },
         {
             "dataIndex": "biddingEndTime",
-            "title": "投标截至时间",
+            "title": "开标（截标）时间",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "isShowTime" : true,
+            "format": "YYYY-MM-DD HH:mm:ss",
             "rules": [
                 {
                     "required": true,
-                    "message": "请输入投标截至时间..."
+                    "message": "请输入开标（截标）时间..."
                 }
             ]
         },

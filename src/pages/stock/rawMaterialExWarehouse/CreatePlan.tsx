@@ -111,7 +111,6 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.wareHouseId) {
-            console.log(fields, "filedd")
             setWarehouseId(fields.wareHouseId);
             return;
         }
@@ -259,7 +258,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     }]}
                 pagination={false}
                 dataSource={popDataList} />
-            <Modal width={1100} title={`选择出库明细`} destroyOnClose
+            <Modal width={1100} title={`选择库存`} destroyOnClose
                 visible={visible}
                 onOk={handleAddModalOk}
                 onCancel={() => {

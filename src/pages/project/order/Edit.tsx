@@ -73,10 +73,7 @@ export default function SeeGuarantee(): JSX.Element {
     const { loading: contratLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract/${contratId}`)
-            setEditFormData(result?.paymentPlanVos.map((item: any) => ({
-                ...item,
-                returnedAmount: addCollectionForm.getFieldValue("taxAmount") || 0.00
-            })) || [])
+            setEditFormData(result?.paymentPlanVos || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -99,6 +96,9 @@ export default function SeeGuarantee(): JSX.Element {
             addCollectionForm.setFieldsValue({
                 purchaseOrderNumber: result.purchaseOrderNumber, // 采购订单号
                 // internalNumber: result.internalNumber, // 内部合同编号
+                orderWeight: result.contractTotalWeight,// 订单重量=== 合同总重
+                taxAmount: result.contractAmount,// 含税金额=== 合同总价
+                taxPrice: processingNumber(result.contractAmount / result.contractTotalWeight + "", 6),
                 customerCompany: result.customerCompany, // 业主单位
                 signCustomerName: result.signCustomerName, // 合同签订单位
                 signContractTime: result.signContractTime, // 合同签订日期

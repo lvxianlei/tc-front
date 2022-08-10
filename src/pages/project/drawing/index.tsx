@@ -1,18 +1,22 @@
 import React, { useRef, useState } from 'react'
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form } from 'antd'
+import { useHistory, useLocation } from 'react-router-dom'
 import { SearchTable as Page, PopTableContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { drawing, connectContract } from './drawing.json'
 import Edit from "./Edit"
 import Overview from "./Overview"
+
 interface EditRefProps {
     onSubmit: (type: 1 | 2) => void
 }
 export default function Drawing(): React.ReactNode {
     const history = useHistory()
-    const [filterValue, setFilterValue] = useState({})
+    const location = useLocation<{ auditStatus?: number }> ();
+    const [filterValue, setFilterValue] = useState<any>({
+        ...history.location.state as object
+    })
     const [visible, setVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [connectVisible, setConnectVisible] = useState<boolean>(false)
@@ -223,13 +227,15 @@ export default function Drawing(): React.ReactNode {
                 {
                     name: 'auditStatus',
                     label: '项目状态',
-                    children: <Select style={{ width: "100px" }}>
-                        <Select.Option value={0}>待发起</Select.Option>
-                        <Select.Option value={1}>已发起</Select.Option>
-                        <Select.Option value={2}>待完成</Select.Option>
-                        <Select.Option value={3}>已拒绝</Select.Option>
-                        <Select.Option value={4}>已完成</Select.Option>
-                    </Select>
+                    children: <Form.Item name='auditStatus' initialValue={location.state?.auditStatus}>
+                        <Select style={{ width: "100px" }}>
+                            <Select.Option value={0}>待发起</Select.Option>
+                            <Select.Option value={1}>已发起</Select.Option>
+                            <Select.Option value={2}>待完成</Select.Option>
+                            <Select.Option value={3}>已拒绝</Select.Option>
+                            <Select.Option value={4}>已完成</Select.Option>
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'fuzzyQuery',

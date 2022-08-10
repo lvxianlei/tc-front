@@ -9,7 +9,7 @@ import {
     baseInfoColumn,
     addMaterial
 } from "./CreatePlan.json";
-import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
+import { materialStandardOptions, materialTextureOptions, qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -22,6 +22,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string>("");
     const [supplierId, setSupplierId] = useState<any>("");
+    const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     
     let [count, setCount] = useState<number>(1);
 
@@ -134,6 +135,9 @@ export default function CreatePlan(props: any): JSX.Element {
     useEffect(() => {
         if (props.visible) {
             getBatchingStrategy();
+            addCollectionForm.setFieldsValue({
+                warehousingType: "1"
+            })
         } 
     }, [props.visible])
 
@@ -195,6 +199,19 @@ export default function CreatePlan(props: any): JSX.Element {
                             value: item.id,
                             label: item.name
                         })) })
+                    }
+                    if (item.dataIndex === "supplierId") {
+                        return ({
+                            ...item, search: item.search.map((res: any) => {
+                                if (res.dataIndex === 'qualityAssurance') {
+                                    return ({
+                                        ...res,
+                                        enum: qualityAssuranceEnum
+                                    })
+                                }
+                                return res
+                            })
+                        })
                     }
                     return item
                 })}

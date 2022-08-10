@@ -89,7 +89,7 @@ export default function Edit() {
   const handleSubmit = async () => {
     const baseInfo = await form.validateFields()
     const editformData = await editform.validateFields()
-    const attchs = attchmentRef.current?.getDataSource()
+    const attchs = attchmentRef.current?.getDataSource()?.map(item => item.id)
     const {
       totalReturnedRate,
       totalReturnedAmount
@@ -148,7 +148,7 @@ export default function Edit() {
   }
 
   const handleBaseInfoChange = (fields: { [key: string]: any }, allFields: any) => {
-    const { contractAmount, contractTotalWeight } = allFields
+    const { contractAmount, contractTotalWeight, customerCompany } = allFields
     if (fields.contractTotalWeight || fields.contractAmount) {
       const contractPrice = (contractAmount / contractTotalWeight).toFixed(2)
       form.setFieldsValue({ contractPrice })
@@ -172,6 +172,12 @@ export default function Edit() {
           })
         })
       }
+    }
+    if(fields.customerCompany){
+      form.setFieldsValue({ 
+        signCustomer: customerCompany, 
+        payCompany: customerCompany 
+      })
     }
   }
 
