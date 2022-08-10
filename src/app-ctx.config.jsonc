@@ -216,7 +216,7 @@
                     {
                         "label": "人员工作负荷",
                         "path": "/cockpit/personnelLoad",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_work_load"
                     },
                     {
                         "label": "报表",
@@ -450,7 +450,7 @@
                 ]
             },
             {
-                "label": "工作管理",
+                "label": "放样过程管理",
                 "icon": "RD_gongzuoguanli-gongzuobaogao",
                 "path": "/workMngt",
                 "appName": "RD",
