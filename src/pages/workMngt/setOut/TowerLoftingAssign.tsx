@@ -173,7 +173,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
             <Button type="primary" onClick={() => this.modalShow()} ghost>塔型放样分派</Button>
             <Modal
                 visible={this.state.visible}
-                width="60%"
+                width="80%"
                 title="塔型放样分派"
                 footer={
                     <Space direction="horizontal" className={styles.bottomBtn}>
@@ -222,7 +222,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     rules={[{
                                         required: true,
                                         message: '请选择完成时间'
-                                    }]} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                    }]} style={{ width: '200px', display: 'inline-block', marginLeft: '0.8%' }}>
                                     <DatePicker showTime />
                                 </Form.Item>
                             </Descriptions.Item>
@@ -242,7 +242,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     rules={[{
                                         required: true,
                                         message: '请选择完成时间'
-                                    }]} style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
+                                    }]} style={{ width: '200px', display: 'inline-block', marginLeft: '0.8%' }}>
                                     <DatePicker showTime />
                                 </Form.Item>
                             </Descriptions.Item>
