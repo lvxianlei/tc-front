@@ -1,13 +1,15 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
-import { Input, Select, Form, Row, Modal, message, Spin } from 'antd';
+import { useHistory } from 'react-router';
+import { Input, Select, Form, Row, Modal, message, Spin, Button, Upload } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
-import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"
-import '../StockPublicStyle.less';
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 import { Attachment, AttachmentRef, SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
+import { exportDown } from '../../../utils/Export';
+import AuthUtil from '../../../utils/AuthUtil';
+import '../StockPublicStyle.less';
 interface ReceiveStrokAttachProps {
     type: 1 | 2
     id: string
@@ -48,7 +50,7 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
     useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
 
     return <Spin spinning={loading}>
-        <Attachment title={false} dataSource={data} edit ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
+        <Attachment dataSource={data} edit title="附件" ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
     </Spin>
 })
 
@@ -84,6 +86,11 @@ export default function RawMaterialStock(): React.ReactNode {
         message.success("保存成功...")
         setVisible(false)
     }
+
+    const handleDownload = () => {
+        exportDown(`/tower-storage/materialStock/masterplate/export`)
+    }
+
     return (
         <>
             <Modal
@@ -131,8 +138,35 @@ export default function RawMaterialStock(): React.ReactNode {
                         </>
                     )
                 }]}
-                extraOperation={
+                extraOperation={<>
+                    <Upload
+                        accept=".xls,.xlsx"
+                        action={() => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl + '/tower-storage/materialStock/masterplate/import'
+                        }}
+                        headers={
+                            {
+                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        showUploadList={false}
+                        onChange={(info) => {
+                            if (info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            } else if (info.file.response && info.file.response?.success) {
+                                message.success('导入成功！');
+                                history.go(0)
+                            }
+                        }}
+                    >
+                        <Button type="primary" ghost>导入</Button>
+                    </Upload>
+                    <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
                     <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
+                </>
                 }
                 filterValue={filterValue}
                 onFilterSubmit={(value: any) => {

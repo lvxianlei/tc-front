@@ -11,7 +11,7 @@ export default function Invoicing() {
     const history = useHistory()
     const modalRef = useRef<{ onSubmit: () => void, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
-    const location = useLocation<{ state?: number }> ();
+    const location = useLocation<{ state?: number }>();
     const [filterValue, setFilterValue] = useState({
         ...history.location.state as object
     });
@@ -136,14 +136,12 @@ export default function Invoicing() {
                 {
                     name: 'state',
                     label: '状态',
-                    children: <Form.Item name='auditStatus' initialValue={location.state?.state||''}>
-                        <Select style={{ width: 200 }}>
-                            <Select.Option value={0}>已创建</Select.Option>
-                            <Select.Option value={1}>审批中</Select.Option>
-                            <Select.Option value={2}>审批通过</Select.Option>
-                            <Select.Option value={3}>被驳回</Select.Option>
-                        </Select>
-                    </Form.Item>
+                    children: <Select style={{ width: 200 }}>
+                        <Select.Option value={0}>已创建</Select.Option>
+                        <Select.Option value={1}>审批中</Select.Option>
+                        <Select.Option value={2}>审批通过</Select.Option>
+                        <Select.Option value={3}>被驳回</Select.Option>
+                    </Select>
                 },
                 {
                     name: 'fuzzyQuery',
