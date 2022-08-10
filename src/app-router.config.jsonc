@@ -2649,6 +2649,13 @@
       "module": "./pages/businessDisposal/ProcessedDetails",
       "exact": true,
       "authority": "tc_erp_rd_order_adjustment_see"
+    },
+    { // 通用中心-第三方应用配置
+      "name": "第三方应用配置",
+      "path": "/otherSetting/index",
+      "module": "./pages/system-mngt/otherSetting/index",
+      "exact": true,
+      "authority": "tc_erp_sys_log"
     }
   ]
 }

@@ -951,6 +951,20 @@
                 ]
             },
             {
+                "label": "第三方应用配置",
+                "icon": "xitongrizhiTY_xitongrizhi",
+                "path": "/otherSetting",
+                "appName": "COMM",
+                "authority": "tc_erp_sys_log",
+                "items": [
+                    {
+                        "label": "第三方应用配置",
+                        "path": "/otherSetting/index",
+                        "authority": "tc_erp_sys_log_operation"
+                    }
+                ]
+            },
+            {
                 "label": "请款申请管理",
                 "icon": "caiwuzhongxin_qingkuanshenqing",
                 "path": "/fundApply",
