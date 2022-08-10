@@ -1024,7 +1024,7 @@ export default function ScheduleView(): React.ReactNode {
                         <Button type="primary" ghost onClick={ async () => {
                             setVisible(true);
                             setLoad(true)
-                            const resData: any = await RequestUtil.get(`/tower-science/productCategory/${selectedKeys.join(',')}`);
+                            const resData: any = selectedKeys.length>1?await RequestUtil.get(`/tower-science/productCategory/category/name`,{ids:selectedKeys.join(',')}):await RequestUtil.get(`/tower-science/productCategory/${selectedKeys.join(',')}`);
                             setScheduleData(resData);
                             if(resData?.assignConfigVO?.weldingCompletionTime 
                                 && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
