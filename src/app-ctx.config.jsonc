@@ -848,21 +848,6 @@
                 "appName": "COMM",
                 "authority": "tc_erp_sys_base",
                 "items": [
-                    {
-                        "label": "基础设置",
-                        "path": "/baseSetting/baseSettingMngt",
-                        "authority": "tc_erp_sys_base"
-                    },
-                    {
-                        "label": "试组装配置",
-                        "path": "/baseSetting/tryAssemble",
-                        "authority": "rd_config"
-                    },
-                    {
-                        "label": "返修件条目配置",
-                        "path": "/baseSetting/itemRepair",
-                        "authority": "rd_config"
-                    },
                     // {
                     //     "label": "产线管理",
                     //     "path": "/baseSetting/productionLineMngt",
@@ -1189,6 +1174,30 @@
                 "appName": "RD",
                 "path": "http://erp-tdm-hjt-uat.dhwy.cn/login",
                 "authority": "tc_erp_rd_tdm"
+            },
+            {
+                "label": "系统设置",
+                "icon": "jichuguanliTY_jichuguanli",
+                "path": "/baseSetting",
+                "appName": "RD",
+                "authority": "tc_erp_rd_system",
+                "items": [
+                    {
+                        "label": "基础设置",
+                        "path": "/baseSetting/baseSettingMngt",
+                        "authority": "rd_config"
+                    },
+                    {
+                        "label": "试组装配置",
+                        "path": "/baseSetting/tryAssemble",
+                        "authority": "tc_erp_rd_trial_config"
+                    },
+                    {
+                        "label": "返修件条目配置",
+                        "path": "/baseSetting/itemRepair",
+                        "authority": "tc_erp_rd_fix_item_config"
+                    }
+                ]
             }
         ]
     },
