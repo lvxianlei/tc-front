@@ -44,7 +44,7 @@ export default function Login(): JSX.Element {
             reject(false)
         }
     }))
-    const { loading: saveLoading, data: saveData, run } = useRequest<any>((values: { [key: string]: any }) => new Promise(async (resole, reject) => {
+    const { loading: saveLoading, run } = useRequest<any>((values: { [key: string]: any }) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(
                 '/sinzetech-auth/oauth/token',

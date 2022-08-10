@@ -68,6 +68,10 @@
             "dataIndex": "warehouseName"
         },
         {
+            "title": "过磅重量(吨)",
+            "dataIndex": "totalPonderationWeight"
+        },
+        {
             "title": "备注",
             "dataIndex": "remark",
             "type": "textarea"
@@ -140,7 +144,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName", 
+            "dataIndex": "materialStandardName",
             "type": "string",
             "disabled": true
         },
@@ -179,8 +183,8 @@
             "disabled": true
         },
         {
-            "title": "过磅重量（吨）",
-            "dataIndex": "ponderationWeight"
+            "title": "结算重量（吨）",
+            "dataIndex": "balanceTotalWeight"
         },
         {
             "title": "含税单价（元/吨）",
@@ -205,6 +209,18 @@
         {
             "title": "炉批号",
             "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "肢宽",
+            "dataIndex": "limbWidth"
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness"
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber"
         },
         {
             "title": "质保书号",

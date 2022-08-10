@@ -3,27 +3,27 @@
         {
             "title": "收货状态",
             "dataIndex": "warehousingEntryStatusName",
-            "width": 120
+            "width": 80
         },
         {
             "title": "收货批次",
             "dataIndex": "receiveBatchNumber",
-            "width": 120
+            "width": 80
         },
         {
             "title": "品名",
             "dataIndex": "materialName",
-            "width": 120
+            "width": 40
         },
         {
             "title": "标准",
             "dataIndex": "materialStandardName",
-            "width": 120
+            "width": 40
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "width": 120
+            "width": 40
         },
         {
             "title": "规格",
@@ -68,17 +68,22 @@
         {
             "title": "不含税单价（元/吨）",
             "dataIndex": "unTaxPrice",
-            "width": 120
+            "width": 160
         },
         {
-            "title": "不含税金额（元/吨）",
+            "title": "不含税金额（元）",
             "dataIndex": "totalUnTaxPrice",
-            "width": 120
+            "width": 160
         },
         {
             "title": "不含税运费（元）",
             "dataIndex": "unTransportTaxPrice",
             "width": 120
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "unUnloadTaxPrice",
+            "width": 160
         },
         {
             "title": "供应商",
