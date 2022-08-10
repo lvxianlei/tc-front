@@ -2682,14 +2682,14 @@
       "path": "/baseSetting/tryAssemble",
       "module": "./pages/baseSetting/TryAssemble",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_rd_trial_config_list"
     },
     { // RD-系统设置-返修件条目配置
       "name": "返修件条目配置",
       "path": "/baseSetting/itemRepair",
       "module": "./pages/baseSetting/ItemRepair",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
