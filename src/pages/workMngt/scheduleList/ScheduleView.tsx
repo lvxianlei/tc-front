@@ -138,8 +138,8 @@ export default function ScheduleView(): React.ReactNode {
             }else{
                 saveData.weldingUser='';
             }
-            saveData.loftingMutualReview = saveData.loftingMutualReview.join(',')
-            saveData.weldingUser=saveData.weldingUser.join(',')
+            saveData.loftingMutualReview = Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.join(','):''
+            saveData.weldingUser=Array.isArray(saveData.weldingUser)&&saveData.weldingUser.length>0?saveData.weldingUser.join(','):''
             saveData.loftingUser= Array.isArray(saveData.loftingUser)&&saveData.loftingUser.length>0?saveData.loftingUser.join(','):'';
             console.log(saveData.loftingMutualReview)
            
