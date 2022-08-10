@@ -214,6 +214,11 @@
                         "authority": "tc_erp_rd_cockpit_loft"
                     },
                     {
+                        "label": "人员工作负荷",
+                        "path": "/cockpit/personnelLoad",
+                        "authority": "rd_cockpit"
+                    },
+                    {
                         "label": "报表",
                         "path": "/cockpit/statements",
                         "authority": "tc_erp_rd_cockpit_report"
@@ -843,6 +848,31 @@
                         "path": "/baseSetting/baseSettingMngt",
                         "authority": "tc_erp_sys_base"
                     },
+                    {
+                        "label": "试组装配置",
+                        "path": "/baseSetting/tryAssemble",
+                        "authority": "rd_config"
+                    },
+                    {
+                        "label": "返修件条目配置",
+                        "path": "/baseSetting/itemRepair",
+                        "authority": "rd_config"
+                    },
+                    // {
+                    //     "label": "产线管理",
+                    //     "path": "/baseSetting/productionLineMngt",
+                    //     "authority": "basic_settings_production_line_management"
+                    // },
+                    // {
+                    //     "label": "工序管理",
+                    //     "path": "/baseSetting/processMngt",
+                    //     "authority": "basic_settings_process_management"
+                    // },
+                    // {
+                    //     "label": "车间派工设备管理",
+                    //     "path": "/baseSetting/workshopEquipmentMngt",
+                    //     "authority": "basic_settings_workshop_dispatch_equipment_management"
+                    // },
                     {
                         "label": "生产班组管理",
                         "path": "/baseSetting/workshopTeamMngt",
