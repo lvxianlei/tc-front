@@ -327,7 +327,7 @@ export default function TowerInformation(): React.ReactNode {
                         record.status === 1 ?
                             <Popconfirm
                                 title="确认删除?"
-                                onConfirm={() => RequestUtil.delete(`/tower-science/productSegment?productSegmentGroupId=${record.id}`).then(res => {
+                                onConfirm={() => RequestUtil.delete(`/tower-science/productSegment?segmentId=${record.id}`).then(res => {
                                     onRefresh();
                                 })}
                                 okText="确认"
@@ -352,9 +352,9 @@ export default function TowerInformation(): React.ReactNode {
                                         title: "当前存在未上传的大样图或工艺卡，是否完成放样？",
                                         onOk: async () => new Promise(async (resove, reject) => {
                                             try {
-                                                RequestUtil.put(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
+                                                RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
                                                     message.success('放样完成！');
-                                                    setRefresh(!refresh);
+                                                    onRefresh();
                                                 })
                                                 resove(true)
                                             } catch (error) {
@@ -373,7 +373,7 @@ export default function TowerInformation(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认完成校核?"
-                        onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check`).then(res => {
+                        onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check?productSegmentId=${record.id}`).then(res => {
                             onRefresh();
                             message.success('校核成功！')
                         })}
@@ -388,7 +388,7 @@ export default function TowerInformation(): React.ReactNode {
     ]
 
     const onRefresh = () => {
-        setRefresh(!refresh);
+        history.go(0)
     }
 
 
