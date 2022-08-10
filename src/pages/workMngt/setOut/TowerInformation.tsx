@@ -90,7 +90,9 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'id',
             width: 50,
             fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<><span>{index + 1}</span><Form.Item name={['data', index, "id"]} initialValue={_} style={{ display: "none" }}>
+                <Input size="small" onChange={() => rowChange(index)} />
+            </Form.Item></>)
         },
         {
             key: 'segmentName',
@@ -401,6 +403,7 @@ export default function TowerInformation(): React.ReactNode {
                 let changeValues = values.filter((item: any, index: number) => {
                     return newRowChangeList.indexOf(index) !== -1;
                 })
+                console.log(changeValues)
                 if (changeValues && changeValues.length > 0) {
                     const tip: boolean[] = []
                     changeValues.forEach((res: any) => {
