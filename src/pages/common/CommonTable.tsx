@@ -32,7 +32,7 @@ export function generateRender(type: ColumnsItemsType, data: (SelectData | TextD
             return ({
                 ellipsis: { showTitle: false },
                 onCell: () => ({ className: styles.tableCell }),
-                render: (text: number) => <>{text && !["-1", -1].includes(text) ? text : 0}</>,
+                render: (text: any) => <>{text && !["-1"].includes(text) ? text : 0}</>,
                 ...data
             })
         case "string":

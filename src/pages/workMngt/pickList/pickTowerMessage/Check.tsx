@@ -188,7 +188,10 @@ export default function PickCheckList(): React.ReactNode {
         <>
             <Page
                 path={`/tower-science/drawProductStructure/check`}
-                requestData={{segmentGroupId:params.productSegmentId}}
+                requestData={{
+                    segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                    productCategoryId:params.productSegmentId ==='all'?params?.id:'',
+                }}
                 columns={ columnsSetting }
                 onFilterSubmit={onFilterSubmit}
                 refresh={refresh}
@@ -196,7 +199,7 @@ export default function PickCheckList(): React.ReactNode {
                 exportPath="/tower-science/drawProductStructure/check"
                 extraOperation={
                     <Space>
-                        <Popconfirm
+                        {/* <Popconfirm
                             title="确认完成校核?"
                             onConfirm={ async () => {
                                 await RequestUtil.post(`/tower-science/drawProductStructure/completed/check?productSegmentId=${params.productSegmentId}`).then(()=>{
@@ -209,7 +212,7 @@ export default function PickCheckList(): React.ReactNode {
                             cancelText="取消"
                         > 
                             <Button type='primary' ghost >完成校核</Button>
-                        </Popconfirm>
+                        </Popconfirm> */}
                         <Button type='ghost' onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)}}>返回</Button>
                     </Space>
                 }

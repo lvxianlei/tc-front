@@ -12,6 +12,7 @@ import useRequest from '@ahooksjs/use-request';
 import styles from '../TowerPickAssign.module.less';
 import CommonTable from "../../../common/CommonTable";
 import { materialTextureOptions } from "../../../../configuration/DictionaryOptions";
+import { useParams } from "react-router-dom";
 
  interface modalProps {
      id: string;
@@ -21,7 +22,12 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
      const [form] = Form.useForm();
      const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
      const [selectedRows, setSelectedRows] = useState<any[]>([]);
- 
+     const params = useParams<{
+        id: string,
+        productSegmentId: string,
+        status: string,
+        materialLeader: string
+    }>();
      const list = [
          {
              index: 0,
@@ -52,7 +58,10 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
  
      const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
          try {
-             const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment/getSegmentName`,{segmentGroupId:id});
+             const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`,{                                
+                //  segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                 productCategory:params?.id
+             });
              form.setFieldsValue({ data: [...list] })
              resole(data)
          } catch (error) {
@@ -84,7 +93,8 @@ import { materialTextureOptions } from "../../../../configuration/DictionaryOpti
              console.log(newSelected)
              await saveRun({
                  exactReplace: newSelected,
-                 segmentGroupId: id,
+                //  segmentGroupId: id,
+                 productCategoryId: params.id,
                  segmentNameList: values?.segmentNameList===null? undefined: values?.segmentNameList,
                  fuzzyReplace:[{
                      before:values?.before===null? undefined:values?.before,

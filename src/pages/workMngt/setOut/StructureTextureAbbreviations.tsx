@@ -102,7 +102,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
             const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
-                productSegmentGroupId: id
+                productCategoryId: id
             });
             form.setFieldsValue({ data: [...list] })
             resole(data)

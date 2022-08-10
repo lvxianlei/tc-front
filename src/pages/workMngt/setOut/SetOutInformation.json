@@ -296,6 +296,12 @@
             "dataIndex": "thickness"
         },
         {
+            "key": "thickness",
+            "title": "零件类型",
+            "width": 120,
+            "dataIndex": "thickness"
+        },
+        {
             "key": "electricWelding",
             "title": "电焊",
             "width": 80,
