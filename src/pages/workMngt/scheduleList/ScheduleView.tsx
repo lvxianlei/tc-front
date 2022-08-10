@@ -120,9 +120,9 @@ export default function ScheduleView(): React.ReactNode {
                     saveData.loftingMutualReview.splice(saveData.loftingMutualReview.indexOf('0'),1)
                     console.log(saveData.loftingMutualReview)
                     console.log(saveData.loftingUser)
-                    user = saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.concat([saveData.loftingUser]):saveData.loftingUser
+                    user = saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.concat(saveData.loftingUser):saveData.loftingUser
                     saveData.loftingMutualReview = Array.from(new Set(user))
-                    
+                    console.log(Array.from(new Set(user)))
                 }
             }else{
                 saveData.loftingMutualReview='';
