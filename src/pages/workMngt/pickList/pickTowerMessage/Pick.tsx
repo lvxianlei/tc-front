@@ -436,7 +436,7 @@ export default function Lofting(): React.ReactNode {
     })
     const [tableColumns, setColumns] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
-        value.productCategory = params.id
+        value.productCategoryId = params.id
         setFilterValue(value)
         return value
     }

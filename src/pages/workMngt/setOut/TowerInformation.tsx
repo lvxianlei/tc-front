@@ -38,6 +38,16 @@ export default function TowerInformation(): React.ReactNode {
         resole(result?.records || [])
     }), {})
 
+    const { data: userList } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get<any>(`/tower-system/employee?deptName=技术部&size=1000`);
+            resole(result?.records)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
+
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
             role.value = role.id;
@@ -93,27 +103,17 @@ export default function TowerInformation(): React.ReactNode {
             title: '外来模型',
             width: 80,
             dataIndex: 'isExternalModel',
-            type: 'select',
-            enum: [
-                { "value": 1, "label": "是" },
-                { "value": 0, "label": "否" }
-            ],
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <>{
-                    editorLock === '编辑' ?
-                        <span>{_ === 0 ? '否' : '是'}</span>
-                        :
-                        <Form.Item name={['data', index, "isExternalModel"]} initialValue={_} rules={[{
-                            required: true,
-                            message: '请选择外来模型'
-                        }]} >
-                            <Select style={{ width: '120px' }} placeholder="请选择外来模型">
-                                <Select.Option value={1} key="1">是</Select.Option>
-                                <Select.Option value={0} key="0">否</Select.Option>
-                            </Select>
-                        </Form.Item>
-                }</>
+                <Form.Item name={['data', index, "isExternalModel"]} initialValue={_} rules={[{
+                    required: true,
+                    message: '请选择外来模型'
+                }]} >
+                    <Select style={{ width: '120px' }} placeholder="请选择外来模型" onChange={() => rowChange(index)}>
+                        <Select.Option value={'是'} key="1">是</Select.Option>
+                        <Select.Option value={'否'} key="0">否</Select.Option>
+                    </Select>
+                </Form.Item>
             )
         },
         {
@@ -124,13 +124,15 @@ export default function TowerInformation(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "structureId"]} initialValue={record?.structureId}>
-                    {
-                        towerStructureOptions?.map((item: any, index: number) =>
-                            <Select.Option value={item.id} key={index}>
-                                {item.name}
-                            </Select.Option>
-                        )
-                    }
+                    <Select style={{ width: '120px' }} placeholder="请选择结构" onChange={() => rowChange(index)}>
+                        {
+                            towerStructureOptions?.map((item: any, index: number) =>
+                                <Select.Option value={item.id} key={index}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        }
+                    </Select>
                 </Form.Item>
             )
         },
@@ -147,14 +149,19 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'loftingUserName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "loftingUser"]} initialValue={record.loftingUser}>
-                    {
-                        productTypeOptions?.map((item: any, index: number) =>
-                            <Select.Option value={item.id} key={index}>
-                                {item.name}
-                            </Select.Option>
-                        )
-                    }
+                <Form.Item name={['data', index, "loftingUser"]} initialValue={record?.loftingUser?.split(',')} rules={[{
+                    required: true,
+                    message: '请选择放样人'
+                }]} >
+                    <Select style={{ width: '120px' }} placeholder="请选择放样人" mode='multiple' onChange={() => rowChange(index)}>
+                        {
+                            userList?.map((item: any, index: number) =>
+                                <Select.Option value={item.userId} key={index}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        }
+                    </Select>
                 </Form.Item>
             )
         },
@@ -165,14 +172,19 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'loftingMutualReviewName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "loftingMutualReview"]} initialValue={record.loftingMutualReview}>
-                    {
-                        productTypeOptions?.map((item: any, index: number) =>
-                            <Select.Option value={item.id} key={index}>
-                                {item.name}
-                            </Select.Option>
-                        )
-                    }
+                <Form.Item name={['data', index, "loftingMutualReview"]} initialValue={record?.loftingMutualReview?.split(',')} rules={[{
+                    required: true,
+                    message: '请选择放样互审'
+                }]} >
+                    <Select style={{ width: '120px' }} placeholder="请选择放样互审" mode='multiple' onChange={() => rowChange(index)}>
+                        {
+                            userList?.map((item: any, index: number) =>
+                                <Select.Option value={item.userId} key={index}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        }
+                    </Select>
                 </Form.Item>
             )
         },
@@ -183,14 +195,19 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'checkUserName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "checkUser"]} initialValue={record.checkUser}>
-                    {
-                        productTypeOptions?.map((item: any, index: number) =>
-                            <Select.Option value={item.id} key={index}>
-                                {item.name}
-                            </Select.Option>
-                        )
-                    }
+                <Form.Item name={['data', index, "checkUser"]} initialValue={record?.checkUser?.split(',')} rules={[{
+                    required: true,
+                    message: '请选择校核人'
+                }]} >
+                    <Select style={{ width: '120px' }} placeholder="请选择校核人" mode='multiple' onChange={() => rowChange(index)}>
+                        {
+                            userList?.map((item: any, index: number) =>
+                                <Select.Option value={item.userId} key={index}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        }
+                    </Select>
                 </Form.Item>
             )
         },
@@ -226,7 +243,7 @@ export default function TowerInformation(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "projectEntries"]} initialValue={_}>
-                    <Select style={{ width: '120px' }} placeholder="请选择定额条目">
+                    <Select style={{ width: '120px' }} placeholder="请选择定额条目" onChange={() => rowChange(index)}>
                         {loftingQuota && loftingQuota?.map((item: any) => {
                             return <Select.Option key={item.id} value={item.id}>{item.projectEntries}</Select.Option>
                         })}
@@ -248,7 +265,7 @@ export default function TowerInformation(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "cadDrawingType"]} initialValue={_}>
-                    <Select style={{ width: '120px' }} placeholder="请选择辅助设计出图类型">
+                    <Select style={{ width: '120px' }} placeholder="请选择辅助设计出图类型" allowClear onChange={() => rowChange(index)}>
                         <Select.Option value="普通图纸" key="1">普通图纸</Select.Option>
                         <Select.Option value="核算重量图纸" key="0">核算重量图纸</Select.Option>
                     </Select>
@@ -262,10 +279,7 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'drawPageNum',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "drawPageNum"]} rules={editForm.getFieldsValue(true).cadDrawingType ? [{
-                    required: true,
-                    message: '请输入图纸页数'
-                }] : []} initialValue={_}>
+                <Form.Item name={['data', index, "drawPageNum"]} initialValue={_}>
                     <InputNumber min={1} max={9999} onChange={() => rowChange(index)} />
                 </Form.Item>
             )
@@ -366,67 +380,15 @@ export default function TowerInformation(): React.ReactNode {
                     >
                         <Button type="link">完成校核</Button>
                     </Popconfirm>
-                    {/* <TowerLoftingAssign
-                        type={record.status === 1 ? 'edit' : 'detail'}
-                        title="分派信息"
-                        detailData={{ ...record, loftingUser: record.loftingUser + '-' + record.loftingUserName, checkUser: record.checkUser + '-' + record.checkUserName }}
-                        id={params.id}
-                        patternName={record.pattern}
-                        update={onRefresh}
-                        rowId={record.id}
-                    />
-                    <Button type="link" onClick={async () => {
-                        const data: ISectionData[] = await RequestUtil.get(`/tower-science/productSegment/segmentList`, { productSegmentGroupId: record.id });
-                        setSectionData(data);
-                        setVisible(true);
-                        form.setFieldsValue({ data: [...data] });
-                        setRecordStatus(record.status)
-                    }}>段模式</Button> */}
                 </Space>
             )
         }
     ]
 
-    // const sectionColumns = [
-    //     {
-    //         title: '段号',
-    //         dataIndex: 'segmentName',
-    //         key: 'segmentName',
-    //         width: '50%'
-    //     },
-    //     {
-    //         title: '模式',
-    //         dataIndex: 'pattern',
-    //         key: 'pattern',
-    //         width: '50%',
-    //         render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-    //             <Form.Item name={['data', index, 'pattern']} rules={[{
-    //                 required: true,
-    //                 message: '请选择模式'
-    //             }]}>
-    //                 <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={recordStatus === 3}>
-    //                     {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-    //                         return <Select.Option key={index} value={id}>
-    //                             {name}
-    //                         </Select.Option>
-    //                     })}
-    //                 </Select>
-    //             </Form.Item>
-    //         )
-    //     }
-    // ]
-
     const onRefresh = () => {
         setRefresh(!refresh);
     }
 
-    // const saveSection = () => {
-    //     const value = form.getFieldsValue(true).data;
-    //     RequestUtil.post(`/tower-science/productSegment/updateSegmentPattern`, [...value]).then(res => {
-    //         setVisible(false);
-    //         setRefresh(!refresh);
-    //     })
-    // }
 
     const closeOrEdit = () => {
         if (editorLock === '编辑') {
@@ -440,14 +402,40 @@ export default function TowerInformation(): React.ReactNode {
                     return newRowChangeList.indexOf(index) !== -1;
                 })
                 if (changeValues && changeValues.length > 0) {
-                    console.log(changeValues)
-                    RequestUtil.post(`/tower-science/productSegment`, changeValues).then(res => {
-                        setTableColumns(columnsSetting);
-                        setEditorLock('编辑');
-                        setRowChangeList([]);
-                        editForm.resetFields();
-                        setRefresh(!refresh);
+                    const tip: boolean[] = []
+                    changeValues.forEach((res: any) => {
+                        if (!!(res.cadDrawingType)) {
+                            console.log('kkk')
+                            if (!!(res.drawPageNum)) {
+                                tip.push(true)
+                            } else {
+                                tip.push(false)
+                            }
+                        } else {
+                            tip.push(true)
+                        }
                     });
+                    if (tip.indexOf(false) !== -1) {
+                        message.warning('存在辅助设计出图类型，请填写图纸页数')
+                    } else {
+                        RequestUtil.post(`/tower-science/productSegment`, [
+                            ...changeValues.map((res: any) => {
+                                return {
+                                    ...res,
+                                    loftingUser: res?.loftingUser?.join(','),
+                                    loftingMutualReview: res?.loftingMutualReview?.join(','),
+                                    checkUser: res?.checkUser?.join(','),
+                                }
+                            })
+                        ]).then(res => {
+                            setTableColumns(columnsSetting);
+                            setEditorLock('编辑');
+                            setRowChangeList([]);
+                            editForm.resetFields();
+                            setRefresh(!refresh);
+                        });
+
+                    }
                 } else {
                     setTableColumns(columnsSetting);
                     setEditorLock('编辑');
@@ -469,7 +457,7 @@ export default function TowerInformation(): React.ReactNode {
         }
         return {
             ...col,
-            render: col.dataIndex === 'isExternalModel' ? col.render : (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{_ === -1 ? undefined : _}</span>
             )
         }
@@ -490,17 +478,6 @@ export default function TowerInformation(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
 
     return <>
-        {/* <Modal title="段模式" visible={visible} onCancel={() => setVisible(false)} footer={<Space direction="horizontal" size="small" >
-            <Button onClick={() => setVisible(false)}>关闭</Button>
-            {
-                recordStatus === 3 ?
-                    null : <Button type="primary" onClick={saveSection} ghost>保存</Button>
-            }
-        </Space>}>
-            <Form form={form} className={styles.sectionModal}>
-                <Table columns={sectionColumns} pagination={false} dataSource={sectionData} />
-            </Form>
-        </Modal> */}
         <Modal
             destroyOnClose
             key='DetailsQuestionnaire'
@@ -606,53 +583,6 @@ export default function TowerInformation(): React.ReactNode {
                     </Space>
                 </>}
                 searchFormItems={[]}
-                // searchFormItems={[
-                //     {
-                //         name: 'updateStatusTime',
-                //         label: '最新状态变更时间',
-                //         children: <DatePicker.RangePicker />
-                //     },
-                //     {
-                //         name: 'status',
-                //         label: '放样状态',
-                //         children: <Select style={{ width: '120px' }} placeholder="请选择">
-                //             <Select.Option value="" key="4">全部</Select.Option>
-                //             <Select.Option value="1" key="1">放样中</Select.Option>
-                //             <Select.Option value="2" key="2">校核中</Select.Option>
-                //             <Select.Option value="3" key="3">已完成</Select.Option>
-                //         </Select>
-                //     },
-                //     {
-                //         name: 'personnel',
-                //         label: '人员',
-                //         children: <Row>
-                //             <Col>
-                //                 <Form.Item name="personnelDept">
-                //                     <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'loftingUserDept') }} style={{ width: "150px" }}>
-                //                         {renderTreeNodes(wrapRole2DataNode(departmentData))}
-                //                     </TreeSelect>
-                //                 </Form.Item>
-                //             </Col>
-                //             <Col>
-                //                 <Form.Item name="personnel">
-                //                     <Select placeholder="请选择" style={{ width: "150px" }}>
-                //                         {loftingUser && loftingUser.map((item: any) => {
-                //                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                //                         })}
-                //                     </Select>
-                //                 </Form.Item>
-                //             </Col>
-                //         </Row>
-                //     }
-                // ]}
-                // onFilterSubmit={(values: Record<string, any>) => {
-                //     if (values.updateStatusTime) {
-                //         const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                //         values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-                //         values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-                //     }
-                //     return values;
-                // }}
                 tableProps={{
                     pagination: false
                 }}

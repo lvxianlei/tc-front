@@ -786,7 +786,7 @@ export default function Lofting(): React.ReactNode {
     const [rowData, setRowData] = useState<any>([])
     const userId = AuthUtil.getUserId();
 
-    const { data: segmentNames } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+    const { data: segmentNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result = await RequestUtil.get<any>(`/tower-science/productSegment/list/${params.id}`);
             resole(result)
@@ -795,12 +795,10 @@ export default function Lofting(): React.ReactNode {
         }
     }), {})
     
-    const { data: isShow } = useRequest<boolean>((id: string) => new Promise(async (resole, reject) => {
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
-            let result = await RequestUtil.get<any>(`/productCategory/assign/user/list/${params.id}`);
-            result = result.map((res: { id: any; }) => res.id)
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
             result.indexOf(userId) === -1 ? resole(false) : resole(true)
-            
         } catch (error) {
             reject(error)
         }
@@ -922,7 +920,7 @@ export default function Lofting(): React.ReactNode {
                     <Button type="primary" ghost disabled={!isShow}>导入</Button>
                 </Upload>
                 <Button type="primary" key='2' onClick={async () => { setMissVisible(true) }} disabled={!isShow} ghost>漏件检查</Button>
-                <Dropdown overlay={menu} trigger={['click']}>
+                <Dropdown overlay={menu} trigger={['click']} disabled={!isShow}>
                     <Button type="primary" ghost>
                         批量修改<DownOutlined />
                     </Button>

@@ -110,14 +110,15 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 legProgrammingUser: data?.legProgrammingUser ? data.legProgrammingUser : '0',
                 loftingUser: data?.loftingUser && data?.loftingUser?.split(',')
             }
-            this.getForm()?.setFieldsValue({
+            this.getForm()?.setFieldsValue
+            ({
                 ...detailData
             });
         }
     }
 
     private async getUserList(): Promise<void> {
-        const data = await RequestUtil.get<any>(`/tower-system/employee?size=1000`);
+        const data = await RequestUtil.get<any>(`/tower-system/employee?deptName=技术部&size=1000`);
         this.setState({
             user: data?.records
         })
@@ -147,6 +148,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                     productPartUser: values.productPartUser === '0' ? values.ncUser === '0' ? values.programmingLeader : values.ncUser : values.productPartUser,
                     packageUser: values.packageUser === '0' ? values.productPartUser === '0' ? values.ncUser === '0' ? values.programmingLeader : values.ncUser : values.productPartUser : values.packageUser,
                     legProgrammingUser: values.legProgrammingUser === '0' ? values.packageUser === '0' ? values.productPartUser === '0' ? values.ncUser === '0' ? values.programmingLeader : values.ncUser : values.productPartUser : values.packageUser : values.legProgrammingUser,
+                    type: 1
                 }
                 RequestUtil.post(`/tower-science/productCategory/assign`, { ...values }).then(() => {
                     message.success('指派成功');
