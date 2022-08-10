@@ -56,6 +56,16 @@ export default function ContractList(): JSX.Element {
       dataIndex: "contractTotalWeight",
     },
     {
+      title: "已下计划重量(吨)",
+      dataIndex: "released",
+      width: 120,
+    },
+    {
+        title: "未下计划重量(吨)",
+        dataIndex: "notReleased",
+        width: 120,
+    },
+    {
       title: "合同金额(元)",
       width: 100,
       dataIndex: "contractAmount",
@@ -177,7 +187,10 @@ export default function ContractList(): JSX.Element {
                 </Popconfirm>
                 <Button type="link">
                   <Link
-                    to={`/project/management/pamentRecord/contract/${record?.id}/${record?.contractName}/${record?.signCustomerId}/${record?.signCustomerName}/${record?.contractNumber}/${params.id}`}
+                    to={`/project/management/pamentRecord/contract/${(record as IContract).id
+                      }/${(record as any).contractName}/${(record as IContract).signCustomerId
+                      }/${(record as IContract).signCustomerName
+                      }/${(record as any).contractNumber}/${params.id}`}
                   >
                     添加回款记录
                   </Link>

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { Space, Button, Input, Modal, Form, message, Select, DatePicker } from 'antd'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { SearchTable as Page, BaseInfo, DetailTitle, EditTable, Attachment, AttachmentRef } from '../common'
 import ApprovalTypesView from "./ApprovalTypesView"
 import SelectAuditType from './SelectAuditType'
@@ -27,6 +27,10 @@ export default function Information(): React.ReactNode {
     }))
 
     const history = useHistory()
+    const location = useLocation<{ auditStatus?: number, processName?: string }> ();
+    const [filterValue, setFilterValue] = useState<object>({
+        ...history.location.state as object
+    });
     const attachRef = useRef<AttachmentRef>()
     const [visible, setVisible] = useState(false)
     const [performanceBondVisible, setPerformanceBondVisible] = useState<boolean>(false)
@@ -364,6 +368,7 @@ export default function Information(): React.ReactNode {
             value.endMarketAuditTime = formatDate[1]
             delete value.marketAuditTime
         }
+        setFilterValue(value)
         return value
     }
 
@@ -549,14 +554,17 @@ export default function Information(): React.ReactNode {
                     )
                 }]}
             onFilterSubmit={onFilterSubmit}
+            filterValue={filterValue}
             extraOperation={<Button type="primary" onClick={handleNewAudit}>新增审批</Button>}
             searchFormItems={[
                 {
-                    name: 'processTypeId',
+                    name: 'processName',
                     label: '审批类型',
-                    children: <Select style={{ width: "200px" }}>
-                        {auditType?.map((item: any) => <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)}
-                    </Select>
+                    children: <Form.Item name='processName' initialValue={location.state?.processName}>
+                        <Select style={{ width: "200px" }}>
+                            {auditType?.map((item: any) => <Select.Option value={item.name} key={item.id}>{item.name}</Select.Option>)}
+                        </Select>
+                    </Form.Item>
                 },
                 {
                     name: 'marketAuditTime',
@@ -566,11 +574,13 @@ export default function Information(): React.ReactNode {
                 {
                     name: 'auditStatus',
                     label: '审批状态',
-                    children: <Select style={{ width: "140px" }}>
-                        <Select.Option value={0} key="audit-0">审批中</Select.Option>
-                        <Select.Option value={1} key="audit-1">已通过</Select.Option>
-                        <Select.Option value={2} key="audit-2">已驳回</Select.Option>
-                    </Select>
+                    children: <Form.Item name='auditStatus' initialValue={location.state?.auditStatus}>
+                        <Select style={{ width: "140px" }}>
+                            <Select.Option value={0} key="audit-0">审批中</Select.Option>
+                            <Select.Option value={1} key="audit-1">已通过</Select.Option>
+                            <Select.Option value={2} key="audit-2">已驳回</Select.Option>
+                        </Select>
+                        </Form.Item>
                 },
                 {
                     name: 'omnipotentQuery',
