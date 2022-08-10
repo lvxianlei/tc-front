@@ -97,7 +97,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
     const [form] = useForm();
     const history = useHistory();
     const [paragraphData, setParagraphData] = useState([] as undefined | any);
-    const params = useParams<{ id: string, loftId: string }>();
+    const params = useParams<{ id: string }>();
     const page = {
         current: 1,
         pageSize: 10
@@ -115,7 +115,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
-            productSegmentGroupId: params.loftId
+            productCategoryId: params.id
         });
         getTableDataSource(page, {})
         resole(data);

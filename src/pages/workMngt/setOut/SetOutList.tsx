@@ -46,19 +46,19 @@ export default function SetOutList(): React.ReactNode {
         {
             key: 'name',
             title: '塔型',
-            width: 200,
+            width: 150,
             dataIndex: 'name'
         },
         {
             key: 'num',
             title: '杆塔（基）',
-            width: 150,
+            width: 120,
             dataIndex: 'num',
         },
         {
             key: 'voltageGradeName',
             title: '电压等级',
-            width: 150,
+            width: 120,
             dataIndex: 'voltageGradeName',
         },
         {
@@ -70,13 +70,13 @@ export default function SetOutList(): React.ReactNode {
         {
             key: 'patternName',
             title: '模式',
-            width: 200,
+            width: 120,
             dataIndex: 'patternName'
         },
         {
             key: 'loftingLeaderName',
             title: '放样负责人',
-            width: 200,
+            width: 150,
             dataIndex: 'loftingLeaderName'
         },
         {

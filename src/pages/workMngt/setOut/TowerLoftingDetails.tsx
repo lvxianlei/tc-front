@@ -5,11 +5,14 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Input } from 'antd';
+import { Space, Button, Input, Select } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
+import useRequest from '@ahooksjs/use-request';
+import result from 'antd/lib/result';
+import RequestUtil from '../../../utils/RequestUtil';
 
 const columns = [
     {
@@ -285,12 +288,21 @@ export default function TowerLoftingDetails(): React.ReactNode {
     const params = useParams<{ id: string, productSegmentId: string }>();
     const [filterValue, setFilterValue] = useState({});
 
+    const { data: segmentNames } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get<any>(`/tower-science/productSegment/list/${params.id}`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
     return <Page
         path="/tower-science/productStructure/list"
         exportPath={`/tower-science/productStructure/list`}
         columns={columns}
         headTabs={[]}
-        requestData={{ productSegmentGroupId: params.productSegmentId }}
+        requestData={{ productCategoryId: params.id, segmentId: params.productSegmentId }}
         extraOperation={
             <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
@@ -309,9 +321,14 @@ export default function TowerLoftingDetails(): React.ReactNode {
                     children: <Input maxLength={50} />
                 },
                 {
-                    name: 'segmentName',
+                    name: 'segmentId',
                     label: '段名',
-                    children: <Input maxLength={50} />
+                    children: <Select placeholder="请选择" style={{ width: '100%' }} defaultValue={params.productSegmentId}>
+                        <Select.Option key={0} value={''}>全部</Select.Option>
+                        {segmentNames && segmentNames.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                        })}
+                    </Select>
                 },
                 {
                     name: 'code',

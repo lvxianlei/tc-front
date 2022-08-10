@@ -16,14 +16,10 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
-import { patternTypeOptions, productTypeOptions, towerStructureOptions } from '../../../configuration/DictionaryOptions';
+import { productTypeOptions, towerStructureOptions } from '../../../configuration/DictionaryOptions';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
-
-interface ISectionData {
-
-}
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -36,12 +32,6 @@ export default function TowerInformation(): React.ReactNode {
         resole(data);
     }), {})
     const departmentData: any = data || [];
-
-    // const { data: otherQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-    //     const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=4`);
-    //     resole(result?.records || [])
-    // }), {})
-
 
     const { data: loftingQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1`);
@@ -85,9 +75,9 @@ export default function TowerInformation(): React.ReactNode {
 
     const columns = [
         {
-            key: 'index',
+            key: 'id',
             title: '序号',
-            dataIndex: 'index',
+            dataIndex: 'id',
             width: 50,
             fixed: 'left' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
@@ -105,20 +95,25 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'isExternalModel',
             type: 'select',
             enum: [
-                { "value": "1", "label": "是" },
-                { "value": "0", "label": "否" }
+                { "value": 1, "label": "是" },
+                { "value": 0, "label": "否" }
             ],
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "isExternalModel"]} initialValue={_} rules={[{
-                    required: true,
-                    message: '请选择外来模型'
-                }]} >
-                    <Select style={{ width: '120px' }} placeholder="请选择外来模型">
-                        <Select.Option value="1" key="1">是</Select.Option>
-                        <Select.Option value="0" key="0">否</Select.Option>
-                    </Select>
-                </Form.Item>
+                <>{
+                    editorLock === '编辑' ?
+                        <span>{_ === 0 ? '否' : '是'}</span>
+                        :
+                        <Form.Item name={['data', index, "isExternalModel"]} initialValue={_} rules={[{
+                            required: true,
+                            message: '请选择外来模型'
+                        }]} >
+                            <Select style={{ width: '120px' }} placeholder="请选择外来模型">
+                                <Select.Option value={1} key="1">是</Select.Option>
+                                <Select.Option value={0} key="0">否</Select.Option>
+                            </Select>
+                        </Form.Item>
+                }</>
             )
         },
         {
@@ -128,7 +123,7 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'structure',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "structure"]} initialValue={_}>
+                <Form.Item name={['data', index, "structureId"]} initialValue={record?.structureId}>
                     {
                         towerStructureOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -146,13 +141,13 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'completeTime'
         },
         {
-            key: 'loftingUser',
+            key: 'loftingUserName',
             title: '放样人',
             width: 80,
-            dataIndex: 'loftingUser',
+            dataIndex: 'loftingUserName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "loftingUser"]} initialValue={_}>
+                <Form.Item name={['data', index, "loftingUser"]} initialValue={record.loftingUser}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -164,13 +159,13 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'loftingMutualReview',
+            key: 'loftingMutualReviewName',
             title: '放样互审',
             width: 80,
-            dataIndex: 'loftingMutualReview',
+            dataIndex: 'loftingMutualReviewName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "loftingMutualReview"]} initialValue={_}>
+                <Form.Item name={['data', index, "loftingMutualReview"]} initialValue={record.loftingMutualReview}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -182,13 +177,13 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'checkUser',
+            key: 'checkUserName',
             title: '校核人',
             width: 80,
-            dataIndex: 'checkUser',
+            dataIndex: 'checkUserName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "checkUser"]} initialValue={_}>
+                <Form.Item name={['data', index, "checkUser"]} initialValue={record.checkUser}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -230,7 +225,7 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'projectEntries',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
+                <Form.Item name={['data', index, "projectEntries"]} initialValue={_}>
                     <Select style={{ width: '120px' }} placeholder="请选择定额条目">
                         {loftingQuota && loftingQuota?.map((item: any) => {
                             return <Select.Option key={item.id} value={item.id}>{item.projectEntries}</Select.Option>
@@ -248,7 +243,7 @@ export default function TowerInformation(): React.ReactNode {
         {
             key: 'cadDrawingType',
             title: '辅助设计出图类型',
-            width: 80,
+            width: 120,
             dataIndex: 'cadDrawingType',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
@@ -301,21 +296,15 @@ export default function TowerInformation(): React.ReactNode {
             width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {userId === record.loftingUser ?
-                        <>{
-                            record.status === 1 ?
-                                <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
-                                : <Button type="link" disabled>放样</Button>
-                        }</>
-                        : null
+                    {
+                        record.status === 1 ?
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
+                            : <Button type="link" disabled>放样</Button>
                     }
-                    {userId === record.checkUser ?
-                        <>{
-                            record.status === 2 ?
-                                <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}>校核</Link>
-                                : <Button type="link" disabled>校核</Button>
-                        }</>
-                        : null
+                    {
+                        record.status === 2 ?
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}>校核</Link>
+                            : <Button type="link" disabled>校核</Button>
                     }
                     <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerLoftingDetails/${record.id}`}>明细</Link>
                     {
@@ -334,9 +323,33 @@ export default function TowerInformation(): React.ReactNode {
                     }
                     <Popconfirm
                         title="确认完成放样?"
-                        onConfirm={() => RequestUtil.post(``).then(res => {
-                            onRefresh();
-                        })}
+                        onConfirm={() => {
+                            RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
+                                console.log(res)
+                                if (res) {
+                                    RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
+                                        onRefresh();
+                                        message.success('放样完成！')
+                                    })
+                                } else {
+                                    Modal.confirm({
+                                        title: "当前存在未上传的大样图或工艺卡，是否完成放样？",
+                                        onOk: async () => new Promise(async (resove, reject) => {
+                                            try {
+                                                RequestUtil.put(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
+                                                    message.success('放样完成！');
+                                                    setRefresh(!refresh);
+                                                })
+                                                resove(true)
+                                            } catch (error) {
+                                                reject(error)
+                                            }
+                                        })
+                                    })
+                                }
+                            })
+                        }
+                        }
                         okText="确认"
                         cancelText="取消"
                     >
@@ -344,8 +357,9 @@ export default function TowerInformation(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认完成校核?"
-                        onConfirm={() => RequestUtil.post(``).then(res => {
+                        onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check`).then(res => {
                             onRefresh();
+                            message.success('校核成功！')
                         })}
                         okText="确认"
                         cancelText="取消"
@@ -427,17 +441,13 @@ export default function TowerInformation(): React.ReactNode {
                 })
                 if (changeValues && changeValues.length > 0) {
                     console.log(changeValues)
-                    // RequestUtil.post(`/tower-science/productStructure/save`, changeValues.map((res: any) => {
-                    //     return {
-                    //         ...res, productCategoryId: params.id
-                    //     }
-                    // })).then(res => {
-                    //     setTableColumns(columnsSetting);
-                    //     setEditorLock('编辑');
-                    //     setRowChangeList([]);
-                    //     editForm.resetFields();
-                    //     setRefresh(!refresh);
-                    // });
+                    RequestUtil.post(`/tower-science/productSegment`, changeValues).then(res => {
+                        setTableColumns(columnsSetting);
+                        setEditorLock('编辑');
+                        setRowChangeList([]);
+                        editForm.resetFields();
+                        setRefresh(!refresh);
+                    });
                 } else {
                     setTableColumns(columnsSetting);
                     setEditorLock('编辑');
@@ -459,7 +469,7 @@ export default function TowerInformation(): React.ReactNode {
         }
         return {
             ...col,
-            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            render: col.dataIndex === 'isExternalModel' ? col.render : (_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{_ === -1 ? undefined : _}</span>
             )
         }
@@ -472,7 +482,6 @@ export default function TowerInformation(): React.ReactNode {
     const location = useLocation<{ loftingLeader: string, status: number, name: string, planNumber: string }>();
     const userId = AuthUtil.getUserId();
     const [visible, setVisible] = useState(false);
-    const [rowId, setRowId] = useState<string>('');
     const [editForm] = useForm();
     const [loading1, setLoading1] = useState(false);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
@@ -502,7 +511,7 @@ export default function TowerInformation(): React.ReactNode {
             onCancel={() => {
                 setVisible(false);
             }}>
-            <ChooseMaterials id={params.id} name={location.state.name} planNumber={location.state.planNumber} />
+            <ChooseMaterials id={params.id} name={location.state?.name || ''} planNumber={location.state?.planNumber || ''} />
         </Modal>
         <Form layout="inline" onFinish={(value: Record<string, any>) => {
             if (value.updateStatusTime) {
@@ -560,12 +569,12 @@ export default function TowerInformation(): React.ReactNode {
                 exportPath={`/tower-science/productSegment`}
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={<>
-                    <span>塔型：<span>{location.state.name}</span></span>
-                    <span>计划号：<span>{location.state.planNumber}</span></span>
+                    <span>塔型：<span>{location.state?.name}</span></span>
+                    <span>计划号：<span>{location.state?.planNumber}</span></span>
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
-                        <Button type='primary' ghost>放样</Button>
+                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' ghost>放样</Button> </Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
@@ -589,7 +598,7 @@ export default function TowerInformation(): React.ReactNode {
                                     >
                                         <Button type="primary" loading={loading1} disabled={!(location.state?.status < 3)} ghost>提交</Button>
                                     </Popconfirm>
-                                    <TowerLoftingAssign title="塔型放样分派" id={params.id} update={onRefresh} type="edit" />
+                                    <TowerLoftingAssign id={params.id} update={onRefresh} type="edit" />
                                 </>
                                 : null
                         }

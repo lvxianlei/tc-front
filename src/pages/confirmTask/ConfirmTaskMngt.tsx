@@ -276,7 +276,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             refresh={refresh}
             exportPath="/tower-science/drawTask"
             extraOperation={
-                <Button type="primary" onClick={async () => {
+                <Button type="primary" disabled={selectedKeys.length === 0} onClick={async () => {
                     const rows: number[] = selectedRows.map(res => res.status);
                     if (rows.findIndex((value) => value === 1) !== -1 || rows.findIndex((value) => value === 4) !== -1 || rows.findIndex((value) => value === 5) !== -1 || rows.findIndex((value) => value === 0) !== -1) {
                         message.warning('待指派或待完成状态可进行指派！')
