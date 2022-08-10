@@ -215,6 +215,9 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            // 盘点仓库修改后入库明细清空
+            setMaterialList([])
+            setPopDataList([])
             return;
         }
     }
@@ -436,7 +439,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
                             {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
-                            <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
+                            <Button type="link" onClick={() => handleRemove(records.id)}>移除</Button>
                         </>
                     }]}
                 pagination={false}
