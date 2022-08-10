@@ -999,6 +999,13 @@
       "exact": true,
       "authority": "tc_erp_sw_stock_material_receive_edit"
     },
+    { // 库存管理-原材料盘点
+      "name": "原材料盘点",
+      "path": "/stock/materials",
+      "module": "./pages/stock/materials",
+      "exact": true,
+      "authority": "inventory_management_surplus_material_warehousing"
+    },
     { // 工作管理-缺料列表
       "name": "缺料列表",
       "path": "/ingredients/shortageList",
@@ -2670,14 +2677,14 @@
       "path": "/baseSetting/tryAssemble",
       "module": "./pages/baseSetting/TryAssemble",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_rd_trial_config_list"
     },
     { // RD-系统设置-返修件条目配置
       "name": "返修件条目配置",
       "path": "/baseSetting/itemRepair",
       "module": "./pages/baseSetting/ItemRepair",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }

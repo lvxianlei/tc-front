@@ -250,7 +250,7 @@
             "type": "popTable",
             "path": "/tower-market/contract/getPaymentPlansByContractId?contractId=",
             "width": 1011,
-            "value": "name",
+            "value": "planName",
             "dependencies": true,
             "readOnly": true,
             "columns": [
@@ -260,7 +260,7 @@
                 },
                 {
                     "title": "回款计划名称",
-                    "dataIndex": "name"
+                    "dataIndex": "planName"
                 },
                 {
                     "title": "计划回款日期",

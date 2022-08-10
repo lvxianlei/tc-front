@@ -409,11 +409,11 @@ export default function TowerCheck(): React.ReactNode {
         <Page
             path="/tower-science/productStructure/list"
             columns={columnsSetting}
-            requestData={{ productSegmentGroupId: params.productSegmentId }}
+            requestData={{ segmentId: params.productSegmentId }}
             headTabs={[]}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
-                <Popconfirm
+                {/* <Popconfirm
                     title="确认完成校核?"
                     onConfirm={() => {
                         setLoading1(true);
@@ -427,7 +427,7 @@ export default function TowerCheck(): React.ReactNode {
                     cancelText="取消"
                 >
                     <Button type="primary" loading={loading1} ghost>完成校核</Button>
-                </Popconfirm>
+                </Popconfirm> */}
                 <Button type="ghost" onClick={() => history.goBack()} >返回</Button>
             </Space>}
             searchFormItems={[
