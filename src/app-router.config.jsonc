@@ -598,7 +598,7 @@
       "path": "/cockpit/personnelLoad",
       "module": "./pages/cockpit/personnelLoad/List",
       "exact": true,
-      "authority": "rd_cockpit"
+      "authority": "tc_erp_rd_work_load_list"
     },
     { // 驾驶舱-报表
       "name": "报表",
