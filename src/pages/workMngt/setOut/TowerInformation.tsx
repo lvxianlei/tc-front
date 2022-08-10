@@ -95,20 +95,25 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'isExternalModel',
             type: 'select',
             enum: [
-                { "value": "1", "label": "是" },
-                { "value": "0", "label": "否" }
+                { "value": 1, "label": "是" },
+                { "value": 0, "label": "否" }
             ],
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "isExternalModel"]} initialValue={_} rules={[{
-                    required: true,
-                    message: '请选择外来模型'
-                }]} >
-                    <Select style={{ width: '120px' }} placeholder="请选择外来模型">
-                        <Select.Option value="1" key="1">是</Select.Option>
-                        <Select.Option value="0" key="0">否</Select.Option>
-                    </Select>
-                </Form.Item>
+                <>{
+                    editorLock === '编辑' ?
+                        <span>{_ === 0 ? '否' : '是'}</span>
+                        :
+                        <Form.Item name={['data', index, "isExternalModel"]} initialValue={_} rules={[{
+                            required: true,
+                            message: '请选择外来模型'
+                        }]} >
+                            <Select style={{ width: '120px' }} placeholder="请选择外来模型">
+                                <Select.Option value={1} key="1">是</Select.Option>
+                                <Select.Option value={0} key="0">否</Select.Option>
+                            </Select>
+                        </Form.Item>
+                }</>
             )
         },
         {
@@ -136,13 +141,13 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'completeTime'
         },
         {
-            key: 'loftingUser',
+            key: 'loftingUserName',
             title: '放样人',
             width: 80,
-            dataIndex: 'loftingUser',
+            dataIndex: 'loftingUserName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "loftingUser"]} initialValue={_}>
+                <Form.Item name={['data', index, "loftingUser"]} initialValue={record.loftingUser}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -154,13 +159,13 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'loftingMutualReview',
+            key: 'loftingMutualReviewName',
             title: '放样互审',
             width: 80,
-            dataIndex: 'loftingMutualReview',
+            dataIndex: 'loftingMutualReviewName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "loftingMutualReview"]} initialValue={_}>
+                <Form.Item name={['data', index, "loftingMutualReview"]} initialValue={record.loftingMutualReview}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -172,13 +177,13 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'checkUser',
+            key: 'checkUserName',
             title: '校核人',
             width: 80,
-            dataIndex: 'checkUser',
+            dataIndex: 'checkUserName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "checkUser"]} initialValue={_}>
+                <Form.Item name={['data', index, "checkUser"]} initialValue={record.checkUser}>
                     {
                         productTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id} key={index}>
@@ -291,21 +296,15 @@ export default function TowerInformation(): React.ReactNode {
             width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {userId === record.loftingUser ?
-                        <>{
-                            record.status === 1 ?
-                                <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
-                                : <Button type="link" disabled>放样</Button>
-                        }</>
-                        : null
+                    {
+                        record.status === 1 ?
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
+                            : <Button type="link" disabled>放样</Button>
                     }
-                    {userId === record.checkUser ?
-                        <>{
-                            record.status === 2 ?
-                                <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}>校核</Link>
-                                : <Button type="link" disabled>校核</Button>
-                        }</>
-                        : null
+                    {
+                        record.status === 2 ?
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}>校核</Link>
+                            : <Button type="link" disabled>校核</Button>
                     }
                     <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerLoftingDetails/${record.id}`}>明细</Link>
                     {
@@ -470,7 +469,7 @@ export default function TowerInformation(): React.ReactNode {
         }
         return {
             ...col,
-            render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+            render: col.dataIndex === 'isExternalModel' ? col.render : (_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{_ === -1 ? undefined : _}</span>
             )
         }
@@ -575,7 +574,7 @@ export default function TowerInformation(): React.ReactNode {
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
-                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/null`}><Button type='primary' ghost>放样</Button> </Link>
+                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' ghost>放样</Button> </Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
@@ -599,7 +598,7 @@ export default function TowerInformation(): React.ReactNode {
                                     >
                                         <Button type="primary" loading={loading1} disabled={!(location.state?.status < 3)} ghost>提交</Button>
                                     </Popconfirm>
-                                    <TowerLoftingAssign title="塔型放样分派" id={params.id} update={onRefresh} type="edit" />
+                                    <TowerLoftingAssign id={params.id} update={onRefresh} type="edit" />
                                 </>
                                 : null
                         }

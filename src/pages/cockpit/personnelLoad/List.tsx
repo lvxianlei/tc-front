@@ -37,7 +37,7 @@ export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any[] = await RequestUtil.post<any[]>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
+        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
         // setPage({ ...data });
         // if (data.records.length > 0 && data.records[0]?.id) {
         //     detailRun(data.records[0]?.id)
@@ -50,7 +50,7 @@ export default function List(): React.ReactNode {
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post<any>(`/tower-science/personal/work/load/detail/list`, {
+            const result = await RequestUtil.get<any>(`/tower-science/personal/work/load/detail/list`, {
                 userId: rowId,
                 type: status
             });

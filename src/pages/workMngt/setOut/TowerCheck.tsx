@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Input, Popconfirm } from 'antd';
+import { Space, Button, Input, Popconfirm, Select } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -13,6 +13,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import QuestionnaireModal from './QuestionnaireModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRecord } from './ISetOut';
+import useRequest from '@ahooksjs/use-request';
 
 const columns = [
     {
@@ -395,6 +396,15 @@ export default function TowerCheck(): React.ReactNode {
         }
     })
 
+    const { data: segmentNames } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get<any>(`/tower-science/productSegment/list/${params.id}`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+    
     return <>
         <Page
             path="/tower-science/productStructure/list"
@@ -432,9 +442,14 @@ export default function TowerCheck(): React.ReactNode {
                     children: <Input placeholder="请输入" />
                 },
                 {
-                    name: 'segmentName',
+                    name: 'segmentId',
                     label: '段名',
-                    children: <Input placeholder="请输入" />
+                    children: <Select placeholder="请选择" style={{ width: '100%' }} defaultValue={params.productSegmentId}>
+                        <Select.Option key={0} value={''}>全部</Select.Option>
+                        {segmentNames && segmentNames.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                        })}
+                    </Select>
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {

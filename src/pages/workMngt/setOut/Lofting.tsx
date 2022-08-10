@@ -5,7 +5,7 @@
 */
 
 import React, { useRef, useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal, Dropdown, Menu, InputNumber } from 'antd';
+import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal, Dropdown, Menu, InputNumber, Select } from 'antd';
 import { DetailContent, Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
@@ -21,6 +21,7 @@ import StructureTextureAbbreviations from './StructureTextureAbbreviations';
 import StructureTextureEdit from './StructureTextureEdit';
 import MissCheck from './MissCheck';
 import AddLofting from './AddLofting';
+import useRequest from '@ahooksjs/use-request';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -619,7 +620,7 @@ export default function Lofting(): React.ReactNode {
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type='link'  onClick={() => { setAddVisible(true); setType('edit'); setRowData([record]); }}>编辑</Button>
+                    <Button type='link' onClick={() => { setAddVisible(true); setType('edit'); setRowData([record]); }} disabled={!isShow}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => RequestUtil.post(`/tower-science/productStructure`, {
@@ -631,7 +632,7 @@ export default function Lofting(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link">删除</Button>
+                        <Button type="link" disabled={!isShow}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -763,7 +764,7 @@ export default function Lofting(): React.ReactNode {
     }
 
     const history = useHistory();
-    const params = useParams<{ id: string, segmentId: string }>();
+    const params = useParams<{ id: string, productSegmentId: string }>();
     // const [editorLock, setEditorLock] = useState('编辑');
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     // const [tableColumns, setColumns] = useState(columnsSetting);
@@ -783,6 +784,27 @@ export default function Lofting(): React.ReactNode {
     const [addVisible, setAddVisible] = useState<boolean>(false);
     const [type, setType] = useState<'new' | 'edit'>('new');
     const [rowData, setRowData] = useState<any>([])
+    const userId = AuthUtil.getUserId();
+
+    const { data: segmentNames } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get<any>(`/tower-science/productSegment/list/${params.id}`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+    
+    const { data: isShow } = useRequest<boolean>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/productCategory/assign/user/list/${params.id}`);
+            result = result.map((res: { id: any; }) => res.id)
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+            
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     return <DetailContent>
         <Modal
@@ -831,7 +853,7 @@ export default function Lofting(): React.ReactNode {
             onCancel={() => {
                 setAddVisible(false);
             }}>
-            <AddLofting id={params.id} type={type} rowData={rowData || []} productSegmentId={params.segmentId} ref={addModalRef} />
+            <AddLofting id={params.id} type={type} rowData={rowData || []} productSegmentId={params.productSegmentId} ref={addModalRef} />
         </Modal>
         {/* <Form layout="inline" style={{ margin: '20px' }} onFinish={(value: Record<string, any>) => {
             setFilterValue(value)
@@ -857,56 +879,56 @@ export default function Lofting(): React.ReactNode {
             </Form.Item>
         </Form> */}
         {/* <Form form={form} className={styles.descripForm}> */}
-            <Page
-                path="/tower-science/productStructure/list"
-                exportPath={`/tower-science/productStructure/list`}
-                columns={columns}
-                headTabs={[]}
-                refresh={refresh}
-                tableProps={{
-                    pagination: false,
-                    rowSelection: {
-                        selectedRowKeys: selectedKeys,
-                        onChange: SelectChange
-                    }
-                }}
-                requestData={{ segmentId: params.segmentId, ...filterValue, productCategoryId: params.id }}
-                extraOperation={<Space direction="horizontal" size="small">
-                    <Button type="primary" key='1' onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
-                    <Popconfirm
-                        title="确认删除?"
-                        onConfirm={del}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="primary" ghost>删除</Button>
-                    </Popconfirm>
-                    <Upload
-                        action={() => {
-                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                            return baseUrl + '/tower-science/productStructure/import'
-                        }}
-                        headers={
-                            {
-                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                                'Tenant-Id': AuthUtil.getTenantId(),
-                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                            }
+        <Page
+            path="/tower-science/productStructure/list"
+            exportPath={`/tower-science/productStructure/list`}
+            columns={columns}
+            headTabs={[]}
+            refresh={refresh}
+            tableProps={{
+                pagination: false,
+                rowSelection: {
+                    selectedRowKeys: selectedKeys,
+                    onChange: SelectChange
+                }
+            }}
+            requestData={{ segmentId: params.productSegmentId === 'all' ? '' : params.productSegmentId, ...filterValue, productCategoryId: params.id }}
+            extraOperation={<Space direction="horizontal" size="small">
+                <Button type="primary" key='1' onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
+                <Popconfirm
+                    title="确认删除?"
+                    onConfirm={del}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="primary" ghost disabled={!isShow}>删除</Button>
+                </Popconfirm>
+                <Upload
+                    action={() => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl + '/tower-science/productStructure/import'
+                    }}
+                    headers={
+                        {
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                         }
-                        data={{ productCategoryId: params.id }}
-                        showUploadList={false}
-                        onChange={(info) => uploadChange(info)}
-                    >
-                        <Button type="primary" ghost>导入</Button>
-                    </Upload>
-                    <Button type="primary" key='2' onClick={async () => { setMissVisible(true) }} ghost>漏件检查</Button>
-                    <Dropdown overlay={menu} trigger={['click']}>
-                        <Button type="primary" ghost>
-                            批量修改<DownOutlined />
-                        </Button>
-                    </Dropdown>
-                    <Button type="primary" onClick={() => { setAddVisible(true); setType('new'); }} ghost>添加构件</Button>
-                    {/* <Popconfirm
+                    }
+                    data={{ productCategoryId: params.id }}
+                    showUploadList={false}
+                    onChange={(info) => uploadChange(info)}
+                >
+                    <Button type="primary" ghost disabled={!isShow}>导入</Button>
+                </Upload>
+                <Button type="primary" key='2' onClick={async () => { setMissVisible(true) }} disabled={!isShow} ghost>漏件检查</Button>
+                <Dropdown overlay={menu} trigger={['click']}>
+                    <Button type="primary" ghost>
+                        批量修改<DownOutlined />
+                    </Button>
+                </Dropdown>
+                <Button type="primary" onClick={() => { setAddVisible(true); setType('new'); }} disabled={!isShow} ghost>添加构件</Button>
+                {/* <Popconfirm
                         title="确认完成放样?"
                         onConfirm={() => {
                             setLoading1(true);
@@ -922,9 +944,9 @@ export default function Lofting(): React.ReactNode {
                     >
                         <Button type="primary" loading={loading1} disabled={editorLock === '锁定'} ghost>完成放样</Button>
                     </Popconfirm> */}
-                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.segmentId}/loftingTowerApplication`}><Button type="primary" ghost>放样塔型套用</Button></Link>
-                    {/* <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button> */}
-                    {/* <Button type="primary" loading={loading2} onClick={() => {
+                <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${params.productSegmentId}/loftingTowerApplication`}><Button type="primary" disabled={!isShow} ghost>放样塔型套用</Button></Link>
+                {/* <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button> */}
+                {/* <Button type="primary" loading={loading2} onClick={() => {
                         setLoading2(true);
                         RequestUtil.post(`/tower-science/productStructure/pdmSynchronous/${params.productSegmentId}`).then(res => {
                             setLoading2(false);
@@ -935,38 +957,43 @@ export default function Lofting(): React.ReactNode {
                         })
                     }} disabled={editorLock === '锁定'} ghost>PDM同步</Button> */}
 
-                    <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                </Space>}
-                searchFormItems={
-                    [
-                        {
-                            name: 'materialName',
-                            label: '材料名称',
-                            children: <Input maxLength={50} />
-                        },
-                        {
-                            name: 'structureTexture',
-                            label: '材质',
-                            children: <Input maxLength={50} />
-                        },
-                        {
-                            name: 'segmentName',
-                            label: '段名',
-                            children: <Input maxLength={50} />
-                        },
-                        {
-                            name: 'code',
-                            label: '查询',
-                            children: <Input placeholder="请输入构件编号查询" maxLength={50} />
-                        },
-                    ]
-                }
-                filterValue={filterValue}
-                onFilterSubmit={(values: Record<string, any>) => {
-                    setFilterValue(values);
-                    return values;
-                }}
-            />
+                <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+            </Space>}
+            searchFormItems={
+                [
+                    {
+                        name: 'materialName',
+                        label: '材料名称',
+                        children: <Input maxLength={50} />
+                    },
+                    {
+                        name: 'structureTexture',
+                        label: '材质',
+                        children: <Input maxLength={50} />
+                    },
+                    {
+                        name: 'segmentId',
+                        label: '段名',
+                        children: <Select placeholder="请选择" style={{ width: '100%' }} defaultValue={params.productSegmentId === 'all' ? '' : params.productSegmentId}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            {segmentNames && segmentNames.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                            })}
+                        </Select>
+                    },
+                    {
+                        name: 'code',
+                        label: '查询',
+                        children: <Input placeholder="请输入构件编号查询" maxLength={50} />
+                    },
+                ]
+            }
+            filterValue={filterValue}
+            onFilterSubmit={(values: Record<string, any>) => {
+                setFilterValue(values);
+                return values;
+            }}
+        />
         {/* </Form> */}
         <Modal
             visible={urlVisible}
