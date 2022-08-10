@@ -146,15 +146,15 @@ export default function ScheduleView(): React.ReactNode {
             // saveData.loftingMutualReview= Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.join(','):'';
             // saveData.weldingUser= Array.isArray(saveData.weldingUser)&&saveData.weldingUser.length>0?saveData.weldingUser.join(','):'';
             
-            saveData.ncUser = saveData?.ncUser.indexOf('0')>-1?saveData?.programmingLeader:saveData?.ncUser;
-            saveData.productPartUser = saveData?.productPartUser.indexOf('0')>-1?saveData?.ncUser:saveData?.productPartUser;
-            saveData.packageUser = saveData?.packageUser.indexOf('0')>-1?saveData?.productPartUser:saveData?.packageUser;
+            saveData.ncUser = saveData?.ncUser&&saveData?.ncUser.indexOf('0')>-1?saveData?.programmingLeader:saveData?.ncUser;
+            saveData.productPartUser = saveData?.productPartUser&&saveData?.productPartUser.indexOf('0')>-1?saveData?.ncUser:saveData?.productPartUser;
+            saveData.packageUser = saveData?.packageUser&&saveData?.packageUser.indexOf('0')>-1?saveData?.productPartUser:saveData?.packageUser;
            
-            saveData.boltPlanCheckUser = saveData?.ncUser.indexOf('0')>-1?saveData?.boltLeader:saveData?.boltPlanCheckUser;
-            saveData.boltCheckUser = saveData?.boltCheckUser.indexOf('0')>-1?saveData?.boltPlanCheckUser:saveData?.boltCheckUser;
-            saveData.boltUser = saveData?.boltUser.indexOf('0')>-1?saveData?.productPartUser:saveData?.boltUser;
+            saveData.boltPlanCheckUser = saveData?.boltPlanCheckUser&&saveData?.boltPlanCheckUser.indexOf('0')>-1?saveData?.boltLeader:saveData?.boltPlanCheckUser;
+            saveData.boltCheckUser = saveData?.boltCheckUser&&saveData?.boltCheckUser.indexOf('0')>-1?saveData?.boltPlanCheckUser:saveData?.boltCheckUser;
+            saveData.boltUser = saveData?.boltUser&&saveData?.boltUser.indexOf('0')>-1?saveData?.productPartUser:saveData?.boltUser;
 
-            saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader.indexOf('0')>-1?saveData?.drawLeader:saveData?.deliveryDrawLeader;
+            saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader&&saveData?.deliveryDrawLeader.indexOf('0')>-1?saveData?.drawLeader:saveData?.deliveryDrawLeader;
   
            
             await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
