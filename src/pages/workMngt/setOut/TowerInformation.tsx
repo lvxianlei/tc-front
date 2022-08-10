@@ -238,13 +238,13 @@ export default function TowerInformation(): React.ReactNode {
             dataIndex: 'totalWeight'
         },
         {
-            key: 'projectEntries',
+            key: 'projectEntriesName',
             title: '定额条目',
             width: 80,
-            dataIndex: 'projectEntries',
+            dataIndex: 'projectEntriesName',
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "projectEntries"]} initialValue={_}>
+                <Form.Item name={['data', index, "projectEntries"]} initialValue={record.projectEntries}>
                     <Select style={{ width: '120px' }} placeholder="请选择定额条目" onChange={() => rowChange(index)}>
                         {loftingQuota && loftingQuota?.map((item: any) => {
                             return <Select.Option key={item.id} value={item.id}>{item.projectEntries}</Select.Option>
