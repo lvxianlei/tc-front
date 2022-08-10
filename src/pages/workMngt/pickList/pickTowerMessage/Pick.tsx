@@ -84,7 +84,7 @@ export default function Lofting(): React.ReactNode {
             editable: true,
             dataIndex: 'segmentName',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                params.productSegmentId ==='all'?<Form.Item
+                <Form.Item
                     name={['data', index, "segmentName"]}
                     initialValue={record.segmentName}
                     rules={[{
@@ -102,7 +102,6 @@ export default function Lofting(): React.ReactNode {
                     </Select> */}
                     <Input size="small" onChange={() => rowChange(index)} maxLength={10} />
                 </Form.Item>
-                :  <span>系统自动带出</span>
             )
         },
         // {
@@ -801,7 +800,7 @@ export default function Lofting(): React.ReactNode {
                             key: 'segmentName', 
                             width: 120,
                             render: (_a: any, _b: any, index: number): React.ReactNode => (
-                                params.productSegmentId ==='all'?<Form.Item name={['dataV', index, "segmentName"]} initialValue={_a} rules={[{ required: true, message: '请填写段号' }, {
+                                <Form.Item name={['dataV', index, "segmentName"]} initialValue={_a} rules={[{ required: true, message: '请填写段号' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
@@ -811,7 +810,7 @@ export default function Lofting(): React.ReactNode {
                                 }) }
                             </Select> */}
                                     <Input size="small" maxLength={10} />
-                                </Form.Item>:  <span>系统自动带出</span>
+                                </Form.Item>
                             )
                         },
                         {
@@ -1032,7 +1031,7 @@ export default function Lofting(): React.ReactNode {
                             key: 'segmentName', 
                             width: 120,
                             render: (_a: any, _b: any, index: number): React.ReactNode => (
-                                params.productSegmentId ==='all'?<Form.Item name={['dataV', index, "segmentName"]} initialValue={_a} rules={[{ required: true, message: '请填写段号' }, {
+                                <Form.Item name={['dataV', index, "segmentName"]} initialValue={_a} rules={[{ required: true, message: '请填写段号' }, {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
@@ -1042,7 +1041,7 @@ export default function Lofting(): React.ReactNode {
                                 }) }
                             </Select> */}
                                     <Input size="small" maxLength={10} />
-                                </Form.Item>:  <span>系统自动带出</span>
+                                </Form.Item>
                             )
                         },
                         {
