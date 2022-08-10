@@ -47,7 +47,10 @@ const StyledBaseTable = (styled(BaseTable)`
     --cell-padding: 0px 8px;
     th {
       .resize-handle {
+        dispaly: inline-block;
         width: 1px;
+        height: 60%;
+        margin: auto 0;
       }
       .ant-btn-link {
         padding-left: 0px;

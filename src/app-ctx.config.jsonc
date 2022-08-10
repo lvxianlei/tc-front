@@ -332,6 +332,11 @@
                         "label": "余料入库",
                         "path": "/stock/surplusMaterialWarehousing",
                         "authority": "tc_erp_sw_stock_material_surplus"
+                    },
+                    {
+                        "label": "原材料盘点",
+                        "path": "/stock/materials",
+                        "authority": "inventory_management_surplus_material_warehousing"
                     }
                 ]
             },

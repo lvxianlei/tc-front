@@ -131,7 +131,7 @@ const generatePlaceholder = (columnItems: any): string => {
     return placeholder
 }
 export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "" }: BaseInfoProps): JSX.Element {
-
+    
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
     }, [JSON.stringify(dataSource), form])
