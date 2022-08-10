@@ -513,7 +513,7 @@
                     {
                         "label": "工程报价列表",
                         "path": "/ingredients/enquiry",
-                        "authority": "work_management_inquiry_list"
+                        "authority": "tc_erp_sw_contract_inquiry_list"
                     },
                     {
                         "label": "采购配料",
