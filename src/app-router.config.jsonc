@@ -871,7 +871,7 @@
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
-      "authority": "tc_erp_rd_work_material_tower_material"
+      "authority": "tc_erp_rd_work_material_tower_material_list"
     },
     { // 工作管理-提料-塔型信息-提料-放样塔型套用
       "name": "放样塔型套用",
