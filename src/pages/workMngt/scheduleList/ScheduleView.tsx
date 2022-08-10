@@ -581,7 +581,7 @@ export default function ScheduleView(): React.ReactNode {
         <>
             <Modal 
                 title='指派信息'  
-                width={'90%'} 
+                width={'95%'} 
                 visible={visible} 
                 onCancel={handleModalCancel}
                 footer={
@@ -597,7 +597,7 @@ export default function ScheduleView(): React.ReactNode {
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="name" label="塔型" >
                                         <span>{scheduleData.name}</span>
                                     </Form.Item>
@@ -606,7 +606,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="pattern" label="模式" rules={[{required: true,message:'请选择模式'}]}>
                                         <Select style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} disabled={edit}>
                                             { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
@@ -621,7 +621,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="priority" label="优先级" rules={[{required: true,message:'请选择优先级'}]} > 
                                         <Select disabled={edit}>
                                             <Select.Option value={1} key={1}>紧急</Select.Option>
@@ -635,7 +635,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="assignName" label="指派方案"> 
                                         <Select disabled={edit} allowClear  onClear={()=>{
                                             console.log('-------clear-scheduleView-plan-------')
@@ -669,7 +669,7 @@ export default function ScheduleView(): React.ReactNode {
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="loftingLeader" label="放样负责人" rules={[{required: true,message:'请选择放样负责人'}]} >
                                         <Select disabled={edit||scheduleData?.loftingStatus===5}>
                                             { user && user.map((item:any)=>{
@@ -680,28 +680,30 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="loftingDeliverTime" label="" rules={[{required: true,message:'请选择放样交付时间'}]} >
-                                        <DatePicker  style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'} showTime onChange={(date: any)=>{
-                                            const weldingCompletionTime = Number(scheduleData.assignConfigVO.weldingCompletionTime);
-                                            const loftingWithSectionCompletionTime = Number(scheduleData.assignConfigVO.loftingWithSectionCompletionTime);
-                                            const smallSampleCompletionTime = Number(scheduleData.assignConfigVO.smallSampleCompletionTime);
-                                            const boltCompletionTime = Number(scheduleData.assignConfigVO.boltCompletionTime);
-                                            const weldingDrawTime = Number(scheduleData.assignConfigVO.blotDrawDeliverTime);
-                                            const boltDrawTime = Number(scheduleData.assignConfigVO.weldingDrawDeliverTime);
-                                            let newWeldingCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + weldingCompletionTime));
-                                            let newLoftingWithSectionCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + loftingWithSectionCompletionTime));
-                                            let newSmallSampleCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + smallSampleCompletionTime));
-                                            let newBoltCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
-                                            let newWeldingDrawTime =new Date(new Date(date).setHours(new Date(date).getHours() + weldingCompletionTime + boltDrawTime));
-                                            let newBoltDrawTime =new Date(new Date(date).setHours(new Date(date).getHours() + boltCompletionTime + weldingDrawTime));
-                                    
-                                            form.setFieldsValue({ 
-                                                weldingDeliverTime: moment(newWeldingCompletionTime),
-                                                boltDeliverTime: moment(newBoltCompletionTime), 
-                                                smallSampleDeliverTime: moment(newSmallSampleCompletionTime), 
-                                                loftingPartDeliverTime: moment(newLoftingWithSectionCompletionTime),  
-                                                deliveryDrawDeliverTime: moment(newBoltDrawTime),
-                                                drawDeliverTime: moment(newWeldingDrawTime)
-                                            })
+                                        <DatePicker  style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'} showTime 
+                                            disabledDate={current => current && current < moment().startOf('day')}
+                                            onChange={(date: any)=>{
+                                                const weldingCompletionTime = Number(scheduleData.assignConfigVO.weldingCompletionTime);
+                                                const loftingWithSectionCompletionTime = Number(scheduleData.assignConfigVO.loftingWithSectionCompletionTime);
+                                                const smallSampleCompletionTime = Number(scheduleData.assignConfigVO.smallSampleCompletionTime);
+                                                const boltCompletionTime = Number(scheduleData.assignConfigVO.boltCompletionTime);
+                                                const weldingDrawTime = Number(scheduleData.assignConfigVO.blotDrawDeliverTime);
+                                                const boltDrawTime = Number(scheduleData.assignConfigVO.weldingDrawDeliverTime);
+                                                let newWeldingCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + weldingCompletionTime));
+                                                let newLoftingWithSectionCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + loftingWithSectionCompletionTime));
+                                                let newSmallSampleCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + smallSampleCompletionTime));
+                                                let newBoltCompletionTime =new Date(new Date(date).setHours(new Date(date).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
+                                                let newWeldingDrawTime =new Date(new Date(date).setHours(new Date(date).getHours() + weldingCompletionTime + boltDrawTime));
+                                                let newBoltDrawTime =new Date(new Date(date).setHours(new Date(date).getHours() + boltCompletionTime + weldingDrawTime));
+                                        
+                                                form.setFieldsValue({ 
+                                                    weldingDeliverTime: moment(newWeldingCompletionTime),
+                                                    boltDeliverTime: moment(newBoltCompletionTime), 
+                                                    smallSampleDeliverTime: moment(newSmallSampleCompletionTime), 
+                                                    loftingPartDeliverTime: moment(newLoftingWithSectionCompletionTime),  
+                                                    deliveryDrawDeliverTime: moment(newBoltDrawTime),
+                                                    drawDeliverTime: moment(newWeldingDrawTime)
+                                                })
                                 
                                         }} disabled={edit||scheduleData?.loftingStatus===5}/>
                                     </Form.Item>
@@ -710,8 +712,8 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
-                                    <Form.Item name="programmingLeader" label="编程负责人" rules={[{required: true,message:'请选择编程负责人'}]} >
+                                <Col span={18}>
+                                    <Form.Item name="programmingLeader" label="编程负责人(生产下达)" rules={[{required: true,message:'请选择编程负责人'}]} >
                                         <Select disabled={edit||scheduleData?.weldingStatus===4}> 
                                             { user && user.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
@@ -721,15 +723,21 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="programmingDeliverTime" label="" rules={[{required: true,message:'请选择编程时间'}]} >
-                                        <DatePicker disabled={edit||scheduleData?.weldingStatus===4}  style={{width:'100%'}} showTime  format={'YYYY-MM-DD HH:mm:ss'}/>
+                                        <DatePicker 
+                                            disabled={edit||scheduleData?.weldingStatus===4}  
+                                            style={{width:'100%'}} 
+                                            showTime  
+                                            format={'YYYY-MM-DD HH:mm:ss'}
+                                            disabledDate={current => current && current < moment().startOf('day')}
+                                        />
                                     </Form.Item>
                                 </Col>
                             </Row>
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
-                                    <Form.Item name="boltLeader" label="螺栓清单负责人" rules={[{required: true,message:'请选择螺栓清单负责人'}]} >
+                                <Col span={18}>
+                                    <Form.Item name="boltLeader" label="螺栓负责人(螺栓计划)" rules={[{required: true,message:'请选择螺栓清单负责人'}]} >
                                         <Select disabled={edit||scheduleData?.boltStatus===4}>
                                             { user &&user.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
@@ -747,8 +755,8 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
-                                    <Form.Item name="drawLeader" label="图纸负责人" rules={[{required: true,message:'请选择图纸负责人'}]} >
+                                <Col span={18}>
+                                    <Form.Item name="drawLeader" label="图纸负责人(组装图纸)" rules={[{required: true,message:'请选择图纸负责人'}]} >
                                         <Select disabled={edit||scheduleData?.templateLoftingStatus===2}>
                                             { user && user.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
@@ -767,7 +775,7 @@ export default function ScheduleView(): React.ReactNode {
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="loftingUser" label="放样员"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} mode='multiple' allowClear>
                                             { user && user.map((item:any)=>{
@@ -780,7 +788,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="ncUser" label="NC程序"> 
                                         <Select disabled={edit||scheduleData?.loftingStatus===5} allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -794,7 +802,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="boltPlanCheckUser" label="螺栓计划校核"> 
                                         <Select disabled={edit||scheduleData?.boltStatus===4} allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -808,7 +816,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="deliveryDrawLeader" label="发货图纸" rules={[{required: true,message:'请选择发货图纸负责人'}]}> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2}>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -829,7 +837,7 @@ export default function ScheduleView(): React.ReactNode {
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="loftingMutualReview" label="审图校卡"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} mode='multiple' allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -843,7 +851,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="productPartUser" label="杆塔配段"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -857,7 +865,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="boltUser" label="螺栓清单"> 
                                         <Select disabled={edit||scheduleData?.boltStatus===4} allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -871,7 +879,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="smallSampleLeader" label="小样图上传" rules={[{required: true,message:'请选择小样图负责人'}]} >
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2}>
                                             { user && user.map((item:any)=>{
@@ -891,7 +899,7 @@ export default function ScheduleView(): React.ReactNode {
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="weldingUser" label="组焊清单"> 
                                         <Select disabled={edit||scheduleData?.weldingStatus===4} mode='multiple' allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -905,7 +913,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="packageUser" label="包装清单"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -919,7 +927,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="boltCheckUser" label="螺栓清单校核"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
                                             <Select.Option key={'0'} value={'0'}>同上</Select.Option>
@@ -933,7 +941,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="description" label="备注"  >
                                         <TextArea rows={1} disabled={edit} showCount maxLength={400} style={{width:'100%'}}/>
                                     </Form.Item>
@@ -944,7 +952,7 @@ export default function ScheduleView(): React.ReactNode {
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="legConfigurationUser" label="高低腿配置编制"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
                                             { user && user.map((item:any)=>{
@@ -957,7 +965,7 @@ export default function ScheduleView(): React.ReactNode {
                         </Col>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="legProgrammingUser" label="编程高低腿"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
                                             { user && user.map((item:any)=>{
@@ -973,7 +981,7 @@ export default function ScheduleView(): React.ReactNode {
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="legConfigurationCheckUser" label="高低腿配置校核"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
                                             { user && user.map((item:any)=>{
@@ -984,12 +992,11 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col span={18}/>
                     </Row>
                     <Row>
                         <Col span={6}>
                             <Row>
-                                <Col span={15}>
+                                <Col span={18}>
                                     <Form.Item name="hangLineBoardCheckUser" label="挂线板校核"> 
                                         <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
                                             { user && user.map((item:any)=>{
@@ -1000,7 +1007,6 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col span={18}/>
                     </Row>
                 </Form>
                 </Spin>
