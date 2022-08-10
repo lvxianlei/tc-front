@@ -948,7 +948,7 @@
       "path": "/ingredients/planList/purchaseList/:id",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
-      "authority": "sw_work_management_plan_list_purchase_list"
+      "authority": "tc_erp_sw_work_plan_detail"
     },
     { // 工作管理-计划列表-关联塔型
       "name": "关联塔型",
@@ -1354,7 +1354,7 @@
       "path": "/ingredients/enquiry",
       "module": "./pages/workMngt/enquiryList/index",
       "exact": true,
-      "authority": "work_management_inquiry_list"
+      "authority": "tc_erp_sw_contract_inquiry_list_list"
     },
     { // 工作管理-采购配料
       "name": "采购配料",
@@ -1510,7 +1510,7 @@
       "path": "/supply/sw",
       "module": "./pages/workBench/sw/index",
       "exact": true,
-      "authority": "tc_erp_sw_workBench_list"
+      "authority": "tc_erp_sw_workBench_list_data"
     },
     { // 工作台-营销
       "name": "营销工作台",
