@@ -84,7 +84,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     }
 
     private async modalShow(): Promise<void> {
-        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/materialProductCategory/assign/${ this.props.id }`)
+        // const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/materialProductCategory/assign/${ this.props.id }`)
+        const data = await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`)
         const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
             return {
@@ -107,7 +108,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             }
         // }
         this.getForm()?.setFieldsValue({  ...data, ...detailData});
-        if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
+        if(data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
             this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
             this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
         }
@@ -306,7 +307,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         pattern: /^(全部)$|^([0-9a-zA-Z-,]*)$/,
                                         message: '仅可输入数字/字母/-/,/全部',
                                     }]}>
-                                    <Input placeholder="请输入（1-3，5，ac，w，全部）" />
+                                    <Input placeholder="请输入（1-3，5，ac，w，全部）" disabled/>
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="提料人">

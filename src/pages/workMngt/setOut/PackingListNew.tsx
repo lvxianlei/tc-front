@@ -677,6 +677,13 @@ export default function PackingListNew(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
+                <Form.Item name="segmentId" label="零件类型">
+                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                        {userList && userList.map((item: any) => {
+                            return <Select.Option key={item.id} value={item.segmentId}>{item.segmentName}</Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
                 <Form.Item name="isCommonSegment">
                     <Checkbox.Group style={{ width: '100%' }}>
                         <Checkbox value="isCommonSegment" key="7" style={{ width: '100%' }}>公用段</Checkbox>

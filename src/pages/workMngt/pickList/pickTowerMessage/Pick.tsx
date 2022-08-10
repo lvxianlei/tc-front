@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table } from 'antd';
+import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table, Checkbox, Select } from 'antd';
 import { SearchTable as Page } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
@@ -9,6 +9,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import AuthUtil from '../../../../utils/AuthUtil';
 import { downloadTemplate } from '../../setOut/downloadTemplate';
 import StructureTextureEdit from './StructureTextureEdit';
+import useRequest from '@ahooksjs/use-request';
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
@@ -21,16 +22,26 @@ export default function Lofting(): React.ReactNode {
         materialLeader: string
     }>();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState<any>({ segmentGroupId: params.productSegmentId });
+    const [filterValue, setFilterValue] = useState<any>({ segmentId: params.productSegmentId==='all'?'': params.productSegmentId, productCategoryId: params.id});
     const [visible, setVisible] = useState<boolean>(false);
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
+    const [isBig, setIsBig] = useState<boolean>(true);
+    const [isAuto, setIsAuto] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [editorLock, setEditorLock] = useState('添加');
     const [form] = Form.useForm();
     const [editVisible, setEditVisible] = useState<boolean>(false);
     const [tableDataSource, setTableDataSource] = useState<any[]>([])
     const editModalRef = useRef<any>();
+    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
+        const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`,{                                
+            // segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+            productCategory:params?.id
+        });
+        resole(data);
+    }), {})
+    const paragraphList: [] = data || [];
     const handleEditModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editModalRef.current?.onSubmit();
@@ -425,6 +436,8 @@ export default function Lofting(): React.ReactNode {
     })
     const [tableColumns, setColumns] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
+        value.productCategoryId = params.id
+        setFilterValue(value)
         return value
     }
     const rowChange = (index: number) => {
@@ -516,7 +529,10 @@ export default function Lofting(): React.ReactNode {
                                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
                             }
                         }
-                        data={{ productSegmentId: params.productSegmentId }}
+                        data={{ 
+                            segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                            productCategoryId: params.productSegmentId!=='all'?'':params.id, 
+                        }}
                         showUploadList={false}
                         onChange={(info) => {
                             if (info.file.response && !info.file.response?.success) {
@@ -529,7 +545,7 @@ export default function Lofting(): React.ReactNode {
                                     message.success('导入成功！');
                                     history.go(0)
                                     // setRefresh(!refresh);
-                                    setFilterValue({ segmentGroupId: params.productSegmentId })
+                                    setFilterValue({ segmentId: params.productSegmentId })
                                 }
                             }
                         }}
@@ -541,20 +557,7 @@ export default function Lofting(): React.ReactNode {
                     }}>添加</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/drawApply`) }}>图纸塔型套用</Button>
                     <Button type="primary" ghost onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}/setOutApply`) }}>放样塔型套用</Button>
-                    <Popconfirm
-                        title="确认完成提料?"
-                        onConfirm={async () => {
-                            await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting?segmentGroupId=${params.productSegmentId}`).then(() => {
-                                message.success('提料成功！')
-                            }).then(() => {
-                                history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}`)
-                            })
-                        }}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="primary" ghost>完成提料</Button>
-                    </Popconfirm>
+                    
                     <Button type="primary" ghost
                     onClick={()=>{
                         setEditVisible(true)
@@ -643,9 +646,14 @@ export default function Lofting(): React.ReactNode {
                     children: <Input maxLength={50} />
                 },
                 {
-                    name: 'segmentName',
+                    name: 'segmentId',
                     label: '段号',
-                    children: <Input maxLength={50} />
+                    children: <Select  style={{width:'100px'}} defaultValue={params?.productSegmentId==='all'?'':params?.productSegmentId}>
+                        <Select.Option key={ 0 } value={''}>全部</Select.Option>
+                        { paragraphList.map((item: any) => {
+                            return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                        }) }
+                    </Select>
                 }
             ]}
             onFilterSubmit={onFilterSubmit}
@@ -689,6 +697,9 @@ export default function Lofting(): React.ReactNode {
             setAddVisible(false);
             setTableDataSource([]);
             form.setFieldsValue({ dataV: [] })
+            setEditorLock('添加')
+            setIsAuto(false)
+            setIsBig(true)
         }} 
         okText={editorLock==='编辑'?'锁定':'确定'}
         width={'90%'} onOk={
@@ -698,10 +709,15 @@ export default function Lofting(): React.ReactNode {
                         return {
                             ...item,
                             productCategory: params.id,
-                            segmentGroupId: params.productSegmentId
+                            segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
                         }
                     })
-                    RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [...values]).then(res => {
+                    const submitData ={
+                        segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                        productCategoryId: params.productSegmentId!=='all'?'':params.id,
+                        drawProductStructureSaveDTOS:[...values]
+                    }
+                    RequestUtil.post(`/tower-science/drawProductStructure/submit`, submitData).then(res => {
                         setAddVisible(false);
                         setTableDataSource([]);
                         form.setFieldsValue({ dataV: [] })
@@ -714,10 +730,15 @@ export default function Lofting(): React.ReactNode {
                         return {
                             ...item,
                             productCategory: params.id,
-                            segmentGroupId: params.productSegmentId
+                            segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
                         }
                     })
-                    RequestUtil.post(`/tower-science/drawProductStructure/submit?productCategoryId=${params.id}`, [...values]).then(res => {
+                    const submitData ={
+                        segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                        productCategoryId: params.productSegmentId!=='all'?'':params.id,
+                        drawProductStructureSaveDTOS:[...values]
+                    }
+                    RequestUtil.post(`/tower-science/drawProductStructure/submit`, submitData).then(res => {
                         setAddVisible(false);
                         setTableDataSource([]);
                         form.setFieldsValue({ dataV: [] })
@@ -737,6 +758,32 @@ export default function Lofting(): React.ReactNode {
                     console.log(value)
                     form.setFieldsValue({ dataV: [...value] })
                 }} type='primary' ghost>添加一行</Button>}
+                <Checkbox onChange={(e)=>{
+                    setIsBig(e.target.checked)
+                    if(e.target.checked){
+                        const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                            return {
+                                ...item,
+                                structureTexture:item?.structureTexture.toUpperCase()
+                            }
+                        })
+                        setTableDataSource([...value])
+                        form.setFieldsValue({dataV: value})
+                    }
+                    // setTableDataSource(tableDataSource)
+                }} checked={isBig}>件号字母自动转换成大写</Checkbox>
+                <Checkbox onChange={(e)=>{
+                    setIsAuto(e.target.checked)
+                    const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                        return {
+                            ...item,
+                            basicsWeight:''
+                        }
+                    })
+                    setTableDataSource([...value])
+                    form.setFieldsValue({dataV: value})
+                    // setTableDataSource(tableDataSource)
+                }} checked={isAuto}>保存时自动计算重量</Checkbox>
                 <Table
                     scroll={{x:1200}}
                     columns={editorLock==='添加'?[
@@ -804,7 +851,19 @@ export default function Lofting(): React.ReactNode {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                        if(isBig){
+                                            const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                                                return {
+                                                    ...item,
+                                                    structureTexture:item?.structureTexture.toUpperCase()
+                                                }
+                                            })
+                                            console.log(value)
+                                            setTableDataSource([...value])
+                                            form.setFieldsValue({dataV: value})
+                                        }
+                                    }}/>
                                 </Form.Item>
                             )
                         },
@@ -906,7 +965,7 @@ export default function Lofting(): React.ReactNode {
                             key: 'basicsWeight', 
                             width: 120,
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: true, message: '请输入单件重量' }]}>
+                                <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: !isAuto, message: '请输入单件重量' }]}>
                                     <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
                                         if (data[index].basicsPartNum) {
@@ -917,7 +976,7 @@ export default function Lofting(): React.ReactNode {
                                             form?.setFieldsValue({ dataV: data })
                                             setTableDataSource(data)
                                         }
-                                    }} />
+                                    }} disabled={isAuto}/>
                                 </Form.Item>
                             )
                         },
@@ -1023,7 +1082,19 @@ export default function Lofting(): React.ReactNode {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                        if(isBig){
+                                            const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                                                return {
+                                                    ...item,
+                                                    structureTexture:item?.structureTexture.toUpperCase()
+                                                }
+                                            })
+                                            console.log(value)
+                                            setTableDataSource([...value])
+                                            form.setFieldsValue({dataV: value})
+                                        }
+                                    }}/>
                                 </Form.Item>
                             )
                         },
@@ -1136,7 +1207,7 @@ export default function Lofting(): React.ReactNode {
                                             form?.setFieldsValue({ dataV: data })
                                             setTableDataSource(data)
                                         }
-                                    }} />
+                                    }} disabled={isAuto}/>
                                 </Form.Item>
                             )
                         },

@@ -4,17 +4,16 @@
  * @description 工作管理-组焊列表-组焊清单-添加组焊
  */
 
-import React, { useState } from 'react';
-import { Space, Input, Select, Button, Form, Row, Col, InputNumber, Radio, Popconfirm, message, Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Space, Input, Select, Button, Form, Row, Col, InputNumber, Radio, Popconfirm, message, Spin, Checkbox, Modal } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
-import { FixedType, TriggerEventHandler } from 'rc-table/lib/interface';
+import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IComponentList, IResponseData, ISegmentNameList } from './IAssemblyWelding';
 import { compoundTypeOptions } from '../../../configuration/DictionaryOptions';
-
 
 export default function AddAssemblyWelding(): React.ReactNode {
     const params = useParams<{ id: string, productCategoryId: string, segmentId?: string }>();
@@ -25,11 +24,23 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const history = useHistory();
     const [settingData, setSettingData] = useState<IComponentList[]>([]);
     const [segment, setSegment] = useState<string>('');
+    const [checked, setChecked] = useState<boolean>(false);
+    const [visible, setVisible] = useState<boolean>(false);
+    const [moveNum, setMoveNum] = useState<number>(0);
+    const [maxNum, setMaxNum] = useState<number>(0);
+    const [title, setTitle] = useState<string>('');
+    const [moveRecord, setMoveRecord] = useState<any>({});
+    const [removeIndex, setRemoveIndex] = useState<number>(0);
+    const [leftSelectedRowKeys, setLeftSelectedRowKeys] = useState<string[]>([]);
+    const [leftSelectedRows, setLeftSelectedRows] = useState<any[]>([]);
+    const [rightSelectedRowKeys, setRightSelectedRowKeys] = useState<string[]>([]);
+    const [rightSelectedRows, setRightSelectedRows] = useState<any[]>([]);
+    const type = window.location.pathname.split('/')[6];
 
     const { loading, data } = useRequest<ISegmentNameList[]>(() => new Promise(async (resole, reject) => {
         const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);
         if (params.segmentId) {
-            const result: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: params.segmentId });
+            const result: IComponentList[] = await RequestUtil.get(`/tower-science/welding/getStructureById`, { segmentId: params.segmentId, flag: type === 'apply' ? 1 : 0 });
             setWeldingDetailedStructureList([...result]);
             setSettingData([...result]);
             const baseData = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, segmentId: params.segmentId });
@@ -43,6 +54,10 @@ export default function AddAssemblyWelding(): React.ReactNode {
         }
         resole(data);
     }), {})
+
+    useEffect(() => {
+        isShowZero(componentList, checked)
+    }, [checked])
 
     const segmentNameList: ISegmentNameList[] = data || [];
 
@@ -138,27 +153,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
         {
             title: '电焊长度（mm）',
             dataIndex: 'weldingLength',
-            key: 'weldingLength',
-            // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-            //     <InputNumber
-            //         min={0}
-            //         max={99999}
-            //         key={record.structureId}
-            //         defaultValue={record.weldingLength}
-            //         placeholder="请输入"
-            // onChange={(e) => {
-            //     const newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
-            //     const electricWeldingMeters = form.getFieldsValue(true).electricWeldingMeters;
-            //     newWeldingDetailedStructureList[index] = {
-            //         ...newWeldingDetailedStructureList[index],
-            //         weldingLength: Number(e)
-            //     }
-            //     setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
-            //     form.setFieldsValue({ 'electricWeldingMeters': Number(electricWeldingMeters) - Number(record.weldingLength) * Number(record.singleNum) + Number(e) * Number(record.singleNum) });
-            // }}
-            //         bordered={false} 
-            //         disabled/>
-            // )
+            key: 'weldingLength'
         },
         {
             title: '操作',
@@ -166,14 +161,18 @@ export default function AddAssemblyWelding(): React.ReactNode {
             key: 'operation',
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Popconfirm
-                    title="确认移除?"
-                    onConfirm={() => removeRow(record, index)}
-                    okText="移除"
-                    cancelText="取消"
-                >
-                    <Button type="link">移除</Button>
-                </Popconfirm>
+                <Space>
+                    <Popconfirm
+                        title="确认移除?"
+                        onConfirm={() => removeRow(record, index, 1)}
+                        okText="移除"
+                        cancelText="取消"
+                    >
+                        <Button type="link">移除</Button>
+                    </Popconfirm>
+                    <Button type="link" onClick={() => { move('批量移除', record.singleNum); setMoveRecord(record); setRemoveIndex(index) }}>批量移除</Button>
+                </Space>
+
             )
         }
     ]
@@ -207,7 +206,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
         {
             title: '剩余数量',
             dataIndex: 'basicsPartNumNow',
-            key: 'basicsPartNumNow'
+            key: 'basicsPartNumNow',
+            type: 'number'
         },
         {
             title: '备注',
@@ -220,7 +220,15 @@ export default function AddAssemblyWelding(): React.ReactNode {
             key: 'operation',
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type="link" onClick={() => addComponent(record, index)}>右移</Button>
+                <Space>
+                    {/* <Button type="link" disabled={record.basicsPartNumNow === 0} onClick={() => addComponent(record, 1)}>右移</Button> */}
+                    <Button type="link" onClick={() => addComponent(record, 1)}>右移</Button>
+                    <Button type="link" onClick={() => {
+                        move('批量右移', record.basicsPartNumNow);
+                        setMoveRecord(record)
+                    }}>批量右移</Button>
+                </Space>
+
             )
         }
     ]
@@ -228,19 +236,19 @@ export default function AddAssemblyWelding(): React.ReactNode {
     /**
      * @description 构件信息移除行 
      */
-    const removeRow = async (record: Record<string, any>, index: number) => {
+    const removeRow = async (record: Record<string, any>, index: number, num: number) => {
         let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) - (Number(record.basicsWeight) || 0);
         let electricWeldingMeters: number = Number(form.getFieldsValue(true).electricWeldingMeters || 0) - Number(record.weldingLength || 0);
         form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': electricWeldingMeters?.toFixed(4) });
-        if (record.singleNum === 1) {
-            weldingDetailedStructureList?.splice(index, 1);
+        if (record.singleNum === num) {
+            weldingDetailedStructureList?.splice(index, num);
             setWeldingDetailedStructureList([...weldingDetailedStructureList || []])
         } else {
             setWeldingDetailedStructureList(weldingDetailedStructureList?.map((res: IComponentList) => {
                 if (res.structureId === record.structureId) {
                     return {
                         ...res,
-                        singleNum: Number(res.singleNum) - 1
+                        singleNum: Number(res.singleNum) - num
                     }
                 } else {
                     return res
@@ -263,30 +271,38 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     segmentId: params.segmentId || ''
                 });
                 data = data.filter(res => { return res.id === record.structureId });
-                setComponentList([
+                const newList = [
                     {
                         ...data[0],
-                        basicsPartNumNow: 1
+                        basicsPartNumNow: num
                     },
                     ...componentList
-                ])
+                ]
+                const noZero = newList.filter(res => {
+                    return Number(res.basicsPartNumNow) !== 0
+                })
+                setComponentList(checked ? newList : noZero)
             } else {
-                setComponentList([
-                    ...componentList
-                ])
+                const noZero = componentList.filter(res => {
+                    return Number(res.basicsPartNumNow) !== 0
+                })
+                setComponentList(checked ? componentList : noZero)
             }
         } else {
-            setComponentList(componentList?.map((res: IComponentList) => {
+            const newData = componentList?.map((res: IComponentList) => {
                 if (res.id === record.structureId) {
                     return {
                         ...res,
-                        basicsPartNumNow: Number(res.basicsPartNumNow) + 1
+                        basicsPartNumNow: Number(res.basicsPartNumNow) + num
                     }
                 } else {
                     return res
                 }
-
-            }))
+            })
+            const noZero = newData.filter(res => {
+                return Number(res.basicsPartNumNow) !== 0
+            })
+            setComponentList(checked ? newData : noZero)
         }
     }
 
@@ -332,7 +348,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 let newData = data.filter(res => {
                     return Number(res.basicsPartNumNow) !== 0
                 })
-                setComponentList([...newData])
+                setComponentList(checked ? [...data] : [...newData])
             })
         }
     }
@@ -340,7 +356,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
     /**
     * @descriptions 可选构件明细右移
     */
-    const addComponent = (record: Record<string, any>, index: number) => {
+    const addComponent = (record: Record<string, any>, num: number) => {
         let newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
         let weldingLength: number = form?.getFieldsValue(true)?.electricWeldingMeters;
         let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.singleNum) || 1);
@@ -352,7 +368,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             id: '',
             // segmentId: params.segmentId,
             structureId: record.id,
-            singleNum: 1,
+            singleNum: num,
             isMainPart: 0,
             weldingLength: record.weldingEdge
         } : {}
@@ -360,7 +376,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             if (item.structureId === record.id) {
                 return {
                     ...item,
-                    singleNum: Number(item.singleNum) + 1,
+                    singleNum: Number(item.singleNum) + num,
                     basicsPartNumNow: Number(record.basicsPartNumNow || 0)
                 }
             } else {
@@ -375,21 +391,25 @@ export default function AddAssemblyWelding(): React.ReactNode {
         // })
         form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': (Number(weldingLength || 0) + (Number(record.singleNum) || 1) * Number(record.weldingEdge || 0))?.toFixed(3) });
         setWeldingDetailedStructureList(Object.keys(newComponentList).length > 0 ? [...newWeldingDetailedStructureList, newComponentList] : [...newWeldingDetailedStructureList]);
-        if (Number(record.basicsPartNumNow) === 1) {
-            componentList.splice(index, 1);
-            setComponentList([...componentList]);
-        } else {
-            setComponentList(componentList?.map((res: IComponentList) => {
-                if (res.id === record.id) {
-                    return {
-                        ...res,
-                        basicsPartNumNow: Number(res.basicsPartNumNow) - 1
-                    }
-                } else {
-                    return res
+        // if (Number(record.basicsPartNumNow) === 1) {
+        //     componentList.splice(index, 1);
+        //     setComponentList([...componentList]);
+        // } else {
+        const list = componentList?.map((res: IComponentList) => {
+            if (res.id === record.id) {
+                return {
+                    ...res,
+                    basicsPartNumNow: Number(res.basicsPartNumNow) - num
                 }
-            }))
-        }
+            } else {
+                return res
+            }
+        })
+        const noZero = list.filter(res => {
+            return Number(res.basicsPartNumNow) !== 0
+        })
+        setComponentList(checked ? [...list] : noZero)
+        // }
     }
 
     /**
@@ -405,9 +425,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 } else {
                     const value = {
                         weldingId: params.id,
-                        id: params.segmentId,
-                        // ...params.record,
                         ...values,
+                        id: type === 'apply' ? '' : params.segmentId,
                         componentId: mainPartId,
                         mainPartId: mainPartId,
                         segmentName: segmentList[1],
@@ -444,8 +463,6 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const segmentChange = (values: Record<string, any>, segmentNames: ISegmentNameList[]) => {
         if (values.length > 0) {
             if (values.findIndex((value: string) => value === 'all') !== -1) {
-                
-        
                 const selected = segmentNames?.map(item => {
                     return item.name + ',' + item.id
                 })
@@ -473,7 +490,194 @@ export default function AddAssemblyWelding(): React.ReactNode {
         }
     }
 
+    const move = (title: string, max: number) => {
+        setVisible(true);
+        setTitle(title);
+        setMaxNum(max);
+    }
+
+    const onMove = () => {
+        if (title === '批量右移') {
+            addComponent(moveRecord, moveNum);
+            setVisible(false);
+        } else {
+            removeRow(moveRecord, removeIndex, moveNum);
+            setVisible(false);
+        }
+        setMoveNum(0)
+    }
+
+    const batchMove = async () => {
+        if (rightSelectedRows.length > 0) {
+            let newWeld = weldingDetailedStructureList;
+            rightSelectedRows.map(async record => {
+                const index = weldingDetailedStructureList?.findIndex((obj) => {
+                    return obj.structureId === record.structureId
+                })
+                let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) - (Number(record.basicsWeight) || 0);
+                let electricWeldingMeters: number = Number(form.getFieldsValue(true).electricWeldingMeters || 0) - Number(record.weldingLength || 0);
+                form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': electricWeldingMeters?.toFixed(4) });
+                if (record.singleNum === record.singleNum) {
+                    newWeld?.splice(index || 0, record.singleNum);
+                    // setWeldingDetailedStructureList([...newWeld || []])
+                } else {
+                    newWeld = newWeld?.map((res: IComponentList) => {
+                        if (res.structureId === record.structureId) {
+                            return {
+                                ...res,
+                                singleNum: Number(res.singleNum) - record.singleNum
+                            }
+                        } else {
+                            return res
+                        }
+                    })
+                }
+
+            })
+            setWeldingDetailedStructureList([...newWeld || []])
+            const data = await processData();
+            const noZero = data.filter(res => {
+                return Number(res.basicsPartNumNow) !== 0;
+            })
+            setComponentList(checked ? [...data] : [...noZero])
+            setRightSelectedRows([]);
+            setRightSelectedRowKeys([]);
+        } else {
+            let newcom = componentList;
+            let newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
+            leftSelectedRows.map(record => {
+                let weldingLength: number = form?.getFieldsValue(true)?.electricWeldingMeters;
+                let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.singleNum) || 1);
+                let isNewComponent: boolean = newWeldingDetailedStructureList.every((items: IComponentList) => {
+                    return record.id !== items.structureId;
+                })
+                let newComponentList: IComponentList = isNewComponent ? {
+                    ...record,
+                    id: '',
+                    structureId: record.id,
+                    singleNum: record.basicsPartNumNow,
+                    isMainPart: 0,
+                    weldingLength: record.weldingEdge
+                } : {}
+                newWeldingDetailedStructureList = newWeldingDetailedStructureList.map((item: IComponentList) => {
+                    if (item.structureId === record.id) {
+                        return {
+                            ...item,
+                            singleNum: Number(item.singleNum) + record.basicsPartNumNow,
+                            basicsPartNumNow: Number(record.basicsPartNumNow || 0)
+                        }
+                    } else {
+                        return {
+                            ...item,
+                            basicsPartNumNow: Number(record.basicsPartNumNow || 0)
+                        }
+                    }
+                })
+                form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': (Number(weldingLength || 0) + (Number(record.singleNum) || 1) * Number(record.weldingEdge || 0))?.toFixed(3) });
+                newWeldingDetailedStructureList = Object.keys(newComponentList).length > 0 ? [...newWeldingDetailedStructureList, newComponentList] : [...newWeldingDetailedStructureList];
+                newcom = newcom?.map((res: IComponentList) => {
+                    if (res.id === record.id) {
+                        return {
+                            ...res,
+                            basicsPartNumNow: Number(res.basicsPartNumNow) - record.basicsPartNumNow
+                        }
+                    } else {
+                        return res
+                    }
+                })
+            })
+            setWeldingDetailedStructureList(newWeldingDetailedStructureList)
+            const noZero = newcom.filter(res => {
+                return Number(res.basicsPartNumNow) !== 0
+            })
+            setComponentList(checked ? [...newcom] : noZero);
+            setLeftSelectedRows([]);
+            setLeftSelectedRowKeys([]);
+        }
+    }
+
+    const processData = () => {
+        let newCom = componentList;
+        return new Promise<IComponentList[]>(async (resolve) => {
+            let data: IComponentList[] = [];
+            let values = form.getFieldsValue(true).segmentName;
+            if (values && values.length > 0) {
+                values = values.filter((res: string) => res !== 'all')
+                values = values.map((res: string) => {
+                    return {
+                        segmentName: res.split(',')[0],
+                        segmentId: res.split(',')[1],
+                    }
+                })
+                data = await RequestUtil.post(`/tower-science/welding/getStructure`, {
+                    weldingSegmentDTOS: values,
+                    productCategoryId: params.productCategoryId,
+                    segmentId: params.segmentId || ''
+                });
+            }
+            rightSelectedRows.map(async record => {
+                if ((newCom || []).map(res => res.id).findIndex((value) => value === record.structureId) === -1) {
+                    if (values && values.length > 0) {
+                        const newData = data?.filter(res => { return res.id === record.structureId });
+                        newCom = [
+                            {
+                                ...newData[0],
+                                basicsPartNumNow: record.singleNum
+                            },
+                            ...newCom
+                        ]
+                    } else {
+                        newCom = [...newCom]
+                    }
+                } else {
+                    newCom = newCom?.map((res: IComponentList) => {
+                        if (res.id === record.structureId) {
+                            return {
+                                ...res,
+                                basicsPartNumNow: Number(res.basicsPartNumNow) + record.singleNum
+                            }
+                        } else {
+                            return res
+                        }
+                    })
+                }
+            })
+            resolve(newCom)
+        })
+    }
+
+    const isShowZero = (data: IComponentList[], isCheck: boolean) => {
+        setChecked(isCheck);
+        if (isCheck) {
+            segmentChange(form.getFieldsValue(true)?.segmentName, segmentNameList);
+        } else {
+            let newData = data.filter(res => {
+                return Number(res.basicsPartNumNow) !== 0
+            })
+            setComponentList([...newData])
+        }
+    }
+
     return <Spin spinning={loading}>
+        <Modal
+            visible={visible}
+            title={title}
+            okText="确认"
+            onCancel={() => {
+                setMoveNum(0);
+                setVisible(false);
+            }}
+            onOk={() => onMove()}
+        >
+            <Row>
+                <Col span={4}><p style={{ lineHeight: '3.2' }}>数量</p></Col>
+                {
+                    title === '批量右移'
+                        ? <Col span={20}><InputNumber value={moveNum} style={{ width: '90%' }} onChange={(e) => setMoveNum(Number(e))} /></Col>
+                        : <Col span={20}><InputNumber max={maxNum} value={moveNum} style={{ width: '90%' }} onChange={(e) => setMoveNum(Number(e))} /></Col>
+                }
+            </Row>
+        </Modal>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                 <Button key="cancel" type="ghost" onClick={() => history.goBack()}>返回</Button>
@@ -482,7 +686,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             </Space>
         ]}>
             <DetailTitle title="组焊信息" />
-            <Form form={form} layout="inline">
+            <Form form={form} layout="inline" className={styles.informationForm}>
                 <Form.Item name="componentId" label="组件号">
                     <Input placeholder="自动产生" maxLength={10} disabled />
                 </Form.Item>
@@ -492,8 +696,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 }]}>
                     <Input placeholder="自动计算" disabled />
                 </Form.Item>
-                <Form.Item name="segmentName" label="段号" initialValue={"all"}>
-                    <Select placeholder="请选择" style={{ width: '150px' }}
+                <Form.Item name="segmentName" label="段号" initialValue={["all"]}>
+                    <Select placeholder="请选择" style={{ width: '200px' }}
                         mode="multiple" onChange={() => segmentChange(form.getFieldsValue(true)?.segmentName, segmentNameList)} >
                         <Select.Option key={'all'} value={'all'}>全部</Select.Option>
                         {segmentNameList.map((item: any) => {
@@ -522,7 +726,22 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     </Select>
                 </Form.Item>
             </Form>
-            <DetailTitle title="构件信息" />
+            <DetailTitle
+                title={
+                    <div>构件信息
+                        <Checkbox
+                            checked={checked}
+                            value={checked}
+                            onChange={(e) => {
+                                isShowZero(componentList, e.target.checked);
+                            }}
+                            style={{ fontSize: '14px', paddingLeft: '16px', fontWeight: 'lighter' }}
+                        >显示剩余数量为0的构件{checked}
+                        </Checkbox>
+                        <Button type='primary' style={{ left: '38%' }} onClick={batchMove} ghost>批量移动</Button>
+                    </div>
+                }
+            />
             <CommonTable
                 haveIndex
                 columns={componentColumns}
@@ -531,6 +750,16 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 style={{
                     width: '40%',
                     position: 'absolute'
+                }}
+                rowSelection={{
+                    selectedRowKeys: leftSelectedRowKeys,
+                    onChange: (selectedRowKeys: string[], selectRows: any[]) => {
+                        setLeftSelectedRowKeys(selectedRowKeys);
+                        setLeftSelectedRows(selectRows)
+                    },
+                    getCheckboxProps: () => ({
+                        disabled: rightSelectedRows.length > 0
+                    })
                 }}
             />
             <CommonTable
@@ -543,6 +772,16 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 rowKey="structureId"
                 dataSource={[...(weldingDetailedStructureList || [])]}
                 pagination={false}
+                rowSelection={{
+                    selectedRowKeys: rightSelectedRowKeys,
+                    onChange: (selectedRowKeys: string[], selectRows: any[]) => {
+                        setRightSelectedRowKeys(selectedRowKeys);
+                        setRightSelectedRows(selectRows)
+                    },
+                    getCheckboxProps: () => ({
+                        disabled: leftSelectedRows.length > 0
+                    })
+                }}
             />
         </DetailContent>
     </Spin>

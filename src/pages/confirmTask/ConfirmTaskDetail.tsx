@@ -8,33 +8,33 @@ import RequestUtil from '../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
 
 const tableColumns = [
-    { 
-        title: '序号', 
-        dataIndex: 'index', 
-        key: 'index', 
+    {
+        title: '序号',
+        dataIndex: 'index',
+        key: 'index',
         render: (_a: any, _b: any, index: number): React.ReactNode => (
             <span>{index + 1}</span>
-        ) 
+        )
     },
-    { 
-        title: '操作部门', 
-        dataIndex: 'createDeptName', 
-        key: 'createDeptName', 
+    {
+        title: '操作部门',
+        dataIndex: 'createDeptName',
+        key: 'createDeptName',
     },
-    { 
-        title: '操作人', 
-        dataIndex: 'createUserName', 
-        key: 'createUserName' 
+    {
+        title: '操作人',
+        dataIndex: 'createUserName',
+        key: 'createUserName'
     },
-    { 
-        title: '操作时间', 
-        dataIndex: 'createTime', 
-        key: 'createTime' 
+    {
+        title: '操作时间',
+        dataIndex: 'createTime',
+        key: 'createTime'
     },
-    { 
-        title: '任务状态', 
-        dataIndex: 'currentStatus', 
-        key: 'currentStatus', 
+    {
+        title: '任务状态',
+        dataIndex: 'currentStatus',
+        key: 'currentStatus',
         render: (value: number, record: object): React.ReactNode => {
             const renderEnum: any = [
                 {
@@ -62,13 +62,13 @@ const tableColumns = [
                     label: "已提交"
                 }
             ]
-             return <>{value!==-1?renderEnum.find((item: any) => item.value === value).label:''}</>
+            return <>{value !== -1 ? renderEnum.find((item: any) => item.value === value).label : ''}</>
         }
     },
-    { 
-        title: '备注', 
-        dataIndex: 'description', 
-        key: 'description' 
+    {
+        title: '备注',
+        dataIndex: 'description',
+        key: 'description'
     }
 ]
 
@@ -76,7 +76,7 @@ export default function ConfirmTaskDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
-    const params = useParams<{ id: string ,status: string}>();
+    const params = useParams<{ id: string, status: string }>();
     const [pictureVisible, setPictureVisible] = useState<boolean>(false);
     const [pictureUrl, setPictureUrl] = useState('');
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -88,37 +88,37 @@ export default function ConfirmTaskDetail(): React.ReactNode {
         try {
             const refuseData = await form.validateFields();
             refuseData.drawTaskId = params.id;
-            await RequestUtil.post('/tower-science/drawTask/refuseDrawTask', refuseData).then(()=>{
+            await RequestUtil.post('/tower-science/drawTask/refuseDrawTask', refuseData).then(() => {
                 message.success('提交成功！')
                 setVisible(false)
-            }).then(()=>{
+            }).then(() => {
                 history.push(`/taskMngt/ConfirmTaskMngt`)
             })
-        
+
         } catch (error) {
             console.log(error)
         }
     }
     const handleModalCancel = () => setVisible(false);
-    const handlePictureModalCancel = () => {setPictureVisible(false)}
+    const handlePictureModalCancel = () => { setPictureVisible(false) }
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
                     {
-                        params.status!=='1'?null:
-                        <Space>
-                            <Button 
-                            type="primary"
-                            onClick={async () => {
-                                await RequestUtil.post('/tower-science/drawTask/receiveDrawTask',{drawTaskId: params.id}).then(()=>{
-                                    message.success('接收成功！');
-                                }).then(()=>{
-                                    history.push(`/taskMngt/ConfirmTaskMngt`)
-                                });  
-                            }}
-                        >接收</Button>
-                        {/* <Button 
+                        params.status !== '1' ? null :
+                            <Space>
+                                <Button
+                                    type="primary"
+                                    onClick={async () => {
+                                        await RequestUtil.post('/tower-science/drawTask/receiveDrawTask', { drawTaskId: params.id }).then(() => {
+                                            message.success('接收成功！');
+                                        }).then(() => {
+                                            history.push(`/taskMngt/ConfirmTaskMngt`)
+                                        });
+                                    }}
+                                >接收</Button>
+                                {/* <Button 
                             key="edit" 
                             style={{ marginRight: '10px' }} 
                             type="primary" 
@@ -126,14 +126,14 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                                 setVisible(true)
                             }}
                         >拒绝</Button> */}
-                    </Space>
+                            </Space>
                     }
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
-                <Modal 
+                <Modal
                     title='拒绝'
-                    visible={visible} 
+                    visible={visible}
                     onCancel={handleModalCancel}
                     onOk={handleModalOk}
                     okText='提交'
@@ -141,19 +141,19 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                 >
                     <Form form={form} >
                         <Form.Item name="reason" label="拒绝原因" rules={[{
-                            required:true, 
-                            message:'请填写拒绝原因'
+                            required: true,
+                            message: '请填写拒绝原因'
                         },
                         {
                             pattern: /^[^\s]*$/,
                             message: '禁止输入空格',
                         }]}>
-                            <TextArea showCount maxLength={500}/>
+                            <TextArea showCount maxLength={500} />
                         </Form.Item>
                     </Form>
                 </Modal>
                 <DetailTitle title="基本信息" />
-                <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2}/>
+                <BaseInfo columns={baseInfoData} dataSource={detailData || {}} col={2} />
                 {/* <DetailTitle title="相关附件"/> */}
                 {/* <CommonTable columns={[
                     {
@@ -174,12 +174,12 @@ export default function ConfirmTaskDetail(): React.ReactNode {
                         )
                     }
                 ]} dataSource={detailData?.attachInfoList} pagination={ false } /> */}
-                <Attachment dataSource={detailData?.fileVOList}/>
+                <Attachment dataSource={detailData?.fileVOList} />
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={ false } />
+                <CommonTable columns={tableColumns} dataSource={detailData?.statusRecordList} pagination={false} />
             </DetailContent>
             <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
-                <Image src={pictureUrl} preview={false}/>
+                <Image src={pictureUrl} preview={false} />
             </Modal>
         </Spin>
     </>
