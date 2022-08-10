@@ -71,11 +71,13 @@ export default forwardRef(function ChooseMaterials({ id, name, planNumber }: mod
 
     return <DetailContent key='ChooseMaterials'>
         <Page
-            path={`/tower-science/productCategory/picking/list?productCategoryId=${id}`}
-            exportPath={`/tower-science/productCategory/picking/list?productCategoryId=${id}`}
+            path={`/tower-science/productCategory/picking/list`}
+            exportPath={`/tower-science/productCategory/picking/list`}
             columns={columns}
             headTabs={[]}
-            requestData={{}}
+            requestData={{
+                productCategoryId: id
+            }}
             searchFormItems={[]}
             extraOperation={<p>
                 <span>计划号：<span>{name}</span></span>
