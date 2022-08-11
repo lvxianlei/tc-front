@@ -121,11 +121,12 @@ export default function EditableTable({
     const handleNewButtonClick = async () => {
         try {
             form && await form.validateFields();
+            const editableDataSource = form?.getFieldsValue()
             const newRowData = {
                 id: (Math.random() * 1000000).toFixed(0),
-                ...(typeof addData === "function" ? addData(editableDataSource) : addData)
+                ...(typeof addData === "function" ? addData(editableDataSource?.submit || []) : addData)
             }
-            const addedEditDataSource = [newRowData, ...editableDataSource]
+            const addedEditDataSource = [newRowData, ...editableDataSource?.submit || []]
             form && form.setFieldsValue({ submit: addedEditDataSource })
             onFormChange && onFormChange({ submit: [newRowData], type: "add" }, { submit: addedEditDataSource })
             setEditableDataSource(addedEditDataSource)

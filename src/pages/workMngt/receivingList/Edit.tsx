@@ -6,7 +6,6 @@ import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails, } from "./receivingListData.json"
-import moment from "moment"
 
 /**
  * 纸质单号，原材料税款合计，车辆牌照
