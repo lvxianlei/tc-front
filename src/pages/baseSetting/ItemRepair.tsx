@@ -145,7 +145,7 @@ export default function ItemRepair(): React.ReactNode {
                 key='ItemRepairNew'
                 visible={visible}
                 title={type === 'new' ? '新增' : '编辑'}
-                width='60%'
+                width='50%'
                 onOk={handleOk}
                 onCancel={() => setVisible(false)}>
                 <ItemRepairNew type={type} record={rowData} ref={newRef} />
