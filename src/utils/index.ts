@@ -2,6 +2,7 @@ import moment from "moment"
 import { matchPath } from "react-router-dom";
 import ctxRouter from "../app-router.config.jsonc"
 import * as XLSX from "xlsx"
+// 下载文件
 export function downLoadFile(path: string, fileName?: string | undefined) {
     const a = document.createElement("a");
     a.setAttribute("href", path);
@@ -11,7 +12,7 @@ export function downLoadFile(path: string, fileName?: string | undefined) {
     clickEvent.initEvent("click", true, true);
     a.dispatchEvent(clickEvent);
 }
-
+// 前端直接导出xlsx模版
 export function downLoadTemplate(columns: any[], fileName: string) {
     const head = columns.map(item => item.title)
     const workbook: XLSX.WorkBook = XLSX.utils.book_new()

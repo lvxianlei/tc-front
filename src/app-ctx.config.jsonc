@@ -337,6 +337,11 @@
                         "label": "余料入库",
                         "path": "/stock/surplusMaterialWarehousing",
                         "authority": "inventory_management_surplus_material_warehousing"
+                    },
+                    {
+                        "label": "原材料盘点",
+                        "path": "/stock/materials",
+                        "authority": "inventory_management_surplus_material_warehousing"
                     }
                 ]
             },

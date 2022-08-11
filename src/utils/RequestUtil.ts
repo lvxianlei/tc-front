@@ -78,6 +78,7 @@ export default abstract class RequestUtil {
                         NProgress.done();
                     }
                     if (res.status === 401) {
+                        message.warning("登录已过期！请重新登录...")
                         setTimeout(this.backToLogin, 10);
                     }
                     return res.json();
@@ -90,6 +91,7 @@ export default abstract class RequestUtil {
                         resolve(res.data);
                     } else if (res.code === 401) {
                         if (!path.includes("sinzetech-auth/oauth")) {
+                            message.warning("登录已过期！请重新登录...")
                             setTimeout(this.backToLogin, 10);
                         } else {
                             message.warning("登录已过期！请重新登录...")

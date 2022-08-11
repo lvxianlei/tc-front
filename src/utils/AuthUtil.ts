@@ -232,6 +232,7 @@ export default abstract class AuthUtil {
                 'Authorization': `Basic ${this.getAuthorization()}`,
                 'Tenant-Id': this.getTenantId()
             })
+            console.log("refrensh--")
             this.setSinzetechAuth(access_token, refresh_token)
         } catch (error) {
             console.log("ERROR: refrenshToken", error)

@@ -46,6 +46,7 @@
         {
             "title": "不含税价格（元/吨）",
             "dataIndex": "transportPrice",
+            "disabled": true,
             "rules": [
                 {
                     "required": true,
@@ -100,6 +101,7 @@
         {
             "title": "不含税价格（元/吨）",
             "dataIndex": "unloadPrice",
+            "disabled": true,
             "rules": [
                 {
                     "required": true,
