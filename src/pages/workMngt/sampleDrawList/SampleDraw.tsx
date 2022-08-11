@@ -229,9 +229,9 @@ export default function SampleDraw(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'upLoadTime',
+                        name: 'smallSampleStatus',
                         label: '上传状态',
-                        children: <Select style={{ width: "200px" }}>
+                        children: <Select style={{ width: "200px" }} defaultValue={''}>
                             <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>已上传</Select.Option>
                             <Select.Option value={2} key={2}>未上传</Select.Option>
