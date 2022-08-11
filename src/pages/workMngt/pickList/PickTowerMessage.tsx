@@ -72,7 +72,7 @@ export default function Lofting(): React.ReactNode {
         setDepartment(departmentData);
         const detailTop: any = await RequestUtil.get(`/tower-science/materialProductCategory/${params.id}`);
         setDetailTop(detailTop);
-        const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000`);
+        const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000&category=2`);
         setList(list?.records);
         setValue(value)
         resole(data)
