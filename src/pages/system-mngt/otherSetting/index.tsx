@@ -20,52 +20,52 @@ export default function JobsMngt(): React.ReactNode {
     
     const columns = [
         {
-            key: 'stationName',
+            key: 'appCharacteristic',
             title: '应用唯一标识',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'appCharacteristic'
         },
         {
-            key: 'stationName',
+            key: 'appName',
             title: '应用名称',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'appName'
         },
         {
-            key: 'stationName',
+            key: 'appId',
             title: 'appId',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'appId'
         },
         {
-            key: 'stationName',
+            key: 'appSecret',
             title: 'appSecret',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'appSecret'
         },
         {
-            key: 'stationName',
+            key: 'serviceUrl',
             title: '服务地址',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'serviceUrl'
         },
         {
-            key: 'stationName',
+            key: 'skipUrl',
             title: '前端跳转地址',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'skipUrl'
         },
         {
-            key: 'stationName',
+            key: 'impowerCode',
             title: '授权码',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'impowerCode'
         },
         {
-            key: 'stationName',
+            key: 'impowerPatterm',
             title: '授权模式',
             width: 150,
-            dataIndex: 'stationName'
+            dataIndex: 'impowerPatterm'
         },
         {
             key: 'operation',
@@ -76,7 +76,7 @@ export default function JobsMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/station/${ record.id }`);
+                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/getAppDeployById/${ record.id }`);
                         setDetail(data);
                         setTitle("查看");
                         setView(true)
@@ -84,7 +84,7 @@ export default function JobsMngt(): React.ReactNode {
                         setVisible(true);
                     } }>查看</Button>
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/station/${ record.id }`);
+                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/getAppDeployById/${ record.id }`);
                         setDetail(data);
                         setTitle("编辑");
                         form.setFieldsValue({ ...data });
@@ -93,7 +93,8 @@ export default function JobsMngt(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-system/station/${ record.id }`).then(res => {
+                            RequestUtil.delete(`/tower-system/appDeploy/${ record.id }`).then(res => {
+                                message.success('删除成功！')
                                 setRefresh(!refresh);
                             });
                         } }
@@ -144,19 +145,30 @@ export default function JobsMngt(): React.ReactNode {
             })
         }
     }
-
+    const formItemLayout = {
+        labelCol: { span: 6 },
+        wrapperCol: { span: 16 }
+    };
     return <>
         <Page
-            path="/tower-system/station"
+            path="/tower-system/appDeploy/list"
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
-            extraOperation={ <Button type="primary" onClick={ () => { setVisible(true); setTitle("新增"); } }>新增</Button> }
+            extraOperation={ <Button type="primary" onClick={ () => { 
+                setTitle("新增"); 
+                setSelected(0); 
+                setVisible(true);  
+                form.setFieldsValue({
+                    impowerPatterm: 0
+                })
+            } }>新增</Button> }
             searchFormItems={ [] }
         />
         <Modal 
             visible={ visible } 
             title={ title  }
+            width={'60%'}
             footer={<Space>
                 <Button type="ghost" onClick={() => {
                     setVisible(false); 
@@ -175,44 +187,52 @@ export default function JobsMngt(): React.ReactNode {
                 setView(false)
                 form.resetFields(); 
                 form.setFieldsValue({ 
-                    stationName: '' 
+                    appCharacteristic: '',
+                    appId: '',
+                    appName: '',
+                    appSecret: '',
+                    description: '',
+                    impowerCode: '',
+                    impowerPatterm: '',
+                    serviceUrl: '',
+                    skipUrl: '',
                 }); 
             } }
         >
-            <Form form={ form }>
+            <Form form={ form } {...formItemLayout}>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label="应用名称" name="stationName" initialValue={ detail.stationName } rules={[{
+                        <Form.Item label="应用名称" name="appName"  rules={[{
                             "required": true,
                             "message": "请输入应用名称"
                         }]}>
-                            <Input maxLength={ 32 }/>
+                            <Input maxLength={ 32 } placeholder="请输入应用名称"/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="应用标识" name="stationName" initialValue={ detail.stationName } rules={[{
+                        <Form.Item label="应用标识" name="appCharacteristic"  rules={[{
                             "required": true,
                             "message": "请输入应用标识"
                         }]}>
-                            <Input maxLength={ 32 }/>
+                            <Input maxLength={ 32 } placeholder="请输入应用标识"/>
                         </Form.Item>
                     </Col>
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label="授权模式" name="stationName" initialValue={ detail.stationName } rules={[{
+                        <Form.Item label="授权模式" name="impowerPatterm" rules={[{
                             "required": true,
                             "message": "请选择授权模式"
                         }]}>
                             <Select placeholder="请选择授权模式" style={{ width: "100%" }} onChange={(value:number) => setSelected(value)}>
-                                <Select.Option value={1} key="1">Token授权</Select.Option>
-                                <Select.Option value={2} key="2">授权码授权</Select.Option>
+                                <Select.Option value={0} key="0">Token授权</Select.Option>
+                                <Select.Option value={1} key="1">授权码授权</Select.Option>
                             </Select>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="授权码" name="stationName" initialValue={ detail.stationName } rules={[{
-                            "required": selected===2,
+                        <Form.Item label="授权码" name="impowerCode"  rules={[{
+                            "required": selected===1,
                             "message": "请输入授权码"
                         }]}>
                             <Input  placeholder={"请输入授权码"}/>
@@ -221,40 +241,34 @@ export default function JobsMngt(): React.ReactNode {
                 </Row>
                 <Row>
                     <Col span={12}>
-                        <Form.Item label="appId" name="stationName" initialValue={ detail.stationName } rules={[{
-                            "required": selected===1,
+                        <Form.Item label="appId" name="appId"  rules={[{
+                            "required": selected===0,
                             "message": "请输入appId"
                         }]}>
                             <Input maxLength={ 32 } placeholder={"请输入appId"}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
-                        <Form.Item label="appSecret" name="stationName" initialValue={ detail.stationName } rules={[{
-                            "required": true,
+                        <Form.Item label="appSecret" name="appSecret" rules={[{
+                            "required": selected===0,
                             "message": "请输入appSecret"
                         }]}>
                             <Input maxLength={ 32 } placeholder={"请输入appSecret"}/>
                         </Form.Item>
                     </Col>
                 </Row>
-                <Row>
-                    <Form.Item label="服务地址" name="stationName" initialValue={ detail.stationName } rules={[{
-                        "required": true,
-                        "message": "请输入服务地址"
-                    }]}>
-                        <Input maxLength={ 200 } placeholder={"请输入服务地址"}/>
-                    </Form.Item>
-                </Row>
-                <Row>
-                    <Form.Item label="跳转地址" name="stationName" initialValue={ detail.stationName } >
-                        <Input maxLength={ 200 } placeholder={"请输入前端跳转地址"}/>
-                    </Form.Item>
-                </Row>
-                <Row>
-                    <Form.Item label="备注" name="description" initialValue={ detail.description }>
-                        <Input.TextArea maxLength={ 200 }/>
-                    </Form.Item>
-                </Row>
+                <Form.Item label="服务地址" name="serviceUrl"  rules={[{
+                    "required": true,
+                    "message": "请输入服务地址"
+                }]} labelCol={{span:3}} wrapperCol={{span:20}}>
+                    <Input maxLength={ 200 } placeholder={"请输入服务地址"}/>
+                </Form.Item>
+                <Form.Item label="跳转地址" name="skipUrl"  labelCol={{span:3}} wrapperCol={{span:20}}>
+                    <Input maxLength={ 200 } placeholder={"请输入前端跳转地址"}/>
+                </Form.Item>
+                <Form.Item label="备注" name="description" labelCol={{span:3}} wrapperCol={{span:20}}>
+                    <Input.TextArea maxLength={ 200 } showCount/>
+                </Form.Item>
             </Form>
         </Modal>
     </>
