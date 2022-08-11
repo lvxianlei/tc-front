@@ -369,7 +369,7 @@ export default function TowerInformation(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link">完成放样</Button>
+                        <Button type="link" disabled={record.status !== 1}>完成放样</Button>
                     </Popconfirm>
                     <Popconfirm
                         title="确认完成校核?"
@@ -380,7 +380,7 @@ export default function TowerInformation(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link">完成校核</Button>
+                        <Button type="link" disabled={record.status !== 2}>完成校核</Button>
                     </Popconfirm>
                 </Space>
             )
