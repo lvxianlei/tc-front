@@ -74,6 +74,7 @@ export default function ScheduleView(): React.ReactNode {
     const [edit, setEdit] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [load, setLoad] = useState<boolean>(false);
+    const [batch, setBatch] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [scheduleData, setScheduleData] = useState<any|undefined>({});
     const history = useHistory();
@@ -103,7 +104,7 @@ export default function ScheduleView(): React.ReactNode {
             const saveData = await form.getFieldsValue(true);
             saveData.id = scheduleData.id;
             saveData.assignPlanId = scheduleData.assignPlanId;
-            saveData.idList = selectedKeys.length>0?selectedKeys:[scheduleData.productCategoryId];
+            saveData.idList = !batch&&selectedKeys.length>0?selectedKeys:[scheduleData.productCategoryId];
             saveData.boltDeliverTime= moment(saveData.boltDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.weldingDeliverTime= moment(saveData.weldingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.loftingDeliverTime= moment(saveData.loftingDeliverTime).format('YYYY-MM-DD HH:mm:ss');
@@ -160,6 +161,7 @@ export default function ScheduleView(): React.ReactNode {
             await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
 
                 setVisible(false);
+                setBatch(false)
                 message.success('指派成功！')
                 form.resetFields([
                     'pattern',
@@ -395,6 +397,7 @@ export default function ScheduleView(): React.ReactNode {
                         
                         setVisible(true);
                         setLoad(true)
+                        setBatch(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
                   
@@ -534,7 +537,11 @@ export default function ScheduleView(): React.ReactNode {
         }
     ]
 
-    const handleModalCancel = () => {setVisible(false);setEdit(false);form.resetFields([
+    const handleModalCancel = () => {
+        setVisible(false);
+        setEdit(false);
+        setBatch(false);
+        form.resetFields([
             'pattern',
             'boltCheckUser',
             'boltLeader',
