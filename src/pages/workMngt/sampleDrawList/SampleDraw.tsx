@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload, Select } from 'antd';
-import { Page } from '../../common';
+import { Attachment, AttachmentRef, Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import styles from './sample.module.less';
+import { FileProps } from '../../common/Attachment';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>()
@@ -114,6 +115,7 @@ export default function SampleDraw(): React.ReactNode {
     ]
 
     const handleModalCancel = () => { setVisible(false); setUrl(''); };
+    const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
             const formatDate = value.upLoadTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -196,19 +198,20 @@ export default function SampleDraw(): React.ReactNode {
                         >
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
-                        <Upload
-                            // accept=".zip,.rar,.7z"
-                            multiple={true}
-                            action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
-                            headers={{
-                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                                'Tenant-Id': AuthUtil.getTenantId(),
-                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                            }}
-                            // data={ { productCategoryId:params.id } }
-                            onChange={uploadChange}
-                            showUploadList={false}
-                        ><Button type="primary" ghost>导入</Button></Upload>
+                        <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
+                            RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...dataInfo]).then(res => {
+                                if (res) {
+                                    message.success('上传成功');
+                                    history.go(0);
+                                }
+                            }).catch(error => {
+                                setTimeout(() => {
+                                    history.go(0);
+                                }, 1500)
+                            })
+                        }}>
+                            <Button type="primary" ghost>导入</Button>
+                        </Attachment>
                         <Button type="primary" onClick={() => {
                             history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
                         }} ghost>下载样图</Button>
@@ -229,9 +232,9 @@ export default function SampleDraw(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'upLoadTime',
+                        name: 'smallSampleStatus',
                         label: '上传状态',
-                        children: <Select style={{ width: "200px" }}>
+                        children: <Select style={{ width: "200px" }} defaultValue={''}>
                             <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>已上传</Select.Option>
                             <Select.Option value={2} key={2}>未上传</Select.Option>
