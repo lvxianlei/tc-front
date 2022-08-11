@@ -409,7 +409,7 @@ export default function TowerCheck(): React.ReactNode {
         <Page
             path="/tower-science/productStructure/list"
             columns={columnsSetting}
-            requestData={{ segmentId: params.productSegmentId }}
+            requestData={{ segmentId: params.productSegmentId, productCategoryId: params.id }}
             headTabs={[]}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
