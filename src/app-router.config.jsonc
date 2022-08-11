@@ -997,7 +997,7 @@
       "path": "/stock/materials",
       "module": "./pages/stock/materials",
       "exact": true,
-      "authority": "inventory_management_surplus_material_warehousing"
+      "authority": "tc_erp_sw_stock_taking"
     },
     { // 工作管理-缺料列表
       "name": "缺料列表",

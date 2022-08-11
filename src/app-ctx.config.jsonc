@@ -336,7 +336,7 @@
                     {
                         "label": "原材料盘点",
                         "path": "/stock/materials",
-                        "authority": "inventory_management_surplus_material_warehousing"
+                        "authority": "tc_erp_sw_stock_taking"
                     }
                 ]
             },
