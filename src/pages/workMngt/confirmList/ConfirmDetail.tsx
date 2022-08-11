@@ -625,7 +625,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={async () => {
-                            await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${record.id }`)
+                            await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${record.id}`)
                             message.success('删除成功！')
                             run()
                         }}
@@ -779,7 +779,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     }}>添加</Button> : null}
                     <Button type='primary' disabled={selectedKeys.length <= 0} onClick={
                         async () => {
-                            await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',') }`, )
+                            await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',')}`,)
                             message.success('删除成功！')
                             run()
                         }
@@ -948,7 +948,10 @@ export default function ConfirmDetail(): React.ReactNode {
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="呼高(m)" span={2}>
-                                    <Form.Item name={["confirmList", index, "basicHeight"]} wrapperCol={{ span: 24 }}>
+                                    <Form.Item name={["confirmList", index, "basicHeight"]} wrapperCol={{ span: 24 }} rules={[{
+                                        "required": true,
+                                        "message": "请输入呼高(m)"
+                                    }]} >
                                         <InputNumber precision={2} min={0.01} max={99.99} style={{ width: '100%' }} />
                                     </Form.Item>
                                 </Descriptions.Item>
