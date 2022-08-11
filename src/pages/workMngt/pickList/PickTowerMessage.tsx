@@ -630,7 +630,7 @@ export default function Lofting(): React.ReactNode {
                                             // segmentGroupId: params.productSegmentId
                                         }
                                     })
-                                    RequestUtil.post(`/tower-science/drawProductStructure/submit`, [...changeValues]).then(res => {
+                                    RequestUtil.post(`/tower-science/drawProductSegment/update/segment`, [...changeValues]).then(res => {
 
                                         setColumns(columnsSetting);
                                         setEditorLock('编辑');
