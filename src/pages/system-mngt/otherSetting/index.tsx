@@ -65,7 +65,8 @@ export default function JobsMngt(): React.ReactNode {
             key: 'impowerPatterm',
             title: '授权模式',
             width: 150,
-            dataIndex: 'impowerPatterm'
+            dataIndex: 'impowerPatterm',
+            render: (_: any, _b: any, index: number): React.ReactNode => (<span>{_===0?'Token授权':_===1?'授权码授权':'-'}</span>)
         },
         {
             key: 'operation',
@@ -104,11 +105,19 @@ export default function JobsMngt(): React.ReactNode {
                         <Button type="link">删除</Button>
                     </Popconfirm>
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/station/${ record.id }`);
+                        await RequestUtil.put(`/tower-system/appDeploy`,  {
+                            ...record,
+                            switchButton: 0
+                        })
+                        message.success('启用成功！')
                         setRefresh(!refresh)
                     } }>启用</Button>
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/station/${ record.id }`);
+                        await RequestUtil.put(`/tower-system/appDeploy`,  {
+                            ...record,
+                            switchButton: 1
+                        })
+                        message.success('禁用成功！')
                         setRefresh(!refresh)
                     } }>禁用</Button>
                 </Space>
@@ -116,34 +125,51 @@ export default function JobsMngt(): React.ReactNode {
         }
     ]
 
-    const save = () => {
-        if(form) {
-            form.validateFields().then(res => {
-                let value = form.getFieldsValue(true);
-                if(title === '新增') {
-                    RequestUtil.post(`/tower-system/station`, value).then(res => {
-                        setDetail({});
-                        message.success('新增成功');
-                        setRefresh(!refresh);
-                        form.resetFields();
-                        form.setFieldsValue({ stationName: '' });
-                        setVisible(false);
-                    })
-                } else {
-                    RequestUtil.put(`/tower-system/station`,  {
-                        ...value,
-                        id: detail.id
-                    }).then(res => {
-                        setDetail({});
-                        message.success('编辑成功');
-                        setRefresh(!refresh);
-                        form.resetFields();
-                        form.setFieldsValue({ stationName: '' });
-                        setVisible(false);
-                    })
-                }
+    const save = async () => {
+        await form.validateFields();
+        let value = form.getFieldsValue(true);
+        if(title === '新增') {
+            RequestUtil.post(`/tower-system/appDeploy`, value).then(res => {
+                setDetail({});
+                message.success('新增成功');
+                setRefresh(!refresh);
+                form.setFieldsValue({ 
+                    appCharacteristic: '',
+                    appId: '',
+                    appName: '',
+                    appSecret: '',
+                    description: '',
+                    impowerCode: '',
+                    impowerPatterm: '',
+                    serviceUrl: '',
+                    skipUrl: '',
+                }); 
+                setVisible(false);
+            })
+        } else {
+            RequestUtil.put(`/tower-system/appDeploy`,  {
+                ...value,
+                id: detail.id
+            }).then(res => {
+                setDetail({});
+                message.success('编辑成功');
+                setRefresh(!refresh);
+                form.setFieldsValue({ 
+                    appCharacteristic: '',
+                    appId: '',
+                    appName: '',
+                    appSecret: '',
+                    description: '',
+                    impowerCode: '',
+                    impowerPatterm: '',
+                    serviceUrl: '',
+                    skipUrl: '',
+                }); 
+                setVisible(false);
+                setTitle('新增')
             })
         }
+            
     }
     const formItemLayout = {
         labelCol: { span: 6 },
@@ -176,8 +202,17 @@ export default function JobsMngt(): React.ReactNode {
                     setView(false)
                     form.resetFields(); 
                     form.setFieldsValue({ 
-                        stationName: '' 
+                        appCharacteristic: '',
+                        appId: '',
+                        appName: '',
+                        appSecret: '',
+                        description: '',
+                        impowerCode: '',
+                        impowerPatterm: '',
+                        serviceUrl: '',
+                        skipUrl: '',
                     }); 
+                    setTitle('新增')
                 }}>取消</Button>
                 {!view&&<Button type="primary" onClick={save} ghost>保存</Button>}
             </Space>}
@@ -206,7 +241,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": true,
                             "message": "请输入应用名称"
                         }]}>
-                            <Input maxLength={ 32 } placeholder="请输入应用名称"/>
+                            <Input maxLength={ 32 } placeholder="请输入应用名称" disabled={title==='查看'}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
