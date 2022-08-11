@@ -134,7 +134,7 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
                 </Col>
                 <Col span={7} offset={1}>
                     <Form.Item name={'number'} label="基数限制">
-                        <InputNumber max={999999} style={{ width: '100%' }} />
+                        <InputNumber max={999999} min={1} style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
                 <Col span={7} offset={1}>
