@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Input, Popconfirm, Select } from 'antd';
+import { Space, Button, Input, Popconfirm, Select, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -404,7 +404,7 @@ export default function TowerCheck(): React.ReactNode {
             reject(error)
         }
     }), {})
-    
+
     return <>
         <Page
             path="/tower-science/productStructure/list"
@@ -444,12 +444,14 @@ export default function TowerCheck(): React.ReactNode {
                 {
                     name: 'segmentId',
                     label: '段名',
-                    children: <Select placeholder="请选择" style={{ width: '100%' }} defaultValue={params.productSegmentId}>
-                        <Select.Option key={0} value={''}>全部</Select.Option>
-                        {segmentNames && segmentNames.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
-                        })}
-                    </Select>
+                    children: <Form.Item name="segmentId" initialValue={params.productSegmentId}>
+                        <Select placeholder="请选择" style={{ width: '100%' }}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            {segmentNames && segmentNames.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {

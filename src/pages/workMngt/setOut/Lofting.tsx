@@ -794,7 +794,7 @@ export default function Lofting(): React.ReactNode {
             reject(error)
         }
     }), {})
-    
+
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
@@ -972,12 +972,14 @@ export default function Lofting(): React.ReactNode {
                     {
                         name: 'segmentId',
                         label: '段名',
-                        children: <Select placeholder="请选择" style={{ width: '100%' }} defaultValue={params.productSegmentId === 'all' ? '' : params.productSegmentId}>
-                            <Select.Option key={0} value={''}>全部</Select.Option>
-                            {segmentNames && segmentNames.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
-                            })}
-                        </Select>
+                        children: <Form.Item name="segmentId" initialValue={params.productSegmentId === 'all' ? '' : params.productSegmentId}>
+                            <Select placeholder="请选择" style={{ width: '100%' }}>
+                                <Select.Option key={0} value={''}>全部</Select.Option>
+                                {segmentNames && segmentNames.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
                     },
                     {
                         name: 'code',
