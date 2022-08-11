@@ -764,7 +764,9 @@ export default function Lofting(): React.ReactNode {
                         const value = form.getFieldsValue(true).dataV.map((item:any)=>{
                             return {
                                 ...item,
-                                structureTexture:item?.structureTexture.toUpperCase()
+                                structureTexture:item?.structureTexture.toUpperCase(),
+                                segmentName:item?.segmentName.toUpperCase(),
+                                code:item?.code.toUpperCase(),
                             }
                         })
                         setTableDataSource([...value])
@@ -809,7 +811,19 @@ export default function Lofting(): React.ReactNode {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
                                 }) }
                             </Select> */}
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                        if(isBig){
+                                            const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                                                return {
+                                                    ...item,
+                                                    segmentName:item?.segmentName.toUpperCase()
+                                                }
+                                            })
+                                            console.log(value)
+                                            setTableDataSource([...value])
+                                            form.setFieldsValue({dataV: value})
+                                        }
+                                    }}/>
                                 </Form.Item>
                             )
                         },
@@ -823,7 +837,19 @@ export default function Lofting(): React.ReactNode {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                        if(isBig){
+                                            const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                                                return {
+                                                    ...item,
+                                                    code:item?.code.toUpperCase()
+                                                }
+                                            })
+                                            console.log(value)
+                                            setTableDataSource([...value])
+                                            form.setFieldsValue({dataV: value})
+                                        }
+                                    }}/>
                                 </Form.Item>
                             )
                         },
