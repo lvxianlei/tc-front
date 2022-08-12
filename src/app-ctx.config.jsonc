@@ -12,12 +12,12 @@
                 "icon": "customer",
                 "path": "/workBenchSC",
                 "appName": "SC",
-                "authority": "customer_page",
+                "authority": "tc_erp_sc_workbench",
                 "items": [
                     {
                         "label": "工作台",
                         "path": "/workBenchSC/sc",
-                        "authority": "customer_detail"
+                        "authority": "tc_erp_sc_workbench"
                     }
                 ]
             },
@@ -26,12 +26,12 @@
                 "icon": "customer",
                 "path": "/client",
                 "appName": "SC",
-                "authority": "customer_page",
+                "authority": "tc_erp_sc_customer",
                 "items": [
                     {
                         "label": "客户管理",
                         "path": "/client/mngt",
-                        "authority": "customer_detail"
+                        "authority": "tc_erp_sc_customer"
                     }
                 ]
             },
