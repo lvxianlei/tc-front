@@ -32,27 +32,25 @@ export default function List(): React.ReactNode {
 
     const [form] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
-    const [rowId, setRowId] = useState<string>('');
     const [status, setStatus] = useState<number>(1);
     const [detailData, setDetailData] = useState<any>();
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any[] = await RequestUtil.get<any[]>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
         // setPage({ ...data });
-        // if (data.records.length > 0 && data.records[0]?.id) {
-        //     detailRun(data.records[0]?.id)
-        //     setRowId(data.records[0]?.id)
-        // } else {
-        //     setDetailData([]);
-        // }
+        if (data?.length > 0 && data[0]?.id) {
+            detailRun(data[0]?.id, data[0]?.type)
+        } else {
+            setDetailData([]);
+        }
         resole(data);
     }), {})
 
-    const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+    const { run: detailRun } = useRequest<any>((id: string, type: number) => new Promise(async (resole, reject) => {
         try {
             const result = await RequestUtil.get<any>(`/tower-science/personal/work/load/detail/list`, {
-                userId: rowId,
-                type: status
+                userId: id,
+                type: type
             });
             setDetailData(result)
             resole(result)
@@ -72,8 +70,7 @@ export default function List(): React.ReactNode {
     // }
 
     const onRowChange = async (record: Record<string, any>) => {
-        detailRun(record.id)
-        setRowId(record.id)
+        detailRun(record.id, record.type)
     }
 
     return <Spin spinning={loading}>
