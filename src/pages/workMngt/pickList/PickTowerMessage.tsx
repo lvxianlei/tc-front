@@ -536,7 +536,7 @@ export default function Lofting(): React.ReactNode {
                     width: 100,
                     render: (_: undefined, record: any): React.ReactNode => (
                                     <Space direction="horizontal" size="small"  className={styles.operationBtn}>
-                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
+                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={AuthUtil.getUserId()!==record.materialLeader||params.status==='1'}>提料</Button>
                                         <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                                         <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
                                         {/* <TowerPickAssign type={ record.status < 2 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } /> */}
@@ -654,7 +654,7 @@ export default function Lofting(): React.ReactNode {
                             }
                             console.log(formRef.getFieldsValue(true))
                         }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?
+                        { params.materialLeader===AuthUtil.getUserId()?
                             <Button type="primary" ghost onClick={
                                 ()=>history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
                             } disabled={params.status==='1'}>提料</Button>

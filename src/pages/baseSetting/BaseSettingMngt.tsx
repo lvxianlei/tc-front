@@ -36,7 +36,7 @@ export default function TowerDetail(): React.ReactNode {
                         );
                         if(data===true){
                             message.success('保存成功');
-                            // history.go(0)
+                            history.go(0)
                         }
                     })
                 }}>保存</Button>
