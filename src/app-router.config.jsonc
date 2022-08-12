@@ -1456,7 +1456,7 @@
       "path": "/baseSetting/baseSettingMngt",
       "module": "./pages/baseSetting/BaseSettingMngt",
       "exact": true,
-      "authority": "rd_config"
+      "authority": "tc_erp_rd_config_system"
     },
     { // 图纸塔型
       "name": "图纸塔型",

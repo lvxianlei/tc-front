@@ -1185,7 +1185,7 @@
                     {
                         "label": "基础设置",
                         "path": "/baseSetting/baseSettingMngt",
-                        "authority": "rd_config"
+                        "authority": "tc_erp_rd_config_system"
                     },
                     {
                         "label": "试组装配置",
