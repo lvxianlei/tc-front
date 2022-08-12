@@ -353,7 +353,7 @@ export default function TowerCheck(): React.ReactNode {
     const [record, setRecord] = useState({});
     const [title, setTitle] = useState('提交问题单');
     const [refresh, setRefresh] = useState(false);
-    const [loading1, setLoading1] = useState(false);
+    const [filterValue, setFilterValue] = useState({});
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
@@ -409,7 +409,7 @@ export default function TowerCheck(): React.ReactNode {
         <Page
             path="/tower-science/productStructure/list"
             columns={columnsSetting}
-            requestData={{ segmentId: params.productSegmentId, productCategoryId: params.id }}
+            requestData={{ segmentId: params.productSegmentId, productCategoryId: params.id, ...filterValue }}
             headTabs={[]}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
@@ -455,6 +455,7 @@ export default function TowerCheck(): React.ReactNode {
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
+                setFilterValue(values);
                 return values;
             }}
         />
