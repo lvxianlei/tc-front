@@ -1518,7 +1518,7 @@
       "module": "./pages/workBench/sc/index",
       "exact": true,
       // "authority": "rd_workbench"
-      "authority": "workbench_supply"
+      "authority": "tc_erp_sc_workbench"
     },
     { // 工作台-营销
       "name": "营销工作台",
