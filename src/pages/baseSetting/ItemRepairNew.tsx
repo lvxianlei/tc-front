@@ -57,14 +57,14 @@ export default forwardRef(function ItemRepairNew({ record, type }: modalProps, r
     const [form] = Form.useForm();
 
     return <DetailContent key='ItemRepairNew'>
-        <Form form={form} layout="horizontal" labelCol={{ span: 8 }}>
+        <Form form={form} layout="horizontal" labelCol={{ span: 10 }}>
             <Row>
-                <Col span={5}>
+                <Col span={11}>
                     <Form.Item name={'fixType'} label="返修件条目" rules={[{ required: true, message: '请输入返修件条目' }]}>
                         <Input maxLength={200} />
                     </Form.Item>
                 </Col>
-                <Col span={5} offset={1}>
+                <Col span={11} offset={1}>
                     <Form.Item name={'measuringUnit'} label="单位" rules={[{ required: true, message: '请选择单位' }]}>
                         <Select style={{ width: '100%' }}>
                             <Select.Option key={1} value="件号数">件号数</Select.Option>
@@ -73,12 +73,12 @@ export default forwardRef(function ItemRepairNew({ record, type }: modalProps, r
                         </Select>
                     </Form.Item>
                 </Col>
-                <Col span={5} offset={1}>
+                <Col span={11}>
                     <Form.Item name={'amount'} label="金额" rules={[{ required: true, message: '请输入金额' }]}>
                         <InputNumber max={9999.99} min={0} style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
-                <Col span={5} offset={1}>
+                <Col span={11} offset={1}>
                     <Form.Item name={'maxAmount'} label="上限金额">
                         <InputNumber max={9999.99} min={0} style={{ width: '100%' }} />
                     </Form.Item>

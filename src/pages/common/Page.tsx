@@ -177,7 +177,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                     match={this.props.match}
                     columnsKey={() => {
                         const keys = [...this.getTableColumns()]
-                        if (!keys[keys.length - 1].isExport) {
+                        if (!!(keys[keys.length - 1].dataIndex === 'operation')) {
                             keys.pop()
                         }
                         return keys

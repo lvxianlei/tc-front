@@ -598,7 +598,7 @@
       "path": "/cockpit/personnelLoad",
       "module": "./pages/cockpit/personnelLoad/List",
       "exact": true,
-      "authority": "rd_cockpit"
+      "authority": "tc_erp_rd_work_load_list"
     },
     { // 驾驶舱-报表
       "name": "报表",
@@ -871,7 +871,7 @@
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
-      "authority": "tc_erp_rd_work_material_tower_material"
+      "authority": "tc_erp_rd_work_material_tower_material_list"
     },
     { // 工作管理-提料-塔型信息-提料-放样塔型套用
       "name": "放样塔型套用",
@@ -1456,7 +1456,7 @@
       "path": "/baseSetting/baseSettingMngt",
       "module": "./pages/baseSetting/BaseSettingMngt",
       "exact": true,
-      "authority": "rd_config"
+      "authority": "tc_erp_rd_config_system"
     },
     { // 图纸塔型
       "name": "图纸塔型",
@@ -1518,7 +1518,7 @@
       "module": "./pages/workBench/sc/index",
       "exact": true,
       // "authority": "rd_workbench"
-      "authority": "workbench_supply"
+      "authority": "tc_erp_sc_workbench"
     },
     { // 工作台-营销
       "name": "营销工作台",

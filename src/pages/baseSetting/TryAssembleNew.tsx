@@ -21,11 +21,12 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
         try {
             form.setFieldsValue({
                 ...record,
-                towerStructureIds: record?.towerStructureIds && record?.towerStructureIds.split('、'),
-                voltageGradeIds: record?.voltageGradeIds && record?.voltageGradeIds.split('、'),
-                areaNames: record?.areaNames && record?.areaNames.split('、'),
-                segmentModeIds: record?.segmentModeIds && record?.segmentModeIds.split('、'),
-                weldingTypes: record?.weldingTypes && record?.weldingTypes.split('、')
+                towerStructureIds: record?.towerStructureIds ? record?.towerStructureIds.split('、') : [],
+                voltageGradeIds: record?.voltageGradeIds ? record?.voltageGradeIds.split('、') : [],
+                areaNames: record?.areaNames === '不限' ? [] : record?.areaNames.split('、'),
+                segmentModeIds: record?.segmentModeIds ? record?.segmentModeIds.split('、') : [],
+                weldingTypes: record?.weldingTypes ? record?.weldingTypes.split('、') : [],
+                number: record?.number === '不限' ? '' : record?.number
             })
             resole(true);
         } catch (error) {
@@ -134,7 +135,7 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
                 </Col>
                 <Col span={7} offset={1}>
                     <Form.Item name={'number'} label="基数限制">
-                        <InputNumber max={999999} style={{ width: '100%' }} />
+                        <InputNumber max={999999} min={1} style={{ width: '100%' }} />
                     </Form.Item>
                 </Col>
                 <Col span={7} offset={1}>

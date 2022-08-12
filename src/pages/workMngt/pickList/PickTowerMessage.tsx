@@ -34,6 +34,9 @@ export default function Lofting(): React.ReactNode {
     const onRefresh=()=>{
         setRefresh(!refresh);
     }
+    const pathLink = () => {
+       history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/2/${params.materialLeader}`)
+    }
     const [formRef] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
@@ -72,7 +75,7 @@ export default function Lofting(): React.ReactNode {
         setDepartment(departmentData);
         const detailTop: any = await RequestUtil.get(`/tower-science/materialProductCategory/${params.id}`);
         setDetailTop(detailTop);
-        const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000`);
+        const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000&category=2&productType=${detailTop?.productType}`);
         setList(list?.records);
         setValue(value)
         resole(data)
@@ -201,7 +204,7 @@ export default function Lofting(): React.ReactNode {
                     name={['data',index, "projectEntries"]} 
                     initialValue={ record.projectEntries }
                 >
-                   <Select onChange={ () => rowChange(index) }>
+                   <Select onChange={ () => rowChange(index) } allowClear>
                         { list && list.map((item:any, index:number) => {
                             return <Select.Option key={ index } value={  item?.projectEntries  }>
                                 { item?.projectEntries }
@@ -226,7 +229,7 @@ export default function Lofting(): React.ReactNode {
                         message: '请选择提料完成时间'
                     }]}
                 >
-                    <DatePicker format={'YYYY-MM-DD'}/>
+                    <DatePicker format={'YYYY-MM-DD HH:mm:ss'} showTime onChange={() => rowChange(index)}/>
                 </Form.Item>
             )
         },
@@ -256,7 +259,7 @@ export default function Lofting(): React.ReactNode {
                         message: '请选择提料人'
                     }]}
                 >
-                    <Select style={{width:'100%'}}> 
+                    <Select style={{width:'100%'}} onChange={() => rowChange(index)}> 
                         { user && user.map((item:any)=>{
                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         }) }
@@ -279,7 +282,7 @@ export default function Lofting(): React.ReactNode {
                         message: '请选择校核人'
                     }]}
                 >
-                    <Select style={{width:'100%'}}> 
+                    <Select style={{width:'100%'}} onChange={() => rowChange(index)}> 
                         { user && user.map((item:any)=>{
                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         }) }
@@ -533,7 +536,7 @@ export default function Lofting(): React.ReactNode {
                     width: 100,
                     render: (_: undefined, record: any): React.ReactNode => (
                                     <Space direction="horizontal" size="small"  className={styles.operationBtn}>
-                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={record.status!==1||AuthUtil.getUserId()!==record.materialLeader}>提料</Button>
+                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={AuthUtil.getUserId()!==record.materialLeader||params.status==='1'}>提料</Button>
                                         <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
                                         <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
                                         {/* <TowerPickAssign type={ record.status < 2 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } /> */}
@@ -548,9 +551,9 @@ export default function Lofting(): React.ReactNode {
                                             }}
                                             okText="提交"
                                             cancelText="取消"
-                                            disabled={record.status!== 1}
+                                            // disabled={record.status!== 1}
                                         >
-                                            <Button type='link' disabled={record.status!== 1}>删除</Button>
+                                            <Button type='link' >删除</Button>
                                         </Popconfirm>
                                         {/* <Button onClick={async ()=>{
                                             const data = await RequestUtil.get(`/tower-science/drawProductSegment/pattern/${record.id}`)
@@ -625,12 +628,13 @@ export default function Lofting(): React.ReactNode {
                                     }).map((item: any) => {
                                         return {
                                             ...item,
-                                            completeStatusTime: item?.completeStatusTime?moment(item?.completeStatusTime).format('YYYY-MM-DD'):'',
+                                            completeStatusTime: item?.completeStatusTime?moment(item?.completeStatusTime).format('YYYY-MM-DD HH:mm:ss'):'',
                                             productCategory: params.id,
+                                            productCategoryName: detailTop?.productCategoryName,
                                             // segmentGroupId: params.productSegmentId
                                         }
                                     })
-                                    RequestUtil.post(`/tower-science/drawProductStructure/submit`, [...changeValues]).then(res => {
+                                    RequestUtil.post(`/tower-science/drawProductSegment/update/segment`, [...changeValues]).then(res => {
 
                                         setColumns(columnsSetting);
                                         setEditorLock('编辑');
@@ -650,12 +654,12 @@ export default function Lofting(): React.ReactNode {
                             }
                             console.log(formRef.getFieldsValue(true))
                         }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?
+                        { params.materialLeader===AuthUtil.getUserId()?
                             <Button type="primary" ghost onClick={
                                 ()=>history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
-                            }>提料</Button>
+                            } disabled={params.status==='1'}>提料</Button>
                         :null}
-                        { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?<Popconfirm
+                        { params.materialLeader===AuthUtil.getUserId()?<Popconfirm
                             title="确认提交?"
                             onConfirm={ async () => {
                                 await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(()=>{
@@ -669,7 +673,7 @@ export default function Lofting(): React.ReactNode {
                         >   
                             <Button type="primary" ghost>提交</Button>
                         </Popconfirm>:null}
-                        { (params.status==='1'||params.status==='2')&& params.materialLeader===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh } /> : null }
+                        { (params.status==='1'||params.status==='2')&& params.materialLeader===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh }  path={pathLink}/> : null }
                         <Button type="ghost" onClick={()=>history.push('/workMngt/pickList')}>返回</Button>
                         <span>塔型：{detailTop?.productCategoryName}</span>
                         <span>计划号：{detailTop?.planNumber}</span>

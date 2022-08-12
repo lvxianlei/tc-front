@@ -1,9 +1,11 @@
 import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect, ReactNode } from 'react'
-import { Button, Upload, Modal, Image, message, Row, Col, Spin, Empty } from 'antd'
+import { Button, Upload, Modal, Image, message, Row, Col, Spin, Empty, Checkbox, Space } from 'antd'
 import { DetailTitle } from "../common"
 import RequestUtil from "../../utils/RequestUtil"
 import useRequest from '@ahooksjs/use-request'
 import { downLoadFile } from "../../utils"
+import { CheckboxValueType } from 'antd/lib/checkbox/Group'
+import { CheckboxChangeEvent } from 'antd/lib/checkbox'
 export interface FileProps {
     id?: string,
     uid?: number | string,
@@ -31,7 +33,8 @@ export interface AttachmentProps {
     children?: JSX.Element
     renderActions?: (records: FileProps, actions: Actions) => ReactNode[]
     onDoneChange?: (params: FileProps[]) => void  //同AttachmentRef 文件上传成功后的回调
-    [key: string]: any
+    [key: string]: any;
+    isBatchDel?: boolean; //true 批量删除
 }
 
 export interface AttachmentRef {
@@ -83,6 +86,7 @@ export default forwardRef(function ({
     edit = false,
     marginTop = true,
     onDoneChange = () => { },
+    isBatchDel = false,
     ...props
 }: AttachmentProps, ref): JSX.Element {
     const inputAccepts = accept ? ({ accept }) : ({})
@@ -227,6 +231,35 @@ export default forwardRef(function ({
             {edit && <Button className='btn-operation-link' type="link" onClick={() => deleteAttachData(records.uid)}>删除</Button>}
         </>
     }, [attchs])
+
+    const [checkedList, setCheckedList] = useState<CheckboxValueType[]>();
+    const [indeterminate, setIndeterminate] = useState(false);
+    const [checkAll, setCheckAll] = useState(false);
+    const plainOptions = attchs?.map(res => res.uid || '');
+
+    const onChange = (list: CheckboxValueType[]) => {
+        setCheckedList(list);
+        setIndeterminate(!!list.length && list.length < plainOptions.length);
+        setCheckAll(list.length === plainOptions.length);
+    };
+
+    const onCheckAllChange = (e: CheckboxChangeEvent) => {
+        setCheckedList(e.target.checked ? plainOptions : []);
+        setIndeterminate(false);
+        setCheckAll(e.target.checked);
+    };
+
+    const bitchDel = () => {
+        let newList = attchs
+        checkedList?.forEach((res: any) => {
+            newList = newList.filter((item: any) => item.uid !== res)
+        })
+        setAttachs(newList);
+        setCheckedList([]);
+        setIndeterminate(false);
+        setCheckAll(false);
+    }
+
     return <>
         <Modal
             title={`${picInfo.title}`}
@@ -241,31 +274,34 @@ export default forwardRef(function ({
             title={title}
             {...edit ? {
                 operation: [
-                    <Upload
-                        key="sub"
-                        name="file"
-                        multiple={multiple}
-                        {...inputAccepts}
-                        maxCount={maxCount}
-                        action={`${uploadOSSUrlInfo?.pushUrl}`}
-                        headers={{
-                            "Content-Type": "application/octet-stream",
-                            expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
-                        }}
-                        method="put"
-                        showUploadList={false}
-                        customRequest={async (options: any) => {
-                            const file: any = options.file
-                            const result: any = await uploadRun(options.action, options.file)
-                            file.status = "done"
-                            file.xhr = { status: 200, response: result }
-                            uploadChange({ file })
-                        }}
-                        beforeUpload={handleBeforeUpload}
-                        onChange={uploadChange}
-                    >
-                        <Button key="enclosure" type="primary" ghost>上传附件</Button>
-                    </Upload>
+                    <Space direction="horizontal">
+                        <Upload
+                            key="sub"
+                            name="file"
+                            multiple={multiple}
+                            {...inputAccepts}
+                            maxCount={maxCount}
+                            action={`${uploadOSSUrlInfo?.pushUrl}`}
+                            headers={{
+                                "Content-Type": "application/octet-stream",
+                                expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
+                            }}
+                            method="put"
+                            showUploadList={false}
+                            customRequest={async (options: any) => {
+                                const file: any = options.file
+                                const result: any = await uploadRun(options.action, options.file)
+                                file.status = "done"
+                                file.xhr = { status: 200, response: result }
+                                uploadChange({ file })
+                            }}
+                            beforeUpload={handleBeforeUpload}
+                            onChange={uploadChange}
+                        >
+                            <Button key="enclosure" type="primary" ghost>上传附件</Button>
+                        </Upload>
+                        {isBatchDel ? <Button onClick={bitchDel} type="primary" ghost>批量删除</Button> : null}
+                    </Space>
                 ]
             } : {}} />}
         {!isTable && <Upload
@@ -294,24 +330,51 @@ export default forwardRef(function ({
             {children}
         </Upload>
         }
+
         {isTable && <div style={{ border: "1px solid #eee", margin: "0px 0px 24px 0px", ...props?.style }}>
             <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
-                <Col span={12}>文件名称</Col>
-                <Col span={12} style={{ paddingLeft: 16, boxSizing: "border-box" }}>操作</Col>
+                {isBatchDel ? <Col span={4}><Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll} /></Col> : null}
+                <Col span={10}>文件名称</Col>
+                <Col span={10} style={{ paddingLeft: 16, boxSizing: "border-box" }}>操作</Col>
             </Row>
             {!attchs.length && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
-            {attchs.map((item, index: number) => <Spin key={item.uid} spinning={item.loading} size="small">
-                <Row style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#f8f8f8" }} >
-                    <Col span={12} style={{
-                        padding: "8px 8px",
-                        width: "100%",
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden"
-                    }}>{item.originalName}</Col>
-                    <Col span={12} style={{ padding: "0px 8px" }}>{operationRender(item)}</Col>
-                </Row>
-            </Spin>)}
+            {isBatchDel ?
+                <Checkbox.Group style={{ width: '100%' }} value={checkedList} onChange={onChange}>
+                    {attchs.map((item, index: number) => <Spin key={item.uid} spinning={item.loading} size="small">
+                        <Row style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#f8f8f8" }} >
+                            <Col span={4}>
+                                <Checkbox value={item.uid} style={{
+                                    padding: "8px 8px"
+                                }} />
+                            </Col>
+                            <Col span={10} style={{
+                                padding: "8px 8px",
+                                width: "100%",
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden"
+                            }}>{item.originalName}</Col>
+                            <Col span={10} style={{ padding: "0px 8px" }}>{operationRender(item)}</Col>
+                        </Row>
+                    </Spin>)}
+                </Checkbox.Group>
+                :
+                <>{
+                    attchs.map((item, index: number) => <Spin key={item.uid} spinning={item.loading} size="small">
+                        <Row style={{ backgroundColor: index % 2 === 0 ? "#fff" : "#f8f8f8" }} >
+                            <Col span={10} style={{
+                                padding: "8px 8px",
+                                width: "100%",
+                                whiteSpace: "nowrap",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden"
+                            }}>{item.originalName}</Col>
+                            <Col span={10} style={{ padding: "0px 8px" }}>{operationRender(item)}</Col>
+                        </Row>
+                    </Spin>)
+                }
+                </>
+            }
         </div>}
     </>
 })

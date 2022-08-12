@@ -22,7 +22,7 @@ export default function Lofting(): React.ReactNode {
         materialLeader: string
     }>();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState<any>({ segmentId: params.productSegmentId==='all'?'': params.productSegmentId, productCategoryId: params.id});
+    const [filterValue, setFilterValue] = useState<any>({ productCategoryId: params.id});
     const [visible, setVisible] = useState<boolean>(false);
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
@@ -349,9 +349,8 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'basicsTheoryWeight',
             key: 'basicsTheoryWeight',
             width: 120,
-            editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>锁定后，系统自动计算</span>
+                <span>{_!==null?_:'-'}</span>
             )
         },
         {
@@ -530,8 +529,8 @@ export default function Lofting(): React.ReactNode {
                             }
                         }
                         data={{ 
-                            segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
-                            productCategoryId: params.productSegmentId!=='all'?'':params.id, 
+                            // segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                            productCategoryId: params.id, 
                         }}
                         showUploadList={false}
                         onChange={(info) => {
@@ -545,7 +544,7 @@ export default function Lofting(): React.ReactNode {
                                     message.success('导入成功！');
                                     history.go(0)
                                     // setRefresh(!refresh);
-                                    setFilterValue({ segmentId: params.productSegmentId })
+                                    setFilterValue({ productCategoryId: params.id })
                                 }
                             }
                         }}
@@ -713,8 +712,8 @@ export default function Lofting(): React.ReactNode {
                         }
                     })
                     const submitData ={
-                        segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
-                        productCategoryId: params.productSegmentId!=='all'?'':params.id,
+                        // segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                        productCategoryId: params.id,
                         drawProductStructureSaveDTOS:[...values]
                     }
                     RequestUtil.post(`/tower-science/drawProductStructure/submit`, submitData).then(res => {
@@ -730,12 +729,12 @@ export default function Lofting(): React.ReactNode {
                         return {
                             ...item,
                             productCategory: params.id,
-                            segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
+                            // segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
                         }
                     })
                     const submitData ={
-                        segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
-                        productCategoryId: params.productSegmentId!=='all'?'':params.id,
+                        // segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                        productCategoryId: params.id,
                         drawProductStructureSaveDTOS:[...values]
                     }
                     RequestUtil.post(`/tower-science/drawProductStructure/submit`, submitData).then(res => {
@@ -764,7 +763,9 @@ export default function Lofting(): React.ReactNode {
                         const value = form.getFieldsValue(true).dataV.map((item:any)=>{
                             return {
                                 ...item,
-                                structureTexture:item?.structureTexture.toUpperCase()
+                                structureTexture:item?.structureTexture.toUpperCase(),
+                                segmentName:item?.segmentName.toUpperCase(),
+                                code:item?.code.toUpperCase(),
                             }
                         })
                         setTableDataSource([...value])
@@ -777,7 +778,8 @@ export default function Lofting(): React.ReactNode {
                     const value = form.getFieldsValue(true).dataV.map((item:any)=>{
                         return {
                             ...item,
-                            basicsWeight:''
+                            basicsWeight:'',
+                            totalWeight:''
                         }
                     })
                     setTableDataSource([...value])
@@ -809,7 +811,19 @@ export default function Lofting(): React.ReactNode {
                                     return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
                                 }) }
                             </Select> */}
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                        if(isBig){
+                                            const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                                                return {
+                                                    ...item,
+                                                    segmentName:item?.segmentName.toUpperCase()
+                                                }
+                                            })
+                                            console.log(value)
+                                            setTableDataSource([...value])
+                                            form.setFieldsValue({dataV: value})
+                                        }
+                                    }}/>
                                 </Form.Item>
                             )
                         },
@@ -823,7 +837,19 @@ export default function Lofting(): React.ReactNode {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                        if(isBig){
+                                            const value = form.getFieldsValue(true).dataV.map((item:any)=>{
+                                                return {
+                                                    ...item,
+                                                    code:item?.code.toUpperCase()
+                                                }
+                                            })
+                                            console.log(value)
+                                            setTableDataSource([...value])
+                                            form.setFieldsValue({dataV: value})
+                                        }
+                                    }}/>
                                 </Form.Item>
                             )
                         },

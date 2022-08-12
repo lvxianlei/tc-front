@@ -12,12 +12,12 @@
                 "icon": "customer",
                 "path": "/workBenchSC",
                 "appName": "SC",
-                "authority": "customer_page",
+                "authority": "tc_erp_sc_workbench",
                 "items": [
                     {
                         "label": "工作台",
                         "path": "/workBenchSC/sc",
-                        "authority": "customer_detail"
+                        "authority": "tc_erp_sc_workbench"
                     }
                 ]
             },
@@ -26,12 +26,12 @@
                 "icon": "customer",
                 "path": "/client",
                 "appName": "SC",
-                "authority": "customer_page",
+                "authority": "tc_erp_sc_customer",
                 "items": [
                     {
                         "label": "客户管理",
                         "path": "/client/mngt",
-                        "authority": "customer_detail"
+                        "authority": "tc_erp_sc_customer"
                     }
                 ]
             },
@@ -216,7 +216,7 @@
                     {
                         "label": "人员工作负荷",
                         "path": "/cockpit/personnelLoad",
-                        "authority": "rd_cockpit"
+                        "authority": "tc_erp_rd_work_load"
                     },
                     {
                         "label": "报表",
@@ -450,7 +450,7 @@
                 ]
             },
             {
-                "label": "工作管理",
+                "label": "放样过程管理",
                 "icon": "RD_gongzuoguanli-gongzuobaogao",
                 "path": "/workMngt",
                 "appName": "RD",
@@ -1185,7 +1185,7 @@
                     {
                         "label": "基础设置",
                         "path": "/baseSetting/baseSettingMngt",
-                        "authority": "rd_config"
+                        "authority": "tc_erp_rd_config_system"
                     },
                     {
                         "label": "试组装配置",

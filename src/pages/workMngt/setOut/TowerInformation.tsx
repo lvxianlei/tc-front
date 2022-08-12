@@ -339,6 +339,7 @@ export default function TowerInformation(): React.ReactNode {
                     }
                     <Popconfirm
                         title="确认完成放样?"
+                        disabled={record.status !== 1}
                         onConfirm={() => {
                             RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
                                 console.log(res)
@@ -369,10 +370,11 @@ export default function TowerInformation(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link">完成放样</Button>
+                        <Button type="link" disabled={record.status !== 1}>完成放样</Button>
                     </Popconfirm>
                     <Popconfirm
                         title="确认完成校核?"
+                        disabled={record.status !== 2}
                         onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check?productSegmentId=${record.id}`).then(res => {
                             onRefresh();
                             message.success('校核成功！')
@@ -380,7 +382,7 @@ export default function TowerInformation(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link">完成校核</Button>
+                        <Button type="link" disabled={record.status !== 2}>完成校核</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -398,46 +400,52 @@ export default function TowerInformation(): React.ReactNode {
             setEditorLock('保存');
         } else {
             const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-            let values = editForm.getFieldsValue(true).data;
-            if (values) {
-                let changeValues = values.filter((item: any, index: number) => {
-                    return newRowChangeList.indexOf(index) !== -1;
-                })
-                console.log(changeValues)
-                if (changeValues && changeValues.length > 0) {
-                    const tip: boolean[] = []
-                    changeValues.forEach((res: any) => {
-                        if (!!(res.cadDrawingType)) {
-                            console.log('kkk')
-                            if (!!(res.drawPageNum)) {
-                                tip.push(true)
-                            } else {
-                                tip.push(false)
-                            }
-                        } else {
-                            tip.push(true)
-                        }
-                    });
-                    if (tip.indexOf(false) !== -1) {
-                        message.warning('存在辅助设计出图类型，请填写图纸页数')
-                    } else {
-                        RequestUtil.post(`/tower-science/productSegment`, [
-                            ...changeValues.map((res: any) => {
-                                return {
-                                    ...res,
-                                    loftingUser: res?.loftingUser?.join(','),
-                                    loftingMutualReview: res?.loftingMutualReview?.join(','),
-                                    checkUser: res?.checkUser?.join(','),
+            editForm.validateFields().then(res => {
+                let values = editForm.getFieldsValue(true).data;
+                if (values) {
+                    let changeValues = values.filter((item: any, index: number) => {
+                        return newRowChangeList.indexOf(index) !== -1;
+                    })
+                    if (changeValues && changeValues.length > 0) {
+                        const tip: boolean[] = []
+                        changeValues.forEach((res: any) => {
+                            if (!!(res.cadDrawingType)) {
+                                console.log('kkk')
+                                if (!!(res.drawPageNum)) {
+                                    tip.push(true)
+                                } else {
+                                    tip.push(false)
                                 }
-                            })
-                        ]).then(res => {
-                            setTableColumns(columnsSetting);
-                            setEditorLock('编辑');
-                            setRowChangeList([]);
-                            editForm.resetFields();
-                            setRefresh(!refresh);
+                            } else {
+                                tip.push(true)
+                            }
                         });
+                        if (tip.indexOf(false) !== -1) {
+                            message.warning('存在辅助设计出图类型，请填写图纸页数')
+                        } else {
+                            RequestUtil.post(`/tower-science/productSegment`, [
+                                ...changeValues.map((res: any) => {
+                                    return {
+                                        ...res,
+                                        loftingUser: res?.loftingUser?.join(','),
+                                        loftingMutualReview: res?.loftingMutualReview?.join(','),
+                                        checkUser: res?.checkUser?.join(','),
+                                    }
+                                })
+                            ]).then(res => {
+                                setTableColumns(columnsSetting);
+                                setEditorLock('编辑');
+                                setRowChangeList([]);
+                                editForm.resetFields();
+                                setRefresh(!refresh);
+                            });
 
+                        }
+                    } else {
+                        setTableColumns(columnsSetting);
+                        setEditorLock('编辑');
+                        setRowChangeList([]);
+                        editForm.resetFields();
                     }
                 } else {
                     setTableColumns(columnsSetting);
@@ -445,12 +453,7 @@ export default function TowerInformation(): React.ReactNode {
                     setRowChangeList([]);
                     editForm.resetFields();
                 }
-            } else {
-                setTableColumns(columnsSetting);
-                setEditorLock('编辑');
-                setRowChangeList([]);
-                editForm.resetFields();
-            }
+            })
         }
     }
 

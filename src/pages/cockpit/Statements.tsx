@@ -810,6 +810,13 @@ export default function Statements(): React.ReactNode {
         // 绘制图表
         productionDistributionPieChart.setOption({
             backgroundColor: '#0B1C3D',
+            color: [
+                '#2778FF',
+                '#80C269',
+                '#FFD200',
+                '#F45E23',
+                '#E5004F'
+            ],
             tooltip: {
                 trigger: 'item',
                 axisPointer: {

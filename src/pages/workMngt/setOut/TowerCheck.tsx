@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Input, Popconfirm, Select } from 'antd';
+import { Space, Button, Input, Popconfirm, Select, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -353,7 +353,7 @@ export default function TowerCheck(): React.ReactNode {
     const [record, setRecord] = useState({});
     const [title, setTitle] = useState('提交问题单');
     const [refresh, setRefresh] = useState(false);
-    const [loading1, setLoading1] = useState(false);
+    const [filterValue, setFilterValue] = useState({});
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
@@ -404,12 +404,12 @@ export default function TowerCheck(): React.ReactNode {
             reject(error)
         }
     }), {})
-    
+
     return <>
         <Page
             path="/tower-science/productStructure/list"
             columns={columnsSetting}
-            requestData={{ segmentId: params.productSegmentId }}
+            requestData={{ segmentId: params.productSegmentId, productCategoryId: params.id, ...filterValue }}
             headTabs={[]}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
@@ -444,15 +444,18 @@ export default function TowerCheck(): React.ReactNode {
                 {
                     name: 'segmentId',
                     label: '段名',
-                    children: <Select placeholder="请选择" style={{ width: '100%' }} defaultValue={params.productSegmentId}>
-                        <Select.Option key={0} value={''}>全部</Select.Option>
-                        {segmentNames && segmentNames.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
-                        })}
-                    </Select>
+                    children: <Form.Item name="segmentId" initialValue={params.productSegmentId}>
+                        <Select placeholder="请选择" style={{ width: '100%' }}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            {segmentNames && segmentNames.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
+                setFilterValue(values);
                 return values;
             }}
         />

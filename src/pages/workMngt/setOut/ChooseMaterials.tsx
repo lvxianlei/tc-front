@@ -65,7 +65,7 @@ export default forwardRef(function ChooseMaterials({ id, name, planNumber }: mod
             key: 'num',
             title: '件数',
             dataIndex: 'num',
-            width: 200,
+            width: 200
         }
     ]
 

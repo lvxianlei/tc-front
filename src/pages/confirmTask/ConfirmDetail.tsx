@@ -216,6 +216,18 @@ const towerColumns = [
         dataIndex: 'otherWeightLs'
     },
     {
+        title: '其他增重-电缆支架（kg）',
+        dataIndex: 'otherWeightDlzj',
+        width: 200,
+        key: 'otherWeightDlzj'
+    },
+    {
+        title: '其他增重-其他（kg）',
+        dataIndex: 'otherWeightOther',
+        width: 200,
+        key: 'otherWeightOther'
+    },
+    {
         key: 'description',
         title: '备注',
         width: 100,
