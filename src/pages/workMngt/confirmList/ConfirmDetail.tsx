@@ -11,6 +11,7 @@ import { patternTypeOptions, productTypeOptions, towerStructureOptions, voltageG
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import styles from './confirm.module.less'
 import { FixedType } from 'rc-table/lib/interface';
+import { FileProps } from '../../common/Attachment';
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
@@ -809,7 +810,11 @@ export default function ConfirmDetail(): React.ReactNode {
                 }} disabled={params.status !== '3'} /> : null}
             </div>
 
-            <Attachment dataSource={attachInfo} edit={params.status === '3' ? true : false} title="附件信息" ref={attchsRef} />
+            <Attachment dataSource={attachInfo} multiple isBatchDel={true} edit={params.status === '3' ? true : false} title="附件信息" ref={attchsRef}
+                onDoneChange={(dataInfo: FileProps[]) => {
+                    setAttachInfo([...dataInfo])
+                }}
+            />
         </DetailContent>
         {/* <Modal visible={pictureVisible} onCancel={handlePictureModalCancel} footer={false}>
                 <Image src={pictureUrl} preview={false}/>
