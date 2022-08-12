@@ -23,7 +23,7 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
                 ...record,
                 towerStructureIds: record?.towerStructureIds ? record?.towerStructureIds.split('、') : [],
                 voltageGradeIds: record?.voltageGradeIds ? record?.voltageGradeIds.split('、') : [],
-                areaNames: record?.areaNames ? record?.areaNames.split('、') : [],
+                areaNames: record?.areaNames === '不限' ? [] : record?.areaNames.split('、'),
                 segmentModeIds: record?.segmentModeIds ? record?.segmentModeIds.split('、') : [],
                 weldingTypes: record?.weldingTypes ? record?.weldingTypes.split('、') : [],
                 number: record?.number === '不限' ? '' : record?.number
