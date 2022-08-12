@@ -630,6 +630,7 @@ export default function Lofting(): React.ReactNode {
                                             ...item,
                                             completeStatusTime: item?.completeStatusTime?moment(item?.completeStatusTime).format('YYYY-MM-DD HH:mm:ss'):'',
                                             productCategory: params.id,
+                                            productCategoryName: detailTop?.productCategoryName,
                                             // segmentGroupId: params.productSegmentId
                                         }
                                     })
