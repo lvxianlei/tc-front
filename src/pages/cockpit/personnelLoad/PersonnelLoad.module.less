@@ -1,3 +1,5 @@
+@import "../../../App.module.less";
+
 .search {
     margin-bottom: 16px;
 }
@@ -11,4 +13,16 @@
     width: 69%;
     position: absolute;
     left: 31%;
+}
+
+
+.tableRow{
+    padding: 0;
+    height: @tableRowHeight;
+    line-height: @tableRowHeight;
+    box-sizing: border-box;
+    border: none;
+    &:nth-child(odd){
+      background-color: #F8F8F8;
+    }
 }
