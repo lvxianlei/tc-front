@@ -133,7 +133,7 @@ export default forwardRef(function StructureTextureAbbreviations({ id }: modalPr
                 })
                 await saveRun({
                     textureUpdateList: newSelected,
-                    segmentGroupId: id,
+                    productCategoryId: id,
                     segmentIdList: values.segmentIdList
                 })
                 resolve(true);
