@@ -778,7 +778,8 @@ export default function Lofting(): React.ReactNode {
                     const value = form.getFieldsValue(true).dataV.map((item:any)=>{
                         return {
                             ...item,
-                            basicsWeight:''
+                            basicsWeight:'',
+                            totalWeight:''
                         }
                     })
                     setTableDataSource([...value])
