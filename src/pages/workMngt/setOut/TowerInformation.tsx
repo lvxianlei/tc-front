@@ -339,6 +339,7 @@ export default function TowerInformation(): React.ReactNode {
                     }
                     <Popconfirm
                         title="确认完成放样?"
+                        disabled={record.status !== 1}
                         onConfirm={() => {
                             RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
                                 console.log(res)
@@ -373,6 +374,7 @@ export default function TowerInformation(): React.ReactNode {
                     </Popconfirm>
                     <Popconfirm
                         title="确认完成校核?"
+                        disabled={record.status !== 2}
                         onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check?productSegmentId=${record.id}`).then(res => {
                             onRefresh();
                             message.success('校核成功！')
