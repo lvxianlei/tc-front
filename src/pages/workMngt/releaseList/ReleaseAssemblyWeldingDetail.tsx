@@ -187,7 +187,7 @@ export default function ReleaseList(): React.ReactNode {
                     }}
                     onRow={(record:any) => ({
                         onClick: async (event: any) => {
-                            const data:any = await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: record.id});
+                            const data:any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`,{segmentId: record.id});
                             setSegmentDataSource([...data]);
                         }
                     })}
