@@ -15,7 +15,7 @@
                             "inquiryStatus": 3
                         }
                     },
-                    "authority": "workbench_data"
+                    "authority": ""
                 },
                 {
                     "title": "待确认",
@@ -26,7 +26,7 @@
                             "inquiryStatus": 1
                         }
                     },
-                    "authority": "workbench_data1"
+                    "authority": ""
                 },
                 {
                     "title": "待提交",
@@ -37,7 +37,7 @@
                             "inquiryStatus": 2
                         }
                     },
-                    "authority": "workbench_data2"
+                    "authority": ""
                 },
                 {
                     "title": "待完成",
@@ -48,7 +48,7 @@
                             "inquiryStatus": 4
                         }
                     },
-                    "authority": "workbench_data3"
+                    "authority": ""
                 }
             ]
         },
@@ -67,7 +67,7 @@
                             "taskStatus": 1
                         }
                     },
-                    "authority": "workbench_data4"
+                    "authority": ""
                 }
             ]
         },
@@ -86,7 +86,7 @@
                             "materialConfirmStatus": "0"
                         }
                     },
-                    "authority": "workbench_data4"
+                    "authority": ""
                 }
             ]
         },
@@ -106,7 +106,7 @@
                             "batcheTaskStatus": 1
                         }
                     },
-                    "authority": "workbench_data7"
+                    "authority": ""
                 }
             ]
         },
@@ -126,7 +126,7 @@
                             "loftingState": 1
                         }
                     },
-                    "authority": "workbench_data8"
+                    "authority": ""
                 }
             ]
         },
@@ -146,7 +146,7 @@
                             "purchaseTaskStatus": 1
                         }
                     },
-                    "authority": "workbench_data9"
+                    "authority": ""
                 }
             ]
         },
@@ -166,7 +166,7 @@
                             "planStatus": 1
                         }
                     },
-                    "authority": "workbench_data10"
+                    "authority": ""
                 }
             ]
         },
@@ -186,7 +186,7 @@
                             "shortageStatus": 1
                         }
                     },
-                    "authority": "workbench_data12"
+                    "authority": ""
                 }
             ]
         },
@@ -206,7 +206,7 @@
                             "receiveStatus": "0"
                         }
                     },
-                    "authority": "workbench_data13"
+                    "authority": ""
                 }
             ]
         },
@@ -226,7 +226,7 @@
                             "status": "0"
                         }
                     },
-                    "authority": "workbench_data14"
+                    "authority": ""
                 }
             ]
         },
@@ -246,7 +246,7 @@
                             "receiveStatus": "0"
                         }
                     },
-                    "authority": "workbench_data15"
+                    "authority": ""
                 }
             ]
         },
@@ -266,7 +266,7 @@
                             "applyStatus": 1
                         }
                     },
-                    "authority": "workbench_data16"
+                    "authority": ""
                 },
                 {
                     "title": "我接收的",
@@ -277,7 +277,7 @@
                             "applyStatus": 4
                         }
                     },
-                    "authority": "workbench_data17"
+                    "authority": ""
                 }
             ]
         }

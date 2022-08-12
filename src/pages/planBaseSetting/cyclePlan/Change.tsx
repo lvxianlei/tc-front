@@ -9,6 +9,7 @@ import { MenuOutlined } from '@ant-design/icons';
 import ReleaseOrder from './ReleaseOrder';
 import moment from 'moment';
 import zhCN from 'antd/es/date-picker/locale/zh_CN';
+import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
 const SortableItem = SortableElement((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>) => <tr {...props} />);
 const SortableCon = SortableContainer((props: JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableSectionElement> & React.HTMLAttributes<HTMLTableSectionElement>) => <tbody {...props} />);
 
@@ -440,6 +441,9 @@ export default function CyclePlanChange(): React.ReactNode {
                     >
                         <Button type="primary" ghost disabled={detail.status===2}>周期计划下发</Button>
                     </Popconfirm>
+                    <Button type="primary" ghost onClick={() => {
+                        downloadTemplate(`/tower-aps/cyclePlan/download/${params.id}`, '周期计划压缩包', {}, true)
+                    }}>下载</Button>
                 </Space>
             ]}>
                 <DetailTitle title="基础信息"/>
