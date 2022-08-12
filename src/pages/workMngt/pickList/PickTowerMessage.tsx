@@ -75,7 +75,7 @@ export default function Lofting(): React.ReactNode {
         setDepartment(departmentData);
         const detailTop: any = await RequestUtil.get(`/tower-science/materialProductCategory/${params.id}`);
         setDetailTop(detailTop);
-        const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000&category=2`);
+        const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000&category=2&productType=${detailTop?.productType}`);
         setList(list?.records);
         setValue(value)
         resole(data)
@@ -204,7 +204,7 @@ export default function Lofting(): React.ReactNode {
                     name={['data',index, "projectEntries"]} 
                     initialValue={ record.projectEntries }
                 >
-                   <Select onChange={ () => rowChange(index) }>
+                   <Select onChange={ () => rowChange(index) } allowClear>
                         { list && list.map((item:any, index:number) => {
                             return <Select.Option key={ index } value={  item?.projectEntries  }>
                                 { item?.projectEntries }
@@ -551,9 +551,9 @@ export default function Lofting(): React.ReactNode {
                                             }}
                                             okText="提交"
                                             cancelText="取消"
-                                            disabled={record.status!== 1}
+                                            // disabled={record.status!== 1}
                                         >
-                                            <Button type='link' disabled={record.status!== 1}>删除</Button>
+                                            <Button type='link' >删除</Button>
                                         </Popconfirm>
                                         {/* <Button onClick={async ()=>{
                                             const data = await RequestUtil.get(`/tower-science/drawProductSegment/pattern/${record.id}`)
@@ -659,7 +659,7 @@ export default function Lofting(): React.ReactNode {
                                 ()=>history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
                             } disabled={params.status==='1'}>提料</Button>
                         :null}
-                        { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?<Popconfirm
+                        { params.materialLeader===AuthUtil.getUserId()?<Popconfirm
                             title="确认提交?"
                             onConfirm={ async () => {
                                 await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(()=>{
