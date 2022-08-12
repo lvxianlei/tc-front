@@ -349,9 +349,8 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'basicsTheoryWeight',
             key: 'basicsTheoryWeight',
             width: 120,
-            editable: true,
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>锁定后，系统自动计算</span>
+                <span>{_!==null?_:'-'}</span>
             )
         },
         {

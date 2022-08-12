@@ -34,6 +34,9 @@ export default function Lofting(): React.ReactNode {
     const onRefresh=()=>{
         setRefresh(!refresh);
     }
+    const pathLink = () => {
+       history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/2/${params.materialLeader}`)
+    }
     const [formRef] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
@@ -226,7 +229,7 @@ export default function Lofting(): React.ReactNode {
                         message: '请选择提料完成时间'
                     }]}
                 >
-                    <DatePicker format={'YYYY-MM-DD'}/>
+                    <DatePicker format={'YYYY-MM-DD HH:mm:ss'} showTime onChange={() => rowChange(index)}/>
                 </Form.Item>
             )
         },
@@ -256,7 +259,7 @@ export default function Lofting(): React.ReactNode {
                         message: '请选择提料人'
                     }]}
                 >
-                    <Select style={{width:'100%'}}> 
+                    <Select style={{width:'100%'}} onChange={() => rowChange(index)}> 
                         { user && user.map((item:any)=>{
                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         }) }
@@ -279,7 +282,7 @@ export default function Lofting(): React.ReactNode {
                         message: '请选择校核人'
                     }]}
                 >
-                    <Select style={{width:'100%'}}> 
+                    <Select style={{width:'100%'}} onChange={() => rowChange(index)}> 
                         { user && user.map((item:any)=>{
                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         }) }
@@ -625,8 +628,9 @@ export default function Lofting(): React.ReactNode {
                                     }).map((item: any) => {
                                         return {
                                             ...item,
-                                            completeStatusTime: item?.completeStatusTime?moment(item?.completeStatusTime).format('YYYY-MM-DD'):'',
+                                            completeStatusTime: item?.completeStatusTime?moment(item?.completeStatusTime).format('YYYY-MM-DD HH:mm:ss'):'',
                                             productCategory: params.id,
+                                            productCategoryName: detailTop?.productCategoryName,
                                             // segmentGroupId: params.productSegmentId
                                         }
                                     })
@@ -653,7 +657,7 @@ export default function Lofting(): React.ReactNode {
                         { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?
                             <Button type="primary" ghost onClick={
                                 ()=>history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
-                            }>提料</Button>
+                            } disabled={params.status==='1'}>提料</Button>
                         :null}
                         { params.materialLeader===AuthUtil.getUserId()&&params.status!=='3'?<Popconfirm
                             title="确认提交?"
@@ -669,7 +673,7 @@ export default function Lofting(): React.ReactNode {
                         >   
                             <Button type="primary" ghost>提交</Button>
                         </Popconfirm>:null}
-                        { (params.status==='1'||params.status==='2')&& params.materialLeader===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh } /> : null }
+                        { (params.status==='1'||params.status==='2')&& params.materialLeader===AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={ params.id } update={ onRefresh }  path={pathLink}/> : null }
                         <Button type="ghost" onClick={()=>history.push('/workMngt/pickList')}>返回</Button>
                         <span>塔型：{detailTop?.productCategoryName}</span>
                         <span>计划号：{detailTop?.planNumber}</span>

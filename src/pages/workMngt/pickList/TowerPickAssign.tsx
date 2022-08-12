@@ -14,6 +14,7 @@ export interface TowerPickAssignProps {}
 export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPickAssignProps>, WithTranslation {
     readonly id: number | string;
     readonly update: () => void;
+    readonly path: () => void;
     readonly title: string;
     readonly state?: number
     readonly type?: string;  //detail为展示，此时需传detailData
@@ -142,7 +143,13 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     this.setState({  
                         visible: false
                     })
-                    this.props.update();
+                    if(window.location.pathname.indexOf('/1/')>-1){
+                        this.props.path();
+                    }  else{
+                        this.props.update();
+                    }
+                    // 
+                    // history.push(`/workMngt/pickList/pickTowerMessage/${window.location.pathname.id}/${params.status}/${params.materialLeader}/pick/all`)
                 });
                 return Promise.resolve();
             })
