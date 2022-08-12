@@ -22,7 +22,7 @@ export default function Lofting(): React.ReactNode {
         materialLeader: string
     }>();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState<any>({ segmentId: params.productSegmentId==='all'?'': params.productSegmentId, productCategoryId: params.id});
+    const [filterValue, setFilterValue] = useState<any>({ productCategoryId: params.id});
     const [visible, setVisible] = useState<boolean>(false);
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
@@ -529,8 +529,8 @@ export default function Lofting(): React.ReactNode {
                             }
                         }
                         data={{ 
-                            segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
-                            productCategoryId: params.productSegmentId!=='all'?'':params.id, 
+                            // segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                            productCategoryId: params.id, 
                         }}
                         showUploadList={false}
                         onChange={(info) => {
@@ -544,7 +544,7 @@ export default function Lofting(): React.ReactNode {
                                     message.success('导入成功！');
                                     history.go(0)
                                     // setRefresh(!refresh);
-                                    setFilterValue({ segmentId: params.productSegmentId })
+                                    setFilterValue({ productCategoryId: params.id })
                                 }
                             }
                         }}
@@ -712,8 +712,8 @@ export default function Lofting(): React.ReactNode {
                         }
                     })
                     const submitData ={
-                        segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
-                        productCategoryId: params.productSegmentId!=='all'?'':params.id,
+                        // segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                        productCategoryId: params.id,
                         drawProductStructureSaveDTOS:[...values]
                     }
                     RequestUtil.post(`/tower-science/drawProductStructure/submit`, submitData).then(res => {
@@ -729,12 +729,12 @@ export default function Lofting(): React.ReactNode {
                         return {
                             ...item,
                             productCategory: params.id,
-                            segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
+                            // segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
                         }
                     })
                     const submitData ={
-                        segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
-                        productCategoryId: params.productSegmentId!=='all'?'':params.id,
+                        // segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                        productCategoryId: params.id,
                         drawProductStructureSaveDTOS:[...values]
                     }
                     RequestUtil.post(`/tower-science/drawProductStructure/submit`, submitData).then(res => {
