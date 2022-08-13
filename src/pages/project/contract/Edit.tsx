@@ -78,7 +78,7 @@ export default function Edit() {
       const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/contract`, {
         ...saveData,
         id: type === "new" ? "" : params.id,
-        projectId: params.projectId
+        projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
     } catch (error) {

@@ -211,8 +211,9 @@ export default function SeeGuarantee(): JSX.Element {
             message.error('计划回款总金额必须等于含税金额');
             return
         }
+        
         const result = {
-            projectId: params.projectId,
+            projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined,
             ...baseData,
             contractInfoDto: {
                 ...baseData?.internalNumber.records[0],

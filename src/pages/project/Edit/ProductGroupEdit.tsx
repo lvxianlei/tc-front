@@ -60,7 +60,7 @@ export default function ProductGroupEdit() {
                 await run({
                     ...data,
                     ...baseInfoData,
-                    projectId: match.params?.projectId,
+                    projectId: match.params?.projectId && match.params?.projectId !== "undefined" ? match.params?.projectId : undefined,
                     contractId,
                     saleOrderNumber: baseInfoData.saleOrderNumber?.value,
                     saleOrderId,

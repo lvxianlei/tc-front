@@ -3,7 +3,7 @@
  */
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Button, Space } from 'antd';
+import { Button, Input, Space } from 'antd';
 import { Page } from '../../common';
 import RequestUtil from "../../../utils/RequestUtil";
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
@@ -193,7 +193,33 @@ export default function SaleOrder(): JSX.Element {
                     },
                 ]}
                 refresh={refresh}
-                searchFormItems={[]}
+                searchFormItems={[
+                    {
+                        name: 'internalNumber',
+                        label: '内部合同编号',
+                        children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
+                    },
+                    {
+                        name: 'contractNumber',
+                        label: '合同编号',
+                        children: <Input placeholder="合同编号" style={{ width: 210 }} />
+                    },
+                    {
+                        name: 'contractName',
+                        label: '合同名称',
+                        children: <Input placeholder="合同名称" style={{ width: 210 }} />
+                    },
+                    {
+                        name: 'saleOrderNumber',
+                        label: '采购订单编号',
+                        children: <Input placeholder="采购订单编号" style={{ width: 210 }} />
+                    },
+                    {
+                        name: 'fuzzyQuery',
+                        label: '模糊查询项',
+                        children: <Input placeholder="内部合同号/订单号/订单工程名称/合同签订单位" style={{ width: 210 }} />
+                    }
+                ]}
             />
         </>
     )

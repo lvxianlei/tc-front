@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button, Modal, Radio, Row } from "antd";
+import { Button, Input, Modal, Radio, Row, Select } from "antd";
 import { useHistory, useParams } from "react-router-dom";
-import { CommonTable, DetailContent } from "../../common";
+import { CommonTable, DetailContent, SearchTable } from "../../common";
 import { productAssist, productGroupColumns } from "../managementDetailData.json"
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
@@ -33,10 +33,7 @@ export default function Index() {
         const result: any = await projectGroupRun(id)
         setProductGroupData(result)
     }
-    const { loading, data } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productGroup/${params.id || ''}`)
-        resole(result)
-    }))
+
     const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductAssist?productGroupId=${id}`)
@@ -74,7 +71,9 @@ export default function Index() {
     return <DetailContent title={[
         <Button key="new" type="primary" onClick={() => history.push(`/project/${entryPath}/new/productGroup/${params.id}`)} style={{ marginBottom: 16 }}>新增</Button>
     ]}>
-        <CommonTable
+        <SearchTable
+            path={`/tower-market/productGroup?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : undefined}`}
+            modal={true}
             columns={[
                 ...productGroupColumns,
                 {
@@ -84,12 +83,38 @@ export default function Index() {
                     width: 250,
                     render: (_: any, record: any) => <>
                         <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
-                        <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => history.push(`/project/${entryPath}/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
+                        <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => history.push(`/project/${entryPath}/productGroup/item/${params.id}/${record.id}`)}>查看</Button>
                         <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => history.push(`/project/${entryPath}/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
-                        <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
+                        <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)}>删除</Button>
                     </>
-                }]}
-            dataSource={data?.records}
+                }
+            ] as any}
+            searchFormItems={[
+                {
+                    name: 'status',
+                    label: '杆塔明细状态',
+                    children: <Select style={{ width: "150px" }} placeholder="杆塔明细状态">
+                        <Select.Option value={1}>未下发</Select.Option>
+                        <Select.Option value={2}>部分下发</Select.Option>
+                        <Select.Option value={3}>已下发</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'saleOrderNumber',
+                    label: '订单编号',
+                    children: <Input placeholder="订单编号" style={{ width: 210 }} />
+                },
+                {
+                    name: 'orderProjectName',
+                    label: '订单工程名称',
+                    children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
+                },
+                {
+                    name: 'internalNumber',
+                    label: '内部编号',
+                    children: <Input placeholder="内部编号" style={{ width: 210 }} />
+                },
+            ]}
         />
         <Row style={{ marginBottom: 16 }}><Radio.Group
             value={productGroupFlag}

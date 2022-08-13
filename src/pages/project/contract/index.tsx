@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Button, Popconfirm, Space, message } from 'antd';
+import { Button, Popconfirm, Space, message, Input } from 'antd';
 import { Page } from '../../common';
 import { IContract } from "../../IContract";
 import RequestUtil from "../../../utils/RequestUtil";
@@ -15,7 +15,7 @@ export default function ContractList(): JSX.Element {
   const [filterValue, setFilterValue] = useState({ projectId: params.id });
   const onFilterSubmit = (value: any) => {
     value["projectId"] = params.id;
-    setFilterValue({ projectId: params.id })
+    setFilterValue({ projectId: params.id, ...value })
     return value
   }
 
@@ -211,7 +211,33 @@ export default function ContractList(): JSX.Element {
           },
         ]}
         refresh={refresh}
-        searchFormItems={[]}
+        searchFormItems={[
+          {
+            name: 'saleOrderNumber',
+            label: '订单编号',
+            children: <Input placeholder="订单编号" style={{ width: 210 }} />
+          },
+          {
+            name: 'internalNumber',
+            label: '内部合同编号',
+            children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
+          },
+          {
+            name: 'orderProjectName',
+            label: '订单工程名称',
+            children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
+          },
+          {
+            name: 'customerCompany',
+            label: '业主单位',
+            children: <Input placeholder="业主单位" style={{ width: 210 }} />
+          },
+          {
+            name: 'fuzzyQuery',
+            label: '模糊查询项',
+            children: <Input placeholder="内部合同号/合同名称/采购订单号/业主单位" style={{ width: 210 }} />
+          }
+        ]}
       />
     </>
   )
