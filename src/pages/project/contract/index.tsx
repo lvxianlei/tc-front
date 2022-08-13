@@ -11,6 +11,7 @@ export default function ContractList(): JSX.Element {
   const history = useHistory();
   const [refresh, setRefresh] = useState<boolean>(false);
   const params = useParams<{ id: string }>();
+  const entryPath = params.id ? "management" : "contract"
   const [filterValue, setFilterValue] = useState({ projectId: params.id });
   const onFilterSubmit = (value: any) => {
     value["projectId"] = params.id;
@@ -23,10 +24,10 @@ export default function ContractList(): JSX.Element {
       title: "合同编号",
       width: 140,
       dataIndex: "contractNumber",
-      render: (_: undefined, record: object): React.ReactNode => {
+      render: (_: undefined, record: any): React.ReactNode => {
         return (
           <Link
-            to={`/project/management/detail/contract/${params.id}/${(record as IContract).id}`}
+            to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}
           >
             {(record as IContract).contractNumber}
           </Link>
@@ -37,9 +38,9 @@ export default function ContractList(): JSX.Element {
       title: "内部合同编号",
       width: 140,
       dataIndex: "internalNumber",
-      render: (_: undefined, record: object): React.ReactNode => {
+      render: (_: undefined, record: any): React.ReactNode => {
         return (
-          <Link to={`/project/management/detail/contract/${params.id}/${(record as IContract).id}`}>
+          <Link to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}>
             {(record as IContract).internalNumber}
           </Link>
         );
@@ -61,9 +62,9 @@ export default function ContractList(): JSX.Element {
       width: 120,
     },
     {
-        title: "未下计划重量(吨)",
-        dataIndex: "notReleased",
-        width: 120,
+      title: "未下计划重量(吨)",
+      dataIndex: "notReleased",
+      width: 120,
     },
     {
       title: "合同金额(元)",
@@ -135,7 +136,7 @@ export default function ContractList(): JSX.Element {
           return (<>
             <Button
               type="primary"
-              onClick={() => history.push(`/project/management/new/contract/${params.id}`)}
+              onClick={() => history.push(`/project/${entryPath}/new/contract/${params.id}`)}
             >新增合同</Button>
             <span style={{ marginLeft: "20px" }}>
               合同重量合计：{data?.contractTotalWeight || 0.00}吨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合同金额合计：{data?.contractTotalAmount || 0.00}元
@@ -159,7 +160,7 @@ export default function ContractList(): JSX.Element {
               <Space direction="horizontal" size="small">
                 <Button type="link">
                   <Link
-                    to={`/project/management/edit/contract/${params.id}/${(record as IContract).id}`}
+                    to={`/project/${entryPath}/edit/contract/${record?.projectId}/${record?.id}`}
                   >
                     编辑
                   </Link>
@@ -187,10 +188,10 @@ export default function ContractList(): JSX.Element {
                 </Popconfirm>
                 <Button type="link">
                   <Link
-                    to={`/project/management/pamentRecord/contract/${(record as IContract).id
+                    to={`/project/${entryPath}/pamentRecord/contract/${(record as IContract).id
                       }/${(record as any).contractName}/${(record as IContract).signCustomerId
                       }/${(record as IContract).signCustomerName
-                      }/${(record as any).contractNumber}/${params.id}`}
+                      }/${(record as any).contractNumber}/${record?.projectId}`}
                   >
                     添加回款记录
                   </Link>

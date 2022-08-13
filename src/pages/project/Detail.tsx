@@ -5,9 +5,7 @@ import { DetailContent, CommonTable } from '../common'
 import CostDetail from './cost'
 import PayInfo from './payInfo'
 import ManagementDetailTabsTitle from './ManagementDetailTabsTitle'
-import {
-    productGroupColumns, paths, taskNotice, productAssist
-} from './managementDetailData.json'
+import { paths, taskNotice } from './managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import Base from "./baseInfo/Overview"
@@ -15,79 +13,51 @@ import BidDoc from "./bidDoc/Overview"
 import QualificationReview from "./qualificationReview/Overview"
 import BidResult from "./bidResult/Overview"
 import FrameAgreement from './frameAgreement/Overview'
+import ProductGroup from './productGroup'
 // 合同列表
 import ContractList from "./contract";
 import SaleOrder from "./order";
 import ExportList from '../../components/export/list';
 export type TabTypes = "base" | "bidDoc" | "bidResult" | "frameAgreement" | "contract" | "productGroup" | "salesPlan" | "payInfo" | undefined
-const productAssistStatistics = [
-    {
-        "title": "塔型",
-        "dataIndex": "productCategoryName"
-    },
-    {
-        "title": "基数",
-        "dataIndex": "number"
-    },
-    {
-        "title": "重量（吨）",
-        "dataIndex": "weight"
-    }
-]
+
 export default function ManagementDetail(): React.ReactNode {
     const history = useHistory()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
     const [isExport, setIsExportStoreList] = useState(false)
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [contractStatus, setContractStatus] = useState<string>("contract");
     const [contractLoading, setContractLoaing] = useState<boolean>(false);
-    const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
-        productAssistDetailVos: [],
-        productAssistStatisticsVos: []
-    })
     const [salesPlanStatus, setSalesPlanStatus] = useState<string>("");
     // 招标结果的开标信息统计数据
 
     const { loading, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
-        if (params.tab === "contract") {
-            resole({})
-            return;
-        }
-        if (["productGroup", "salesPlan"].includes(params.tab as string)) {
-            const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}`, { projectId: params.id, ...postData })
-            if (result && result.records && result.records.length > 0) {
-                handleProductGroupClick(result?.records[0].id)
-            }
+        if (["salesPlan"].includes(params.tab as string)) {
+            const result: { [key: string]: any } = await RequestUtil.get(`${(paths as any)[params.tab || 'base']}`, { projectId: params.id, ...postData })
+            // if (result && result.records && result.records.length > 0) {
+            //     handleProductGroupClick(result?.records[0].id)
+            // }
             resole(result)
             return
         }
-        if (["base", "bidDoc", "bidResult", "cost", "payInfo", "frameAgreement", "qualificationReview"].includes(params.tab as string)) {
+        if ([
+            "base",
+            "bidDoc",
+            "bidResult",
+            "cost",
+            "payInfo",
+            "frameAgreement",
+            "qualificationReview",
+            "productGroup",
+            "contract"
+        ].includes(params.tab as string)) {
             resole({})
             return
         }
-        const result: { [key: string]: any } = await RequestUtil.get(`${paths[params.tab || 'base']}/${params.id}`)
+        const result: { [key: string]: any } = await RequestUtil.get(`${(paths as any)[params.tab || 'base']}/${params.id}`)
         resole(result)
 
     }), { refreshDeps: [params.tab] })
-    const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductAssist?productGroupId=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/productGroup/${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
 
     const { loading: noticeLoading, run: noticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -107,22 +77,6 @@ export default function ManagementDetail(): React.ReactNode {
         }
     }), { manual: true })
 
-    const deleteProductGroupItem = (id: string) => {
-        Modal.confirm({
-            title: "删除",
-            content: "确定删除此数据吗？",
-            onOk: () => new Promise(async (resove, reject) => {
-                try {
-                    await deleteRun(id)
-                    resove("")
-                    history.go(0)
-                } catch (error) {
-                    reject(error)
-                }
-            })
-        })
-    }
-
     useEffect(() => {
         setSalesPlanStatus("")
     }, [params.tab])
@@ -141,11 +95,6 @@ export default function ManagementDetail(): React.ReactNode {
                 }
             })
         })
-    }
-
-    const handleProductGroupClick = async (id: string) => {
-        const result: any = await projectGroupRun(id)
-        setProductGroupData(result)
     }
 
     const handleSubmitAudit = async (saleOrderId: string) => {
@@ -185,41 +134,7 @@ export default function ManagementDetail(): React.ReactNode {
                 }
             </Spin>
         </>,
-        tab_productGroup: <DetailContent title={[
-            <Button key="new" type="primary" onClick={() => history.push(`/project/management/new/productGroup/${params.id}`)} style={{ marginBottom: 16 }}>新增</Button>
-        ]}>
-            <CommonTable
-                columns={[
-                    ...productGroupColumns,
-                    {
-                        title: "操作",
-                        dataIndex: "opration",
-                        ellipsis: false,
-                        width: 250,
-                        render: (_: any, record: any) => <>
-                            <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>
-                            <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => history.push(`/project/management/productGroup/item/${params.id}/${record.id}`)} >查看</Button>
-                            <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => history.push(`/project/management/edit/productGroup/${params.id}/${record.id}`)}>编辑</Button>
-                            <Button type="link" size="small" disabled={`${record.status}` !== "0"} onClick={() => deleteProductGroupItem(record.id)} >删除</Button>
-                        </>
-                    }]}
-                dataSource={data?.records}
-            />
-            <Row style={{ marginBottom: 16 }}><Radio.Group
-                value={productGroupFlag}
-                onChange={(event: any) => setProductGroupFlag(event.target.value)}
-                options={[
-                    { label: '明细', value: 'productAssistDetailVos' },
-                    { label: '统计', value: 'productAssistStatisticsVos' }
-                ]}
-                optionType="button"
-            /></Row>
-            <CommonTable
-                // rowKey="productCategoryName"
-                columns={productGroupFlag === "productAssistStatisticsVos" ? productAssistStatistics : productAssist}
-                dataSource={productGroupData[productGroupFlag]}
-            />
-        </DetailContent>,
+        tab_productGroup: <ProductGroup />,
         tab_salesPlan: <DetailContent style={{ paddingTop: 14 }}>
             <Row>
                 <Radio.Group
@@ -270,18 +185,6 @@ export default function ManagementDetail(): React.ReactNode {
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" size="small" className='btn-operation-link' onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
-                            {/* {record.taskReviewStatus === 0 && <>
-                                <Button type="link" size="small" className='btn-operation-link' onClick={async () => {
-                                    const result = await noticeAdoptRun(record.id)
-                                    result && message.success("审批通过成功...")
-                                    history.go(0)
-                                }}>审批通过</Button>
-                                <Button type="link" size="small" className='btn-operation-link' onClick={async () => {
-                                    const result = await noticeRejectRun(record.id)
-                                    result && message.success("审批已驳回...")
-                                    history.go(0)
-                                }}>驳回</Button>
-                            </>} */}
                             {[2, -1].includes(record.taskReviewStatus) && <>
                                 <Button type="link" size="small" className='btn-operation-link'><Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
                                 <Button type="link" size="small" className='btn-operation-link' onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>

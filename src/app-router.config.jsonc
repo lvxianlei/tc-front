@@ -436,6 +436,13 @@
       "exact": true,
       "authority": "contract"
     },
+    { // 合同详情
+      "name": "合同详情",
+      "path": "/project/contract/detail/contract/:projectId/:id",
+      "module": "./pages/project/contract/Detail",
+      "exact": true,
+      "authority": "contract"
+    },
     { // 新增合同
       "name": "新增合同",
       "path": "/project/management/new/contract/:projectId",
@@ -445,7 +452,14 @@
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/management/edit/contract/:projectId/:id",
+      "path": "/project/contract/edit/contract/:projectId/:id",
+      "module": "./pages/project/contract/Edit",
+      "exact": true,
+      "authority": "contract"
+    },
+    { // 编辑合同
+      "name": "编辑合同",
+      "path": "/project/contract/edit/contract/:projectId/:id",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "contract"
@@ -453,6 +467,13 @@
     { // 新增回款计划
       "name": "新增回款记录",
       "path": "/project/management/pamentRecord/contract/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
+      "module": "./pages/project/contract/PaymentNew",
+      "exact": true,
+      "authority": "contract"
+    },
+    { // 新增回款计划
+      "name": "新增回款记录",
+      "path": "/project/contract/pamentRecord/contract/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
       "module": "./pages/project/contract/PaymentNew",
       "exact": true,
       "authority": "contract"
@@ -465,15 +486,43 @@
       "authority": "sale_order"
     },
     {
+      "name": "新增订单",
+      "path": "/project/order/new/order/:projectId",
+      "module": "./pages/project/order/Edit",
+      "exact": true,
+      "authority": "sale_order"
+    },
+    {
+      "name": "新增订单",
+      "path": "/project/order/new/order/:projectId",
+      "module": "./pages/project/order/Edit",
+      "exact": true,
+      "authority": "sale_order"
+    },
+    {
       "name": "编辑订单",
       "path": "/project/management/edit/order/:projectId/:id",
       "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "sale_order"
     },
+    {
+      "name": "编辑订单",
+      "path": "/project/order/edit/order/:projectId/:id",
+      "module": "./pages/project/order/Edit",
+      "exact": true,
+      "authority": "sale_order"
+    },
     { // 订单详情
       "name": "订单详情",
-      "path":"/project/management/detail/order/:projectId/:id",
+      "path": "/project/management/detail/order/:projectId/:id",
+      "module": "./pages/project/order/Detail",
+      "exact": true,
+      "authority": "sale_order"
+    },
+    { // 订单详情
+      "name": "订单详情",
+      "path": "/project/order/detail/order/:projectId/:id",
       "module": "./pages/project/order/Detail",
       "exact": true,
       "authority": "sale_order"
@@ -490,6 +539,27 @@
       "name": "项目管理子项详情",
       "path": "/project/management/detail/:tab/:id",
       "module": "./pages/project/Detail",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 项目管理子项详情
+      "name": "合同管理",
+      "path": "/project/contract",
+      "module": "./pages/project/contract/index",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 项目管理子项详情
+      "name": "订单管理",
+      "path": "/project/order",
+      "module": "./pages/project/order/index",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 项目管理子项详情
+      "name": "杆塔明细",
+      "path": "/project/productGroup",
+      "module": "./pages/project/productGroup/index",
       "exact": true,
       "authority": "project_detail"
     },
@@ -542,6 +612,13 @@
       "exact": true,
       "authority": "project_detail"
     },
+    { // 杆塔明细编辑
+      "name": "杆塔明细编辑",
+      "path": "/project/productGroup/edit/productGroup/:projectId/:id",
+      "module": "./pages/project/Edit/ProductGroupEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 查看杆塔明细
       "name": "杆塔明细",
       "path": "/project/management/productGroup/item/:projectId/:id",
@@ -549,9 +626,23 @@
       "exact": true,
       "authority": "project_detail"
     },
+    { // 查看杆塔明细
+      "name": "杆塔明细",
+      "path": "/project/productGroup/productGroup/item/:projectId/:id",
+      "module": "./pages/project/ProductDetail",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 新增杆塔明细
       "name": "新增杆塔明细",
       "path": "/project/management/new/productGroup/:id",
+      "module": "./pages/project/Edit/ProductGroupEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 新增杆塔明细
+      "name": "新增杆塔明细",
+      "path": "/project/productGroup/new/productGroup/:id",
       "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
       "authority": "project_detail"

@@ -4,7 +4,7 @@ import { Button, Form, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable, OperationRecord } from "../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist, approvalRecord } from "./managementDetailData.json"
+import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist } from "./managementDetailData.json"
 import { materialStandardOptions } from "../../configuration/DictionaryOptions"
 export default function SalesPlanEdit() {
     const history = useHistory()

@@ -13,6 +13,7 @@ export default function SaleOrder(): JSX.Element {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const params = useParams<{ id: string }>();
+    const entryPath = params.id ? "management" : "order"
     const [filterValue, setFilterValue] = useState({ projectId: params.id });
     const onFilterSubmit = (value: any) => {
         value["projectId"] = params.id;
@@ -25,7 +26,7 @@ export default function SaleOrder(): JSX.Element {
         render: (_: undefined, record: any): React.ReactNode => {
             return (
                 <Link
-                    to={`/project/management/detail/order/${params.id}/${record?.id}`}
+                    to={`/project/${entryPath}/detail/order/${record?.projectId}/${record?.id}`}
                 >
                     {record.saleOrderNumber}
                 </Link>
@@ -61,8 +62,7 @@ export default function SaleOrder(): JSX.Element {
         render: (_: undefined, record: any): React.ReactNode => {
             return (
                 <Link
-                    to={`/project/contract/detail/${params.id}/${record.contractId
-                        }`}
+                    to={`/project/contract/detail/contract/${record?.projectId}/${record.contractId}`}
                 >
                     {record.internalNumber}
                 </Link>
@@ -150,7 +150,7 @@ export default function SaleOrder(): JSX.Element {
                 filterValue={filterValue}
                 extraOperation={(data: any) => <>
                     <Button type="primary" onClick={() => {
-                        history.push(`/project/management/new/order/${params.id}`);
+                        history.push(`/project/${entryPath}/new/order/${params.id}`);
                     }}>新增订单</Button>
                 </>}
                 columns={[
@@ -171,7 +171,7 @@ export default function SaleOrder(): JSX.Element {
                                 <Button
                                     type="link"
                                     disabled={record.isProductGroupRef !== 0}
-                                    onClick={() => history.push(`/project/management/edit/order/${params.id}/${record.id}`)}>编辑</Button>
+                                    onClick={() => history.push(`/project/${entryPath}/edit/order/${record?.projectId}/${record.id}`)}>编辑</Button>
                                 <AuthorityComponent permissions="sale_order_del">
                                     <ConfirmableButton
                                         confirmTitle="要删除该订单吗？"
