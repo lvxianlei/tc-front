@@ -155,7 +155,7 @@ export default function PackingList(): React.ReactNode {
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                             <Space direction="horizontal" size="small" className={styles.operationBtn}>
                                 <Link to={`/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListSetting/${record.id}`}>
-                                    <Button type="link" disabled={location?.state?.status === 4}>编辑</Button>
+                                    <Button type="link" disabled={record.packStatus === 2}>编辑</Button>
                                 </Link>
                                 {/* 已接收不可删除 */}
                                 <Popconfirm
@@ -163,9 +163,9 @@ export default function PackingList(): React.ReactNode {
                                     onConfirm={() => { RequestUtil.delete(`/tower-science/packageStructure?id=${record.id}`).then(res => history.go(0)) }}
                                     okText="确认"
                                     cancelText="取消"
-                                    disabled={location?.state?.status === 4}
+                                    disabled={record.packStatus === 2}
                                 >
-                                    <Button type="link" disabled={location?.state?.status === 4}>删除</Button>
+                                    <Button type="link" disabled={record.packStatus === 2}>删除</Button>
                                 </Popconfirm>
                             </Space>
                         )

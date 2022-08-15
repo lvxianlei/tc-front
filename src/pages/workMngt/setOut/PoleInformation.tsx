@@ -133,11 +133,7 @@ export default function PoleInformation(): React.ReactNode {
                     }
                     {
                         userId === record.loftingUser ?
-                            <>{
-                                record.loftingStatus === 3 || record.loftingStatus === 4 ?
-                                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record.loftingStatus } }}>包装清单</Link>
-                                    : <Button type="link" disabled>包装清单</Button>
-                            }</>
+                            <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record.loftingStatus } }}><Button type="link" disabled={record.loftingStatus === 1}>包装清单</Button></Link>
                             : null
                     }
                     {
@@ -273,7 +269,7 @@ export default function PoleInformation(): React.ReactNode {
             onCancel={() => setVisible(false)}
             className={styles.tryAssemble}
         >
-            <WeldingVerify id={params.id}/>
+            <WeldingVerify id={params.id} />
         </Modal>
         <Modal title='提示' okText='是' cancelText='否' visible={tipVisible} onCancel={() => {
             setButtonName('')
