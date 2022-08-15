@@ -36,7 +36,7 @@ export default function ProductGroupEdit() {
         } catch (error) {
             reject(error)
         }
-    }), { manual: match.params?.type === "new" })
+    }), { manual: match.params?.type === "new" || !match.params?.id })
 
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {

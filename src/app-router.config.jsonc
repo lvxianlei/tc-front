@@ -445,6 +445,13 @@
     },
     { // 新增合同
       "name": "新增合同",
+      "path": "/project/contract/new/contract/:projectId",
+      "module": "./pages/project/contract/Edit",
+      "exact": true,
+      "authority": "contract"
+    },
+    { // 新增合同
+      "name": "新增合同",
       "path": "/project/management/new/contract/:projectId",
       "module": "./pages/project/contract/Edit",
       "exact": true,

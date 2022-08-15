@@ -38,7 +38,7 @@ export default function Edit() {
     } catch (error) {
       reject(error)
     }
-  }))
+  }), { ready: (params.projectId !== "undefined") })
 
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {

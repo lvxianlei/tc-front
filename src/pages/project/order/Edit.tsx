@@ -68,7 +68,7 @@ export default function SeeGuarantee(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new" })
+    }), { manual: type === "new" || !params.id })
 
     const { loading: contratLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -211,7 +211,7 @@ export default function SeeGuarantee(): JSX.Element {
             message.error('计划回款总金额必须等于含税金额');
             return
         }
-        
+
         const result = {
             projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined,
             ...baseData,
