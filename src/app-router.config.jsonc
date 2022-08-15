@@ -2678,6 +2678,7 @@
       "module": "./pages/system-mngt/otherSetting/index",
       "exact": true,
       "authority": "tc_erp_sys_system_app_deploy_list"
+    },
     { // RD-系统设置-试组装配置
       "name": "试组装配置",
       "path": "/baseSetting/tryAssemble",
