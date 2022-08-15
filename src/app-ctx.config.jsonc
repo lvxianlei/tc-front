@@ -61,6 +61,11 @@
                         "label": "定额配置",
                         "path": "/sys/quotaConfig",
                         "authority": "tc_erp_sys_system_quota"
+                    },
+                    {
+                        "label": "第三方应用配置",
+                        "path": "/sys/otherSetting/index",
+                        "authority": "tc_erp_sys_system_app_deploy"
                     }
                 ]
             },
