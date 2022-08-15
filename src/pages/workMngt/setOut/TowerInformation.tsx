@@ -16,7 +16,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
-import { productTypeOptions, towerStructureOptions } from '../../../configuration/DictionaryOptions';
+import { towerStructureOptions } from '../../../configuration/DictionaryOptions';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
@@ -312,31 +312,23 @@ export default function TowerInformation(): React.ReactNode {
             width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
                     {
-                        record.status === 1 ?
-                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
-                            : <Button type="link" disabled>放样</Button>
-                    }
-                    {
-                        record.status === 2 ?
+                        record.status > 1 ?
                             <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}>校核</Link>
                             : <Button type="link" disabled>校核</Button>
                     }
                     <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerLoftingDetails/${record.id}`}>明细</Link>
-                    {
-                        record.status === 1 ?
-                            <Popconfirm
-                                title="确认删除?"
-                                onConfirm={() => RequestUtil.delete(`/tower-science/productSegment?segmentId=${record.id}`).then(res => {
-                                    onRefresh();
-                                })}
-                                okText="确认"
-                                cancelText="取消"
-                            >
-                                <Button type="link">删除</Button>
-                            </Popconfirm>
-                            : <Button type="link" disabled>删除</Button>
-                    }
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={() => RequestUtil.delete(`/tower-science/productSegment?segmentId=${record.id}`).then(res => {
+                            onRefresh();
+                        })}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link">删除</Button>
+                    </Popconfirm>
                     <Popconfirm
                         title="确认完成放样?"
                         disabled={record.status !== 1}
@@ -392,7 +384,6 @@ export default function TowerInformation(): React.ReactNode {
     const onRefresh = () => {
         history.go(0)
     }
-
 
     const closeOrEdit = () => {
         if (editorLock === '编辑') {
@@ -483,6 +474,15 @@ export default function TowerInformation(): React.ReactNode {
     const [tableColumns, setTableColumns] = useState(columnsSetting);
     const [filterValue, setFilterValue] = useState({});
 
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
     return <>
         <Modal
             destroyOnClose
@@ -511,9 +511,9 @@ export default function TowerInformation(): React.ReactNode {
             <Form.Item label='放样状态' name='status'>
                 <Select style={{ width: '120px' }} placeholder="请选择">
                     <Select.Option value="" key="4">全部</Select.Option>
-                    <Select.Option value="1" key="1">放样中</Select.Option>
-                    <Select.Option value="2" key="2">校核中</Select.Option>
-                    <Select.Option value="3" key="3">已完成</Select.Option>
+                    <Select.Option value={1} key="1">放样中</Select.Option>
+                    <Select.Option value={2} key="2">校核中</Select.Option>
+                    <Select.Option value={3} key="3">已完成</Select.Option>
                 </Select>
             </Form.Item>
             <Form.Item label='人员' name='personnel'>
@@ -558,11 +558,11 @@ export default function TowerInformation(): React.ReactNode {
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
                         <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' ghost>放样</Button> </Link>
-                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList`, state: { status: location.state?.status } }}><Button type="primary" ghost>模型</Button></Link>
-                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList`, state: { status: location.state?.status } }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
-                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram`, state: { status: location.state?.status } }}><Button type="primary" ghost>NC程序</Button></Link>
+                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type="primary" ghost>模型</Button></Link>
+                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
+                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type="primary" ghost>NC程序</Button></Link>
                         {
-                            userId === location.state?.loftingLeader ?
+                            isShow ?
                                 <>
                                     <Popconfirm
                                         title="确认提交?"
@@ -593,7 +593,6 @@ export default function TowerInformation(): React.ReactNode {
                     pagination: false
                 }}
             />
-
         </Form>
     </>
 }

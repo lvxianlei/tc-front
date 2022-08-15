@@ -23,7 +23,7 @@ export default function PackingList(): React.ReactNode {
     const match = useRouteMatch();
     const [isExport, setIsExport] = useState(false);
     const [bundleData, setBundleData] = useState<IBundle[]>([]);
-    const location = useLocation<{ status: number }>();
+    const location = useLocation<{}>();
     const [loading1, setLoading1] = useState(false);
     const editRef = useRef<EditProps>();
     const [visible, setVisible] = useState<boolean>(false);
@@ -111,34 +111,29 @@ export default function PackingList(): React.ReactNode {
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16} ${styles.btnRight}`}>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
-            {
-                location?.state?.status === 4 ?
-                    null : <>
-                        <Button type="primary" ghost onClick={() => setVisible(true)}>套用包</Button>
-                        <Button type="primary" onClick={() => {
-                            RequestUtil.post(`/tower-science/packageStructure/automatic/${params.id}/${params.productId}`).then(res => {
-                                history.go(0)  
-                                message.success('自动打包成功');
-                            }).catch(error => {
-                                console.log(error)
-                            })
-                        }} ghost>自动打包</Button>
-                        <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
-                        <Popconfirm
-                            title="确认完成?"
-                            onConfirm={() => {
-                                setLoading1(true);
-                                RequestUtil.post(`/tower-science/packageStructure/submit?productId=${params.productId}`).then(res => history.goBack()).catch(error => {
-                                    setLoading1(false);
-                                })
-                            }}
-                            okText="确认"
-                            cancelText="取消"
-                        >
-                            <Button loading={loading1} type="primary">完成</Button>
-                        </Popconfirm>
-                    </>
-            }
+            <Button type="primary" ghost onClick={() => setVisible(true)}>套用包</Button>
+            <Button type="primary" onClick={() => {
+                RequestUtil.post(`/tower-science/packageStructure/automatic/${params.id}/${params.productId}`).then(res => {
+                    history.go(0)
+                    message.success('自动打包成功');
+                }).catch(error => {
+                    console.log(error)
+                })
+            }} ghost>自动打包</Button>
+            <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" ghost>添加</Button></Link>
+            <Popconfirm
+                title="确认完成?"
+                onConfirm={() => {
+                    setLoading1(true);
+                    RequestUtil.post(`/tower-science/packageStructure/submit?productId=${params.productId}`).then(res => history.goBack()).catch(error => {
+                        setLoading1(false);
+                    })
+                }}
+                okText="确认"
+                cancelText="取消"
+            >
+                <Button loading={loading1} type="primary">完成</Button>
+            </Popconfirm>
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>
         <DetailContent key="packinglist">
