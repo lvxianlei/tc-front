@@ -17,6 +17,8 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export default function AssemblyWeldingList(): React.ReactNode {
+    const userId = AuthUtil.getUserId();
+
     const columns = [
         {
             key: 'index',
@@ -75,12 +77,6 @@ export default function AssemblyWeldingList(): React.ReactNode {
             dataIndex: 'weldingLeaderName'
         },
         {
-            key: 'weldingOperatorName',
-            title: '作业员',
-            width: 120,
-            dataIndex: 'weldingOperatorName'
-        },
-        {
             key: 'statusName',
             title: '组焊清单状态',
             width: 120,
@@ -101,11 +97,11 @@ export default function AssemblyWeldingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
-                    {/* {
-                        record.weldingLeader === userId || record.weldingOperator === userId ? */}
-                    <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
-                    {/* : <Button type="link" disabled>组焊清单</Button>
-                    } */}
+                    {
+                        record.weldingLeader.split(',').indexOf(userId) !== -1 ?
+                            <Button type="link" disabled>组焊清单</Button>
+                            : <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
+                    }
                     {/* <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);
@@ -117,7 +113,6 @@ export default function AssemblyWeldingList(): React.ReactNode {
 
     const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
-    // const userId = AuthUtil.getUserId();
     const [filterValue, setFilterValue] = useState<Record<string, any>>();
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);

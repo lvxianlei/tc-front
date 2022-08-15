@@ -1221,7 +1221,7 @@
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/apply/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
-      "authority": "rd_welding"
+      "authority": "tc_erp_rd_work_weld_detailed_add"
     },
     // { // 工作管理-组焊列表-校核
     //   "name": "校核",
