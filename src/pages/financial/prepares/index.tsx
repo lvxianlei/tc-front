@@ -211,7 +211,7 @@ export default function ApplyPayment() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 230,
                     render: (_: any, record: any) => {
                         return <>
                             <a className="btn-operation-link" onClick={() => {

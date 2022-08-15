@@ -83,6 +83,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = (saveType?: "save" | "saveAndApply") => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
+            console.log(baseData, "================>>>")
             const postData = type === "new" ? {
                 ...baseData,
                 businessId: baseData.businessId?.split(',')[0],
@@ -104,7 +105,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     billNumber: item.billNumber
                 }))
             }
-            await saveRun(postData, saveType)
+            // await saveRun(postData, saveType)
             resolve(true)
         } catch (error) {
             reject(false)
@@ -375,7 +376,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({
                             "title": "请款金额",
                             "dataIndex": "pleasePayAmount",
-                            "disabled": false
+                            "disabled": false,
+                            "rules": [
+                                {
+                                    "required": true,
+                                    "message": "请输入请款金额"
+                                }
+                            ]
                         })
                     }
                     return item
