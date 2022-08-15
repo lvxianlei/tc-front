@@ -563,6 +563,13 @@
       "exact": true,
       "authority": "project_detail"
     },
+    { // 项目管理子项详情
+      "name": "销售计划",
+      "path": "/project/salePlan",
+      "module": "./pages/project/salesPlan/index",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/new/cost/:projectId",

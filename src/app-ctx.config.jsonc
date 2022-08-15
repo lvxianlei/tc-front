@@ -125,6 +125,11 @@
                         "authority": "project_management"
                     },
                     {
+                        "label": "销售计划",
+                        "path": "/project/salePlan",
+                        "authority": "project_management"
+                    },
+                    {
                         "label": "开票申请",
                         "path": "/project/invoicing",
                         "authority": "project_invoicing_requisition"

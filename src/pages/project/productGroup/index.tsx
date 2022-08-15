@@ -68,12 +68,18 @@ export default function Index() {
         })
     }
 
-    return <DetailContent title={[
-        <Button key="new" type="primary" onClick={() => history.push(`/project/${entryPath}/new/productGroup/${params.id}`)} style={{ marginBottom: 16 }}>新增</Button>
-    ]}>
+    return <DetailContent style={{ paddingTop: 16 }}>
         <SearchTable
-            path={`/tower-market/productGroup?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : undefined}`}
+            path={`/tower-market/productGroup?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
             modal={true}
+            extraOperation={<Button
+                key="new"
+                type="primary"
+                onClick={() => history.push(
+                    `/project/${entryPath}/new/productGroup/${params.id}`
+                )}>
+                新增
+            </Button>}
             columns={[
                 ...productGroupColumns,
                 {
