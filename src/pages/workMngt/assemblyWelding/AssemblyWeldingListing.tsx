@@ -177,49 +177,48 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                     <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button>
                     <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板')} ghost>模板下载</Button>
-                    {location.state?.status === 2 ? <>
-                        <Button type="primary" onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
-                            history.goBack();
-                        })} >完成组焊清单</Button>
-                        <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/new`}>
-                            <Button type="primary" >添加组焊</Button>
-                        </Link>
-                        <Upload
-                            action={() => {
-                                const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                                return baseUrl + '/tower-science/welding/import'
-                            }}
-                            headers={
-                                {
-                                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                                    'Tenant-Id': AuthUtil.getTenantId(),
-                                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                    <Button type="primary" disabled={location.state?.status === 3} onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
+                        history.goBack();
+                    })} >完成组焊清单</Button>
+                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/new`}>
+                        <Button type="primary" >添加组焊</Button>
+                    </Link>
+                    <Upload
+                        action={() => {
+                            const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                            return baseUrl + '/tower-science/welding/import'
+                        }}
+                        headers={
+                            {
+                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                                'Tenant-Id': AuthUtil.getTenantId(),
+                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                            }
+                        }
+                        showUploadList={false}
+                        data={{ weldingId: params.id }}
+                        onChange={(info) => {
+                            if (info.file.response && !info.file.response?.success) {
+                                message.warning(info.file.response?.msg)
+                            }
+                            if (info.file.response && info.file.response?.success) {
+                                if (Object.keys(info.file.response?.data).length > 0) {
+                                    setUrl(info.file.response?.data);
+                                    setUrlVisible(true);
+                                } else {
+                                    message.success('导入成功！');
+                                    history.go(0);
                                 }
                             }
-                            showUploadList={false}
-                            data={{ weldingId: params.id }}
-                            onChange={(info) => {
-                                if (info.file.response && !info.file.response?.success) {
-                                    message.warning(info.file.response?.msg)
-                                }
-                                if (info.file.response && info.file.response?.success) {
-                                    if (Object.keys(info.file.response?.data).length > 0) {
-                                        setUrl(info.file.response?.data);
-                                        setUrlVisible(true);
-                                    } else {
-                                        message.success('导入成功！');
-                                        history.go(0);
-                                    }
-                                }
-                            }}
-                        >
-                            <Button type="primary" ghost>导入</Button>
-                        </Upload></> : null}
+                        }}
+                    >
+                        <Button type="primary" ghost>导入</Button>
+                    </Upload>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>
                 <CommonTable
                     dataSource={detailData?.records}
-                    columns={location.state?.status === 2 ? towerColumns : towerColumns.splice(0, 6)}
+                    columns={towerColumns}
                     onRow={(record: Record<string, any>, index: number) => ({
                         onClick: () => { getParagraphData(record.id) },
                         className: styles.tableRow

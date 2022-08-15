@@ -117,48 +117,48 @@ export default function AssemblyWeldingList(): React.ReactNode {
 
     const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
-    const userId = AuthUtil.getUserId();
+    // const userId = AuthUtil.getUserId();
     const [filterValue, setFilterValue] = useState<Record<string, any>>();
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
     }), {})
-    const [user, setUser] = useState<any[] | undefined>([]);
+    // const [user, setUser] = useState<any[] | undefined>([]);
     const [department, setDepartment] = useState<any | undefined>([]);
-    const [assignVisible, setAssignVisible] = useState<boolean>(false);
-    const [drawTaskId, setDrawTaskId] = useState<string>('');
+    // const [assignVisible, setAssignVisible] = useState<boolean>(false);
+    // const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [checkUser, setCheckUser] = useState([]);
-    const [form] = Form.useForm();
+    // const [form] = Form.useForm();
 
-    const handleAssignModalOk = async () => {
-        try {
-            const submitData = await form.validateFields();
-            submitData.weldingId = drawTaskId;
-            await RequestUtil.post('/tower-science/welding/assign', submitData).then(() => {
-                message.success('指派成功！')
-            }).then(() => {
-                setAssignVisible(false);
-                form.resetFields();
-            }).then(() => {
-                setRefresh(!refresh);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const handleAssignModalCancel = () => { setAssignVisible(false); form.resetFields(); };
-    const formItemLayout = {
-        labelCol: { span: 6 },
-        wrapperCol: { span: 16 }
-    };
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-        switch (title) {
-            case "user":
-                form.setFieldsValue({ 'weldingOperator': '' })
-                return setUser(userData.records);
-        }
-    }
+    // const handleAssignModalOk = async () => {
+    //     try {
+    //         const submitData = await form.validateFields();
+    //         submitData.weldingId = drawTaskId;
+    //         await RequestUtil.post('/tower-science/welding/assign', submitData).then(() => {
+    //             message.success('指派成功！')
+    //         }).then(() => {
+    //             setAssignVisible(false);
+    //             form.resetFields();
+    //         }).then(() => {
+    //             setRefresh(!refresh);
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+    // const handleAssignModalCancel = () => { setAssignVisible(false); form.resetFields(); };
+    // const formItemLayout = {
+    //     labelCol: { span: 6 },
+    //     wrapperCol: { span: 16 }
+    // };
+    // const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
+    //     const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+    //     switch (title) {
+    //         case "user":
+    //             form.setFieldsValue({ 'weldingOperator': '' })
+    //             return setUser(userData.records);
+    //     }
+    // }
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
@@ -183,7 +183,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
         return roles;
     }
     return <>
-        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
+        {/* <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
             <Form form={form} {...formItemLayout}>
                 <Row>
                     <Col span={12}>
@@ -206,7 +206,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-        </Modal>
+        </Modal> */}
         <Page
             path="/tower-science/welding"
             exportPath={`/tower-science/welding`}
