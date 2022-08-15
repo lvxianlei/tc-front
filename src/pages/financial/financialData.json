@@ -369,6 +369,10 @@
             "dataIndex": "pleasePayNumber"
         },
         {
+            "title": "付款类型------新加",
+            "dataIndex": "pleasePayNumber"
+        },
+        {
             "title": "关联到货单",
             "dataIndex": "receiptNumbers"
         },
@@ -430,6 +434,31 @@
                 {
                     "required": true,
                     "message": "请选择请款类别..."
+                }
+            ]
+        },
+        {
+            "title": "付款类型",
+            "dataIndex": "businessTypePay",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "货到付款",
+                    "value": 1
+                },
+                {
+                    "label": "货到票到付款",
+                    "value": 2
+                },
+                {
+                    "label": "预付款",
+                    "value": 3
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择付款类型..."
                 }
             ]
         },
@@ -506,12 +535,6 @@
                     "type": "select",
                     "search": true
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择关联票据..."
-                }
             ]
         },
         {
@@ -557,13 +580,7 @@
         {
             "title": "请款机构",
             "dataIndex": "pleasePayOrganization",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择请款机构..."
-                }
-            ]
+            "disabled": true
         },
         {
             "title": "请款金额",

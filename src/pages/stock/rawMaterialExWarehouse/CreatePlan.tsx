@@ -216,7 +216,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 })}
                 onChange={performanceBondChange}
             />
-            <DetailTitle title="入库明细" />
+            <DetailTitle title="出库明细" />
             <div className='btnWrapper'>
                 <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择</Button>
             </div>

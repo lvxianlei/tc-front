@@ -299,6 +299,16 @@ export default function ApplyPayment() {
                 },
                 {
                     name: 'businessType',
+                    label: '付款类型',
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="1">货到付款</Select.Option>
+                        <Select.Option value="2">货到票到付款</Select.Option>
+                        <Select.Option value="3">预付款</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'businessType',
                     label: '企业类型',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>

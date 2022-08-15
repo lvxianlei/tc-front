@@ -2,7 +2,7 @@
  * 创建计划列表
  */
 import React, { useState } from 'react';
-import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
+import { Modal, Form, Button, InputNumber, Select, message, Input } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
@@ -12,15 +12,19 @@ import { materialStandardOptions, materialTextureOptions } from "../../../config
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import { spawn } from 'child_process';
 
 export default function CreatePlan(props: any): JSX.Element {
-    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const [addCollectionForm] = Form.useForm();
+    const [addCollectionNumberForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
+    const [visibleNumber, setVisibleNumber] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     
     let [count, setCount] = useState<number>(1);
+    let [indexNumber, setIndexNumber] = useState<number>(0);
+    let [dataCopy, setDataCopy] = useState<any[]>([]);
 
     const formatSpec = (spec: any): { width: string, length: string } => {
         if (!spec) {
@@ -35,6 +39,34 @@ export default function CreatePlan(props: any): JSX.Element {
             length: splitArr[1] || "0"
         })
     }
+
+    const handleAddModalOkNumber = async() => {
+        const baseData = await addCollectionNumberForm.validateFields();
+        console.log(baseData, "baseData")
+        let ix = count,
+            materialListCopy = materialList,
+            popDataListCopy = popDataList;
+        for (let i = 0; i < baseData.name; i += 1) {
+            const result = {
+                ...dataCopy,
+                width: 0,
+                length: 0,
+                planPurchaseNum: "",
+                totalWeight: "",
+                id: ix + ""
+            }
+            ix = ix + 1;
+            materialListCopy.splice((indexNumber + 1), 0, result);
+            popDataListCopy.splice((indexNumber + 1), 0, result);
+        }
+
+        setCount(ix)
+        setMaterialList(materialListCopy.splice(0))
+        setPopDataList(popDataListCopy.splice(0));
+        setVisibleNumber(false);
+
+    }
+
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -50,7 +82,7 @@ export default function CreatePlan(props: any): JSX.Element {
             return ({
                 ...item,
                 planPurchaseNum: num,
-                width: formatSpec(item.structureSpec).width,
+                // width: formatSpec(item.structureSpec).width,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
             })
@@ -60,7 +92,7 @@ export default function CreatePlan(props: any): JSX.Element {
             return ({
                 ...item,
                 planPurchaseNum: num,
-                width: formatSpec(item.structureSpec).width,
+                // width: formatSpec(item.structureSpec).width,
                 // length: formatSpec(item.structureSpec).length,
                 weight: item.weight || "1.00",
             })
@@ -72,27 +104,6 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.id !== id))
         setPopDataList(materialList.filter((item: any) => item.id !== id))
-    }
-
-    // 复制
-    const handleCopy = (options: any) => {
-        const result = {
-            ...options,
-            width: "",
-            length: "",
-            planPurchaseNum: "",
-            totalWeight: "",
-            id: count + ""
-        }
-        setCount(count + 1)
-        setMaterialList([
-            ...materialList,
-            result
-        ])
-        setPopDataList([
-            ...popDataList,
-            result
-        ])
     }
 
     const handleNumChange = (value: number, id: string) => {
@@ -253,7 +264,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || 0} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                             })
                         }
                         if (item.dataIndex === "width") {
@@ -319,8 +330,12 @@ export default function CreatePlan(props: any): JSX.Element {
                         title: "操作",
                         fixed: "right",
                         dataIndex: "opration",
-                        render: (_: any, records: any) => <>
-                            <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button>
+                        render: (_: any, records: any, index: number) => <>
+                            <Button type="link" style={{ marginRight: 8 }} onClick={() => {
+                                setIndexNumber(index);
+                                setDataCopy(records);
+                                setVisibleNumber(true);
+                            }}>复制</Button>
                             <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
                         </>
                     }]}
@@ -351,11 +366,11 @@ export default function CreatePlan(props: any): JSX.Element {
                             materialId: item.id,
                             code: item.materialCode,
                             materialCategoryId: item.materialCategory,
-                            planPurchaseNum: item.planPurchaseNum || "",
+                            planPurchaseNum: item.planPurchaseNum || 1,
                             source: 2,
                             standardName: item.standardName,
-                            length: item.length || "",
-                            width: item.width || "",
+                            length: item.length || 0,
+                            width: item.width || 0,
                             materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
                             materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                             structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
@@ -365,6 +380,36 @@ export default function CreatePlan(props: any): JSX.Element {
                         })) || [])
                     }}
                 />
+            </Modal>
+            <Modal width={400} title={`请输入要复制的行数`} destroyOnClose
+                visible={visibleNumber}
+                onOk={handleAddModalOkNumber}
+                onCancel={() => {
+                    setVisibleNumber(false);
+                }}
+            >
+                <Form
+                    name="basic"
+                    labelCol={{ span: 2 }}
+                    wrapperCol={{ span: 22 }}
+                    initialValues={{ remember: true }}
+                    onFinish={handleAddModalOkNumber}
+                    autoComplete="off"
+                    form={addCollectionNumberForm}
+                >
+
+                    <Form.Item
+                        name="name"
+                        rules={[{ required: true, message: '请输入要复制的行数' }]}
+                    >
+                        <InputNumber
+                            min={1}
+                            max={100}
+                            style={{width: 200}}
+                        />
+                    </Form.Item>
+
+                </Form>
             </Modal>
         </Modal>
     )
