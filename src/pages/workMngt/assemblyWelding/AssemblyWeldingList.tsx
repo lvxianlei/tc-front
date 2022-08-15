@@ -35,7 +35,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
         {
             key: 'priorityName',
             title: '优先级',
-            width: 150,
+            width: 100,
             dataIndex: 'priorityName'
         },
         {
@@ -71,19 +71,19 @@ export default function AssemblyWeldingList(): React.ReactNode {
         {
             key: 'weldingLeaderName',
             title: '组焊负责人',
-            width: 200,
+            width: 120,
             dataIndex: 'weldingLeaderName'
         },
         {
             key: 'weldingOperatorName',
             title: '作业员',
-            width: 200,
+            width: 120,
             dataIndex: 'weldingOperatorName'
         },
         {
             key: 'statusName',
             title: '组焊清单状态',
-            width: 200,
+            width: 120,
             dataIndex: 'statusName'
         },
         {
@@ -101,15 +101,15 @@ export default function AssemblyWeldingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
-                    {
-                        record.weldingLeader === userId || record.weldingOperator === userId ?
-                            <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
-                            : <Button type="link" disabled>组焊清单</Button>
-                    }
-                    <Button type='link' onClick={async () => {
+                    {/* {
+                        record.weldingLeader === userId || record.weldingOperator === userId ? */}
+                    <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
+                    {/* : <Button type="link" disabled>组焊清单</Button>
+                    } */}
+                    {/* <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);
-                    }} disabled={record.status !== 2}>指派</Button>
+                    }} disabled={record.status !== 2}>指派</Button> */}
                 </Space>
             )
         }
@@ -228,9 +228,8 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
                             <Select.Option value={1} key="1">待开始</Select.Option>
-                            <Select.Option value={2} key="2">待指派</Select.Option>
-                            <Select.Option value={3} key="3">组焊中</Select.Option>
-                            <Select.Option value={4} key="4">已完成</Select.Option>
+                            <Select.Option value={2} key="2">组焊中</Select.Option>
+                            <Select.Option value={3} key="3">已完成</Select.Option>
                         </Select>
                     </Form.Item>
                 },

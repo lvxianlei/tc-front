@@ -593,6 +593,13 @@
       "exact": true,
       "authority": "tc_erp_rd_cockpit_loft_list"
     },
+    { // 驾驶舱-人员工作负荷
+      "name": "人员工作负荷",
+      "path": "/cockpit/personnelLoad",
+      "module": "./pages/cockpit/personnelLoad/List",
+      "exact": true,
+      "authority": "tc_erp_rd_work_load_list"
+    },
     { // 驾驶舱-报表
       "name": "报表",
       "path": "/cockpit/statements",
@@ -864,7 +871,7 @@
       "path": "/workMngt/pickList/pickTowerMessage/:id/:status/:materialLeader/pick/:productSegmentId",
       "module": "./pages/workMngt/pickList/pickTowerMessage/Pick",
       "exact": true,
-      "authority": "tc_erp_rd_work_material_tower_material"
+      "authority": "tc_erp_rd_work_material_tower_material_list"
     },
     { // 工作管理-提料-塔型信息-提料-放样塔型套用
       "name": "放样塔型套用",
@@ -1076,63 +1083,63 @@
       "exact": true,
       "authority": "tc_erp_rd_work_loft_list"
     },
-    { // 工作管理-放样信息
-      "name": "放样信息",
+    { // 工作管理-任务说明
+      "name": "任务说明",
       "path": "/workMngt/setOutList/setOutInformation/:id",
       "module": "./pages/workMngt/setOut/SetOutInformation",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_details"
     },
-    { // 工作管理-塔型信息
-      "name": "塔型信息",
+    { // 工作管理-工作目录
+      "name": "工作目录",
       "path": "/workMngt/setOutList/towerInformation/:id",
       "module": "./pages/workMngt/setOut/TowerInformation",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower"
     },
-    { // 工作管理-塔型信息-放样
+    { // 工作管理-工作目录-放样
       "name": "放样",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:productSegmentId",
       "module": "./pages/workMngt/setOut/Lofting",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower_loft"
     },
-    { // 工作管理-塔型信息-模型
+    { // 工作管理-工作目录-模型
       "name": "模型",
       "path": "/workMngt/setOutList/towerInformation/:id/modalList",
       "module": "./pages/workMngt/setOut/ModelList",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower_mode"
     },
-    { // 工作管理-塔型信息-大样图工艺卡
+    { // 工作管理-工作目录-大样图工艺卡
       "name": "大样图工艺卡",
       "path": "/workMngt/setOutList/towerInformation/:id/processCardList",
       "module": "./pages/workMngt/setOut/ProcessCardList",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower_sketch"
     },
-    { // 工作管理-塔型信息-NC程序
+    { // 工作管理-工作目录-NC程序
       "name": "NC程序",
       "path": "/workMngt/setOutList/towerInformation/:id/NCProgram",
       "module": "./pages/workMngt/setOut/NCProgram",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower_nc"
     },
-    { // 工作管理-塔型信息-校核
+    { // 工作管理-工作目录-校核
       "name": "校核",
       "path": "/workMngt/setOutList/towerInformation/:id/towerCheck/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerCheck",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower_check"
     },
-    { // 工作管理-塔型信息-塔型放样明细
+    { // 工作管理-工作目录-塔型放样明细
       "name": "塔型放样明细",
       "path": "/workMngt/setOutList/towerInformation/:id/towerLoftingDetails/:productSegmentId",
       "module": "./pages/workMngt/setOut/TowerLoftingDetails",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower_detailed"
     },
-    { // 工作管理-塔型信息-放样-放样塔型套用
+    { // 工作管理-工作目录-放样-放样塔型套用
       "name": "放样塔型套用",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:loftId/loftingTowerApplication",
       "module": "./pages/workMngt/setOut/LoftingTowerApplication",
@@ -1208,6 +1215,13 @@
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed_add"
+    },
+    { // 工作管理-组焊列表-组焊清单-套用
+      "name": "套用",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/apply/:segmentId",
+      "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
+      "exact": true,
+      "authority": "rd_welding"
     },
     // { // 工作管理-组焊列表-校核
     //   "name": "校核",
@@ -1442,7 +1456,7 @@
       "path": "/baseSetting/baseSettingMngt",
       "module": "./pages/baseSetting/BaseSettingMngt",
       "exact": true,
-      "authority": "rd_config"
+      "authority": "tc_erp_rd_config_system"
     },
     { // 图纸塔型
       "name": "图纸塔型",
@@ -1497,6 +1511,14 @@
       "module": "./pages/workBench/sw/index",
       "exact": true,
       "authority": "tc_erp_sw_workBench_list_data"
+    },
+    { // 工作台-营销
+      "name": "营销工作台",
+      "path": "/workBenchSC/sc",
+      "module": "./pages/workBench/sc/index",
+      "exact": true,
+      // "authority": "rd_workbench"
+      "authority": "tc_erp_sc_workbench"
     },
     { // 工作台-营销
       "name": "营销工作台",
@@ -2656,6 +2678,19 @@
       "module": "./pages/system-mngt/otherSetting/index",
       "exact": true,
       "authority": "tc_erp_sys_system_app_deploy_list"
+    { // RD-系统设置-试组装配置
+      "name": "试组装配置",
+      "path": "/baseSetting/tryAssemble",
+      "module": "./pages/baseSetting/TryAssemble",
+      "exact": true,
+      "authority": "tc_erp_rd_trial_config_list"
+    },
+    { // RD-系统设置-返修件条目配置
+      "name": "返修件条目配置",
+      "path": "/baseSetting/itemRepair",
+      "module": "./pages/baseSetting/ItemRepair",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }

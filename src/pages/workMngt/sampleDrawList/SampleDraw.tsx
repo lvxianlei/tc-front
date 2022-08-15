@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload } from 'antd';
-import { Page } from '../../common';
+import React, { useRef, useState } from 'react';
+import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload, Select } from 'antd';
+import { Attachment, AttachmentRef, Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import styles from './sample.module.less';
+import { FileProps } from '../../common/Attachment';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>()
@@ -20,6 +21,9 @@ export default function SampleDraw(): React.ReactNode {
         uploadSmallSampleCount: 0,
         noSmallSampleCount: 0
     });
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
         setHeaderName(data);
@@ -98,7 +102,7 @@ export default function SampleDraw(): React.ReactNode {
                     </Popconfirm> : null}
                     <Button type='link' onClick={async () => {
                         const url: any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
-                        if(url?.fileSuffix === 'pdf') {
+                        if (url?.fileSuffix === 'pdf') {
                             window.open(url?.downloadUrl)
                         } else {
                             setUrl(url?.downloadUrl);
@@ -111,6 +115,7 @@ export default function SampleDraw(): React.ReactNode {
     ]
 
     const handleModalCancel = () => { setVisible(false); setUrl(''); };
+    const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
             const formatDate = value.upLoadTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -142,6 +147,23 @@ export default function SampleDraw(): React.ReactNode {
             message.error('上传失败');
         }
     }
+
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
+
+    const del = () => {
+        if (selectedKeys.length > 0) {
+            RequestUtil.delete(`/tower-science/smallSample/sampleDelete?ids=${selectedKeys.join(',')}`).then(res => {
+                message.success('删除成功');
+                history.go(0);
+            })
+        } else {
+            message.warning('请选择要删除的数据')
+        }
+    }
+
     return (
         <>
             <Modal visible={visible} title="图片" footer={false} onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
@@ -162,23 +184,8 @@ export default function SampleDraw(): React.ReactNode {
                         {/* <Button type="primary">导出</Button> */}
                         <Button type="primary" onClick={() => {
                             downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {}, true)
-                        }}>导出</Button>
-                        {params.status === '1' ? <Upload
-                            accept=".zip,.rar,.7z"
-                            multiple={true}
-                            action={`${process.env.REQUEST_API_PATH_PREFIX}/tower-science/smallSample/sampleUploadByZip/${params.id}`}
-                            headers={{
-                                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                                'Tenant-Id': AuthUtil.getTenantId(),
-                                'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                            }}
-                            // data={ { productCategoryId:params.id } }
-                            onChange={uploadChange}
-                            showUploadList={false}
-                        ><Button type="primary" >导入</Button></Upload> : null}
-                        <Button type="primary" onClick={() => {
-                            history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
-                        }}>下载样图</Button>
+                        }} ghost>导出</Button>
+                        <Button type='primary' onClick={del} disabled={selectedKeys.length === 0} ghost>批量删除</Button>
                         {params.status === '1' ? <Popconfirm
                             title="确认完成小样图?"
                             onConfirm={async () => await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(() => {
@@ -191,15 +198,47 @@ export default function SampleDraw(): React.ReactNode {
                         >
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
+                        <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
+                            RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...dataInfo]).then(res => {
+                                if (res) {
+                                    message.success('上传成功');
+                                    history.go(0);
+                                }
+                            }).catch(error => {
+                                setTimeout(() => {
+                                    history.go(0);
+                                }, 1500)
+                            })
+                        }}>
+                            <Button type="primary" ghost>导入</Button>
+                        </Attachment>
+                        <Button type="primary" onClick={() => {
+                            history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
+                        }} ghost>下载样图</Button>
                         <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                        <span>小样图数：<span style={{color:'#FF8C00'}}>{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span></span>
+                        <span>小样图数：<span style={{ color: '#FF8C00' }}>{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span></span>
                     </Space>
                 }
+                tableProps={{
+                    rowSelection: {
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange
+                    }
+                }}
                 searchFormItems={[
                     {
                         name: 'upLoadTime',
                         label: '上传时间',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'smallSampleStatus',
+                        label: '上传状态',
+                        children: <Select style={{ width: "200px" }} defaultValue={''}>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
+                            <Select.Option value={1} key={1}>已上传</Select.Option>
+                            <Select.Option value={2} key={2}>未上传</Select.Option>
+                        </Select>
                     },
                     {
                         name: 'fuzzyMsg',

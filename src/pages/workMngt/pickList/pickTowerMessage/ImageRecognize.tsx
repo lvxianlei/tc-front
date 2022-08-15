@@ -135,13 +135,18 @@ export default function PickTowerDetail(): React.ReactNode {
                             values = values.map((res: any) => {
                                 return {
                                     ...res,
-                                    segmentGroupId: tableDataSource[0].segmentGroupId,
-                                    productCategory: tableDataSource[0].productCategory
+                                    segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                                    productCategoryId:params?.id,
                                 }
                             })
+                            const submitData={
+                                drawProductStructureSaveDTOS: values,
+                                segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                                productCategoryId:params.productSegmentId ==='all'?params?.id:'',
+                            }
                             const value = await RequestUtil.post(`/tower-science/drawProductStructure/check/cover`, values)
                             if(value){
-                                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`, values).then(()=>{
+                                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`, submitData).then(()=>{
                                     message.success('保存成功！')
                                 }).then(()=>{
                                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
@@ -166,7 +171,8 @@ export default function PickTowerDetail(): React.ReactNode {
                 
                     {/* <Button type='primary' onClick={getCropData} disabled={!urlBase}>确认剪裁</Button> */}
                     <Button type='primary' onClick={async ()=>{
-                        const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: urlBase, productSegmentId: params.productSegmentId});
+                        const tableDataSource: any[]  = await RequestUtil.post(`/tower-science/drawProductStructure/ocr`,{base64File: urlBase, segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                        productCategoryId:params.productSegmentId ==='all'?params?.id:''});
                         setTableDataSource(tableDataSource);
                         form.setFieldsValue({
                             data: tableDataSource
@@ -245,10 +251,15 @@ export default function PickTowerDetail(): React.ReactNode {
                 values = values.map((res: any) => {
                     return {
                         ...res,
-                        segmentGroupId: params.productSegmentId
+                        segmentId: params.productSegmentId
                     }
                 })
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,values).then(()=>{
+                const submitData={
+                    drawProductStructureSaveDTOS: values,
+                    segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                    productCategoryId:params.productSegmentId ==='all'?params?.id:'',
+                }
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=1`,submitData).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
@@ -258,10 +269,15 @@ export default function PickTowerDetail(): React.ReactNode {
                 values = values.map((res: any) => {
                     return {
                         ...res,
-                        segmentGroupId: params.productSegmentId
+                        segmentId: params.productSegmentId
                     }
                 })
-                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,values).then(()=>{
+                const submitData={
+                    drawProductStructureSaveDTOS: values,
+                    segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                    productCategoryId:params.productSegmentId ==='all'?params?.id:'',
+                }
+                await RequestUtil.post(`/tower-science/drawProductStructure/ocr/save?cover=0`,submitData).then(()=>{
                     message.success('保存成功！')
                 }).then(()=>{
                     setVisible(false);

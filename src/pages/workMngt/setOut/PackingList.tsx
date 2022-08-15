@@ -13,7 +13,7 @@ import { Link, useHistory, useLocation, useParams, useRouteMatch } from 'react-r
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
-import { IAllot, IBundle, ICount, ILofting, IPackingList } from './ISetOut';
+import { IBundle, ICount, IPackingList } from './ISetOut';
 import { bundleColumns, columns } from './SetOutInformation.json';
 import ApplyPacking, { EditProps } from './ApplyPacking';
 
@@ -157,6 +157,7 @@ export default function PackingList(): React.ReactNode {
                                 <Link to={`/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListSetting/${record.id}`}>
                                     <Button type="link" disabled={location?.state?.status === 4}>编辑</Button>
                                 </Link>
+                                {/* 已接收不可删除 */}
                                 <Popconfirm
                                     title="确认删除?"
                                     onConfirm={() => { RequestUtil.delete(`/tower-science/packageStructure?id=${record.id}`).then(res => history.go(0)) }}
