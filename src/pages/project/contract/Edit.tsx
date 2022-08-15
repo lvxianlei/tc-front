@@ -89,7 +89,7 @@ export default function Edit() {
   const handleSubmit = async () => {
     const baseInfo = await form.validateFields()
     const editformData = await editform.validateFields()
-    const attchs = attchmentRef.current?.getDataSource()
+    const attchs = attchmentRef.current?.getDataSource()?.map(item => item.id)
     const {
       totalReturnedRate,
       totalReturnedAmount
@@ -138,7 +138,7 @@ export default function Edit() {
         ...item,
         contractId: params.id
       })),
-      fileIds: attchs
+      fileIds: attchs?.map((item: any) => item.id)
     })
     if (result) {
       setWhen(false)
@@ -173,38 +173,38 @@ export default function Edit() {
         })
       }
     }
-    if(fields.customerCompany){
-      form.setFieldsValue({ 
-        signCustomer: customerCompany, 
-        payCompany: customerCompany 
+    if (fields.customerCompany) {
+      form.setFieldsValue({
+        signCustomer: customerCompany,
+        payCompany: customerCompany
       })
     }
   }
 
   const handleEditableChange = (fields: any, allFields: any) => {
     if (fields.submit.length - 1 >= 0) {
-      const baseInfo = form.getFieldsValue()
+      const contractAmount = form.getFieldValue("contractAmount")
       const result = allFields.submit[fields.submit.length - 1];
-      if (planType === 1) {
+      if (planType === 1 && (fields.type !== "add")) {
         editform.setFieldsValue({
           submit: allFields.submit.map((item: any) => {
             if (item.id === result.id) {
               return ({
                 ...item,
-                returnedAmount: (Number(baseInfo.contractAmount || 0) * Number(result.returnedRate || 0) / 100).toFixed(2)
+                returnedAmount: (parseFloat(contractAmount || 0) * (result.returnedRate || 0) * 0.01).toFixed(2)
               })
             }
             return item
           })
         })
       }
-      if (planType === 2) {
+      if (planType === 2 && (fields.type !== "add")) {
         editform.setFieldsValue({
           submit: allFields.submit.map((item: any) => {
             if (item.id === result.id) {
               return ({
                 ...item,
-                returnedRate: (Number(baseInfo.contractAmount || 0) / Number(result.returnedAmount || 0) * 100).toFixed(2)
+                returnedRate: (parseFloat(contractAmount || 0) / (result.returnedAmount || 0) * 100).toFixed(2)
               })
             }
             return item
