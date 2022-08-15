@@ -259,7 +259,16 @@ export default function JobsMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择授权模式"
                         }]}>
-                            <Select placeholder="请选择授权模式" style={{ width: "100%" }} disabled={title==='查看'} onChange={(value:number) => setSelected(value)}>
+                            <Select placeholder="请选择授权模式" style={{ width: "100%" }} disabled={title==='查看'} onChange={(value:number) => {
+                                setSelected(value)
+                                value===0&&form.setFieldsValue({
+                                    impowerCode:'',
+                                })
+                                value===1&&form.setFieldsValue({
+                                    appId:'',
+                                    appSecret:''
+                                })
+                            }}>
                                 <Select.Option value={0} key="0">Token授权</Select.Option>
                                 <Select.Option value={1} key="1">授权码授权</Select.Option>
                             </Select>
