@@ -104,22 +104,22 @@ export default function JobsMngt(): React.ReactNode {
                     >
                         <Button type="link">删除</Button>
                     </Popconfirm>
-                    <Button type="link" onClick={ async () => {
+                    {record?.switchButton===1 && <Button type="link" onClick={ async () => {
                         await RequestUtil.put(`/tower-system/appDeploy`,  {
                             ...record,
                             switchButton: 0
                         })
                         message.success('启用成功！')
                         setRefresh(!refresh)
-                    } }>启用</Button>
-                    <Button type="link" onClick={ async () => {
+                    } } >启用</Button>}
+                    {record?.switchButton===0 && <Button type="link" onClick={ async () => {
                         await RequestUtil.put(`/tower-system/appDeploy`,  {
                             ...record,
                             switchButton: 1
                         })
                         message.success('禁用成功！')
                         setRefresh(!refresh)
-                    } }>禁用</Button>
+                    } } >禁用</Button>}
                 </Space>
             )
         }
@@ -249,7 +249,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": true,
                             "message": "请输入应用标识"
                         }]}>
-                            <Input maxLength={ 32 } placeholder="请输入应用标识"/>
+                            <Input maxLength={ 32 } placeholder="请输入应用标识" disabled={title==='查看'}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -259,7 +259,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": true,
                             "message": "请选择授权模式"
                         }]}>
-                            <Select placeholder="请选择授权模式" style={{ width: "100%" }} onChange={(value:number) => setSelected(value)}>
+                            <Select placeholder="请选择授权模式" style={{ width: "100%" }} disabled={title==='查看'} onChange={(value:number) => setSelected(value)}>
                                 <Select.Option value={0} key="0">Token授权</Select.Option>
                                 <Select.Option value={1} key="1">授权码授权</Select.Option>
                             </Select>
@@ -270,7 +270,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": selected===1,
                             "message": "请输入授权码"
                         }]}>
-                            <Input  placeholder={"请输入授权码"}/>
+                            <Input  placeholder={"请输入授权码"} disabled={title==='查看'}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -280,7 +280,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": selected===0,
                             "message": "请输入appId"
                         }]}>
-                            <Input maxLength={ 32 } placeholder={"请输入appId"}/>
+                            <Input maxLength={ 32 } placeholder={"请输入appId"} disabled={title==='查看'}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -288,7 +288,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": selected===0,
                             "message": "请输入appSecret"
                         }]}>
-                            <Input maxLength={ 32 } placeholder={"请输入appSecret"}/>
+                            <Input maxLength={ 32 } placeholder={"请输入appSecret"} disabled={title==='查看'}/>
                         </Form.Item>
                     </Col>
                 </Row>
@@ -296,13 +296,13 @@ export default function JobsMngt(): React.ReactNode {
                     "required": true,
                     "message": "请输入服务地址"
                 }]} labelCol={{span:3}} wrapperCol={{span:20}}>
-                    <Input maxLength={ 200 } placeholder={"请输入服务地址"}/>
+                    <Input maxLength={ 200 } placeholder={"请输入服务地址"} disabled={title==='查看'}/>
                 </Form.Item>
                 <Form.Item label="跳转地址" name="skipUrl"  labelCol={{span:3}} wrapperCol={{span:20}}>
-                    <Input maxLength={ 200 } placeholder={"请输入前端跳转地址"}/>
+                    <Input maxLength={ 200 } placeholder={"请输入前端跳转地址"} disabled={title==='查看'}/>
                 </Form.Item>
                 <Form.Item label="备注" name="description" labelCol={{span:3}} wrapperCol={{span:20}}>
-                    <Input.TextArea maxLength={ 200 } showCount/>
+                    <Input.TextArea maxLength={ 200 } showCount disabled={title==='查看'}/>
                 </Form.Item>
             </Form>
         </Modal>
