@@ -9,7 +9,7 @@ import { Space, Button, Modal, Row, Col, Input, message, Popconfirm } from 'antd
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import UploadModal from './UploadModal';
 import { FileProps } from '../../common/Attachment';
@@ -21,7 +21,6 @@ export default function ModelList(): React.ReactNode {
     const [visible, setVisible] = useState(false);
     const [segmentName, setSegmentName] = useState('');
     const [segmentId, setSegmentId] = useState('');
-    const location = useLocation<{ status: number }>();
 
     const columns = [
         {
@@ -68,12 +67,12 @@ export default function ModelList(): React.ReactNode {
                         const data: FileProps = await RequestUtil.get(`/tower-science/productSegment/segmentModelDownload?segmentRecordId=${record.id}`);
                         window.open(data?.downloadUrl)
                     }}>下载</Button>
-                    {location.state.status === 1 || location.state.status === 2 ? <Button type="link" onClick={() => {
+                    <Button type="link" onClick={() => {
                         setVisible(true);
                         setSegmentName(record.segmentName);
                         setSegmentId(record.id)
-                    }}>编辑</Button> : null}
-                    {location.state.status === 1 || location.state.status === 2 ? <Popconfirm
+                    }}>编辑</Button>
+                    <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
                             RequestUtil.delete(`/tower-science/productSegment/segmentModelDelete?segmentRecordId=${record.id}`).then(res => {
@@ -85,7 +84,7 @@ export default function ModelList(): React.ReactNode {
                         cancelText="取消"
                     >
                         <Button type="link">删除</Button>
-                    </Popconfirm> : null}
+                    </Popconfirm>
                 </Space>
             )
         }
@@ -100,7 +99,7 @@ export default function ModelList(): React.ReactNode {
             refresh={refresh}
             requestData={{ productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
-                {location.state.status === 1 || location.state.status === 2 ? <UploadModal id={params.id} path="/tower-science/productSegment/segmentModelUpload" updateList={() => setRefresh(!refresh)} /> : null}
+                <UploadModal id={params.id} path="/tower-science/productSegment/segmentModelUpload" updateList={() => setRefresh(!refresh)} />
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
             searchFormItems={[]}
