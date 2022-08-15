@@ -41,6 +41,7 @@ export default function Lofting(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
     const [user, setUser] = useState<any|undefined>([]);
+    const [materialCheckLeaders, setMaterialCheckLeaders] = useState<any|undefined>([]);
     const [list, setList] = useState<any|undefined>([]);
     const [pickLeader, setPickLeader] = useState<any|undefined>([]);
     const [checkLeader, setCheckLeader] = useState<any|undefined>([]);
@@ -70,13 +71,16 @@ export default function Lofting(): React.ReactNode {
             statusName: "校核中",
             updateStatusTime: "2022-06-16 09:59:33",
         }]
-        const userData: any = await RequestUtil.get(`/tower-system/employee?current=1&size=1000`);
-        setUser(userData?.records);
+        // const userData: any = await RequestUtil.get(`/tower-system/employee?current=1&size=1000`);
+        // setUser(userData?.records);
         setDepartment(departmentData);
         const detailTop: any = await RequestUtil.get(`/tower-science/materialProductCategory/${params.id}`);
         setDetailTop(detailTop);
         const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000&category=2&productType=${detailTop?.productType}`);
         setList(list?.records);
+        const users:any = await RequestUtil.get(`/tower-science/drawProductSegment/leader/${ params.id}`)
+        setUser(users?.materialLeaders&&Array.isArray(users?.materialLeaders)&&users?.materialLeaders.length>0?users?.materialLeaders:[])
+        setMaterialCheckLeaders(users?.materialCheckLeaders&&Array.isArray(users?.materialCheckLeaders)&&users?.materialCheckLeaders.length>0?users?.materialCheckLeaders:[])
         setValue(value)
         resole(data)
     }), {})
@@ -283,7 +287,7 @@ export default function Lofting(): React.ReactNode {
                     }]}
                 >
                     <Select style={{width:'100%'}} onChange={() => rowChange(index)}> 
-                        { user && user.map((item:any)=>{
+                        { materialCheckLeaders && materialCheckLeaders.map((item:any)=>{
                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         }) }
                     </Select>
@@ -610,6 +614,7 @@ export default function Lofting(): React.ReactNode {
                     <Space>
                         <Button type="primary" ghost onClick={async () => {
                             if (editorLock === '编辑') {
+                            
                                 setColumns(columns);
                                 // form.setFieldsValue({
                                 //     ...value,
