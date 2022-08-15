@@ -59,10 +59,10 @@ export default forwardRef(function WeldingVerify({ id }: modalProps, ref) {
             ]
         },
         {
-            key: 'voltageGradeName',
+            key: 'isMainPart',
             title: '是否主件',
             width: 80,
-            dataIndex: 'voltageGradeName',
+            dataIndex: 'isMainPart',
             type: 'select',
             enum: [
                 { "value": 1, "label": "是" },
