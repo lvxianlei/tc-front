@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, message, Modal, Radio, Row } from "antd";
+import { Button, message, Modal, Radio } from "antd";
 import { Link, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { DetailContent, SearchTable } from "../../common";
 import { TabTypes } from "../Detail";
@@ -14,7 +14,7 @@ export default function Index() {
     const params = useParams<{ id: string, tab?: TabTypes }>()
     const [salesPlanStatus, setSalesPlanStatus] = useState<string>("");
     const [isExport, setIsExportStoreList] = useState(false)
-    const entryPath = params.id ? "management" : "salesPlan"
+    const entryPath = params.id ? "management" : "salePlan"
     const { loading, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice`, {
             projectId: params.id, ...postData
@@ -83,7 +83,7 @@ export default function Index() {
                     salesPlanStatus === "" && <Button
                         type="primary"
                         onClick={() => history.push(
-                            `/project/management/new/salesPlan/${params.id}`
+                            `/project/${entryPath}/new/salesPlan/${params.id}`
                         )
                         }>新增</Button>
                 }
@@ -117,9 +117,9 @@ export default function Index() {
                     fixed: "right",
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" size="small" className='btn-operation-link' onClick={() => history.push(`/project/management/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                            <Button type="link" size="small" className='btn-operation-link' onClick={() => history.push(`/project/${entryPath}/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
                             {[2, -1].includes(record.taskReviewStatus) && <>
-                                <Button type="link" size="small" className='btn-operation-link'><Link to={`/project/management/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
+                                <Button type="link" size="small" className='btn-operation-link'><Link to={`/project/${entryPath}/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
                                 <Button type="link" size="small" className='btn-operation-link' onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
                                 <Button type="link" size="small" className='btn-operation-link' loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                             </>}

@@ -656,7 +656,21 @@
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
+      "path": "/project/salePlan/edit/salesPlan/:projectId/:id",
+      "module": "./pages/project/Edit/SalesPlanEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 销售计划编辑
+      "name": "销售计划编辑",
       "path": "/project/management/edit/salesPlan/:projectId/:id",
+      "module": "./pages/project/Edit/SalesPlanEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 新增销售计划编辑
+      "name": "新增销售计划",
+      "path": "/project/salePlan/new/salesPlan/:id",
       "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
       "authority": "project_detail"
@@ -665,6 +679,13 @@
       "name": "新增销售计划",
       "path": "/project/management/new/salesPlan/:id",
       "module": "./pages/project/Edit/SalesPlanEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 销售计划详情
+      "name": "销售计划详情",
+      "path": "/project/salePlan/cat/salesPlan/:projectId/:id",
+      "module": "./pages/project/SalesPlanDetail",
       "exact": true,
       "authority": "project_detail"
     },

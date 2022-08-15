@@ -10,8 +10,8 @@ import { materialStandardOptions } from "../../../configuration/DictionaryOption
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/:type/salesPlan/:projectId/:id")
-    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/:type/salesPlan/:projectId")
+    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/:entryPath/:type/salesPlan/:projectId/:id")
+    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/:entryPath/:type/salesPlan/:projectId")
     const match = editMatch || newMatch
     const [when, setWhen] = useState<boolean>(true)
     const [select, setSelect] = useState<string[]>([])
