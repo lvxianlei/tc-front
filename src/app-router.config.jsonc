@@ -2652,10 +2652,10 @@
     },
     { // 通用中心-第三方应用配置
       "name": "第三方应用配置",
-      "path": "/otherSetting/index",
+      "path": "/sys/otherSetting/index",
       "module": "./pages/system-mngt/otherSetting/index",
       "exact": true,
-      "authority": "tc_erp_sys_log"
+      "authority": "tc_erp_sys_system_app_deploy_list"
     }
   ]
 }

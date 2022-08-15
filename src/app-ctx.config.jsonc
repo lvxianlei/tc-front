@@ -61,6 +61,11 @@
                         "label": "定额配置",
                         "path": "/sys/quotaConfig",
                         "authority": "tc_erp_sys_system_quota"
+                    },
+                    {
+                        "label": "第三方应用配置",
+                        "path": "/sys/otherSetting/index",
+                        "authority": "tc_erp_sys_system_app_deploy"
                     }
                 ]
             },
@@ -947,20 +952,6 @@
                         "label": "登录日志",
                         "path": "/journal/login",
                         "authority": "tc_erp_sys_log_login"
-                    }
-                ]
-            },
-            {
-                "label": "第三方应用配置",
-                "icon": "xitongrizhiTY_xitongrizhi",
-                "path": "/otherSetting",
-                "appName": "COMM",
-                "authority": "tc_erp_sys_log",
-                "items": [
-                    {
-                        "label": "第三方应用配置",
-                        "path": "/otherSetting/index",
-                        "authority": "tc_erp_sys_log_operation"
                     }
                 ]
             },

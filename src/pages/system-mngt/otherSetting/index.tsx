@@ -77,7 +77,7 @@ export default function JobsMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/getAppDeployById/${ record.id }`);
+                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/${ record.id }`);
                         setDetail(data);
                         setTitle("查看");
                         setView(true)
@@ -85,7 +85,7 @@ export default function JobsMngt(): React.ReactNode {
                         setVisible(true);
                     } }>查看</Button>
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/getAppDeployById/${ record.id }`);
+                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/${ record.id }`);
                         setDetail(data);
                         setTitle("编辑");
                         form.setFieldsValue({ ...data });
@@ -140,7 +140,7 @@ export default function JobsMngt(): React.ReactNode {
                     appSecret: '',
                     description: '',
                     impowerCode: '',
-                    impowerPatterm: '',
+                    impowerPatterm: 0,
                     serviceUrl: '',
                     skipUrl: '',
                 }); 
@@ -161,7 +161,7 @@ export default function JobsMngt(): React.ReactNode {
                     appSecret: '',
                     description: '',
                     impowerCode: '',
-                    impowerPatterm: '',
+                    impowerPatterm: 0,
                     serviceUrl: '',
                     skipUrl: '',
                 }); 
@@ -177,7 +177,7 @@ export default function JobsMngt(): React.ReactNode {
     };
     return <>
         <Page
-            path="/tower-system/appDeploy/list"
+            path="/tower-system/appDeploy"
             columns={ columns }
             headTabs={ [] }
             refresh={ refresh }
@@ -208,7 +208,7 @@ export default function JobsMngt(): React.ReactNode {
                         appSecret: '',
                         description: '',
                         impowerCode: '',
-                        impowerPatterm: '',
+                        impowerPatterm: 0,
                         serviceUrl: '',
                         skipUrl: '',
                     }); 
@@ -228,7 +228,7 @@ export default function JobsMngt(): React.ReactNode {
                     appSecret: '',
                     description: '',
                     impowerCode: '',
-                    impowerPatterm: '',
+                    impowerPatterm: 0,
                     serviceUrl: '',
                     skipUrl: '',
                 }); 
