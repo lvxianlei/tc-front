@@ -12,7 +12,7 @@ import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
+import { componentTypeOptions, packageTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IBundle, IPackingList, ITower } from './ISetOut';
 import ReuseTower, { EditProps } from './ReuseTower';
 import { chooseColumns, packingColumns } from './SetOutInformation.json';
@@ -677,11 +677,11 @@ export default function PackingListNew(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item name="segmentId" label="零件类型">
-                    <Select placeholder="请选择" style={{ width: '100%' }}>
-                        {userList && userList.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.segmentId}>{item.segmentName}</Select.Option>
-                        })}
+                <Form.Item name="type" label="零件类型">
+                    <Select placeholder="请选择" size="small">
+                        {componentTypeOptions?.map((item: any, index: number) =>
+                            <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>
+                        )}
                     </Select>
                 </Form.Item>
                 <Form.Item name="isCommonSegment">

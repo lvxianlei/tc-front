@@ -98,7 +98,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
                     {
-                        record.weldingLeader.split(',').indexOf(userId) !== -1 ?
+                        record.weldingLeader.split(',').indexOf(userId) === -1 ?
                             <Button type="link" disabled>组焊清单</Button>
                             : <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
                     }
