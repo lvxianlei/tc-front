@@ -92,7 +92,12 @@
         {
             "title": "收货单号",
             "dataIndex": "receiveNumber",
-            "disabled": true
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收货单号"
+                }
+            ]
         },
         {
             "title": "合同编号",
@@ -420,14 +425,12 @@
         {
             "title": "标准",
             "dataIndex": "materialStandardName",
-            "type": "string",
-            "disabled": true
+            "type": "select"
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "type": "string",
-            "disabled": true
+            "type": "select"
         },
         {
             "title": "规格",
@@ -438,14 +441,12 @@
         {
             "title": "长度（mm）",
             "dataIndex": "length",
-            "type": "number",
-            "disabled": true
+            "type": "number"
         },
         {
             "title": "宽度（mm）",
             "dataIndex": "width",
-            "type": "number",
-            "disabled": true
+            "type": "number"
         },
         {
             "title": "数量",
