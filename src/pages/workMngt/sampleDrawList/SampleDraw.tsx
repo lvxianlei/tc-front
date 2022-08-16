@@ -237,8 +237,8 @@ export default function SampleDraw(): React.ReactNode {
                         // 0是未上传1已上传
                         children: <Select style={{ width: "200px" }} defaultValue={''}>
                             <Select.Option value={''} key={''}>全部</Select.Option>
-                            <Select.Option value={0} key={0}>已上传</Select.Option>
-                            <Select.Option value={1} key={1}>未上传</Select.Option>
+                            <Select.Option value={0} key={0}>未上传</Select.Option>
+                            <Select.Option value={1} key={1}>已上传</Select.Option>
                         </Select>
                     },
                     {
