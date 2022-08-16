@@ -80,8 +80,8 @@ export default forwardRef(function ChooseMaterials({ id, name, planNumber }: mod
             }}
             searchFormItems={[]}
             extraOperation={<p>
-                <span>计划号：<span>{name}</span></span>
-                <span>塔型名：<span>{planNumber}</span></span>
+                <span>计划号：<span>{planNumber}</span></span>
+                <span>塔型名：<span>{name}</span></span>
             </p>}
         />
     </DetailContent>

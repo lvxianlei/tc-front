@@ -26,12 +26,7 @@ interface Column extends ColumnType<object> {
 }
 
 export default function TowerInformation(): React.ReactNode {
-
-    const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
-        resole(data);
-    }), {})
-    const departmentData: any = data || [];
+    const [optionalList, setOptionalList] = useState<any>()
 
     const { data: loftingQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1`);
@@ -41,42 +36,31 @@ export default function TowerInformation(): React.ReactNode {
     const { data: userList } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result = await RequestUtil.get<any>(`/tower-system/employee?deptName=技术部&size=1000`);
+            const user = await RequestUtil.get<any>(`/tower-science/productCategory/${params.id}`);
+            let loftingUserList: any[] = [];
+            let loftingMutualReviewList: any[] = [];
+            let programmingLeaderList: any[] = [];
+            result?.records?.forEach((res: any) => {
+                if (user?.loftingUser.split(',').indexOf(res.userId) > -1) {
+                    loftingUserList.push(res)
+                }
+                if (user?.loftingMutualReview.split(',').indexOf(res.userId) > -1) {
+                    loftingMutualReviewList.push(res)
+                }
+                if (user?.programmingLeader.split(',').indexOf(res.userId) > -1) {
+                    programmingLeaderList.push(res)
+                }
+            })
+            setOptionalList({
+                loftingUserList: loftingUserList,
+                loftingMutualReviewList: loftingMutualReviewList,
+                programmingLeaderList: programmingLeaderList
+            })
             resole(result?.records)
         } catch (error) {
             reject(error)
         }
     }), {})
-
-
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles && roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
-
-    const renderTreeNodes = (data: any) => data.map((item: any) => {
-        if (item.children) {
-            return (<TreeNode key={item.id} title={item.name} value={item.id} className={styles.node} >
-                {renderTreeNodes(item.children)}
-            </TreeNode>);
-        }
-        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
-    });
-
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-        switch (title) {
-            case "loftingUserDept":
-                return setLoftingUser(userData.records);
-        };
-    }
 
     const rowChange = (index: number) => {
         rowChangeList.push(index);
@@ -126,7 +110,7 @@ export default function TowerInformation(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "structureId"]} initialValue={record?.structureId}>
-                    <Select style={{ width: '120px' }} placeholder="请选择结构" onChange={() => rowChange(index)}>
+                    <Select style={{ width: '120px' }} placeholder="请选择结构" onChange={() => rowChange(index)} allowClear>
                         {
                             towerStructureOptions?.map((item: any, index: number) =>
                                 <Select.Option value={item.id} key={index}>
@@ -157,7 +141,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择放样人" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            userList?.map((item: any, index: number) =>
+                            optionalList.loftingUserList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -180,7 +164,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择放样互审" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            userList?.map((item: any, index: number) =>
+                            optionalList.loftingMutualReviewList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -203,7 +187,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择校核人" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            userList?.map((item: any, index: number) =>
+                            optionalList.programmingLeaderList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -463,7 +447,6 @@ export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
-    const [loftingUser, setLoftingUser] = useState([]);
     const location = useLocation<{ loftingLeader: string, status: number, name: string, planNumber: string }>();
     const userId = AuthUtil.getUserId();
     const [visible, setVisible] = useState(false);
@@ -517,24 +500,11 @@ export default function TowerInformation(): React.ReactNode {
                 </Select>
             </Form.Item>
             <Form.Item label='人员' name='personnel'>
-                <Row>
-                    <Col>
-                        <Form.Item name="personnelDept">
-                            <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'loftingUserDept') }} style={{ width: "150px" }}>
-                                {renderTreeNodes(wrapRole2DataNode(departmentData))}
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col>
-                    <Col>
-                        <Form.Item name="personnel">
-                            <Select placeholder="请选择" style={{ width: "150px" }}>
-                                {loftingUser && loftingUser.map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
+                <Select placeholder="请选择" style={{ width: "150px" }}>
+                    {userList && userList.map((item: any) => {
+                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                    })}
+                </Select>
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">查询</Button>
