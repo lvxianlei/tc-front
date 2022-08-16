@@ -659,12 +659,12 @@ export default function Lofting(): React.ReactNode {
                             }
                             console.log(formRef.getFieldsValue(true))
                         }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        { params.materialLeader===AuthUtil.getUserId()?
+                        {(user&&user.length>0&&user.map((item:any)=>{return item.userId}).concat([params?.materialLeader]).indexOf(AuthUtil.getUserId())>-1)?
                             <Button type="primary" ghost onClick={
                                 ()=>history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
                             } disabled={params.status==='1'}>提料</Button>
                         :null}
-                        { params.materialLeader===AuthUtil.getUserId()?<Popconfirm
+                        {(materialCheckLeaders.length>0&&materialCheckLeaders.map((item:any)=>{return item.userId}).concat([params.materialLeader]).indexOf(AuthUtil.getUserId())>-1)?<Popconfirm
                             title="确认提交?"
                             onConfirm={ async () => {
                                 await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(()=>{
