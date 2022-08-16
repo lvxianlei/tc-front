@@ -3,7 +3,6 @@ import { Button, message, Modal, Radio } from "antd";
 import { Link, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { DetailContent, SearchTable } from "../../common";
 import { TabTypes } from "../Detail";
-import ExportList from '../../../components/export/list';
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
 import { taskNotice } from "../managementDetailData.json"
@@ -12,15 +11,8 @@ export default function Index() {
     const location = useLocation()
     const match = useRouteMatch()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const [salesPlanStatus, setSalesPlanStatus] = useState<string>("");
-    const [isExport, setIsExportStoreList] = useState(false)
+    const [filterValue, setFilterValue] = useState<{ [key: string]: string }>({ taskReviewStatus: '' });
     const entryPath = params.id ? "management" : "salePlan"
-    const { loading, data, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice`, {
-            projectId: params.id, ...postData
-        })
-        resole(result)
-    }), { refreshDeps: [params.tab] })
 
     const { loading: noticeLoading, run: noticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -66,13 +58,14 @@ export default function Index() {
 
     return <><DetailContent style={{ paddingTop: 14 }}>
         <SearchTable
-            path={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : undefined}`}
+            path={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
+            exportPath={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
+            filterValue={filterValue}
             extraOperation={<>
                 <Radio.Group
                     defaultValue=""
                     onChange={(event) => {
-                        setSalesPlanStatus(event.target.value)
-                        run({ taskReviewStatus: event.target.value })
+                        setFilterValue({ taskReviewStatus: event.target.value })
                     }} >
                     <Radio.Button value="">全部</Radio.Button>
                     <Radio.Button value="0" >审批中</Radio.Button>
@@ -80,17 +73,13 @@ export default function Index() {
                     <Radio.Button value="1" >已通过</Radio.Button>
                 </Radio.Group>
                 {
-                    salesPlanStatus === "" && <Button
+                    filterValue.taskReviewStatus === "" && <Button
                         type="primary"
                         onClick={() => history.push(
                             `/project/${entryPath}/new/salesPlan/${params.id}`
                         )
                         }>新增</Button>
                 }
-                <Button
-                    type="primary"
-                    ghost
-                    onClick={() => setIsExportStoreList(true)}>导出</Button>
             </>}
             columns={[
                 ...taskNotice.map((item: any) => {
@@ -128,17 +117,6 @@ export default function Index() {
                 }
             ]} searchFormItems={[]} />
     </DetailContent>
-        {isExport && <ExportList
-            history={history}
-            location={location}
-            match={match}
-            columnsKey={() => taskNotice as any[]}
-            current={data?.current || 1}
-            size={data?.size || 10}
-            total={data?.total || 0}
-            url={`/tower-market/taskNotice`}
-            serchObj={{ projectId: params.id }}
-            closeExportList={() => { setIsExportStoreList(false) }}
-        />}
+
     </>
 }

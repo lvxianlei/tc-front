@@ -9,7 +9,7 @@ import { materialStandardOptions } from "../../configuration/DictionaryOptions"
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/management/:type/salesPlan/:projectId/:id")
+    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/:entry/:type/salesPlan/:projectId/:id")
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {

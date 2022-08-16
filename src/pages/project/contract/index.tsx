@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Button, Popconfirm, Space, message, Input } from 'antd';
+import { Button, Popconfirm, Space, message, Input, Upload } from 'antd';
 import { Page } from '../../common';
 import { IContract } from "../../IContract";
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
 import MiddleModal from '../../../components/MiddleModal';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function ContractList(): JSX.Element {
   const history = useHistory();
@@ -125,6 +126,7 @@ export default function ContractList(): JSX.Element {
       dataIndex: "createTime", width: 100,
     }
   ]
+
   return (
     <>
       <Page
@@ -138,6 +140,31 @@ export default function ContractList(): JSX.Element {
               type="primary"
               onClick={() => history.push(`/project/${entryPath}/new/contract/${params.id}`)}
             >新增合同</Button>
+            <Upload
+              accept=".xls,.xlsx"
+              action={() => {
+                const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                return baseUrl + '/tower-market/contract/import'
+              }}
+              headers={
+                {
+                  'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                  'Tenant-Id': AuthUtil.getTenantId(),
+                  'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                }
+              }
+              showUploadList={false}
+              onChange={(info) => {
+                if (info.file.response && !info.file.response?.success) {
+                  message.warning(info.file.response?.msg)
+                } else if (info.file.response && info.file.response?.success) {
+                  message.success('导入成功！');
+                  history.go(0)
+                }
+              }}
+            >
+              <Button type="primary" ghost>导入</Button>
+            </Upload>
             <span style={{ marginLeft: "20px" }}>
               合同重量合计：{data?.contractTotalWeight || 0.00}吨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合同金额合计：{data?.contractTotalAmount || 0.00}元
             </span>
@@ -160,7 +187,7 @@ export default function ContractList(): JSX.Element {
               <Space direction="horizontal" size="small">
                 <Button type="link">
                   <Link
-                    to={`/project/${entryPath}/edit/contract/${record?.projectId}/${record?.id}`}
+                    to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}`}
                   >
                     编辑
                   </Link>

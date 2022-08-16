@@ -88,7 +88,6 @@ export default function SalesPlanEdit() {
                 ...data,
                 ...baseInfoData,
                 ...cargoDtoData,
-                projectId: match.params.projectId,
                 contractId,
                 saleOrderNumber: baseInfoData.saleOrderNumber?.value,
                 saleOrderId: baseInfoData.saleOrderNumber?.id,
@@ -96,6 +95,7 @@ export default function SalesPlanEdit() {
                 saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
                 productInfoList: submitProductDetailsData
             }
+            match.params.projectId !== "undefined" && (submitData.projectId = match.params.projectId)
             if (type === "save") {
                 await run(submitData)
                 setWhen(false)
@@ -290,9 +290,10 @@ export default function SalesPlanEdit() {
                 onChange={handleBaseInfoChange}
                 columns={taskNoticeEditBaseInfo.map((item: any) => {
                     if (item.dataIndex === "saleOrderNumber") {
+                        const projectId = !match.params.projectId || match.params.projectId === "undefined"
                         return ({
                             ...item,
-                            path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
+                            path: `${item.path}?taskStatus=0,1${!projectId ? `&projectId=${match.params.projectId}` : ""}`
                         })
                     }
                     if (item.dataIndex === "issueTime" && match.params.type === "new") {
