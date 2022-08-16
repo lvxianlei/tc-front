@@ -110,7 +110,7 @@ export default function TowerInformation(): React.ReactNode {
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "structureId"]} initialValue={record?.structureId}>
-                    <Select style={{ width: '120px' }} placeholder="请选择结构" onChange={() => rowChange(index)}>
+                    <Select style={{ width: '120px' }} placeholder="请选择结构" onChange={() => rowChange(index)} allowClear>
                         {
                             towerStructureOptions?.map((item: any, index: number) =>
                                 <Select.Option value={item.id} key={index}>
