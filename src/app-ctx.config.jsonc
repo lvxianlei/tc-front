@@ -110,6 +110,26 @@
                         "authority": "project_management"
                     },
                     {
+                        "label": "合同管理",
+                        "path": "/project/contract",
+                        "authority": "project_management"
+                    },
+                    {
+                        "label": "订单管理",
+                        "path": "/project/order",
+                        "authority": "project_management"
+                    },
+                    {
+                        "label": "杆塔明细",
+                        "path": "/project/productGroup",
+                        "authority": "project_management"
+                    },
+                    {
+                        "label": "销售计划",
+                        "path": "/project/salePlan",
+                        "authority": "project_management"
+                    },
+                    {
                         "label": "开票申请",
                         "path": "/project/invoicing",
                         "authority": "project_invoicing_requisition"

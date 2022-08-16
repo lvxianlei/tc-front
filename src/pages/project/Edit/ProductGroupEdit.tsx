@@ -8,8 +8,8 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 export default function ProductGroupEdit() {
     const history = useHistory()
-    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/:type/productGroup/:projectId/:id")
-    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/:type/productGroup/:projectId")
+    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/:entryPath/:type/productGroup/:projectId/:id")
+    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/:entryPath/:type/productGroup/:projectId")
     const match = editMatch || newMatch
     const [visible, setVisible] = useState<boolean>(false)
     const [select, setSelect] = useState<any[]>([])
@@ -20,7 +20,7 @@ export default function ProductGroupEdit() {
     const [cargoDtoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productGroup/${match.params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productGroup/${match.params?.id}`)
             baseInfoForm.setFieldsValue(result)
             cargoDtoForm.setFieldsValue({ submit: result.contractCargoVos })
             setContractId(result.contractId)
@@ -36,11 +36,11 @@ export default function ProductGroupEdit() {
         } catch (error) {
             reject(error)
         }
-    }), { manual: match.params.type === "new" })
+    }), { manual: match.params?.type === "new" || !match.params?.id })
 
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[match.params.type === "new" ? "post" : "put"](`/tower-market/productGroup`, postData)
+            const result: { [key: string]: any } = await RequestUtil[match.params?.type === "new" ? "post" : "put"](`/tower-market/productGroup`, postData)
             resole(result)
         } catch (error) {
             reject(error)
@@ -60,7 +60,7 @@ export default function ProductGroupEdit() {
                 await run({
                     ...data,
                     ...baseInfoData,
-                    projectId: match.params.projectId,
+                    projectId: match.params?.projectId && match.params?.projectId !== "undefined" ? match.params?.projectId : undefined,
                     contractId,
                     saleOrderNumber: baseInfoData.saleOrderNumber?.value,
                     saleOrderId,
@@ -88,7 +88,8 @@ export default function ProductGroupEdit() {
     }
 
     const handleModalOk = (selectRows: any[]) => {
-        setSelect([...select, ...selectRows.filter((item: any) => !select.map((item: any) => item.id).includes(item.id))])
+        setSelect([...select,
+        ...selectRows.filter((item: any) => !select.map((item: any) => item.id).includes(item.id))])
         setVisible(false)
     }
 
@@ -98,13 +99,21 @@ export default function ProductGroupEdit() {
         when={when}
         title={[<Button key="pro" type="primary" onClick={() => setVisible(true)}>导入确认明细</Button>]}
         operation={[
-            <Button key="save" type="primary" style={{ marginRight: "12px" }} onClick={handleSubmit} loading={saveStatus}>保存</Button>,
-            <Button key="goback" type="default" onClick={() => history.goBack()}>返回</Button>
+            <Button
+                key="save"
+                type="primary"
+                style={{ marginRight: "12px" }}
+                onClick={handleSubmit}
+                loading={saveStatus}>保存</Button>,
+            <Button key="goback"
+                type="default"
+                onClick={() => history.goBack()}
+            >返回</Button>
         ]}>
         <Spin spinning={loading}>
             <SelectProductGroup
-                projectId={match.params.projectId}
-                productGroupId={match.params.id}
+                projectId={match.params?.projectId}
+                productGroupId={match.params?.id}
                 select={select.map(item => item.id)}
                 visible={visible}
                 onCancel={() => setVisible(false)}
@@ -119,7 +128,7 @@ export default function ProductGroupEdit() {
                             return ({
                                 ...item,
                                 disabled: [1, 2].includes(data?.status),
-                                path: `${item.path}?projectId=${match.params.projectId}`
+                                path: `${item.path}?${match.params?.projectId === 'undefined' ? undefined : `projectId=${match.params?.projectId}`}`
                             })
                         case "description":
                             return ({ ...item, disabled: [1, 2].includes(data?.status) })
