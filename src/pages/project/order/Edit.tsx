@@ -281,7 +281,7 @@ export default function SeeGuarantee(): JSX.Element {
                             if (item.dataIndex === "internalNumber") {
                                 return ({
                                     ...item,
-                                    path: "/tower-market/contract?projectId=" + params.projectId,
+                                    path: `/tower-market/contract${params.projectId && params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ""}`,
                                     columns: item.columns.map((v: any) => {
                                         if (v.dataIndex === "saleTypeName") {
                                             return {
