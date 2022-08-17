@@ -171,7 +171,7 @@ export default function SaleOrder(): JSX.Element {
                                 <Button
                                     type="link"
                                     disabled={record.isProductGroupRef !== 0}
-                                    onClick={() => history.push(`/project/${entryPath}/edit/order/${record.projectId}/${record.id}`)}>编辑</Button>
+                                    onClick={() => history.push(`/project/${entryPath}/edit/order/${params.id}/${record.id}`)}>编辑</Button>
                                 <ConfirmableButton
                                     confirmTitle="要删除该订单吗？"
                                     type="link"
