@@ -77,18 +77,20 @@ export default function JobsMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/${ record.id }`);
+                        const data: any = await RequestUtil.get(`/tower-system/appDeploy/${ record.id }`);
                         setDetail(data);
                         setTitle("查看");
                         setView(true)
                         form.setFieldsValue({ ...data });
+                        setSelected(data?.impowerPatterm)
                         setVisible(true);
                     } }>查看</Button>
                     <Button type="link" onClick={ async () => {
-                        const data: IJobs = await RequestUtil.get(`/tower-system/appDeploy/${ record.id }`);
+                        const data: any = await RequestUtil.get(`/tower-system/appDeploy/${ record.id }`);
                         setDetail(data);
                         setTitle("编辑");
                         form.setFieldsValue({ ...data });
+                        setSelected(data?.impowerPatterm)
                         setVisible(true);
                     } }>编辑</Button>
                     <Popconfirm
