@@ -12,12 +12,12 @@
                 "icon": "customer",
                 "path": "/workBenchSC",
                 "appName": "SC",
-                "authority": "customer_page",
+                "authority": "tc_erp_sc_workbench",
                 "items": [
                     {
                         "label": "工作台",
                         "path": "/workBenchSC/sc",
-                        "authority": "customer_detail"
+                        "authority": "tc_erp_sc_workbench_list"
                     }
                 ]
             },
@@ -61,6 +61,11 @@
                         "label": "定额配置",
                         "path": "/sys/quotaConfig",
                         "authority": "tc_erp_sys_system_quota"
+                    },
+                    {
+                        "label": "第三方应用配置",
+                        "path": "/sys/otherSetting/index",
+                        "authority": "tc_erp_sys_system_app_deploy"
                     }
                 ]
             },
@@ -107,22 +112,22 @@
                     {
                         "label": "合同管理",
                         "path": "/project/contract",
-                        "authority": "project_management"
+                        "authority": "tc_erp_sc_project_view_contract"
                     },
                     {
                         "label": "订单管理",
                         "path": "/project/order",
-                        "authority": "project_management"
+                        "authority": "tc_erp_sc_project_view_contract"
                     },
                     {
                         "label": "杆塔明细",
                         "path": "/project/productGroup",
-                        "authority": "project_management"
+                        "authority": "tc_erp_sc_project_view_product"
                     },
                     {
                         "label": "销售计划",
                         "path": "/project/salePlan",
-                        "authority": "project_management"
+                        "authority": "tc_erp_sc_project_view_task_notice"
                     },
                     {
                         "label": "开票申请",
@@ -212,7 +217,7 @@
                     {
                         "label": "供应工作台",
                         "path": "/supply/sw",
-                        "authority": "tc_erp_sw_workBench"
+                        "authority": "tc_erp_sw_workBench_list"
                     }
                 ]
             },
@@ -232,6 +237,11 @@
                         "label": "放样计划",
                         "path": "/cockpit/planSetOut",
                         "authority": "tc_erp_rd_cockpit_loft"
+                    },
+                    {
+                        "label": "人员工作负荷",
+                        "path": "/cockpit/personnelLoad",
+                        "authority": "tc_erp_rd_work_load"
                     },
                     {
                         "label": "报表",
@@ -465,7 +475,7 @@
                 ]
             },
             {
-                "label": "工作管理",
+                "label": "放样过程管理",
                 "icon": "RD_gongzuoguanli-gongzuobaogao",
                 "path": "/workMngt",
                 "appName": "RD",
@@ -863,11 +873,21 @@
                 "appName": "COMM",
                 "authority": "tc_erp_sys_base",
                 "items": [
-                    {
-                        "label": "基础设置",
-                        "path": "/baseSetting/baseSettingMngt",
-                        "authority": "tc_erp_sys_base"
-                    },
+                    // {
+                    //     "label": "产线管理",
+                    //     "path": "/baseSetting/productionLineMngt",
+                    //     "authority": "basic_settings_production_line_management"
+                    // },
+                    // {
+                    //     "label": "工序管理",
+                    //     "path": "/baseSetting/processMngt",
+                    //     "authority": "basic_settings_process_management"
+                    // },
+                    // {
+                    //     "label": "车间派工设备管理",
+                    //     "path": "/baseSetting/workshopEquipmentMngt",
+                    //     "authority": "basic_settings_workshop_dispatch_equipment_management"
+                    // },
                     {
                         "label": "生产班组管理",
                         "path": "/baseSetting/workshopTeamMngt",
@@ -1137,7 +1157,6 @@
                         "path": "/workshopPlanBasic/assemblyWeld",
                         "authority": "tc_erp_aps_config_welding_unit"
                     }
-                    
                 ]
             },
             {
@@ -1179,6 +1198,30 @@
                 "appName": "RD",
                 "path": "http://erp-tdm-hjt-uat.dhwy.cn/login",
                 "authority": "tc_erp_rd_tdm"
+            },
+            {
+                "label": "系统设置",
+                "icon": "jichuguanliTY_jichuguanli",
+                "path": "/baseSetting",
+                "appName": "RD",
+                "authority": "tc_erp_rd_system",
+                "items": [
+                    {
+                        "label": "基础设置",
+                        "path": "/baseSetting/baseSettingMngt",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
+                        "label": "试组装配置",
+                        "path": "/baseSetting/tryAssemble",
+                        "authority": "tc_erp_rd_trial_config"
+                    },
+                    {
+                        "label": "返修件条目配置",
+                        "path": "/baseSetting/itemRepair",
+                        "authority": "tc_erp_rd_fix_item_config"
+                    }
+                ]
             }
         ]
     },

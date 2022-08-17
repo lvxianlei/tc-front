@@ -116,7 +116,10 @@ export default function LoftingTowerApplication(): React.ReactNode {
         resole(data);
     });
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
-        const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
+        const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`,{                                
+            // segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+            productCategory:params?.id
+        });
         getTableDataSource(page, {})
         resole(data);
     }), {})
