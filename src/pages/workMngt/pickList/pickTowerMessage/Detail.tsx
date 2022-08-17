@@ -103,7 +103,7 @@ const towerColumns = [
 
 export default function PickTowerDetail(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ productSegmentId: string }>();
+    const params = useParams<{id:string, productSegmentId: string }>();
     const [tableDataSource,setTableDataSource] = useState([]);
     const [tablePagination,setTablePagination] =useState({
         current: 1,
@@ -115,7 +115,8 @@ export default function PickTowerDetail(): React.ReactNode {
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{segmentGroupId:params.productSegmentId,...tablePagination, size:tablePagination.pageSize})
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+        productCategoryId:params.productSegmentId ==='all'?params?.id:'',...tablePagination, size:tablePagination.pageSize})
         setTableDataSource(data.records);
         setTablePagination({
             ...tablePagination,
@@ -127,7 +128,8 @@ export default function PickTowerDetail(): React.ReactNode {
     }), {});
     
     const onTableChange=async (pagination: TablePaginationConfig)=> {
-        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{segmentGroupId:params.productSegmentId,...pagination, size:pagination.pageSize})
+        const data: any = await RequestUtil.get(`/tower-science/drawProductStructure/check`,{segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+        productCategoryId:params.productSegmentId ==='all'?params?.id:'',...pagination, size:pagination.pageSize})
         setTableDataSource(data.records);
         setTablePagination({
             ...tablePagination,
@@ -155,7 +157,8 @@ export default function PickTowerDetail(): React.ReactNode {
                     size={tablePagination.pageSize}
                     total={tablePagination.total}
                     url={'/tower-science/drawProductStructure/check'}
-                    serchObj={{segmentGroupId:params.productSegmentId}}
+                    serchObj={{segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+                    productCategoryId:params.productSegmentId ==='all'?params?.id:''}}
                     closeExportList={() => { setIsExportStoreList(false) }}
                 />:null}
                 <Table 

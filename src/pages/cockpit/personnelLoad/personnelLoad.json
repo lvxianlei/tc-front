@@ -1,0 +1,91 @@
+{
+    "columns": [
+        {
+            "key": "userName",
+            "title": "姓名",
+            "dataIndex": "userName"
+        },
+        {
+            "key": "process",
+            "title": "工序",
+            "dataIndex": "process"
+        },
+        {
+            "key": "workStatus",
+            "title": "工作状态",
+            "dataIndex": "workStatus"
+        },
+        {
+            "key": "totalProductCategoryNum",
+            "title": "累计塔型数",
+            "dataIndex": "totalProductCategoryNum"
+        },
+        {
+            "key": "productCategoryNum",
+            "title": "塔型数",
+            "dataIndex": "productCategoryNum"
+        },
+        {
+            "key": "endTime",
+            "title": "截止日期",
+            "dataIndex": "endTime"
+        }
+    ],
+    "tableColumns": [
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "programName",
+            "title": "项目名称",
+            "dataIndex": "programName",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productType",
+            "title": "产品类型",
+            "dataIndex": "productType",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "key": "patternName",
+            "title": "模式",
+            "dataIndex": "patternName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "优先级",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "startTime",
+            "title": "开始日期",
+            "dataIndex": "startTime",
+            "type": "date",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "预计完成日期",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        }
+    ]
+}

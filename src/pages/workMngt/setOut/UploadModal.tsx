@@ -3,6 +3,7 @@ import { Button, Space, Modal, Form, Input } from 'antd';
 import { DetailContent, Attachment, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import { FileProps } from '../../common/Attachment';
+import styles from './SetOut.module.less';
 
 export interface UploadModalProps { }
 export interface IUploadModalRouteProps {
@@ -85,14 +86,33 @@ export default forwardRef(function ({
                 <Button type="primary" onClick={save} ghost>确定</Button>
             </Space>}
             onCancel={() => modalCancel()}
+            className={styles.uploadModal}
         >
             <DetailContent>
                 <Attachment isTable={false} onDoneChange={(attachs: FileProps[]) => {
                     let data = form.getFieldsValue(true).data || [];
-                    setList([...data, ...attachs]);
-                    form.setFieldsValue({ data: [...data, ...attachs] });
+                    const newData = attachs.map((res: Record<string, any>) => {
+                        const name = res.originalName;
+                        const reg = /\((.+?)\)/g;
+                        const codeList = (name.match(reg) || [])[0]?.replace(/\(|\)/g, '')?.split(',');
+                        let segmentGroupName = '';
+                        let partLabelRange = '';
+                        codeList?.forEach((e: string) => {
+                            if (RegExp(/#/).exec(e)) {
+                                partLabelRange = partLabelRange + ',' + e?.replace(/#/g, '');
+                            } else {
+                                segmentGroupName = segmentGroupName + ',' + e
+                            }
+                        });
+                        return {
+                            segmentName: segmentGroupName?.slice(1) || '',
+                            ...res
+                        }
+                    })
+                    setList([...data, ...newData]);
+                    form.setFieldsValue({ data: [...data, ...newData] });
                 }} />
-                <Form form={form}>
+                <Form form={form} className={styles.uploadBtn}>
                     <CommonTable columns={[
                         {
                             key: 'originalName',
@@ -111,7 +131,7 @@ export default forwardRef(function ({
                                     required: true,
                                     message: '请输入段信息 '
                                 }]}>
-                                    <Input placeholder="请输入段信息" maxLength={50} />
+                                    <Input placeholder="请输入段信息" size='small' maxLength={50} />
                                 </Form.Item>
                             )
                         },

@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Input, Popconfirm } from 'antd';
+import { Space, Button, Input, Popconfirm, Select, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -13,6 +13,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import QuestionnaireModal from './QuestionnaireModal';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IRecord } from './ISetOut';
+import useRequest from '@ahooksjs/use-request';
 
 const columns = [
     {
@@ -352,7 +353,7 @@ export default function TowerCheck(): React.ReactNode {
     const [record, setRecord] = useState({});
     const [title, setTitle] = useState('提交问题单');
     const [refresh, setRefresh] = useState(false);
-    const [loading1, setLoading1] = useState(false);
+    const [filterValue, setFilterValue] = useState({});
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
@@ -395,15 +396,24 @@ export default function TowerCheck(): React.ReactNode {
         }
     })
 
+    const { data: segmentNames } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get<any>(`/tower-science/productSegment/list/${params.id}`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
     return <>
         <Page
             path="/tower-science/productStructure/list"
             columns={columnsSetting}
-            requestData={{ productSegmentGroupId: params.productSegmentId }}
+            requestData={{ segmentId: params.productSegmentId, productCategoryId: params.id, ...filterValue }}
             headTabs={[]}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
-                <Popconfirm
+                {/* <Popconfirm
                     title="确认完成校核?"
                     onConfirm={() => {
                         setLoading1(true);
@@ -417,7 +427,7 @@ export default function TowerCheck(): React.ReactNode {
                     cancelText="取消"
                 >
                     <Button type="primary" loading={loading1} ghost>完成校核</Button>
-                </Popconfirm>
+                </Popconfirm> */}
                 <Button type="ghost" onClick={() => history.goBack()} >返回</Button>
             </Space>}
             searchFormItems={[
@@ -432,12 +442,20 @@ export default function TowerCheck(): React.ReactNode {
                     children: <Input placeholder="请输入" />
                 },
                 {
-                    name: 'segmentName',
+                    name: 'segmentId',
                     label: '段名',
-                    children: <Input placeholder="请输入" />
+                    children: <Form.Item name="segmentId" initialValue={params.productSegmentId}>
+                        <Select placeholder="请选择" style={{ width: '100%' }}>
+                            <Select.Option key={0} value={''}>全部</Select.Option>
+                            {segmentNames && segmentNames.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
+                setFilterValue(values);
                 return values;
             }}
         />

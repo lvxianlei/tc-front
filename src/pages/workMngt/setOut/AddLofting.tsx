@@ -17,9 +17,11 @@ import { componentTypeOptions } from "../../../configuration/DictionaryOptions";
 interface modalProps {
     id: string;
     productSegmentId: string;
+    type: 'new' | 'edit';
+    rowData?: any[];
 }
 
-export default forwardRef(function AddLofting({ id, productSegmentId }: modalProps, ref) {
+export default forwardRef(function AddLofting({ id, productSegmentId, type, rowData }: modalProps, ref) {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<any>([])
 
@@ -602,19 +604,20 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
             fixed: 'right' as FixedType,
             width: 80,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button onClick={() => delRow(index)} type="link">删除</Button>
+                <Button onClick={() => delRow(index)} disabled={type === 'edit'} type="link">删除</Button>
             )
         }
     ]
 
-    // const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
-    //     try {
-    //         //  const result: [] = await RequestUtil.get(``);
-    //         resole([])
-    //     } catch (error) {
-    //         reject(error)
-    //     }
-    // }), { refreshDeps: [id, productSegmentId] })
+    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
+        try {
+            setTableData([...rowData || []])
+            form.setFieldsValue({ data: [...rowData || []] })
+            resole([])
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: type === 'new', refreshDeps: [id, productSegmentId, type, rowData] })
 
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
@@ -634,7 +637,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
                     return {
                         ...res,
                         productCategoryId: id,
-                        segmentGroupId: productSegmentId,
+                        segmentId: productSegmentId === 'all' ? '' : productSegmentId,
                         type: res?.type?.split(',')[1],
                         typeDictId: res?.type?.split(',')[0]
                     }
@@ -668,7 +671,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId }: modalPro
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     return <DetailContent key='AddLofting'>
-        <Button type="primary" onClick={addRow} ghost>添加一行</Button>
+        {type === 'new' ? <Button type="primary" onClick={addRow} ghost>添加一行</Button> : null}
         <Form form={form} className={styles.descripForm}>
             <CommonTable
                 haveIndex
