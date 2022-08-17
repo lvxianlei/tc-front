@@ -39,7 +39,7 @@ export default function List(): React.ReactNode {
         const data: any[] = await RequestUtil.get<any[]>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
         // setPage({ ...data });
         if (data?.length > 0 && data[0]?.id) {
-            detailRun(data[0]?.id, data[0]?.type)
+            detailRun(data[0]?.userId, data[0]?.type)
         } else {
             setDetailData([]);
         }
