@@ -23,7 +23,7 @@ const currencyTypeEnum = currencyTypeOptions?.map((item: any) => ({ label: item.
 const planNameEnum = planNameOptions?.map((item: any) => ({ label: item.name, value: item.id }))
 export default function Edit() {
   const history = useHistory()
-  const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/management/:type/contract")
+  const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/:entry/:type/contract")
   const params = useParams<{ projectId: string, id: string }>()
   const [planType, setPlanType] = useState<1 | 2>(1)
   const [when, setWhen] = useState<boolean>(true)
@@ -38,8 +38,7 @@ export default function Edit() {
     } catch (error) {
       reject(error)
     }
-  }))
-
+  }), { ready: (params.projectId !== "undefined") })
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract/${params.id}`)
@@ -75,10 +74,11 @@ export default function Edit() {
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
     try {
+  
       const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/contract`, {
         ...saveData,
         id: type === "new" ? "" : params.id,
-        projectId: params.projectId
+        projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
     } catch (error) {
@@ -138,7 +138,7 @@ export default function Edit() {
         ...item,
         contractId: params.id
       })),
-      fileIds: attchs
+      fileIds: attchs?.map((item: any) => item.id)
     })
     if (result) {
       setWhen(false)
@@ -173,38 +173,38 @@ export default function Edit() {
         })
       }
     }
-    if(fields.customerCompany){
-      form.setFieldsValue({ 
-        signCustomer: customerCompany, 
-        payCompany: customerCompany 
+    if (fields.customerCompany) {
+      form.setFieldsValue({
+        signCustomer: customerCompany,
+        payCompany: customerCompany
       })
     }
   }
 
   const handleEditableChange = (fields: any, allFields: any) => {
     if (fields.submit.length - 1 >= 0) {
-      const baseInfo = form.getFieldsValue()
+      const contractAmount = form.getFieldValue("contractAmount")
       const result = allFields.submit[fields.submit.length - 1];
-      if (planType === 1) {
+      if (planType === 1 && (fields.type !== "add")) {
         editform.setFieldsValue({
           submit: allFields.submit.map((item: any) => {
             if (item.id === result.id) {
               return ({
                 ...item,
-                returnedAmount: (Number(baseInfo.contractAmount || 0) * Number(result.returnedRate || 0) / 100).toFixed(2)
+                returnedAmount: (parseFloat(contractAmount || 0) * (result.returnedRate || 0) * 0.01).toFixed(2)
               })
             }
             return item
           })
         })
       }
-      if (planType === 2) {
+      if (planType === 2 && (fields.type !== "add")) {
         editform.setFieldsValue({
           submit: allFields.submit.map((item: any) => {
             if (item.id === result.id) {
               return ({
                 ...item,
-                returnedRate: (Number(baseInfo.contractAmount || 0) / Number(result.returnedAmount || 0) * 100).toFixed(2)
+                returnedRate: (parseFloat(contractAmount || 0) / (result.returnedAmount || 0) * 100).toFixed(2)
               })
             }
             return item
