@@ -101,10 +101,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'processNum'
         },
         {
-            key: 'trialAssembleNum',
+            key: 'assembleNum',
             title: '试装数',
             width: 200,
-            dataIndex: 'trialAssembleNum'
+            dataIndex: 'assembleNum'
         },
         {
             key: 'basicsWeight',
