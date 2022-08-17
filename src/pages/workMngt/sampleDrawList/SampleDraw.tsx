@@ -199,7 +199,13 @@ export default function SampleDraw(): React.ReactNode {
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
                         <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                            RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...dataInfo]).then(res => {
+                            const data = dataInfo.map(res => {
+                                return {
+                                    ...res,
+                                    fileName: res.originalName
+                                }
+                            })
+                            RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...data]).then(res => {
                                 if (res) {
                                     message.success('上传成功');
                                     history.go(0);
@@ -232,12 +238,13 @@ export default function SampleDraw(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'smallSampleStatus',
+                        name: 'uploadStatus',
                         label: '上传状态',
+                        // 0是未上传1已上传
                         children: <Select style={{ width: "200px" }} defaultValue={''}>
                             <Select.Option value={''} key={''}>全部</Select.Option>
+                            <Select.Option value={0} key={0}>未上传</Select.Option>
                             <Select.Option value={1} key={1}>已上传</Select.Option>
-                            <Select.Option value={2} key={2}>未上传</Select.Option>
                         </Select>
                     },
                     {
