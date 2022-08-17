@@ -678,7 +678,7 @@ export default function PackingListNew(): React.ReactNode {
                     </Select>
                 </Form.Item>
                 <Form.Item name="type" label="零件类型">
-                    <Select placeholder="请选择" size="small">
+                    <Select placeholder="请选择">
                         {componentTypeOptions?.map((item: any, index: number) =>
                             <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>
                         )}

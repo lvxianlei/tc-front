@@ -23,7 +23,7 @@ export default function PackingList(): React.ReactNode {
     const match = useRouteMatch();
     const [isExport, setIsExport] = useState(false);
     const [bundleData, setBundleData] = useState<IBundle[]>([]);
-    const location = useLocation<{}>();
+    const location = useLocation<{ status: number }>();
     const [loading1, setLoading1] = useState(false);
     const editRef = useRef<EditProps>();
     const [visible, setVisible] = useState<boolean>(false);
@@ -129,10 +129,11 @@ export default function PackingList(): React.ReactNode {
                         setLoading1(false);
                     })
                 }}
+                disabled={location.state.status === 4}
                 okText="确认"
                 cancelText="取消"
             >
-                <Button loading={loading1} type="primary">完成</Button>
+                <Button loading={loading1} disabled={location.state.status === 4} type="primary">完成</Button>
             </Popconfirm>
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>
