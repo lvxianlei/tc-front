@@ -10,8 +10,8 @@ import { materialStandardOptions } from "../../../configuration/DictionaryOption
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/management/:type/salesPlan/:projectId/:id")
-    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/management/:type/salesPlan/:projectId")
+    const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/:entryPath/:type/salesPlan/:projectId/:id")
+    const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/:entryPath/:type/salesPlan/:projectId")
     const match = editMatch || newMatch
     const [when, setWhen] = useState<boolean>(true)
     const [select, setSelect] = useState<string[]>([])
@@ -88,7 +88,6 @@ export default function SalesPlanEdit() {
                 ...data,
                 ...baseInfoData,
                 ...cargoDtoData,
-                projectId: match.params.projectId,
                 contractId,
                 saleOrderNumber: baseInfoData.saleOrderNumber?.value,
                 saleOrderId: baseInfoData.saleOrderNumber?.id,
@@ -96,6 +95,7 @@ export default function SalesPlanEdit() {
                 saleOrder: baseInfoData.saleOrderNumber.saleOrderId || "",
                 productInfoList: submitProductDetailsData
             }
+            match.params.projectId !== "undefined" && (submitData.projectId = match.params.projectId)
             if (type === "save") {
                 await run(submitData)
                 setWhen(false)
@@ -290,9 +290,10 @@ export default function SalesPlanEdit() {
                 onChange={handleBaseInfoChange}
                 columns={taskNoticeEditBaseInfo.map((item: any) => {
                     if (item.dataIndex === "saleOrderNumber") {
+                        const projectId = !match.params.projectId || match.params.projectId === "undefined"
                         return ({
                             ...item,
-                            path: `${item.path}?projectId=${match.params.projectId}&taskStatus=0,1`
+                            path: `${item.path}?taskStatus=0,1${!projectId ? `&projectId=${match.params.projectId}` : ""}`
                         })
                     }
                     if (item.dataIndex === "issueTime" && match.params.type === "new") {
