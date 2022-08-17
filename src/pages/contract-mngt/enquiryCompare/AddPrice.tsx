@@ -75,7 +75,7 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         console.log(id, materials, materials)
         // 不含税报价 = 含税报价 - （含税报价 * 材料税率）
         // 材料税率 目前是写死 13%
-        setMaterials(materials.map((item: any) => item.materialCode + item.length === id ?
+        setMaterials(materials.map((item: any) => item.id === id ?
             ({
                 ...item,
                 [name]: value,
@@ -104,11 +104,20 @@ export default forwardRef(function ({ id, type, materialLists }: AddPriceProps, 
         <DetailTitle title="询价原材料" />
         <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
-                return ({ ...item, render: (value: number, records: any) => <div style={{ padding: "2px 0" }}><InputNumber style={{ height: 28 }} min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "taxOffer")} /></div> })
+                return ({
+                    ...item,
+                    render: (value: number, records: any) =>
+                        <div style={{ padding: "2px 0" }}>
+                            <InputNumber style={{ height: 28 }}
+                                min={1} max={999999.99} step={0.01}
+                                value={value}
+                                key={records.materialCode}
+                                onChange={(value: number) =>
+                                    handleChange(records?.id, value, "taxOffer")
+                                } />
+                        </div>
+                })
             }
-            // if (item.dataIndex === "offer") {
-            //     return ({ ...item, render: (value: number, records: any) => <div style={{ padding: "2px 0" }}><InputNumber style={{ height: 28 }} min={1} max={999999.99} step={0.01} value={value} key={records.materialCode} onChange={(value: number) => handleChange(records.materialCode + records.length, value, "offer")} /></div> })
-            // }
             return item
         })}
             dataSource={materials} />

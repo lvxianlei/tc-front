@@ -1,12 +1,11 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Button, Form, message, Spin, Modal } from 'antd'
+import { Button, Form, message, Spin, Modal, InputNumber, Select } from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
+import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails, } from "./receivingListData.json"
-import moment from "moment"
 
 /**
  * 纸质单号，原材料税款合计，车辆牌照
@@ -85,6 +84,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     let [number, setNumber] = useState<number>(0);
     const [form] = Form.useForm()
     const [editForm] = Form.useForm()
+    
+    const [select, setSelect] = useState<any[]>([])
 
     const { loading: materialLoading, data: materialData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -200,9 +201,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 unTaxPrice: calcObj.unTaxPrice(item.taxPrice, materialData?.taxVal),
                 appearance: item.appearance || 1
             }
+            console.log(postData, "postData")
             delete postData.id
             return postData
         })
+        console.log(dataSource, "dataSource")
         setCargoData(dataSource)
         setVisible(false);
     }
@@ -211,6 +214,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const baseFormData = await form.validateFields()
             const listsFormData = await editForm.validateFields()
+            console.log(listsFormData, "listsFormData", cargoData)
             const contractNumberData = baseFormData.contractNumber.records[0]
             await saveRun({
                 ...baseFormData,
@@ -320,6 +324,48 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             }
             setCargoData(dataSource || [])
         }
+        if (changeFiled.length) {
+            const result = editForm.getFieldsValue(true).submit[changeIndex];
+            const dataSource: any[] = cargoData
+            const meteringMode = form.getFieldValue("meteringMode")
+            const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
+            // 所有明细理算重量总和
+            const allTotalWeight = modalRef.current?.dataSource.reduce((total, item) =>
+                (parseFloat(total) + parseFloat(calcObj.totalWeight(item.weight, item.num))).toFixed(4), 0)
+            // 结算重量
+            const balanceTotalWeight = calcObj.balanceTotalWeight(
+                meteringMode,
+                (((result.proportion || 1) * changeFiled.length) / 1000 / 1000).toFixed(3),
+                result.num,
+                totalPonderationWeight,
+                allTotalWeight)
+            // 含税金额
+            const totalTaxPrice = calcObj.totalTaxPrice(result.taxPrice, balanceTotalWeight)
+            // 不含税金额
+            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
+            dataSource[changeIndex] = {
+                ...dataSource[changeIndex],
+                /** 理算重量 */
+                weight: (((result.proportion || 1) * changeFiled.length) / 1000 / 1000).toFixed(3),
+                /** 理算总重量 */
+                totalWeight: calcObj.totalWeight((((result.proportion || 1) * changeFiled.length) / 1000 / 1000).toFixed(3), result.num),
+                balanceTotalWeight,
+                totalTaxPrice,
+                totalUnTaxPrice,
+                unTaxPrice: calcObj.unTaxPrice(result.taxPrice, materialData?.taxVal),
+            }
+            console.log(dataSource, "================>>>改变后的dataSource")
+            setCargoData(dataSource || [])
+        }
+    }
+
+    const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
+        // onChange && onChange(selectRows)
+        setSelect(selectedRowKeys)
+    }
+
+    const onSelectAll = (selected: any[], _: any, changeRows: any[]) => {
+        
     }
 
     return <Spin spinning={loading && warehouseLoading && materialLoading}>
@@ -406,12 +452,43 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             ]}
         />
         <EditableTable
-            haveIndex
+            haveIndex={false}
             form={editForm}
             haveOpration={false}
             onChange={handleEditableChange}
             haveNewButton={false}
-            columns={editCargoDetails}
-            dataSource={cargoData || []} />
+            columns={[
+                ...editCargoDetails.map((item: any) => {
+                    if (item.dataIndex === "materialStandardName") {
+                        return ({
+                            ...item,
+                            enum: materialStandardOptions?.map(item => ({
+                                value: item.id,
+                                label: item.name
+                            }))
+                        })
+                    }
+                    if (item.dataIndex === "structureTexture") {
+                        return ({
+                            ...item,
+                            enum: materialTextureOptions?.map(item => ({
+                                value: item.id,
+                                label: item.name
+                            }))
+                        })
+                    }
+                    return item;
+                })
+            ]}
+            dataSource={cargoData || []}
+            // rowSelection={{
+            //     selectedRowKeys: select,
+            //     type: "checkbox",
+            //     onChange: onSelectChange,
+            //     // onSelect: onSelectChange,
+            //     // onSelectAll,
+            //     getCheckboxProps: data?.getCheckboxProps
+            // }} 
+        />
     </Spin>
 })

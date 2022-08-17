@@ -13,10 +13,13 @@ export default function SelectProductGroup(props: any): JSX.Element {
         setProjectSelect(props.select)
         setProjectSelectRows(projectSelectRows.filter((item: any) => props.select.includes(item.id)))
     }, [JSON.stringify(props.select)])
-    
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract?projectId=${props.projectId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(
+                `/tower-market/contract`,
+                { projectId: props.projectId === "undefined" ? undefined : props.projectId }
+            )
             resole(result)
         } catch (error) {
             reject(error)
