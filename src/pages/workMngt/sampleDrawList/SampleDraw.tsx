@@ -199,7 +199,13 @@ export default function SampleDraw(): React.ReactNode {
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
                         <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                            RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...dataInfo]).then(res => {
+                            const data = dataInfo.map(res => {
+                                return {
+                                    ...res,
+                                    fileName: res.originalName
+                                }
+                            })
+                            RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...data]).then(res => {
                                 if (res) {
                                     message.success('上传成功');
                                     history.go(0);
