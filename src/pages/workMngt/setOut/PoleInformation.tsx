@@ -213,20 +213,20 @@ export default function PoleInformation(): React.ReactNode {
         }
     })
 
-    const handleModalOk = () => new Promise(async (resove, reject) => {
-        try {
-            setButtonName('保存')
-            await onTip();
-            await editRef.current?.onSave();
-            message.success('保存成功！');
-            setTipVisible(false);
-            setAllotVisible(false);
-            setRefresh(!refresh);
-            resove(true);
-        } catch (error) {
-            reject(false)
-        }
-    })
+    // const handleModalOk = () => new Promise(async (resove, reject) => {
+    //     try {
+    //         setButtonName('保存')
+    //         await onTip();
+    //         await editRef.current?.onSave();
+    //         message.success('保存成功！');
+    //         setTipVisible(false);
+    //         setAllotVisible(false);
+    //         setRefresh(!refresh);
+    //         resove(true);
+    //     } catch (error) {
+    //         reject(false)
+    //     }
+    // })
 
     const handleModalsubmit = () => new Promise(async (resove, reject) => {
         try {
@@ -300,7 +300,7 @@ export default function PoleInformation(): React.ReactNode {
                 } */}
                 {
                     loftingStatus !== 4 && <>
-                        <Button type="primary" onClick={handleModalOk} ghost>保存</Button>
+                        {/* <Button type="primary" onClick={handleModalOk} ghost>保存</Button> */}
                         <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
                     </>
 
