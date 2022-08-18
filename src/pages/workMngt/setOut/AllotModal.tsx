@@ -18,18 +18,18 @@ import { PlusOutlined } from "@ant-design/icons"
 interface AllotModalProps {
     id: string;
     allotData: IAllot;
-    status: number|string;
+    status: number | string;
 }
 
-export default forwardRef(function AllotModal({ id, allotData,status }: AllotModalProps, ref) {
+export default forwardRef(function AllotModal({ id, allotData, status }: AllotModalProps, ref) {
     const [form] = Form.useForm();
-    const [visible,setVisible] = useState<boolean>(false)
-    const [towerData,setTowerData] = useState<any[]>([])
-    const [selectedRowKeys, setSelectedRowKeys]=useState<React.Key[]>([]);
-    const [selectedRows, setSelectedRows]=useState<any[]>([]);
-    const [checkRowKeys, setCheckRowKeys]=useState<any[]>([]);
-    const [checkRows, setCheckRows]=useState<any[]>([]);
-    const [statusValue, setStatusValue]=useState<any>('');
+    const [visible, setVisible] = useState<boolean>(false)
+    const [towerData, setTowerData] = useState<any[]>([])
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [checkRowKeys, setCheckRowKeys] = useState<any[]>([]);
+    const [checkRows, setCheckRows] = useState<any[]>([]);
+    const [statusValue, setStatusValue] = useState<any>('');
     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
         try {
             allotData = {
@@ -45,16 +45,16 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                 })
             }
             setStatusValue(status)
-            const towerData:any = await RequestUtil.get(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${allotData.productCategory}&productId=${id}`)
-            setTowerData(towerData?.records.filter((item:any)=>{
-                return item.isSpecial===1&&item.isSpecial!==null&&item.specialStatus!==2
+            const towerData: any = await RequestUtil.get(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${allotData.productCategory}&productId=${id}`)
+            setTowerData(towerData?.records.filter((item: any) => {
+                return item.isSpecial === 1 && item.isSpecial !== null && item.specialStatus !== 2
             }))
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
             resole(allotData)
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id,allotData,status] })
+    }), { refreshDeps: [id, allotData, status] })
     const { run: visibleData } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
@@ -73,19 +73,18 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
         }
     }), { manual: true })
 
-    const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
-        try {
-            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/save`, postData);
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
+    // const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/save`, postData);
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { manual: true })
 
     const onCheck = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await form.validateFields()
-        
             resolve(true);
         } catch (error) {
             reject(false)
@@ -102,7 +101,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                 // productCategoryName: data?.productCategoryName,
                 // productNumber: data?.productNumber,
                 // segmentInformation: data?.segmentInformation,
-                productIds: [id,...selectedRowKeys],
+                productIds: [id, ...selectedRowKeys],
                 productStructureSaveDTOList: form.getFieldsValue(true).loftingProductStructure
             })
             resolve(true);
@@ -110,32 +109,33 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
             reject(false)
         }
     })
-    const onSave = () => new Promise(async (resolve, reject) => {
-        try {
-            
-            form.validateFields().then(async res => {
 
-                await saveRun({
-                    // productId: id,
-                    // productCategory: data?.productCategory,
-                    // productHeight: data?.productHeight,
-                    // productCategoryName: data?.productCategoryName,
-                    // productNumber: data?.productNumber,
-                    // segmentInformation: data?.segmentInformation,
-                    productIds: [id,...selectedRowKeys],
-                    productStructureSaveDTOList: form.getFieldsValue(true).loftingProductStructure
-                })
-                resolve(true);
-            })
-        } catch (error) {
-            reject(false)
-        }
-    })
+    // const onSave = () => new Promise(async (resolve, reject) => {
+    //     try {
+
+    //         form.validateFields().then(async res => {
+
+    //             await saveRun({
+    //                 // productId: id,
+    //                 // productCategory: data?.productCategory,
+    //                 // productHeight: data?.productHeight,
+    //                 // productCategoryName: data?.productCategoryName,
+    //                 // productNumber: data?.productNumber,
+    //                 // segmentInformation: data?.segmentInformation,
+    //                 productIds: [id,...selectedRowKeys],
+    //                 productStructureSaveDTOList: form.getFieldsValue(true).loftingProductStructure
+    //             })
+    //             resolve(true);
+    //         })
+    //     } catch (error) {
+    //         reject(false)
+    //     }
+    // })
 
     const resetFields = () => {
         form.resetFields();
     }
-    
+
 
     const columns = [
         {
@@ -192,7 +192,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                         form.validateFields()
                     }} disabled={data?.specialStatus === 2} size="small" /> */}
 
-                    <InputNumber min={0} max={99} disabled={status===4} size="small" />
+                    <InputNumber min={0} max={99} disabled={status === 4} size="small" />
                 </Form.Item>
             )
         },
@@ -203,16 +203,16 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
             dataIndex: 'description',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['loftingProductStructure', index, 'description']}>
-                    <Input disabled={status===4} size="small" />
+                    <Input disabled={status === 4} size="small" />
                 </Form.Item>
             )
         }
-        
+
     ]
 
-    useImperativeHandle(ref, () => ({ selectedRowKeys,onCheck,  onSave, onSubmit, resetFields, visibleData }), [ref, selectedRowKeys, onCheck, onSave, onSubmit, resetFields, visibleData]);
+    useImperativeHandle(ref, () => ({ selectedRowKeys, onCheck, onSubmit, resetFields, visibleData }), [ref, selectedRowKeys, onCheck, onSubmit, resetFields, visibleData]);
     return <Spin spinning={loading}>
-        <DetailContent style={{padding:'20px'}}>
+        <DetailContent style={{ padding: '20px' }}>
             <Form form={form} className={styles.descripForm}>
                 <p style={{ paddingBottom: "12px", fontWeight: "bold", fontSize: '14PX' }}>基础信息</p>
                 <Descriptions title="" bordered size="small" colon={false} column={4}>
@@ -225,11 +225,11 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     <Descriptions.Item key={2} label="配段信息">
                         {data?.segmentInformation}
                     </Descriptions.Item>
-                    {(statusValue=='2'||statusValue=='3')&& <Descriptions.Item key={1} label="复用杆塔">
-                                    <Button onClick={async () => {
-                                        setSelectedRowKeys(checkRowKeys)
-                                        setVisible(true)
-                                    }} type='link'>请选择</Button>
+                    {(statusValue == '2' || statusValue == '3') && <Descriptions.Item key={1} label="复用杆塔">
+                        <Button onClick={async () => {
+                            setSelectedRowKeys(checkRowKeys)
+                            setVisible(true)
+                        }} type='link'>请选择</Button>
                     </Descriptions.Item>}
                 </Descriptions>
                 <p style={{ padding: "12px 0px", fontWeight: "bold", fontSize: '14PX' }}>特殊件号信息</p>
@@ -250,7 +250,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                 setSelectedRowKeys([])
                 setVisible(false)
             }}
-            onOk={()=>{
+            onOk={() => {
                 setCheckRowKeys(selectedRowKeys)
                 setCheckRows(selectedRows)
                 setVisible(false)
@@ -258,7 +258,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
         >
             <CommonTable dataSource={towerData} pagination={false} rowSelection={{
                 selectedRowKeys: selectedRowKeys,
-                onChange: (selectedRowKeys: React.Key[], selectedRows:any)=>{
+                onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
                     setSelectedRowKeys(selectedRowKeys);
                     setSelectedRows(selectedRows)
                 }
@@ -279,7 +279,7 @@ export default forwardRef(function AllotModal({ id, allotData,status }: AllotMod
                     dataIndex: 'productHeight',
                     key: 'productHeight'
                 }
-            ]}/>
+            ]} />
         </Modal>
     </Spin>
 })
