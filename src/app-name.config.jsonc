@@ -18,7 +18,7 @@
         "appName": "PC"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_rd",
         "title": "研发中心",
         "description": "包含提料、放样等",
         "iconFont": "icon-yanfazhongxin2", // iconfont
@@ -66,7 +66,7 @@
         "appName": "MC2"
     },
     {
-        "authority": "",
+        "authority": "tc_tms",
         "icon": "logistic",
         "title": "物流中心",
         "description": "配车、发货等相关功能",
@@ -88,7 +88,7 @@
         "appName": "ASM"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_hr",
         "title": "人资中心",
         "description": "人资管理相关功能",
         "iconFont": "icon-renzizhongxin2", // iconfont

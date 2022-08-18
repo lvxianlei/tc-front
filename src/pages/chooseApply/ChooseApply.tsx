@@ -4,6 +4,7 @@ import styles from "./ChooseApply.module.less";
 import { useHistory } from "react-router";
 import AuthUtil from "../../utils/AuthUtil";
 import apps from "../../app-name.config.jsonc"
+import ApplicationContext from "../../configuration/ApplicationContext";
 type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC" | "MC2" | "PC"
 interface IApplyType {
     readonly authority?: string;
@@ -20,11 +21,12 @@ interface IApplyType {
 
 export default function ChooseApply(): JSX.Element {
     const history = useHistory()
+    const authorities = ApplicationContext.get().authorities
     return <DetailContent>
         <DetailTitle title="选择应用" style={{ padding: "16px" }} />
         <div className={styles.content}>
             {
-                (apps as IApplyType[]).map((res: IApplyType, index: number) => (
+                (apps as IApplyType[]).filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((res: IApplyType, index: number) => (
                     <div className={styles.apply} key={index} onClick={() => {
                         AuthUtil.setCurrentAppName(res.appName)
                         if (res.corsWeb) {

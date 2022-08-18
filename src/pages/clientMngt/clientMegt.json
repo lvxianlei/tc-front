@@ -80,8 +80,7 @@
         },
         {
             "title": "电话",
-            "dataIndex": "contactManTel",
-            "type": "phone"
+            "dataIndex": "contactManTel"
         },
         {
             "title": "开户行",

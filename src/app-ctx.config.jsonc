@@ -17,7 +17,7 @@
                     {
                         "label": "工作台",
                         "path": "/workBenchSC/sc",
-                        "authority": "tc_erp_sc_workbench"
+                        "authority": "tc_erp_sc_workbench_list"
                     }
                 ]
             },
@@ -61,6 +61,11 @@
                         "label": "定额配置",
                         "path": "/sys/quotaConfig",
                         "authority": "tc_erp_sys_system_quota"
+                    },
+                    {
+                        "label": "第三方应用配置",
+                        "path": "/sys/otherSetting/index",
+                        "authority": "tc_erp_sys_system_app_deploy"
                     }
                 ]
             },
@@ -103,6 +108,26 @@
                         "label": "项目管理",
                         "path": "/project/management",
                         "authority": "tc_erp_sc_project"
+                    },
+                    {
+                        "label": "合同管理",
+                        "path": "/project/contract",
+                        "authority": "tc_erp_sc_project_view_contract"
+                    },
+                    {
+                        "label": "订单管理",
+                        "path": "/project/order",
+                        "authority": "tc_erp_sc_project_view_contract"
+                    },
+                    {
+                        "label": "杆塔明细",
+                        "path": "/project/productGroup",
+                        "authority": "tc_erp_sc_project_view_product"
+                    },
+                    {
+                        "label": "销售计划",
+                        "path": "/project/salePlan",
+                        "authority": "tc_erp_sc_project_view_task_notice"
                     },
                     {
                         "label": "开票申请",
@@ -192,7 +217,7 @@
                     {
                         "label": "供应工作台",
                         "path": "/supply/sw",
-                        "authority": "tc_erp_sw_workBench"
+                        "authority": "tc_erp_sw_workBench_list"
                     }
                 ]
             },
@@ -341,7 +366,7 @@
                     {
                         "label": "原材料盘点",
                         "path": "/stock/materials",
-                        "authority": "inventory_management_surplus_material_warehousing"
+                        "authority": "tc_erp_sw_stock_taking"
                     }
                 ]
             },
@@ -518,7 +543,7 @@
                     {
                         "label": "工程报价列表",
                         "path": "/ingredients/enquiry",
-                        "authority": "work_management_inquiry_list"
+                        "authority": "tc_erp_sw_contract_inquiry_list"
                     },
                     {
                         "label": "采购配料",
@@ -1132,7 +1157,6 @@
                         "path": "/workshopPlanBasic/assemblyWeld",
                         "authority": "tc_erp_aps_config_welding_unit"
                     }
-                    
                 ]
             },
             {
