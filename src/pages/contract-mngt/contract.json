@@ -167,7 +167,12 @@
         {
             "title": "合同编号",
             "dataIndex": "contractNumber",
-            "disabled": true
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入合同编号"
+                }
+            ]
         },
         {
             "title": "询比价名称",

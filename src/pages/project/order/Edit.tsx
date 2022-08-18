@@ -26,7 +26,7 @@ const initData = {
 
 export default function SeeGuarantee(): JSX.Element {
     const history = useHistory();
-    const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/management/:type/order")
+    const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/:entry/:type/order")
     const [when, setWhen] = useState<boolean>(true)
     const [contratId, setContratId] = useState<string>()
     const [planType, setPlanType] = useState<1 | 2>(1)
@@ -68,7 +68,7 @@ export default function SeeGuarantee(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new" })
+    }), { manual: type === "new" || !params.id })
 
     const { loading: contratLoading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -184,7 +184,11 @@ export default function SeeGuarantee(): JSX.Element {
 
     const handleSave = async () => {
         const baseData: any = await addCollectionForm.validateFields();
-        const editformData = await editform.validateFields()
+        const editformData: any = await editform.validateFields()
+        if (!editformData.submit || editformData.submit.length <= 0) {
+            message.warning("至少新增一条回款计划")
+            return
+        }
         const {
             totalReturnedRate,
             totalReturnedAmount
@@ -211,8 +215,9 @@ export default function SeeGuarantee(): JSX.Element {
             message.error('计划回款总金额必须等于含税金额');
             return
         }
+
         const result = {
-            projectId: params.projectId,
+            projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined,
             ...baseData,
             contractInfoDto: {
                 ...baseData?.internalNumber.records[0],
@@ -280,7 +285,7 @@ export default function SeeGuarantee(): JSX.Element {
                             if (item.dataIndex === "internalNumber") {
                                 return ({
                                     ...item,
-                                    path: "/tower-market/contract?projectId=" + params.projectId,
+                                    path: `/tower-market/contract${params.projectId && params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ""}`,
                                     columns: item.columns.map((v: any) => {
                                         if (v.dataIndex === "saleTypeName") {
                                             return {
