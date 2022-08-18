@@ -354,7 +354,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 totalUnTaxPrice,
                 unTaxPrice: calcObj.unTaxPrice(result.taxPrice, materialData?.taxVal),
             }
-            console.log(dataSource, "================>>>改变后的dataSource")
             setCargoData(dataSource || [])
         }
     }
@@ -431,7 +430,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })}
             dataSource={{
                 meteringMode: 1,
-                settlementMode: settlementModeOptions?.[0].id,
+                settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
             }} />
         <DetailTitle
@@ -481,14 +480,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 })
             ]}
             dataSource={cargoData || []}
-            // rowSelection={{
-            //     selectedRowKeys: select,
-            //     type: "checkbox",
-            //     onChange: onSelectChange,
-            //     // onSelect: onSelectChange,
-            //     // onSelectAll,
-            //     getCheckboxProps: data?.getCheckboxProps
-            // }} 
+            rowSelection={{
+                selectedRowKeys: select,
+                type: "checkbox",
+                onChange: onSelectChange,
+                // onSelect: onSelectChange,
+                // onSelectAll,
+                getCheckboxProps: data?.getCheckboxProps
+            }} 
         />
     </Spin>
 })

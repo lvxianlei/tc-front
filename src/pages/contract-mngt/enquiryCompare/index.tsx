@@ -164,8 +164,8 @@ export default function ContractMngt() {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'updateStartTime',
-                        label: '最新状态变更时间',
+                        name: 'createTime--------',
+                        label: '创建日期----------',
                         children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
                     {

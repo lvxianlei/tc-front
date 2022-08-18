@@ -115,7 +115,6 @@ export default function Overview(): JSX.Element {
         setSelectedKeys(selectedRowKeys);
     }
 
-
     return <Spin spinning={loading}>
         <Modal
             width={1011}
@@ -210,6 +209,15 @@ export default function Overview(): JSX.Element {
                     setVisible(true)
                 }}>添加报价</Button>,
             <Button
+                disabled={data?.comparisonStatus !== 1}
+                type="primary"
+                style={{ marginRight: 16 }}
+                ghost key="add"
+                onClick={() => {
+                    setOprationType("new")
+                    setVisible(true)
+                }}>批量添加报价</Button>,
+            <Button
                 type="primary"
                 style={{ marginRight: 16 }}
                 ghost
@@ -221,11 +229,11 @@ export default function Overview(): JSX.Element {
                     } else {
                         message.warning('请选择要批量中标的数据');
                     }
-
                 }}>批量中标选择</Button>
-        ]} operation={[
-            <Button key="back" onClick={() => history.goBack()}>返回</Button>
-        ]}>
+        ]}
+            operation={[
+                <Button key="back" onClick={() => history.goBack()}>返回</Button>
+            ]}>
             <DetailTitle title="询价产品信息" style={{ marginTop: "24px" }} />
             <CommonTable columns={[...materialColumns, {
                 title: "中标供应商",
@@ -243,7 +251,9 @@ export default function Overview(): JSX.Element {
                 rowSelection={{
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,
-                }} dataSource={materialLists} />
+                }}
+                dataSource={materialLists}
+            />
             <DetailTitle title="询价报价信息" />
             <CommonTable
                 haveIndex
@@ -300,8 +310,7 @@ export default function Overview(): JSX.Element {
                                             history.go(0);
                                         }
                                     })
-                                }
-                                }>移除</Button>
+                                }}>移除</Button>
                         </>
                     }]}
                 dataSource={data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData || []}
@@ -322,9 +331,7 @@ export default function Overview(): JSX.Element {
             size={materialLists.length}
             total={materialLists.length}
             url={`/tower-supply/comparisonPrice/exportComparisonPriceDetails`}
-            serchObj={{
-                comparisonPriceId: params.id
-            }}
+            serchObj={{ comparisonPriceId: params.id }}
             closeExportList={() => { setIsExportStoreList(false) }}
         /> : null}
     </Spin>

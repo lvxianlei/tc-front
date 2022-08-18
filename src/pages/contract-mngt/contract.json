@@ -97,6 +97,10 @@
             "dataIndex": "weight"
         },
         {
+            "title": "生产厂家-----------",
+            "dataIndex": "------------------"
+        },
+        {
             "title": "含税单价(元/吨)",
             "dataIndex": "taxPrice"
         },
@@ -145,6 +149,10 @@
         {
             "title": "重量（吨）",
             "dataIndex": "weight"
+        },
+        {
+            "title": "生产厂家------------",
+            "dataIndex": "------------------"
         },
         {
             "title": "含税单价(元/吨)",

@@ -1,7 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
 import { Button, Modal, Spin, Form, InputNumber, message, Select } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable } from "../common"
-import { PopTableContent } from "./enquiryCompare/ComparesModal"
+
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
@@ -11,7 +11,7 @@ import {
     materialTextureOptions, transportationTypeOptions,
     settlementModeOptions
 } from "../../configuration/DictionaryOptions"
-import { contractBaseInfo, material, addMaterial } from "./contract.json"
+import { contractBaseInfo, material } from "./contract.json"
 
 // 新加运费信息
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
@@ -528,7 +528,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     return <Spin spinning={loading && taxLoading}>
-        <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
+        {/* <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
                 ...(addMaterial as any),
@@ -575,7 +575,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })))
                 }} />
-        </Modal>
+        </Modal> */}
         <DetailTitle title="合同基本信息" />
         <BaseInfo
             form={baseForm}
@@ -640,7 +640,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             dataSource={{ unloadBear: 1 }} edit />
         <DetailTitle title="原材料信息" />
         <CommonTable
-            rowKey={(records: any) => `${records.materialName}${records.structureSpec}${records.length}`}
             style={{ padding: "0" }}
             columns={[
                 ...material.map((item: any) => {
@@ -684,21 +683,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             ...item,
                             render: (value: number, records: any, key: number) => type === "edit" ? records.structureTexture : <Select
                                 style={{ width: '150px' }}
-                                value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture}
-                                onChange={(e: string) => {
+                                labelInValue={true}
+                                value={{ value: materialList[key]?.structureTextureId } as any}
+                                onChange={(e: any) => {
                                     const newData = materialList.map((item: any, index: number) => {
                                         if (index === key) {
                                             return {
                                                 ...item,
-                                                structureTextureId: e.split(',')[0],
-                                                structureTexture: e.split(',')[1]
+                                                structureTextureId: e.key,
+                                                structureTexture: e.label
                                             }
                                         }
                                         return item
                                     })
                                     setMaterialList(newData)
                                 }}>
-                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         })
                     }
