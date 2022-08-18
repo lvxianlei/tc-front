@@ -123,7 +123,7 @@ export default function PoleInformation(): React.ReactNode {
                             : <Button type="link" disabled>配段</Button>
                     }
                     <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
-                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record.status } }}><Button type="link" disabled={!isShow}>包装清单</Button></Link>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record?.loftingStatus } }}><Button type="link" disabled={!isShow}>包装清单</Button></Link>
                     <Button type="link" onClick={async () => {
                         setLoftingStatus(record.loftingStatus)
                         let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
