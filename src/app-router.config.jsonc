@@ -618,21 +618,21 @@
       "path": "/project/productGroup/edit/productGroup/:projectId/:id",
       "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_product_edit"
     },
     { // 查看杆塔明细
       "name": "杆塔明细",
       "path": "/project/management/productGroup/item/:projectId/:id",
       "module": "./pages/project/ProductDetail",
       "exact": true,
-      "authority": "tc_erp_sc_project_view_product"
+      "authority": "tc_erp_sc_project_view_product_detail"
     },
     { // 查看杆塔明细
       "name": "杆塔明细",
       "path": "/project/productGroup/productGroup/item/:projectId/:id",
       "module": "./pages/project/ProductDetail",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_product_detail"
     },
     { // 新增杆塔明细
       "name": "新增杆塔明细",
