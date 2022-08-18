@@ -60,7 +60,7 @@ export default function Edit() {
         },
         salesman: {
           value: result.salesman,
-          id: result.salesmanId
+          id: result.payServiceManager
         },
         ascription: {
           value: result.ascriptionName,
@@ -123,7 +123,7 @@ export default function Edit() {
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
-      salesmanId: baseInfo.salesman.id,
+      payServiceManager: baseInfo.salesman.id,
       ascriptionName: baseInfo.ascription.value,
       ascriptionId: baseInfo.ascription.id,
       payType: baseInfo.payType?.join(","),
