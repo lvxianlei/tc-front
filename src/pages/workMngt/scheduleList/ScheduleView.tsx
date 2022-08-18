@@ -660,7 +660,8 @@ export default function ScheduleView(): React.ReactNode {
                                                     name:form.getFieldsValue().name,
                                                 });
                                                 form.setFieldsValue({
-                                                    ...resData
+                                                    ...resData,
+                                                    programmingLeader: resData?.welding
                                                 });
                                                 setLoad(false)
                                             }
