@@ -21,7 +21,7 @@
      const addRef = useRef<EditRefProps>();
      const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
          try {
-             const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-system/role`)
+             const result: { [key: string]: any } = await RequestUtil.get(`/sinzetech-system/role?current=1&size=20&type=`)
              resole(result);
              message.success("删除角色成功！");
              setRefresh(!refresh);

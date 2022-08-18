@@ -154,13 +154,7 @@ export default function SearchTable({
             history={history}
             location={location}
             match={match}
-            columnsKey={() => {
-                const keys = [...columns]
-                if (!keys[keys.length - 1].isExport) {
-                    keys.pop()
-                }
-                return keys
-            }}
+            columnsKey={() => columns.filter((item: any) => item.title !== "操作")}
             current={pagenationParams.current || 1}
             size={pagenationParams.pageSize || 10}
             total={data?.result?.total || 0}

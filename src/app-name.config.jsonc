@@ -1,6 +1,6 @@
 [ //应用列表
     {
-        "authority": "",         //权限
+        "authority": "tc_erp_sc",         //权限
         "title": "营销中心",      //应用展示名称
         "description": "包含客户、合同、订单等",//描述
         "iconFont": "icon-yingxiaozhongxin2", // iconfont
@@ -9,7 +9,7 @@
         "appName": "SC"           //应用name
     },
     {
-        "authority": "",
+        "authority": "tc_erp_aps",
         "title": "计划中心",
         "description": "各工序统筹计划",
         "iconFont": "icon-jihuazhongxin2", // iconfont
@@ -18,7 +18,7 @@
         "appName": "PC"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_rd",
         "title": "研发中心",
         "description": "包含提料、放样等",
         "iconFont": "icon-yanfazhongxin2", // iconfont
@@ -27,7 +27,7 @@
         "appName": "RD"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_sw",
         "title": "供应中心",
         "description": "包含配料、采购合同、采购计划、收货单等",
         "iconFont": "icon-gongyingzhongxin21", // iconfont
@@ -36,7 +36,7 @@
         "appName": "SW"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_qa",
         "title": "质检中心",
         "description": "质检过程相关功能",
         "iconFont": "icon-zhijianzhongxin2", // iconfont
@@ -66,7 +66,7 @@
         "appName": "MC2"
     },
     {
-        "authority": "",
+        "authority": "tc_tms",
         "icon": "logistic",
         "title": "物流中心",
         "description": "配车、发货等相关功能",
@@ -88,7 +88,7 @@
         "appName": "ASM"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_hr",
         "title": "人资中心",
         "description": "人资管理相关功能",
         "iconFont": "icon-renzizhongxin2", // iconfont
@@ -97,7 +97,7 @@
         "appName": "HR"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_fc",
         "title": "财务中心",
         "description": "财务管理相关功能",
         "iconFont": "icon-caiwuzhongxin2", // iconfont
@@ -106,7 +106,7 @@
         "appName": "FC"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_sys",
         "title": "通用中心",
         "description": "必备基础功能",
         "iconFont": "icon-tongyong2", // iconfont

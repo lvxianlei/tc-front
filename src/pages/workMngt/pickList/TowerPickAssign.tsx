@@ -14,6 +14,7 @@ export interface TowerPickAssignProps {}
 export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPickAssignProps>, WithTranslation {
     readonly id: number | string;
     readonly update: () => void;
+    readonly path: () => void;
     readonly title: string;
     readonly state?: number
     readonly type?: string;  //detail为展示，此时需传detailData
@@ -82,10 +83,17 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             visible: false,
         })
     }
-
+    private async getUserList(): Promise<void> {
+        const data = await RequestUtil.get<any>(`/tower-system/employee?deptName=技术部&size=1000`);
+        this.setState({
+            user: data?.records
+        })
+    }
     private async modalShow(): Promise<void> {
-        const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/materialProductCategory/assign/${ this.props.id }`)
-        const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
+        this.getUserList();
+        // const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/materialProductCategory/assign/${ this.props.id }`)
+        const data:any = await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`)
+        // const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
             return {
                 label:name,
@@ -93,7 +101,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             }
         })
         this.setState({
-            departmentData: departmentData,
+            // departmentData: departmentData,
             visible: true,
             appointed: data,
             pattern: renderEnum,
@@ -101,16 +109,21 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         })
         let detailData = this.props.detailData;
         // if(this.props.type === 'message'||this.props.type === 'detail'){  //提料指派1.2.0版本 去掉
-            detailData = {
-                ...detailData,
-                plannedDeliveryTime: moment(data?.plannedDeliveryTime)
-            }
-        // }
-        this.getForm()?.setFieldsValue({  ...data, ...detailData});
-        if(this.props.type==='message'&& data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
-            this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
-            this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
+        detailData = {
+            ...detailData,
+            
+            plannedDeliveryTime: moment(data?.plannedDeliveryTime)
         }
+        // }
+        this.getForm()?.setFieldsValue({  ...data, ...detailData,  
+            materialLeader: data?.materialLeader?data?.materialLeader.indexOf(',')?data?.materialLeader.split(','):[data?.materialLeader]:[],
+        // materialLeaderName: values.materialLeader.split('-')[1],
+            materialCheckLeader: data?.materialCheckLeader?data?.materialCheckLeader.indexOf(',')?data?.materialCheckLeader.split(','):[data?.materialCheckLeader]:[],
+        });
+        // if(data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
+        //     this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
+        //     this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
+        // }
     }
     
     /**
@@ -129,10 +142,10 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     productCategory: this.state.appointed?.productCategory || this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
                     pattern: this.state.appointed?.pattern,
-                    materialLeader: values.materialLeader.split('-')[0],
-                    materialLeaderName: values.materialLeader.split('-')[1],
-                    materialCheckLeader: values.materialCheckLeader.split('-')[0],
-                    materialCheckLeaderName: values.materialCheckLeader.split('-')[1],
+                    materialLeader: values.materialLeader.join(','),
+                    // materialLeaderName: values.materialLeader.split('-')[1],
+                    materialCheckLeader: values.materialCheckLeader.join(','),
+                    // materialCheckLeaderName: values.materialCheckLeader.split('-')[1],
                 }
                 RequestUtil.post(`/tower-science/drawProductSegment/assign`, { ...values }).then(() => {
                     message.success('指派成功');
@@ -141,83 +154,89 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     this.setState({  
                         visible: false
                     })
-                    this.props.update();
+                    if(window.location.pathname.indexOf('/1/')>-1){
+                        this.props.path();
+                    }  else{
+                        this.props.update();
+                    }
+                    // 
+                    // history.push(`/workMngt/pickList/pickTowerMessage/${window.location.pathname.id}/${params.status}/${params.materialLeader}/pick/all`)
                 });
                 return Promise.resolve();
             })
         }
     };
-    /**
-     * onDepartmentChange
-     */
-    public onDepartmentChange = async (value: Record<string, any>, title: string) => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${ value }&size=1000`);
-        let appointed = this.getForm()?.getFieldsValue(true);
-        if(title === '校对'){
-            this.setState({
-                materialCheckLeader: userData.records,
-                appointed: {
-                    ...appointed,
-                    materialCheckLeader: ''
-                }
-            })
-            this.getForm()?.setFieldsValue({ materialCheckLeader:'' })
-        }
-        else if(title === '提料'){
-            this.setState({
-                user: userData.records,
-                appointed: {
-                    ...appointed,
-                    materialLeader: ''
-                }
-            })
-            this.getForm()?.setFieldsValue({ materialLeader:'' })
-        }else if(title === '提料人'){
-            this.setState({
-                user: userData.records,
-            })
-            this.getForm()?.setFieldsValue({ ...appointed })
-        }if(title === '校核人'){
-            this.setState({
-                materialCheckLeader: userData.records,
-            })
-            this.getForm()?.setFieldsValue({ ...appointed })
-        }
-    }
+    // /**
+    //  * onDepartmentChange
+    //  */
+    // public onDepartmentChange = async (value: Record<string, any>, title: string) => {
+    //     const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${ value }&size=1000`);
+    //     let appointed = this.getForm()?.getFieldsValue(true);
+    //     if(title === '校对'){
+    //         this.setState({
+    //             materialCheckLeader: userData.records,
+    //             appointed: {
+    //                 ...appointed,
+    //                 materialCheckLeader: ''
+    //             }
+    //         })
+    //         this.getForm()?.setFieldsValue({ materialCheckLeader:'' })
+    //     }
+    //     else if(title === '提料'){
+    //         this.setState({
+    //             user: userData.records,
+    //             appointed: {
+    //                 ...appointed,
+    //                 materialLeader: ''
+    //             }
+    //         })
+    //         this.getForm()?.setFieldsValue({ materialLeader:'' })
+    //     }else if(title === '提料人'){
+    //         this.setState({
+    //             user: userData.records,
+    //         })
+    //         this.getForm()?.setFieldsValue({ ...appointed })
+    //     }if(title === '校核人'){
+    //         this.setState({
+    //             materialCheckLeader: userData.records,
+    //         })
+    //         this.getForm()?.setFieldsValue({ ...appointed })
+    //     }
+    // }
 
-    public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles && roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                this.wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
+    // public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+    //     roles && roles.forEach((role: any & SelectDataNode): void => {
+    //         role.value = role.id;
+    //         role.isLeaf = false;
+    //         if (role.children && role.children.length > 0) {
+    //             this.wrapRole2DataNode(role.children);
+    //         } else {
+    //             role.children = []
+    //         }
+    //     });
+    //     return roles;
+    // }
 
-    public renderTreeNodes = (data:any) => data.map((item:any) => {
-        if (item.children) {
-            return (
-                <TreeNode 
-                    key={ item.id } 
-                    title={ item.name } 
-                    value={ item.id } 
-                    className={ styles.node } 
-                    >
-                    { this.renderTreeNodes(item.children) }
-                </TreeNode>
-            );
-        }
-        return <TreeNode 
-                    { ...item } 
-                    key={ item.id } 
-                    title={ item.name } 
-                    value={ item.id }
-                />;
-    });
+    // public renderTreeNodes = (data:any) => data.map((item:any) => {
+    //     if (item.children) {
+    //         return (
+    //             <TreeNode 
+    //                 key={ item.id } 
+    //                 title={ item.name } 
+    //                 value={ item.id } 
+    //                 className={ styles.node } 
+    //                 >
+    //                 { this.renderTreeNodes(item.children) }
+    //             </TreeNode>
+    //         );
+    //     }
+    //     return <TreeNode 
+    //                 { ...item } 
+    //                 key={ item.id } 
+    //                 title={ item.name } 
+    //                 value={ item.id }
+    //             />;
+    // });
     
      /**
      * @description Renders AbstractDetailComponent
@@ -306,11 +325,11 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         pattern: /^(全部)$|^([0-9a-zA-Z-,]*)$/,
                                         message: '仅可输入数字/字母/-/,/全部',
                                     }]}>
-                                    <Input placeholder="请输入（1-3，5，ac，w，全部）" />
+                                    <Input placeholder="请输入（1-3，5，ac，w，全部）" disabled/>
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="提料人">
-                                <Form.Item name="materialLeaderDepartment"
+                                {/* <Form.Item name="materialLeaderDepartment"
                                     rules={[{
                                         required: true,
                                         message: '请选择部门'
@@ -327,7 +346,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     >
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item name="materialLeader"
                                     rules={[{
                                         required: true,
@@ -338,7 +357,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         display: 'inline-block' 
                                     } }
                                 >
-                                    <Select placeholder="请选择" style={{width:'120px'}}>
+                                    <Select placeholder="请选择" style={{width:'120px'}} mode='multiple'>
                                         { this.state?.user && this.state.user.map((item: any) => {
                                             return <Select.Option 
                                                         key={ item.userId } 
@@ -351,7 +370,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="校核人">
-                                <Form.Item 
+                                {/* <Form.Item 
                                     name="materialCheckLeaderDepartment"
                                     rules={[{
                                         required: true,
@@ -374,7 +393,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     >
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
-                                </Form.Item>
+                                </Form.Item> */}
                                 <Form.Item 
                                     name="materialCheckLeader"
                                     rules={[{
@@ -386,8 +405,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         display: 'inline-block' 
                                     } }
                                 >
-                                    <Select placeholder="请选择" style={{width:'120px'}}>
-                                        { this.state?.materialCheckLeader && this.state.materialCheckLeader.map((item: any) => {
+                                    <Select placeholder="请选择" style={{width:'120px'}}  mode='multiple'>
+                                        { this.state?.user && this.state.user.map((item: any) => {
                                             return <Select.Option 
                                                         key={ item.userId } 
                                                         value={ item.userId }

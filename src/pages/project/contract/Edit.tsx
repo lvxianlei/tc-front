@@ -60,7 +60,7 @@ export default function Edit() {
         },
         salesman: {
           value: result.salesman,
-          id: result.salesmanId
+          id: result.payServiceManager
         },
         ascription: {
           value: result.ascriptionName,
@@ -89,7 +89,7 @@ export default function Edit() {
   const handleSubmit = async () => {
     const baseInfo = await form.validateFields()
     const editformData = await editform.validateFields()
-    const attchs = attchmentRef.current?.getDataSource()
+    const attchs = attchmentRef.current?.getDataSource()?.map(item => item.id)
     const {
       totalReturnedRate,
       totalReturnedAmount
@@ -123,7 +123,7 @@ export default function Edit() {
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
-      salesmanId: baseInfo.salesman.id,
+      payServiceManager: baseInfo.salesman.id,
       ascriptionName: baseInfo.ascription.value,
       ascriptionId: baseInfo.ascription.id,
       payType: baseInfo.payType?.join(","),

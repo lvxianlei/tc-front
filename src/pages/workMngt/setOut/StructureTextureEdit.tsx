@@ -53,7 +53,7 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
             const data: [] = await RequestUtil.get<[]>(`/tower-science/productSegment/segmentList`, {
-                productSegmentGroupId: id
+                productCategoryId: id
             });
             form.setFieldsValue({ data: [...list] })
             resole(data)
@@ -83,7 +83,7 @@ export default forwardRef(function StructureTextureEdit({ id }: modalProps, ref)
             })
             await saveRun({
                 textureUpdateList: newSelected,
-                segmentGroupId: id,
+                productCategoryId: id,
                 segmentIdList: values.segmentIdList,
                 structureTextureId: values.fuzzyReplaceBefore?.split(',')[0],
                 structureTexture: values.fuzzyReplaceBefore?.split(',')[1],

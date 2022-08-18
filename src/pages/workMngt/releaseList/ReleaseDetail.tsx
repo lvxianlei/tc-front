@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, Select } from 'antd';
+import { Button, Input, message, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
@@ -101,10 +101,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'processNum'
         },
         {
-            key: 'trialAssembleNum',
+            key: 'assembleNum',
             title: '试装数',
             width: 200,
-            dataIndex: 'trialAssembleNum'
+            dataIndex: 'assembleNum'
         },
         {
             key: 'basicsWeight',
@@ -178,7 +178,19 @@ export default function ReleaseList(): React.ReactNode {
             refresh={refresh}
             requestData={{ productCategoryId: params.productCategoryId, id: params.id }}
             exportPath="/tower-science/loftingBatch/batchDetail"
-            extraOperation={<Button style={{ margin: '0px 20px 0px 0px' }} onClick={() => history.goBack()} >返回</Button>}
+            extraOperation={<Space>
+                    <Button type='primary' ghost onClick={async () => {
+                        await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.id}`);
+                        message.success('更新成功！')
+                        history.go(0)
+                    }} >更新下达明细</Button>
+                    <Button type='primary' ghost onClick={async () => {
+                        await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.id}`);
+                        message.success('刷新成功！')
+                        history.go(0)
+                    }} >刷新件号数据</Button>
+                    <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
+                </Space>}
             searchFormItems={[
                 {
                     name: 'materialName',

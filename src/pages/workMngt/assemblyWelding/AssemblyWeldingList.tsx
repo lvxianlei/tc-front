@@ -17,6 +17,8 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export default function AssemblyWeldingList(): React.ReactNode {
+    const userId = AuthUtil.getUserId();
+
     const columns = [
         {
             key: 'index',
@@ -35,7 +37,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
         {
             key: 'priorityName',
             title: '优先级',
-            width: 150,
+            width: 100,
             dataIndex: 'priorityName'
         },
         {
@@ -71,19 +73,13 @@ export default function AssemblyWeldingList(): React.ReactNode {
         {
             key: 'weldingLeaderName',
             title: '组焊负责人',
-            width: 200,
+            width: 120,
             dataIndex: 'weldingLeaderName'
-        },
-        {
-            key: 'weldingOperatorName',
-            title: '作业员',
-            width: 200,
-            dataIndex: 'weldingOperatorName'
         },
         {
             key: 'statusName',
             title: '组焊清单状态',
-            width: 200,
+            width: 120,
             dataIndex: 'statusName'
         },
         {
@@ -102,14 +98,14 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
                     {
-                        record.weldingLeader === userId || record.weldingOperator === userId ?
-                            <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
-                            : <Button type="link" disabled>组焊清单</Button>
+                        record.weldingLeader.split(',').indexOf(userId) === -1 ?
+                            <Button type="link" disabled>组焊清单</Button>
+                            : <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
                     }
-                    <Button type='link' onClick={async () => {
+                    {/* <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);
-                    }} disabled={record.status !== 2}>指派</Button>
+                    }} disabled={record.status !== 2}>指派</Button> */}
                 </Space>
             )
         }
@@ -117,48 +113,47 @@ export default function AssemblyWeldingList(): React.ReactNode {
 
     const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
-    const userId = AuthUtil.getUserId();
     const [filterValue, setFilterValue] = useState<Record<string, any>>();
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
     }), {})
-    const [user, setUser] = useState<any[] | undefined>([]);
+    // const [user, setUser] = useState<any[] | undefined>([]);
     const [department, setDepartment] = useState<any | undefined>([]);
-    const [assignVisible, setAssignVisible] = useState<boolean>(false);
-    const [drawTaskId, setDrawTaskId] = useState<string>('');
+    // const [assignVisible, setAssignVisible] = useState<boolean>(false);
+    // const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [checkUser, setCheckUser] = useState([]);
-    const [form] = Form.useForm();
+    // const [form] = Form.useForm();
 
-    const handleAssignModalOk = async () => {
-        try {
-            const submitData = await form.validateFields();
-            submitData.weldingId = drawTaskId;
-            await RequestUtil.post('/tower-science/welding/assign', submitData).then(() => {
-                message.success('指派成功！')
-            }).then(() => {
-                setAssignVisible(false);
-                form.resetFields();
-            }).then(() => {
-                setRefresh(!refresh);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    const handleAssignModalCancel = () => { setAssignVisible(false); form.resetFields(); };
-    const formItemLayout = {
-        labelCol: { span: 6 },
-        wrapperCol: { span: 16 }
-    };
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-        switch (title) {
-            case "user":
-                form.setFieldsValue({ 'weldingOperator': '' })
-                return setUser(userData.records);
-        }
-    }
+    // const handleAssignModalOk = async () => {
+    //     try {
+    //         const submitData = await form.validateFields();
+    //         submitData.weldingId = drawTaskId;
+    //         await RequestUtil.post('/tower-science/welding/assign', submitData).then(() => {
+    //             message.success('指派成功！')
+    //         }).then(() => {
+    //             setAssignVisible(false);
+    //             form.resetFields();
+    //         }).then(() => {
+    //             setRefresh(!refresh);
+    //         })
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
+    // const handleAssignModalCancel = () => { setAssignVisible(false); form.resetFields(); };
+    // const formItemLayout = {
+    //     labelCol: { span: 6 },
+    //     wrapperCol: { span: 16 }
+    // };
+    // const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
+    //     const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+    //     switch (title) {
+    //         case "user":
+    //             form.setFieldsValue({ 'weldingOperator': '' })
+    //             return setUser(userData.records);
+    //     }
+    // }
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
@@ -183,7 +178,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
         return roles;
     }
     return <>
-        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
+        {/* <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
             <Form form={form} {...formItemLayout}>
                 <Row>
                     <Col span={12}>
@@ -206,7 +201,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     </Col>
                 </Row>
             </Form>
-        </Modal>
+        </Modal> */}
         <Page
             path="/tower-science/welding"
             exportPath={`/tower-science/welding`}
@@ -228,9 +223,8 @@ export default function AssemblyWeldingList(): React.ReactNode {
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
                             <Select.Option value={1} key="1">待开始</Select.Option>
-                            <Select.Option value={2} key="2">待指派</Select.Option>
-                            <Select.Option value={3} key="3">组焊中</Select.Option>
-                            <Select.Option value={4} key="4">已完成</Select.Option>
+                            <Select.Option value={2} key="2">组焊中</Select.Option>
+                            <Select.Option value={3} key="3">已完成</Select.Option>
                         </Select>
                     </Form.Item>
                 },

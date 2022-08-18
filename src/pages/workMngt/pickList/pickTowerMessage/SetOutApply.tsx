@@ -89,7 +89,7 @@ export default function LoftingTowerApplication(): React.ReactNode {
             key:'operation', 
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
                 if(paragraph){
-                    RequestUtil.post(`/tower-science/productStructure/reuse?productSegmentGroupId=${params.productSegmentId}&productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
+                    RequestUtil.post(`/tower-science/productStructure/reuse?productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
                         message.success('套用成功'); 
                     }).then(()=>{
                         history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
@@ -127,7 +127,10 @@ export default function LoftingTowerApplication(): React.ReactNode {
         resole(data);
     });
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
-        const data: [] = await RequestUtil.get(`/tower-science/drawProductSegment/getSegmentBySegmentGroupId`,{segmentGroupId:params.productSegmentId});
+        const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`,{                                
+            // segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
+            productCategory:params?.id
+        }); 
         getTableDataSource(page, {})
         resole(data);
     }), {})
