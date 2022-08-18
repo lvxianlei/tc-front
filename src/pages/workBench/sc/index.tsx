@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './WorkBench.module.less'
 import RequestUtil from '../../../utils/RequestUtil'
 import { DetailTitle } from '../../common'
-import { scWork }  from "./sc.json"
+import { scWork } from "./sc.json"
 import Icon, { SoundOutlined } from '@ant-design/icons'
 import useRequest from '@ahooksjs/use-request'
 import { Spin, Table } from 'antd'
@@ -32,10 +32,13 @@ export default function SWWorkBench(): React.ReactNode {
                             }} />} />
                         <span style={{ verticalAlign: "sub" }}>{item.title}</span>
                     </>} style={{ background: "#f8f8f8", padding: "10px" }} />
-                    {item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)).map((workbenchItem: any, index: number) => {
+                    {/* 预留验证
+                     * item.workbenchItemVos?.filter((itemVos: any) => authorities?.includes(itemVos.authority)) 
+                    */}
+                    {item.workbenchItemVos?.map((workbenchItem: any, index: number) => {
                         return <div key={index} className={styles.content}>
                             <div style={{ cursor: "pointer" }} onClick={() => history.push(workbenchItem.path)}>
-                                <p className={styles.total}>{ typeof(data?.[item.dataIndex]) == "number"?data?.[item.dataIndex] : data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
+                                <p className={styles.total}>{typeof (data?.[item.dataIndex]) == "number" ? data?.[item.dataIndex] : data?.[item.dataIndex]?.[workbenchItem.dataIndex] || 0}</p>
                                 <p style={{ textAlign: "center" }}>{workbenchItem.title}</p>
                             </div>
                         </div>

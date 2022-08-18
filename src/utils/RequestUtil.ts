@@ -73,16 +73,17 @@ export default abstract class RequestUtil {
                 referrerPolicy: 'no-referrer-when-downgrade',
                 signal
             })
-                .then((res) => {
+                .then(async (res) => {
                     if (res.status !== 200) {
                         NProgress.done();
                     }
                     if (res.status === 401) {
+                        await message.warning("登录已过期！请重新登录...")
                         setTimeout(this.backToLogin, 10);
                     }
                     return res.json();
                 })
-                .then((res: IResponse<T> | any) => {
+                .then(async (res: IResponse<T> | any) => {
                     NProgress.done();
                     if (path === '/sinzetech-auth/oauth/token') {
                         resolve(res);
@@ -90,9 +91,10 @@ export default abstract class RequestUtil {
                         resolve(res.data);
                     } else if (res.code === 401) {
                         if (!path.includes("sinzetech-auth/oauth")) {
+                            await message.warning("登录已过期！请重新登录...")
                             setTimeout(this.backToLogin, 10);
                         } else {
-                            message.warning("登录已过期！请重新登录...")
+                            await message.warning("登录已过期！请重新登录...")
                             console.log("token过期。。。。")
                         }
                     } else {

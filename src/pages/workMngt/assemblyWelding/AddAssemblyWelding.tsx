@@ -55,11 +55,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
         resole(data);
     }), {})
 
+    const segmentNameList: ISegmentNameList[] = data || [];
+
     useEffect(() => {
         isShowZero(componentList, checked)
     }, [checked])
-
-    const segmentNameList: ISegmentNameList[] = data || [];
 
     const columns = [
         {
@@ -168,11 +168,10 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         okText="移除"
                         cancelText="取消"
                     >
-                        <Button type="link">移除</Button>
+                        <Button type="link" disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0}>移除</Button>
                     </Popconfirm>
-                    <Button type="link" onClick={() => { move('批量移除', record.singleNum); setMoveRecord(record); setRemoveIndex(index) }}>批量移除</Button>
+                    <Button type="link" disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0} onClick={() => { move('批量移除', record.singleNum); setMoveRecord(record); setRemoveIndex(index) }}>批量移除</Button>
                 </Space>
-
             )
         }
     ]
@@ -222,8 +221,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Space>
                     {/* <Button type="link" disabled={record.basicsPartNumNow === 0} onClick={() => addComponent(record, 1)}>右移</Button> */}
-                    <Button type="link" onClick={() => addComponent(record, 1)}>右移</Button>
-                    <Button type="link" onClick={() => {
+                    <Button type="link" disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0} onClick={() => addComponent(record, 1)}>右移</Button>
+                    <Button type="link" disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0} onClick={() => {
                         move('批量右移', record.basicsPartNumNow);
                         setMoveRecord(record)
                     }}>批量右移</Button>
@@ -293,7 +292,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 if (res.id === record.structureId) {
                     return {
                         ...res,
-                        basicsPartNumNow: Number(res.basicsPartNumNow) + num
+                        basicsPartNumNow: Number(res.basicsPartNumNow) + Number(num)
                     }
                 } else {
                     return res
@@ -317,7 +316,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     productCategoryId: params.productCategoryId,
                     segmentId: params.segmentId || ''
                 });
-                if (params.segmentId) {
+                if (params.segmentId && type === 'edit') {
                     settingData.forEach((items: IComponentList) => {
                         data = data.map((item: IComponentList) => {
                             if (items.structureId === item.id) {
@@ -376,7 +375,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             if (item.structureId === record.id) {
                 return {
                     ...item,
-                    singleNum: Number(item.singleNum) + num,
+                    singleNum: Number(item.singleNum) + Number(num),
                     basicsPartNumNow: Number(record.basicsPartNumNow || 0)
                 }
             } else {
@@ -399,7 +398,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             if (res.id === record.id) {
                 return {
                     ...res,
-                    basicsPartNumNow: Number(res.basicsPartNumNow) - num
+                    basicsPartNumNow: Number(res.basicsPartNumNow) - Number(num)
                 }
             } else {
                 return res
@@ -525,7 +524,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         if (res.structureId === record.structureId) {
                             return {
                                 ...res,
-                                singleNum: Number(res.singleNum) - record.singleNum
+                                singleNum: Number(res.singleNum) - Number(record.singleNum)
                             }
                         } else {
                             return res
@@ -563,7 +562,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     if (item.structureId === record.id) {
                         return {
                             ...item,
-                            singleNum: Number(item.singleNum) + record.basicsPartNumNow,
+                            singleNum: Number(item.singleNum) + Number(record.basicsPartNumNow),
                             basicsPartNumNow: Number(record.basicsPartNumNow || 0)
                         }
                     } else {
@@ -579,7 +578,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     if (res.id === record.id) {
                         return {
                             ...res,
-                            basicsPartNumNow: Number(res.basicsPartNumNow) - record.basicsPartNumNow
+                            basicsPartNumNow: Number(res.basicsPartNumNow) - Number(record.basicsPartNumNow)
                         }
                     } else {
                         return res
@@ -634,7 +633,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         if (res.id === record.structureId) {
                             return {
                                 ...res,
-                                basicsPartNumNow: Number(res.basicsPartNumNow) + record.singleNum
+                                basicsPartNumNow: Number(res.basicsPartNumNow) + Number(record.singleNum)
                             }
                         } else {
                             return res

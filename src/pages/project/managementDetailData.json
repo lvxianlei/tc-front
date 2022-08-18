@@ -477,6 +477,7 @@
             "title": "原材料标准",
             "dataIndex": "materialStandard",
             "type": "select",
+            "enum": [],
             "rules": [
                 {
                     "required": true,

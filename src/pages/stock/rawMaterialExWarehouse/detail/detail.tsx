@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Table } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
-import { Page, IntgSelect } from '../../../common';
+import { SearchTable as Page, IntgSelect } from '../../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
@@ -318,7 +318,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
-        const result = {
+        const result: any = {
             selectName: value.selectName || "",
             status: value.status || "",
             updateTimeStart: "",
@@ -338,8 +338,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (value.batcherId) {
             result.outStockStaffId = value.batcherId.value
         }
-        setFilterValue(result)
-        return result
+        setFilterValue({ ...value })
+        return value
     }
 
     // 点击出库显示弹框内容
@@ -462,7 +462,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...baseColumn,
+                    ...(baseColumn as any),
                     {
                         title: '操作',
                         width: 80,

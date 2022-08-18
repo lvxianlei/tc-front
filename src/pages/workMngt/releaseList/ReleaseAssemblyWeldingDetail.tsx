@@ -24,7 +24,7 @@ export default function ReleaseList(): React.ReactNode {
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeld`, { ...pages, weldingId:params.weldingId, fuzzyMsg: data?.fuzzyMsg,id: params.id })
-            const dataSource:any = result?.records?.length>0? await RequestUtil.get(`/tower-science/welding/getStructureById`,{segmentId: result?.records[0]?.id}):[];
+            const dataSource:any = result?.records?.length>0? await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`,{segmentId: result?.records[0]?.id}):[];
             setSegmentDataSource([...dataSource]);
             resole(result?.records)
         } catch (error) {

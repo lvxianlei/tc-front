@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { Button, Spin, Tabs } from 'antd'
-import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom'
+import { useHistory, useRouteMatch, useLocation } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable } from '../../common'
 import { bidInfoColumns, billingInformationStatistics, overview } from "./bidResult.json"
 import useRequest from '@ahooksjs/use-request'
@@ -21,7 +21,7 @@ export default function Overview({ id }: OverviewProps) {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/bidBase/${id}`)
             const statistics: any = await RequestUtil.get(`/tower-market/bidBase/statistics/${id}`)
-            resole({ result, statistics: statistics.map(((item: any, index: number) => ({ ...item, key: index }))) || [] })
+            resole({ result, statistics: statistics?.map(((item: any, index: number) => ({ ...item, key: index }))) || [] })
         } catch (error) {
             reject(error)
         }

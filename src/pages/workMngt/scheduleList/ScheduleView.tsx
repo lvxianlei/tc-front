@@ -504,30 +504,31 @@ export default function ScheduleView(): React.ReactNode {
                         }
                         form.setFieldsValue({
                             ...resData,
-                            // materialLeader:resData.materialLeader && resData.materialLeader!==-1 ?resData.materialLeader:'',
-                            // materialLeaderDepartment:resData.materialLeaderDepartment && resData.materialLeaderDepartment!==-1?resData.materialLeaderDepartment:'',
                             boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
-                            boltLeaderDepartment:resData.boltLeaderDepartment&& resData.boltLeaderDepartment!==-1?resData.boltLeaderDepartment:'',
                             weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
-                            weldingLeaderDepartment:resData.weldingLeaderDepartment&& resData.weldingLeaderDepartment!==-1?resData.weldingLeaderDepartment:'',
                             loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
-                            loftingLeaderDepartment:resData.loftingLeaderDepartment&& resData.loftingLeaderDepartment!==-1?resData.loftingLeaderDepartment:'',
                             drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
-                            drawLeaderDepartment:resData.drawLeaderDepartment&& resData.drawLeaderDepartment!==-1?resData.drawLeaderDepartment:'',
-                            // materialPartLeader:resData.materialPartLeader&& resData.materialPartLeader!==-1?resData.materialPartLeader:'',
-                            // materialPartLeaderDepartment:resData.materialPartLeaderDepartment&& resData.materialPartLeaderDepartment!==-1?resData.materialPartLeaderDepartment:'',
+                            loftingUser: resData.loftingUser&&resData.loftingUser!==null ? resData.loftingUser.indexOf(',')>-1?resData.loftingUser.split(','):[resData.loftingUser]:[],
+                            loftingMutualReview: resData.loftingMutualReview&&resData.loftingMutualReview!==null ? resData.loftingMutualReview.indexOf(',')>-1?resData.loftingMutualReview.split(','):[resData.loftingMutualReview]:['0'],
+                            weldingUser: resData.weldingUser&&resData.weldingUser!==null ? resData.weldingUser.indexOf(',')>-1?resData.weldingUser.split(','):[resData.weldingUser]:['0'],
                             smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
-                            smallSampleLeaderDepartment:resData.smallSampleLeaderDepartment&& resData.smallSampleLeaderDepartment!==-1?resData.smallSampleLeaderDepartment:'',
+                            ncUser:resData.ncUser?resData.ncUser:'0',
+                            packageUser:resData.packageUser?resData.packageUser:'0',
+                            productPartUser:resData.productPartUser?resData.productPartUser:'0',
+                            boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
+                            boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
+                            boltUser:resData.boltUser?resData.boltUser:'0',
+                            deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
+                            
                             boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
                             weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
                             loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
                             loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
-                            // materialDeliverTime:resData.materialDeliverTime?moment(resData.materialDeliverTime):'',
-                            // materialPartDeliverTime: resData.materialPartDeliverTime?moment(resData.materialPartDeliverTime):'',
                             programmingDeliverTime: resData.programmingDeliverTime?moment(resData.programmingDeliverTime):'',
                             smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
                             deliveryDrawDeliverTime:resData.deliveryDrawDeliverTime? moment(resData.deliveryDrawDeliverTime):'',
                             drawDeliverTime:resData.drawDeliverTime? moment(resData.drawDeliverTime):'',
+                        
                         });
                         
                         setLoad(false)

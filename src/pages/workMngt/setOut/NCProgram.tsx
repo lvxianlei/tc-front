@@ -83,7 +83,6 @@ export default function NCProgram(): React.ReactNode {
     const [refresh, setRefresh] = useState(false);
     const [detailData, setDetailData] = useState<IData>();
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
-    const location = useLocation<{ status: number }>();
 
     const getData = async () => {
         const data = await RequestUtil.get<IData>(`/tower-science/productNc/count?productCategoryId=${params.id}`);
@@ -106,33 +105,29 @@ export default function NCProgram(): React.ReactNode {
     return <Page
         path="/tower-science/productNc"
         requestData={{ id: params.productSegmentId, productCategoryId: params.id }}
-        columns={location.state.status === 1 || location.state.status === 2 ? columns : columns.splice(0, 5)}
+        columns={columns}
         headTabs={[]}
         refresh={refresh}
         extraOperation={<Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={() => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${params.id}`, "NC文件汇总", {}, true)}>下载</Button>
             <p>NC程序数 {detailData?.ncCount || 0}/{detailData?.structureCount || 0}</p>
-            {
-                location.state.status === 1 || location.state.status === 2 ?
-                    <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                        RequestUtil.post(`/tower-science/productNc/importProductNc`, {
-                            fileVOList: [...dataInfo],
-                            productCategoryId: params.id
-                        }).then(res => {
-                            if (res) {
-                                message.success('上传成功');
-                                history.go(0);
-                                getData();
-                            }
-                        }).catch(error => {
-                            setTimeout(() => {
-                                history.go(0);
-                            }, 1500)
+            <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
+                RequestUtil.post(`/tower-science/productNc/importProductNc`, {
+                    fileVOList: [...dataInfo],
+                    productCategoryId: params.id
+                }).then(res => {
+                    if (res) {
+                        message.success('上传成功');
+                        history.go(0);
+                        getData();
+                    }
+                }).catch(error => {
+                    setTimeout(() => {
+                        history.go(0);
+                    }, 1500)
 
-                        })
-                    }}><Button type="primary" ghost>批量上传</Button></Attachment>
-                    : null
-            }
+                })
+            }}><Button type="primary" ghost>批量上传</Button></Attachment>
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>}
         searchFormItems={[

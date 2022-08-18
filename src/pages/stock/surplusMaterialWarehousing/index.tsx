@@ -279,6 +279,7 @@ export default function RawMaterialStock(): React.ReactNode {
         <>
             <Page
                 path="/tower-storage/surplusMaterial/excess"
+                exportPath="/tower-storage/surplusMaterial/excess"
                 searchFormItems={[
                     {
                         name: "updateTime",
@@ -308,7 +309,6 @@ export default function RawMaterialStock(): React.ReactNode {
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
                 columns={columns as any[]}
-                exportPath="/tower-storage/receiveStock/excess"
             />
             {/* 入库弹框 */}
             <Modal

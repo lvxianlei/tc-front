@@ -41,6 +41,7 @@ export default function Lofting(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [edit, setEdit] = useState<boolean>(false);
     const [user, setUser] = useState<any|undefined>([]);
+    const [materialCheckLeaders, setMaterialCheckLeaders] = useState<any|undefined>([]);
     const [list, setList] = useState<any|undefined>([]);
     const [pickLeader, setPickLeader] = useState<any|undefined>([]);
     const [checkLeader, setCheckLeader] = useState<any|undefined>([]);
@@ -70,13 +71,16 @@ export default function Lofting(): React.ReactNode {
             statusName: "校核中",
             updateStatusTime: "2022-06-16 09:59:33",
         }]
-        const userData: any = await RequestUtil.get(`/tower-system/employee?current=1&size=1000`);
-        setUser(userData?.records);
+        // const userData: any = await RequestUtil.get(`/tower-system/employee?current=1&size=1000`);
+        // setUser(userData?.records);
         setDepartment(departmentData);
         const detailTop: any = await RequestUtil.get(`/tower-science/materialProductCategory/${params.id}`);
         setDetailTop(detailTop);
         const list: any = await RequestUtil.get(`/tower-science/projectPrice/list?current=1&size=1000&category=2&productType=${detailTop?.productType}`);
         setList(list?.records);
+        const users:any = await RequestUtil.get(`/tower-science/drawProductSegment/leader/${ params.id}`)
+        setUser(users?.materialLeaders&&Array.isArray(users?.materialLeaders)&&users?.materialLeaders.length>0?users?.materialLeaders:[])
+        setMaterialCheckLeaders(users?.materialCheckLeaders&&Array.isArray(users?.materialCheckLeaders)&&users?.materialCheckLeaders.length>0?users?.materialCheckLeaders:[])
         setValue(value)
         resole(data)
     }), {})
@@ -283,7 +287,7 @@ export default function Lofting(): React.ReactNode {
                     }]}
                 >
                     <Select style={{width:'100%'}} onChange={() => rowChange(index)}> 
-                        { user && user.map((item:any)=>{
+                        { materialCheckLeaders && materialCheckLeaders.map((item:any)=>{
                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                         }) }
                     </Select>
@@ -536,8 +540,8 @@ export default function Lofting(): React.ReactNode {
                     width: 100,
                     render: (_: undefined, record: any): React.ReactNode => (
                                     <Space direction="horizontal" size="small"  className={styles.operationBtn}>
-                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={AuthUtil.getUserId()!==record.materialLeader||params.status==='1'}>提料</Button>
-                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||AuthUtil.getUserId()!==record.materialCheckLeader}>校核</Button>
+                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`)}} type='link' disabled={ !(user&&user.length>0&&user.map((item:any)=>{return item.userId}).concat([record?.materialLeader]).indexOf(AuthUtil.getUserId())>-1)||params.status==='1'}>提料</Button>
+                                        <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`)}} type='link' disabled={record.status!==2||!(materialCheckLeaders.length>0&&materialCheckLeaders.map((item:any)=>{return item.userId}).concat([record?.materialCheckLeader]).indexOf(AuthUtil.getUserId())>-1)}>校核</Button>
                                         <Button onClick={()=>{history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`)}} type='link' disabled={record.status<3}>明细</Button>
                                         {/* <TowerPickAssign type={ record.status < 2 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } /> */}
                                         <Popconfirm
@@ -610,6 +614,7 @@ export default function Lofting(): React.ReactNode {
                     <Space>
                         <Button type="primary" ghost onClick={async () => {
                             if (editorLock === '编辑') {
+                            
                                 setColumns(columns);
                                 // form.setFieldsValue({
                                 //     ...value,
@@ -654,12 +659,12 @@ export default function Lofting(): React.ReactNode {
                             }
                             console.log(formRef.getFieldsValue(true))
                         }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        { params.materialLeader===AuthUtil.getUserId()?
+                        {(user&&user.length>0&&user.map((item:any)=>{return item.userId}).concat([params?.materialLeader]).indexOf(AuthUtil.getUserId())>-1)?
                             <Button type="primary" ghost onClick={
                                 ()=>history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
                             } disabled={params.status==='1'}>提料</Button>
                         :null}
-                        { params.materialLeader===AuthUtil.getUserId()?<Popconfirm
+                        {(materialCheckLeaders.length>0&&materialCheckLeaders.map((item:any)=>{return item.userId}).concat([params.materialLeader]).indexOf(AuthUtil.getUserId())>-1)?<Popconfirm
                             title="确认提交?"
                             onConfirm={ async () => {
                                 await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(()=>{

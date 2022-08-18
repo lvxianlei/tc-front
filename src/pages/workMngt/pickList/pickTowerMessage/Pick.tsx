@@ -22,7 +22,7 @@ export default function Lofting(): React.ReactNode {
         materialLeader: string
     }>();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [filterValue, setFilterValue] = useState<any>({ productCategoryId: params.id});
+    const [filterValue, setFilterValue] = useState<any>({ productCategoryId: params.id, segmentId:params?.productSegmentId==='all'?'':params?.productSegmentId});
     const [visible, setVisible] = useState<boolean>(false);
     const [tipVisible, setTipVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
@@ -436,6 +436,8 @@ export default function Lofting(): React.ReactNode {
     const [tableColumns, setColumns] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
         value.productCategoryId = params.id
+        console.log(value)
+        // value.segmentId =  value.segmentId?value.segmentId:params?.productSegmentId==='all'?'':params?.productSegmentId
         setFilterValue(value)
         return value
     }
@@ -647,12 +649,14 @@ export default function Lofting(): React.ReactNode {
                 {
                     name: 'segmentId',
                     label: '段号',
-                    children: <Select  style={{width:'100px'}} defaultValue={params?.productSegmentId==='all'?'':params?.productSegmentId}>
-                        <Select.Option key={ 0 } value={''}>全部</Select.Option>
-                        { paragraphList.map((item: any) => {
-                            return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
-                        }) }
-                    </Select>
+                    children: <Form.Item name='segmentId' initialValue={params?.productSegmentId==='all'?'':params?.productSegmentId}>
+                        <Select  style={{width:'100px'}}>
+                            <Select.Option key={ 0 } value={''}>全部</Select.Option>
+                            { paragraphList.map((item: any) => {
+                                return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                            }) }
+                        </Select>
+                    </Form.Item>
                 }
             ]}
             onFilterSubmit={onFilterSubmit}
@@ -708,7 +712,7 @@ export default function Lofting(): React.ReactNode {
                         return {
                             ...item,
                             productCategory: params.id,
-                            segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
+                            // segmentId: params.productSegmentId==='all'?'':params.productSegmentId,
                         }
                     })
                     const submitData ={

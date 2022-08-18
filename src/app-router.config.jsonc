@@ -430,6 +430,20 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_detail"
     },
+    { // 合同详情
+      "name": "合同详情",
+      "path": "/project/contract/detail/contract/:projectId/:id",
+      "module": "./pages/project/contract/Detail",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract_detail"
+    },
+    { // 新增合同
+      "name": "新增合同",
+      "path": "/project/contract/new/contract/:projectId",
+      "module": "./pages/project/contract/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract_add"
+    },
     { // 新增合同
       "name": "新增合同",
       "path": "/project/management/new/contract/:projectId",
@@ -444,9 +458,23 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
     },
+    { // 编辑合同
+      "name": "编辑合同",
+      "path": "/project/contract/edit/contract/:projectId/:id",
+      "module": "./pages/project/contract/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract_edit"
+    },
     { // 新增回款计划
       "name": "新增回款记录",
       "path": "/project/management/pamentRecord/contract/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
+      "module": "./pages/project/contract/PaymentNew",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract_back_money"
+    },
+    { // 新增回款计划
+      "name": "新增回款记录",
+      "path": "/project/contract/pamentRecord/contract/:id/:contractName/:signCustomerId/:signCustomerName/:contractNumber/:projectId",
       "module": "./pages/project/contract/PaymentNew",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_back_money"
@@ -459,15 +487,36 @@
       "authority": "tc_erp_sc_project_view_contract_sale_order_add"
     },
     {
+      "name": "新增订单",
+      "path": "/project/order/new/order/:projectId",
+      "module": "./pages/project/order/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract_sale_order_add"
+    },
+    {
       "name": "编辑订单",
       "path": "/project/management/edit/order/:projectId/:id",
       "module": "./pages/project/order/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_sale_order_edit"
     },
+    {
+      "name": "编辑订单",
+      "path": "/project/order/edit/order/:projectId/:id",
+      "module": "./pages/project/order/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract_sale_order_edit"
+    },
     { // 订单详情
       "name": "订单详情",
-      "path":"/project/management/detail/order/:projectId/:id",
+      "path": "/project/management/detail/order/:projectId/:id",
+      "module": "./pages/project/order/Detail",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract_sale_order_detail"
+    },
+    { // 订单详情
+      "name": "订单详情",
+      "path": "/project/order/detail/order/:projectId/:id",
       "module": "./pages/project/order/Detail",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_sale_order_detail"
@@ -486,6 +535,34 @@
       "module": "./pages/project/Detail",
       "exact": true,
       "authority": "tc_erp_sc_project_view"
+    },
+    { // 项目管理子项详情
+      "name": "合同管理",
+      "path": "/project/contract",
+      "module": "./pages/project/contract/index",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract"
+    },
+    { // 项目管理子项详情
+      "name": "订单管理",
+      "path": "/project/order",
+      "module": "./pages/project/order/index",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_contract"
+    },
+    { // 项目管理子项详情
+      "name": "杆塔明细",
+      "path": "/project/productGroup",
+      "module": "./pages/project/productGroup/index",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_product"
+    },
+    { // 项目管理子项详情
+      "name": "销售计划",
+      "path": "/project/salePlan",
+      "module": "./pages/project/salesPlan/index",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_task_notice"
     },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
@@ -536,6 +613,13 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view_product_edit"
     },
+    { // 杆塔明细编辑
+      "name": "杆塔明细编辑",
+      "path": "/project/productGroup/edit/productGroup/:projectId/:id",
+      "module": "./pages/project/Edit/ProductGroupEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 查看杆塔明细
       "name": "杆塔明细",
       "path": "/project/management/productGroup/item/:projectId/:id",
@@ -543,12 +627,33 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view_product"
     },
+    { // 查看杆塔明细
+      "name": "杆塔明细",
+      "path": "/project/productGroup/productGroup/item/:projectId/:id",
+      "module": "./pages/project/ProductDetail",
+      "exact": true,
+      "authority": "project_detail"
+    },
     { // 新增杆塔明细
       "name": "新增杆塔明细",
       "path": "/project/management/new/productGroup/:id",
       "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_product_add"
+    },
+    { // 新增杆塔明细
+      "name": "新增杆塔明细",
+      "path": "/project/productGroup/new/productGroup/:id",
+      "module": "./pages/project/Edit/ProductGroupEdit",
+      "exact": true,
+      "authority": "project_detail"
+    },
+    { // 销售计划编辑
+      "name": "销售计划编辑",
+      "path": "/project/salePlan/edit/salesPlan/:projectId/:id",
+      "module": "./pages/project/Edit/SalesPlanEdit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_task_notice_add"
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
@@ -559,10 +664,24 @@
     },
     { // 新增销售计划编辑
       "name": "新增销售计划",
+      "path": "/project/salePlan/new/salesPlan/:id",
+      "module": "./pages/project/Edit/SalesPlanEdit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_task_notice_add"
+    },
+    { // 新增销售计划编辑
+      "name": "新增销售计划",
       "path": "/project/management/new/salesPlan/:id",
       "module": "./pages/project/Edit/SalesPlanEdit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_task_notice_add"
+    },
+    { // 销售计划详情
+      "name": "销售计划详情",
+      "path": "/project/salePlan/cat/salesPlan/:projectId/:id",
+      "module": "./pages/project/SalesPlanDetail",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_task_notice_detail"
     },
     { // 销售计划详情
       "name": "销售计划详情",
@@ -1221,7 +1340,7 @@
       "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/apply/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
-      "authority": "rd_welding"
+      "authority": "tc_erp_rd_work_weld_detailed_add"
     },
     // { // 工作管理-组焊列表-校核
     //   "name": "校核",
@@ -1510,23 +1629,14 @@
       "path": "/supply/sw",
       "module": "./pages/workBench/sw/index",
       "exact": true,
-      "authority": "tc_erp_sw_workBench_list_data"
+      "authority": "tc_erp_sw_workBench_list"
     },
     { // 工作台-营销
       "name": "营销工作台",
       "path": "/workBenchSC/sc",
       "module": "./pages/workBench/sc/index",
       "exact": true,
-      // "authority": "rd_workbench"
       "authority": "tc_erp_sc_workbench"
-    },
-    { // 工作台-营销
-      "name": "营销工作台",
-      "path": "/workBenchSC/sc",
-      "module": "./pages/workBench/sc/index",
-      "exact": true,
-      // "authority": "rd_workbench"
-      "authority": "workbench_supply"
     },
     //财务管理
     { // 票据管理
