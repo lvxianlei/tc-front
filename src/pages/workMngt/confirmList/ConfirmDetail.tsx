@@ -15,8 +15,6 @@ import { FileProps } from '../../common/Attachment';
 export default function ConfirmDetail(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
-    // const [pictureVisible, setPictureVisible] = useState<boolean>(false);
-    const [pictureUrl, setPictureUrl] = useState('');
     const [rowId, setRowId] = useState('');
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
     const [weight, setWeight] = useState<string>('0');
@@ -59,7 +57,8 @@ export default function ConfirmDetail(): React.ReactNode {
                         steelProductShape: value?.steelProductShape,
                         voltageLevel: value?.voltageLevel,
                         lineName: value?.lineName,
-                        drawTaskId: params.id
+                        drawTaskId: params.id,
+                        structure: value?.structure
                     }
                 })
                 await RequestUtil.post(`/tower-science/drawProductDetail/saveBatch`, submitData)
@@ -123,7 +122,8 @@ export default function ConfirmDetail(): React.ReactNode {
                         voltageLevel: value?.voltageLevel,
                         lineName: value?.lineName,
                         drawTaskId: params.id,
-                        id: rowId
+                        id: rowId,
+                        structure: value?.structure
                     }
                 })
                 await RequestUtil.post(`/tower-science/drawProductDetail/save`, submitData[0])
@@ -367,9 +367,9 @@ export default function ConfirmDetail(): React.ReactNode {
         },
         {
             title: '结构',
-            dataIndex: 'structure',
+            dataIndex: 'structureName',
             width: 90,
-            key: 'structure',
+            key: 'structureName',
         },
         {
             title: '接腿配置A',
@@ -593,6 +593,7 @@ export default function ConfirmDetail(): React.ReactNode {
                             steelProductShape: record?.steelProductShape,
                             voltageLevel: record?.voltageLevel,
                             lineName: record?.lineName,
+                            structure: record?.structure,
                             confirmList: [record].map((item: any) => {
                                 return {
                                     ...item,
