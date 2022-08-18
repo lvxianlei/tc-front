@@ -191,6 +191,13 @@
             "value": "comparisonPriceNumber",
             "dependencies": true,
             "readOnly": true,
+            "search":[
+                {
+                    "title":"查询",
+                    "dataIndex":"fuzzyQuery",
+                    "placeholder": "询比价编号"
+                }
+            ],
             "columns": [
                 {
                     "title": "询比价编号",
@@ -252,6 +259,13 @@
             "dependencies": true,
             "readOnly": true,
             "disabled": true,
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "编号/名称/联系人/联系人电话"
+                }
+            ],
             "columns": [
                 {
                     "title": "供应商编号",

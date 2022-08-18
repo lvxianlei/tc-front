@@ -203,7 +203,7 @@ export default function Overview(): JSX.Element {
                 disabled={data?.comparisonStatus !== 1}
                 type="primary"
                 style={{ marginRight: 16 }}
-                ghost key="add"
+                ghost key="addPrice"
                 onClick={() => {
                     setOprationType("new")
                     setVisible(true)
