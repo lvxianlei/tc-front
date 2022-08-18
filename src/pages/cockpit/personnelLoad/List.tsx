@@ -70,7 +70,7 @@ export default function List(): React.ReactNode {
     // }
 
     const onRowChange = async (record: Record<string, any>) => {
-        detailRun(record.id, record.type)
+        detailRun(record.userId, record.type)
     }
 
     return <Spin spinning={loading}>
