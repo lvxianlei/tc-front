@@ -59,7 +59,8 @@ export default function ConfirmDetail(): React.ReactNode {
                         steelProductShape: value?.steelProductShape,
                         voltageLevel: value?.voltageLevel,
                         lineName: value?.lineName,
-                        drawTaskId: params.id
+                        drawTaskId: params.id,
+                        structure: value?.structure
                     }
                 })
                 await RequestUtil.post(`/tower-science/drawProductDetail/saveBatch`, submitData)
@@ -367,9 +368,9 @@ export default function ConfirmDetail(): React.ReactNode {
         },
         {
             title: '结构',
-            dataIndex: 'structure',
+            dataIndex: 'structureName',
             width: 90,
-            key: 'structure',
+            key: 'structureName',
         },
         {
             title: '接腿配置A',
