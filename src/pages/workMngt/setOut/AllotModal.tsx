@@ -29,7 +29,6 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [checkRowKeys, setCheckRowKeys] = useState<any[]>([]);
     const [checkRows, setCheckRows] = useState<any[]>([]);
-    const [statusValue, setStatusValue] = useState<any>('');
     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
         try {
             allotData = {
@@ -44,7 +43,6 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
                     }
                 })
             }
-            setStatusValue(status)
             const towerData: any = await RequestUtil.get(`/tower-science/product/lofting?page=1&size=1000&productCategoryId=${allotData.productCategory}&productId=${id}`)
             setTowerData(towerData?.records.filter((item: any) => {
                 return item.isSpecial === 1 && item.isSpecial !== null && item.specialStatus !== 2
@@ -192,7 +190,7 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
                         form.validateFields()
                     }} disabled={data?.specialStatus === 2} size="small" /> */}
 
-                    <InputNumber min={0} max={99} disabled={status === 4} size="small" />
+                    <InputNumber min={0} max={99} size="small" />
                 </Form.Item>
             )
         },
@@ -203,7 +201,7 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
             dataIndex: 'description',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['loftingProductStructure', index, 'description']}>
-                    <Input disabled={status === 4} size="small" />
+                    <Input maxLength={20} size="small" />
                 </Form.Item>
             )
         }
@@ -225,12 +223,12 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
                     <Descriptions.Item key={2} label="配段信息">
                         {data?.segmentInformation}
                     </Descriptions.Item>
-                    {(statusValue == '2' || statusValue == '3') && <Descriptions.Item key={1} label="复用杆塔">
+                    <Descriptions.Item key={3} label="复用杆塔">
                         <Button onClick={async () => {
                             setSelectedRowKeys(checkRowKeys)
                             setVisible(true)
                         }} type='link'>请选择</Button>
-                    </Descriptions.Item>}
+                    </Descriptions.Item>
                 </Descriptions>
                 <p style={{ padding: "12px 0px", fontWeight: "bold", fontSize: '14PX' }}>特殊件号信息</p>
                 <CommonTable

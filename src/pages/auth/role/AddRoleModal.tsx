@@ -130,6 +130,12 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                     <Input placeholder="请输入名称" />
                 </Form.Item>
                 <Form.Item
+                    name="code"
+                    style={{display:'none'}}
+                >
+                    <Input type="hidden"/>
+                </Form.Item>
+                <Form.Item
                     label="功能权限"
                     name="components"
                 // rules={[{ type: 'array', required: true, message: 'Please input your username!' }]}

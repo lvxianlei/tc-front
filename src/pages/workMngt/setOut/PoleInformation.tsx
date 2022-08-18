@@ -288,24 +288,16 @@ export default function PoleInformation(): React.ReactNode {
             visible={allotVisible}
             width="60%"
             title="特殊件号"
-            footer={loftingStatus !== 1 && <Space>
-                <Button type="ghost" onClick={async () => {
-                    setAllotVisible(false);
-                    editRef.current?.resetFields()
-                }}>关闭</Button>
-                {/* {
-                    allotData?.specialStatus === 0 || allotData?.specialStatus === 1 ? <><Button type="primary" onClick={handleModalOk} ghost>保存</Button>
-                        <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button></> : null}
-                    </Space>
-                } */}
-                {
-                    loftingStatus !== 4 && <>
-                        {/* <Button type="primary" onClick={handleModalOk} ghost>保存</Button> */}
-                        <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
-                    </>
-
-                }
-            </Space>}
+            footer={
+                <Space>
+                    <Button type="ghost" onClick={async () => {
+                        setAllotVisible(false);
+                        editRef.current?.resetFields()
+                    }}>关闭</Button>
+                    {/* <Button type="primary" onClick={handleModalOk} ghost>保存</Button> */}
+                    <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
+                </Space>
+            }
             // onOk={handleModalOk}
             onCancel={() => setAllotVisible(false)}
             className={styles.tryAssemble}
