@@ -62,7 +62,7 @@ const tableColumns = [
                     label: "已提交"
                 }
             ]
-            return <>{value !== -1 ? renderEnum.find((item: any) => item.value === value).label : ''}</>
+            return <>{value !== -1 ? renderEnum.find((item: any) => item.value === value)?.label : ''}</>
         }
     },
     {

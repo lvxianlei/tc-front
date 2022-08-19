@@ -369,8 +369,8 @@
             "dataIndex": "pleasePayNumber"
         },
         {
-            "title": "付款类型------新加",
-            "dataIndex": "pleasePayNumber"
+            "title": "付款类型",
+            "dataIndex": "paymentReqTypeName"
         },
         {
             "title": "关联到货单",
@@ -439,7 +439,7 @@
         },
         {
             "title": "付款类型",
-            "dataIndex": "businessTypePay",
+            "dataIndex": "paymentReqType",
             "type": "select",
             "enum": [
                 {
@@ -534,6 +534,12 @@
                     "dataIndex": "invoiceType",
                     "type": "select",
                     "search": true
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择关联票据..."
                 }
             ]
         },

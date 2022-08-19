@@ -296,7 +296,12 @@ export default function TowerInformation(): React.ReactNode {
             width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
+                    {
+                        location.state?.status > 1 ?
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
+                            :
+                            <Button type="link" disabled>放样</Button>
+                    }
                     {
                         record.status > 1 ?
                             <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}>校核</Link>
@@ -527,7 +532,7 @@ export default function TowerInformation(): React.ReactNode {
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
-                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' ghost>放样</Button> </Link>
+                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' disabled={location.state?.status === 1} ghost>放样</Button> </Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type="primary" ghost>模型</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type="primary" ghost>NC程序</Button></Link>

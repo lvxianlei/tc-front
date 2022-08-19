@@ -123,7 +123,7 @@ export default function PoleInformation(): React.ReactNode {
                             : <Button type="link" disabled>配段</Button>
                     }
                     <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
-                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record.status } }}><Button type="link" disabled={!isShow}>包装清单</Button></Link>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record?.loftingStatus } }}><Button type="link" disabled={!isShow}>包装清单</Button></Link>
                     <Button type="link" onClick={async () => {
                         setLoftingStatus(record.loftingStatus)
                         let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
@@ -213,20 +213,20 @@ export default function PoleInformation(): React.ReactNode {
         }
     })
 
-    const handleModalOk = () => new Promise(async (resove, reject) => {
-        try {
-            setButtonName('保存')
-            await onTip();
-            await editRef.current?.onSave();
-            message.success('保存成功！');
-            setTipVisible(false);
-            setAllotVisible(false);
-            setRefresh(!refresh);
-            resove(true);
-        } catch (error) {
-            reject(false)
-        }
-    })
+    // const handleModalOk = () => new Promise(async (resove, reject) => {
+    //     try {
+    //         setButtonName('保存')
+    //         await onTip();
+    //         await editRef.current?.onSave();
+    //         message.success('保存成功！');
+    //         setTipVisible(false);
+    //         setAllotVisible(false);
+    //         setRefresh(!refresh);
+    //         resove(true);
+    //     } catch (error) {
+    //         reject(false)
+    //     }
+    // })
 
     const handleModalsubmit = () => new Promise(async (resove, reject) => {
         try {
@@ -288,24 +288,16 @@ export default function PoleInformation(): React.ReactNode {
             visible={allotVisible}
             width="60%"
             title="特殊件号"
-            footer={loftingStatus !== 1 && <Space>
-                <Button type="ghost" onClick={async () => {
-                    setAllotVisible(false);
-                    editRef.current?.resetFields()
-                }}>关闭</Button>
-                {/* {
-                    allotData?.specialStatus === 0 || allotData?.specialStatus === 1 ? <><Button type="primary" onClick={handleModalOk} ghost>保存</Button>
-                        <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button></> : null}
-                    </Space>
-                } */}
-                {
-                    loftingStatus !== 4 && <>
-                        <Button type="primary" onClick={handleModalOk} ghost>保存</Button>
-                        <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
-                    </>
-
-                }
-            </Space>}
+            footer={
+                <Space>
+                    <Button type="ghost" onClick={async () => {
+                        setAllotVisible(false);
+                        editRef.current?.resetFields()
+                    }}>关闭</Button>
+                    {/* <Button type="primary" onClick={handleModalOk} ghost>保存</Button> */}
+                    <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
+                </Space>
+            }
             // onOk={handleModalOk}
             onCancel={() => setAllotVisible(false)}
             className={styles.tryAssemble}

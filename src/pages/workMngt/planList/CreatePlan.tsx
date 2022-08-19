@@ -162,7 +162,7 @@ export default function CreatePlan(props: any): JSX.Element {
             // 添加对长度以及数量的拦截
             let flag = false;
             for (let i = 0; i < materialList.length; i += 1) {
-                if (!(materialList[i].length && materialList[i].planPurchaseNum && (materialList[i].width !== ""))) {
+                if (!((materialList[i].length !== "") && materialList[i].planPurchaseNum && (materialList[i].width !== ""))) {
                     flag = true;
                 }
             }
@@ -173,7 +173,7 @@ export default function CreatePlan(props: any): JSX.Element {
             saveRun({
                 purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",
-                purchaseType: baseInfo?.purchaseType
+                ...baseInfo
             });
         } catch (error) {
             console.log(error);
@@ -220,9 +220,19 @@ export default function CreatePlan(props: any): JSX.Element {
                 form={addCollectionForm}
                 edit
                 dataSource={[]}
-                col={4}
+                col={2}
                 classStyle="baseInfo"
                 columns={[
+                    {
+                        "title": "采购计划编号",
+                        "dataIndex": "purchasePlanCode",
+                        "rules": [
+                            {
+                                "required": true,
+                                "message": "请输入采购计划编号"
+                            }
+                        ],
+                    },
                     {
                         "dataIndex": "purchaseType",
                         "title": "采购类型",
