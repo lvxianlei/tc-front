@@ -125,7 +125,7 @@ export default function Invoice() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 200,
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" className="btn-operation-link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
