@@ -26,11 +26,12 @@
     "editBaseInfo": [
         {
             "title": "询比价供应商",
-            "dataIndex": "-------------",
+            "dataIndex": "supplyIdList",
             "type": "popTable",
             "path": "/tower-supply/supplier",
             "width": 1011,
             "value": "supplierName",
+            "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,
             "search": [

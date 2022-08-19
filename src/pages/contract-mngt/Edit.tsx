@@ -1,7 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
 import { Button, Modal, Spin, Form, InputNumber, message, Select } from "antd"
-import { BaseInfo, DetailTitle, Attachment, CommonTable } from "../common"
-
+import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent } from "../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
@@ -11,13 +10,23 @@ import {
     materialTextureOptions, transportationTypeOptions,
     settlementModeOptions
 } from "../../configuration/DictionaryOptions"
-import { contractBaseInfo, material } from "./contract.json"
+import { contractBaseInfo, material, addMaterial } from "./contract.json"
 
 // 新加运费信息
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
 interface EditProps {
     id: string
     type: "new" | "edit"
+}
+interface WeightParams {
+    width: number | string
+    length: number | string
+    weightAlgorithm: 1 | 2 | 3
+    proportion: number | string
+}
+
+interface TotalWeightParmas extends WeightParams {
+    num: number | string
 }
 
 const oneFreight = [{
@@ -67,7 +76,7 @@ const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: st
 const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
 const settlementModeEnum = settlementModeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
 
-const calcFun = {
+export const calcFun = {
     /** 
      *  运费-不含税价格 
      * 运费不含税价格=运费含税价格 /（ 1 + 运费税率 / 100 )
@@ -79,7 +88,19 @@ const calcFun = {
     * 装卸费不含税价格=装卸费含税价格/（1+运费税率/100)
     */
     unloadPrice: (taxPrice: any = 0, tax: any = 0) =>
-        (taxPrice / (1 + tax / 100)).toFixed(6)
+        (taxPrice / (1 + tax / 100)).toFixed(6),
+    /**
+     * 理重
+     */
+    weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => weightAlgorithm === 1 ? ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
+        : weightAlgorithm === 2 ? (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
+            : (Number(proportion || 1) / 1000).toFixed(3),
+    /**
+     * 总重量
+     */
+    totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => weightAlgorithm === 1 ? ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
+        : weightAlgorithm === 2 ? (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
+            : (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
 }
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
@@ -251,8 +272,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 price,
                 spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
-                // length: formatSpec(item.structureSpec).length,
-                weight: item.weight || "1.00",
+                weight: calcFun.weight({
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion,
+                    length: item.length,
+                    width: item.width
+                }),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -268,8 +293,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 price,
                 spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
-                // length: formatSpec(item.structureSpec).length,
-                weight: item.weight || "1.00",
+                weight: calcFun.weight({
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion,
+                    length: item.length,
+                    width: item.width
+                }),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -369,7 +398,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
-                        weight: item.weight || "1.00",
+                        weight: calcFun.weight({
+                            weightAlgorithm: item.weightAlgorithm,
+                            proportion: item.proportion,
+                            length: item.length,
+                            width: item.width
+                        }),
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                         totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
@@ -387,7 +421,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
-                        weight: item.weight || "1.00",
+                        weight: calcFun.weight({
+                            weightAlgorithm: item.weightAlgorithm,
+                            proportion: item.proportion,
+                            length: item.length,
+                            width: item.width
+                        }),
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                         totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
@@ -406,7 +445,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return ({
                         ...item,
                         disabled: false,
-                        path: `/tower-supply/comparisonPrice/getComparisonPrice/${fields.comparisonPriceNumber.id}`
+                        path: `/tower-supply/comparisonPrice/getComparisonPrice?comparisonPriceId=${fields.comparisonPriceNumber.id}`
                     })
                 }
                 return item
@@ -528,7 +567,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     return <Spin spinning={loading && taxLoading}>
-        {/* <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
+        <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
                 ...(addMaterial as any),
@@ -575,7 +614,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                     })))
                 }} />
-        </Modal> */}
+        </Modal>
         <DetailTitle title="合同基本信息" />
         <BaseInfo
             form={baseForm}
@@ -638,7 +677,20 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 })
             }
             dataSource={{ unloadBear: 1 }} edit />
-        <DetailTitle title="原材料信息" />
+        <DetailTitle title="原材料信息" operation={[
+            <Button
+                type="primary"
+                ghost
+                key="add"
+                onClick={async () => {
+                    const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
+                    if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
+                        message.warning("请先选择询比价信息...")
+                    } else {
+                        setVisible(true)
+                    }
+                }}>添加</Button>
+        ]} />
         <CommonTable
             style={{ padding: "0" }}
             columns={[
