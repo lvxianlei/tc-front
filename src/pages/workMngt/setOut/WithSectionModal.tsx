@@ -274,7 +274,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                 required: true,
                                 message: '请选择呼高'
                             }]}>
-                                <Select placeholder="请选择" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
+                                <Select placeholder="请选择呼高" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e) => {
                                     const data = this.state.basicHeightList?.filter(res => res.basicHeight === e);
                                     this.setState({
                                         productList: data && data[0].productVOList,
@@ -301,7 +301,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     required: true,
                                     message: '请选择杆塔'
                                 }]}>
-                                    <Select placeholder="请选择" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
+                                    <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
                                         const productId = this.fastForm.current?.getFieldsValue(true).productId;
                                         this.setState({
                                             detailData: {
