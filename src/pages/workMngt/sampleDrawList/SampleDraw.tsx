@@ -95,6 +95,7 @@ export default function SampleDraw(): React.ReactNode {
                             setHeaderName(data);
                             setRefresh(!refresh)
                         })}
+                        disabled={!record.smallSample}
                     >
                         <Button type="link" disabled={!record.smallSample}>
                             删除
