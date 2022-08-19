@@ -23,6 +23,7 @@ export default function PickCheckList(): React.ReactNode {
             dataIndex: 'index', 
             key: 'index', 
             editable: true, 
+            width: 50,
             render: (_a: any, _b: any, index: number): React.ReactNode => (
                 <span>{index + 1}</span>
             ) 
@@ -31,6 +32,7 @@ export default function PickCheckList(): React.ReactNode {
             title: '段号', 
             dataIndex: 'segmentName', 
             key: 'segmentName', 
+            width: 100,
             editable: false
         },
         // { 
@@ -43,66 +45,77 @@ export default function PickCheckList(): React.ReactNode {
             title: '构件编号', 
             dataIndex: 'code', 
             key: 'code',
+            width: 100,
             editable: true 
         },
         { 
             title: '材料名称', 
             dataIndex: 'materialName', 
             key: 'materialName', 
+            width: 120,
             editable: true 
         },
         { 
             title: '材质', 
             dataIndex: 'structureTexture', 
             key: 'structureTexture',
+            width: 100,
             editable: true 
         },
         { 
             title: '规格', 
             dataIndex: 'structureSpec', 
             key: 'structureSpec', 
+            width: 100,
             editable: true 
         },
         { 
             title: '长度（mm）', 
             dataIndex: 'length', 
             key: 'length', 
+            width: 120,
             editable: true 
         },
         { 
             title: '宽度（mm）', 
             dataIndex: 'width', 
             key: 'width', 
+            width: 120,
             editable: true 
         },
         { 
             title: '厚度（mm）', 
             dataIndex: 'thickness', 
             key: 'thickness', 
+            width: 120,
             editable: true 
         },
         { 
             title: '大头', 
             dataIndex: 'bigHead', 
             key: 'bigHead', 
+            width: 100,
             editable: true 
         },
         { 
             title: '小头', 
             dataIndex: 'smallHead', 
-            key: 'smallHead', 
+            key: 'smallHead',
+            width: 100, 
             editable: true 
         },
         { 
             title: '单段件数', 
             dataIndex: 'basicsPartNum', 
             key: 'basicsPartNum', 
+            width: 120,
             editable: true 
         },
         { 
             title: '理算重量（kg）', 
             dataIndex: 'basicsTheoryWeight', 
             key: 'basicsTheoryWeight', 
+            width: 120,
             editable: false,
             render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{(parseFloat(record?.basicsTheoryWeight)*parseFloat(record?.basicsPartNum)).toFixed(2)}</span>
@@ -113,12 +126,14 @@ export default function PickCheckList(): React.ReactNode {
             title: '单件重量（kg）', 
             dataIndex: 'basicsWeight', 
             key: 'basicsWeight', 
+            width: 150,
             editable: true 
         },
         { 
             title: '小计重量（kg）', 
             dataIndex: 'totalWeight', 
             key: 'totalWeight', 
+            width: 150,
             editable: false,  
             render:(_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{((record.basicsWeight&&record.basicsWeight!==-1?record.basicsWeight:0)*(record.basicsPartNum&&record.basicsPartNum!==-1?record.basicsPartNum:0)).toFixed(2)}</span>
@@ -128,6 +143,7 @@ export default function PickCheckList(): React.ReactNode {
             title: '备注', 
             dataIndex: 'description', 
             key: 'description', 
+            width: 150,
             editable: true 
         }
     ];
