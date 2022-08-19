@@ -84,10 +84,10 @@ const towerColumns = [
         dataIndex: 'patternName'
     },
     {
-        key: 'structure',
+        key: 'structureName',
         title: '结构',
         width: 100,
-        dataIndex: 'structure'
+        dataIndex: 'structureName'
     },
     {
         key: 'legConfigurationA',
