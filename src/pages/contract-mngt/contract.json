@@ -97,8 +97,8 @@
             "dataIndex": "weight"
         },
         {
-            "title": "生产厂家-----------",
-            "dataIndex": "------------------"
+            "title": "生产厂家",
+            "dataIndex": "manufacturer"
         },
         {
             "title": "含税单价(元/吨)",
@@ -151,8 +151,8 @@
             "dataIndex": "weight"
         },
         {
-            "title": "生产厂家------------",
-            "dataIndex": "------------------"
+            "title": "生产厂家",
+            "dataIndex": "manufacturer"
         },
         {
             "title": "含税单价(元/吨)",
@@ -191,10 +191,10 @@
             "value": "comparisonPriceNumber",
             "dependencies": true,
             "readOnly": true,
-            "search":[
+            "search": [
                 {
-                    "title":"查询",
-                    "dataIndex":"fuzzyQuery",
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
                     "placeholder": "询比价编号"
                 }
             ],

@@ -6,8 +6,10 @@
             "width": 200
         },
         {
-            "title": "创建日期--------",
-            "dataIndex": "createTime---------",
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "width": 200
         },
         {
@@ -36,12 +38,6 @@
                     "title": "查询",
                     "dataIndex": "fuzzyQuery",
                     "placeholder": "编号/名称/联系人/联系人电话"
-                },
-                {
-                    "title": "质量保证体系",
-                    "dataIndex": "qualityAssurance",
-                    "type": "select",
-                    "placeholder": "请选择"
                 }
             ],
             "columns": [
