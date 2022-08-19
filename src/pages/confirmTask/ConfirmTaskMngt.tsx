@@ -178,9 +178,9 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         }
     ]
 
-    const handleAssignModalCancel = () => { 
-        setVisible(false); 
-        form.resetFields(); 
+    const handleAssignModalCancel = () => {
+        setVisible(false);
+        form.resetFields();
     };
 
     const formItemLayout = {
@@ -198,7 +198,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 return setUser(userData.records);
         }
     }
-    
+
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
@@ -338,7 +338,16 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
-                }
+                },
+                onRow: (record: Record<string, any>) => ({
+                    className: record.status === 1 ?
+                        styles.row_color_1 : record.status === 2 ?
+                            styles.row_color_2 : record.status === 3 ?
+                                styles.row_color_3 : record.status === 4 ?
+                                    styles.row_color_4 : record.status === 5 ?
+                                        styles.row_color_5 : record.status === 0 ?
+                                            styles.row_color_0 : undefined
+                })
             }}
         />
     </>
