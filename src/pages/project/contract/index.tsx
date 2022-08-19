@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Button, Popconfirm, Space, message } from 'antd';
+import { Button, Popconfirm, Space, message, Input, Upload } from 'antd';
 import { Page } from '../../common';
 import { IContract } from "../../IContract";
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
 import MiddleModal from '../../../components/MiddleModal';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export default function ContractList(): JSX.Element {
   const history = useHistory();
   const [refresh, setRefresh] = useState<boolean>(false);
   const params = useParams<{ id: string }>();
+  const entryPath = params.id ? "management" : "contract"
   const [filterValue, setFilterValue] = useState({ projectId: params.id });
   const onFilterSubmit = (value: any) => {
     value["projectId"] = params.id;
-    setFilterValue({ projectId: params.id })
+    setFilterValue({ projectId: params.id, ...value })
     return value
   }
 
@@ -23,10 +25,10 @@ export default function ContractList(): JSX.Element {
       title: "合同编号",
       width: 140,
       dataIndex: "contractNumber",
-      render: (_: undefined, record: object): React.ReactNode => {
+      render: (_: undefined, record: any): React.ReactNode => {
         return (
           <Link
-            to={`/project/management/detail/contract/${params.id}/${(record as IContract).id}`}
+            to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}
           >
             {(record as IContract).contractNumber}
           </Link>
@@ -37,9 +39,9 @@ export default function ContractList(): JSX.Element {
       title: "内部合同编号",
       width: 140,
       dataIndex: "internalNumber",
-      render: (_: undefined, record: object): React.ReactNode => {
+      render: (_: undefined, record: any): React.ReactNode => {
         return (
-          <Link to={`/project/management/detail/contract/${params.id}/${(record as IContract).id}`}>
+          <Link to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}>
             {(record as IContract).internalNumber}
           </Link>
         );
@@ -61,9 +63,9 @@ export default function ContractList(): JSX.Element {
       width: 120,
     },
     {
-        title: "未下计划重量(吨)",
-        dataIndex: "notReleased",
-        width: 120,
+      title: "未下计划重量(吨)",
+      dataIndex: "notReleased",
+      width: 120,
     },
     {
       title: "合同金额(元)",
@@ -124,6 +126,7 @@ export default function ContractList(): JSX.Element {
       dataIndex: "createTime", width: 100,
     }
   ]
+
   return (
     <>
       <Page
@@ -135,8 +138,33 @@ export default function ContractList(): JSX.Element {
           return (<>
             <Button
               type="primary"
-              onClick={() => history.push(`/project/management/new/contract/${params.id}`)}
+              onClick={() => history.push(`/project/${entryPath}/new/contract/${params.id}`)}
             >新增合同</Button>
+            <Upload
+              accept=".xls,.xlsx"
+              action={() => {
+                const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                return baseUrl + '/tower-market/contract/import'
+              }}
+              headers={
+                {
+                  'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                  'Tenant-Id': AuthUtil.getTenantId(),
+                  'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                }
+              }
+              showUploadList={false}
+              onChange={(info) => {
+                if (info.file.response && !info.file.response?.success) {
+                  message.warning(info.file.response?.msg)
+                } else if (info.file.response && info.file.response?.success) {
+                  message.success('导入成功！');
+                  history.go(0)
+                }
+              }}
+            >
+              <Button type="primary" ghost>导入</Button>
+            </Upload>
             <span style={{ marginLeft: "20px" }}>
               合同重量合计：{data?.contractTotalWeight || 0.00}吨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合同金额合计：{data?.contractTotalAmount || 0.00}元
             </span>
@@ -159,7 +187,7 @@ export default function ContractList(): JSX.Element {
               <Space direction="horizontal" size="small">
                 <Button type="link">
                   <Link
-                    to={`/project/management/edit/contract/${params.id}/${(record as IContract).id}`}
+                    to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}`}
                   >
                     编辑
                   </Link>
@@ -187,10 +215,10 @@ export default function ContractList(): JSX.Element {
                 </Popconfirm>
                 <Button type="link">
                   <Link
-                    to={`/project/management/pamentRecord/contract/${(record as IContract).id
+                    to={`/project/${entryPath}/pamentRecord/contract/${(record as IContract).id
                       }/${(record as any).contractName}/${(record as IContract).signCustomerId
                       }/${(record as IContract).signCustomerName
-                      }/${(record as any).contractNumber}/${params.id}`}
+                      }/${(record as any).contractNumber}/${record?.projectId}`}
                   >
                     添加回款记录
                   </Link>
@@ -210,7 +238,33 @@ export default function ContractList(): JSX.Element {
           },
         ]}
         refresh={refresh}
-        searchFormItems={[]}
+        searchFormItems={[
+          {
+            name: 'saleOrderNumber',
+            label: '订单编号',
+            children: <Input placeholder="订单编号" style={{ width: 210 }} />
+          },
+          {
+            name: 'internalNumber',
+            label: '内部合同编号',
+            children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
+          },
+          {
+            name: 'orderProjectName',
+            label: '订单工程名称',
+            children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
+          },
+          {
+            name: 'customerCompany',
+            label: '业主单位',
+            children: <Input placeholder="业主单位" style={{ width: 210 }} />
+          },
+          {
+            name: 'fuzzyQuery',
+            label: '模糊查询项',
+            children: <Input placeholder="内部合同号/合同名称/采购订单号/业主单位" style={{ width: 210 }} />
+          }
+        ]}
       />
     </>
   )

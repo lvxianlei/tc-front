@@ -70,11 +70,11 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName"
+            "dataIndex": "materialStandard"
         },
         {
             "title": "材质",
-            "dataIndex": "structureTexture"
+            "dataIndex": "structureTextureId"
         },
         {
             "title": "规格",
@@ -95,6 +95,10 @@
         {
             "title": "重量（吨）",
             "dataIndex": "weight"
+        },
+        {
+            "title": "生产厂家-----------",
+            "dataIndex": "------------------"
         },
         {
             "title": "含税单价(元/吨)",
@@ -147,6 +151,10 @@
             "dataIndex": "weight"
         },
         {
+            "title": "生产厂家------------",
+            "dataIndex": "------------------"
+        },
+        {
             "title": "含税单价(元/吨)",
             "dataIndex": "taxPrice"
         },
@@ -167,7 +175,12 @@
         {
             "title": "合同编号",
             "dataIndex": "contractNumber",
-            "disabled": true
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入合同编号"
+                }
+            ]
         },
         {
             "title": "询比价名称",
@@ -178,6 +191,13 @@
             "value": "comparisonPriceNumber",
             "dependencies": true,
             "readOnly": true,
+            "search":[
+                {
+                    "title":"查询",
+                    "dataIndex":"fuzzyQuery",
+                    "placeholder": "询比价编号"
+                }
+            ],
             "columns": [
                 {
                     "title": "询比价编号",
@@ -239,6 +259,13 @@
             "dependencies": true,
             "readOnly": true,
             "disabled": true,
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "编号/名称/联系人/联系人电话"
+                }
+            ],
             "columns": [
                 {
                     "title": "供应商编号",

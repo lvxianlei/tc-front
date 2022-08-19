@@ -1,8 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message } from "antd"
-import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
+import { BaseInfo, CommonTable, DetailTitle, IntgSelect, PopTableContent } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
-import { PopTableContent } from "./ComparesModal"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
@@ -351,7 +350,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         ]} />
         <CommonTable
             haveIndex
-            style={{ padding: "0"}}
+            style={{ padding: "0" }}
             rowKey="key"
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {

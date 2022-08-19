@@ -19,6 +19,7 @@ import AuthUtil from '../../../utils/AuthUtil';
 import Modal from 'antd/lib/modal/Modal';
 import { allotModalProps, IAllot } from './ISetOut';
 import AllotModal from './AllotModal';
+import WeldingVerify from './WeldingVerify';
 
 export default function PoleInformation(): React.ReactNode {
     const columns = [
@@ -33,19 +34,19 @@ export default function PoleInformation(): React.ReactNode {
         {
             key: 'productNumber',
             title: '杆塔号',
-            width: 150,
+            width: 120,
             dataIndex: 'productNumber'
         },
         {
             key: 'productHeight',
             title: '呼高',
-            width: 150,
+            width: 80,
             dataIndex: 'productHeight'
         },
         {
             key: 'voltageGradeName',
             title: '电压等级',
-            width: 150,
+            width: 100,
             dataIndex: 'voltageGradeName'
         },
         {
@@ -57,7 +58,7 @@ export default function PoleInformation(): React.ReactNode {
         {
             key: 'loftingDeliverTime',
             title: '计划交付时间',
-            width: 200,
+            width: 150,
             dataIndex: 'loftingDeliverTime'
         },
         {
@@ -70,12 +71,12 @@ export default function PoleInformation(): React.ReactNode {
             key: 'loftingStatusName',
             title: '杆塔放样状态',
             dataIndex: 'loftingStatusName',
-            width: 200
+            width: 150
         },
         {
             key: 'loftingUpdateStatusTime',
             title: '最新状态变更时间',
-            width: 200,
+            width: 150,
             dataIndex: 'loftingUpdateStatusTime'
         },
         {
@@ -117,42 +118,20 @@ export default function PoleInformation(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
-                        userId === record.loftingUser ?
-                            <>{
-                                record.loftingStatus === 2 && location?.state?.status === 4 ?
-                                    <WithSectionModal key={record.id} productCategoryId={params.id} id={record.id} updateList={() => setRefresh(!refresh)} />
-                                    : <Button type="link" disabled>配段</Button>
-                            }</>
-                            : null
+                        isShow ?
+                            <WithSectionModal key={record.id} productCategoryId={params.id} id={record.id} updateList={() => setRefresh(!refresh)} />
+                            : <Button type="link" disabled>配段</Button>
                     }
-                    {
-                        record.loftingStatus === 4 ?
-                            <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
-                            : <Button type="link" disabled>杆塔放样明细</Button>
-                    }
-                    {
-                        userId === record.loftingUser ?
-                            <>{
-                                record.loftingStatus === 3 || record.loftingStatus === 4 ?
-                                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record.loftingStatus } }}>包装清单</Link>
-                                    : <Button type="link" disabled>包装清单</Button>
-                            }</>
-                            : null
-                    }
-                    {
-                        record.loftingStatus !== 1 ?
-                            <Button type="link" onClick={async () => {
-                                setLoftingStatus(record.loftingStatus)
-                                let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
-                                setAllotData(result)
-                                setProductId(record.id);
-                                await editRef.current?.visibleData()
-                                setAllotVisible(true);
-
-
-                            }}>特殊件号</Button>
-                            : <Button type="link" disabled>特殊件号</Button>
-                    }
+                    <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record.status } }}><Button type="link" disabled={!isShow}>包装清单</Button></Link>
+                    <Button type="link" onClick={async () => {
+                        setLoftingStatus(record.loftingStatus)
+                        let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
+                        setAllotData(result)
+                        setProductId(record.id);
+                        await editRef.current?.visibleData()
+                        setAllotVisible(true);
+                    }}>特殊件号</Button>
                 </Space>
             )
         }
@@ -169,13 +148,22 @@ export default function PoleInformation(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
     const [materialUser, setMaterialUser] = useState([]);
-    const location = useLocation<{ loftingLeader: string, status: number }>();
     const userId = AuthUtil.getUserId();
     const [allotVisible, setAllotVisible] = useState<boolean>(false);
     const editRef = useRef<allotModalProps>();
     const [productId, setProductId] = useState<string>('');
     const [allotData, setAllotData] = useState<IAllot>();
     const [loftingStatus, setLoftingStatus] = useState<number>(0);
+    const [visible, setVisible] = useState<boolean>(false);
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
         roles && roles.forEach((role: any & SelectDataNode): void => {
@@ -206,6 +194,7 @@ export default function PoleInformation(): React.ReactNode {
                 return setMaterialUser(userData.records);
         };
     }
+
     const onTip = () => new Promise(async (resolve, reject) => {
         try {
             await editRef.current?.onCheck()
@@ -223,6 +212,7 @@ export default function PoleInformation(): React.ReactNode {
             reject(false)
         }
     })
+
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             setButtonName('保存')
@@ -260,6 +250,19 @@ export default function PoleInformation(): React.ReactNode {
     }
 
     return <>
+        <Modal
+            // destroyOnClose
+            visible={visible}
+            width="60%"
+            title="电焊件验证"
+            footer={
+                <Button type="ghost" onClick={() => setVisible(false)}>关闭</Button>
+            }
+            onCancel={() => setVisible(false)}
+            className={styles.tryAssemble}
+        >
+            <WeldingVerify id={params.id} />
+        </Modal>
         <Modal title='提示' okText='是' cancelText='否' visible={tipVisible} onCancel={() => {
             setButtonName('')
             setTipVisible(false)
@@ -317,6 +320,7 @@ export default function PoleInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
+                <Button type='primary' onClick={() => setVisible(true)} ghost>电焊件验证</Button>
                 <WithSectionModal type="batch" productCategoryId={params.id} updateList={() => setRefresh(!refresh)} />
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}

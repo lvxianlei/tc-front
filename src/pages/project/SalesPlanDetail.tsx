@@ -4,12 +4,12 @@ import { Button, Form, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable, OperationRecord } from "../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
-import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist, approvalRecord } from "./managementDetailData.json"
+import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist } from "./managementDetailData.json"
 import { materialStandardOptions } from "../../configuration/DictionaryOptions"
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/management/:type/salesPlan/:projectId/:id")
+    const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/:entry/:type/salesPlan/:projectId/:id")
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {

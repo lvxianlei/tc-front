@@ -45,7 +45,7 @@
             "title": "创建日期",
             "dataIndex": "createTime",
             "type": "string",
-            "format":"YYYY-MM-DD",
+            "format": "YYYY-MM-DD",
             "width": 100
         },
         {
@@ -154,6 +154,71 @@
             "dataIndex": "planPurchaseNum",
             "type": "string",
             "width": 100
+        },
+        {
+            "title": "已采购量",
+            "dataIndex": "alreadyPurchaseNum",
+            "type": "number",
+            "width": 100
+        }
+    ],
+    "PurchaseListDetail": [
+        {
+            "title": "类型",
+            "dataIndex": "materialCategoryName",
+            "width": 100
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string",
+            "width": 100
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "string",
+            "width": 100
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string",
+            "width": 100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "width": 100
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number",
+            "width": 100
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "type": "number",
+            "width": 100
+        },
+        {
+            "title": "单个重量(吨)",
+            "dataIndex": "weight",
+            "type": "number",
+            "width": 100
+        },
+        {
+            "title": "计划采购量",
+            "dataIndex": "planPurchaseNum",
+            "type": "string",
+            "width": 100
+        },
+        {
+            "title": "总重量（吨）--------",
+            "dataIndex": "------------------"
         },
         {
             "title": "已采购量",

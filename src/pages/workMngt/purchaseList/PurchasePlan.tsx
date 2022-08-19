@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from "react"
-import { Spin, Row, Col, InputNumber, message, Input } from "antd"
+import { Spin, Row, InputNumber, message, Input } from "antd"
 import { DetailTitle, CommonTable } from '../../common'
-import { ListIngredients, PlanList } from "./purchaseListData.json"
+import { ListIngredients } from "./purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { upNumber } from "../../../utils/KeepDecimals"
@@ -50,7 +50,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             }
             const result = handleData();
             if (!result) {
-                dataSource.map((item: any) =>  {
+                dataSource.map((item: any) => {
                     item["warehouseOccupy"] = item.warehouseOccupy ? item.warehouseOccupy : 0;
                 })
                 // 可以保存
@@ -91,7 +91,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     useImperativeHandle(ref, () => ({ onSubmit: handleSubmit, confirmLoading }), [handleSubmit, confirmLoading])
 
     return <Spin spinning={loading}>
-        <Row style={{marginBottom: 8}}>
+        <Row style={{ marginBottom: 8 }}>
             合并批次： {data?.mergeBatch}
         </Row>
         <div style={{
@@ -99,18 +99,18 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             display: "flex",
             flexWrap: "nowrap"
         }}>
-            <div style={{width: "854px", display: "flex", flexWrap: "nowrap"}}>
+            <div style={{ width: "854px", display: "flex", flexWrap: "nowrap" }}>
                 <p style={{
                     fontSize: 16,
                     color: "#181818",
                     fontWeight: "bold"
                 }}>配料方案</p>
-                <p style={{position: "relative", top: 4, marginLeft: 12}}>
+                <p style={{ position: "relative", top: 4, marginLeft: 12 }}>
                     <span style={{ marginRight: 12 }}>重量合计：</span>
-                    <span style={{ color: "#FF8C00" }}>{ weightNumber }</span>
+                    <span style={{ color: "#FF8C00" }}>{weightNumber}</span>
                 </p>
             </div>
-            <DetailTitle title="计划列表" style={{width: 200}}/>
+            <DetailTitle title="计划列表" style={{ width: 200 }} />
         </div>
         <div>
             <CommonTable

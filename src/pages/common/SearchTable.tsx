@@ -134,7 +134,7 @@ export default function SearchTable({
             rowKey={rowKey || ((record: any) => record.id)}
             size="small"
             isLoading={loading}
-            dataSource={data?.result.records || data?.result || []}
+            dataSource={data?.result?.records || data?.result || []}
             {...tableProps}
             {...props}
         />
@@ -142,7 +142,7 @@ export default function SearchTable({
             pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
                 <Pagination
                     className={styles.pagination}
-                    total={data?.result.total}
+                    total={data?.result?.total}
                     current={pagenationParams.current}
                     showTotal={(total: number) => `共${total}条记录`}
                     showSizeChanger
@@ -154,16 +154,10 @@ export default function SearchTable({
             history={history}
             location={location}
             match={match}
-            columnsKey={() => {
-                const keys = [...columns]
-                if (!keys[keys.length - 1].isExport) {
-                    keys.pop()
-                }
-                return keys
-            }}
+            columnsKey={() => columns.filter((item: any) => item.title !== "操作")}
             current={pagenationParams.current || 1}
             size={pagenationParams.pageSize || 10}
-            total={data?.result.total || 0}
+            total={data?.result?.total || 0}
             url={exportPath}
             serchObj={{
                 ...JSON.parse(JSON.stringify(filterValue || {})),

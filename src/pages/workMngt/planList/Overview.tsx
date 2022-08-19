@@ -2,16 +2,12 @@ import React, { Fragment, useState } from "react"
 import { Button, InputNumber, message, Modal, Select } from 'antd'
 import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom'
 import { DetailContent, CommonTable, PopTableContent, SearchTable } from '../../common'
-import { PurchaseList, PurchaseTypeStatistics } from "./planListData.json"
+import { PurchaseList, PurchaseListDetail, PurchaseTypeStatistics } from "./planListData.json"
 import { addMaterial } from "./CreatePlan.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ExportList from '../../../components/export/list';
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
-interface PagenationProps {
-    current: number
-    pageSize: number
-}
 export default function Edit() {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const history = useHistory()
@@ -194,7 +190,7 @@ export default function Edit() {
                 ]}>
                 {!isEdit && <CommonTable
                     loading={loading}
-                    columns={PurchaseList}
+                    columns={PurchaseListDetail}
                     dataSource={dataTable?.records || []}
                 />}
                 {isEdit && <CommonTable

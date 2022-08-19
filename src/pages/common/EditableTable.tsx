@@ -3,6 +3,7 @@ import AliTable from './AliTable'
 import { FormInstance, message, Button, Form, Space } from "antd"
 import FormItemType from './FormItemType'
 import { generateRules } from "./BaseInfo"
+import CommonAliTable from './CommonAliTable'
 interface EditableTableProps {
     columns: any[]
     dataSource: any[]
@@ -15,6 +16,7 @@ interface EditableTableProps {
     addData?: { [key: string]: any } | ((data: any) => { [key: string]: any })
     onChange?: (data: any[], allFields: any[]) => void
     rowKey?: string | ((row: any) => string)
+    [key: string]: any
 }
 
 const formatColunms = (columns: any[], haveIndex: boolean) => {
@@ -81,7 +83,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
 
 export default function EditableTable({
     columns, dataSource = [], onChange, form, haveNewButton = true, addData = {},
-    newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration, rowKey
+    newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration, rowKey, ...props
 }: EditableTableProps): JSX.Element {
     const [editableDataSource, setEditableDataSource] = useState<any[]>(dataSource.map(item => ({
         ...item,
@@ -145,7 +147,7 @@ export default function EditableTable({
         >{newButtonTitle}</Button>}
             {opration}
         </Space>}
-        <AliTable
+        <CommonAliTable
             size="small"
             className="edit"
             primaryKey={rowKey || "id"}
@@ -163,6 +165,7 @@ export default function EditableTable({
             ] : eidtableColumns}
             dataSource={editableDataSource}
             useVirtual={{ vertical: true }}
+            {...props}
         />
     </Form>
 }

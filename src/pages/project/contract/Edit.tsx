@@ -23,7 +23,7 @@ const currencyTypeEnum = currencyTypeOptions?.map((item: any) => ({ label: item.
 const planNameEnum = planNameOptions?.map((item: any) => ({ label: item.name, value: item.id }))
 export default function Edit() {
   const history = useHistory()
-  const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/management/:type/contract")
+  const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/:entry/:type/contract")
   const params = useParams<{ projectId: string, id: string }>()
   const [planType, setPlanType] = useState<1 | 2>(1)
   const [when, setWhen] = useState<boolean>(true)
@@ -38,8 +38,7 @@ export default function Edit() {
     } catch (error) {
       reject(error)
     }
-  }))
-
+  }), { ready: (params.projectId !== "undefined") })
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract/${params.id}`)
@@ -61,7 +60,7 @@ export default function Edit() {
         },
         salesman: {
           value: result.salesman,
-          id: result.salesmanId
+          id: result.payServiceManager
         },
         ascription: {
           value: result.ascriptionName,
@@ -75,10 +74,11 @@ export default function Edit() {
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
     try {
+  
       const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/contract`, {
         ...saveData,
         id: type === "new" ? "" : params.id,
-        projectId: params.projectId
+        projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
     } catch (error) {
@@ -123,7 +123,7 @@ export default function Edit() {
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
-      salesmanId: baseInfo.salesman.id,
+      payServiceManager: baseInfo.salesman.id,
       ascriptionName: baseInfo.ascription.value,
       ascriptionId: baseInfo.ascription.id,
       payType: baseInfo.payType?.join(","),
