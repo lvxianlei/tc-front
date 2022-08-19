@@ -81,7 +81,7 @@ const towerColumns = [
         dataIndex: 'basicsTheoryWeight', 
         key: 'basicsTheoryWeight',
         render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-            <span >{_ === -1 ? 0 : (parseFloat(record?.basicsTheoryWeight)*parseFloat(record?.basicsPartNum)).toFixed(2)}</span>
+            <span >{_ === -1 && _ === null? 0 :_? (parseFloat(record?.basicsTheoryWeight)*parseFloat(record?.basicsPartNum)).toFixed(2):'-'}</span>
         )
     },
     { 
