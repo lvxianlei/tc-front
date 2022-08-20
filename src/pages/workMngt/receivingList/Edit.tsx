@@ -187,7 +187,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 materialContractDetailId: item.id,
                 materialName: item.materialName,
                 materialStandard: item.materialStandard,
-                materialStandardName: item.materialStandardName,
+                // materialStandardName: item.materialStandardName,
                 num: item.num,
                 contractUnitPrice: item.taxPrice,
                 taxPrice: item.taxPrice,
@@ -216,7 +216,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const listsFormData = await editForm.validateFields()
             console.log(listsFormData, "listsFormData", cargoData, editForm.getFieldsValue(true))
             const contractNumberData = baseFormData.contractNumber.records[0]
-            await saveRun({
+            const result = {
                 ...baseFormData,
                 transportBear: contractNumberData?.transportBear, // 运输承担
                 transportTaxPrice: contractNumberData?.transportTaxPrice, // 合同单价
@@ -238,7 +238,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
-            })
+            }
+            await saveRun(result)
             resole(true)
         } catch (error) {
             console.log(error)
@@ -461,7 +462,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             haveNewButton={false}
             columns={[
                 ...editCargoDetails.map((item: any) => {
-                    if (item.dataIndex === "materialStandardName") {
+                    if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
                             enum: materialStandardOptions?.map(item => ({
