@@ -214,7 +214,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const baseFormData = await form.validateFields()
             const listsFormData = await editForm.validateFields()
-            console.log(listsFormData, "listsFormData", cargoData)
+            console.log(listsFormData, "listsFormData", cargoData, editForm.getFieldsValue(true))
             const contractNumberData = baseFormData.contractNumber.records[0]
             await saveRun({
                 ...baseFormData,
@@ -307,6 +307,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         const changeFiled = data.submit[changeIndex]
         if (changeFiled.balanceTotalWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
+            const result = editForm.getFieldsValue(true).submit[changeIndex];
             const dataSource: any[] = [...allValues?.submit]
             const totalTaxPrice = calcObj.totalTaxPrice(
                 dataSource[changeIndex].taxPrice,
@@ -314,6 +315,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
             dataSource[changeIndex] = {
                 ...dataSource[changeIndex],
+                weight: (((result.proportion || 1) * result.length) / 1000 / 1000).toFixed(3),
                 totalTaxPrice,
                 totalUnTaxPrice
             }
