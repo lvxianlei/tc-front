@@ -424,7 +424,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "materialStandard",
             "type": "select"
         },
         {
