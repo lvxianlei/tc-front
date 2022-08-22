@@ -135,6 +135,9 @@ export default function IngredientsList(): React.ReactNode {
     const [indeterminateStock, setIndeterminateStock] = useState(true);
     const [checkAllStock, setCheckAllStock] = useState(false);
 
+    // 当前选中的所有明细
+    const [activeInfo, setActiveInfo] = useState<any>({});
+
 
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
@@ -698,7 +701,7 @@ export default function IngredientsList(): React.ReactNode {
     }
 
     // 点击构建分类
-    const handleConstructionClassification = (options: string) => {
+    const handleConstructionClassification = (options: string, currentInfo: any) => {
         let v = globallyStoredData?.sortChildren;
         const panes = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
         if (panes.length !== 1) {
@@ -707,6 +710,7 @@ export default function IngredientsList(): React.ReactNode {
         }
         panes[0].batchingStrategy = serarchForm.getFieldsValue();
         setActiveSort(options);
+        setActiveInfo(currentInfo)
         setActiveKey("fangan1");
         setGloballyStoredData({
             id: params.id,
@@ -906,6 +910,7 @@ export default function IngredientsList(): React.ReactNode {
             setConstructionClassification((result as any) || []);
             if (result?.length > 0) {
                 setActiveSort(`${result?.[0].structureTexture}_${result?.[0].structureSpec}`)
+                setActiveInfo(result?.[0]);
                 // 根据构建分类获取配料策略
                 getIngredient(result?.[0]?.structureSpec);
                 // // 获取构建分类明细
@@ -1214,7 +1219,7 @@ export default function IngredientsList(): React.ReactNode {
                             {
                                 constructionClassification?.map((item: any) => {
                                     const flag = activeSort === `${item.structureTexture}_${item.structureSpec}`;
-                                    return <div className={`contentWrapperLeftlist ${flag ? "active" : ""}`} onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`)}>
+                                    return <div className={`contentWrapperLeftlist ${flag ? "active" : ""}`} onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`, item)}>
                                         <div className='color' style={{
                                             backgroundColor: item.notConfigured === item.totalNum ? "#EE483C"
                                                 : item.notConfigured === 0 ? "#13C519" : "#FFB631"

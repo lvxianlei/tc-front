@@ -1,8 +1,8 @@
 {
     "baseInfo": [
         {
-            "title": "采购状态----新加",
-            "dataIndex": "materialName"
+            "title": "采购状态",
+            "dataIndex": "purchaseStatus"
         },
         {
             "title": "品名",

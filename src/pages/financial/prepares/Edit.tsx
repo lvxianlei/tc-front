@@ -60,13 +60,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) || []
                 } : "",
                 receiptNumbers: result?.paymentReqType !== 2 ? {
-                    value: result.receivingNoteList?.map((item: any) => item.receiveNumber).join(","),
-                    records: result.receivingNoteList?.map((item: any) => ({
+                    value: result.receiveNumberList?.map((item: any) => item.receiveNumber).join(","),
+                    records: result.receiveNumberList?.map((item: any) => ({
                         id: item.id,
                         receiveNumber: item.receiveNumber
                     })) || []
                 } : result?.receiptNumbers
             })
+            console.log(result?.paymentReqType !== 2, "编辑")
             businessTypeChange(result.businessType);
             setPleasePayType(result.pleasePayType);
             resole(result)
@@ -94,12 +95,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = (saveType?: "save" | "saveAndApply") => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
-            console.log(baseData, "===================>>>")
             let postData: any = {};
             // 付款类型为货到票到付款 关联票据
             if (baseData.paymentReqType === 2) { 
                 postData = type === "new" ? {
                     ...baseData,
+                    pleasePayOrganization: perData?.dept,
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     businessId: baseData.businessId?.split(',')[0],
                     businessName: baseData.businessId?.split(',')[1],
@@ -109,6 +110,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) || data?.applyPaymentInvoiceVos
                 } : {
                     ...baseData,
+                    pleasePayOrganization: perData?.dept,
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     id: data?.id,
                     businessId: baseData.businessId?.split(',')[0],
@@ -127,6 +129,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 baseData.receiptNumbers.records?.map((item: any) => v.push(item.receiveNumber))
                 postData = type === "new" ? {
                     ...baseData,
+                    pleasePayOrganization: perData?.dept,
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     businessId: baseData.businessId?.split(',')[0],
                     businessName: baseData.businessId?.split(',')[1],
@@ -137,6 +140,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     receiptNumbers: v.join(",")
                 } : {
                     ...baseData,
+                    pleasePayOrganization: perData?.dept,
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     id: data?.id,
                     businessId: baseData.businessId?.split(',')[0],
@@ -149,8 +153,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             }
             console.log(postData, "============postData")
-            // await saveRun(postData, saveType)
-            // resolve(true)
+            await saveRun(postData, saveType)
+            resolve(true)
         } catch (error) {
             reject(false)
         }
@@ -490,13 +494,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
 
 
     // 获取当前操作人信息
-    const { run: getCurrentPersonRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { run: getCurrentPersonRun, data: perData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/personalCenter`)
             resole(result)
             if (type === "new") {
                 baseForm.setFieldsValue({
-                    pleasePayOrganization: result?.deptName
+                    pleasePayOrganizationName: result?.deptName,
+                    pleasePayOrganization: result?.dept
                 })
             }
         } catch (error) {

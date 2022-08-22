@@ -5,6 +5,7 @@ import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
+import RequestUtil from "../../../utils/RequestUtil"
 export default function Invoicing() {
     const history = useHistory()
     const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean }>({ onSubmit: () => { }, confirmLoading: false })
@@ -77,7 +78,9 @@ export default function Invoicing() {
                                 className="btn-operation-link"
                                 title="确认删除?"
                                 onConfirm={() => {
-                                    console.log("确认删除操作")   
+                                    RequestUtil.delete(`/tower-supply/task/scheme?id=${record.id}`).then((res: any) => {
+                                        history.go(0)
+                                    });
                                 }}
                                 okText="确认"
                                 cancelText="取消"

@@ -64,20 +64,10 @@ export default function MaterialMngt(): React.ReactNode {
             }
         },
         {
-            key: 'weightAlgorithm',
+            key: 'weightAlgorithmName',
             title: '算法',
-            width: 200,
-            dataIndex: 'weightAlgorithm',
-            render: (status: string): React.ReactNode => {
-                switch (status) {
-                    case '0':
-                        return '比重*体积（钢板类）';
-                    case '1':
-                        return '比重*长度（角钢类）';
-                    default:
-                        return '-'
-                }
-            }
+            width: 150,
+            dataIndex: 'weightAlgorithmName'
         },
         {
             key: 'description',
@@ -353,10 +343,10 @@ export default function MaterialMngt(): React.ReactNode {
                         message: '请选择比重算法'
                     }]}>
                         <Select style={{ width: '100%' }}>
-                            <Select.Option value='' id=''>
+                            <Select.Option value='3' id='3'>
                                 法兰类
                             </Select.Option>
-                            <Select.Option value='0' id='0'>
+                            <Select.Option value='2' id='2'>
                                 比重*面积（钢板类）
                             </Select.Option>
                             <Select.Option value='1' id='1' >

@@ -585,7 +585,7 @@
         },
         {
             "title": "请款机构",
-            "dataIndex": "pleasePayOrganization",
+            "dataIndex": "pleasePayOrganizationName",
             "disabled": true
         },
         {
@@ -597,8 +597,11 @@
     "ApplicationOverview": [
         {
             "title": "请款类别",
-            "dataIndex": "pleasePayType",
-            "type": "select"
+            "dataIndex": "paymentReqTypeName"
+        },
+        {
+            "title": "付款类型",
+            "dataIndex": "businessTypeName"
         },
         {
             "title": "企业类型",

@@ -114,7 +114,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         </div>
         <div>
             <CommonTable
-                rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
+                rowKey="id"
                 columns={[
                     {
                         key: 'index',

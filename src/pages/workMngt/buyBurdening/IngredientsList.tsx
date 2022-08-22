@@ -129,6 +129,9 @@ export default function IngredientsList(): React.ReactNode {
     const [indeterminate, setIndeterminate] = useState(true);
     const [checkAll, setCheckAll] = useState(false);
 
+    // 当前选中的所有明细
+    const [activeInfo, setActiveInfo] = useState<any>({});
+
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
         switch (options.key) {
@@ -650,7 +653,7 @@ export default function IngredientsList(): React.ReactNode {
     }
 
     // 点击构建分类
-    const handleConstructionClassification = (options: string) => {
+    const handleConstructionClassification = (options: string, currentInfo: any) => {
         let v = globallyStoredData;
         const panes = globallyStoredData?.filter((v: any) => v.key === activeSort)[0].children;
         if (panes.length !== 1) {
@@ -659,6 +662,7 @@ export default function IngredientsList(): React.ReactNode {
         }
         panes[0].batchingStrategy = serarchForm.getFieldsValue();
         setActiveSort(options);
+        setActiveInfo(currentInfo)
         setActiveKey("fangan1");
         setGloballyStoredData(v)
         const result = globallyStoredData?.filter((v: any) => v.key === options)[0].children;
@@ -796,6 +800,7 @@ export default function IngredientsList(): React.ReactNode {
             setConstructionClassification(result || []);
             if (result?.length > 0) {
                 setActiveSort(`${result?.[0].structureTexture}_${result?.[0].structureSpec}`)
+                setActiveInfo(result?.[0]);
                 // 根据构建分类获取配料策略
                 getIngredient(result?.[0]?.structureSpec);
                 // // 获取构建分类明细
@@ -1036,7 +1041,7 @@ export default function IngredientsList(): React.ReactNode {
                                     return <div
                                         key={index}
                                         className={`contentWrapperLeftlist ${flag ? "active" : ""}`}
-                                        onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`)}>
+                                        onClick={() => handleConstructionClassification(`${item.structureTexture}_${item.structureSpec}`, item)}>
                                         <div className='color' style={{
                                             backgroundColor: item.notConfigured === item.totalNum ? "#EE483C"
                                                 : item.notConfigured === 0 ? "#13C519" : "#FFB631"
@@ -1137,7 +1142,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                             render: (_: any, record: any, index: number) => {
                                                                                 return (
                                                                                     <>
-                                                                                        <Button type="link" onClick={() => handleRemove(index)}>移除</Button>
+                                                                                        <Button type="link" disabled={activeInfo.isHandler === 2} onClick={() => handleRemove(index)}>移除</Button>
                                                                                     </>
                                                                                 )
                                                                             }

@@ -1,8 +1,8 @@
 {
     "baseInfo": [
         {
-            "title": "配料方案编号-----新加",
-            "dataIndex": "batchNumber",
+            "title": "配料方案编号",
+            "dataIndex": "schemeNumber",
             "width": 200,
             "type": "string"
         },
