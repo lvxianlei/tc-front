@@ -187,8 +187,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const name = res.structureTexture;
                 return {
                     ...res,
-                    structureTexture: name,
-                    structureTextureId: id,
+                    structureTextureId: { value: id, label: name },
                 }
             }) || [])
             setPopDataList(result?.materialContractDetailVos.map((res: any) => {
@@ -196,8 +195,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const name = res.structureTexture;
                 return {
                     ...res,
-                    structureTexture: name,
-                    structureTextureId: id,
+                    structureTextureId: { value: id, label: name },
                 }
             }) || [])
             resove({ ...result, tax: taxNum })
@@ -701,25 +699,29 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                             render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
-                    // if (item.dataIndex === "length") {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
-                    //     })
-                    // }
+                    if (item.dataIndex === "length") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                        })
+                    }
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => type === "edit" ? records.materialStandardName : <Select
+                            render: (_value: number, records: any, key: number) => type === "edit" ? records.materialStandardName : <Select
                                 style={{ width: '150px' }}
-                                value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName}
-                                onChange={(e: string) => {
+                                labelInValue
+                                value={{
+                                    value: materialList[key]?.materialStandard,
+                                    label: materialList[key]?.materialStandardName
+                                } as any}
+                                onChange={(e: any) => {
                                     const newData = materialList.map((item: any, index: number) => {
                                         if (index === key) {
                                             return {
                                                 ...item,
-                                                materialStandard: e.split(',')[0],
-                                                materialStandardName: e.split(',')[1]
+                                                materialStandard: e.value,
+                                                materialStandardName: e.label
                                             }
                                         }
                                         return item
@@ -733,16 +735,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "structureTextureId") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => type === "edit" ? records.structureTexture : <Select
+                            render: (_value: number, records: any, key: number) => type === "edit" ? records.structureTexture : <Select
                                 style={{ width: '150px' }}
                                 labelInValue={true}
-                                value={{ value: materialList[key]?.structureTextureId } as any}
+                                value={{
+                                    value: materialList[key]?.structureTextureId,
+                                    label: materialList[key]?.structureTexture
+                                } as any}
                                 onChange={(e: any) => {
                                     const newData = materialList.map((item: any, index: number) => {
                                         if (index === key) {
                                             return {
                                                 ...item,
-                                                structureTextureId: e.key,
+                                                structureTextureId: e.value,
                                                 structureTexture: e.label
                                             }
                                         }
