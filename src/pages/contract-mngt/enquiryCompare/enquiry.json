@@ -6,8 +6,10 @@
             "width": 200
         },
         {
-            "title": "创建日期--------",
-            "dataIndex": "createTime---------",
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "width": 200
         },
         {
@@ -24,11 +26,12 @@
     "editBaseInfo": [
         {
             "title": "询比价供应商",
-            "dataIndex": "-------------",
+            "dataIndex": "supplyIdList",
             "type": "popTable",
             "path": "/tower-supply/supplier",
             "width": 1011,
             "value": "supplierName",
+            "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,
             "search": [
@@ -36,12 +39,6 @@
                     "title": "查询",
                     "dataIndex": "fuzzyQuery",
                     "placeholder": "编号/名称/联系人/联系人电话"
-                },
-                {
-                    "title": "质量保证体系",
-                    "dataIndex": "qualityAssurance",
-                    "type": "select",
-                    "placeholder": "请选择"
                 }
             ],
             "columns": [

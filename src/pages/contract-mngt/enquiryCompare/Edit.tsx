@@ -5,6 +5,7 @@ import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList 
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
+import { calcFun } from "../Edit"
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -182,14 +183,38 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             num: item.num || "0",
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            })
         }))])
         setPopDataList([...materialList, ...newMaterialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            })
         }))])
         setVisible(false)
     }
@@ -215,11 +240,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
-            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            // weight: item.singleWeight || 0,
             source: item.source || 1,
-            // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            }),
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
@@ -230,11 +265,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
-            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            // weight: item.singleWeight || 0,
             source: item.source || 1,
-            // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            }),
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
@@ -289,8 +334,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
-                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
+                    weight: calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width
+                    }),
+                    totalWeight: calcFun.totalWeight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width,
+                        num: item.num
+                    })
                 })
             }
             return item

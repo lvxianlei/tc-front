@@ -342,11 +342,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 onRow: (record: Record<string, any>) => ({
                     className: record.status === 1 ?
                         styles.row_color_1 : record.status === 2 ?
-                            styles.row_color_2 : record.status === 3 ?
-                                styles.row_color_3 : record.status === 4 ?
-                                    styles.row_color_4 : record.status === 5 ?
-                                        styles.row_color_5 : record.status === 0 ?
-                                            styles.row_color_0 : undefined
+                            styles.row_color_2 : undefined
                 })
             }}
         />
