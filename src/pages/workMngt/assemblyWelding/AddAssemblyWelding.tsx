@@ -6,7 +6,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { Space, Input, Select, Button, Form, Row, Col, InputNumber, Radio, Popconfirm, message, Spin, Checkbox, Modal } from 'antd';
-import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import { CommonAliTable, CommonTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { useHistory, useParams } from 'react-router-dom';
@@ -737,51 +737,46 @@ export default function AddAssemblyWelding(): React.ReactNode {
                             style={{ fontSize: '14px', paddingLeft: '16px', fontWeight: 'lighter' }}
                         >显示剩余数量为0的构件{checked}
                         </Checkbox>
-                        <Button type='primary' style={{ left: '38%' }} onClick={batchMove} ghost>批量移动</Button>
+                        <Button type='primary' style={{ left: '55%' }} onClick={batchMove} ghost>批量移动</Button>
                     </div>
                 }
             />
-            <CommonTable
-                haveIndex
-                columns={componentColumns}
-                dataSource={componentList}
-                pagination={false}
-                style={{
-                    width: '40%',
-                    position: 'absolute'
-                }}
-                rowSelection={{
-                    selectedRowKeys: leftSelectedRowKeys,
-                    onChange: (selectedRowKeys: string[], selectRows: any[]) => {
-                        setLeftSelectedRowKeys(selectedRowKeys);
-                        setLeftSelectedRows(selectRows)
-                    },
-                    getCheckboxProps: () => ({
-                        disabled: rightSelectedRows.length > 0
-                    })
-                }}
-            />
-            <CommonTable
-                columns={columns}
-                style={{
-                    width: '55%',
-                    position: 'relative',
-                    left: '42%'
-                }}
-                rowKey="structureId"
-                dataSource={[...(weldingDetailedStructureList || [])]}
-                pagination={false}
-                rowSelection={{
-                    selectedRowKeys: rightSelectedRowKeys,
-                    onChange: (selectedRowKeys: string[], selectRows: any[]) => {
-                        setRightSelectedRowKeys(selectedRowKeys);
-                        setRightSelectedRows(selectRows)
-                    },
-                    getCheckboxProps: () => ({
-                        disabled: leftSelectedRows.length > 0
-                    })
-                }}
-            />
+            <Row gutter={12}>
+                <Col span={12} >
+                    <CommonAliTable
+                        haveIndex
+                        columns={componentColumns}
+                        dataSource={componentList}
+                        pagination={false}
+                        code={1}
+                        rowSelection={{
+                            selectedRowKeys: leftSelectedRowKeys,
+                            onChange: (selectedRowKeys: string[], selectRows: any[]) => {
+                                setLeftSelectedRowKeys(selectedRowKeys);
+                                setLeftSelectedRows(selectRows)
+                            },
+                            getCheckboxProps: () => rightSelectedRows.length > 0
+                        }}
+                    />
+                </Col>
+                <Col span={12}>
+                    <CommonAliTable
+                        columns={columns}
+                        rowKey="structureId"
+                        dataSource={[...(weldingDetailedStructureList || [])]}
+                        pagination={false}
+                        rowSelection={{
+                            selectedRowKeys: rightSelectedRowKeys,
+                            onChange: (selectedRowKeys: string[], selectRows: any[]) => {
+                                setRightSelectedRowKeys(selectedRowKeys);
+                                setRightSelectedRows(selectRows)
+                            },
+                            getCheckboxProps: () => leftSelectedRows.length > 0
+                        }}
+                    />
+
+                </Col>
+            </Row>
         </DetailContent>
     </Spin>
 }
