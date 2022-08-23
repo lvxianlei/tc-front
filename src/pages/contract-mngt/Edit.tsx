@@ -92,15 +92,27 @@ export const calcFun = {
     /**
      * 理重
      */
-    weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => weightAlgorithm === 1 ? ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
-        : weightAlgorithm === 2 ? (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
-            : (Number(proportion || 1) / 1000).toFixed(3),
+    weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
+        if (weightAlgorithm === 1) {
+            return ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
+        }
+        if (weightAlgorithm === 2) {
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
+        }
+        return (Number(proportion || 1) / 1000).toFixed(3)
+    },
     /**
      * 总重量
      */
-    totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => weightAlgorithm === 1 ? ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
-        : weightAlgorithm === 2 ? (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
-            : (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
+    totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
+        if (weightAlgorithm === 1) {
+            return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
+        }
+        if (weightAlgorithm === 2) {
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
+        }
+        return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
+    }
 }
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
@@ -385,46 +397,46 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const meterialList: any[] = await getComparisonPrice(comparisonPriceNumberId, fields.supplier.id)
                 setMaterialList(meterialList.map((item: any) => {
                     const num = parseFloat(item.num || "1")
+                    const weight = calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width
+                    })
                     const totalWeight = parseFloat(item.totalWeight || "1.00")
                     const taxPrice = parseFloat(item.taxOffer || "1.00")
-                    // const price = parseFloat(item.offer || "1.00")
                     return ({
                         ...item,
                         source: 1,
                         num,
+                        weight,
                         taxPrice,
                         price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
-                        weight: calcFun.weight({
-                            weightAlgorithm: item.weightAlgorithm,
-                            proportion: item.proportion,
-                            length: item.length,
-                            width: item.width
-                        }),
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                         totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
                 }))
                 setPopDataList(meterialList.map((item: any) => {
                     const num = parseFloat(item.num || "1")
+                    const weight = calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width
+                    })
                     const totalWeight = parseFloat(item.totalWeight || "1.00")
                     const taxPrice = parseFloat(item.taxOffer || "1.00")
-                    // const price = parseFloat(item.offer || "1.00")
                     return ({
                         ...item,
                         source: 1,
                         num,
+                        weight,
                         taxPrice,
                         price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
-                        weight: calcFun.weight({
-                            weightAlgorithm: item.weightAlgorithm,
-                            proportion: item.proportion,
-                            length: item.length,
-                            width: item.width
-                        }),
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                         totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
@@ -458,15 +470,35 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
                     price: parseFloat(item.price || "1.00"),
-                    weight: ((item.proportion * (item.length || 1)) / 1000).toFixed(3),
-                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
+                    weight: calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width,
+                        [type]: value
+                    }),
+                    totalWeight: calcFun.totalWeight({
+                        length: item.length,
+                        width: item.width,
+                        proportion: item.proportion,
+                        weightAlgorithm: item.weightAlgorithm,
+                        num: item.num,
+                        [type]: value
+                    })
                 }
                 allData[dataIndex] = value
                 return ({
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
                     totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
-                    totalWeight: (allData.num * allData.weight).toFixed(3),
+                    totalWeight: calcFun.totalWeight({
+                        length: item.length,
+                        width: item.width,
+                        proportion: item.proportion,
+                        weightAlgorithm: item.weightAlgorithm,
+                        num: item.num,
+                        [type]: value
+                    }),
                     [dataIndex]: value
                 })
             }
@@ -476,14 +508,27 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList(newData.slice(0))
     }
 
-    const lengthChange = (value: number, id: string) => {
+    const lengthChange = (value: number, id: string, type: "length" | "width") => {
         const list = materialList.map((item: any) => {
             if (item.id === id) {
                 return ({
                     ...item,
-                    length: value,
-                    totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
+                    [type]: value,
+                    weight: calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width,
+                        [type]: value
+                    }),
+                    totalWeight: calcFun.totalWeight({
+                        length: item.length,
+                        width: item.width,
+                        proportion: item.proportion,
+                        weightAlgorithm: item.weightAlgorithm,
+                        num: item.num,
+                        [type]: value
+                    }),
                 })
             }
             return item
@@ -696,19 +741,33 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "num") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber
+                                min={1} value={value || 1}
+                                onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber
+                                min={1}
+                                value={value || 100}
+                                onChange={(value: number) => lengthChange(value, records.id, "length")} key={key} />
+                        })
+                    }
+                    if (item.dataIndex === "width") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number) => <InputNumber
+                                min={1}
+                                value={value || 100}
+                                onChange={(value: number) => lengthChange(value, records.id, "width")} key={key} />
                         })
                     }
                     if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
-                            render: (_value: number, records: any, key: number) => type === "edit" ? records.materialStandardName : <Select
+                            render: (_value: number, records: any, key: number) => <Select
                                 style={{ width: '150px' }}
                                 labelInValue
                                 value={{
@@ -728,14 +787,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                     })
                                     setMaterialList(newData)
                                 }}>
-                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         })
                     }
                     if (item.dataIndex === "structureTextureId") {
                         return ({
                             ...item,
-                            render: (_value: number, records: any, key: number) => type === "edit" ? records.structureTexture : <Select
+                            render: (_value: number, records: any, key: number) => <Select
                                 style={{ width: '150px' }}
                                 labelInValue={true}
                                 value={{

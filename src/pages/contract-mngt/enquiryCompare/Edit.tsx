@@ -106,14 +106,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
-            form.setFieldsValue(result)
+            form.setFieldsValue({
+                ...result,
+                supplyIdList: {
+                    id: result?.supplyIdList.split(","),
+                    records: result?.supplyIdList.split(","),
+                    value: result?.supplyNameList
+                }
+            })
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
                     structureTexture: res.structureTexture,
                     structureTextureId: res.structureTextureId,
                     materialStandardName: res.materialStandardName,
-                    materialStandard: res.materialStandard
+                    materialStandard: res.materialStandard,
                 }
             })
             setMaterialList(comparisonPriceDetailVos || [])
@@ -152,6 +159,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
             await saveRun({
                 ...baseData,
+                supplyIdList: baseData?.supplyIdList.records.map((item: any) => item.id).join(","),
+                supplyNameList: baseData?.supplyIdList.records.map((item: any) => item.supplierName).join(","),
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
@@ -165,6 +174,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
             resove(true)
         } catch (error) {
+            console.log(error)
             reject(false)
         }
     })
