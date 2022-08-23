@@ -35,35 +35,33 @@ const tableColumns = [
         title: '任务状态',
         dataIndex: 'currentStatus',
         key: 'currentStatus',
-        render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = [
-                {
-                    value: 0,
-                    label: "已拒绝"
-                },
-                {
-                    value: 1,
-                    label: "待确认"
-                },
-                {
-                    value: 2,
-                    label: "待指派"
-                },
-                {
-                    value: 3,
-                    label: "待完成"
-                },
-                {
-                    value: 4,
-                    label: "已完成"
-                },
-                {
-                    value: 5,
-                    label: "已提交"
-                }
-            ]
-            return <>{value !== -1 ? renderEnum.find((item: any) => item.value === value)?.label : ''}</>
-        }
+        type: 'select',
+        enum: [
+            {
+                "value": 0,
+                "label": "已拒绝"
+            },
+            {
+                value: 1,
+                label: "待确认"
+            },
+            {
+                value: 2,
+                label: "待指派"
+            },
+            {
+                value: 3,
+                label: "待完成"
+            },
+            {
+                value: 4,
+                label: "已完成"
+            },
+            {
+                value: 5,
+                label: "已提交"
+            }
+        ]
     },
     {
         title: '备注',

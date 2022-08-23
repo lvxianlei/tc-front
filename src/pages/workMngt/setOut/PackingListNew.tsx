@@ -6,7 +6,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Space, Button, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
-import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import { CommonAliTable, DetailContent, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import styles from './SetOut.module.less';
@@ -722,7 +722,7 @@ export default function PackingListNew(): React.ReactNode {
                 </p>
                 <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
             </p>
-            <CommonTable
+            <CommonAliTable
                 haveIndex
                 rowKey='businessId'
                 columns={[
@@ -791,9 +791,7 @@ export default function PackingListNew(): React.ReactNode {
                     selectedRowKeys: selectedRowKeys,
                     type: "checkbox",
                     onChange: onSelectChange,
-                    getCheckboxProps: (record: Record<string, any>) => ({
-                        disabled: record.isChild === true
-                    }),
+                    getCheckboxProps: (record: Record<string, any>) => !!record.isChild,
                 }}
             />
             <p className={styles.titleContent}>
@@ -809,7 +807,7 @@ export default function PackingListNew(): React.ReactNode {
                 </span>
                 <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
             </p>
-            <CommonTable
+            <CommonAliTable
                 haveIndex
                 columns={[
                     ...packingColumns.map((item: any) => {
