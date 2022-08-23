@@ -57,6 +57,12 @@ export default function ScheduleList(): React.ReactNode {
             dataIndex: 'productCategoryNum'
         },
         {
+            key: 'productCategoryName',
+            title: '塔型',
+            width: 150,
+            dataIndex: 'productCategoryName'
+        },
+        {
             key: 'productNum',
             title: '杆塔（基）',
             width: 150,
