@@ -538,7 +538,7 @@ export default function TowerInformation(): React.ReactNode {
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={<>
                     <span>塔型：<span>{detail?.productCategoryName}</span></span>
-                    <span>计划号：<span>{detail?.productCategoryName}</span></span>
+                    <span>计划号：<span>{detail?.planNumber}</span></span>
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
