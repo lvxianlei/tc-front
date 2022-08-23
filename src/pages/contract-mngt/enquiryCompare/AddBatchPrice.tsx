@@ -52,8 +52,8 @@ export default forwardRef(function ({ id, type, comparisonPriceId }: AddPricePro
             const formData = await form.validateFields()
             await saveRun({
                 manufacturer: formData.manufacturer,
-                supplierId: formData.supplier?.id || data?.supplierId,
-                supplierName: formData.supplier?.value || data?.supplierName,
+                supplierId: formData.supplier?.value || data?.supplierId,
+                supplierName: formData.supplier?.label || data?.supplierName,
                 inquiryQuotationOfferDtos: data?.inquiryQuotationOfferVos.map((item: any) => {
                     type === "batch_new" && delete item.id
                     return ({
@@ -88,10 +88,10 @@ export default forwardRef(function ({ id, type, comparisonPriceId }: AddPricePro
                 return item
             })}
             dataSource={{
-                supplier: {
-                    id: data?.supplierId,
-                    value: data?.supplierName
-                }
+                supplier: data?.supplierId ? {
+                    value: data?.supplierId,
+                    label: data?.supplierName
+                } : undefined
             }} edit />
         <Attachment dataSource={data?.inquiryQuotationAttachInfoVos || []} ref={attachRef} edit />
     </Spin>

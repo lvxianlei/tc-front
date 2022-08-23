@@ -29,10 +29,10 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
             reject(error)
         }
     }))
+
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryQuotation/${id}`)
-            form.setFieldsValue({ supplier: { id: result.supplierId, value: result.supplierName } })
             setMaterials(result?.inquiryQuotationOfferVos.map((item: any) => ({
                 ...item,
                 taxOffer: [-1, "-1"].includes(item.taxOffer) ? 1 : item.taxOffer,
@@ -46,7 +46,10 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/inquiryQuotation`, type === "new" ? data : ({ id, ...data }))
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](
+                `/tower-supply/inquiryQuotation`,
+                type === "new" ? data : ({ id, ...data })
+            )
             resole(result)
         } catch (error) {
             reject(error)
@@ -64,12 +67,12 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
             const formData = await form.validateFields()
             await saveRun({
                 manufacturer: formData.manufacturer,
-                supplierId: formData.supplier?.id || data?.supplierId,
-                supplierName: formData.supplier?.value || data?.supplierName,
-                inquiryQuotationOfferDtos: materials.map((item: any) => {
-                    type === "new" && delete item.id
-                    return item
-                }),
+                supplierId: formData.supplier?.value || data?.supplierId,
+                supplierName: formData.supplier?.label || data?.supplierName,
+                inquiryQuotationOfferDtos: materials.map((item: any) => ({
+                    ...item,
+                    comparisonPriceDetailId: item.id
+                })),
                 comparisonPriceId: params.id,
                 fileIds: attachRef.current?.getDataSource().map(item => item.id)
             })
@@ -81,7 +84,6 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     const handleChange = (id: string, value: number, name: string) => {
-        console.log(id, materials, materials)
         // 不含税报价 = 含税报价 - （含税报价 * 材料税率）
         // 材料税率 目前是写死 13%
         setMaterials(materials.map((item: any) => item.id === id ?
@@ -95,7 +97,7 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
     return <Spin spinning={loading && suplierLoading}>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo
-            classStyle={"overall-form-class-padding0"}
+            classStyle="overall-form-class-padding0"
             form={form}
             col={2}
             columns={supplier.map((item: any) => {
@@ -106,7 +108,13 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                     })
                 }
                 return item
-            })} dataSource={{}} edit />
+            })}
+            dataSource={{
+                supplier: data?.supplierId ? {
+                    label: data?.supplierName,
+                    value: data?.supplierId
+                } : undefined
+            }} edit />
         <DetailTitle title="询价原材料" />
         <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {

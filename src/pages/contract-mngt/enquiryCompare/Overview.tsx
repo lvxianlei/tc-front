@@ -34,6 +34,7 @@ export default function Overview(): JSX.Element {
     const addBatchPriceRef = useRef<AddPriceRef>({ onSubmit: () => { }, resetFields: () => { } })
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [batchVisible, setBatchVisible] = useState<boolean>(false)
     const [attchVisible, setAttchVisible] = useState<boolean>(false)
     const [supplierVisible, setSupplierVisible] = useState<boolean>(false)
     const [supplier, setSupplier] = useState('')
@@ -101,11 +102,22 @@ export default function Overview(): JSX.Element {
         winBidSupplierId: value
     }) : item))
 
-    const handleAddPriceOk = () => new Promise((resolve, reject) => {
+    const handleAddPriceOk = () => new Promise(async (resolve, reject) => {
         try {
-            addPriceRef.current?.onSubmit()
-            message.success("成功添加报价...")
+            await addPriceRef.current?.onSubmit()
+            await message.success("成功添加报价...")
             setVisible(false)
+            history.go(0)
+            resolve(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+    const handleAddBatchPriceOk = () => new Promise(async (resolve, reject) => {
+        try {
+            await addBatchPriceRef.current?.onSubmit()
+            await message.success("成功添加报价...")
+            setBatchVisible(false)
             history.go(0)
             resolve(true)
         } catch (error) {
@@ -121,6 +133,24 @@ export default function Overview(): JSX.Element {
         <Modal
             width={1011}
             destroyOnClose
+            title={oprationType === "batch_new" ? "批量添加报价" : "批量编辑报价"}
+            visible={batchVisible}
+            onOk={handleAddBatchPriceOk}
+            onCancel={() => {
+                addBatchPriceRef.current?.resetFields()
+                setBatchVisible(false)
+            }}>
+            <AddBatchPrice
+                id={detailId}
+                type={oprationType as any}
+                ref={addBatchPriceRef}
+                materialLists={materialLists}
+                comparisonPriceId={params.id}
+            />
+        </Modal>
+        <Modal
+            width={1011}
+            destroyOnClose
             title={oprationType === "new" ? "添加报价" : "编辑报价"}
             visible={visible}
             onOk={handleAddPriceOk}
@@ -128,18 +158,13 @@ export default function Overview(): JSX.Element {
                 addPriceRef.current?.resetFields()
                 setVisible(false)
             }}>
-            {oprationType.includes("batch") && <AddBatchPrice
-                comparisonPriceId={params.id}
+            <AddPrice
                 id={detailId}
                 type={oprationType as any}
                 ref={addPriceRef}
-                materialLists={materialLists} />}
-            {!oprationType.includes("batch") && <AddPrice
+                materialLists={materialLists}
                 comparisonPriceId={params.id}
-                id={detailId}
-                type={oprationType as any}
-                ref={addBatchPriceRef}
-                materialLists={materialLists} />}
+            />
         </Modal>
         <Modal
             width={1011}
@@ -200,9 +225,9 @@ export default function Overview(): JSX.Element {
             <Button
                 type="primary"
                 ghost
-                key="export_overview"
+                key="export"
                 style={{ marginRight: 16 }}
-                onClick={() => setIsExportStoreList(true)}
+                onClick={() => { setIsExportStoreList(true) }}
             >导出</Button>,
             <Button
                 type="primary"
@@ -216,7 +241,7 @@ export default function Overview(): JSX.Element {
                 disabled={data?.comparisonStatus !== 1}
                 type="primary"
                 style={{ marginRight: 16 }}
-                ghost key="addPrice"
+                ghost key="add"
                 onClick={() => {
                     setOprationType("new")
                     setVisible(true)
@@ -228,7 +253,7 @@ export default function Overview(): JSX.Element {
                 ghost key="addBatchPrice"
                 onClick={() => {
                     setOprationType("batch_new")
-                    setVisible(true)
+                    setBatchVisible(true)
                 }}>批量添加报价</Button>,
             <Button
                 type="primary"
@@ -251,9 +276,10 @@ export default function Overview(): JSX.Element {
             <CommonTable
                 columns={[
                     ...materialColumns,
-                    ...data?.headerColumnVos?.map((item: any) => {
-                        return item
-                    }) || [],
+                    ...(data?.headerColumnVos.map((item: any) => ({
+                        ...item,
+                        render: (_value: any, records: any) => records?.inquiryQuotationOfferData?.[item.dataIndex]
+                    })) || []),
                     {
                         title: "中标供应商",
                         dataIndex: "winBidSupplierId",
@@ -273,7 +299,7 @@ export default function Overview(): JSX.Element {
                 }}
                 dataSource={materialLists}
             />
-            <DetailTitle title="相关附件" />
+            <DetailTitle title="询价报价信息" />
             <CommonTable
                 haveIndex
                 columns={[
