@@ -1,6 +1,6 @@
-import React, { useImperativeHandle, forwardRef, useState } from "react"
+import React, { useImperativeHandle, forwardRef, useState, useRef } from "react"
 import { Spin, Form, Select, TreeSelect } from 'antd'
-import { DetailContent, BaseInfo, formatData } from '../../common'
+import { DetailContent, BaseInfo, formatData, Attachment, AttachmentRef } from '../../common'
 import { ApplicationList } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -25,9 +25,13 @@ const wrapRole2DataNode: (data: any) => any[] = (data: any[]) => {
 export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [baseForm] = Form.useForm()
     const [companyList, setCompanyList] = useState([]);
+    const attachRef = useRef<AttachmentRef>()
     const [pleasePayType, setPleasePayType] = useState('');
     const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+
+    // 存储
+    const [baseInfoColumn, setBaseInfoColumn] = useState<any[]>(ApplicationList);
 
     const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -41,17 +45,29 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
-            baseForm.setFieldsValue(formatData(ApplicationList, {
+            /**
+             * 根据付款类型重置表头，根据不同的付款类型，处理不同回显操作
+             */
+            handleBaseColumn(result?.paymentReqType, result?.businessType)
+            baseForm.setFieldsValue({
                 ...result,
                 businessId: result.businessId + ',' + result.businessName,
-                relatednotes: {
+                relatednotes: result?.paymentReqType === 2 ? {
                     value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","),
                     records: result.applyPaymentInvoiceVos?.map((item: any) => ({
                         invoiceId: item.invoiceId,
                         billNumber: item.billNumber
                     })) || []
-                }
-            }))
+                } : "",
+                receiptNumbers: result?.paymentReqType !== 2 ? {
+                    value: result.receiveNumberList?.map((item: any) => item.receiveNumber).join(","),
+                    records: result.receiveNumberList?.map((item: any) => ({
+                        id: item.id,
+                        receiveNumber: item.receiveNumber
+                    })) || []
+                } : result?.receiptNumbers
+            })
+            console.log(result?.paymentReqType !== 2, "编辑")
             businessTypeChange(result.businessType);
             setPleasePayType(result.pleasePayType);
             resole(result)
@@ -79,27 +95,64 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const onSubmit = (saveType?: "save" | "saveAndApply") => new Promise(async (resolve, reject) => {
         try {
             const baseData = await baseForm.validateFields()
-            const postData = type === "new" ? {
-                ...baseData,
-                businessId: baseData.businessId?.split(',')[0],
-                businessName: baseData.businessId?.split(',')[1],
-                applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                    invoiceId: item.id,
-                    billNumber: item.billNumber
-                })) || data?.applyPaymentInvoiceVos
-            } : {
-                ...baseData,
-                id: data?.id,
-                businessId: baseData.businessId?.split(',')[0],
-                businessName: baseData.businessId?.split(',')[1],
-                applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                    invoiceId: item.id,
-                    billNumber: item.billNumber
-                })) || data?.applyPaymentInvoiceVos.map((item: any) => ({
-                    invoiceId: item.invoiceId,
-                    billNumber: item.billNumber
-                }))
+            let postData: any = {};
+            // 付款类型为货到票到付款 关联票据
+            if (baseData.paymentReqType === 2) { 
+                postData = type === "new" ? {
+                    ...baseData,
+                    pleasePayOrganization: perData?.dept,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
+                    businessId: baseData.businessId?.split(',')[0],
+                    businessName: baseData.businessId?.split(',')[1],
+                    applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
+                        invoiceId: item.id,
+                        billNumber: item.billNumber
+                    })) || data?.applyPaymentInvoiceVos
+                } : {
+                    ...baseData,
+                    pleasePayOrganization: perData?.dept,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
+                    id: data?.id,
+                    businessId: baseData.businessId?.split(',')[0],
+                    businessName: baseData.businessId?.split(',')[1],
+                    applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
+                        invoiceId: item.id,
+                        billNumber: item.billNumber
+                    })) || data?.applyPaymentInvoiceVos.map((item: any) => ({
+                        invoiceId: item.invoiceId,
+                        billNumber: item.billNumber
+                    }))
+                }
+            } else {
+                // 其他两种关联票据禁用  关联收货单
+                let v: any[] = [];
+                baseData.receiptNumbers.records?.map((item: any) => v.push(item.receiveNumber))
+                postData = type === "new" ? {
+                    ...baseData,
+                    pleasePayOrganization: perData?.dept,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
+                    businessId: baseData.businessId?.split(',')[0],
+                    businessName: baseData.businessId?.split(',')[1],
+                    receivingNoteList: baseData.receiptNumbers.records?.map((item: any) => ({
+                        id: item.id,
+                        receiveNumber: item.receiveNumber
+                    })),
+                    receiptNumbers: v.join(",")
+                } : {
+                    ...baseData,
+                    pleasePayOrganization: perData?.dept,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
+                    id: data?.id,
+                    businessId: baseData.businessId?.split(',')[0],
+                    businessName: baseData.businessId?.split(',')[1],
+                    receivingNoteList: baseData.receiptNumbers.records?.map((item: any) => ({
+                        id: item.id,
+                        receiveNumber: item.receiveNumber
+                    })),
+                    receiptNumbers: v.join(",")
+                }
             }
+            console.log(postData, "============postData")
             await saveRun(postData, saveType)
             resolve(true)
         } catch (error) {
@@ -113,7 +166,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         baseForm.resetFields()
     }
 
-    const handleBaseInfoChange = (fields: any) => {
+    const handleBaseInfoChange = (fields: any, allFields: { [key: string]: any }) => {
         if (fields.relatednotes) {
             let pleasePayAmount = "0.00"
             fields.relatednotes.records.forEach((item: any) => {
@@ -129,6 +182,271 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 openBank: fields.supplierName.records[0]?.bankDeposit,
                 openBankNumber: fields.supplierName.records[0]?.bankAccount
             })
+        }
+
+        if (fields.receiptNumbers) {
+            baseForm.setFieldsValue({
+                receiptNumbers: {
+                    value: fields.receiptNumbers.records.map((item: any) => item.receiveNumber).join(","),
+                    records: fields.receiptNumbers.records.map((item: any) => ({ ...item, receiveNumber: item.receiveNumber }))
+                }
+            })
+        }
+
+        if (fields.businessType || fields.pleasePayType) {
+            if (allFields.paymentReqType !== 2) {
+                const result = baseInfoColumn.map(((item: any) => {
+                    if (item.dataIndex === "receiptNumbers") {
+                        return ({
+                            "dataIndex": "receiptNumbers",
+                            "title": "关联收货单",
+                            "type": "popTable",
+                            "path": `/tower-storage/receiveStock?receiveStatus=1&companyRelationStatus=${allFields.businessType || ""}`,
+                            "width": 1011,
+                            "value": "receiptNumbers",
+                            "selectType": "checkbox",
+                            "dependencies": true,
+                            "readOnly": true,
+                            "disabled": false,
+                            "search": [
+                                {
+                                    "title": "月份选择",
+                                    "dataIndex": "receiveTime",
+                                    "type": "date",
+                                    "width": 200
+                                },
+                                {
+                                    "title": "查询",
+                                    "dataIndex": "fuzzyQuery",
+                                    "width": 200,
+                                    "placeholder": "合同编号/收货单号/联系人"
+                                }
+                            ],
+                            "columns": [
+                                {
+                                    "title": "收货单号",
+                                    "dataIndex": "receiveNumber",
+                                    "type": "string"
+                                },
+                                {
+                                    "title": "联系人",
+                                    "dataIndex": "contactsUser"
+                                },
+                                {
+                                    "title": "合同编号",
+                                    "dataIndex": "contractNumber"
+                                },
+                                {
+                                    "title": "完成时间",
+                                    "dataIndex": "receiveTime",
+                                    "type": "date",
+                                    "format": "YYYY-MM-DD"
+                                },
+                                {
+                                    "title": "创建人",
+                                    "dataIndex": "createUserName"
+                                },
+                                {
+                                    "title": "重量（吨）合计",
+                                    "dataIndex": "weight"
+                                },
+                                {
+                                    "title": "原材料价税合计（元）",
+                                    "dataIndex": "price"
+                                },
+                                {
+                                    "title": "运费价税合计（元）",
+                                    "dataIndex": "transportPriceCount"
+                                },
+                                {
+                                    "title": "装卸费价税合计（元）",
+                                    "dataIndex": "unloadPriceCount"
+                                },
+                                {
+                                    "title": "备注",
+                                    "dataIndex": "remark"
+                                }
+                            ],
+                            "rules": [
+                                {
+                                    "required": true,
+                                    "message": "请选择关联收货单"
+                                }
+                            ]
+                        })
+                    }
+                    return item
+                }))
+                setBaseInfoColumn(result.slice(0))
+                baseForm.setFieldsValue({
+                    receiptNumbers: ""
+                })
+            }
+        }
+
+        // 付款类型变化
+        if (fields.paymentReqType) {
+            /**
+             * 关联票据： 当选择货到票到付款时需选择，当选择预付款或货到付款时无需选择填写
+             * 关联收货单：当未关联票据时，手动选择
+             * 请款金额：当未关联票据时，手动输入
+             */
+            handleBaseColumn(fields.paymentReqType, allFields.businessType)
+            baseForm.setFieldsValue({
+                receiptNumbers: "",
+                relatednotes: "",
+                pleasePayAmount: ""
+            })
+        }
+    }
+
+    // 根据付款类型不同去处理表头
+    const handleBaseColumn = (type: number, businessType: any) => {
+        if (type === 2) {
+            // 货到票到付款
+            const result = baseInfoColumn.map(((item: any) => {
+                if (item.dataIndex === "relatednotes") {
+                    return ({
+                        ...item,
+                        disabled: false,
+                        "rules": [
+                            {
+                                "required": true,
+                                "message": "请选择关联票据..."
+                            }
+                        ]
+                    })
+                }
+                if (item.dataIndex === "receiptNumbers") {
+                    return ({
+                        "title": "关联收货单",
+                        "dataIndex": "receiptNumbers",
+                        "disabled": true,
+                    })
+                }
+                if (item.dataIndex === "pleasePayAmount") {
+                    return ({
+                        "title": "请款金额",
+                        "dataIndex": "pleasePayAmount",
+                        "type": "number",
+                        "precision": 2,
+                        "disabled": true
+                    })
+                }
+                return item
+            }))
+            setBaseInfoColumn(result.slice(0))
+        } else {
+            const result = baseInfoColumn.map(((item: any) => {
+                if (item.dataIndex === "relatednotes") {
+                    return ({
+                        ...item,
+                        disabled: true,
+                        "rules": [
+                            {
+                                "required": false,
+                                "message": "请选择关联票据..."
+                            }
+                        ]
+                    })
+                }
+                if (item.dataIndex === "receiptNumbers") {
+                    return ({
+                        "dataIndex": "receiptNumbers",
+                        "title": "关联收货单",
+                        "type": "popTable",
+                        "path": `/tower-storage/receiveStock?receiveStatus=1&companyRelationStatus=${businessType || ""}`,
+                        "width": 1011,
+                        "value": "receiptNumbers",
+                        "selectType": "checkbox",
+                        "dependencies": true,
+                        "readOnly": true,
+                        "disabled": businessType ? false : true,
+                        "search": [
+                            {
+                                "title": "月份选择",
+                                "dataIndex": "receiveTime",
+                                "type": "date",
+                                "width": 200
+                            },
+                            {
+                                "title": "查询",
+                                "dataIndex": "fuzzyQuery",
+                                "width": 200,
+                                "placeholder": "合同编号/收货单号/联系人"
+                            }
+                        ],
+                        "columns": [
+                            {
+                                "title": "收货单号",
+                                "dataIndex": "receiveNumber",
+                                "type": "string"
+                            },
+                            {
+                                "title": "联系人",
+                                "dataIndex": "contactsUser"
+                            },
+                            {
+                                "title": "合同编号",
+                                "dataIndex": "contractNumber"
+                            },
+                            {
+                                "title": "完成时间",
+                                "dataIndex": "receiveTime",
+                                "type": "date",
+                                "format": "YYYY-MM-DD"
+                            },
+                            {
+                                "title": "创建人",
+                                "dataIndex": "createUserName"
+                            },
+                            {
+                                "title": "重量（吨）合计",
+                                "dataIndex": "weight"
+                            },
+                            {
+                                "title": "原材料价税合计（元）",
+                                "dataIndex": "price"
+                            },
+                            {
+                                "title": "运费价税合计（元）",
+                                "dataIndex": "transportPriceCount"
+                            },
+                            {
+                                "title": "装卸费价税合计（元）",
+                                "dataIndex": "unloadPriceCount"
+                            },
+                            {
+                                "title": "备注",
+                                "dataIndex": "remark"
+                            }
+                        ],
+                        "rules": [
+                            {
+                                "required": true,
+                                "message": "请选择关联收货单"
+                            }
+                        ]
+                    })
+                }
+                if (item.dataIndex === "pleasePayAmount") {
+                    return ({
+                        "title": "请款金额",
+                        "dataIndex": "pleasePayAmount",
+                        "disabled": false,
+                        "type": "number",
+                        "precision": 2,
+                        "rules": [
+                            {
+                                "required": true,
+                                "message": "请输入请款金额"
+                            }
+                        ]
+                    })
+                }
+                return item
+            }))
+            setBaseInfoColumn(result.slice(0))
         }
     }
 
@@ -174,9 +492,26 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         })
     }
 
+
+    // 获取当前操作人信息
+    const { run: getCurrentPersonRun, data: perData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/personalCenter`)
+            resole(result)
+            if (type === "new") {
+                baseForm.setFieldsValue({
+                    pleasePayOrganizationName: result?.deptName,
+                    pleasePayOrganization: result?.dept
+                })
+            }
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
     return <DetailContent>
         <Spin spinning={loading}>
-            <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={ApplicationList.map((item: any) => {
+            <BaseInfo form={baseForm} onChange={handleBaseInfoChange} columns={baseInfoColumn.map((item: any) => {
                 switch (item.dataIndex) {
                     case "relatednotes":
                         return ({
@@ -211,16 +546,16 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         })
                     case "paymentMethod":
                         return ({ ...item, type: "select", enum: paymentMethodEnum })
-                    case "pleasePayOrganization":
-                        return ({
-                            ...item,
-                            // enum: deptData,
-                            render: (data: any, props: any) => <TreeSelect
-                                {...props}
-                                style={{ width: '100%' }}
-                                treeData={deptData as any}
-                            />
-                        })
+                    // case "pleasePayOrganization":
+                    //     return ({
+                    //         ...item,
+                    //         // enum: deptData,
+                    //         render: (data: any, props: any) => <TreeSelect
+                    //             {...props}
+                    //             style={{ width: '100%' }}
+                    //             treeData={deptData as any}
+                    //         />
+                    //     })
                     case 'businessType':
                         return ({
                             ...item, render: (data: any, props: any) => {
@@ -249,6 +584,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return item
                 }
             })} col={2} dataSource={{}} edit />
+            
+            <Attachment
+                dataSource={ [] }
+                ref={attachRef}
+                edit
+            />
         </Spin>
     </DetailContent>
 })

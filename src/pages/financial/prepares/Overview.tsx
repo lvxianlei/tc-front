@@ -38,9 +38,9 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
         <Spin spinning={loading}>
             <DetailTitle title="申请信息" />
             <BaseInfo columns={ApplicationOverview.map((item: any) => {
-                if (item.dataIndex === "pleasePayType") {
-                    return ({ ...item, type: "select", enum: pleasePayTypeEnum })
-                }
+                // if (item.dataIndex === "pleasePayType") {
+                //     return ({ ...item, type: "select", enum: pleasePayTypeEnum })
+                // }
                 if (item.dataIndex === "paymentMethod") {
                     return ({ ...item, type: "select", enum: paymentMethodEnum })
                 }

@@ -47,7 +47,7 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
 
     return (
         <Modal
-            title={'一次配料方案'}
+            title={'请选择要继承的批次'}
             visible={props?.visible}
             width={1000}
             maskClosable={false}

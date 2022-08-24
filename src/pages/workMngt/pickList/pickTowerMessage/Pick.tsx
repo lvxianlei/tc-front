@@ -1226,7 +1226,7 @@ export default function Lofting(): React.ReactNode {
                             key: 'basicsWeight', 
                             width: 120,
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: true, message: '请输入单件重量' }]}>
+                                <Form.Item name={['dataV', index, "basicsWeight"]} initialValue={_} rules={[{ required: !isAuto, message: '请输入单件重量' }]}>
                                     <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => {
                                         const data = form.getFieldsValue(true).dataV;
                                         if (data[index].basicsPartNum) {

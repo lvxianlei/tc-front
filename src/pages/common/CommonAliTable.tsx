@@ -4,7 +4,7 @@ import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
 import AliTable from "./AliTable"
-import { useTablePipeline, features, TablePipeline } from "ali-react-table"
+import { useTablePipeline, features } from "ali-react-table"
 const { Text } = Typography
 export type ColumnsItemsType = "string" | "text" | "date" | "popTable" | "select" | "number" | undefined
 export interface columnsProps {

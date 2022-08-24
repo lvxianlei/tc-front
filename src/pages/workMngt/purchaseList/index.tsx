@@ -1,10 +1,11 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, Select, Modal, message } from 'antd'
+import { Button, Input, Select, Modal, message, Popconfirm } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./purchaseListData.json"
 import Overview from "./Overview"
 import PurchasePlan from "./PurchasePlan"
+import RequestUtil from "../../../utils/RequestUtil"
 export default function Invoicing() {
     const history = useHistory()
     const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean }>({ onSubmit: () => { }, confirmLoading: false })
@@ -71,10 +72,27 @@ export default function Invoicing() {
                     dataIndex: "opration",
                     fixed: "right",
                     width: 100,
-                    render: (_: any, record: any) => <Button className="btn-operation-link" disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
-                        setVisible(true)
-                        setChooseId(record.id)
-                    }}>明细</Button>
+                    render: (_: any, record: any) => {
+                        return <>
+                            <Popconfirm
+                                className="btn-operation-link"
+                                title="确认删除?"
+                                onConfirm={() => {
+                                    RequestUtil.delete(`/tower-supply/task/scheme?id=${record.id}`).then((res: any) => {
+                                        history.go(0)
+                                    });
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="link" className="btn-operation-link" >删除</Button>
+                            </Popconfirm>
+                            <Button className="btn-operation-link" disabled={![1, 3].includes(record.purchaseTaskStatus)} type="link" onClick={() => {
+                                setVisible(true)
+                                setChooseId(record.id)
+                            }}>明细</Button>
+                        </>
+                    }
                 }]}
             extraOperation={<>
                 <Button type="primary" ghost onClick={() => {

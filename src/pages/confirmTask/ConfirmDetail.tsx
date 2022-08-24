@@ -35,7 +35,7 @@ const towerColumns = [
                     value: id,
                 }
             })
-            return <>{value ? renderEnum && value && renderEnum.find((item: any) => item.value === value).label : '-'}</>
+            return <>{value ? renderEnum && value && renderEnum.find((item: any) => item.value === value)?.label : '-'}</>
         }
     },
     {
@@ -50,7 +50,7 @@ const towerColumns = [
                     value: id,
                 }
             })
-            return <>{renderEnum && value && renderEnum.find((item: any) => item.value === value).label}</>
+            return <>{renderEnum && value && renderEnum.find((item: any) => item.value === value)?.label}</>
         }
     },
     {
@@ -84,10 +84,10 @@ const towerColumns = [
         dataIndex: 'patternName'
     },
     {
-        key: 'structure',
+        key: 'structureName',
         title: '结构',
         width: 100,
-        dataIndex: 'structure'
+        dataIndex: 'structureName'
     },
     {
         key: 'legConfigurationA',

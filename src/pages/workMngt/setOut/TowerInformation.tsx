@@ -26,7 +26,8 @@ interface Column extends ColumnType<object> {
 }
 
 export default function TowerInformation(): React.ReactNode {
-    const [optionalList, setOptionalList] = useState<any>()
+    const [optionalList, setOptionalList] = useState<any>();
+    const [loftingUser, setLoftingUser] = useState<string>();
 
     const { data: loftingQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1`);
@@ -40,6 +41,7 @@ export default function TowerInformation(): React.ReactNode {
             let loftingUserList: any[] = [];
             let loftingMutualReviewList: any[] = [];
             let programmingLeaderList: any[] = [];
+            setLoftingUser(user?.loftingLeader)
             result?.records?.forEach((res: any) => {
                 if (user?.loftingUser.split(',').indexOf(res.userId) > -1) {
                     loftingUserList.push(res)
@@ -57,6 +59,15 @@ export default function TowerInformation(): React.ReactNode {
                 programmingLeaderList: programmingLeaderList
             })
             resole(result?.records)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
+    const { data: detail } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/detail/${params.id}`);
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -297,7 +308,7 @@ export default function TowerInformation(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
-                        location.state?.status > 1 ?
+                        detail?.status > 1 ?
                             <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
                             :
                             <Button type="link" disabled>放样</Button>
@@ -452,7 +463,6 @@ export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
-    const location = useLocation<{ loftingLeader: string, status: number, name: string, planNumber: string }>();
     const userId = AuthUtil.getUserId();
     const [visible, setVisible] = useState(false);
     const [editForm] = useForm();
@@ -482,7 +492,7 @@ export default function TowerInformation(): React.ReactNode {
             onCancel={() => {
                 setVisible(false);
             }}>
-            <ChooseMaterials id={params.id} name={location.state?.name || ''} planNumber={location.state?.planNumber || ''} />
+            <ChooseMaterials id={params.id} name={detail?.productCategoryName || ''} planNumber={detail?.planNumber || ''} />
         </Modal>
         <Form layout="inline" onFinish={(value: Record<string, any>) => {
             if (value.updateStatusTime) {
@@ -527,17 +537,17 @@ export default function TowerInformation(): React.ReactNode {
                 exportPath={`/tower-science/productSegment`}
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={<>
-                    <span>塔型：<span>{location.state?.name}</span></span>
-                    <span>计划号：<span>{location.state?.planNumber}</span></span>
+                    <span>塔型：<span>{detail?.productCategoryName}</span></span>
+                    <span>计划号：<span>{detail?.planNumber}</span></span>
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
-                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' disabled={location.state?.status === 1} ghost>放样</Button> </Link>
+                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' disabled={detail?.loftingStatus === 1} ghost>放样</Button> </Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type="primary" ghost>模型</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
                         <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type="primary" ghost>NC程序</Button></Link>
                         {
-                            isShow ?
+                            loftingUser === userId ?
                                 <>
                                     <Popconfirm
                                         title="确认提交?"
@@ -552,9 +562,9 @@ export default function TowerInformation(): React.ReactNode {
                                         }}
                                         okText="提交"
                                         cancelText="取消"
-                                        disabled={!(location.state?.status < 3)}
+                                        disabled={!(detail?.loftingStatus < 3)}
                                     >
-                                        <Button type="primary" loading={loading1} disabled={!(location.state?.status < 3)} ghost>提交</Button>
+                                        <Button type="primary" loading={loading1} disabled={!(detail?.loftingStatus < 3)} ghost>提交</Button>
                                     </Popconfirm>
                                     <TowerLoftingAssign id={params.id} update={onRefresh} type="edit" />
                                 </>

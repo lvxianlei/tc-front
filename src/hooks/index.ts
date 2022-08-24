@@ -31,6 +31,9 @@ export function setDictionary(dictionary?: any[]) {
 }
 
 export function hasAuthority(authority: string): boolean {
+    if (authority === "") {
+        return true
+    }
     if (!authority) {
         return false;
     }

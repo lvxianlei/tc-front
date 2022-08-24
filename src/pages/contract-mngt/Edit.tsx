@@ -1,23 +1,32 @@
 import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
 import { Button, Modal, Spin, Form, InputNumber, message, Select } from "antd"
-import { BaseInfo, DetailTitle, Attachment, CommonTable } from "../common"
-import { contractBaseInfo, material, addMaterial } from "./contract.json"
+import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent } from "../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
 import moment from "moment"
-import { PopTableContent } from "./enquiryCompare/ComparesModal"
 import {
     deliverywayOptions, materialStandardOptions,
     materialTextureOptions, transportationTypeOptions,
     settlementModeOptions
 } from "../../configuration/DictionaryOptions"
+import { contractBaseInfo, material, addMaterial } from "./contract.json"
 
 // 新加运费信息
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
 interface EditProps {
     id: string
     type: "new" | "edit"
+}
+interface WeightParams {
+    width: number | string
+    length: number | string
+    weightAlgorithm: 1 | 2 | 3
+    proportion: number | string
+}
+
+interface TotalWeightParmas extends WeightParams {
+    num: number | string
 }
 
 const oneFreight = [{
@@ -67,7 +76,7 @@ const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: st
 const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
 const settlementModeEnum = settlementModeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
 
-const calcFun = {
+export const calcFun = {
     /** 
      *  运费-不含税价格 
      * 运费不含税价格=运费含税价格 /（ 1 + 运费税率 / 100 )
@@ -79,7 +88,31 @@ const calcFun = {
     * 装卸费不含税价格=装卸费含税价格/（1+运费税率/100)
     */
     unloadPrice: (taxPrice: any = 0, tax: any = 0) =>
-        (taxPrice / (1 + tax / 100)).toFixed(6)
+        (taxPrice / (1 + tax / 100)).toFixed(6),
+    /**
+     * 理重
+     */
+    weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
+        if (weightAlgorithm === 1) {
+            return ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
+        }
+        if (weightAlgorithm === 2) {
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
+        }
+        return (Number(proportion || 1) / 1000).toFixed(3)
+    },
+    /**
+     * 总重量
+     */
+    totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
+        if (weightAlgorithm === 1) {
+            return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
+        }
+        if (weightAlgorithm === 2) {
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
+        }
+        return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
+    }
 }
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
@@ -166,8 +199,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const name = res.structureTexture;
                 return {
                     ...res,
-                    structureTexture: name,
-                    structureTextureId: id,
+                    structureTextureId: { value: id, label: name },
                 }
             }) || [])
             setPopDataList(result?.materialContractDetailVos.map((res: any) => {
@@ -175,8 +207,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const name = res.structureTexture;
                 return {
                     ...res,
-                    structureTexture: name,
-                    structureTextureId: id,
+                    structureTextureId: { value: id, label: name },
                 }
             }) || [])
             resove({ ...result, tax: taxNum })
@@ -251,8 +282,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 price,
                 spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
-                // length: formatSpec(item.structureSpec).length,
-                weight: item.weight || "1.00",
+                weight: calcFun.weight({
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion,
+                    length: item.length,
+                    width: item.width
+                }),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -268,8 +303,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 price,
                 spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
-                // length: formatSpec(item.structureSpec).length,
-                weight: item.weight || "1.00",
+                weight: calcFun.weight({
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion,
+                    length: item.length,
+                    width: item.width
+                }),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -358,36 +397,46 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 const meterialList: any[] = await getComparisonPrice(comparisonPriceNumberId, fields.supplier.id)
                 setMaterialList(meterialList.map((item: any) => {
                     const num = parseFloat(item.num || "1")
+                    const weight = calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width
+                    })
                     const totalWeight = parseFloat(item.totalWeight || "1.00")
                     const taxPrice = parseFloat(item.taxOffer || "1.00")
-                    // const price = parseFloat(item.offer || "1.00")
                     return ({
                         ...item,
                         source: 1,
                         num,
+                        weight,
                         taxPrice,
                         price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
-                        weight: item.weight || "1.00",
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                         totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
                 }))
                 setPopDataList(meterialList.map((item: any) => {
                     const num = parseFloat(item.num || "1")
+                    const weight = calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width
+                    })
                     const totalWeight = parseFloat(item.totalWeight || "1.00")
                     const taxPrice = parseFloat(item.taxOffer || "1.00")
-                    // const price = parseFloat(item.offer || "1.00")
                     return ({
                         ...item,
                         source: 1,
                         num,
+                        weight,
                         taxPrice,
                         price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                         structureTexture: item.structureTexture,
                         structureTextureId: item.structureTextureId,
-                        weight: item.weight || "1.00",
                         taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                         totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
                     })
@@ -406,7 +455,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     return ({
                         ...item,
                         disabled: false,
-                        path: `/tower-supply/comparisonPrice/getComparisonPrice/${fields.comparisonPriceNumber.id}`
+                        path: `/tower-supply/comparisonPrice/getComparisonPrice?comparisonPriceId=${fields.comparisonPriceNumber.id}`
                     })
                 }
                 return item
@@ -421,15 +470,35 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
                     price: parseFloat(item.price || "1.00"),
-                    weight: ((item.proportion * (item.length || 1)) / 1000).toFixed(3),
-                    totalWeight: ((item.proportion * value * (item.length || 1)) / 1000).toFixed(3)
+                    weight: calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width,
+                        [type]: value
+                    }),
+                    totalWeight: calcFun.totalWeight({
+                        length: item.length,
+                        width: item.width,
+                        proportion: item.proportion,
+                        weightAlgorithm: item.weightAlgorithm,
+                        num: item.num,
+                        [type]: value
+                    })
                 }
                 allData[dataIndex] = value
                 return ({
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
                     totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
-                    totalWeight: (allData.num * allData.weight).toFixed(3),
+                    totalWeight: calcFun.totalWeight({
+                        length: item.length,
+                        width: item.width,
+                        proportion: item.proportion,
+                        weightAlgorithm: item.weightAlgorithm,
+                        num: item.num,
+                        [type]: value
+                    }),
                     [dataIndex]: value
                 })
             }
@@ -439,14 +508,27 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList(newData.slice(0))
     }
 
-    const lengthChange = (value: number, id: string) => {
+    const lengthChange = (value: number, id: string, type: "length" | "width") => {
         const list = materialList.map((item: any) => {
             if (item.id === id) {
                 return ({
                     ...item,
-                    length: value,
-                    totalWeight: ((item.proportion * value * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000).toFixed(3) : null
+                    [type]: value,
+                    weight: calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width,
+                        [type]: value
+                    }),
+                    totalWeight: calcFun.totalWeight({
+                        length: item.length,
+                        width: item.width,
+                        proportion: item.proportion,
+                        weightAlgorithm: item.weightAlgorithm,
+                        num: item.num,
+                        [type]: value
+                    }),
                 })
             }
             return item
@@ -599,8 +681,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 signingTime: moment(),
                 invoiceCharacter: 1,
                 meteringMode: 2,
-                deliveryMethod: deliveryMethodEnum?.[1].value,
-                settlementMode: settlementModeEnum?.[0].value
+                deliveryMethod: deliveryMethodEnum?.[1]?.value,
+                settlementMode: settlementModeEnum?.[0]?.value
             }} edit />
         <DetailTitle title="运费信息" />
         <BaseInfo
@@ -638,88 +720,104 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 })
             }
             dataSource={{ unloadBear: 1 }} edit />
-        <DetailTitle
-            title="原材料信息"
-            operation={[
-                // <Button
-                // type="primary"
-                // ghost
-                // key="add"
-                // onClick={async () => {
-                //     const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
-                //     if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
-                //         message.warning("请先选择询比价信息...")
-                //     } else {
-                //         setVisible(true)
-                //     }
-                // }}>添加</Button>
-            ]} />
+        <DetailTitle title="原材料信息" operation={[
+            <Button
+                type="primary"
+                ghost
+                key="add"
+                onClick={async () => {
+                    const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
+                    if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
+                        message.warning("请先选择询比价信息...")
+                    } else {
+                        setVisible(true)
+                    }
+                }}>添加</Button>
+        ]} />
         <CommonTable
-            rowKey={(records: any) => `${records.materialName}${records.structureSpec}${records.length}`}
             style={{ padding: "0" }}
             columns={[
                 ...material.map((item: any) => {
-                    if ([
-                        "num",
-                        //  "taxPrice", "price"
-                    ].includes(item.dataIndex)) {
+                    if (item.dataIndex === "num") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber
+                                min={1} value={value || 1}
+                                onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
                         })
                     }
-                    // if (item.dataIndex === "length") {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => records.source === 1 ? value : <InputNumber min={1} value={value || 100} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
-                    //     })
-                    // }
-                    // if (item.dataIndex === "materialStandard") {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
-                    //             style={{ width: '150px' }}
-                    //             value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName}
-                    //             onChange={(e: string) => {
-                    //                 const newData = materialList.map((item: any, index: number) => {
-                    //                     if (index === key) {
-                    //                         return {
-                    //                             ...item,
-                    //                             materialStandard: e.split(',')[0],
-                    //                             materialStandardName: e.split(',')[1]
-                    //                         }
-                    //                     }
-                    //                     return item
-                    //                 })
-                    //                 setMaterialList(newData)
-                    //             }}>
-                    //             {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
-                    //         </Select>
-                    //     })
-                    // }
-                    // if (item.dataIndex === "structureTextureId") {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => records.source === 1 ? records.structureTexture : <Select
-                    //             style={{ width: '150px' }}
-                    //             value={materialList[key]?.structureTextureId && materialList[key]?.structureTextureId + ',' + materialList[key]?.structureTexture}
-                    //             onChange={(e: string) => {
-                    //                 const newData = materialList.map((item: any, index: number) => {
-                    //                     if (index === key) {
-                    //                         return {
-                    //                             ...item,
-                    //                             structureTextureId: e.split(',')[0],
-                    //                             structureTexture: e.split(',')[1]
-                    //                         }
-                    //                     }
-                    //                     return item
-                    //                 })
-                    //                 setMaterialList(newData)
-                    //             }}>
-                    //             {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
-                    //         </Select>
-                    //     })
-                    // }
+                    if (item.dataIndex === "length") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number) => <InputNumber
+                                min={1}
+                                value={value || 100}
+                                onChange={(value: number) => lengthChange(value, records.id, "length")} key={key} />
+                        })
+                    }
+                    if (item.dataIndex === "width") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number) => <InputNumber
+                                min={1}
+                                value={value || 100}
+                                onChange={(value: number) => lengthChange(value, records.id, "width")} key={key} />
+                        })
+                    }
+                    if (item.dataIndex === "materialStandard") {
+                        return ({
+                            ...item,
+                            render: (_value: number, records: any, key: number) => <Select
+                                style={{ width: '150px' }}
+                                labelInValue
+                                value={{
+                                    value: materialList[key]?.materialStandard,
+                                    label: materialList[key]?.materialStandardName
+                                } as any}
+                                onChange={(e: any) => {
+                                    const newData = materialList.map((item: any, index: number) => {
+                                        if (index === key) {
+                                            return {
+                                                ...item,
+                                                materialStandard: e.value,
+                                                materialStandardName: e.label
+                                            }
+                                        }
+                                        return item
+                                    })
+                                    setMaterialList(newData)
+                                }}>
+                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        })
+                    }
+                    if (item.dataIndex === "structureTextureId") {
+                        return ({
+                            ...item,
+                            render: (_value: number, records: any, key: number) => <Select
+                                style={{ width: '150px' }}
+                                labelInValue={true}
+                                value={{
+                                    value: materialList[key]?.structureTextureId,
+                                    label: materialList[key]?.structureTexture
+                                } as any}
+                                onChange={(e: any) => {
+                                    const newData = materialList.map((item: any, index: number) => {
+                                        if (index === key) {
+                                            return {
+                                                ...item,
+                                                structureTextureId: e.value,
+                                                structureTexture: e.label
+                                            }
+                                        }
+                                        return item
+                                    })
+                                    setMaterialList(newData)
+                                }}>
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        })
+                    }
                     return item
                 }),
                 {
