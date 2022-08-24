@@ -22,6 +22,7 @@ const productAssistStatistics = [
 export default function Index() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
+    const [filterValue, setFilterValue] = useState({ projectId: params.id });
     const entryPath = params.id ? "management" : "productGroup"
     const [productGroupFlag, setProductGroupFlag] = useState<"productAssistDetailVos" | "productAssistStatisticsVos">("productAssistDetailVos")
     const [productGroupData, setProductGroupData] = useState<{ productAssistDetailVos: any[], productAssistStatisticsVos: any[] }>({
@@ -33,8 +34,12 @@ export default function Index() {
         const result: any = await projectGroupRun(id)
         setProductGroupData(result)
     }
-
-    const { loading: projectGroupLoading, data: projectGroupData, run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
+    const onFilterSubmit = (value: any) => {
+        value["projectId"] = params.id;
+        setFilterValue({ projectId: params.id })
+        return value
+    }
+    const { run: projectGroupRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductAssist?productGroupId=${id}`)
             resole(result)
@@ -70,8 +75,9 @@ export default function Index() {
 
     return <DetailContent style={{ paddingTop: 16 }}>
         <SearchTable
-            path={`/tower-market/productGroup?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
+            path={`/tower-market/productGroup`}
             modal={true}
+            filterValue={filterValue}
             extraOperation={<Button
                 key="new"
                 type="primary"
@@ -121,6 +127,7 @@ export default function Index() {
                     children: <Input placeholder="内部编号" style={{ width: 210 }} />
                 },
             ]}
+            onFilterSubmit={onFilterSubmit}
         />
         <Row style={{ marginBottom: 16 }}><Radio.Group
             value={productGroupFlag}
