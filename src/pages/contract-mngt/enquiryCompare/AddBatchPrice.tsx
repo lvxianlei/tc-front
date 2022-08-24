@@ -66,9 +66,9 @@ export default forwardRef(function ({ id, type, materialLists, comparisonPriceId
                 supplierId: formData.supplier?.value || data?.supplierId,
                 supplierName: formData.supplier?.label || data?.supplierName,
                 inquiryQuotationOfferDtos: materialLists.map((item: any) => {
-                    type === "batch_new" && delete item.id
                     return ({
                         ...item,
+                        comparisonPriceDetailId: item.id,
                         taxOffer: formData.taxOffer,
                         offer: calcObj.unTaxPrice(formData.taxOffer, materialData?.taxVal)
                     })
