@@ -8,7 +8,7 @@ import PurchasePlan from "./PurchasePlan"
 import RequestUtil from "../../../utils/RequestUtil"
 export default function Invoicing() {
     const history = useHistory()
-    const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean }>({ onSubmit: () => { }, confirmLoading: false })
+    const purChasePlanRef = useRef<{ onSubmit: () => void, confirmLoading: boolean, handleCancle: () => void }>({ onSubmit: () => { }, confirmLoading: false, handleCancle: () => {} })
     const [visible, setVisible] = useState<boolean>(false)
     const [generateVisible, setGenerateVisible] = useState<boolean>(false)
     const [generateIds, setGenerateIds] = useState<string[]>([])
@@ -52,7 +52,10 @@ export default function Invoicing() {
             onOk={handlePurChasePlan}
             maskClosable={false}
             confirmLoading={purChasePlanRef.current?.confirmLoading}
-            onCancel={() => setGenerateVisible(false)}>
+            onCancel={async() => {
+                await purChasePlanRef.current?.handleCancle()
+                setGenerateVisible(false)
+            }}>
             <PurchasePlan ids={generateIds} ref={purChasePlanRef} />
         </Modal>
         <Page
