@@ -5,17 +5,13 @@ import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./productionData.json"
 import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "../../../utils/RequestUtil";
-import AuthUtil from "../../../utils/AuthUtil"
 // 引入明细
 import DetailOverView from './DetailOverView';
 export default function Invoicing() {
     const [form] = Form.useForm()
     const history = useHistory()
-    const userId = AuthUtil.getUserId()
-    const [visible, setVisible] = useState<boolean>(false)
     const [generaterVisible, setGenerteVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
-    const [ingredientsvisible, setIngredientsvisible] = useState<boolean>(false);
     const [detailOver, setDetailOver] = useState<boolean>(false);
     const [loftingState, setLoftingState] = useState<number>(0);
     const [filterValue, setFilterValue] = useState<object>({
@@ -25,24 +21,6 @@ export default function Invoicing() {
     const { loading, run: saveRun } = useRequest<any[]>((id: string, productCategoryName: string) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredients?materialTaskCode=${id}&productCategoryName=${productCategoryName}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { run: getLoftingRun } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: any[] = await RequestUtil.get(`/tower-supply/initData/ingredientsComponent?productionBatch=${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const { run: loftingRun } = useRequest<any[]>((productCategoryName: string, purchaseTaskId: string, productionBatch: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: any[] = await RequestUtil.get(`/tower-supply//initData/lofting?productCategoryName=${productCategoryName}&purchaseTaskId=${purchaseTaskId}&productionBatch=${productionBatch}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -60,18 +38,20 @@ export default function Invoicing() {
             value.startLoftingBatchTime = formatDate[0] + " 00:00:00"
             value.endLoftingBatchTime = formatDate[1] + " 23:59:59"
         }
-        if (value.loftingId) {
-            value.loftingId = value.loftingId.value
+        if (value.batcherId) {
+            value.batcherId = value.batcherId.value
         }
         setFilterValue(value)
         return value
     }
+
     const handleGenerateOk = async () => {
         const formData = await form.validateFields()
         await saveRun(formData.materialTaskCode, formData.productCategoryName)
         message.success("成功生成配料方案...")
         history.go(0)
     }
+
     return <>
         <Modal title="生成数据" visible={generaterVisible} onCancel={() => {
             form.resetFields()
@@ -127,13 +107,13 @@ export default function Invoicing() {
                             }}>详情</Button>
                             <Button
                                 type="link"
-                                className="btn-operation-link" 
+                                className="btn-operation-link"
                                 disabled={record.batcheTaskStatus !== 1 && (record?.updateUser)}
                             >
                                 <Link to={`/ingredients/production/ingredientsList/${record.id}/${record.batcheTaskStatus}/${record.batchNumber || "--"}/${record.productCategoryName}/${record.materialStandardName || "--"}/${record.materialStandard}/${record.planNumber}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'
-                                 disabled={record.batcheTaskStatus !== 3}
+                                disabled={record.batcheTaskStatus !== 3}
                             >
                                 <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
                             </Button>
@@ -164,7 +144,7 @@ export default function Invoicing() {
                     </Select>
                 },
                 {
-                    name: 'loftingId',
+                    name: 'batcherId',
                     label: '配料负责人',
                     children: <IntgSelect width={200} />
                 },

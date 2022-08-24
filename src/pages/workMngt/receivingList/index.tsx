@@ -52,14 +52,8 @@ export default function Invoicing() {
             value.startCompleteTime = formatDate[0] + " 00:00:00"
             value.endCompleteTime = formatDate[1] + " 23:59:59"
         }
-        if (value.createUserDeptId) {
-            const {
-                first,
-                second
-            } = value.createUserDeptId;
-            // value.createUserDeptId = first
-            value.createUserId = second
-            delete value.createUserDeptId
+        if (value.createUserId) {
+            value.createUserId = value.createUserId.value
         }
         setFilterValue(value)
         return value
@@ -208,7 +202,7 @@ export default function Invoicing() {
                     children: <Input placeholder="供应商/联系人/收货单号/联系电话/纸质单号/车牌号" style={{ width: 300 }} />
                 },
                 {
-                    name: "createUserDeptId",
+                    name: "createUserId",
                     label: "制单人",
                     children: <IntgSelect width={200} />
                 },

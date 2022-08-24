@@ -392,6 +392,7 @@
             "dataIndex": "supplier",
             "type": "select",
             "enum": [],
+            "labelInValue": true,
             "required": true
         },
         {
