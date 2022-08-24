@@ -64,6 +64,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
+            key: 'scTaskNum',
+            title: '营销任务编号',
+            width: 100,
+            dataIndex: 'scTaskNum'
+        },
+        {
             key: 'statusName',
             title: '任务状态',
             width: 100,
