@@ -22,6 +22,16 @@
             "width": 120
         },
         {
+            "title": "待出库数量",
+            "dataIndex": "num",
+            "width": 120
+        },
+        {
+            "title": "已出库数量",
+            "dataIndex": "num",
+            "width": 120
+        },
+        {
             "title": "标准",
             "dataIndex": "materialStandardName",
             "width": 120

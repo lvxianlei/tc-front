@@ -1,5 +1,5 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Button, Form, message, Spin, Modal, InputNumber, Select } from 'antd'
+import { Button, Form, message, Spin, Modal, InputNumber, Select, Space } from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
@@ -18,6 +18,13 @@ interface EditProps {
 interface ModalRef {
     dataSource: any[]
     resetFields: () => void
+}
+
+interface TotalState {
+    count?: string
+    weight?: string
+    taxPrice?: string
+    unTaxPrice?: string
 }
 
 const calcObj = {
@@ -82,9 +89,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [contractId, setContractId] = useState<string>("")
     const [supplierId, setSupplierId] = useState<string>("")
     let [number, setNumber] = useState<number>(0);
+    const [total, setTotal] = useState<TotalState>({});
     const [form] = Form.useForm()
     const [editForm] = Form.useForm()
-    
+
     const [select, setSelect] = useState<any[]>([])
 
     const { loading: materialLoading, data: materialData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -187,7 +195,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 materialContractDetailId: item.id,
                 materialName: item.materialName,
                 materialStandard: item.materialStandard,
-                materialStandardName: item.materialStandardName,
+                // materialStandardName: item.materialStandardName,
                 num: item.num,
                 contractUnitPrice: item.taxPrice,
                 taxPrice: item.taxPrice,
@@ -201,11 +209,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 unTaxPrice: calcObj.unTaxPrice(item.taxPrice, materialData?.taxVal),
                 appearance: item.appearance || 1
             }
-            console.log(postData, "postData")
             delete postData.id
             return postData
         })
-        console.log(dataSource, "dataSource")
         setCargoData(dataSource)
         setVisible(false);
     }
@@ -214,9 +220,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const baseFormData = await form.validateFields()
             const listsFormData = await editForm.validateFields()
-            console.log(listsFormData, "listsFormData", cargoData)
+            console.log(listsFormData, "listsFormData", cargoData, editForm.getFieldsValue(true))
             const contractNumberData = baseFormData.contractNumber.records[0]
-            await saveRun({
+            const result = {
                 ...baseFormData,
                 transportBear: contractNumberData?.transportBear, // 运输承担
                 transportTaxPrice: contractNumberData?.transportTaxPrice, // 合同单价
@@ -238,7 +244,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
-            })
+            }
+            await saveRun(result)
             resole(true)
         } catch (error) {
             console.log(error)
@@ -307,6 +314,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         const changeFiled = data.submit[changeIndex]
         if (changeFiled.balanceTotalWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
+            const result = editForm.getFieldsValue(true).submit[changeIndex];
             const dataSource: any[] = [...allValues?.submit]
             const totalTaxPrice = calcObj.totalTaxPrice(
                 dataSource[changeIndex].taxPrice,
@@ -314,6 +322,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
             dataSource[changeIndex] = {
                 ...dataSource[changeIndex],
+                weight: (((result.proportion || 1) * result.length) / 1000 / 1000).toFixed(3),
                 totalTaxPrice,
                 totalUnTaxPrice
             }
@@ -354,18 +363,19 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 totalUnTaxPrice,
                 unTaxPrice: calcObj.unTaxPrice(result.taxPrice, materialData?.taxVal),
             }
-            console.log(dataSource, "================>>>改变后的dataSource")
             setCargoData(dataSource || [])
         }
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
-        // onChange && onChange(selectRows)
+        const seletTotal = selectRows.reduce((total: TotalState, current: any) => ({
+            count: parseFloat(total.count || "0") + parseFloat(current.num),
+            weight: parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight),
+            taxPrice: parseFloat(total.taxPrice || "0") + parseFloat(current.totalTaxPrice),
+            unTaxPrice: parseFloat(total.unTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)
+        }), {})
+        setTotal(seletTotal)
         setSelect(selectedRowKeys)
-    }
-
-    const onSelectAll = (selected: any[], _: any, changeRows: any[]) => {
-        
     }
 
     return <Spin spinning={loading && warehouseLoading && materialLoading}>
@@ -431,7 +441,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })}
             dataSource={{
                 meteringMode: 1,
-                settlementMode: settlementModeOptions?.[0].id,
+                settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
             }} />
         <DetailTitle
@@ -451,6 +461,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 >选择</Button>
             ]}
         />
+        <Space style={{ color: "red" }}>
+            <div><span>数量合计：</span><span>{total.count || "0"}</span></div>
+            <div><span>重量合计(吨)：</span><span>{total.weight || "0"}</span></div>
+            <div><span>含税金额合计(元)：</span><span>{total.taxPrice || "0"}</span></div>
+            <div><span>不含税金额合计(元)：</span><span>{total.unTaxPrice || "0"}</span></div>
+        </Space>
         <EditableTable
             haveIndex={false}
             form={editForm}
@@ -459,7 +475,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             haveNewButton={false}
             columns={[
                 ...editCargoDetails.map((item: any) => {
-                    if (item.dataIndex === "materialStandardName") {
+                    if (item.dataIndex === "materialStandard") {
                         return ({
                             ...item,
                             enum: materialStandardOptions?.map(item => ({
@@ -481,14 +497,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 })
             ]}
             dataSource={cargoData || []}
-            // rowSelection={{
-            //     selectedRowKeys: select,
-            //     type: "checkbox",
-            //     onChange: onSelectChange,
-            //     // onSelect: onSelectChange,
-            //     // onSelectAll,
-            //     getCheckboxProps: data?.getCheckboxProps
-            // }} 
+            rowSelection={{
+                selectedRowKeys: select,
+                type: "checkbox",
+                onChange: onSelectChange,
+                // onSelect: onSelectChange,
+                // onSelectAll,
+                getCheckboxProps: data?.getCheckboxProps
+            }}
         />
     </Spin>
 })

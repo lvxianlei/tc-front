@@ -1,7 +1,7 @@
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from "react"
-import { Spin, Row, Col, InputNumber, message, Input } from "antd"
+import { Spin, Row, InputNumber, message, Input } from "antd"
 import { DetailTitle, CommonTable } from '../../common'
-import { ListIngredients, PlanList } from "./purchaseListData.json"
+import { ListIngredients } from "./purchaseListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { upNumber } from "../../../utils/KeepDecimals"
@@ -15,6 +15,9 @@ interface Values {
 export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps, ref): JSX.Element {
     const [dataSource, setDataSource] = useState<any[]>([])
     let [count, setCout] = useState<number>(1);
+    const [generateIds, setGenerateIds] = useState<string[]>([])
+    const [selectedRows, setSelectedRows] = useState<any[]>([])
+    const [weightNumber, setWeightNumber] = useState<number>(0);
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/purchase?purchaserTaskTowerIds=${ids.join(",")}&purchaseType=1`)
@@ -41,9 +44,13 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     const handleSubmit = () => new Promise(async (resole, reject) => {
         try {
+            if (selectedRows.length < 1) {
+                message.error("请您先勾选数据！");
+                return false;
+            }
             const result = handleData();
             if (!result) {
-                dataSource.map((item: any) =>  {
+                dataSource.map((item: any) => {
                     item["warehouseOccupy"] = item.warehouseOccupy ? item.warehouseOccupy : 0;
                 })
                 // 可以保存
@@ -67,7 +74,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     // 判断标红
     const handleData = () => {
-        const result = dataSource;
+        const result = selectedRows;
         let flag = false;
         for (let i = 0; i < result.length; i += 1) {
             if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
@@ -84,7 +91,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
     useImperativeHandle(ref, () => ({ onSubmit: handleSubmit, confirmLoading }), [handleSubmit, confirmLoading])
 
     return <Spin spinning={loading}>
-        <Row style={{marginBottom: 8}}>
+        <Row style={{ marginBottom: 8 }}>
             合并批次： {data?.mergeBatch}
         </Row>
         <div style={{
@@ -92,12 +99,22 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             display: "flex",
             flexWrap: "nowrap"
         }}>
-            <DetailTitle title="配料方案" style={{width: 854}}/>
-            <DetailTitle title="计划列表" style={{width: 200}}/>
+            <div style={{ width: "854px", display: "flex", flexWrap: "nowrap" }}>
+                <p style={{
+                    fontSize: 16,
+                    color: "#181818",
+                    fontWeight: "bold"
+                }}>配料方案</p>
+                <p style={{ position: "relative", top: 4, marginLeft: 12 }}>
+                    <span style={{ marginRight: 12 }}>重量合计：</span>
+                    <span style={{ color: "#FF8C00" }}>{weightNumber}</span>
+                </p>
+            </div>
+            <DetailTitle title="计划列表" style={{ width: 200 }} />
         </div>
         <div>
             <CommonTable
-                rowKey={(record: any) => `${record.materialName}${record.materialTexture}${record.structureSpec}${record.length}`}
+                rowKey="id"
                 columns={[
                     {
                         key: 'index',
@@ -167,6 +184,19 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                 dataSource={dataSource || []}
                 pagination={false}
                 scroll={{ y: document.documentElement.clientHeight - 320 }}
+                rowSelection={{
+                    selectedRowKeys: generateIds,
+                    type: "checkbox",
+                    onChange: (selectedRowKeys: any[], selectedRows: any[]) => {
+                        let result = 0;
+                        for (let i = 0; i < selectedRows.length; i += 1) {
+                            result = result + (+selectedRows[i].totalWeight)
+                        }
+                        setWeightNumber(result)
+                        setGenerateIds(selectedRows)
+                        setSelectedRows(selectedRows)
+                    },
+                }}
             />
         </div>
     </Spin>

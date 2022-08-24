@@ -369,6 +369,10 @@
             "dataIndex": "pleasePayNumber"
         },
         {
+            "title": "付款类型",
+            "dataIndex": "paymentReqTypeName"
+        },
+        {
             "title": "关联到货单",
             "dataIndex": "receiptNumbers"
         },
@@ -430,6 +434,31 @@
                 {
                     "required": true,
                     "message": "请选择请款类别..."
+                }
+            ]
+        },
+        {
+            "title": "付款类型",
+            "dataIndex": "paymentReqType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "货到付款",
+                    "value": 1
+                },
+                {
+                    "label": "货到票到付款",
+                    "value": 2
+                },
+                {
+                    "label": "预付款",
+                    "value": 3
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择付款类型..."
                 }
             ]
         },
@@ -556,14 +585,8 @@
         },
         {
             "title": "请款机构",
-            "dataIndex": "pleasePayOrganization",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择请款机构..."
-                }
-            ]
+            "dataIndex": "pleasePayOrganizationName",
+            "disabled": true
         },
         {
             "title": "请款金额",
@@ -574,8 +597,11 @@
     "ApplicationOverview": [
         {
             "title": "请款类别",
-            "dataIndex": "pleasePayType",
-            "type": "select"
+            "dataIndex": "paymentReqTypeName"
+        },
+        {
+            "title": "付款类型",
+            "dataIndex": "businessTypeName"
         },
         {
             "title": "企业类型",

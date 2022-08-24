@@ -211,6 +211,19 @@
             "dataIndex": "furnaceBatchNumber"
         },
         {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
+        },
+        {
+            "title": "轧制批号",
+            "dataIndex": "rollingNumber"
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30
+        },
+        {
             "title": "肢宽",
             "dataIndex": "limbWidth"
         },
@@ -221,14 +234,6 @@
         {
             "title": "管径",
             "dataIndex": "caliber"
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber"
-        },
-        {
-            "title": "轧制批号",
-            "dataIndex": "rollingNumber"
         },
         {
             "title": "外观检验效果",

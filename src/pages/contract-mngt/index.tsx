@@ -174,7 +174,7 @@ export default function ContractMngt(): JSX.Element {
                     {
                         name: 'operatorId',
                         label: '经办人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect placeholder="请输入" width={200} />
                     },
                     {
                         name: 'fuzzyQuery',

@@ -1,11 +1,11 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message } from "antd"
-import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
+import { BaseInfo, CommonTable, DetailTitle, IntgSelect, PopTableContent } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
-import { PopTableContent } from "./ComparesModal"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
+import { calcFun } from "../Edit"
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -106,14 +106,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
-            form.setFieldsValue(result)
+            form.setFieldsValue({
+                ...result,
+                supplyIdList: {
+                    id: result?.supplyIdList.split(","),
+                    records: result?.supplyIdList.split(","),
+                    value: result?.supplyNameList
+                }
+            })
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
                     structureTexture: res.structureTexture,
                     structureTextureId: res.structureTextureId,
                     materialStandardName: res.materialStandardName,
-                    materialStandard: res.materialStandard
+                    materialStandard: res.materialStandard,
                 }
             })
             setMaterialList(comparisonPriceDetailVos || [])
@@ -152,6 +159,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
             await saveRun({
                 ...baseData,
+                supplyIdList: baseData?.supplyIdList.records.map((item: any) => item.id).join(","),
+                supplyNameList: baseData?.supplyIdList.records.map((item: any) => item.supplierName).join(","),
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
@@ -165,6 +174,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
             resove(true)
         } catch (error) {
+            console.log(error)
             reject(false)
         }
     })
@@ -183,14 +193,38 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             num: item.num || "0",
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            })
         }))])
         setPopDataList([...materialList, ...newMaterialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            })
         }))])
         setVisible(false)
     }
@@ -216,11 +250,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
-            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            // weight: item.singleWeight || 0,
             source: item.source || 1,
-            // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            }),
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
@@ -231,11 +275,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
-            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            // weight: item.singleWeight || 0,
             source: item.source || 1,
-            // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            }),
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
@@ -290,8 +344,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
-                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
+                    weight: calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width
+                    }),
+                    totalWeight: calcFun.totalWeight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width,
+                        num: item.num
+                    })
                 })
             }
             return item
@@ -351,7 +416,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         ]} />
         <CommonTable
             haveIndex
-            style={{ padding: "0"}}
+            style={{ padding: "0" }}
             rowKey="key"
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {

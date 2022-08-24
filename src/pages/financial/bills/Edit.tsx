@@ -137,7 +137,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 return ({
                     ...item, render: (data: any, props: any) => {
                         return <Form.Item name="businessId" style={{ width: "100%" }}>
-                            <Select disabled={type === 'edit'}>
+                            <Select disabled={type === 'edit'} onChange={(e: any) => {
+                                console.log(e, "======")
+                                baseForm.setFieldsValue({ invoiceUnit: e.split(",")[1] })
+                            }}>
                                 {companyList && companyList.map((item: any) => {
                                     return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
                                 })}

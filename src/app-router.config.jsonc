@@ -2192,21 +2192,21 @@
       "path": "/homePage/personalCenter",
       "module": "./pages/homePage/personalCenter/PersonalCenter",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": ""
     },
     { // 首页-我的公告
       "name": "我的公告",
       "path": "/homePage/notice",
       "module": "./pages/homePage/notice/Notice",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": ""
     },
     { // 首页-我的公告-详情
       "name": "详情",
       "path": "/homePage/notice/detail/:id",
       "module": "./pages/homePage/notice/NoticeDetail",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": ""
     },
     { // 公告管理
       "name": "公告管理",
@@ -2731,7 +2731,7 @@
       "path": "/changePage/personalPassWord",
       "module": "./pages/changePassword",
       "exact": true,
-      "authority": "home_page_person_center"
+      "authority": ""
     },
     { // RD-定额配置
       "name": "定额配置",

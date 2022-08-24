@@ -424,7 +424,7 @@
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "materialStandard",
             "type": "select"
         },
         {
@@ -504,6 +504,11 @@
         {
             "title": "轧制批号",
             "dataIndex": "rollingNumber",
+            "maxLength": 30
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
             "maxLength": 30
         },
         {

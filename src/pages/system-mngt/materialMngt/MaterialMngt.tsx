@@ -64,20 +64,10 @@ export default function MaterialMngt(): React.ReactNode {
             }
         },
         {
-            key: 'weightAlgorithm',
+            key: 'weightAlgorithmName',
             title: '算法',
-            width: 200,
-            dataIndex: 'weightAlgorithm',
-            render: (status: string): React.ReactNode => {
-                switch (status) {
-                    case '0':
-                        return '比重*体积（钢板类）';
-                    case '1':
-                        return '比重*长度（角钢类）';
-                    default:
-                        return '-'
-                }
-            }
+            width: 150,
+            dataIndex: 'weightAlgorithmName'
         },
         {
             key: 'description',
@@ -340,18 +330,24 @@ export default function MaterialMngt(): React.ReactNode {
                     }]}>
                         <Input maxLength={20} />
                     </Form.Item></Col>
-                    <Col span={11} offset={1}><Form.Item label="比重" name="proportion">
+                    <Col span={11} offset={1}><Form.Item label="比重" name="proportion" rules={[{
+                        required: true,
+                        message: '请输入比重'
+                    }]}>
                         <InputNumber min={0} step="0.0001" precision={4} max={99.9999} style={{ width: '100%' }} />
                     </Form.Item></Col>
                 </Row>
                 <Row>
-                    <Col span={11} offset={1}><Form.Item label="比重算法" name="weightAlgorithm">
+                    <Col span={11} offset={1}><Form.Item label="比重算法" name="weightAlgorithm" rules={[{
+                        required: true,
+                        message: '请选择比重算法'
+                    }]}>
                         <Select style={{ width: '100%' }}>
-                            <Select.Option value='' id=''>
-                                暂无
+                            <Select.Option value='3' id='3'>
+                                法兰类
                             </Select.Option>
-                            <Select.Option value='0' id='0'>
-                                比重*体积（钢板类）
+                            <Select.Option value='2' id='2'>
+                                比重*面积（钢板类）
                             </Select.Option>
                             <Select.Option value='1' id='1' >
                                 比重*长度（角钢类）
