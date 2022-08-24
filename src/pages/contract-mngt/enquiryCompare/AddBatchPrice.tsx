@@ -5,13 +5,14 @@ import { batchSupplier } from "./enquiry.json"
 import { BaseInfo, CommonTable, DetailTitle, Attachment, AttachmentRef } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { calcObj } from "../../workMngt/receivingList/Edit"
 interface AddPriceProps {
     id: string,
     type: "batch_new" | "batch_edit"
     comparisonPriceId: string
     materialLists: any[]
 }
-export default forwardRef(function ({ id, type, comparisonPriceId }: AddPriceProps, ref): JSX.Element {
+export default forwardRef(function ({ id, type, materialLists, comparisonPriceId }: AddPriceProps, ref): JSX.Element {
     const [form] = Form.useForm()
     const attachRef = useRef<AttachmentRef>()
     const params = useParams<{ id: string }>()
@@ -19,6 +20,15 @@ export default forwardRef(function ({ id, type, comparisonPriceId }: AddPricePro
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/getSuppliersById/${comparisonPriceId}`)
             resole(result.map((item: any) => ({ label: item.supplierName, value: item.id })))
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
+    const { loading: materialLoading, data: materialData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
+            resole(result)
         } catch (error) {
             reject(error)
         }
@@ -52,13 +62,15 @@ export default forwardRef(function ({ id, type, comparisonPriceId }: AddPricePro
             const formData = await form.validateFields()
             await saveRun({
                 manufacturer: formData.manufacturer,
+                taxOffer: formData.taxOffer,
                 supplierId: formData.supplier?.value || data?.supplierId,
                 supplierName: formData.supplier?.label || data?.supplierName,
-                inquiryQuotationOfferDtos: data?.inquiryQuotationOfferVos.map((item: any) => {
-                    type === "batch_new" && delete item.id
+                inquiryQuotationOfferDtos: materialLists.map((item: any) => {
                     return ({
                         ...item,
-                        taxOffer: formData.taxOffer
+                        comparisonPriceDetailId: item.id,
+                        taxOffer: formData.taxOffer,
+                        offer: calcObj.unTaxPrice(formData.taxOffer, materialData?.taxVal)
                     })
                 }),
                 comparisonPriceId: params.id,
@@ -72,7 +84,7 @@ export default forwardRef(function ({ id, type, comparisonPriceId }: AddPricePro
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
-    return <Spin spinning={loading && suplierLoading}>
+    return <Spin spinning={loading && suplierLoading && materialLoading}>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo
             classStyle="overall-form-class-padding0"
