@@ -192,8 +192,8 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                         for (let i = 0; i < selectedRows.length; i += 1) {
                             result = result + (+selectedRows[i].totalWeight)
                         }
-                        setWeightNumber(result)
-                        setGenerateIds(selectedRows)
+                        setWeightNumber(+result.toFixed(3))
+                        setGenerateIds(selectedRowKeys)
                         setSelectedRows(selectedRows)
                     },
                 }}
