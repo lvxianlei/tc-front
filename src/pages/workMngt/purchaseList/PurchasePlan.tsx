@@ -88,7 +88,13 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
         return flag;
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit: handleSubmit, confirmLoading }), [handleSubmit, confirmLoading])
+    const handleCancle = () => {
+        setGenerateIds([]);
+        setSelectedRows([]);
+        setWeightNumber(0);
+    }
+
+    useImperativeHandle(ref, () => ({ onSubmit: handleSubmit, confirmLoading, handleCancle }), [handleSubmit, confirmLoading, handleCancle])
 
     return <Spin spinning={loading}>
         <Row style={{ marginBottom: 8 }}>
