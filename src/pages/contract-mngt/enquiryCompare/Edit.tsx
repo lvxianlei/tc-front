@@ -141,7 +141,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
     }), { manual: true })
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }))
+
 
     const onSubmit = () => new Promise(async (resove, reject) => {
         try {
@@ -185,8 +185,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList([])
     }
 
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }))
+
     const handleAddModalOk = () => {
-        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         const newMaterialList: any[] = []
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
             ...item,
@@ -252,19 +253,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
             source: item.source || 1,
-            weight: calcFun.weight({
-                weightAlgorithm: item.weightAlgorithm,
-                proportion: item.proportion,
-                length: item.length,
-                width: item.width
-            }),
-            totalWeight: calcFun.totalWeight({
-                weightAlgorithm: item.weightAlgorithm,
-                proportion: item.proportion,
-                length: item.length,
-                width: item.width,
-                num: item.num
-            }),
+            weight: item.weight,
+            totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
@@ -277,19 +267,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
             source: item.source || 1,
-            weight: calcFun.weight({
-                weightAlgorithm: item.weightAlgorithm,
-                proportion: item.proportion,
-                length: item.length,
-                width: item.width
-            }),
-            totalWeight: calcFun.totalWeight({
-                weightAlgorithm: item.weightAlgorithm,
-                proportion: item.proportion,
-                length: item.length,
-                width: item.width,
-                num: item.num
-            }),
+            weight: item.weight,
+            totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
