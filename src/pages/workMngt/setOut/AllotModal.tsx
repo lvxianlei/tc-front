@@ -169,21 +169,21 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['loftingProductStructure', index, 'basicsPartNum']} rules={[{
                     required: true,
-                    // message:'请输入数量'
-                    validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                        if (value !== null && value !== undefined && value !== '') {
-                            // const data = form.getFieldsValue(true).loftingProductStructure;
-                            // let BasicsPartTotalNum = 0;
-                            // data?.filter((item: ILoftingProductStructureVOS) => { return record.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
-                            if (parseInt(value) < parseInt(record.weldingNum)) {
-                                callback(`需要大于或等于电焊件中包含数${record.weldingNum}`)
-                            } else {
-                                callback()
-                            }
-                        } else {
-                            callback('请输入数量')
-                        }
-                    }
+                    message: '请输入数量'
+                    // validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                    //     if (value !== null && value !== undefined && value !== '') {
+                    // const data = form.getFieldsValue(true).loftingProductStructure;
+                    // let BasicsPartTotalNum = 0;
+                    // data?.filter((item: ILoftingProductStructureVOS) => { return record.codeRelation === item.codeRelation }).forEach((items: ILoftingProductStructureVOS) => { BasicsPartTotalNum += Number(items?.basicsPartNum) });
+                    // if (parseInt(value) < parseInt(record.weldingNum)) {
+                    //     callback(`需要大于或等于电焊件中包含数${record.weldingNum}`)
+                    // } else {
+                    //     callback()
+                    // }
+                    //     } else {
+                    //         callback('请输入数量')
+                    //     }
+                    // }
                 }
                 ]}>
                     {/* <InputNumber min={0} max={record.BasicsPartTotalNum} onBlur={() => {
