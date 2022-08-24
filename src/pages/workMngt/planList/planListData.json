@@ -217,8 +217,10 @@
             "width": 100
         },
         {
-            "title": "总重量（吨）--------",
-            "dataIndex": "------------------"
+            "title": "总重量(吨)",
+            "dataIndex": "totalWeight",
+            "type": "number",
+            "width": 100
         },
         {
             "title": "已采购量",
