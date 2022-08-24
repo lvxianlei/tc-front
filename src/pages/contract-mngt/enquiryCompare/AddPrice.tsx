@@ -5,6 +5,7 @@ import { addPriceHead, supplier } from "./enquiry.json"
 import { BaseInfo, CommonTable, DetailTitle, Attachment, AttachmentRef } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
+import { calcObj } from "../../workMngt/receivingList/Edit"
 
 interface AddPriceProps {
     id: string,
@@ -29,7 +30,14 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
             reject(error)
         }
     }))
-
+    const { loading: materialLoading, data: materialData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/inquiryQuotation/${id}`)
@@ -84,17 +92,15 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields])
 
     const handleChange = (id: string, value: number, name: string) => {
-        // 不含税报价 = 含税报价 - （含税报价 * 材料税率）
-        // 材料税率 目前是写死 13%
         setMaterials(materials.map((item: any) => item.id === id ?
             ({
                 ...item,
                 [name]: value,
-                offer: value - (value * 0.13),
+                offer: calcObj.unTaxPrice(value, materialData?.taxVal)
             }) : item))
     }
 
-    return <Spin spinning={loading && suplierLoading}>
+    return <Spin spinning={loading && suplierLoading && materialLoading}>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo
             classStyle="overall-form-class-padding0"
