@@ -350,14 +350,6 @@
             {
                 "title": "宽度",
                 "dataIndex": "width"
-            },
-            {
-                "title": "需求数量-----",
-                "dataIndex": "num--------"
-            },
-            {
-                "title": "总重量(吨)-----",
-                "dataIndex": "num--------"
             }
         ]
     },
