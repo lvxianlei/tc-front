@@ -646,7 +646,7 @@
       "path": "/project/productGroup/new/productGroup/:id",
       "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_product_add"
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
