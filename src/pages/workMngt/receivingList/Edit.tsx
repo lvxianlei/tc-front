@@ -27,7 +27,7 @@ interface TotalState {
     unTaxPrice?: string
 }
 
-const calcObj = {
+export const calcObj = {
     /**
      *  含税金额 
      * 选择过磅计量时，含税金额 = 单价 × 结算重量
