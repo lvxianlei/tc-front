@@ -167,6 +167,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         onConfirm={() => removeRow(record, index, 1)}
                         okText="移除"
                         cancelText="取消"
+                        disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0}
                     >
                         <Button type="link" disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0}>移除</Button>
                     </Popconfirm>
@@ -722,6 +723,18 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 }]}>
                     <Select placeholder="请选择" style={{ width: '150px' }}>
                         {compoundTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="weldGrade" label="焊缝等级" rules={[{
+                    "required": true,
+                    "message": "请选择焊缝等级"
+                }]}>
+                    <Select placeholder="请选择" style={{ width: '150px' }}>
+                        <Select.Option key={0} value={''}>无</Select.Option>
+                        <Select.Option key={1} value={'一级焊缝'}>一级焊缝</Select.Option>
+                        <Select.Option key={2} value={'二级焊缝'}>二级焊缝</Select.Option>
+                        <Select.Option key={3} value={'外观二级'}>外观二级</Select.Option>
+                        <Select.Option key={4} value={'三级焊缝'}>三级焊缝</Select.Option>
                     </Select>
                 </Form.Item>
             </Form>
