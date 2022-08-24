@@ -8,6 +8,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ExportList from '../../../components/export/list';
 import AddPrice from "./AddPrice"
+import AddBatchPrice from "./AddBatchPrice"
 
 function AttchFiles({ id }: { id: string }): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -30,12 +31,14 @@ interface AddPriceRef {
 export default function Overview(): JSX.Element {
     const history = useHistory()
     const addPriceRef = useRef<AddPriceRef>({ onSubmit: () => { }, resetFields: () => { } })
+    const addBatchPriceRef = useRef<AddPriceRef>({ onSubmit: () => { }, resetFields: () => { } })
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [batchVisible, setBatchVisible] = useState<boolean>(false)
     const [attchVisible, setAttchVisible] = useState<boolean>(false)
     const [supplierVisible, setSupplierVisible] = useState<boolean>(false)
     const [supplier, setSupplier] = useState('')
-    const [oprationType, setOprationType] = useState<"new" | "edit">("new")
+    const [oprationType, setOprationType] = useState<"new" | "edit" | "batch_new" | "batch_edit">("new")
     const [detailId, setDetailId] = useState<string>("")
     const [materialLists, setMaterialList] = useState<any[]>([])
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
@@ -110,12 +113,41 @@ export default function Overview(): JSX.Element {
             reject(false)
         }
     })
+    const handleAddBatchPriceOk = () => new Promise(async (resolve, reject) => {
+        try {
+            await addBatchPriceRef.current?.onSubmit()
+            await message.success("成功添加报价...")
+            setBatchVisible(false)
+            history.go(0)
+            resolve(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: []): void => {
         setSelectedKeys(selectedRowKeys);
     }
 
     return <Spin spinning={loading}>
+        <Modal
+            width={1011}
+            destroyOnClose
+            title={oprationType === "batch_new" ? "批量添加报价" : "批量编辑报价"}
+            visible={batchVisible}
+            onOk={handleAddBatchPriceOk}
+            onCancel={() => {
+                addBatchPriceRef.current?.resetFields()
+                setBatchVisible(false)
+            }}>
+            <AddBatchPrice
+                id={detailId}
+                type={oprationType as any}
+                ref={addBatchPriceRef}
+                materialLists={materialLists}
+                comparisonPriceId={params.id}
+            />
+        </Modal>
         <Modal
             width={1011}
             destroyOnClose
@@ -126,7 +158,13 @@ export default function Overview(): JSX.Element {
                 addPriceRef.current?.resetFields()
                 setVisible(false)
             }}>
-            <AddPrice id={detailId} type={oprationType} ref={addPriceRef} materialLists={materialLists} />
+            <AddPrice
+                id={detailId}
+                type={oprationType as any}
+                ref={addPriceRef}
+                materialLists={materialLists}
+                comparisonPriceId={params.id}
+            />
         </Modal>
         <Modal
             width={1011}
@@ -203,7 +241,7 @@ export default function Overview(): JSX.Element {
                 disabled={data?.comparisonStatus !== 1}
                 type="primary"
                 style={{ marginRight: 16 }}
-                ghost key="addPrice"
+                ghost key="add"
                 onClick={() => {
                     setOprationType("new")
                     setVisible(true)
@@ -212,10 +250,10 @@ export default function Overview(): JSX.Element {
                 disabled={data?.comparisonStatus !== 1}
                 type="primary"
                 style={{ marginRight: 16 }}
-                ghost key="add"
+                ghost key="addBatchPrice"
                 onClick={() => {
-                    setOprationType("new")
-                    setVisible(true)
+                    setOprationType("batch_new")
+                    setBatchVisible(true)
                 }}>批量添加报价</Button>,
             <Button
                 type="primary"
@@ -235,19 +273,26 @@ export default function Overview(): JSX.Element {
                 <Button key="back" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="询价产品信息" style={{ marginTop: "24px" }} />
-            <CommonTable columns={[...materialColumns, {
-                title: "中标供应商",
-                dataIndex: "winBidSupplierId",
-                render: (value: any, records: any) => (<Select
-                    disabled={data?.comparisonStatus !== 1}
-                    value={value === -1 ? "" : value}
-                    onChange={(value: string) => handleSelect(records.id, value)}
-                    style={{ width: 150, height: 32 }}>
-                    {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
-                        value={item.supplierId}
-                        key={item.id}>{item.supplierName}</Select.Option>)}
-                </Select>)
-            }]}
+            <CommonTable
+                columns={[
+                    ...materialColumns,
+                    ...(data?.headerColumnVos.map((item: any) => ({
+                        ...item,
+                        render: (_value: any, records: any) => records?.inquiryQuotationOfferData?.[item.dataIndex]
+                    })) || []),
+                    {
+                        title: "中标供应商",
+                        dataIndex: "winBidSupplierId",
+                        render: (value: any, records: any) => (<Select
+                            disabled={data?.comparisonStatus !== 1}
+                            value={value === -1 ? "" : value}
+                            onChange={(value: string) => handleSelect(records.id, value)}
+                            style={{ width: 150, height: 32 }}>
+                            {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
+                                value={item.supplierId}
+                                key={item.id}>{item.supplierName}</Select.Option>)}
+                        </Select>)
+                    }]}
                 rowSelection={{
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,

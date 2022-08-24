@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect, ReactNode } from "react"
-import { TreeSelect, Select, Spin } from "antd"
+import { Select, Spin } from "antd"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 interface IntgSelectProps {
@@ -7,6 +7,7 @@ interface IntgSelectProps {
     onChange?: (value: any) => void
     value?: undefined | { value: string | number, label: string | ReactNode }
     width?: number | string
+    [key: string]: any
 }
 
 export const generateTreeNode: (data: any) => any[] = (data: any[]) => {
@@ -51,6 +52,7 @@ export default function IntgSelect({ onChange, width, value = { value: "", label
         notFoundContent={fetching ? <Spin size="small" /> : null}
         onSearch={handleSearch}
         onChange={handleChange}
+        placeholder={props.placeholder}
         {...props} >
         {userData?.records?.map((item: any) => <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>)}
     </Select>
