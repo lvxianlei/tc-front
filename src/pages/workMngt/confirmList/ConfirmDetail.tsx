@@ -616,7 +616,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     otherWeightXg: Number(item.otherWeightXg),
                                     otherWeightXxp: Number(item.otherWeightXxp),
                                     totalWeight: Number(item.totalWeight),
-                                    otherWeightDlzj: Number(item.totalWeight),
+                                    otherWeightDlzj: Number(item.otherWeightDlzj),
                                     otherWeightOther: Number(item.otherWeightOther),
                                 }
                             }),
