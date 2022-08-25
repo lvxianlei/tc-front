@@ -259,7 +259,7 @@ export default function Overview() {
                 rowSelection: {
                     selectedRowKeys: selectedRows,
                     onChange: handleSelectChange,
-                    getCheckboxProps: (records: any) => ({ disabled: records.receiveDetailStatus === 1 || records.receiveDetailStatus === 2 })
+                    getCheckboxProps: (records: any) => [1, 2].includes(records.receiveDetailStatus)
                 }
             }}
             columns={[
