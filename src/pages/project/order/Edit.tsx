@@ -78,7 +78,7 @@ export default function SeeGuarantee(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: !!contratId, refreshDeps: [contratId] })
+    }), { ready: !!contratId })
 
     const processingNumber = (arg: any, num: number) => {
         arg = arg.replace(/[^\d.]/g, "");
