@@ -25,7 +25,7 @@ export default function Edit() {
   const history = useHistory()
   const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/:entry/:type/contract")
   const params = useParams<{ projectId: string, id: string }>()
-  const [planType, setPlanType] = useState<1 | 2>(1)
+  const [planType, setPlanType] = useState<0 | 1>(0)
   const [when, setWhen] = useState<boolean>(true)
   const attchmentRef = useRef<AttachmentRef>()
   const [form] = Form.useForm()
@@ -42,6 +42,7 @@ export default function Edit() {
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract/${params.id}`)
+      setPlanType(result?.planType)
       resole({
         ...result,
         ...result.customerInfoVo,
@@ -74,7 +75,7 @@ export default function Edit() {
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
     try {
-  
+
       const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/contract`, {
         ...saveData,
         id: type === "new" ? "" : params.id,
@@ -156,13 +157,13 @@ export default function Edit() {
         const editFormData = editform.getFieldsValue()
         editform.setFieldsValue({
           submit: editFormData.submit?.map((item: any) => {
-            if (planType === 1) {
+            if (planType === 0) {
               return ({
                 ...item,
                 returnedAmount: (item.returnedRate * (fields.contractAmount || 0) / 100).toFixed(2)
               })
             }
-            if (planType === 2) {
+            if (planType === 1) {
               return ({
                 ...item,
                 returnedRate: (item.returnedAmount / (fields.contractAmount || 0) * 100).toFixed(2)
@@ -198,7 +199,7 @@ export default function Edit() {
           })
         })
       }
-      if (planType === 2 && (fields.type !== "add")) {
+      if (planType === 1 && (fields.type !== "add")) {
         editform.setFieldsValue({
           submit: allFields.submit.map((item: any) => {
             if (item.id === result.id) {
@@ -271,12 +272,12 @@ export default function Edit() {
         })}
         opration={[
           <Radio.Group
-            defaultValue={planType}
+            value={planType}
             key="type"
             onChange={(event: any) => setPlanType(event.target.value)}
             options={[
-              { label: "按占比", value: 1 },
-              { label: "按金额", value: 2 }
+              { label: "按占比", value: 0 },
+              { label: "按金额", value: 1 }
             ]} />
         ]}
         form={editform}
@@ -285,13 +286,13 @@ export default function Edit() {
           if (item.dataIndex === "returnedAmount") {
             return ({
               ...item,
-              disabled: planType === 1
+              disabled: planType === 0
             })
           }
           if (item.dataIndex === "returnedRate") {
             return ({
               ...item,
-              disabled: planType === 2
+              disabled: planType === 1
             })
           }
           if (item.dataIndex === "name") {

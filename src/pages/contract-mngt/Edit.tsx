@@ -194,22 +194,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 ...result.unloadBearVo,
                 unloadCompanyId: result.unloadBearVo.unloadCompanyId + ',' + result.unloadBearVo.unloadCompany
             })
-            setMaterialList(result?.materialContractDetailVos.map((res: any) => {
-                const id = res.structureTextureId;
-                const name = res.structureTexture;
-                return {
-                    ...res,
-                    structureTextureId: { value: id, label: name },
-                }
-            }) || [])
-            setPopDataList(result?.materialContractDetailVos.map((res: any) => {
-                const id = res.structureTextureId;
-                const name = res.structureTexture;
-                return {
-                    ...res,
-                    structureTextureId: { value: id, label: name },
-                }
-            }) || [])
+            setMaterialList(result?.materialContractDetailVos || [])
+            setPopDataList(result?.materialContractDetailVos || [])
             resove({ ...result, tax: taxNum })
         } catch (error) {
             reject(error)
