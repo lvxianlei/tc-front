@@ -186,7 +186,7 @@
             "title": "询比价名称",
             "dataIndex": "comparisonPriceNumber",
             "type": "popTable",
-            "path": "/tower-supply/comparisonPrice",
+            "path": "/tower-supply/comparisonPrice?comparisonStatus=2",
             "width": 1011,
             "value": "comparisonPriceNumber",
             "dependencies": true,

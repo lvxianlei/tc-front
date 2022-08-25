@@ -88,12 +88,22 @@ export default function SearchTable({
     }, [setPagenationParams, JSON.stringify(pagenationParams)])
 
     return <>
-        {searchFormItems.length > 0 && <Form style={{ marginBottom: 16 }} form={form} onFinish={async () => {
-            const formValue = await form.getFieldsValue()
-            const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
-            setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
-            await run(params)
-        }}>
+        {searchFormItems.length > 0 && <Form
+            style={{ marginBottom: 16 }}
+            form={form}
+            onFinish={async () => {
+                const formValue = await form.getFieldsValue()
+                const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
+                setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
+                run(params)
+            }}
+            onReset={async () => {
+                const formValue = await form.getFieldsValue()
+                const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
+                setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
+                run(params)
+            }}
+        >
             <Row gutter={[8, 8]}>
                 {searchFormItems.map((fItem: any) => <Col
                     style={{ height: 32 }}
@@ -109,7 +119,7 @@ export default function SearchTable({
                 <Col style={{ height: 32 }} span={(searchFormItems.length + 1) / 24}>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
-                        <Button type="default" onClick={() => form.resetFields()} style={{ marginLeft: 12 }}>重置</Button>
+                        <Button type="default" htmlType="reset" style={{ marginLeft: 12 }}>重置</Button>
                     </Form.Item>
                 </Col>
             </Row>
