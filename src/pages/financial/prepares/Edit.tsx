@@ -71,7 +71,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             console.log(result?.paymentReqType !== 2, "编辑")
             businessTypeChange(result.businessType);
             setPleasePayType(result.pleasePayType);
-            setSourceData(result?.fileIds || [])
+            setSourceData(result?.attachInfoVos || [])
             resole(result)
         } catch (error) {
             reject(error)
