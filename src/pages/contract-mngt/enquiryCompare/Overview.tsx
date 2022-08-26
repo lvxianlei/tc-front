@@ -235,10 +235,10 @@ export default function Overview(): JSX.Element {
                 style={{ marginRight: 16 }}
                 loading={finishPriceLoading}
                 onClick={handleFinishPrice}
-                disabled={data?.comparisonStatus !== 1}
+            // disabled={data?.comparisonStatus !== 1}
             >完成询价</Button>,
             <Button
-                disabled={data?.comparisonStatus !== 1}
+                // disabled={data?.comparisonStatus !== 1}
                 type="primary"
                 style={{ marginRight: 16 }}
                 ghost key="add"
@@ -247,7 +247,7 @@ export default function Overview(): JSX.Element {
                     setVisible(true)
                 }}>添加报价</Button>,
             <Button
-                disabled={data?.comparisonStatus !== 1}
+                // disabled={data?.comparisonStatus !== 1}
                 type="primary"
                 style={{ marginRight: 16 }}
                 ghost key="addBatchPrice"
@@ -260,7 +260,7 @@ export default function Overview(): JSX.Element {
                 style={{ marginRight: 16 }}
                 ghost
                 key="select"
-                disabled={data?.comparisonStatus !== 1}
+                // disabled={data?.comparisonStatus !== 1}
                 onClick={() => {
                     if (selectedKeys.length > 0) {
                         setSupplierVisible(true)
@@ -278,13 +278,18 @@ export default function Overview(): JSX.Element {
                     ...materialColumns,
                     ...(data?.headerColumnVos.map((item: any) => ({
                         ...item,
-                        render: (_value: any, records: any) => records?.inquiryQuotationOfferData?.[item.dataIndex]
+                        render: (_value: any, records: any) => <div
+                            style={records?.inquiryQuotationOfferData?.minTaxOffer === records?.inquiryQuotationOfferData?.[item.dataIndex] ? {
+                                background: "green",
+                                color: "#fff"
+                            } : {}}
+                        >{records?.inquiryQuotationOfferData?.[item.dataIndex]}</div>
                     })) || []),
                     {
                         title: "中标供应商",
                         dataIndex: "winBidSupplierId",
                         render: (value: any, records: any) => (<Select
-                            disabled={data?.comparisonStatus !== 1}
+                            // disabled={data?.comparisonStatus !== 1}
                             value={value === -1 ? "" : value}
                             onChange={(value: string) => handleSelect(records.id, value)}
                             style={{ width: 150, height: 32 }}>
