@@ -113,7 +113,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                 }}>配料方案</p>
                 <p style={{ position: "relative", top: 4, marginLeft: 12 }}>
                     <span style={{ marginRight: 12 }}>重量合计：</span>
-                    <span style={{ color: "#FF8C00" }}>{weightNumber}</span>
+                    <span style={{ color: "#FF8C00" }}>{(weightNumber / 1000).toFixed(3)}吨</span>
                 </p>
             </div>
             <DetailTitle title="计划列表" style={{ width: 200 }} />

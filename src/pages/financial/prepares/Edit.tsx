@@ -27,6 +27,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [companyList, setCompanyList] = useState([]);
     const attachRef = useRef<AttachmentRef>()
     const [pleasePayType, setPleasePayType] = useState('');
+    const [sourceData, setSourceData] = useState<any[]>([]);
     const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
 
@@ -70,6 +71,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             console.log(result?.paymentReqType !== 2, "编辑")
             businessTypeChange(result.businessType);
             setPleasePayType(result.pleasePayType);
+            setSourceData(result?.fileIds || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -586,7 +588,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             })} col={2} dataSource={{}} edit />
             
             <Attachment
-                dataSource={ [] }
+                dataSource={ sourceData }
                 ref={attachRef}
                 edit
             />
