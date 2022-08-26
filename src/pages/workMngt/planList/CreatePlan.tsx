@@ -42,7 +42,6 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const handleAddModalOkNumber = async() => {
         const baseData = await addCollectionNumberForm.validateFields();
-        console.log(baseData, "baseData")
         let ix = count,
             materialListCopy = materialList,
             popDataListCopy = popDataList;
@@ -53,18 +52,16 @@ export default function CreatePlan(props: any): JSX.Element {
                 length: 0,
                 planPurchaseNum: "",
                 totalWeight: "",
-                id: ix + ""
+                id: (ix + 1) + ""
             }
             ix = ix + 1;
             materialListCopy.splice((indexNumber + 1), 0, result);
             popDataListCopy.splice((indexNumber + 1), 0, result);
         }
-
         setCount(ix)
-        setMaterialList(materialListCopy.splice(0))
-        setPopDataList(popDataListCopy.splice(0));
+        setMaterialList(materialListCopy.slice(0))
+        setPopDataList(popDataListCopy.slice(0));
         setVisibleNumber(false);
-
     }
 
     const handleAddModalOk = () => {
@@ -162,8 +159,8 @@ export default function CreatePlan(props: any): JSX.Element {
             }
             return item
         })
-        setMaterialList(list);
-        setPopDataList(list)
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
     }
 
     const handleCreateClick = async () => {

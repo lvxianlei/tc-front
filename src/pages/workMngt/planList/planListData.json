@@ -150,6 +150,12 @@
             "width": 100
         },
         {
+            "title": "总重量(吨)",
+            "dataIndex": "totalWeight",
+            "type": "number",
+            "width": 100
+        },
+        {
             "title": "计划采购量",
             "dataIndex": "planPurchaseNum",
             "type": "string",
