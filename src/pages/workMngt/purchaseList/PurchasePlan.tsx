@@ -50,14 +50,14 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
             }
             const result = handleData();
             if (!result) {
-                dataSource.map((item: any) => {
+                selectedRows.map((item: any) => {
                     item["warehouseOccupy"] = item.warehouseOccupy ? item.warehouseOccupy : 0;
                 })
                 // 可以保存
                 await saveRun({
                     purchaseType: 1,
                     purchaserTaskTowerIds: ids.join(","),
-                    purchasePlanDetailDTOS: dataSource
+                    purchasePlanDetailDTOS: selectedRows
                 })
                 resole(true)
             }
