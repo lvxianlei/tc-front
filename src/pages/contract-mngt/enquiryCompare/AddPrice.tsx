@@ -119,7 +119,8 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                 supplier: data?.supplierId ? {
                     label: data?.supplierName,
                     value: data?.supplierId
-                } : undefined
+                } : undefined,
+                manufacturer: data?.manufacturer
             }} edit />
         <DetailTitle title="询价原材料" />
         <CommonTable columns={addPriceHead.map((item: any) => {

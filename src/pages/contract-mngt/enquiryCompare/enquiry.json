@@ -30,7 +30,7 @@
             "type": "popTable",
             "path": "/tower-supply/supplier",
             "width": 1011,
-            "value": "supplierName",
+            "value": "supplyIdList",
             "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,
@@ -65,6 +65,12 @@
                 {
                     "title": "供货产品",
                     "dataIndex": "supplyProductsName"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择询比价供应商"
                 }
             ]
         }

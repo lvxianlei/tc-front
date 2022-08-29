@@ -287,7 +287,22 @@ export default function Edit() {
                 <SearchTable
                     modal={true}
                     path={`/tower-supply/materialPurchasePlan/list/summary/${params.id}`}
-                    columns={PurchaseTypeStatistics as any[]}
+                    columns={[
+                        ...PurchaseTypeStatistics.map((item: any) => {
+                            if (item.dataIndex === "alreadyPurchaseWeight") {
+                                return ({
+                                    title: item.title,
+                                    dataIndex: item.dataIndex,
+                                    width: 50,
+                                    render: (_: any, record: any): React.ReactNode => {
+                                        return (
+                                            <span>{ record?.alreadyPurchaseWeight || 0 }</span>)
+                                    }
+                                }) 
+                            }
+                            return item;
+                        })
+                    ]}
                     pagination={false}
                     transformResult={(result: any) => result.purchasePlanListTotalVOS || []}
                     extraOperation={(result: any) => (<div style={{ marginBottom: 12 }}>

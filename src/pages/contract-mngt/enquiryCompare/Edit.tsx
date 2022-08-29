@@ -106,14 +106,18 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
+            
             form.setFieldsValue({
                 ...result,
                 supplyIdList: {
-                    id: result?.supplyIdList.split(","),
-                    records: result?.supplyIdList.split(","),
-                    value: result?.supplyNameList
-                }
+                    value: result.supplierVOS?.map((item: any) => item.supplierName).join(","),
+                    records: result.supplierVOS?.map((item: any) => ({
+                        id: item.id,
+                        supplierName: item.supplierName
+                    })) || []
+                },
             })
+            
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
@@ -350,6 +354,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     supplyIdList: ""
                 })
                 return false;
+            } else {
+                form.setFieldsValue({
+                    supplyIdList: {
+                        value: fields.supplyIdList.records.map((item: any) => item.supplierName).join(","),
+                        records: fields.supplyIdList.records.map((item: any) => ({ ...item, supplierName: item.supplierName }))
+                    }
+                })
             }
         }
     }
