@@ -118,6 +118,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         this.getForm()?.setFieldsValue({  ...data, ...detailData,  
             materialLeader: data?.materialLeader?data?.materialLeader.indexOf(',')?data?.materialLeader.split(','):[data?.materialLeader]:[],
         // materialLeaderName: values.materialLeader.split('-')[1],
+            pattern: data?.pattern&&data?.patternName?data?.pattern+','+data?.patternName:'',
             materialCheckLeader: data?.materialCheckLeader?data?.materialCheckLeader.indexOf(',')?data?.materialCheckLeader.split(','):[data?.materialCheckLeader]:[],
         });
         // if(data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
@@ -141,7 +142,8 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     plannedDeliveryTime: values?.plannedDeliveryTime && values?.plannedDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                     productCategory: this.state.appointed?.productCategory || this.state.appointed?.productCategoryId,
                     productCategoryName: this.state.appointed?.productCategoryName,
-                    pattern: this.state.appointed?.pattern,
+                    pattern: values.pattern.split(',')[0],
+                    patternName: values.pattern.split(',')[1],
                     materialLeader: values.materialLeader.join(','),
                     // materialLeaderName: values.materialLeader.split('-')[1],
                     materialCheckLeader: values.materialCheckLeader.join(','),
@@ -294,8 +296,25 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                 { this.state.appointed?.productCategoryName }
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                { this.props.type === 'detail'||this.props.type === 'message'? this.state.appointed?.pattern: this.state.appointed?.patternName }
-                            </Descriptions.Item>
+                                <Form.Item 
+                                    name="pattern"
+                                    initialValue={'全部'}
+                                    rules={[{
+                                        required: true,
+                                        message: '请选择模式'
+                                    }
+                                    ]}>
+                                    <Select style={{ width: '100%' }}>
+                                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                            return <Select.Option key={ index } value={ id+','+name }>
+                                                { name }
+                                            </Select.Option>
+                                        }) }
+                                    </Select>
+                                </Form.Item>
+                                {/* { this.props.type === 'detail'||this.props.type === 'message'? this.state.appointed?.pattern: this.state.appointed?.patternName } */}
+                                
+                           </Descriptions.Item>
                             { this.props.type === 'detail' ?
                                 <><Descriptions.Item label="段信息">
                                     { this.props.detailData?.name || '' }
