@@ -48,8 +48,17 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                 message.error("请您先勾选数据！");
                 return false;
             }
-            const result = handleData();
-            if (!result) {
+            const result = selectedRows;
+            let flag = false;
+            for (let i = 0; i < result.length; i += 1) {
+                if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
+                    result[i]["isRed"] = false;
+                } else {
+                    result[i]["isRed"] = true;
+                    flag = true;
+                }
+            }
+            if (!flag) {
                 selectedRows.map((item: any) => {
                     item["warehouseOccupy"] = item.warehouseOccupy ? item.warehouseOccupy : 0;
                 })
@@ -74,7 +83,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
 
     // 判断标红
     const handleData = () => {
-        const result = selectedRows;
+        const result = dataSource;
         let flag = false;
         for (let i = 0; i < result.length; i += 1) {
             if (((result[i].planPurchaseNum || 0) + (result[i].warehouseOccupy || 0)) >= result[i].num) {
