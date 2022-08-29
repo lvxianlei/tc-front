@@ -475,6 +475,12 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 </Select>
                             })
                         }
+                        if (item.dataIndex === "profitAndLossNum") {
+                            return ({
+                                ...item,
+                                render: (value: number, records: any, key: number) => <span>{ `${records.profitAndLossNum}` }</span>
+                            })
+                        }
                         return item
                     }),
                     {
