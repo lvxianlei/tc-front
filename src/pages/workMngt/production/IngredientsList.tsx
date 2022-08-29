@@ -515,9 +515,9 @@ export default function IngredientsList(): React.ReactNode {
             if (map.has(resultAvailableInventoryData[i].length)) {
                 // map对应存在，则需要减少
                 let num:number = map.get(resultAvailableInventoryData[i]?.length) || 0;
-                resultAvailableInventoryData[i].alreadyNum = num;
+                resultAvailableInventoryData[i].available = resultAvailableInventoryData[i].alreadyNum + num;
             } else {
-                resultAvailableInventoryData[i].alreadyNum = 0;
+                resultAvailableInventoryData[i].available = resultAvailableInventoryData[i].alreadyNum;
             }
         }
         setAvailableInventoryData(resultAvailableInventoryData.slice(0))
@@ -1100,7 +1100,7 @@ export default function IngredientsList(): React.ReactNode {
                         if (nowIngre?.available[i] === availableInventoryData[p].length) {
                             const v = {
                                 ...availableInventoryData[p],
-                                usableNum: availableInventoryData[p].totalNum - availableInventoryData[p].alreadyNum
+                                usableNum: (availableInventoryData[p].totalNum - availableInventoryData[p].available) > 0 ? availableInventoryData[p].totalNum - availableInventoryData[p].available : 0
                             }
                             data.push(v);
                         }
@@ -1643,7 +1643,7 @@ export default function IngredientsList(): React.ReactNode {
                                     {
                                         AvailableInventoryData?.map((item: any) => {
                                             return <Col span={12} style={{marginBottom: 8}}>
-                                                <Checkbox value={item.length}>{item.length} 可用数量:{ (item?.totalNum - item?.alreadyNum) < 0 ? 0 : item?.totalNum - item?.alreadyNum }</Checkbox>
+                                                <Checkbox value={item.length}>{item.length} 可用数量:{ item?.available }</Checkbox>
                                             </Col>
                                         })
                                     }
