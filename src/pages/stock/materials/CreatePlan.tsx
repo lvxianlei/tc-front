@@ -202,9 +202,11 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 return false;
             }
             materialList.forEach((item: any) => {
-                if (item.id) {
+                if (item.id && item.source && item.source === 2) {
                     item["materialStockId"] = item.id
                     // 删除id属性
+                    delete item.id;
+                } else {
                     delete item.id;
                 }
             })
