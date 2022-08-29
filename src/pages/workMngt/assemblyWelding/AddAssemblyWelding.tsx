@@ -66,47 +66,56 @@ export default function AddAssemblyWelding(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             key: 'index',
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>),
+            width: 80
         },
         {
             title: '零件号',
             dataIndex: 'code',
-            key: 'code'
+            key: 'code',
+            width: 100
         },
         {
             title: '材料',
             dataIndex: 'materialName',
-            key: 'materialName'
+            key: 'materialName',
+            width: 80
         },
         {
             title: '材质',
             dataIndex: 'structureTexture',
-            key: 'structureTexture'
+            key: 'structureTexture',
+            width: 80
         },
         {
             title: '规格',
             dataIndex: 'structureSpec',
-            key: 'structureSpec'
+            key: 'structureSpec',
+            width: 100
         },
         {
             title: '长（mm）',
             dataIndex: 'length',
-            key: 'length'
+            key: 'length',
+            width: 80
         },
         {
             title: '宽（mm）',
             dataIndex: 'width',
-            key: 'width'
+            key: 'width',
+            width: 80
         },
         {
             title: '厚度（mm）',
             dataIndex: 'width',
-            key: 'width'
+            key: 'width',
+            width: 100
         },
         {
             title: '单组件数',
             dataIndex: 'singleNum',
-            key: 'singleNum'
+            key: 'singleNum',
+            width: 80
         },
         {
             title: '备注',
@@ -167,6 +176,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         onConfirm={() => removeRow(record, index, 1)}
                         okText="移除"
                         cancelText="取消"
+                        disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0}
                     >
                         <Button type="link" disabled={leftSelectedRows.length > 0 || rightSelectedRows.length > 0}>移除</Button>
                     </Popconfirm>
@@ -180,12 +190,14 @@ export default function AddAssemblyWelding(): React.ReactNode {
         {
             title: '段名',
             dataIndex: 'segmentName',
-            key: 'segmentName'
+            key: 'segmentName',
+            width: 80
         },
         {
             title: '构件编号',
             dataIndex: 'code',
-            key: 'code'
+            key: 'code',
+            width: 120
         },
         {
             title: '材料名称',
@@ -200,13 +212,15 @@ export default function AddAssemblyWelding(): React.ReactNode {
         {
             title: '单段件数',
             dataIndex: 'basicsPartNum',
-            key: 'basicsPartNum'
+            key: 'basicsPartNum',
+            width: 100
         },
         {
             title: '剩余数量',
             dataIndex: 'basicsPartNumNow',
             key: 'basicsPartNumNow',
-            type: 'number'
+            type: 'number',
+            width: 100
         },
         {
             title: '备注',
@@ -516,9 +530,8 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) - (Number(record.basicsWeight) || 0);
                 let electricWeldingMeters: number = Number(form.getFieldsValue(true).electricWeldingMeters || 0) - Number(record.weldingLength || 0);
                 form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': electricWeldingMeters?.toFixed(4) });
-                if (record.singleNum === record.singleNum) {
-                    newWeld?.splice(index || 0, record.singleNum);
-                    // setWeldingDetailedStructureList([...newWeld || []])
+                if ( weldingDetailedStructureList&& weldingDetailedStructureList[index || 0]?.singleNum === record.singleNum) {
+                    newWeld?.splice(index || 0, 1);
                 } else {
                     newWeld = newWeld?.map((res: IComponentList) => {
                         if (res.structureId === record.structureId) {
@@ -538,6 +551,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             const noZero = data.filter(res => {
                 return Number(res.basicsPartNumNow) !== 0;
             })
+            console.log(newWeld)
             setComponentList(checked ? [...data] : [...noZero])
             setRightSelectedRows([]);
             setRightSelectedRowKeys([]);
@@ -722,6 +736,18 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 }]}>
                     <Select placeholder="请选择" style={{ width: '150px' }}>
                         {compoundTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+                <Form.Item name="weldGrade" label="焊缝等级" rules={[{
+                    "required": true,
+                    "message": "请选择焊缝等级"
+                }]}>
+                    <Select placeholder="请选择" style={{ width: '150px' }}>
+                        <Select.Option key={0} value={''}>无</Select.Option>
+                        <Select.Option key={1} value={'一级焊缝'}>一级焊缝</Select.Option>
+                        <Select.Option key={2} value={'二级焊缝'}>二级焊缝</Select.Option>
+                        <Select.Option key={3} value={'外观二级'}>外观二级</Select.Option>
+                        <Select.Option key={4} value={'三级焊缝'}>三级焊缝</Select.Option>
                     </Select>
                 </Form.Item>
             </Form>
