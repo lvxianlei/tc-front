@@ -507,6 +507,11 @@
             "maxLength": 30
         },
         {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30
+        },
+        {
             "title": "肢宽",
             "dataIndex": "limbWidth",
             "maxLength": 50

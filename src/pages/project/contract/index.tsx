@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Button, Popconfirm, Space, message, Input, Upload } from 'antd';
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import { IContract } from "../../IContract";
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
@@ -131,8 +131,9 @@ export default function ContractList(): JSX.Element {
     <>
       <Page
         path="/tower-market/contract/getContractPackPage"
-        sourceKey="contractList.records"
+        sourceKey=""
         onFilterSubmit={onFilterSubmit}
+        transformResult={(result:any)=>result.contractList}
         filterValue={filterValue}
         extraOperation={(data: any) => {
           return (<>
@@ -240,19 +241,9 @@ export default function ContractList(): JSX.Element {
         refresh={refresh}
         searchFormItems={[
           {
-            name: 'saleOrderNumber',
-            label: '订单编号',
-            children: <Input placeholder="订单编号" style={{ width: 210 }} />
-          },
-          {
             name: 'internalNumber',
             label: '内部合同编号',
             children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
-          },
-          {
-            name: 'orderProjectName',
-            label: '订单工程名称',
-            children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
           },
           {
             name: 'customerCompany',

@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, BaseInfo } from '../../common'
 import { CargoDetails } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil'
 
 interface ReceiveStrokAttachProps {
@@ -259,21 +259,19 @@ export default function Overview() {
                 rowSelection: {
                     selectedRowKeys: selectedRows,
                     onChange: handleSelectChange,
-                    getCheckboxProps: (records: any) => ({ disabled: records.receiveDetailStatus === 1 || records.receiveDetailStatus === 2})
+                    getCheckboxProps: (records: any) => [1, 2].includes(records.receiveDetailStatus)
                 }
             }}
             columns={[
-                ...CargoDetails,
+                ...CargoDetails as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
                     render: (_: any, records: any) => <>
                         <Button
                             type="link"
                             disabled={records.receiveDetailStatus !== 0}
-                            style={{ marginRight: 12 }}
                             onClick={() => {
                                 setAttachType(1)
                                 setDetailId([records.id])

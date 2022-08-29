@@ -211,7 +211,7 @@ export default function ApplyPayment() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 100,
+                    width: 230,
                     render: (_: any, record: any) => {
                         return <>
                             <a className="btn-operation-link" onClick={() => {
@@ -298,6 +298,16 @@ export default function ApplyPayment() {
                     </Select>
                 },
                 {
+                    name: 'paymentReqType',
+                    label: '付款类型',
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        <Select.Option value="">全部</Select.Option>
+                        <Select.Option value="1">货到付款</Select.Option>
+                        <Select.Option value="2">货到票到付款</Select.Option>
+                        <Select.Option value="3">预付款</Select.Option>
+                    </Select>
+                },
+                {
                     name: 'businessType',
                     label: '企业类型',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
@@ -310,7 +320,7 @@ export default function ApplyPayment() {
                 {
                     label: "模糊查询项",
                     name: 'fuzzyQuery',
-                    children: <Input placeholder="请款编号/关联到货单/关联票据/供应商" style={{ width: 300 }} />
+                    children: <Input placeholder="请款编号/关联到货单/关联票据/企业名称" style={{ width: 300 }} />
                 }
             ]}
         />

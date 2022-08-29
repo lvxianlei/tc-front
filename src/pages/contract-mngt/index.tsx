@@ -42,8 +42,8 @@ export default function ContractMngt(): JSX.Element {
     })
 
     const onFilterSubmit = (value: any) => {
-        if (value.signStartTime) {
-            const formatDate = value.signStartTime.map((item: any) => item.format("YYYY-MM-DD"))
+        if (value.signStartTimeOrder) {
+            const formatDate = value.signStartTimeOrder.map((item: any) => item.format("YYYY-MM-DD"))
             value.signStartTime = formatDate[0] + " 00:00:00"
             value.signEndTime = formatDate[1] + " 23:59:59"
         }
@@ -159,7 +159,7 @@ export default function ContractMngt(): JSX.Element {
                 </>}
                 searchFormItems={[
                     {
-                        name: 'signStartTime',
+                        name: 'signStartTimeOrder',
                         label: '签订时间',
                         children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
@@ -174,7 +174,7 @@ export default function ContractMngt(): JSX.Element {
                     {
                         name: 'operatorId',
                         label: '经办人',
-                        children: <IntgSelect width={200} />
+                        children: <IntgSelect placeholder="请输入" width={200} />
                     },
                     {
                         name: 'fuzzyQuery',

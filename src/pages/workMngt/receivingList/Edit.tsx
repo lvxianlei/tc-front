@@ -1,5 +1,5 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Button, Form, message, Spin, Modal, InputNumber, Select } from 'antd'
+import { Button, Form, message, Spin, Modal, InputNumber, Select, Space } from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
@@ -20,7 +20,14 @@ interface ModalRef {
     resetFields: () => void
 }
 
-const calcObj = {
+interface TotalState {
+    count?: string
+    weight?: string
+    taxPrice?: string
+    unTaxPrice?: string
+}
+
+export const calcObj = {
     /**
      *  含税金额 
      * 选择过磅计量时，含税金额 = 单价 × 结算重量
@@ -82,9 +89,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [contractId, setContractId] = useState<string>("")
     const [supplierId, setSupplierId] = useState<string>("")
     let [number, setNumber] = useState<number>(0);
+    const [total, setTotal] = useState<TotalState>({});
     const [form] = Form.useForm()
     const [editForm] = Form.useForm()
-    
+
     const [select, setSelect] = useState<any[]>([])
 
     const { loading: materialLoading, data: materialData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -201,11 +209,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 unTaxPrice: calcObj.unTaxPrice(item.taxPrice, materialData?.taxVal),
                 appearance: item.appearance || 1
             }
-            console.log(postData, "postData")
             delete postData.id
             return postData
         })
-        console.log(dataSource, "dataSource")
         setCargoData(dataSource)
         setVisible(false);
     }
@@ -357,18 +363,19 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 totalUnTaxPrice,
                 unTaxPrice: calcObj.unTaxPrice(result.taxPrice, materialData?.taxVal),
             }
-            console.log(dataSource, "================>>>改变后的dataSource")
             setCargoData(dataSource || [])
         }
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
-        // onChange && onChange(selectRows)
+        const seletTotal = selectRows.reduce((total: TotalState, current: any) => ({
+            count: parseFloat(total.count || "0") + parseFloat(current.num),
+            weight: parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight),
+            taxPrice: parseFloat(total.taxPrice || "0") + parseFloat(current.totalTaxPrice),
+            unTaxPrice: parseFloat(total.unTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)
+        }), {})
+        setTotal(seletTotal)
         setSelect(selectedRowKeys)
-    }
-
-    const onSelectAll = (selected: any[], _: any, changeRows: any[]) => {
-        
     }
 
     return <Spin spinning={loading && warehouseLoading && materialLoading}>
@@ -434,7 +441,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })}
             dataSource={{
                 meteringMode: 1,
-                settlementMode: settlementModeOptions?.[0].id,
+                settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
             }} />
         <DetailTitle
@@ -454,6 +461,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 >选择</Button>
             ]}
         />
+        <Space style={{ color: "red" }}>
+            <div><span>数量合计：</span><span>{total.count || "0"}</span></div>
+            <div><span>重量合计(吨)：</span><span>{total.weight || "0"}</span></div>
+            <div><span>含税金额合计(元)：</span><span>{total.taxPrice || "0"}</span></div>
+            <div><span>不含税金额合计(元)：</span><span>{total.unTaxPrice || "0"}</span></div>
+        </Space>
         <EditableTable
             haveIndex={false}
             form={editForm}
@@ -484,14 +497,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 })
             ]}
             dataSource={cargoData || []}
-            // rowSelection={{
-            //     selectedRowKeys: select,
-            //     type: "checkbox",
-            //     onChange: onSelectChange,
-            //     // onSelect: onSelectChange,
-            //     // onSelectAll,
-            //     getCheckboxProps: data?.getCheckboxProps
-            // }} 
+            rowSelection={{
+                selectedRowKeys: select,
+                type: "checkbox",
+                onChange: onSelectChange,
+                // onSelect: onSelectChange,
+                // onSelectAll,
+                getCheckboxProps: data?.getCheckboxProps
+            }}
         />
     </Spin>
 })

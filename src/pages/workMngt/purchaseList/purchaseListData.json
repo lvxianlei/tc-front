@@ -1,6 +1,12 @@
 {
     "baseInfo": [
         {
+            "title": "配料方案编号",
+            "dataIndex": "schemeNumber",
+            "width": 200,
+            "type": "string"
+        },
+        {
             "title": "批次号",
             "dataIndex": "batchNumber",
             "width": 200,
@@ -171,11 +177,6 @@
             "width": 150,
             "dataIndex": "totalWeight",
             "type": "number"
-        },
-        {
-            "title": "备注",
-            "dataIndex": "remarks",
-            "type": "textarea"
         },
         {
             "title": "仓库可用库存（支）",

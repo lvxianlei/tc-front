@@ -4,11 +4,11 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
 import { Button, Input, Space } from 'antd';
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import RequestUtil from "../../../utils/RequestUtil";
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import ConfirmableButton from "../../../components/ConfirmableButton";
-import AuthorityComponent from "../../../components/AuthorityComponent";
+
 export default function SaleOrder(): JSX.Element {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -198,18 +198,13 @@ export default function SaleOrder(): JSX.Element {
                         children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
                     },
                     {
-                        name: 'contractNumber',
-                        label: '合同编号',
-                        children: <Input placeholder="合同编号" style={{ width: 210 }} />
-                    },
-                    {
-                        name: 'contractName',
-                        label: '合同名称',
-                        children: <Input placeholder="合同名称" style={{ width: 210 }} />
+                        name: 'orderProjectName',
+                        label: '订单工程名称',
+                        children: <Input placeholder="采购订单编号" style={{ width: 210 }} />
                     },
                     {
                         name: 'saleOrderNumber',
-                        label: '采购订单编号',
+                        label: '订单编号',
                         children: <Input placeholder="采购订单编号" style={{ width: 210 }} />
                     },
                     {

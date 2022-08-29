@@ -76,6 +76,16 @@
             "width": 50
         },
         {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "width": 50
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "width": 50
+        },
+        {
             "title": "含税单价(元/吨)",
             "dataIndex": "taxPrice",
             "width": 120

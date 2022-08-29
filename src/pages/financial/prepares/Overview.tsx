@@ -38,9 +38,9 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
         <Spin spinning={loading}>
             <DetailTitle title="申请信息" />
             <BaseInfo columns={ApplicationOverview.map((item: any) => {
-                if (item.dataIndex === "pleasePayType") {
-                    return ({ ...item, type: "select", enum: pleasePayTypeEnum })
-                }
+                // if (item.dataIndex === "pleasePayType") {
+                //     return ({ ...item, type: "select", enum: pleasePayTypeEnum })
+                // }
                 if (item.dataIndex === "paymentMethod") {
                     return ({ ...item, type: "select", enum: paymentMethodEnum })
                 }
@@ -61,6 +61,9 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                     }}>回执单</Button>
                 }]} dataSource={data?.applyPaymentRecordVos || []} />
             <OperationRecord title="操作信息" serviceId={id} serviceName="tower-supply" />
+            <Attachment
+                dataSource={ data?.attachInfoVos }
+            />
         </Spin>
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
             <Attachment title="回执单" dataSource={attach || []} />

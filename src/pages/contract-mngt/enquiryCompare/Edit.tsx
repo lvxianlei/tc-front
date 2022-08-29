@@ -1,11 +1,11 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
 import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message } from "antd"
-import { BaseInfo, CommonTable, DetailTitle, IntgSelect } from "../../common"
+import { BaseInfo, CommonTable, DetailTitle, IntgSelect, PopTableContent } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
-import { PopTableContent } from "./ComparesModal"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
+import { calcFun } from "../Edit"
 interface EditProps {
     id: string
     type: "new" | "edit"
@@ -106,14 +106,25 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const { loading } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/comparisonPrice/${id}`)
-            form.setFieldsValue(result)
+            
+            form.setFieldsValue({
+                ...result,
+                supplyIdList: {
+                    value: result.supplierVOS?.map((item: any) => item.supplierName).join(","),
+                    records: result.supplierVOS?.map((item: any) => ({
+                        id: item.id,
+                        supplierName: item.supplierName
+                    })) || []
+                },
+            })
+            
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
                     structureTexture: res.structureTexture,
                     structureTextureId: res.structureTextureId,
                     materialStandardName: res.materialStandardName,
-                    materialStandard: res.materialStandard
+                    materialStandard: res.materialStandard,
                 }
             })
             setMaterialList(comparisonPriceDetailVos || [])
@@ -134,7 +145,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
     }), { manual: true })
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }))
+
 
     const onSubmit = () => new Promise(async (resove, reject) => {
         try {
@@ -152,6 +163,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             }
             await saveRun({
                 ...baseData,
+                supplyIdList: baseData?.supplyIdList.records.map((item: any) => item.id).join(","),
+                supplyNameList: baseData?.supplyIdList.records.map((item: any) => item.supplierName).join(","),
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
@@ -165,6 +178,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
             resove(true)
         } catch (error) {
+            console.log(error)
             reject(false)
         }
     })
@@ -175,22 +189,47 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList([])
     }
 
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }))
+
     const handleAddModalOk = () => {
-        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         const newMaterialList: any[] = []
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            })
         }))])
         setPopDataList([...materialList, ...newMaterialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            totalWeight: (parseFloat(item.num || "0.00") * parseFloat(item.weight || "0.00")).toFixed(2)
+            weight: calcFun.weight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width
+            }),
+            totalWeight: calcFun.totalWeight({
+                weightAlgorithm: item.weightAlgorithm,
+                proportion: item.proportion,
+                length: item.length,
+                width: item.width,
+                num: item.num
+            })
         }))])
         setVisible(false)
     }
@@ -216,11 +255,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
-            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            // weight: item.singleWeight || 0,
             source: item.source || 1,
-            // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            weight: item.weight,
+            totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
@@ -231,11 +269,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             ...item,
             num: item.planPurchaseNum || "0",
             structureSpec: item.structureSpec,
-            // width: formatSpec(item.spec).width,
             thickness: formatSpec(item.spec).thickness,
-            // weight: item.singleWeight || 0,
             source: item.source || 1,
-            // totalWeight: (parseFloat(item.planPurchaseNum || "0.00") * parseFloat(item.singleWeight || "0.00")).toFixed(3),
+            weight: item.weight,
+            totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
@@ -290,12 +327,42 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
-                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
+                    weight: calcFun.weight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width
+                    }),
+                    totalWeight: calcFun.totalWeight({
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        length: item.length,
+                        width: item.width,
+                        num: item.num
+                    })
                 })
             }
             return item
         }));
+    }
+
+    const handGuaranteChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        if (fields.supplyIdList) {
+            if (fields.supplyIdList.records.length > 4) {
+                message.error("询比价供应商最多选择四个，请您重新选择！");
+                form.setFieldsValue({
+                    supplyIdList: ""
+                })
+                return false;
+            } else {
+                form.setFieldsValue({
+                    supplyIdList: {
+                        value: fields.supplyIdList.records.map((item: any) => item.supplierName).join(","),
+                        records: fields.supplyIdList.records.map((item: any) => ({ ...item, supplierName: item.supplierName }))
+                    }
+                })
+            }
+        }
     }
 
     return <Spin spinning={loading}>
@@ -343,7 +410,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             <ChoosePlan ref={choosePlanRef} />
         </Modal>
         <DetailTitle title="询比价基本信息" />
-        <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit />
+        <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit onChange={handGuaranteChange} />
         <DetailTitle title="询价原材料 *" operation={[
             <Button type="primary" ghost key="add" style={{ marginRight: 16 }}
                 onClick={() => setVisible(true)}>添加询价原材料</Button>,
@@ -351,7 +418,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         ]} />
         <CommonTable
             haveIndex
-            style={{ padding: "0"}}
+            style={{ padding: "0" }}
             rowKey="key"
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {

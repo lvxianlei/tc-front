@@ -646,7 +646,7 @@
       "path": "/project/productGroup/new/productGroup/:id",
       "module": "./pages/project/Edit/ProductGroupEdit",
       "exact": true,
-      "authority": "project_detail"
+      "authority": "tc_erp_sc_project_view_product_add"
     },
     { // 销售计划编辑
       "name": "销售计划编辑",
@@ -1064,7 +1064,7 @@
     },
     { // 工作管理-计划列表-采购清单
       "name": "采购清单",
-      "path": "/ingredients/planList/purchaseList/:id",
+      "path": "/ingredients/planList/purchaseList/:id/:purchaseType",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
       "authority": "tc_erp_sw_work_plan_detail"

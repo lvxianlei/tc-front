@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
 import { useHistory } from 'react-router';
-import { Input, Select, Form, Row, Modal, message, Spin, Button, Upload } from 'antd';
+import { Input, Select, Form, Row, Modal, message, Spin, Button, Upload, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"
@@ -234,44 +234,12 @@ export default function RawMaterialStock(): React.ReactNode {
                     {
                         name: 'length',
                         label: '长度',
-                        children: <Row>
-                            <Form.Item name={["length", "lengthMin"]} style={{ width: 100 }}>
-                                <Select style={{ width: 100 }} placeholder="最小长度">
-                                    <Select.Option value={0} key={0}>0</Select.Option>
-                                    <Select.Option value={1000} key={1}>1</Select.Option>
-                                    <Select.Option value={2000} key={2}>2</Select.Option>
-                                    <Select.Option value={3000} key={3}>3</Select.Option>
-                                    <Select.Option value={4000} key={4}>4</Select.Option>
-                                    <Select.Option value={5000} key={5}>5</Select.Option>
-                                    <Select.Option value={6000} key={6}>6</Select.Option>
-                                    <Select.Option value={7000} key={7}>7</Select.Option>
-                                    <Select.Option value={8000} key={8}>8</Select.Option>
-                                    <Select.Option value={9000} key={9}>9</Select.Option>
-                                    <Select.Option value={10000} key={10}>10</Select.Option>
-                                    <Select.Option value={11000} key={11}>11</Select.Option>
-                                    <Select.Option value={12000} key={12}>12</Select.Option>
-                                    <Select.Option value={13000} key={13}>13</Select.Option>
-                                </Select>
-                            </Form.Item>
-                            <Form.Item name={["length", "lengthMax"]} style={{ width: 100 }}>
-                                <Select style={{ width: 100 }} placeholder="最大长度">
-                                    <Select.Option value={0} key={0}>0</Select.Option>
-                                    <Select.Option value={1000} key={1}>1</Select.Option>
-                                    <Select.Option value={2000} key={2}>2</Select.Option>
-                                    <Select.Option value={3000} key={3}>3</Select.Option>
-                                    <Select.Option value={4000} key={4}>4</Select.Option>
-                                    <Select.Option value={5000} key={5}>5</Select.Option>
-                                    <Select.Option value={6000} key={6}>6</Select.Option>
-                                    <Select.Option value={7000} key={7}>7</Select.Option>
-                                    <Select.Option value={8000} key={8}>8</Select.Option>
-                                    <Select.Option value={9000} key={9}>9</Select.Option>
-                                    <Select.Option value={10000} key={10}>10</Select.Option>
-                                    <Select.Option value={11000} key={11}>11</Select.Option>
-                                    <Select.Option value={12000} key={12}>12</Select.Option>
-                                    <Select.Option value={13000} key={13}>13</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        </Row>
+                        children: <InputNumber />
+                    },
+                    {
+                        name: 'width',
+                        label: '宽度',
+                        children: <InputNumber />
                     },
                     {
                         name: 'fuzzyQuery',

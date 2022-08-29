@@ -2,20 +2,16 @@ import React, { Fragment, useState } from "react"
 import { Button, InputNumber, message, Modal, Select } from 'antd'
 import { useHistory, useParams, useRouteMatch, useLocation } from 'react-router-dom'
 import { DetailContent, CommonTable, PopTableContent, SearchTable } from '../../common'
-import { PurchaseList, PurchaseTypeStatistics } from "./planListData.json"
+import { PurchaseList, PurchaseListDetail, PurchaseTypeStatistics } from "./planListData.json"
 import { addMaterial } from "./CreatePlan.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import ExportList from '../../../components/export/list';
 import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
-interface PagenationProps {
-    current: number
-    pageSize: number
-}
 export default function Edit() {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const history = useHistory()
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, purchaseType: string }>()
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
@@ -62,6 +58,10 @@ export default function Edit() {
 
 
     const handleRemove = (id: string) => {
+        if (popDataList.length <= 1) {
+            message.error("至少保存一条原材料数据");
+            return false;
+        }
         setPopDataList(popDataList.filter((item: any) => item.id !== id))
     }
 
@@ -71,6 +71,7 @@ export default function Edit() {
                 return ({
                     ...item,
                     planPurchaseNum: value,
+                    totalWeight: (item.weight * value).toFixed(3)
                     // weight: ((item.proportion * (item.length || 1)) / 1000 / 1000).toFixed(3),
                     // totalWeight: ((item.proportion * value * (item.length || 1)) / 1000 / 1000).toFixed(3)
                 })
@@ -194,7 +195,7 @@ export default function Edit() {
                 ]}>
                 {!isEdit && <CommonTable
                     loading={loading}
-                    columns={PurchaseList}
+                    columns={PurchaseListDetail}
                     dataSource={dataTable?.records || []}
                 />}
                 {isEdit && <CommonTable
@@ -278,14 +279,30 @@ export default function Edit() {
                             title: "操作",
                             fixed: "right",
                             dataIndex: "opration",
-                            render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
+                            // render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button> params.purchaseType
+                            render: (_: any, records: any) => <Button type="link" disabled={params.purchaseType !== "2"} onClick={() => handleRemove(records.id)}>移除</Button>
                         }]}
                     pagination={false}
                     dataSource={popDataList} />}
                 <SearchTable
                     modal={true}
                     path={`/tower-supply/materialPurchasePlan/list/summary/${params.id}`}
-                    columns={PurchaseTypeStatistics as any[]}
+                    columns={[
+                        ...PurchaseTypeStatistics.map((item: any) => {
+                            if (item.dataIndex === "alreadyPurchaseWeight") {
+                                return ({
+                                    title: item.title,
+                                    dataIndex: item.dataIndex,
+                                    width: 50,
+                                    render: (_: any, record: any): React.ReactNode => {
+                                        return (
+                                            <span>{ record?.alreadyPurchaseWeight || 0 }</span>)
+                                    }
+                                }) 
+                            }
+                            return item;
+                        })
+                    ]}
                     pagination={false}
                     transformResult={(result: any) => result.purchasePlanListTotalVOS || []}
                     extraOperation={(result: any) => (<div style={{ marginBottom: 12 }}>

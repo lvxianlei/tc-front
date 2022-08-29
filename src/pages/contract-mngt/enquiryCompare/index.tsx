@@ -44,16 +44,16 @@ export default function ContractMngt() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.updateStartTime) {
-            const formatDate = value.updateStartTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStartTime = formatDate[0] + " 00:00:00"
-            value.updateEndTime = formatDate[1] + " 23:59:59"
+        if (value.createTimeOrder) {
+            const formatDate = value.createTimeOrder.map((item: any) => item.format("YYYY-MM-DD"))
+            value.createStartTime = formatDate[0] + " 00:00:00"
+            value.createEndTime = formatDate[1] + " 23:59:59"
         }
         if (value.comparisonPersonId) {
             value.comparisonPersonId = value.comparisonPersonId.value
         }
-        setFilterValue({ ...filterValue, ...value })
-        return ({ ...filterValue, ...value })
+        setFilterValue({ ...value })
+        return ({ ...value })
     }
 
     const handleAddOk = () => new Promise(async (resove, reject) => {
@@ -112,7 +112,7 @@ export default function ContractMngt() {
                         "width": 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...comparison,
+                    ...comparison as any,
                     {
                         title: "操作",
                         dataIndex: "opration",
@@ -164,8 +164,8 @@ export default function ContractMngt() {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'updateStartTime',
-                        label: '最新状态变更时间',
+                        name: 'createTimeOrder',
+                        label: '创建日期',
                         children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
                     {

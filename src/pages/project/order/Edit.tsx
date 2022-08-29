@@ -29,7 +29,7 @@ export default function SeeGuarantee(): JSX.Element {
     const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/:entry/:type/order")
     const [when, setWhen] = useState<boolean>(true)
     const [contratId, setContratId] = useState<string>()
-    const [planType, setPlanType] = useState<1 | 2>(1)
+    const [planType, setPlanType] = useState<0 | 1>(0)
     const [editFormData, setEditFormData] = useState<any[]>([])
     const [addCollectionForm] = Form.useForm();
     const [editform] = Form.useForm();
@@ -78,7 +78,7 @@ export default function SeeGuarantee(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: !!contratId, refreshDeps: [contratId] })
+    }), { ready: !!contratId })
 
     const processingNumber = (arg: any, num: number) => {
         arg = arg.replace(/[^\d.]/g, "");
@@ -150,13 +150,13 @@ export default function SeeGuarantee(): JSX.Element {
             })
             editform.setFieldsValue({
                 submit: editFormData.submit.map((item: any) => {
-                    if (planType === 1) {
+                    if (planType === 0) {
                         return ({
                             ...item,
                             returnedAmount: (item.returnedRate * processingNumber(fields.taxAmount, 4) / 100).toFixed(2)
                         })
                     }
-                    if (planType === 2) {
+                    if (planType === 1) {
                         return ({
                             ...item,
                             returnedRate: (item.returnedAmount / processingNumber(fields.taxAmount, 4) * 100).toFixed(2)
@@ -239,7 +239,7 @@ export default function SeeGuarantee(): JSX.Element {
         if (fields.submit.length - 1 >= 0) {
             const baseInfo = addCollectionForm.getFieldsValue()
             const result = allFields.submit[fields.submit.length - 1];
-            if (planType === 1) {
+            if (planType === 0) {
                 editform.setFieldsValue({
                     submit: allFields.submit.map((item: any) => {
                         if (item.id === result.id) {
@@ -252,7 +252,7 @@ export default function SeeGuarantee(): JSX.Element {
                     })
                 })
             }
-            if (planType === 2) {
+            if (planType === 1) {
                 editform.setFieldsValue({
                     submit: allFields.submit.map((item: any) => {
                         if (item.id === result.id) {
@@ -367,12 +367,12 @@ export default function SeeGuarantee(): JSX.Element {
                     })}
                     opration={[
                         <Radio.Group
-                            defaultValue={planType}
+                            value={planType}
                             key="type"
                             onChange={(event: any) => setPlanType(event.target.value)}
                             options={[
-                                { label: "按占比", value: 1 },
-                                { label: "按金额", value: 2 }
+                                { label: "按占比", value: 0 },
+                                { label: "按金额", value: 1 }
                             ]} />
                     ]}
                     form={editform}
@@ -381,13 +381,13 @@ export default function SeeGuarantee(): JSX.Element {
                         if (item.dataIndex === "returnedAmount") {
                             return ({
                                 ...item,
-                                disabled: planType === 1
+                                disabled: planType === 0
                             })
                         }
                         if (item.dataIndex === "returnedRate") {
                             return ({
                                 ...item,
-                                disabled: planType === 2
+                                disabled: planType === 1
                             })
                         }
                         if (item.dataIndex === "name") {
