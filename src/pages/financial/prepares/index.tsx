@@ -298,7 +298,7 @@ export default function ApplyPayment() {
                     </Select>
                 },
                 {
-                    name: 'businessType',
+                    name: 'paymentReqType',
                     label: '付款类型',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>

@@ -342,6 +342,18 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }));
     }
 
+    const handGuaranteChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        if (fields.supplyIdList) {
+            if (fields.supplyIdList.records.length > 4) {
+                message.error("询比价供应商最多选择四个，请您重新选择！");
+                form.setFieldsValue({
+                    supplyIdList: ""
+                })
+                return false;
+            }
+        }
+    }
+
     return <Spin spinning={loading}>
         <Modal
             width={addMaterial.width || 520}
@@ -387,7 +399,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             <ChoosePlan ref={choosePlanRef} />
         </Modal>
         <DetailTitle title="询比价基本信息" />
-        <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit />
+        <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit onChange={handGuaranteChange} />
         <DetailTitle title="询价原材料 *" operation={[
             <Button type="primary" ghost key="add" style={{ marginRight: 16 }}
                 onClick={() => setVisible(true)}>添加询价原材料</Button>,

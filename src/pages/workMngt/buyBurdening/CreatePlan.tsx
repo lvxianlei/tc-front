@@ -355,10 +355,10 @@ import AuthUtil from '../../../utils/AuthUtil';
                     setMaterialList(fields.map((item: any) => ({
                         ...item,
                         structureTexture: item?.structureTexture || materialTextureOptions?.[0]?.name,
-                        code: "", // 件号
-                        length: "100", // 长度
-                        num: 1, // 数量
-                        weight: 1, // 重量
+                        code: item.code || "", // 件号
+                        length: item.length || "100", // 长度
+                        num: item.num || 1, // 数量
+                        weight: item.weight || 1, // 重量
                     })) || [])
                 }}
             />

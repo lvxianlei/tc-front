@@ -93,7 +93,7 @@ export default function Invoicing() {
                         render: (_: any, record: any) => {
                             return <>
                                 <Link className="btn-operation-link" to={{
-                                    pathname: `/ingredients/planList/purchaseList/${record.id}`,
+                                    pathname: `/ingredients/planList/purchaseList/${record.id}/${record.purchaseType}`,
                                     search: `productionBatchNos=${record.productionBatchNos}`
                                 }}>采购清单</Link>
 

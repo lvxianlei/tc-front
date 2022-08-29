@@ -44,16 +44,16 @@ export default function ContractMngt() {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        if (value.createTime) {
-            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+        if (value.createTimeOrder) {
+            const formatDate = value.createTimeOrder.map((item: any) => item.format("YYYY-MM-DD"))
             value.createStartTime = formatDate[0] + " 00:00:00"
             value.createEndTime = formatDate[1] + " 23:59:59"
         }
         if (value.comparisonPersonId) {
             value.comparisonPersonId = value.comparisonPersonId.value
         }
-        setFilterValue({ ...filterValue, ...value })
-        return ({ ...filterValue, ...value })
+        setFilterValue({ ...value })
+        return ({ ...value })
     }
 
     const handleAddOk = () => new Promise(async (resove, reject) => {
@@ -164,7 +164,7 @@ export default function ContractMngt() {
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
                     {
-                        name: 'createTime',
+                        name: 'createTimeOrder',
                         label: '创建日期',
                         children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
