@@ -21,7 +21,7 @@ interface EditProps {
 interface WeightParams {
     width: number | string
     length: number | string
-    weightAlgorithm: 1 | 2 | 3
+    weightAlgorithm: number
     proportion: number | string
 }
 
@@ -384,7 +384,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 setMaterialList(meterialList.map((item: any) => {
                     const num = parseFloat(item.num || "1")
                     const weight = calcFun.weight({
-                        weightAlgorithm: item.weightAlgorithm,
+                        weightAlgorithm: item.weightAlgorithm * 1,
                         proportion: item.proportion,
                         length: item.length,
                         width: item.width
@@ -407,7 +407,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 setPopDataList(meterialList.map((item: any) => {
                     const num = parseFloat(item.num || "1")
                     const weight = calcFun.weight({
-                        weightAlgorithm: item.weightAlgorithm,
+                        weightAlgorithm: item.weightAlgorithm * 1,
                         proportion: item.proportion,
                         length: item.length,
                         width: item.width

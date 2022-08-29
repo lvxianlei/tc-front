@@ -204,10 +204,6 @@
                     "dataIndex": "comparisonPriceNumber"
                 },
                 {
-                    "title": "用途",
-                    "dataIndex": "purpose"
-                },
-                {
                     "title": "询比价状态",
                     "dataIndex": "comparisonStatus",
                     "type": "select",
@@ -225,10 +221,6 @@
                             "value": 3
                         }
                     ]
-                },
-                {
-                    "title": "最新状态变更时间",
-                    "dataIndex": "updateTime"
                 },
                 {
                     "title": "询价人",
