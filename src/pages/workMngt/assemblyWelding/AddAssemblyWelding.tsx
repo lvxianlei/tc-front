@@ -253,7 +253,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
         let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) - (Number(record.basicsWeight) || 0);
         let electricWeldingMeters: number = Number(form.getFieldsValue(true).electricWeldingMeters || 0) - Number(record.weldingLength || 0);
         form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': electricWeldingMeters?.toFixed(4) });
-        if (record.singleNum === num) {
+        if (Number(record.singleNum) === Number(num)) {
             weldingDetailedStructureList?.splice(index, num);
             setWeldingDetailedStructureList([...weldingDetailedStructureList || []])
         } else {
@@ -530,7 +530,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) - (Number(record.basicsWeight) || 0);
                 let electricWeldingMeters: number = Number(form.getFieldsValue(true).electricWeldingMeters || 0) - Number(record.weldingLength || 0);
                 form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': electricWeldingMeters?.toFixed(4) });
-                if ( weldingDetailedStructureList&& weldingDetailedStructureList[index || 0]?.singleNum === record.singleNum) {
+                if (weldingDetailedStructureList && weldingDetailedStructureList[index || 0]?.singleNum === record.singleNum) {
                     newWeld?.splice(index || 0, 1);
                 } else {
                     newWeld = newWeld?.map((res: IComponentList) => {
