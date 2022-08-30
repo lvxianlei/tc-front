@@ -941,6 +941,8 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 ? legValueSum[index].name.split(/\/|,|，/).filter((item: any) => { return item }).length
                                                 : legValueSum[index].name.indexOf('-') > -1
                                                     ? Number(legValueSum[index].name.split('-')[1].replace(/[^0-9]/ig, "")) - Number(legValueSum[index].name.split('-')[0].replace(/[^0-9]/ig, "")) + 1
+                                                    : legValueSum[index].name.indexOf('~') > -1
+                                                    ? Number(legValueSum[index].name.split('~')[1].replace(/[^0-9]/ig, "")) - Number(legValueSum[index].name.split('~')[0].replace(/[^0-9]/ig, "")) + 1
                                                     : 1
                                             legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL
                                             legValueSum[index].totalWeight = legValueSum[index].A * legValueSum[index].monomerWeight
