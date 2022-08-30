@@ -308,7 +308,7 @@ export default function TowerInformation(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
-                        detail?.status > 1 ?
+                        detail?.loftingStatus > 1 ?
                             <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}>放样</Link>
                             :
                             <Button type="link" disabled>放样</Button>
