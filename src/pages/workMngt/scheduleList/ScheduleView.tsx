@@ -1080,6 +1080,13 @@ export default function ScheduleView(): React.ReactNode {
                                 smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
                                 deliveryDrawDeliverTime:resData.deliveryDrawDeliverTime? moment(resData.deliveryDrawDeliverTime):'',
                                 drawDeliverTime:resData.drawDeliverTime? moment(resData.drawDeliverTime):'',
+                                ncUser:resData.ncUser?resData.ncUser:'0',
+                                packageUser:resData.packageUser?resData.packageUser:'0',
+                                productPartUser:resData.productPartUser?resData.productPartUser:'0',
+                                boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
+                                boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
+                                boltUser:resData.boltUser?resData.boltUser:'0',
+                                deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
                             });
                             setLoad(false)
                         } } disabled={!(selectedKeys.length>0)}>批量指派</Button>
