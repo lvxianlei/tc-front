@@ -1068,9 +1068,9 @@ export default function ScheduleView(): React.ReactNode {
                                 weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
                                 loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
                                 drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
-                                loftingMutualReview: resData.loftingMutualReview&&resData.loftingMutualReview!==null ? resData.loftingMutualReview.indexOf(',')>-1?resData.loftingMutualReview.split(','):[resData.loftingMutualReview]:[],
+                                loftingMutualReview: resData.loftingMutualReview&&resData.loftingMutualReview!==null ? resData.loftingMutualReview.indexOf(',')>-1?resData.loftingMutualReview.split(','):[resData.loftingMutualReview]:['0'],
                                 loftingUser: resData.loftingUser&&resData.loftingUser!==null ? resData.loftingUser.indexOf(',')>-1?resData.loftingUser.split(','):[resData.loftingUser]:[],
-                                weldingUser: resData.weldingUser&&resData.weldingUser!==null ? resData.weldingUser.indexOf(',')>-1?resData.weldingUser.split(','):[resData.weldingUser]:[],
+                                weldingUser: resData.weldingUser&&resData.weldingUser!==null ? resData.weldingUser.indexOf(',')>-1?resData.weldingUser.split(','):[resData.weldingUser]:['0'],
                                 smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
                                 boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
                                 weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
@@ -1080,6 +1080,13 @@ export default function ScheduleView(): React.ReactNode {
                                 smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
                                 deliveryDrawDeliverTime:resData.deliveryDrawDeliverTime? moment(resData.deliveryDrawDeliverTime):'',
                                 drawDeliverTime:resData.drawDeliverTime? moment(resData.drawDeliverTime):'',
+                                ncUser:resData.ncUser?resData.ncUser:'0',
+                                packageUser:resData.packageUser?resData.packageUser:'0',
+                                productPartUser:resData.productPartUser?resData.productPartUser:'0',
+                                boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
+                                boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
+                                boltUser:resData.boltUser?resData.boltUser:'0',
+                                deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
                             });
                             setLoad(false)
                         } } disabled={!(selectedKeys.length>0)}>批量指派</Button>

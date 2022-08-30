@@ -50,6 +50,11 @@ export default function AssemblyWeldingListing(): React.ReactNode {
             key: 'mainPartId'
         },
         {
+            title: '焊缝等级',
+            dataIndex: 'weldGrade',
+            key: 'weldGrade'
+        },
+        {
             title: '单组重量（kg）',
             dataIndex: 'singleGroupWeight',
             key: 'singleGroupWeight'
