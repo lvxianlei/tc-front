@@ -6,6 +6,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails, } from "./receivingListData.json"
+import Item from "antd/lib/list/Item"
 
 /**
  * 纸质单号，原材料税款合计，车辆牌照
@@ -221,6 +222,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const baseFormData = await form.validateFields()
             const listsFormData = await editForm.validateFields()
             console.log(listsFormData, "listsFormData", cargoData, editForm.getFieldsValue(true))
+            listsFormData?.submit?.map((item: any, index: number) => {
+                const v = editForm?.getFieldsValue(true)?.submit[index];
+                item["weight"] = v?.weight || item?.weightAlgorithm === "1" ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === "2" ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) / 1000).toFixed(3)
+            })
             const contractNumberData = baseFormData.contractNumber.records[0]
             const result = {
                 ...baseFormData,
@@ -314,7 +321,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         const changeFiled = data.submit[changeIndex]
         if (changeFiled.balanceTotalWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
-            const result = editForm.getFieldsValue(true).submit[changeIndex];
             const dataSource: any[] = [...allValues?.submit]
             const totalTaxPrice = calcObj.totalTaxPrice(
                 dataSource[changeIndex].taxPrice,
@@ -322,7 +328,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
             dataSource[changeIndex] = {
                 ...dataSource[changeIndex],
-                weight: (((result.proportion || 1) * result.length) / 1000 / 1000).toFixed(3),
                 totalTaxPrice,
                 totalUnTaxPrice
             }

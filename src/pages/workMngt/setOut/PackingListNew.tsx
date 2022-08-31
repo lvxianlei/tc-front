@@ -46,14 +46,14 @@ export default function PackingListNew(): React.ReactNode {
 
     useEffect(() => setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0), [JSON.stringify([...packagingData])])
 
-    const getTableDataSource = (filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<IPackingList>(() => new Promise(async (resole, reject) => {
         if (!location.state) {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
             form.setFieldsValue({ ...data })
             setPackagingData(data?.packageRecordVOList || []);
             // setPackageAttributeName(data?.packageAttributeName || '');
         }
-        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...filterValues, packageStructureId: params.packId });
+        const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, packageStructureId: params.packId });
         setStayDistrict(list.map((res, index) => {
             return {
                 ...res,
@@ -63,11 +63,8 @@ export default function PackingListNew(): React.ReactNode {
         }));
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
-
         resole(data);
-    });
-
-    const { loading, data } = useRequest<IPackingList>(() => getTableDataSource({}), {})
+    }), {})
 
     const detailData: IPackingList = data || {};
 
@@ -725,6 +722,7 @@ export default function PackingListNew(): React.ReactNode {
             <CommonAliTable
                 haveIndex
                 rowKey='businessId'
+                useVirtual={{ vertical: true }}
                 columns={[
                     ...chooseColumns.map((item: any) => {
                         if (item.dataIndex === 'code') {
