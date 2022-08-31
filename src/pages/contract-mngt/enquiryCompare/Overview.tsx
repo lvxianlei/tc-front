@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react"
 import { Col, message, Row, Select } from "antd"
 import { useHistory, useParams, useRouteMatch, useLocation } from "react-router-dom"
 import { Button, Modal, Spin } from "antd"
-import { CommonTable, DetailTitle, DetailContent, Attachment } from "../../common"
+import { CommonTable, DetailTitle, DetailContent, Attachment, CommonAliTable } from "../../common"
 import { materialColumns } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -144,7 +144,7 @@ export default function Overview(): JSX.Element {
                 id={detailId}
                 type={oprationType as any}
                 ref={addBatchPriceRef}
-                materialLists={materialLists}
+                materialLists={selectedKeys.map((item: any) => materialLists.find((mItem: any) => mItem.id === item))}
                 comparisonPriceId={params.id}
             />
         </Modal>
@@ -237,15 +237,15 @@ export default function Overview(): JSX.Element {
                 onClick={handleFinishPrice}
             // disabled={data?.comparisonStatus !== 1}
             >完成询价</Button>,
-            // <Button
-            //     // disabled={data?.comparisonStatus !== 1}
-            //     type="primary"
-            //     style={{ marginRight: 16 }}
-            //     ghost key="add"
-            //     onClick={() => {
-            //         setOprationType("new")
-            //         setVisible(true)
-            //     }}>添加报价</Button>,
+            <Button
+                // disabled={data?.comparisonStatus !== 1}
+                type="primary"
+                style={{ marginRight: 16 }}
+                ghost key="add"
+                onClick={() => {
+                    setOprationType("new")
+                    setVisible(true)
+                }}>添加报价</Button>,
             <Button
                 // disabled={data?.comparisonStatus !== 1}
                 type="primary"
@@ -273,26 +273,32 @@ export default function Overview(): JSX.Element {
                 <Button key="back" onClick={() => history.goBack()}>返回</Button>
             ]}>
             <DetailTitle title="询价产品信息" style={{ marginTop: "24px" }} />
-            <CommonTable
+            <CommonAliTable
                 columns={[
                     ...materialColumns,
                     ...(data?.headerColumnVos.map((item: any) => ({
                         ...item,
+                        width: 100,
                         render: (_value: any, records: any) => <div
                             style={records?.inquiryQuotationOfferData?.minTaxOffer === records?.inquiryQuotationOfferData?.[item.dataIndex] ? {
                                 background: "green",
-                                color: "#fff"
+                                color: "#fff",
+                                fontWeight: 600,
+                                width: "100%",
+                                height: "100%",
+                                lineHeight: "32px"
                             } : {}}
                         >{records?.inquiryQuotationOfferData?.[item.dataIndex]}</div>
                     })) || []),
                     {
                         title: "中标供应商",
                         dataIndex: "winBidSupplierId",
+                        width: 140,
                         render: (value: any, records: any) => (<Select
                             // disabled={data?.comparisonStatus !== 1}
                             value={value === -1 ? "" : value}
                             onChange={(value: string) => handleSelect(records.id, value)}
-                            style={{ width: 150, height: 32 }}>
+                            style={{ width: "100%", height: "100%" }}>
                             {data?.inquiryQuotationOfferActionVo?.inquiryQuotationOfferData.map((item: any) => <Select.Option
                                 value={item.supplierId}
                                 key={item.id}>{item.supplierName}</Select.Option>)}
