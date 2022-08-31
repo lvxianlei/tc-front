@@ -144,7 +144,7 @@ export default function Overview(): JSX.Element {
                 id={detailId}
                 type={oprationType as any}
                 ref={addBatchPriceRef}
-                materialLists={materialLists}
+                materialLists={selectedKeys.map((item: any) => materialLists.find((mItem: any) => mItem.id === item))}
                 comparisonPriceId={params.id}
             />
         </Modal>
