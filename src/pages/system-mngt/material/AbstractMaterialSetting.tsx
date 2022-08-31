@@ -4,12 +4,11 @@
  */
 import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Input, InputNumber, message, Popconfirm, Select, Table, TableColumnType, TreeSelect } from 'antd';
-import Form, { FormInstance, FormProps, RuleObject } from 'antd/lib/form';
+import { Button, Input, InputNumber, Popconfirm, Select, Table, TableColumnType, TreeSelect } from 'antd';
+import Form, { FormProps, RuleObject } from 'antd/lib/form';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { RouteComponentProps } from 'react-router';
 import AbstractFillableComponent, { IAbstractFillableComponentState, IFormItemGroup } from '../../../components/AbstractFillableComponent';
-import ConfirmableButton from '../../../components/ConfirmableButton';
 import { IRenderedSection } from '../../../utils/SummaryRenderUtil';
 import { IMaterial, IMaterialTree } from './IMaterial';
 import { unitOptions, materialStandardOptions } from '../../../configuration/DictionaryOptions';

@@ -7,15 +7,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Space, Button, Input, Col, Row, message, Form, Checkbox, Spin, InputNumber, Descriptions, Modal, Select } from 'antd';
 import { CommonAliTable, DetailContent, DetailTitle } from '../../common';
-import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import styles from './SetOut.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { componentTypeOptions, packageTypeOptions } from '../../../configuration/DictionaryOptions';
 import { IBundle, IPackingList, ITower } from './ISetOut';
 import ReuseTower, { EditProps } from './ReuseTower';
 import { chooseColumns, packingColumns } from './SetOutInformation.json';
+import styles from './SetOut.module.less';
 
 export default function PackingListNew(): React.ReactNode {
     const history = useHistory();
@@ -51,7 +50,6 @@ export default function PackingListNew(): React.ReactNode {
             const data = await RequestUtil.get<IPackingList>(`/tower-science/packageStructure/structure/list?id=${params.packId}`);
             form.setFieldsValue({ ...data })
             setPackagingData(data?.packageRecordVOList || []);
-            // setPackageAttributeName(data?.packageAttributeName || '');
         }
         const list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, packageStructureId: params.packId });
         setStayDistrict(list.map((res, index) => {
@@ -64,7 +62,7 @@ export default function PackingListNew(): React.ReactNode {
         const data: any = await RequestUtil.get<[]>(`/tower-science/productSegment/distribution?productId=${params.productId}`);
         setUserList(data?.loftingProductSegmentList);
         resole(data);
-    }), {})
+    }))
 
     const detailData: IPackingList = data || {};
 
@@ -576,8 +574,8 @@ export default function PackingListNew(): React.ReactNode {
                 <Col><InputNumber max={maxNum} value={removeNum} onChange={(e) => setRemoveNum(Number(e))} /></Col>
             </Row>
         </Modal>
-        <DetailContent key="packinglistnew" operation={[
-            <Space direction="horizontal" size="small" >
+        <DetailContent operation={[
+            <Space direction="horizontal" size="small" key="operation">
                 <Button type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 <Button type="primary" loading={btnLoading} onClick={() => {
                     save(0);
@@ -722,7 +720,7 @@ export default function PackingListNew(): React.ReactNode {
             <CommonAliTable
                 haveIndex
                 rowKey='businessId'
-                useVirtual={{ vertical: true }}
+                style={{ overflow: "auto", maxHeight: 400 }}
                 columns={[
                     ...chooseColumns.map((item: any) => {
                         if (item.dataIndex === 'code') {
@@ -776,7 +774,7 @@ export default function PackingListNew(): React.ReactNode {
                         key: 'operation',
                         title: '操作',
                         dataIndex: 'operation',
-                        fixed: 'right' as FixedType,
+                        fixed: 'right',
                         width: 100,
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                             <Button type="link" disabled={record.isChild} onClick={() => packaging(record, index)}>添加</Button>
@@ -787,7 +785,6 @@ export default function PackingListNew(): React.ReactNode {
                 dataSource={[...stayDistrict]}
                 rowSelection={{
                     selectedRowKeys: selectedRowKeys,
-                    type: "checkbox",
                     onChange: onSelectChange,
                     getCheckboxProps: (record: Record<string, any>) => !!record.isChild,
                 }}
@@ -821,23 +818,21 @@ export default function PackingListNew(): React.ReactNode {
                         key: 'operation',
                         title: '操作',
                         dataIndex: 'operation',
-                        fixed: 'right' as FixedType,
+                        fixed: 'right',
                         width: 100,
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                             <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum || 1)); setMaxNum(Number(record.structureCount) / Number(record.singleNum || 1)); }}>移除</Button>
                         )
                     }
-                ]}
+                ] as any}
                 pagination={false}
                 dataSource={packagingData}
+                style={{ overflow: "auto", maxHeight: 400 }}
                 rowKey="businessId"
                 rowSelection={{
                     selectedRowKeys: removeRowKeys,
-                    type: "checkbox",
                     onChange: onRemoveSelectChange,
-                    getCheckboxProps: (record: Record<string, any>) => ({
-                        disabled: record.isChild === true
-                    }),
+                    getCheckboxProps: (record: Record<string, any>) => !!record.isChild,
                 }}
             />
         </DetailContent>
