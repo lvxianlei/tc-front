@@ -911,6 +911,11 @@
                         "label": "公告管理",
                         "path": "/announcement/list",
                         "authority": "tc_erp_sys_notice_notice"
+                    },
+                    {
+                        "label": "人员分组管理",
+                        "path": "/announcement/user",
+                        "authority": "tc_erp_sys_notice_notice"
                     }
                 ]
             },
