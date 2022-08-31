@@ -34,11 +34,11 @@ export default function PickTower(): React.ReactNode {
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
     const [productId, setProductId] = useState('');
-    const [status, setStatus] = useState('');
+    // const [status, setStatus] = useState('');
     const [withSectionVisible, setWithSectionVisible] = useState<boolean>(false);
     const editRef = useRef<EditRefProps>();
     const userId = AuthUtil.getUserId();
-    const [batchNo, setBatchNo] = useState<any>();
+    // const [batchNo, setBatchNo] = useState<any>();
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
@@ -122,11 +122,11 @@ export default function PickTower(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type='link'  onClick={async () => {
+                    <Button type='link' onClick={async () => {
                         setWithSectionVisible(true);
                         setProductId(record.id);
-                        setStatus(params.status);
-                        setBatchNo(record.productionBatch && record.productionBatchNo && record.productionBatch.length > 0 && record.productionBatchNo.length > 0)
+                        // setStatus(params.status);
+                        // setBatchNo(record.productionBatch && record.productionBatchNo && record.productionBatch.length > 0 && record.productionBatchNo.length > 0)
                     }} >配段</Button>
                     <Button type='link' onClick={() => { history.push(`/workMngt/pickList/pickTower/${params.id}/${params.status}/pickTowerDetail/${record.id}`) }}>杆塔提料明细</Button>
                 </Space>
@@ -188,7 +188,7 @@ export default function PickTower(): React.ReactNode {
                 width="60%"
                 onOk={handleModalOk}
                 footer={<Space>
-                    {batchNo && status === '3' ? null : <Button type='primary' onClick={handleModalOk}>保存</Button>}
+                    <Button type='primary' onClick={handleModalOk}>保存</Button>
                     <Button onClick={() => {
                         editRef.current?.resetFields();
                         setWithSectionVisible(false);
@@ -199,7 +199,7 @@ export default function PickTower(): React.ReactNode {
                     editRef.current?.resetFields();
                     setWithSectionVisible(false);
                 }}>
-                <WithSection id={productId} ref={editRef} type={status === '3' ? 'detail' : productId?'edit': 'new'} batchNo={batchNo}  productCategoryId={params.id}/>
+                <WithSection id={productId} ref={editRef} type={productId ? 'edit' : 'new'} productCategoryId={params.id} />
             </Modal>
             <Page
                 path="/tower-science/materialProduct"
@@ -211,12 +211,10 @@ export default function PickTower(): React.ReactNode {
                 exportPath="/tower-science/materialProduct"
                 extraOperation={
                     <Space>
-                       {status!=='3'&& <Button type='primary' onClick={() => {
+                        <Button type='primary' onClick={() => {
                             setWithSectionVisible(true);
                             setProductId('');
-                            setStatus('0');
-                            setBatchNo(false)
-                        }}>批量配段</Button>}
+                        }}>批量配段</Button>
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
                     </Space>
                 }
