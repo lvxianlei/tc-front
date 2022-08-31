@@ -8,7 +8,8 @@ import styles from './AnnouncementMngt.module.less';
 import { IAnnouncement, IStaffList } from './AnnouncementMngt';
 import SelectUserTransfer from './SelectUserTransfer';
 import { IStaff } from '../dept/staff/StaffMngt';
-
+import BraftEditor from 'braft-editor'
+import 'braft-editor/dist/index.css'
 export default function AnnouncementNew(): React.ReactNode {
     const [form] = Form.useForm();
     const attachRef = useRef<AttachmentRef>()
@@ -85,6 +86,9 @@ export default function AnnouncementNew(): React.ReactNode {
                 <Button key="cancel" type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ]}>
+            <BraftEditor
+                value={""}
+            />
             <DetailTitle title="基本信息" key={1} />
             <Form form={form} labelCol={{ span: 2 }}>
                 <Form.Item name="title" label="标题" initialValue={detailData.title} rules={[{
