@@ -220,10 +220,6 @@
         {
             "title": "含税报价（单价）",
             "dataIndex": "taxOffer"
-        },
-        {
-            "title": "不含税报价（单价）",
-            "dataIndex": "offer"
         }
     ],
     "choosePlanList": [
