@@ -3,9 +3,9 @@
  * author: mschange
  * time: 2022/4/21
  */
-import { Button, Checkbox, Col, Descriptions, Divider, Form, InputNumber, message, Modal, Radio, Row, Select, Table, Tabs, Tooltip } from 'antd';
+import { Button, Checkbox, Col, Form, InputNumber, message, Modal, Row, Select, Tabs, Tooltip } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable as CommonTableBeFore, DetailContent, DetailTitle } from '../../common';
 import CommonTable from '../../common/CommonAliTable';
@@ -35,10 +35,6 @@ interface BtnList {
     type?: "link" | "text" | "ghost" | "primary" | "default" | "dashed" | undefined
 }
 
-interface Gobal {
-    id: string
-    sortChildren: any[]
-}
 const { TabPane } = Tabs;
 const formItemLayout = {
     labelCol: { span: 5 },
@@ -77,14 +73,10 @@ export default function IngredientsList(): React.ReactNode {
     const [angleConfigVisible, setAngleConfigVisible] = useState<boolean>(false);
     // 控制已配方案
     const [visibleAllocatedScheme, setVisibleAllocatedScheme] = useState<boolean>(false);
-    // 控制选择米数
-    const [visibleSelectMeters, setVisibleSelectMeters] = useState<boolean>(false);
     // 控制已选方案对比
     const [visibleComparisonOfSelectedSchemes, setVisibleComparisonOfSelectedSchemes] = useState<boolean>(false);
     // 控制选择仓库
     const [visibleSelectWarehouse, setVisibleSelectWarehouse] = useState<boolean>(false);
-    // 米数数据
-    const [meterNumber, setMeterNumber] = useState<any[]>([]);
 
     // 构建分类当前选中项
     const [activeSort, setActiveSort] = useState<string>("");
@@ -118,7 +110,7 @@ export default function IngredientsList(): React.ReactNode {
     const [angleConfigStrategy, setAngleConfigStrategy] = useState<any[]>([]);
 
     // 存储当前的配料策略
-    const [nowIngre, setNowIngre] = useState<{[key: string]: any}>({});
+    const [nowIngre, setNowIngre] = useState<{ [key: string]: any }>({});
 
     // 初始米数
     const [miter, setMiter] = useState<any[]>([]);
@@ -285,12 +277,11 @@ export default function IngredientsList(): React.ReactNode {
     const rowSelectionCheck = {
         selectedRowKeys: selectedRowKeysCheck,
         onChange: (selectedRowKeys: React.Key[], selectedRows: any) => {
-            console.log(selectedRowKeys, selectedRows, "======")
             setSelectedRowKeysCheck(selectedRowKeys);
             setSelectedRowCheck(selectedRows)
 
             // 计算构建长度合计
-            let lenth:number = 0;
+            let lenth: number = 0;
             for (let i = 0; i < selectedRows.length; i += 1) {
                 lenth = lenth + (+selectedRows[i].length || 0)
             }
@@ -427,7 +418,7 @@ export default function IngredientsList(): React.ReactNode {
                 result[i].notConfigured = result[i].num;
             }
             // 处理未配为0的情况
-            if (+result[i].notConfigured=== 0) {
+            if (+result[i].notConfigured === 0) {
                 if (selectedRowKeysCheck.indexOf(result[i].id) !== -1) {
                     // 说明存在
                     selectKeys = selectKeys.filter((item: any) => item !== result[i].id);
@@ -440,7 +431,7 @@ export default function IngredientsList(): React.ReactNode {
         setSortDetailList(result.slice(0))
 
         // 当已选方案发生改变，导致选中的变换，修改长度合计
-        let lenth:number = 0;
+        let lenth: number = 0;
         for (let i = 0; i < selectRows.length; i += 1) {
             lenth = lenth + (+selectRows[i].length || 0)
         }
@@ -490,7 +481,7 @@ export default function IngredientsList(): React.ReactNode {
     }, [detailCount])
 
 
-    const handleModalSure = async() => {
+    const handleModalSure = async () => {
         // 修改当前的配料策略
         const baseData = await serarchForm.validateFields();
         setNowIngre({
@@ -500,7 +491,7 @@ export default function IngredientsList(): React.ReactNode {
         let result = angleConfigStrategy;
         const v = activeSort.split("_")[1].split("∠")[1].split("*")[0];
         const index = angleConfigStrategy.findIndex((item: any) => v > item?.width.split("~")[0] && v < item?.width.split("~")[1]);
-        result[index] ={
+        result[index] = {
             ...result[index],
             ...baseData,
             idealRepertoryLengthList: baseData.idealRepertoryLengthList
@@ -522,7 +513,7 @@ export default function IngredientsList(): React.ReactNode {
             ...programme[0].selectedScheme,
             {
                 ...options,
-                clampLoss: serarchForm.getFieldValue("clampLoss"), 
+                clampLoss: serarchForm.getFieldValue("clampLoss"),
                 edgeLoss: serarchForm.getFieldValue("edgeLoss"),
                 margin: serarchForm.getFieldValue("margin"),
             }
@@ -843,7 +834,6 @@ export default function IngredientsList(): React.ReactNode {
                         }
                     }
                 }
-                console.log(v, "====>>>")
                 setGloballyStoredData(v);
             }
         } catch (error) {
@@ -903,7 +893,7 @@ export default function IngredientsList(): React.ReactNode {
             // 重组构建明细数据
             let comp = [];
             if (selectedRowCheck.length === 1) {
-                 for (let i = 0; i < sortDetailList.length; i += 1) {
+                for (let i = 0; i < sortDetailList.length; i += 1) {
                     if (selectedRowKeysCheck.includes(sortDetailList[i].id)) {
                         comp.push({
                             ...sortDetailList[i],
@@ -1017,7 +1007,7 @@ export default function IngredientsList(): React.ReactNode {
         <div className='ingredientsListWrapper'>
             <DetailContent operation={[
                 <span className='texts' style={{ marginRight: 4 }}>长度合计:</span>,
-                <span className='values' style={{ marginRight: 16 }}>{ lengthAll }</span>,
+                <span className='values' style={{ marginRight: 16 }}>{lengthAll}</span>,
                 ...btnList.map((item: BtnList) => {
                     return <Button key={item.key} type={item.type ? item.type : "primary"} style={{ marginRight: 16 }} onClick={() => handleBtnClick(item)}>{item.value}</Button>
                 })
@@ -1068,11 +1058,11 @@ export default function IngredientsList(): React.ReactNode {
                                             return <TabPane tab={item.title} key={item.key} closable={item.closable} style={{ position: "relative" }}>
                                                 <div className='topStrategyWrapper'>
                                                     <Button type='primary' onClick={() => {
-                                                            serarchForm.setFieldsValue({
-                                                                ...nowIngre
-                                                            })
-                                                            setAngleConfigVisible(true)
-                                                        }
+                                                        serarchForm.setFieldsValue({
+                                                            ...nowIngre
+                                                        })
+                                                        setAngleConfigVisible(true)
+                                                    }
                                                     }>配料策略设置</Button>
                                                     <span className='texts'>开数:</span>
                                                     <span className='values'>{nowIngre?.openNumberList?.join("、")}</span>
@@ -1093,7 +1083,7 @@ export default function IngredientsList(): React.ReactNode {
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
-                                                            <DetailTitle key="detail" title="构件明细" col={{left: 8, right: 16}} operation={[
+                                                            <DetailTitle key="detail" title="构件明细" col={{ left: 8, right: 16 }} operation={[
                                                                 <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} disabled={autoLoading} onClick={() => getAuto()}>自动配料</Button>,
                                                                 <Button type="primary" ghost key="choose" style={{ padding: "6px 16px" }} disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
                                                             ]} />
@@ -1106,7 +1096,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                 components={components}
                                                                 rowClassName={(record: any) => {
                                                                     if (+record.notConfigured === 0) return 'table-color-dust';
-                                                                 }}
+                                                                }}
                                                                 onRow={(record: any) => {
                                                                     return {
                                                                         onDoubleClick: async (event: any) => getScheme(1)
@@ -1151,7 +1141,7 @@ export default function IngredientsList(): React.ReactNode {
                                                                     dataSource={item.selectedScheme.slice(0)}
                                                                     pagination={false}
                                                                     // scroll={{ x: 1200, y: 320 }}
-                                                                    style={{height: 200, overflow: "auto"}}
+                                                                    style={{ height: 200, overflow: "auto" }}
                                                                     code={1}
                                                                 />
                                                             </div>
@@ -1280,11 +1270,11 @@ export default function IngredientsList(): React.ReactNode {
                     </Button>
                 ]}
             >
-                <Form {...formItemLayout} form={serarchForm} style={{marginBottom: 18}}>
+                <Form {...formItemLayout} form={serarchForm} style={{ marginBottom: 18 }}>
                     <Form.Item
                         name="openNumberList"
                         label="开数"
-                        style={{marginBottom: 8}}
+                        style={{ marginBottom: 8 }}
                         rules={[
                             {
                                 "required": true,
@@ -1311,7 +1301,7 @@ export default function IngredientsList(): React.ReactNode {
                                 </Col>
                                 <Col span={6}>
                                     <Checkbox value={4} style={{ lineHeight: '32px' }}>
-                                    4
+                                        4
                                     </Checkbox>
                                 </Col>
                             </Row>
@@ -1320,7 +1310,7 @@ export default function IngredientsList(): React.ReactNode {
                     <Form.Item
                         name="edgeLoss"
                         label="刀口"
-                        style={{marginBottom: 16}}
+                        style={{ marginBottom: 16 }}
                         rules={[
                             {
                                 "required": true,
@@ -1337,7 +1327,7 @@ export default function IngredientsList(): React.ReactNode {
                     <Form.Item
                         label="端头"
                         name="clampLoss"
-                        style={{marginBottom: 16}}
+                        style={{ marginBottom: 16 }}
                         rules={[
                             {
                                 "required": true,
@@ -1354,7 +1344,7 @@ export default function IngredientsList(): React.ReactNode {
                     <Form.Item
                         label="余量"
                         name="margin"
-                        style={{marginBottom: 16}}
+                        style={{ marginBottom: 16 }}
                         rules={[
                             {
                                 "required": true,
@@ -1386,12 +1376,12 @@ export default function IngredientsList(): React.ReactNode {
                             precision={2}
                         />
                     </Form.Item>
-                
-                <DetailTitle title="原材料米数" key={"strategy"}  operation={[
-                    <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-                        全选
-                    </Checkbox>
-                ]}/>
+
+                    <DetailTitle title="原材料米数" key={"strategy"} operation={[
+                        <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+                            全选
+                        </Checkbox>
+                    ]} />
                     <Form.Item
                         name="idealRepertoryLengthList"
                         rules={[
@@ -1403,46 +1393,46 @@ export default function IngredientsList(): React.ReactNode {
                     >
                         <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
                             <Row>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="6000">6000</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="6500">6500</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="7000">7000</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="7500">7500</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="8000">8000</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="8500">8500</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="9000">9000</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="9500">9500</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="10000">10000</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="10500">10500</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="11000">11000</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="11500">11500</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="12000">12000</Checkbox>
                                 </Col>
-                                <Col span={8} style={{marginBottom: 8}}>
+                                <Col span={8} style={{ marginBottom: 8 }}>
                                     <Checkbox value="12500">12500</Checkbox>
                                 </Col>
                             </Row>
