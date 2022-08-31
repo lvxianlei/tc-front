@@ -616,7 +616,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     otherWeightXg: Number(item.otherWeightXg),
                                     otherWeightXxp: Number(item.otherWeightXxp),
                                     totalWeight: Number(item.totalWeight),
-                                    otherWeightDlzj: Number(item.totalWeight),
+                                    otherWeightDlzj: Number(item.otherWeightDlzj),
                                     otherWeightOther: Number(item.otherWeightOther),
                                 }
                             }),
@@ -937,7 +937,13 @@ export default function ConfirmDetail(): React.ReactNode {
                                             const otherJ: number = legValueSum[index]?.otherWeightQtsm ? legValueSum[index]?.otherWeightQtsm : 0;
                                             const otherK: number = legValueSum[index]?.otherWeightDlzj ? legValueSum[index]?.otherWeightDlzj : 0;
                                             const otherL: number = legValueSum[index]?.otherWeightOther ? legValueSum[index]?.otherWeightOther : 0;
-                                            legValueSum[index].A = legValueSum[index].name.indexOf('，') > -1 || legValueSum[index].name.indexOf(',') > -1 || legValueSum[index].name.indexOf('/') > -1 ? legValueSum[index].name.split(/\/|,|，/).filter((item: any) => { return item }).length : 1
+                                            legValueSum[index].A = legValueSum[index].name.indexOf('，') > -1 || legValueSum[index].name.indexOf(',') > -1 || legValueSum[index].name.indexOf('/') > -1
+                                                ? legValueSum[index].name.split(/\/|,|，/).filter((item: any) => { return item }).length
+                                                : legValueSum[index].name.indexOf('-') > -1
+                                                    ? Number(legValueSum[index].name.split('-')[1].replace(/[^0-9]/ig, "")) - Number(legValueSum[index].name.split('-')[0].replace(/[^0-9]/ig, "")) + 1
+                                                    : legValueSum[index].name.indexOf('~') > -1
+                                                    ? Number(legValueSum[index].name.split('~')[1].replace(/[^0-9]/ig, "")) - Number(legValueSum[index].name.split('~')[0].replace(/[^0-9]/ig, "")) + 1
+                                                    : 1
                                             legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL
                                             legValueSum[index].totalWeight = legValueSum[index].A * legValueSum[index].monomerWeight
 
