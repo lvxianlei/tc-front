@@ -22,22 +22,22 @@ export default function SetOutTaskList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'taskNum',
-            title: '放样任务编号',
-            width: 150,
-            dataIndex: 'taskNum'
-        },
-        {
-            key: 'statusName',
-            title: '任务状态',
-            dataIndex: 'statusName',
-            width: 120
-        },
-        {
-            key: 'updateStatusTime',
-            title: '最新状态变更时间',
+            key: 'planNumber',
+            title: '计划号',
             width: 200,
-            dataIndex: 'updateStatusTime'
+            dataIndex: 'planNumber'
+        },
+        {
+            key: 'projectName',
+            title: '工程名称',
+            width: 200,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'productCategoryName',
+            title: '塔型',
+            width: 200,
+            dataIndex: 'productCategoryName'
         },
         {
             key: 'productCategoryProportion',
@@ -64,10 +64,30 @@ export default function SetOutTaskList(): React.ReactNode {
             dataIndex: 'weight'
         },
         {
-            key: 'planNumber',
-            title: '计划号',
+            key: 'statusName',
+            title: '任务状态',
+            dataIndex: 'statusName',
+            width: 120
+        },
+        {
+            key: 'updateStatusTime',
+            title: '时间',
             width: 200,
-            dataIndex: 'planNumber'
+            dataIndex: 'updateStatusTime'
+        },
+        {
+            key: 'plannedDeliveryTime',
+            title: '计划交付时间',
+            width: 200,
+            dataIndex: 'plannedDeliveryTime',
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            key: 'taskNum',
+            title: '放样任务编号',
+            width: 150,
+            dataIndex: 'taskNum'
         },
         {
             key: 'saleOrderNumber',
@@ -80,14 +100,6 @@ export default function SetOutTaskList(): React.ReactNode {
             title: '内部合同编号',
             width: 200,
             dataIndex: 'internalNumber'
-        },
-        {
-            key: 'plannedDeliveryTime',
-            title: '计划交付时间',
-            width: 200,
-            dataIndex: 'plannedDeliveryTime',
-            "type": "date",
-            "format": "YYYY-MM-DD"
         },
         {
             key: 'operation',
