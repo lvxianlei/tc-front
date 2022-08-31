@@ -354,6 +354,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             lengthMin: record.length,//长度最小值
             lengthMax: record.length,//长度最大值
             structureSpec: record.structureSpec,//规格
+            width: record.width,
             size: 1000
         });
         setOutLibraryListdata(data.records);
