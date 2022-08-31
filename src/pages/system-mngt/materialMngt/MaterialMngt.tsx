@@ -340,7 +340,7 @@ export default function MaterialMngt(): React.ReactNode {
                         required: true,
                         message: '请输入比重'
                     }]}>
-                        <InputNumber min={0} step="0.0001" precision={4} max={99.9999} style={{ width: '100%' }} />
+                        <InputNumber min={0} step="0.0001" precision={4} max={9999.9999} style={{ width: '100%' }} />
                     </Form.Item></Col>
                 </Row>
                 <Row>
