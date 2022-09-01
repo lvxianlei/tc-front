@@ -915,7 +915,7 @@
                     {
                         "label": "人员分组管理",
                         "path": "/announcement/user",
-                        "authority": "tc_erp_sys_notice_notice"
+                        "authority": "tc_erp_sys_notice_user"
                     }
                 ]
             },
