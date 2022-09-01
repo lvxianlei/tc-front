@@ -57,11 +57,11 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 code: data.dataIndex,
                 lock: data.fixed,
                 editable: data.editable || true,
-                render: (text: number) => <Text
+                render: (text: any) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
-                        tooltip: text && !["-1", -1].includes(text) ? text : 0
-                    }}>{text && !["-1", -1].includes(text) ? text : 0}</Text>,
+                        tooltip: text && !["-1"].includes(text) ? text : 0
+                    }}>{text && !["-1"].includes(text) ? text : 0}</Text>,
                 ...data
             })
         case "string":
