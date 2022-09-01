@@ -2802,6 +2802,34 @@
       "module": "./pages/baseSetting/ItemRepair",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-放样过程管理-补件下达列表
+      "name": "补件下达列表",
+      "path": "/workMngt/patchIssuedList",
+      "module": "./pages/workMngt/patchIssued/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-放样过程管理-补件下达列表-补件下达
+      "name": "补件下达",
+      "path": "/workMngt/patchIssuedList/patchIssued",
+      "module": "./pages/workMngt/patchIssued/PatchIssued",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-放样过程管理-补件下达列表-下达明细
+      "name": "下达明细",
+      "path": "/workMngt/patchIssuedList/issuedDetail/:id",
+      "module": "./pages/workMngt/patchIssued/IssuedDetail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-放样过程管理-补件下达列表-电焊明细
+      "name": "电焊明细",
+      "path": "/workMngt/patchIssuedList/weldingDetail/:id",
+      "module": "./pages/workMngt/patchIssued/WeldingDetail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
