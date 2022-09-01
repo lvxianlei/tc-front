@@ -72,23 +72,23 @@ export default function UserAdd(): React.ReactNode {
             <Form form={form} labelCol={{ span: 2 }}>
                 <Form.Item name="name" label="分组名称" initialValue={detailData.name} rules={[{
                     "required": true,
-                    "message": "请输入标题"
+                    "message": "请输入分组名称"
                 },
                 {
                     pattern: /^[^\s]*$/,
                     message: '禁止输入空格',
                 }]}>
-                    <Input placeholder="请输入" maxLength={50} />
+                    <Input placeholder="请输入"  />
                 </Form.Item>
                 <Form.Item name="type" label="分组分类" initialValue={detailData.type} rules={[{
                     "required": true,
-                    "message": "请输入内容"
+                    "message": "请输入分组分类"
                 },
                 {
                     pattern: /^[^\s]*$/,
                     message: '禁止输入空格',
                 }]}>
-                    <Input placeholder="请输入" maxLength={50} />
+                    <Input placeholder="请输入"  />
                 </Form.Item>
                 <Form.Item name="userNames" label="员工" initialValue={detailData.userNames} rules={[{
                     "required": true,
