@@ -29,37 +29,37 @@ export default function List(): React.ReactNode {
         {
             key: 'planNumber',
             title: '补件下达编号',
-            width: 200,
+            width: 120,
             dataIndex: 'planNumber'
         },
         {
             key: 'projectName',
             title: '补件类型',
-            width: 200,
+            width: 120,
             dataIndex: 'projectName'
         },
         {
             key: 'productCategoryName',
             title: '计划号',
-            width: 200,
+            width: 120,
             dataIndex: 'productCategoryName'
         },
         {
             key: 'productCategoryProportion',
             title: '塔型',
-            width: 150,
+            width: 100,
             dataIndex: 'productCategoryProportion'
         },
         {
             key: 'productProportion',
             title: '工程名称',
             dataIndex: 'productProportion',
-            width: 200
+            width: 100
         },
         {
             key: 'weight',
             title: '电压等级',
-            width: 200,
+            width: 120,
             dataIndex: 'weight'
         },
         {
@@ -71,13 +71,13 @@ export default function List(): React.ReactNode {
         {
             key: 'updateStatusTime',
             title: '补件数量',
-            width: 200,
+            width: 120,
             dataIndex: 'updateStatusTime'
         },
         {
             key: 'plannedDeliveryTime',
             title: '补件重量',
-            width: 200,
+            width: 150,
             dataIndex: 'plannedDeliveryTime'
         },
         {
