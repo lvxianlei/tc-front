@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { Button, message, Modal, Radio } from "antd";
+import { Button, Input, message, Modal, Radio } from "antd";
 import { Link, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import { DetailContent, SearchTable } from "../../common";
 import { TabTypes } from "../Detail";
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
 import { taskNotice } from "../managementDetailData.json"
+
 export default function Index() {
     const history = useHistory()
-    const location = useLocation()
-    const match = useRouteMatch()
+    const location: any = useLocation()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const [filterValue, setFilterValue] = useState<{ [key: string]: string }>({ taskReviewStatus: '' });
+    const [filterValue, setFilterValue] = useState<{ [key: string]: string }>({ taskReviewStatus: location.state?.taskReviewStatus || '' });
     const entryPath = params.id ? "management" : "salePlan"
 
     const { loading: noticeLoading, run: noticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -56,17 +56,18 @@ export default function Index() {
         }
     }
 
-    return <><DetailContent style={{ paddingTop: 14 }}>
+    return <DetailContent style={{ paddingTop: 14 }}>
         <SearchTable
             path={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
             exportPath={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
             filterValue={filterValue}
             extraOperation={<>
                 <Radio.Group
-                    defaultValue=""
-                    onChange={(event) => {
-                        setFilterValue({ taskReviewStatus: event.target.value })
-                    }} >
+                    value={filterValue.taskReviewStatus}
+                    onChange={(event) => setFilterValue({
+                        taskReviewStatus: event.target.value
+                    })
+                    } >
                     <Radio.Button value="">全部</Radio.Button>
                     <Radio.Button value="0" >审批中</Radio.Button>
                     <Radio.Button value="2" >已驳回</Radio.Button>
@@ -115,8 +116,18 @@ export default function Index() {
                         </>;
                     }
                 }
-            ]} searchFormItems={[]} />
+            ]}
+            searchFormItems={[
+                {
+                    name: 'planNumber',
+                    label: '计划号',
+                    children: <Input placeholder="计划号" style={{ width: 210 }} />
+                },
+                {
+                    name: 'orderProjectName',
+                    label: '订单工程名称',
+                    children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
+                }
+            ]} />
     </DetailContent>
-
-    </>
 }
