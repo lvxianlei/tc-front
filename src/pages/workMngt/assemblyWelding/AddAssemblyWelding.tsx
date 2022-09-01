@@ -250,7 +250,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
      * @description 构件信息移除行 
      */
     const removeRow = async (record: Record<string, any>, index: number, num: number) => {
-        let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) - (Number(record.basicsWeight) || 0);
+        let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) - (Number(record.basicsWeight) * Number(num) || 0);
         let electricWeldingMeters: number = Number(form.getFieldsValue(true).electricWeldingMeters || 0) - Number(record.weldingLength || 0);
         form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': electricWeldingMeters?.toFixed(4) });
         if (Number(record.singleNum) === Number(num)) {
@@ -372,7 +372,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const addComponent = (record: Record<string, any>, num: number) => {
         let newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
         let weldingLength: number = form?.getFieldsValue(true)?.electricWeldingMeters;
-        let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.singleNum) || 1);
+        let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(num) || 1);
         let isNewComponent: boolean = newWeldingDetailedStructureList.every((items: IComponentList) => {
             return record.id !== items.structureId;
         })
@@ -743,7 +743,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     "message": "请选择焊缝等级"
                 }]}>
                     <Select placeholder="请选择" style={{ width: '150px' }}>
-                        <Select.Option key={0} value={''}>无</Select.Option>
+                        <Select.Option key={0} value={'无'}>无</Select.Option>
                         <Select.Option key={1} value={'一级焊缝'}>一级焊缝</Select.Option>
                         <Select.Option key={2} value={'二级焊缝'}>二级焊缝</Select.Option>
                         <Select.Option key={3} value={'外观二级'}>外观二级</Select.Option>
