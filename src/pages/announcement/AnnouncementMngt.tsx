@@ -41,12 +41,12 @@ export default function AnnouncementMngt(): React.ReactNode {
                 <Link to={`/announcement/list/detail/${record.id}`}>{_}</Link>
             )
         },
-        {
-            key: 'content',
-            title: '内容',
-            width: 150,
-            dataIndex: 'content'
-        },
+        // {
+        //     key: 'content',
+        //     title: '内容',
+        //     width: 150,
+        //     dataIndex: 'content'
+        // },
         {
             key: 'state',
             title: '状态',
