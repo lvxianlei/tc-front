@@ -33,7 +33,7 @@ export default function UserAdd(): React.ReactNode {
         });
         setStaffList(data.noticeGroupEmployeeVOList?.map((res: any) => {
             return {
-                name: res.userName,
+                name: res.employeeName,
                 id: res.employeeId
             }
         }) || [])
