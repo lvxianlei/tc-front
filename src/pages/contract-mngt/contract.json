@@ -186,7 +186,7 @@
             "title": "询比价名称",
             "dataIndex": "comparisonPriceNumber",
             "type": "popTable",
-            "path": "/tower-supply/comparisonPrice",
+            "path": "/tower-supply/comparisonPrice?comparisonStatus=2",
             "width": 1011,
             "value": "comparisonPriceNumber",
             "dependencies": true,
@@ -202,10 +202,6 @@
                 {
                     "title": "询比价编号",
                     "dataIndex": "comparisonPriceNumber"
-                },
-                {
-                    "title": "用途",
-                    "dataIndex": "purpose"
                 },
                 {
                     "title": "询比价状态",
@@ -225,10 +221,6 @@
                             "value": 3
                         }
                     ]
-                },
-                {
-                    "title": "最新状态变更时间",
-                    "dataIndex": "updateTime"
                 },
                 {
                     "title": "询价人",

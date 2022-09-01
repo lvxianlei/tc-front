@@ -298,7 +298,7 @@ export default function ApplyPayment() {
                     </Select>
                 },
                 {
-                    name: 'businessType',
+                    name: 'paymentReqType',
                     label: '付款类型',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
@@ -320,7 +320,7 @@ export default function ApplyPayment() {
                 {
                     label: "模糊查询项",
                     name: 'fuzzyQuery',
-                    children: <Input placeholder="请款编号/关联到货单/关联票据/供应商" style={{ width: 300 }} />
+                    children: <Input placeholder="请款编号/关联到货单/关联票据/企业名称" style={{ width: 300 }} />
                 }
             ]}
         />

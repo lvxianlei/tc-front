@@ -3,12 +3,11 @@
  * @copyright © 2021 Cory. All rights reserved
  */
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Card, Col, FormItemProps, Input, Popconfirm, Row, Select, Space, Table, TableColumnType, TablePaginationConfig, TableProps, Tree } from 'antd';
+import { Button, Card, Col, FormItemProps, Input, Popconfirm, Row, Space, TableColumnType, TablePaginationConfig, TableProps, Tree } from 'antd';
 import { GetRowKey } from 'antd/lib/table/interface';
 import React from 'react';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import styles from './MaterialMngt.module.less';
 
 import AbstractMngtComponent, { IAbstractMngtComponentState } from '../../../components/AbstractMngtComponent';
 import ConfirmableButton from '../../../components/ConfirmableButton';
@@ -16,7 +15,6 @@ import { ITabItem } from '../../../components/ITabableComponent';
 import RequestUtil from '../../../utils/RequestUtil';
 import { IMaterial, IMaterialTree } from './IMaterial';
 import { DataNode } from 'antd/lib/tree';
-const { TreeNode } = Tree;
 
 interface IMaterialMngtProps { }
 interface IMaterialRouteProps extends RouteComponentProps<IMaterialMngtProps>, WithTranslation { }

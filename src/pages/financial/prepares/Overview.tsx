@@ -61,6 +61,9 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
                     }}>回执单</Button>
                 }]} dataSource={data?.applyPaymentRecordVos || []} />
             <OperationRecord title="操作信息" serviceId={id} serviceName="tower-supply" />
+            <Attachment
+                dataSource={ data?.attachInfoVos }
+            />
         </Spin>
         <Modal width={1011} visible={visible} onCancel={handleCancel} footer={false}>
             <Attachment title="回执单" dataSource={attach || []} />

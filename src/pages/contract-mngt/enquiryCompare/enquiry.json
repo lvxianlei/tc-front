@@ -30,7 +30,7 @@
             "type": "popTable",
             "path": "/tower-supply/supplier",
             "width": 1011,
-            "value": "supplierName",
+            "value": "supplyIdList",
             "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,
@@ -66,62 +66,74 @@
                     "title": "供货产品",
                     "dataIndex": "supplyProductsName"
                 }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择询比价供应商"
+                }
             ]
         }
     ],
     "materialColumns": [
         {
             "title": "序号",
-            "dataIndex": "materialSeq"
+            "dataIndex": "materialSeq",
+            "width": 40
         },
         {
             "title": "物料编码",
-            "dataIndex": "materialCode"
+            "dataIndex": "materialCode",
+            "width": 70
         },
         {
             "title": "品名",
-            "dataIndex": "materialName"
+            "dataIndex": "materialName",
+            "width": 50
         },
         {
             "title": "标准",
-            "dataIndex": "materialStandardName"
+            "dataIndex": "materialStandardName",
+            "width": 50
         },
         {
             "title": "规格",
-            "dataIndex": "structureSpec"
+            "dataIndex": "structureSpec",
+            "width": 50
         },
         {
             "title": "材质",
-            "dataIndex": "structureTexture"
+            "dataIndex": "structureTexture",
+            "width": 50
         },
         {
             "title": "长度（mm）",
             "dataIndex": "length",
-            "type": "number"
+            "type": "number",
+            "width": 100
         },
         {
             "title": "宽度（mm）",
             "dataIndex": "width",
-            "type": "number"
-        },
-        {
-            "title": "厚度（mm）",
-            "dataIndex": "thickness",
-            "type": "number"
+            "type": "number",
+            "width": 100
         },
         {
             "title": "数量",
             "dataIndex": "num",
-            "type": "number"
+            "type": "number",
+            "width": 80
         },
         {
             "title": "单重（吨）",
             "dataIndex": "weight",
-            "type": "number"
+            "type": "number",
+            "width": 80
         },
         {
             "title": "总重（吨）",
-            "dataIndex": "totalWeight"
+            "dataIndex": "totalWeight",
+            "width": 80
         }
     ],
     "materialColumnsSaveOrUpdate": [
@@ -219,10 +231,6 @@
         {
             "title": "含税报价（单价）",
             "dataIndex": "taxOffer"
-        },
-        {
-            "title": "不含税报价（单价）",
-            "dataIndex": "offer"
         }
     ],
     "choosePlanList": [

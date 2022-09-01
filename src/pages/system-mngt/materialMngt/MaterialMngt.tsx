@@ -135,22 +135,28 @@ export default function MaterialMngt(): React.ReactNode {
                     materialCode: code + values.materialCode
                 }
                 if (title === '新增') {
-                    RequestUtil.post('/tower-system/material', [values]).then(res => {
-                        close();
-                        setRefresh(!refresh);
+                    RequestUtil.post(
+                        '/tower-system/material',
+                        [values]
+                    ).then(res => {
+                        // close();
+                        // setRefresh(!refresh);
                         message.success('保存成功');
+                        history.go(0)
                     })
                 } else {
-                    RequestUtil.put('/tower-system/material', [{
+                    RequestUtil.put(
+                        '/tower-system/material',
+                        [{
                         ...values,
                         id: detailData.id
                     }]).then(res => {
                         close();
                         setRefresh(!refresh);
                         message.success('保存成功');
+                        history.go(0)
                     })
                 }
-                history.go(0)
             })
         }
     }
@@ -334,7 +340,7 @@ export default function MaterialMngt(): React.ReactNode {
                         required: true,
                         message: '请输入比重'
                     }]}>
-                        <InputNumber min={0} step="0.0001" precision={4} max={99.9999} style={{ width: '100%' }} />
+                        <InputNumber min={0} step="0.0001" precision={4} max={9999.9999} style={{ width: '100%' }} />
                     </Form.Item></Col>
                 </Row>
                 <Row>
@@ -343,13 +349,13 @@ export default function MaterialMngt(): React.ReactNode {
                         message: '请选择比重算法'
                     }]}>
                         <Select style={{ width: '100%' }}>
-                            <Select.Option value='3' id='3'>
-                                法兰类
+                            <Select.Option value={3} id={3}>
+                                比重（法兰类）
                             </Select.Option>
-                            <Select.Option value='2' id='2'>
+                            <Select.Option value={2} id={2}>
                                 比重*面积（钢板类）
                             </Select.Option>
-                            <Select.Option value='1' id='1' >
+                            <Select.Option value={1} id={1}>
                                 比重*长度（角钢类）
                             </Select.Option>
                         </Select>

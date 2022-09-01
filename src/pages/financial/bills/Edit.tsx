@@ -5,7 +5,6 @@ import { bilinformation } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
-import { PopTable } from "./ReceiptModal"
 interface EditProps {
     type: "new" | "edit",
     id: string

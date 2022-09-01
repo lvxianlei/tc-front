@@ -42,11 +42,10 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
     }
 
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
-        return ( <Space direction="horizontal" size="small" style={{ marginBottom: '12px' }}>
-                {/* <Button type="primary">导入</Button> */}
-                <Button type="primary" onClick={this.onNewClick}>新增一级类目</Button>
-                <Button type="ghost" onClick={() => this.props.history.push('/config/configList')}>返回</Button>
-            </Space>
+        return (<Space direction="horizontal" size="small" style={{ marginBottom: '12px' }}>
+            <Button type="primary" onClick={this.onNewClick}>新增一级类目</Button>
+            <Button type="ghost" onClick={() => this.props.history.push('/config/configList')}>返回</Button>
+        </Space>
         );
     }
 
@@ -101,7 +100,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
         // })
         // selectedValue.id && type === 2 ? await RequestUtil.put('/tower-system/materialCategory', dataSource) : await RequestUtil.post('/tower-system/materialCategory', dataSource);
         // this.fetchMaterialType();
-        if(this.state.type === 0 || this.state.type === 2) {
+        if (this.state.type === 0 || this.state.type === 2) {
             RequestUtil.post('/tower-system/materialCategory', {
                 ...values,
                 code: this.state.type === 0 ? values.code : this.state.defaultData.firstCode + values.code,
@@ -114,8 +113,8 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                 this.fetchMaterialType();
             })
         } else if (this.state.type === 1 || this.state.type === 3) {
-            RequestUtil.put('/tower-system/materialCategory', { 
-                ...this.state.defaultData, 
+            RequestUtil.put('/tower-system/materialCategory', {
+                ...this.state.defaultData,
                 ...values,
                 code: this.state.type === 1 ? values.code : this.state.defaultData.firstCode + values.code
             }).then(res => {
@@ -161,10 +160,10 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             align: "left",
             render: (_: undefined, record: IMaterialType): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    { record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
+                    {record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
                         添加二级类目
                     </Button> : null}
-                    <Button type="link" onClick={() => this.showModal({ ...record, firstCode: record.code?.substring(0,2), code: record.level === 1 ? record.code : record.code?.substring(2, 4) }, record.level === 1 ? 1 : 3)}>
+                    <Button type="link" onClick={() => this.showModal({ ...record, firstCode: record.code?.substring(0, 2), code: record.level === 1 ? record.code : record.code?.substring(2, 4) }, record.level === 1 ? 1 : 3)}>
                         编辑
                     </Button>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => { this.handleDelete(record) }} >
@@ -202,7 +201,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             size: pagination.pageSize || this.state.tablePagination?.pageSize,
         });
         resData = resData.map((item: IMaterialType) => {
-            if(item.children && item.children?.length > 0) {
+            if (item.children && item.children?.length > 0) {
                 return {
                     ...item,
                     children: item?.children?.map((items: IMaterialType) => {
@@ -215,7 +214,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                     })
                 }
             } else {
-                return { ...item, children: undefined}
+                return { ...item, children: undefined }
             }
         })
         this.setState({
@@ -277,14 +276,6 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
      * @param event 
      */
     public onNewClick(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void {
-        // this.setState({
-        //     visible: true,
-        //     defaultName: '',
-        //     defaultCode: '',
-        //     editValue: false,
-        //     type: 0,
-        //     selectedValue: {}
-        // })
         this.setState({
             visible: true,
             type: 0
@@ -353,19 +344,19 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                             {
                                 pattern: /^[^\s]*$/,
                                 message: '禁止输入空格',
-                            }, 
+                            },
                             {
                                 pattern: /^[0-9]*$/,
                                 message: '仅可输入数字',
                             }]}
                             initialValue={defaultData?.code}
                         >
-                            { this.state.type === 2 || this.state.type === 3 ?<Input 
+                            {this.state.type === 2 || this.state.type === 3 ? <Input
                                 min={0}
                                 maxLength={2}
-                                addonBefore={ defaultData.firstCode || 0 }
+                                addonBefore={defaultData.firstCode || 0}
                                 style={{ width: "100%" }}
-                                />  : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
+                            /> : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
                         </Form.Item>
                         <Form.Item
                             name="name"
@@ -378,11 +369,11 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                                 pattern: /^[^\s]*$/,
                                 message: '禁止输入空格',
                             }]}
-                            initialValue={ this.state.type === 2 || this.state.type === 3 ? defaultData?.sonName : defaultData?.name }
+                            initialValue={this.state.type === 2 || this.state.type === 3 ? defaultData?.sonName : defaultData?.name}
                         >
                             <Input placeholder="请输入名称" maxLength={20} />
                         </Form.Item>
-                        { this.state.type === 2 || this.state.type === 3 ?
+                        {this.state.type === 2 || this.state.type === 3 ?
                             <><Form.Item
                                 name="ruleFront"
                                 label="规格前置符"
@@ -390,13 +381,13 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                             >
                                 <Input placeholder="请输入规格前置符" maxLength={20} />
                             </Form.Item>
-                            <Form.Item
-                                name="unit"
-                                label="单位"
-                                initialValue={defaultData?.unit}
-                            >
-                                <Input placeholder="请输入单位称" maxLength={20} />
-                            </Form.Item></>
+                                <Form.Item
+                                    name="unit"
+                                    label="单位"
+                                    initialValue={defaultData?.unit}
+                                >
+                                    <Input placeholder="请输入单位称" maxLength={20} />
+                                </Form.Item></>
                             : null
                         }
                         <Button type="primary" htmlType="submit">保存</Button>
