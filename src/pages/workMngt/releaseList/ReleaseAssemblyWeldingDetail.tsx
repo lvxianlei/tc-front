@@ -165,7 +165,7 @@ export default function ReleaseList(): React.ReactNode {
             </Form>
         {/* <Button  type="primary" onClick={() => setIsExport(true)} ghost>导出</Button> */}
         <Button style={{margin:'0px 10px 20px 20px'}} type="primary" onClick={() => {
-            downloadTemplate(`/tower-science/welding/downloadBatch`, '组焊', {
+            downloadTemplate(`/tower-science/loftingBatch/downloadBatch`, '组焊', {
                 id: params.id,
                 fuzzyMsg: filterValue?.fuzzyMsg,
                 weldingId: params.weldingId
