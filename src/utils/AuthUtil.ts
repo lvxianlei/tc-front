@@ -223,7 +223,7 @@ export default abstract class AuthUtil {
      */
     public static async refrenshToken(token: string): Promise<void> {
         try {
-            const { access_token, refresh_token } = await RequestUtil.post('/sinzetech-auth/oauth/token', {
+            const { access_token, refresh_token }: any = await RequestUtil.post('/sinzetech-auth/oauth/token', {
                 grant_type: "refresh_token",
                 scope: "all",
                 refresh_token: token

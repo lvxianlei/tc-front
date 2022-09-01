@@ -320,6 +320,18 @@
             "dataIndex": "orderProjectName"
         },
         {
+            "title": "塔型数",
+            "dataIndex": "categoryNumber"
+        },
+        {
+            "title": "基数",
+            "dataIndex": "productNumber"
+        },
+        {
+            "title": "总重(吨)",
+            "dataIndex": "totalWeight"
+        },
+        {
             "title": "原材料标准",
             "dataIndex": "materialStandardName"
         },
@@ -342,6 +354,14 @@
         {
             "title": "加工场地",
             "dataIndex": "processingSite"
+        },
+        {
+            "title": "制单人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "制单时间",
+            "dataIndex": "createTime"
         },
         {
             "title": "审批状态",
@@ -510,7 +530,43 @@
             "title": "备注",
             "dataIndex": "peculiarDescription",
             "type": "textarea",
-            "maxLength": 400
+            "autoSize": {
+                "minRows": 2
+            },
+            "maxLength": 1500
+        }
+    ],
+    "taskNoticeDetailSpec": [
+        {
+            "title": "原材料标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "原材料要求",
+            "dataIndex": "materialDemand"
+        },
+        {
+            "title": "焊接要求",
+            "dataIndex": "weldingDemand"
+        },
+        {
+            "title": "包装要求",
+            "dataIndex": "packDemand"
+        },
+        {
+            "title": "镀锌要求",
+            "dataIndex": "galvanizeDemand",
+            "type": "textarea"
+        },
+        {
+            "title": "结算要求",
+            "dataIndex": "payAsk",
+            "type": "textarea"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "peculiarDescription",
+            "type": "textarea"
         }
     ],
     "contract": [
