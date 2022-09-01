@@ -13,10 +13,10 @@ export default function UserAdd(): React.ReactNode {
     const [form] = Form.useForm();
     const location = useLocation<{ type: string }>();
     const [staffList, setStaffList] = useState<IStaffList[]>([]);
-    const [detailData, setDetailData] = useState<IAnnouncement>({});
+    const [detailData, setDetailData] = useState<any>({});
     const history = useHistory();
     const params = useParams<{ id: string }>();
-    const { loading } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
+    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         resole({});
     }), {})
 
@@ -33,8 +33,8 @@ export default function UserAdd(): React.ReactNode {
             RequestUtil.post<IAnnouncement>(`/tower-system/noticeGroup`, {
                 id: detailData.id,
                 ...value,
-                staffList: staffList.map((res: IStaffList) => { return res?.id }),
-                state: state
+                noticeGroupEmployeeDTOList: staffList.map((res: IStaffList) => { return {employeeId: res?.id} }),
+                // state: state
             }).then(res => {
                 history.goBack();
             });
@@ -44,14 +44,13 @@ export default function UserAdd(): React.ReactNode {
     return <>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" className={styles.bottomBtn}>
-                <Button key="save" type="primary" onClick={() => save(1)}>立即发布</Button>
-                <Button key="saveC" type="primary" onClick={() => save(0)}>保存草稿</Button>
+                <Button key="saveC" type="primary" onClick={() => save(0)}>保存</Button>
                 <Button key="cancel" type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ]}>
             <DetailTitle title="基本信息" key={1} />
             <Form form={form} labelCol={{ span: 2 }}>
-                <Form.Item name="title" label="分组名称" initialValue={detailData.title} rules={[{
+                <Form.Item name="name" label="分组名称" initialValue={detailData.name} rules={[{
                     "required": true,
                     "message": "请输入标题"
                 },
@@ -61,7 +60,7 @@ export default function UserAdd(): React.ReactNode {
                 }]}>
                     <Input placeholder="请输入" maxLength={50} />
                 </Form.Item>
-                <Form.Item name="content" label="分组分类" initialValue={detailData.content} rules={[{
+                <Form.Item name="type" label="分组分类" initialValue={detailData.type} rules={[{
                     "required": true,
                     "message": "请输入内容"
                 },

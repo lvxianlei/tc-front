@@ -57,12 +57,12 @@ export default function AnnouncementMngt(): React.ReactNode {
             dataIndex: 'type',
             width: 120
         },
-        {
-            key: 'clientId',
-            title: '应用范围',
-            width: 200,
-            dataIndex: 'clientId'
-        },
+        // {
+        //     key: 'clientId',
+        //     title: '应用范围',
+        //     width: 200,
+        //     dataIndex: 'clientId'
+        // },
         {
             key: 'description',
             title: '备注',
@@ -73,7 +73,7 @@ export default function AnnouncementMngt(): React.ReactNode {
 
     const batchDel = () => {
         if (selectedRows.length > 0) {
-            RequestUtil.delete(`/tower-system/noticeGroup?ids=${selectedRows.map<string>((item: IAnnouncement): string => item?.id || '').join(',')}`).then(res => {
+            RequestUtil.delete(`/tower-system/noticeGroup`,selectedKeys).then(res => {
                 message.success('批量删除成功！');
                 setSelectedKeys([]);
                 setSelectedRows([]);
@@ -90,7 +90,7 @@ export default function AnnouncementMngt(): React.ReactNode {
     }
 
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-    const [selectedRows, setSelectedRows] = useState<IAnnouncement[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
     return <Page
         path="/tower-system/noticeGroup"
