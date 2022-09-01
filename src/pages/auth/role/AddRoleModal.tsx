@@ -35,7 +35,8 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
         try {
             const result: EditResult = await RequestUtil.get(`/sinzetech-system/role/${id}`);
             addCollectionForm.setFieldsValue({
-                name: result && result.name
+                name: result && result.name,
+                code: result && result.code
             })
             setCheckedKeys(result.componentList || []);
         } catch (error) {
