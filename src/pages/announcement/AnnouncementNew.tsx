@@ -118,22 +118,36 @@ export default function AnnouncementNew(): React.ReactNode {
                         onChange={handleChange}
                     />                
                 </Form.Item>
-                <Form.Item name="userNames" label="分组" initialValue={detailData.userNames} rules={[{
+                <Form.Item name="userNames" label="接收人" initialValue={detailData.userNames} rules={[{
                     "required": true,
-                    "message": "请选择分组"
+                    "message": "请选择接收人"
                 }]}>
-                    <Input addonBefore={<SelectGroup onSelect={(selectRows: any[]) => {
-                        console.log(selectRows)
-                        const userNames = selectRows.map(res => { return res.employeeName }).join(',');
-                        form.setFieldsValue({ userNames: userNames, staffList: staffList });
-                        setStaffList(selectRows.map(res => {
-                            return {
-                                id: res?.employeeId,
-                                name: res?.employeeName
-                            }
-                        }));
-                        setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
-                    }} selectedKey={detailData?.staffList} />} disabled   suffix={
+                    <Input addonBefore={<>
+                        <SelectUserTransfer save={(selectRows: IStaff[]) => {
+                            const userNames = selectRows.map(res => { return res.name }).join(',');
+                            form.setFieldsValue({ userNames: userNames, staffList: staffList });
+                            setStaffList(selectRows.map(res => {
+                                return {
+                                    id: res?.id,
+                                    name: res?.name
+                                }
+                            }));
+                            setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
+                        }} staffData={detailData?.staffList} />
+                        <SelectGroup onSelect={(selectRows: any[]) => {
+                            console.log(selectRows)
+                            const userNames = selectRows.map(res => { return res.employeeName }).join(',');
+                            form.setFieldsValue({ userNames: userNames, staffList: staffList });
+                            const value:any[] = selectRows.map(res => {
+                                return {
+                                    id: res?.employeeId,
+                                    name: res?.employeeName
+                                }
+                            })
+                            setStaffList(value);
+                            setDetailData({ ...detailData, userNames: userNames, staffList: value })
+                        }} selectedKey={detailData?.staffList} />
+                    </>} disabled   suffix={
                         <Button type='primary' onClick={()=>history.push(`/announcement/user`)}>设置分组</Button>
                       }/>
                 </Form.Item>
