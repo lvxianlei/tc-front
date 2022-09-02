@@ -13,7 +13,8 @@ interface IPersonal {
     readonly description?: string;
     readonly number?: string;
 }
-export default function SelectGroup({ onSelect, selectedKey, ...props }: any): JSX.Element {
+
+export default function SelectGroup({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
 
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ form ] = Form.useForm();
@@ -77,7 +78,7 @@ export default function SelectGroup({ onSelect, selectedKey, ...props }: any): J
     }
     const onExpand= (expanded:any, record:any) => {
         setSelectedRows(selectedRows.concat(record?.noticeGroupEmployeeVOList))
-        setSelectedKeys(selectedKeys.concat(record?.noticeGroupEmployeeVOList.map((item:any)=>{return item.employeeId})))
+        setSelectedKeys(selectedKeys.concat(record?.noticeGroupEmployeeVOList.map((item:any)=>{return item?.employeeId})))
     }
     const expandedRowRender = (record:any) => {
         console.log('2')

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Spin, Button, Space, Form, Input } from 'antd';
+import { Spin, Button, Space, Form, Input, message } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, Attachment, AttachmentRef } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -18,7 +18,7 @@ export default function AnnouncementNew(): React.ReactNode {
     const location = useLocation<{ type: string }>();
     const [staffList, setStaffList] = useState<IStaffList[]>([]);
     const [detailData, setDetailData] = useState<IAnnouncement>({});
-    const [editorState, setEditorState] = useState<any>(BraftEditor.createEditorState(null));
+    const [editorState, setEditorState] = useState<any>('<p></p>');
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
@@ -61,6 +61,9 @@ export default function AnnouncementNew(): React.ReactNode {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
                 if (location.state.type === 'new') {
+                    if(editorState =='<p></p>'){
+                        return message.error('内容不可为空！')
+                    }
                     RequestUtil.post<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
@@ -73,6 +76,9 @@ export default function AnnouncementNew(): React.ReactNode {
                         history.goBack();
                     });
                 } else {
+                    if(editorState==='<p></p>'){
+                        return message.error('内容不可为空！')
+                    }
                     RequestUtil.put<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
@@ -121,19 +127,33 @@ export default function AnnouncementNew(): React.ReactNode {
                 <Form.Item name="userNames" label="分组" initialValue={detailData.userNames} rules={[{
                     "required": true,
                     "message": "请选择分组"
-                }]}>
-                    <Input addonBefore={<SelectGroup onSelect={(selectRows: any[]) => {
-                        console.log(selectRows)
-                        const userNames = selectRows.map(res => { return res.employeeName }).join(',');
-                        form.setFieldsValue({ userNames: userNames, staffList: staffList });
-                        setStaffList(selectRows.map(res => {
-                            return {
-                                id: res?.employeeId,
-                                name: res?.employeeName
-                            }
-                        }));
-                        setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
-                    }} selectedKey={detailData?.staffList} />} disabled   suffix={
+                }]}>  
+                    <Input addonBefore={<>
+                        <SelectUserTransfer save={(selectRows: IStaff[]) => {
+                            const userNames = selectRows.map(res => { return res.name }).join(',');
+                            form.setFieldsValue({ userNames: userNames, staffList: staffList });
+                            setStaffList(selectRows.map(res => {
+                                return {
+                                    id: res?.id,
+                                    name: res?.name
+                                }
+                            }));
+                            setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
+                        }} staffData={detailData?.staffList} />
+                        <SelectGroup onSelect={(selectRows: any[]) => {
+                            console.log(selectRows)
+                            const userNames = selectRows.map(res => { return res.employeeName }).join(',');
+                            form.setFieldsValue({ userNames: userNames, staffList: staffList });
+                            const value:any[] = selectRows.map(res => {
+                                return {
+                                    id: res?.employeeId,
+                                    name: res?.employeeName
+                                }
+                            })
+                            setStaffList(value);
+                            setDetailData({ ...detailData, userNames: userNames, staffList: value })
+                        }} selectedKey={detailData?.staffList} />
+                    </>} disabled   suffix={
                         <Button type='primary' onClick={()=>history.push(`/announcement/user`)}>设置分组</Button>
                       }/>
                 </Form.Item>
