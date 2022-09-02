@@ -182,7 +182,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             {
                 name: 'msg',
                 label: '模糊查询项',
-                children: <Input maxLength={50} placeholder="请输入标题/内容查询" />
+                children: <Input maxLength={50} placeholder="请输入" />
             }
         ]}
         filterValue={filterValue}
