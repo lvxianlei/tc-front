@@ -32,7 +32,7 @@ export default function ChangePassWord(): React.ReactNode {
                             required: true,
                             message: '请输入旧密码'
                         }]}>
-                            <Input maxLength={ 50 }/>
+                            <Input.Password maxLength={ 50 }/>
                     </Form.Item>
                     <Form.Item label="新密码" name="password" rules={[{
                             required: true,
@@ -48,7 +48,7 @@ export default function ChangePassWord(): React.ReactNode {
                                 }
                             }
                         }]}>
-                            <Input maxLength={ 50 }/>
+                            <Input.Password maxLength={ 50 }/>
                     </Form.Item>
                     <Form.Item label="重复密码" name="confirmPassword" rules={[{
                             required: true,
@@ -64,7 +64,7 @@ export default function ChangePassWord(): React.ReactNode {
                                 }
                             }
                         }]}>
-                            <Input maxLength={ 50 }/>
+                            <Input.Password maxLength={ 50 }/>
                     </Form.Item>
                 </Form>
             </DetailContent>
