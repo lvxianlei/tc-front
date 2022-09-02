@@ -70,7 +70,7 @@
                     {
                         "label": "应用信息",
                         "path": "/sys/appSetting/index",
-                        "authority": "tc_erp_sys_system_app_deploy"
+                        "authority": "tc_erp_sys_system_client"
                     }
                 ]
             },
