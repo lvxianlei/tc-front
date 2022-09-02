@@ -2810,6 +2810,13 @@
       "exact": true,
       "authority": "tc_erp_sys_system_app_deploy_list"
     },
+    { // 通用中心-应用信息
+    "name": "应用信息",
+    "path": "/sys/appSetting/index",
+    "module": "./pages/system-mngt/appSetting/index",
+    "exact": true,
+    "authority": "tc_erp_sys_system_client_info"
+  },
     { // RD-系统设置-试组装配置
       "name": "试组装配置",
       "path": "/baseSetting/tryAssemble",
