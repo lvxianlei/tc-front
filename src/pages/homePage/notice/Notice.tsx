@@ -16,15 +16,15 @@ export default function Notice(): React.ReactNode {
                 <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
             )
         },
-        {
-            key: 'content',
-            title: '内容',
-            width: 150,
-            dataIndex: 'content',
-            render: (_: string, record: Record<string, any>): React.ReactNode => (
-                <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
-            )
-        },
+        // {
+        //     key: 'content',
+        //     title: '内容',
+        //     width: 150,
+        //     dataIndex: 'content',
+        //     render: (_: string, record: Record<string, any>): React.ReactNode => (
+        //         <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
+        //     )
+        // },
         {
             key: 'releaseTime',
             title: '发布时间',
