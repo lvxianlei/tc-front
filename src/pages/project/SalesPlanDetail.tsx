@@ -54,7 +54,7 @@ export default function SalesPlanEdit() {
                     },
                     {
                         "title": "重量（吨）",
-                        "dataIndex": "weight"
+                        "dataIndex": "totalWeight"
                     }]}
                 scroll={{ x: true }}
                 dataSource={data?.productCategories} />
