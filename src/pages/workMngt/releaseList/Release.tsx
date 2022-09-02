@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Popconfirm, message, Modal, Row, Col, Spin, InputNumber } from 'antd';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { FixedType } from 'rc-table/lib/interface';
+import { Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { PlusOutlined } from "@ant-design/icons"
@@ -17,7 +15,6 @@ export default function Release(): React.ReactNode {
     const [tableDataSource, setTableDataSource] = useState<any[]>([]);
     const [aTableDataSource, setATableDataSource] = useState<any[]>([]);
     const [bTableDataSource, setBTableDataSource] = useState<any[]>([]);
-    const location = useLocation<{ state?: number, userId?: string }>();
     const [form] = Form.useForm();
     const [formRef] = Form.useForm();
     const params = useParams<{ id: string }>()
@@ -102,7 +99,6 @@ export default function Release(): React.ReactNode {
                 ...item,
                 batchNum: 0,
                 loftingBatchSegmentVOList: item?.loftingBatchSegmentVOList.map((itemItem: any) => {
-                    console.log(item?.productId)
                     return {
                         ...itemItem,
                         productId: item?.productId
@@ -229,7 +225,7 @@ export default function Release(): React.ReactNode {
                             const value = item.loftingBatchSegmentVOList.map((itemItem: any) => {
                                 return {
                                     ...itemItem,
-                                    productId: item?.productId,
+                                    productId: itemItem?.productId,
                                     productNumber: item?.productNumber,
                                     batchNum: itemItem?.batchNum ? String(itemItem?.batchNum) : '0'
                                 }
@@ -518,7 +514,6 @@ export default function Release(): React.ReactNode {
                             }, 0)
                         }
                     }))
-                    // setBTableDataSource()
                 }} disabled={!(selectedKeys.length > 0)}>输入全部</Button>]} />
                 <Form form={form} className={styles.descripForm}>
                     <CommonTable columns={[...columns,
