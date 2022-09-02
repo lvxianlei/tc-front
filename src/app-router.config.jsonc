@@ -2794,7 +2794,7 @@
     "path": "/sys/appSetting/index",
     "module": "./pages/system-mngt/appSetting/index",
     "exact": true,
-    "authority": "tc_erp_sys_system_app_deploy_list"
+    "authority": "tc_erp_sys_system_client_info"
   },
     { // RD-系统设置-试组装配置
       "name": "试组装配置",
