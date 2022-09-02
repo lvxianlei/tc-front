@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Spin, Button, Space, Form, Input } from 'antd';
+import { Spin, Button, Space, Form, Input, message } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailTitle, DetailContent, Attachment, AttachmentRef } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
@@ -18,7 +18,7 @@ export default function AnnouncementNew(): React.ReactNode {
     const location = useLocation<{ type: string }>();
     const [staffList, setStaffList] = useState<IStaffList[]>([]);
     const [detailData, setDetailData] = useState<IAnnouncement>({});
-    const [editorState, setEditorState] = useState<any>(BraftEditor.createEditorState(null));
+    const [editorState, setEditorState] = useState<any>('<p></p>');
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const { loading } = useRequest<IAnnouncement>(() => new Promise(async (resole, reject) => {
@@ -61,6 +61,9 @@ export default function AnnouncementNew(): React.ReactNode {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
                 if (location.state.type === 'new') {
+                    if(editorState =='<p></p>'){
+                        return message.error('内容不可为空！')
+                    }
                     RequestUtil.post<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
@@ -73,6 +76,9 @@ export default function AnnouncementNew(): React.ReactNode {
                         history.goBack();
                     });
                 } else {
+                    if(editorState==='<p></p>'){
+                        return message.error('内容不可为空！')
+                    }
                     RequestUtil.put<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
