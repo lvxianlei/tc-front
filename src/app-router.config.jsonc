@@ -2236,6 +2236,27 @@
       "exact": true,
       "authority": "tc_erp_sys_notice_notice_detail"
     },
+    { // 人员分组管理
+      "name": "人员分组管理",
+      "path": "/announcement/user",
+      "module": "./pages/announcement/user/index",
+      "exact": true,
+      "authority": "tc_erp_sys_notice_user_list"
+    },
+    { // 人员分组管理-新增
+      "name": "人员分组新增",
+      "path": "/announcement/user/add",
+      "module": "./pages/announcement/user/UserAdd",
+      "exact": true,
+      "authority": "tc_erp_sys_notice_user_add"
+    },
+    { // 人员分组管理-编辑
+      "name": "人员分组编辑",
+      "path": "/announcement/user/edit/:id",
+      "module": "./pages/announcement/user/UserEdit",
+      "exact": true,
+      "authority": "tc_erp_sys_notice_user_edit"
+    },
     { // 档案管理-资料管理
       "name": "资料管理",
       "path": "/archivesMngt/dataMngt",
