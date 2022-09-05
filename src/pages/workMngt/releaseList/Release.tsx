@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Popconfirm, message, Modal, Row, Col, Spin, InputNumber } from 'antd';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { FixedType } from 'rc-table/lib/interface';
+import { Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { PlusOutlined } from "@ant-design/icons"
@@ -17,17 +15,16 @@ export default function Release(): React.ReactNode {
     const [tableDataSource, setTableDataSource] = useState<any[]>([]);
     const [aTableDataSource, setATableDataSource] = useState<any[]>([]);
     const [bTableDataSource, setBTableDataSource] = useState<any[]>([]);
-    const location = useLocation<{ state?: number, userId?: string }>();
-    const [ form ] = Form.useForm();
-    const [ formRef ] = Form.useForm();
+    const [form] = Form.useForm();
+    const [formRef] = Form.useForm();
     const params = useParams<{ id: string }>()
     const [check, setCheck] = useState<boolean>(false);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [visible, setVisible] = useState<boolean>(false);
-    const [releaseData, setReleaseData] = useState<any|undefined>({});
+    const [releaseData, setReleaseData] = useState<any | undefined>({});
     const rowChange = (index: number) => {
         form.setFieldsValue({
-            trialAssembleSegment:""
+            trialAssembleSegment: ""
         })
     }
     const [formTable] = Form.useForm()
@@ -52,21 +49,21 @@ export default function Release(): React.ReactNode {
             dataIndex: "status",
             width: 150,
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                <span>{_===0?'正常':_===1?'暂停':_===2?'恢复':'-'}</span>
+                <span>{_ === 0 ? '正常' : _ === 1 ? '暂停' : _ === 2 ? '恢复' : '-'}</span>
             )
         }
     ]
     const [columns, setColumns] = useState<any>(columnsCommon)
     const [cancelList, setCancelList] = useState<any[]>([]);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
-        const value  = data?.loftingBatchProductVOList.filter((item:any)=>{
-            return item.isAll===0||item.isAll==='0'
+        const data: any = await RequestUtil.get(`/tower-science/loftingBatch/${params.id}`);
+        const value = data?.loftingBatchProductVOList.filter((item: any) => {
+            return item.isAll === 0 || item.isAll === '0'
         })
-        console.log(value.map((item:any)=>{
-            return{
+        console.log(value.map((item: any) => {
+            return {
                 ...item,
-                batchNum:0
+                batchNum: 0
             }
         }))
         setColumns([...columnsCommon, ...data?.segmentNameList?.map(((item: any) => ({
@@ -84,7 +81,7 @@ export default function Release(): React.ReactNode {
         })))])
         form.setFieldsValue({
             ...data,
-            cancelIssuedNumber: data?.cancelIssuedNumber&&data?.cancelIssuedNumber!==null&&data?.cancelIssuedNumber.indexOf(',')>-1?data?.cancelIssuedNumber.split(','):undefined
+            cancelIssuedNumber: data?.cancelIssuedNumber && data?.cancelIssuedNumber !== null && data?.cancelIssuedNumber.indexOf(',') > -1 ? data?.cancelIssuedNumber.split(',') : undefined
             // loftingBatchProductDTOList:value.map((item:any)=>{
             //     return{
             //         ...item,
@@ -94,15 +91,14 @@ export default function Release(): React.ReactNode {
             // loftingBatchProductDTOList:[{id:1,segmentName:1,segmentNum:10,issuedNum:null},{id:2,segmentName:2,segmentNum:5,issuedNum:1},{id:3,segmentName:3,segmentNum:5,issuedNum:5}],
         })
         formRef.setFieldsValue({
-            trialAssembleSegments:[],
+            trialAssembleSegments: [],
         })
-        setDisabled(data?.trialAssemble===1)
-        setTableDataSource(value.map((item:any)=>{
-            return{
+        setDisabled(data?.trialAssemble === 1)
+        setTableDataSource(value.map((item: any) => {
+            return {
                 ...item,
-                batchNum:0,
-                loftingBatchSegmentVOList:item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
-                    console.log(item?.productId)
+                batchNum: 0,
+                loftingBatchSegmentVOList: item?.loftingBatchSegmentVOList.map((itemItem: any) => {
                     return {
                         ...itemItem,
                         productId: item?.productId
@@ -110,45 +106,45 @@ export default function Release(): React.ReactNode {
                 })
             }
         }))
-        setBTableDataSource(data?.loftingStatisticsVOList.map((item:any)=>{
-            return{
+        setBTableDataSource(data?.loftingStatisticsVOList.map((item: any) => {
+            return {
                 ...item,
-                batchNum:0
+                batchNum: 0
             }
         }))
         setReleaseData(data)
-        const cancelData:any[] = await RequestUtil.get(`/tower-science/loftingBatch/canceled/batch/list/${params.id}`);
+        const cancelData: any[] = await RequestUtil.get(`/tower-science/loftingBatch/canceled/batch/list/${params.id}`);
         setCancelList(cancelData)
     }), {})
-    const SelectChange = (selectedRowKeys: React.Key[],selectedRows: any): void => {
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
     }
     return (
         <Spin spinning={false}>
             <Modal
-                title='试装信息'  
-                width={'40%'} 
-                visible={visible} 
-                onCancel={()=>{
+                title='试装信息'
+                width={'40%'}
+                visible={visible}
+                onCancel={() => {
                     formRef.resetFields()
                     form.setFieldsValue({
-                        trialAssembleSegment:''
+                        trialAssembleSegment: ''
                     })
                     setVisible(false)
                 }}
-                onOk={async ()=>{
+                onOk={async () => {
                     await formRef.validateFields();
                     const value = formRef.getFieldsValue(true).trialAssembleSegments
-                    const warnValue = value.filter((item:any)=>{
-                        return  item.trialAssembleNum>0
+                    const warnValue = value.filter((item: any) => {
+                        return item.trialAssembleNum > 0
                     })
-                    if(!(warnValue.length>0)){
+                    if (!(warnValue.length > 0)) {
                         return message.error(`至少存在一条非0的试装数量数据！`)
                     }
                     form.setFieldsValue({
-                        trialAssembleSegment: warnValue.map((item:any)=>{
-                            return  item.segmentName+'*'+item.trialAssembleNum
+                        trialAssembleSegment: warnValue.map((item: any) => {
+                            return item.segmentName + '*' + item.trialAssembleNum
                         }).join(',')
                     })
                     setATableDataSource(value)
@@ -158,8 +154,8 @@ export default function Release(): React.ReactNode {
                     setVisible(false)
                 }}
             >
-                <Form form={formRef} className={ styles.descripForm }>
-                    <CommonTable  
+                <Form form={formRef} className={styles.descripForm}>
+                    <CommonTable
                         columns={[
                             {
                                 title: "序号",
@@ -176,30 +172,30 @@ export default function Release(): React.ReactNode {
                                 title: "试装数量",
                                 dataIndex: "trialAssembleNum",
                                 width: 100,
-                                render:(number: number, record:any, index:number)=>{
-                                    return  <Form.Item name={['trialAssembleSegments',index,'trialAssembleNum']} initialValue={number} rules={[
-                                    //     {
-                                    //     required:true,
-                                    //     message:'请输入试装数量'
-                                    // },
-                                    {
+                                render: (number: number, record: any, index: number) => {
+                                    return <Form.Item name={['trialAssembleSegments', index, 'trialAssembleNum']} initialValue={number} rules={[
+                                        //     {
+                                        //     required:true,
+                                        //     message:'请输入试装数量'
+                                        // },
+                                        {
                                             validator: (rule, value, callback) => {
-                                              let maxPrice = record.batchNum; //拿到最大值
-                                              if (value > maxPrice) {
-                                                callback(`不能大于下达数量${maxPrice}`);
-                                              } 
-                                              else{
-                                                callback();
-                                              }
+                                                let maxPrice = record.batchNum; //拿到最大值
+                                                if (value > maxPrice) {
+                                                    callback(`不能大于下达数量${maxPrice}`);
+                                                }
+                                                else {
+                                                    callback();
+                                                }
                                             },
-                                          },
+                                        },
                                     ]}>
-                                        <InputNumber precision={0} min={0} style={{width:'100%'}}/>
+                                        <InputNumber precision={0} min={0} style={{ width: '100%' }} />
                                     </Form.Item>
                                 }
                             }
                         ]}
-                        dataSource={aTableDataSource} 
+                        dataSource={aTableDataSource}
                         pagination={false}
                         rowKey={'id'}
                     />
@@ -211,41 +207,36 @@ export default function Release(): React.ReactNode {
                     <Button type='primary' onClick={async () => {
                         await form.validateFields()
                         const value = form.getFieldsValue(true)
-                        console.log(value)
-                        if(value.trialAssemble===1){
-                            if(!value.trialAssembleSegment) 
+                        if (value.trialAssemble === 1) {
+                            if (!value.trialAssembleSegment)
                                 return message.error('未填写试装段，不可保存！')
                         }
-                        const trialValue = formRef.getFieldsValue(true)?.trialAssembleSegments?formRef.getFieldsValue(true)?.trialAssembleSegments.map((item:any)=>{
+                        const trialValue = formRef.getFieldsValue(true)?.trialAssembleSegments ? formRef.getFieldsValue(true)?.trialAssembleSegments.map((item: any) => {
                             return {
                                 id: item.id,
-                                productCategoryId:params.id,
-                                segmentId:item.segmentId,
-                                segmentName:item.segmentName,
-                                trialAssembleNum:item.trialAssembleNum?item.trialAssembleNum:0,
+                                productCategoryId: params.id,
+                                segmentId: item.segmentId,
+                                segmentName: item.segmentName,
+                                trialAssembleNum: item.trialAssembleNum ? item.trialAssembleNum : 0,
                             }
-                        }):[]
-                        console.log(trialValue)
-                        console.log(tableDataSource)
+                        }) : []
                         let arr: any[] = [];
-                        tableDataSource.forEach((item:any)=>{
-                            const value = item.loftingBatchSegmentVOList.map((itemItem:any)=>{
+                        tableDataSource.forEach((item: any) => {
+                            const value = item.loftingBatchSegmentVOList.map((itemItem: any) => {
                                 return {
                                     ...itemItem,
-                                    // productId: item?.productId,
+                                    productId: itemItem?.productId,
                                     productNumber: item?.productNumber,
-                                    batchNum: itemItem?.batchNum?String(itemItem?.batchNum):'0'
+                                    batchNum: itemItem?.batchNum ? String(itemItem?.batchNum) : '0'
                                 }
                             })
-                            console.log(value)
                             arr.push(...value)
                         })
-                        console.log(arr)
-                        const submitValue ={
+                        const submitValue = {
                             galvanizeDemand: value.galvanizeDemand,
                             machiningDemand: value.machiningDemand,
                             packDemand: value.packDemand,
-                            cancelIssuedNumber: value.cancelIssuedNumber?value.cancelIssuedNumber.join(','):"",
+                            cancelIssuedNumber: value.cancelIssuedNumber ? value.cancelIssuedNumber.join(',') : "",
                             planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
                             productCategoryId: params.id,
                             trialAssemble: value.trialAssemble,
@@ -254,61 +245,60 @@ export default function Release(): React.ReactNode {
                             weldingDemand: value.weldingDemand,
                             trialAssembleSegments: trialValue,
                             loftingBatchProductDTOList: arr,
-                            loftingBatchStatisticsDTOList: bTableDataSource.map((item:any)=>{
-                                return{
+                            loftingBatchStatisticsDTOList: bTableDataSource.map((item: any) => {
+                                return {
                                     ...item,
-                                    batchNum: item?.batchNum?String(item?.batchNum):'0'
+                                    batchNum: item?.batchNum ? String(item?.batchNum) : '0'
                                 }
                             })
                         }
-                        console.log(submitValue)
-                        RequestUtil.post(`/tower-science/loftingBatch/save`,submitValue).then(()=>{
+                        RequestUtil.post(`/tower-science/loftingBatch/save`, submitValue).then(() => {
                             message.success('保存成功');
                             history.push(`/workMngt/releaseList`)
                         })
                     }}>保存</Button>
                 </Space>
             ]}>
-                    <DetailTitle title='基础信息'/>
-                    <CommonTable columns={[
-                            {
-                                title: "塔型",
-                                dataIndex: "name",
-                                width: 50,
-                            },
-                            {
-                                title: "钢印号",
-                                dataIndex: "steelProductShape",
-                                width: 150
-                            },
-                            {
-                                title: "计划号",
-                                dataIndex: "planNumber",
-                                width: 150
-                            },
-                            {
-                                title: "试装",
-                                dataIndex: "trialAssembleName",
-                                width: 150
-                            },
-                            {
-                                title: "电压等级",
-                                dataIndex: "voltageGradeName",
-                                width: 150
-                            },
-                            {
-                                title: "材料标准",
-                                dataIndex: "materialStandardName",
-                                width: 150
-                            },
-                            {
-                                title: "产品类型",
-                                dataIndex: "productTypeName",
-                                width: 150
-                            }
-                        ]}
-                        dataSource={releaseData?.productCategoryVOList} pagination={false}/>
-                    {/* <DetailTitle title='批次信息'/>
+                <DetailTitle title='基础信息' />
+                <CommonTable columns={[
+                    {
+                        title: "塔型",
+                        dataIndex: "name",
+                        width: 50,
+                    },
+                    {
+                        title: "钢印号",
+                        dataIndex: "steelProductShape",
+                        width: 150
+                    },
+                    {
+                        title: "计划号",
+                        dataIndex: "planNumber",
+                        width: 150
+                    },
+                    {
+                        title: "试装",
+                        dataIndex: "trialAssembleName",
+                        width: 150
+                    },
+                    {
+                        title: "电压等级",
+                        dataIndex: "voltageGradeName",
+                        width: 150
+                    },
+                    {
+                        title: "材料标准",
+                        dataIndex: "materialStandardName",
+                        width: 150
+                    },
+                    {
+                        title: "产品类型",
+                        dataIndex: "productTypeName",
+                        width: 150
+                    }
+                ]}
+                    dataSource={releaseData?.productCategoryVOList} pagination={false} />
+                {/* <DetailTitle title='批次信息'/>
                     <CommonTable
                         columns={[
                             {
@@ -327,116 +317,116 @@ export default function Release(): React.ReactNode {
                         pagination={false} 
                         dataSource={ releaseData?.loftingBatchDetailVOList}
                     /> */}
-                   
-                   <Form form={ form } labelCol={{span:4}}>
-                        <DetailTitle title='下达信息'/>
-                            <Row >
-                                <Col span={12}>
-                                    <Form.Item name="machiningDemand" label="加工要求">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
-                                    </Form.Item>
-                                </Col>
-                            
-                                <Col span={12}>
-                                    <Form.Item name="weldingDemand" label="电焊说明">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
-                                    </Form.Item>
-                                </Col>
-                            
-                            </Row>
-                            <Row>
-                                <Col span={12}>
-                                    <Form.Item name="galvanizeDemand" label="镀锌要求">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
-                                    </Form.Item>
-                                </Col>
-                            
-                                <Col span={12}>
-                                    <Form.Item name="packDemand" label="包装说明">
-                                        <Input.TextArea placeholder="请输入" maxLength={ 800 } showCount rows={1}/>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={12}>
-                                    <Form.Item name="cancelIssuedNumber" label="已取消下达单号">
-                                        <Select style={{width:"100%"}}  showSearch allowClear  mode="multiple">
-                                            {cancelList && cancelList.map(({ id, issuedNumber }, index) => {
-                                                return <Select.Option key={index} value={issuedNumber}>
-                                                    {issuedNumber}
-                                                </Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                        <DetailTitle title='试装信息'/>
-                            <Row>
-                                <Col span={12}>
-                                <Form.Item name="trialAssemble" label="试装类型"  rules={[{
-                                        "required": true,
-                                        "message": "请选择试装类型"
-                                    },
-                                    {
-                                        pattern: /^[^\s]*$/,
-                                        message: '禁止输入空格',
-                                    }]}>
-                                   <Select style={{width:"100%"}} onChange={(value)=>{
-                                        form.setFieldsValue({
-                                            trialAssembleSegment:'',
-                                            trialAssembleDemand:''
-                                        })
-                                        formRef.setFieldsValue({
-                                            trialAssembleSegments:[]
-                                        })
-                                        setDisabled(value===1)
-                                   }}>
-                                        <Select.Option value={1} key ={1}>试组装</Select.Option>
-                                        <Select.Option value={0} key={0}>免试组</Select.Option>
-                                    </Select>
-                                </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                <Form.Item name="trialAssembleSegment" label="试装段">
-                                    <Input
-                                        disabled
-                                        addonAfter={<PlusOutlined onClick={async () => {
-                                            await form.validateFields()
-                                            form.getFieldsValue(true).trialAssemble===1 && setVisible(true);
-                                            const value = bTableDataSource.filter((item:any,index:number)=>{
-                                                return item.batchNum&&item.batchNum!==null&&item.batchNum!=='0'&&item.batchNum!==0
+
+                <Form form={form} labelCol={{ span: 4 }}>
+                    <DetailTitle title='下达信息' />
+                    <Row >
+                        <Col span={12}>
+                            <Form.Item name="machiningDemand" label="加工要求">
+                                <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={12}>
+                            <Form.Item name="weldingDemand" label="电焊说明">
+                                <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
+                            </Form.Item>
+                        </Col>
+
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="galvanizeDemand" label="镀锌要求">
+                                <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
+                            </Form.Item>
+                        </Col>
+
+                        <Col span={12}>
+                            <Form.Item name="packDemand" label="包装说明">
+                                <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="cancelIssuedNumber" label="已取消下达单号">
+                                <Select style={{ width: "100%" }} showSearch allowClear mode="multiple">
+                                    {cancelList && cancelList.map(({ id, issuedNumber }, index) => {
+                                        return <Select.Option key={index} value={issuedNumber}>
+                                            {issuedNumber}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <DetailTitle title='试装信息' />
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="trialAssemble" label="试装类型" rules={[{
+                                "required": true,
+                                "message": "请选择试装类型"
+                            },
+                            {
+                                pattern: /^[^\s]*$/,
+                                message: '禁止输入空格',
+                            }]}>
+                                <Select style={{ width: "100%" }} onChange={(value) => {
+                                    form.setFieldsValue({
+                                        trialAssembleSegment: '',
+                                        trialAssembleDemand: ''
+                                    })
+                                    formRef.setFieldsValue({
+                                        trialAssembleSegments: []
+                                    })
+                                    setDisabled(value === 1)
+                                }}>
+                                    <Select.Option value={1} key={1}>试组装</Select.Option>
+                                    <Select.Option value={0} key={0}>免试组</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="trialAssembleSegment" label="试装段">
+                                <Input
+                                    disabled
+                                    addonAfter={<PlusOutlined onClick={async () => {
+                                        await form.validateFields()
+                                        form.getFieldsValue(true).trialAssemble === 1 && setVisible(true);
+                                        const value = bTableDataSource.filter((item: any, index: number) => {
+                                            return item.batchNum && item.batchNum !== null && item.batchNum !== '0' && item.batchNum !== 0
+                                        });
+                                        let newArr: any[] = [];
+                                        const arr = JSON.parse(JSON.stringify(value))
+                                        for (var i = 0; i < arr.length; i++) {
+                                            const res = newArr.findIndex(ol => {
+                                                return arr[i].segmentName === ol.segmentName;
                                             });
-                                            let newArr: any[] = [];
-                                            const arr = JSON.parse(JSON.stringify(value))
-                                            for(var i = 0; i<arr.length; i++){
-                                                const res = newArr.findIndex(ol=> {
-                                                    return arr[i].segmentName === ol.segmentName;
-                                                });
-                                                if (res!== -1) {
-                                                newArr[res].batchNum = newArr[res].batchNum +  arr[i].batchNum;
-                                                } else {
+                                            if (res !== -1) {
+                                                newArr[res].batchNum = newArr[res].batchNum + arr[i].batchNum;
+                                            } else {
                                                 newArr.push(arr[i]);
-                                                }
                                             }
-                                            setATableDataSource(newArr)
-                                            formRef.setFieldsValue({
-                                                trialAssembleSegments: newArr
-                                            })
-                                        } }/>} 
-                                    />
-                                </Form.Item>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col span={12}>
-                                    <Form.Item name="trialAssembleDemand" label="试装说明">
-                                        <Input.TextArea placeholder="请输入"  maxLength={ 200 } showCount rows={1} disabled={!disabled}/>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                        </Form>
-                <DetailTitle title='杆塔信息' operation={[ <Checkbox checked={check} onChange={(e: { target: { checked: any; }; })=>{
-                    if(e.target.checked){
+                                        }
+                                        setATableDataSource(newArr)
+                                        formRef.setFieldsValue({
+                                            trialAssembleSegments: newArr
+                                        })
+                                    }} />}
+                                />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="trialAssembleDemand" label="试装说明">
+                                <Input.TextArea placeholder="请输入" maxLength={200} showCount rows={1} disabled={!disabled} />
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                </Form>
+                <DetailTitle title='杆塔信息' operation={[<Checkbox checked={check} onChange={(e: { target: { checked: any; }; }) => {
+                    if (e.target.checked) {
                         form.setFieldsValue({
                             // loftingBatchProductDTOList:releaseData?.loftingBatchProductVOList.map((item:any)=>{
                             //     return{
@@ -444,22 +434,23 @@ export default function Release(): React.ReactNode {
                             //         batchNum:0
                             //     }
                             // }),
-                            trialAssembleSegment:''
+                            trialAssembleSegment: ''
                         })
                         formRef.setFieldsValue({
-                            trialAssembleSegments:[],
+                            trialAssembleSegments: [],
                         })
-                        setTableDataSource(releaseData?.loftingBatchProductVOList.map((item:any)=>{
-                            return{
+                        setTableDataSource(releaseData?.loftingBatchProductVOList.map((item: any) => {
+                            return {
                                 ...item,
-                                batchNum:0
+                                batchNum: 0,
+                                productId: item?.productId,
                             }
                         }))
                         setSelectedKeys([])
-                        
-                    }else{
-                        const value  = releaseData?.loftingBatchProductVOList.filter((item:any)=>{
-                            return item.isAll===0||item.isAll==='0'
+
+                    } else {
+                        const value = releaseData?.loftingBatchProductVOList.filter((item: any) => {
+                            return item.isAll === 0 || item.isAll === '0'
                         })
                         form.setFieldsValue({
                             // loftingBatchProductDTOList:value.map((item:any)=>{
@@ -468,36 +459,37 @@ export default function Release(): React.ReactNode {
                             //         batchNum:0
                             //     }
                             // }),
-                            trialAssembleSegment:''
+                            trialAssembleSegment: ''
                         })
                         formRef.setFieldsValue({
-                            trialAssembleSegments:[],
+                            trialAssembleSegments: [],
                         })
-                        setTableDataSource(value.map((item:any)=>{
-                            return{
+                        setTableDataSource(value.map((item: any) => {
+                            return {
                                 ...item,
-                                batchNum:0
+                                batchNum: 0,
+                                productId: item?.productId,
                             }
                         }))
                         setSelectedKeys([])
                     }
                     setCheck(e.target.checked)
-                    
-                }}>显示已全部下达</Checkbox>,<Button type="primary" onClick={ ()=>{
-                    const value = tableDataSource.map((item:any,index:number)=>{
-                        const segmentItem = item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
+
+                }}>显示已全部下达</Checkbox>, <Button type="primary" onClick={() => {
+                    const value = tableDataSource.map((item: any, index: number) => {
+                        const segmentItem = item?.loftingBatchSegmentVOList.map((itemItem: any) => {
                             return {
-                                [itemItem?.segmentName]:selectedKeys.includes(index.toString())?itemItem.releaseNum:0
+                                [itemItem?.segmentName]: selectedKeys.includes(index.toString()) ? itemItem.releaseNum : 0
                             }
                         })
-                        const finalItem = Object.assign({},item,...segmentItem)
+                        const finalItem = Object.assign({}, item, ...segmentItem)
                         return {
                             ...finalItem,
-                            loftingBatchSegmentVOList: item?.loftingBatchSegmentVOList.map((itemItem:any)=>{
+                            loftingBatchSegmentVOList: item?.loftingBatchSegmentVOList.map((itemItem: any) => {
                                 return {
                                     ...itemItem,
-                                    productId:item?.productId,
-                                    batchNum: selectedKeys.includes(index.toString())?itemItem.releaseNum:'0'
+                                    productId: item?.productId,
+                                    batchNum: selectedKeys.includes(index.toString()) ? itemItem.releaseNum : '0'
                                 }
                             })
                         }
@@ -507,197 +499,178 @@ export default function Release(): React.ReactNode {
                         trialAssembleSegments: ''
                     })
                     setTableDataSource(value)
-                    setBTableDataSource(bTableDataSource.map((item:any)=>{
-                        console.log(columns)
-                        const getDataIndex = columns.filter((itemItem:any)=>{
+                    setBTableDataSource(bTableDataSource.map((item: any) => {
+                        const getDataIndex = columns.filter((itemItem: any) => {
                             return item.segmentName === itemItem.title
                         })
-                        console.log(getDataIndex)
-                        const valueArr = getDataIndex.length>0?value.map((item:any)=>{
+                        const valueArr = getDataIndex.length > 0 ? value.map((item: any) => {
                             return item[getDataIndex[0].dataIndex]
-                        }):[]
-                        console.log(valueArr)
+                        }) : []
                         return {
                             ...item,
-                            batchNum:valueArr.reduce((pre: any,cur:any)=>{
-                                console.log(pre,cur)
-                                console.log(parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) )
-                                return parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) 
-                            },0)
+                            batchNum: valueArr.reduce((pre: any, cur: any) => {
+                                console.log(parseFloat(pre && pre !== null ? pre : 0) + parseFloat(cur && cur !== null ? cur : 0))
+                                return parseFloat(pre && pre !== null ? pre : 0) + parseFloat(cur && cur !== null ? cur : 0)
+                            }, 0)
                         }
                     }))
-                    // setBTableDataSource()
-                }} disabled={!(selectedKeys.length>0)}>输入全部</Button>]}/>
-                    <Form form={form}   className={ styles.descripForm }>
-                        <CommonTable  columns={[...columns,
-                            {
-                                key: "operation",
-                                title: "操作",
-                                dataIndex: "operation",
-                                align: "center",
-                                width:80,
-                                fixed: "right",
-                                render: (
-                                    _: undefined,
-                                    records: any,index:number): React.ReactNode => {
-                                    return (
-                                        <Space direction="horizontal" size="small">
-                                            <Button type='link' onClick={async ()=>{
-                                                await formTable.setFieldsValue({
-                                                    ...records,
-                                                })
-                                                Modal.confirm({
-                                                    title: "编辑",
-                                                    icon: null,
-                                                    width: '60%',
-                                                    content: <Form form={formTable} labelCol={{ span: 4 }}>
-                                                        <Form.Item  name='id' style={{display:'none'}}>
-                                                            <Input type="hidden"/>
-                                                        </Form.Item>
-                                                        <Form.Item  name='id' style={{display:'none'}}>
-                                                            <Input type="hidden"/>
-                                                        </Form.Item>
-                                                        <Row>
-                                                        {
-                                                            [...columns].map((item:any,index:number)=>{
-                                                                const maxNum = records?.loftingBatchSegmentVOList.filter((items:any)=> {return items.segmentName ===item.title })
-                                                                // const maxNum=[{releaseNum: 100}];
-                                                                return <Col span={12}>
-                                                                    <Form.Item label={item.title} name={item.dataIndex} >
-                                                                        {
-                                                                            index < 4 ?  index === 3?<Select style={{width:"100%"}} disabled>
-                                                                                <Select.Option key={0} value={0}>正常</Select.Option>
-                                                                                <Select.Option key={1} value={1}>暂停</Select.Option>
-                                                                                <Select.Option key={2} value={2}>恢复</Select.Option>
-                                                                            </Select>:<InputNumber disabled={ index < 4 } precision={0}  min={0} style={{width:"100%"}}/>:
-                                                                            <InputNumber disabled={ index < 4 } precision={0} max={maxNum[0]?.releaseNum||0} min={0} style={{width:"100%"}}/>
-                                                                        }
-                                                                        
-                                                                    </Form.Item>
-                                                                </Col>
-                                                            })
-                                                        }
-                                                        </Row>
-                                                    </Form>,
-                                                    onOk: () => new Promise(async (resolve, reject) => {
-                                                        try {
-                                                            const value = await formTable.validateFields()
-                                                            // await run(selectedKeys.map((item: any) => ({
-                                                            //     id: item,
-                                                            //     loftingCompleteTime: loftingCompleteTime.loftingCompleteTime.format("YYYY-MM-DD") + " 00:00:00"
-                                                            // })))
-                                                            console.log(tableDataSource)
-                                                            console.log(value)
-                                                            const loftingBatchSegmentVOListData:any = tableDataSource[index]?.loftingBatchSegmentVOList
-                                                            const tableData:any = {
-                                                                isAll: 0,
-                                                                ...value,
-                                                                loftingBatchSegmentVOList: loftingBatchSegmentVOListData.map((itemItem:any)=>{
-                                                                    console.log(tableDataSource[index]?.productId)
-                                                                    return {
-                                                                        ...itemItem,
-                                                                        productId: tableDataSource[index]?.productId, 
-                                                                        batchNum: typeof value[itemItem?.segmentName] ==='number'?JSON.stringify(value[itemItem?.segmentName]):value[itemItem?.segmentName]
+                }} disabled={!(selectedKeys.length > 0)}>输入全部</Button>]} />
+                <Form form={form} className={styles.descripForm}>
+                    <CommonTable columns={[...columns,
+                    {
+                        key: "operation",
+                        title: "操作",
+                        dataIndex: "operation",
+                        align: "center",
+                        width: 80,
+                        fixed: "right",
+                        render: (
+                            _: undefined,
+                            records: any, index: number): React.ReactNode => {
+                            return (
+                                <Space direction="horizontal" size="small">
+                                    <Button type='link' onClick={async () => {
+                                        await formTable.setFieldsValue({
+                                            ...records,
+                                        })
+                                        Modal.confirm({
+                                            title: "编辑",
+                                            icon: null,
+                                            width: '60%',
+                                            content: <Form form={formTable} labelCol={{ span: 4 }}>
+                                                <Form.Item name='id' style={{ display: 'none' }}>
+                                                    <Input type="hidden" />
+                                                </Form.Item>
+                                                <Form.Item name='id' style={{ display: 'none' }}>
+                                                    <Input type="hidden" />
+                                                </Form.Item>
+                                                <Row>
+                                                    {
+                                                        [...columns].map((item: any, index: number) => {
+                                                            const maxNum = records?.loftingBatchSegmentVOList.filter((items: any) => { return items.segmentName === item.title })
+                                                            // const maxNum=[{releaseNum: 100}];
+                                                            return <Col span={12}>
+                                                                <Form.Item label={item.title} name={item.dataIndex} >
+                                                                    {
+                                                                        index < 4 ? index === 3 ? <Select style={{ width: "100%" }} disabled>
+                                                                            <Select.Option key={0} value={0}>正常</Select.Option>
+                                                                            <Select.Option key={1} value={1}>暂停</Select.Option>
+                                                                            <Select.Option key={2} value={2}>恢复</Select.Option>
+                                                                        </Select> : <InputNumber disabled={index < 4} precision={0} min={0} style={{ width: "100%" }} /> :
+                                                                            <InputNumber disabled={index < 4} precision={0} max={maxNum[0]?.releaseNum || 0} min={0} style={{ width: "100%" }} />
                                                                     }
-                                                                })
-                                                            }
-                                                            tableDataSource.splice(index,1,tableData)
-                                                            const arrNew = tableDataSource.filter((item:any)=>{
-                                                                return item.productionBatchNo === value?.productionBatchNo&&item.isAll===0
-                                                            })
-                                                            console.log(arrNew)
-                                                            setBTableDataSource(bTableDataSource.map((item:any)=>{
-                                                                console.log(columns)
-                                                                const getDataIndex = columns.filter((itemItem:any)=>{
-                                                                    return item.segmentName === itemItem.title
-                                                                })
-                                                                console.log(getDataIndex)
-                                                                console.log(getDataIndex.length)
-                                                                const valueArr = getDataIndex.length>0?arrNew.map((item:any)=>{
-                                                                    console.log('1')
-                                                                    return item[getDataIndex[0].dataIndex]
-                                                                }):[]
-                                                                console.log(valueArr)
-                                                                console.log(item.productionBatchNo == value?.productionBatchNo)
-                                                                return {
-                                                                    ...item,
-                                                                    batchNum:item.productionBatchNo == value?.productionBatchNo?valueArr.reduce((pre: any,cur:any)=>{
-                                                                        console.log(pre,cur)
-                                                                        console.log(parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) )
-                                                                        return parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur&&cur!==null?cur:0) 
-                                                                    },0):item?.batchNum
-                                                                }
-                                                            }))
-                                                            console.log(bTableDataSource)
-                                                            console.log(tableDataSource)
-                                                            resolve(true)
-                                                            setSelectedRows([])
-                                                            formTable.resetFields()
-                                                            message.success("编辑成功！")
 
-                                                        } catch (error) {
-                                                            console.log(error)
-                                                            reject(false)
-                                                        }
-                                                    }),
-                                                    onCancel() {
-                                                        formTable.resetFields()
+                                                                </Form.Item>
+                                                            </Col>
+                                                        })
                                                     }
-                                                })
-                                            }}
-                                            disabled={records?.isAll!==0}
-                                            >编辑</Button>
-                                        </Space>
-                                    );
-                                }
-                            }]}
-                            dataSource={[...tableDataSource]} 
-                            pagination={false} 
-                            rowSelection={{
-                                selectedRowKeys: selectedKeys,
-                                onChange: SelectChange,
-                                getCheckboxProps: (record: Record<string, any>) => ({
-                                    disabled: record?.isAll=== 1
-                                })
-                            }}
-                            rowKey={(item: any, index:number) => `${index}`}
-                            // rowKey = {'index'}
-                        />
-                        <DetailTitle title='统计信息'/>
-                        <CommonTable
-                            columns={[
-                                {
-                                    title: "序号",
-                                    dataIndex: "index",
-                                    width: 50,
-                                    render: (_a: any, _b: any, index: number) => <>{index + 1}</>
-                                },
-                                {
-                                    title: "段号",
-                                    dataIndex: "segmentName",
-                                },
-                                {
-                                    title: "批次号",
-                                    dataIndex: "productionBatchNo",
-                                },
-                                {
-                                    title: "总段数",
-                                    dataIndex: "segmentNum",
-                                },
-                                {
-                                    title: "已下达数量",
-                                    dataIndex: "issuedNum",
-                                },
-                                {
-                                    title: "本次下达数量",
-                                    dataIndex: "batchNum",
-                                }
-                            ]}
-                            pagination={false} 
-                            dataSource={ [...bTableDataSource]}
-                        />
-                    </Form>
-        </DetailContent>
-    </Spin>
+                                                </Row>
+                                            </Form>,
+                                            onOk: () => new Promise(async (resolve, reject) => {
+                                                try {
+                                                    const value = await formTable.validateFields()
+                                                    // await run(selectedKeys.map((item: any) => ({
+                                                    //     id: item,
+                                                    //     loftingCompleteTime: loftingCompleteTime.loftingCompleteTime.format("YYYY-MM-DD") + " 00:00:00"
+                                                    // })))
+                                                    const loftingBatchSegmentVOListData: any = tableDataSource[index]?.loftingBatchSegmentVOList
+                                                    const tableData: any = {
+                                                        isAll: 0,
+                                                        ...value,
+                                                        loftingBatchSegmentVOList: loftingBatchSegmentVOListData.map((itemItem: any) => {
+                                                            return {
+                                                                ...itemItem,
+                                                                productId: tableDataSource[index]?.productId,
+                                                                batchNum: typeof value[itemItem?.segmentName] === 'number' ? JSON.stringify(value[itemItem?.segmentName]) : value[itemItem?.segmentName]
+                                                            }
+                                                        })
+                                                    }
+                                                    tableDataSource.splice(index, 1, tableData)
+                                                    const arrNew = tableDataSource.filter((item: any) => {
+                                                        return item.productionBatchNo === value?.productionBatchNo && item.isAll === 0
+                                                    })
+                                                    setBTableDataSource(bTableDataSource.map((item: any) => {
+                                                        const getDataIndex = columns.filter((itemItem: any) => {
+                                                            return item.segmentName === itemItem.title
+                                                        })
+                                                        const valueArr = getDataIndex.length > 0 ? arrNew.map((item: any) => {
+                                                            return item[getDataIndex[0].dataIndex]
+                                                        }) : []
+                                                        return {
+                                                            ...item,
+                                                            batchNum: item.productionBatchNo == value?.productionBatchNo ? valueArr.reduce((pre: any, cur: any) => {
+                                                                console.log(parseFloat(pre && pre !== null ? pre : 0) + parseFloat(cur && cur !== null ? cur : 0))
+                                                                return parseFloat(pre && pre !== null ? pre : 0) + parseFloat(cur && cur !== null ? cur : 0)
+                                                            }, 0) : item?.batchNum
+                                                        }
+                                                    }))
+                                                    resolve(true)
+                                                    setSelectedRows([])
+                                                    formTable.resetFields()
+                                                    message.success("编辑成功！")
+
+                                                } catch (error) {
+                                                    reject(false)
+                                                }
+                                            }),
+                                            onCancel() {
+                                                formTable.resetFields()
+                                            }
+                                        })
+                                    }}
+                                        disabled={records?.isAll !== 0}
+                                    >编辑</Button>
+                                </Space>
+                            );
+                        }
+                    }]}
+                        dataSource={[...tableDataSource]}
+                        pagination={false}
+                        rowSelection={{
+                            selectedRowKeys: selectedKeys,
+                            onChange: SelectChange,
+                            getCheckboxProps: (record: Record<string, any>) => ({
+                                disabled: record?.isAll === 1
+                            })
+                        }}
+                        rowKey={(item: any, index: number) => `${index}`}
+                    // rowKey = {'index'}
+                    />
+                    <DetailTitle title='统计信息' />
+                    <CommonTable
+                        columns={[
+                            {
+                                title: "序号",
+                                dataIndex: "index",
+                                width: 50,
+                                render: (_a: any, _b: any, index: number) => <>{index + 1}</>
+                            },
+                            {
+                                title: "段号",
+                                dataIndex: "segmentName",
+                            },
+                            {
+                                title: "批次号",
+                                dataIndex: "productionBatchNo",
+                            },
+                            {
+                                title: "总段数",
+                                dataIndex: "segmentNum",
+                            },
+                            {
+                                title: "已下达数量",
+                                dataIndex: "issuedNum",
+                            },
+                            {
+                                title: "本次下达数量",
+                                dataIndex: "batchNum",
+                            }
+                        ]}
+                        pagination={false}
+                        dataSource={[...bTableDataSource]}
+                    />
+                </Form>
+            </DetailContent>
+        </Spin>
     )
 }
