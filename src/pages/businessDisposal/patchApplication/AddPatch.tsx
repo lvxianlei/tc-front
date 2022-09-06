@@ -5,11 +5,10 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Form, Input, InputNumber, Select } from 'antd';
-import { DetailContent, Page } from '../../common';
+import { Input, Select } from 'antd';
+import { Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { productTypeOptions } from "../../../configuration/DictionaryOptions";
 import { addColumns } from "./patchApplication.json";
 import { FixedType } from 'rc-table/lib/interface';
 
@@ -22,13 +21,18 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
+    const { data: sectionsNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/productSegment/segmentList?productCategoryId=${record.id}`);
+        resole(data)
+    }), {})
+
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            console.log(selectedRows)
             resolve(selectedRows.map(res => {
                 return {
                     ...res,
-                    productCategoryId: record.id
+                    productCategoryId: record.id,
+                    productCategory: record.productCategoryName
                 }
             }));
         } catch (error) {
@@ -44,7 +48,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
     }
 
     return <Page
-        path="/tower-science/loftingTask/taskPage"
+        path="/tower-science/productStructure/supply/entry/list"
         columns={[
             {
                 key: 'index',
@@ -58,33 +62,33 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
         requestData={{ id: record?.id }}
         searchFormItems={[
             {
-                name: 'updateStatusTime',
+                name: 'productCategoryName',
                 label: '塔型名称',
-                children: <p>塔型名称</p>
+                children: <p>{record?.productCategoryName}</p>
             },
             {
-                name: 'updateStatusTime',
-                label: '补件类型',
-                children: <Select placeholder="请选择补件类型">
-                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                name: 'segmentId',
+                label: '段名',
+                children: <Select placeholder="请选择段名">
+                    {sectionsNames && sectionsNames.map(({ id, segmentName }: any, index: number) => {
                         return <Select.Option key={index} value={id}>
-                            {name}
+                            {segmentName}
                         </Select.Option>
                     })}
                 </Select>
             },
             {
-                name: 'updateStatusTime',
+                name: 'code',
                 label: '件号名称',
                 children: <Input />
             },
             {
-                name: 'updateStatusTime',
+                name: 'description',
                 label: '备注',
                 children: <Input />
             },
             {
-                name: 'updateStatusTime',
+                name: 'specialCode',
                 label: '特殊件号',
                 children: <Select placeholder="请选择特殊件号">
                     <Select.Option value={''} key={0}>全部</Select.Option>

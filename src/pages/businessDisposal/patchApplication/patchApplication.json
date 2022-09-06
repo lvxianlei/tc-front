@@ -1,283 +1,298 @@
 {
     "columns": [
         {
-            "key": "userName",
+            "key": "supplyNumber",
             "title": "补件编号",
-            "dataIndex": "userName",
+            "dataIndex": "supplyNumber",
             "width": 100
         },
         {
-            "key": "process",
+            "key": "supplyTypeName",
             "title": "补件类型",
-            "dataIndex": "process",
+            "dataIndex": "supplyTypeName",
             "width": 100
         },
         {
-            "key": "workStatus",
+            "key": "status",
             "title": "审批状态",
-            "dataIndex": "workStatus",
-            "width": 100
+            "dataIndex": "status",
+            "width": 100,
+            "type": "select",
+            "enum": [
+                { "value": "1", "label": "未发起" },
+                { "value": "2", "label": "待审批" },
+                { "value": "3", "label": "审批中" },
+                { "value": "4", "label": "已通过" },
+                { "value": "5", "label": "已撤回" },
+                { "value": "0", "label": "已拒绝" }
+            ]
         },
         {
-            "key": "totalProductCategoryNum",
+            "key": "updateStatusTime",
             "title": "最新状态变更时间",
-            "dataIndex": "totalProductCategoryNum",
+            "dataIndex": "updateStatusTime",
             "width": 150
         },
         {
-            "key": "productCategoryNum",
+            "key": "priorityName",
             "title": "优先级",
-            "dataIndex": "productCategoryNum",
+            "dataIndex": "priorityName",
             "width": 100
         },
         {
-            "key": "endTime",
+            "key": "applyUserDeptName",
             "title": "申请部门",
-            "dataIndex": "endTime",
+            "dataIndex": "applyUserDeptName",
             "width": 100
         },
         {
-            "key": "endTime",
+            "key": "applyUserName",
             "title": "申请人",
-            "dataIndex": "endTime",
+            "dataIndex": "applyUserName",
             "width": 100
         },
         {
-            "key": "userName",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "userName",
+            "dataIndex": "planNumber",
             "width": 100
         },
         {
-            "key": "process",
+            "key": "projectName",
             "title": "工程名称",
-            "dataIndex": "process",
+            "dataIndex": "projectName",
             "width": 100
         },
         {
-            "key": "workStatus",
+            "key": "businessUserName",
             "title": "业务经理",
-            "dataIndex": "workStatus",
+            "dataIndex": "businessUserName",
             "width": 100
         },
         {
-            "key": "totalProductCategoryNum",
+            "key": "planDeliveryTime",
             "title": "计划发货日期",
-            "dataIndex": "totalProductCategoryNum",
+            "dataIndex": "planDeliveryTime",
             "width": 100
         },
         {
-            "key": "productCategoryNum",
+            "key": "materialStandardName",
+            "title": "材料标准",
+            "dataIndex": "materialStandardName",
+            "width": 100
+        },
+        {
+            "key": "totalNumber",
             "title": "零件数量",
-            "dataIndex": "productCategoryNum",
+            "dataIndex": "totalNumber",
             "width": 100
         },
         {
-            "key": "endTime",
+            "key": "totalWeight",
             "title": "零件重量",
-            "dataIndex": "endTime",
+            "dataIndex": "totalWeight",
             "width": 100
         },
         {
-            "key": "endTime",
+            "key": "isSettlement",
             "title": "是否结算",
-            "dataIndex": "endTime",
+            "dataIndex": "isSettlement",
             "width": 100
         },
         {
-            "key": "endTime",
+            "key": "description",
             "title": "说明",
-            "dataIndex": "endTime",
+            "dataIndex": "description",
             "width": 100
         }
     ],
     "tableColumns": [
         {
-            "key": "planNumber",
+            "key": "productCategory",
             "title": "塔型",
-            "dataIndex": "planNumber",
+            "dataIndex": "productCategory",
             "width": 100
         },
         {
-            "key": "programName",
+            "key": "productTypeName",
             "title": "产品类型",
-            "dataIndex": "programName",
-            "width": 100
-        },
-        {
-            "key": "productCategoryName",
-            "title": "电压等级",
-            "dataIndex": "productCategoryName",
-            "width": 100
-        },
-        {
-            "key": "productType",
-            "title": "下达状态",
-            "dataIndex": "productType",
+            "dataIndex": "productTypeName",
             "width": 100
         },
         {
             "key": "voltageGradeName",
-            "title": "零件数量",
+            "title": "电压等级",
             "dataIndex": "voltageGradeName",
             "width": 100
         },
         {
-            "key": "patternName",
+            "key": "status",
+            "title": "下达状态",
+            "dataIndex": "status",
+            "width": 100
+        },
+        {
+            "key": "totalNumber",
+            "title": "零件数量",
+            "dataIndex": "totalNumber",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
             "title": "重量kg",
-            "dataIndex": "patternName",
+            "dataIndex": "totalWeight",
             "width": 100
         }
     ],
     "partsColumns": [
         {
-            "key": "priorityName",
+            "key": "segmentName",
             "title": "段名",
-            "dataIndex": "priorityName",
+            "dataIndex": "segmentName",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "code",
             "title": "部件号",
-            "dataIndex": "priorityName",
+            "dataIndex": "code",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "materialName",
             "title": "材料",
-            "dataIndex": "priorityName",
+            "dataIndex": "materialName",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "structureTexture",
             "title": "材质",
-            "dataIndex": "priorityName",
+            "dataIndex": "structureTexture",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "structureSpec",
             "title": "规格",
-            "dataIndex": "priorityName",
+            "dataIndex": "structureSpec",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "type",
             "title": "零件类型",
-            "dataIndex": "priorityName",
+            "dataIndex": "type",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "length",
             "title": "长度（mm）",
-            "dataIndex": "priorityName",
+            "dataIndex": "length",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "width",
             "title": "宽度（mm）",
-            "dataIndex": "priorityName",
+            "dataIndex": "width",
             "width": 100
         },
         {
-            "key": "startTime",
+            "key": "thickness",
             "title": "厚度（mm）",
-            "dataIndex": "startTime",
+            "dataIndex": "thickness",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "basicsPartNum",
             "title": "补件数量",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "basicsPartNum",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "basicsWeight",
             "title": "单件重量",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "basicsWeight",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "totalWeight",
             "title": "补件重量",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "totalWeight",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "holesNum",
             "title": "单件孔数",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "holesNum",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "electricWelding",
             "title": "电焊",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "electricWelding",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "bend",
             "title": "火曲",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "bend",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "chamfer",
             "title": "切角",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "chamfer",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "shovelBack",
             "title": "铲背",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "shovelBack",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "rootClear",
             "title": "清根",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "rootClear",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "squash",
             "title": "打扁",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "squash",
             "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "suppress",
             "title": "压制",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "suppress",
             "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "openCloseAngle",
             "title": "开合角",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "openCloseAngle",
             "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "slottedForm",
             "title": "开槽形式",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "slottedForm",
             "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "groove",
             "title": "坡口",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "groove",
             "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "intersectingLine",
             "title": "相贯线",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "intersectingLine",
             "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "perforate",
             "title": "钻孔",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "perforate",
             "width": 130
         }
     ],
@@ -441,338 +456,344 @@
     ],
     "towerTypeColumns": [
         {
-            "key": "expectCompleteTime",
+            "key": "productCategoryName",
             "title": "塔型",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "productCategoryName",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "productTypeName",
             "title": "产品类型",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "productTypeName",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "voltageGradeName",
             "title": "电压等级",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "voltageGradeName",
             "width": 100
         }
     ],
     "patchColumns": [
         {
-            "key": "expectCompleteTime",
+            "key": "productCategory",
+            "title": "塔型名称",
+            "dataIndex": "productCategory",
+            "width": 100
+        },
+        {
+            "key": "productNumber",
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
+            "width": 100
+        },
+        {
+            "key": "segmentName",
             "title": "段名",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "segmentName",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "code",
             "title": "部件号",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "code",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
-            "title": "塔型",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
-        },
-        {
-            "key": "expectCompleteTime",
+            "key": "materialName",
             "title": "材料",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "materialName",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "structureTexture",
             "title": "材质",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "structureTexture",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "structureSpec",
             "title": "规格",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "structureSpec",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "type",
             "title": "零件类型",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "type",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "length",
             "title": "长度mm",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "length",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "width",
             "title": "宽度mm",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "width",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "thickness",
             "title": "厚度mm",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "thickness",
             "width": 100
         },
         {
-            "key": "num",
+            "key": "basicsPartNum",
             "title": "补件数量",
-            "dataIndex": "num",
+            "dataIndex": "basicsPartNum",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "basicsWeight",
             "title": "单件重量",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "basicsWeight",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "totalWeight",
             "title": "补件重量",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "totalWeight",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "holesNum",
             "title": "单件孔数",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "holesNum",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "electricWelding",
             "title": "电焊",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "electricWelding",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "bend",
             "title": "火曲",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "bend",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "chamfer",
             "title": "切角",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "chamfer",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "shovelBack",
             "title": "铲背",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "shovelBack",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "rootClear",
             "title": "清根",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "rootClear",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "squash",
             "title": "打扁",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "squash",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "suppress",
             "title": "压制",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "suppress",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "openCloseAngle",
             "title": "开合角",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "openCloseAngle",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "slottedForm",
             "title": "开槽形式",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "slottedForm",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "groove",
             "title": "坡口",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "groove",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "intersectingLine",
             "title": "相贯线",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "intersectingLine",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "perforate",
             "title": "钻孔",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "perforate",
+            "width": 130
         }
     ],
     "addColumns":[
         {
-            "key": "expectCompleteTime",
+            "key": "segmentName",
             "title": "段名",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "segmentName",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "code",
             "title": "部件号",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "code",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "materialName",
             "title": "材料",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "materialName",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "structureTexture",
             "title": "材质",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "structureTexture",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "structureSpec",
             "title": "规格",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "structureSpec",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "type",
             "title": "零件类型",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "type",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "length",
             "title": "长度mm",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "length",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "width",
             "title": "宽度mm",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "width",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "thickness",
             "title": "厚度mm",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "thickness",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "basicsPartNum",
             "title": "单段数量",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "basicsPartNum",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "basicsWeight",
             "title": "单件重量",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "basicsWeight",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "holesNum",
             "title": "单件孔数",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "holesNum",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "specialCode",
             "title": "特殊件",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "specialCode",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "description",
             "title": "备注",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "description",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "electricWelding",
             "title": "电焊",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "electricWelding",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "bend",
             "title": "火曲",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "bend",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "chamfer",
             "title": "切角",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "chamfer",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "shovelBack",
             "title": "铲背",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "shovelBack",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "rootClear",
             "title": "清根",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "rootClear",
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "squash",
             "title": "打扁",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "squash",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "suppress",
             "title": "压制",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "suppress",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "openCloseAngle",
             "title": "开合角",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "openCloseAngle",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "slottedForm",
             "title": "开槽形式",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "slottedForm",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "groove",
             "title": "坡口",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "groove",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "intersectingLine",
             "title": "相贯线",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "intersectingLine",
+            "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "perforate",
             "title": "钻孔",
-            "dataIndex": "expectCompleteTime",
-            "width": 100
+            "dataIndex": "perforate",
+            "width": 130
         }
     ],
     "detailColumns" :[
@@ -783,7 +804,7 @@
             "width": 100
         },
         {
-            "key": "expectCompleteTime",
+            "key": "",
             "title": "计划号",
             "dataIndex": "expectCompleteTime",
             "width": 100

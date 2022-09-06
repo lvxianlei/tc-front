@@ -5,18 +5,19 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Input, Button, Form, Descriptions, Select, TreeSelect, DatePicker, Row, Col, Modal, InputNumber } from 'antd';
+import { Input, Button, Form, Descriptions, Select, TreeSelect, DatePicker, Row, Col, Modal, InputNumber, Space } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { productTypeOptions, supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './PatchApplication.module.less';
 import { useForm } from 'antd/es/form/Form';
 import { towerTypeColumns, patchColumns } from "./patchApplication.json"
 import AddPatch from './AddPatch';
+import { useHistory } from 'react-router-dom';
 
 export interface EditRefProps {
     onSubmit: () => void
@@ -33,6 +34,7 @@ export default function Apply(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [rowData, setRowData] = useState<any>()
     const [towerSelects, setTowerSelects] = useState([]);
+    const history = useHistory();
 
     const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
@@ -40,7 +42,7 @@ export default function Apply(): React.ReactNode {
     }), {})
 
     const { data: planNums } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const nums: any = await RequestUtil.get(`/tower-system/department`);
+        const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/list`);
         resole(nums)
     }), {})
 
@@ -69,16 +71,20 @@ export default function Apply(): React.ReactNode {
         return roles;
     }
 
-    const planNumChange = (e: any) => {
+    const planNumChange = async (e: any) => {
         console.log(e)
-        setTowerSelects([])
+        const data: any = await RequestUtil.get(`/tower-science/productCategory/list/${e}`);
+        setTowerSelects(data || [])
+        form.setFieldsValue({
+            productCategoryIds: []
+        })
     }
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
-            const a: any = await addRef.current?.onSubmit();
-            console.log(a)
-            setPatchList([...(patchList || []), ...a])
+            const data: any = await addRef.current?.onSubmit();
+            console.log(data)
+            setPatchList([...(patchList || []), ...data])
             setVisible(false)
             resove(true)
         } catch (error) {
@@ -102,6 +108,43 @@ export default function Apply(): React.ReactNode {
         console.log(patchList)
     }
 
+    const productNumbers = async (productCategoryId: string) => {
+        const data: any[] = await RequestUtil.get(``);
+        return data || [{ id: 111 }]
+    }
+
+    const delRow = (index: number) => {
+        patchList.split(index, 1)
+        setPatchList([...patchList])
+    }
+
+    const save = () => {
+        if (form) {
+            form.validateFields().then(res => {
+                let value = form.getFieldsValue(true);
+                console.log(value, patchList)
+                RequestUtil.post(`/tower-science/supplyEntry`, {
+
+                }).then(res => {
+                    history.goBack();
+                });
+            })
+        }
+    }
+
+    const submit = () => {
+        if (form) {
+            form.validateFields().then(res => {
+                let value = form.getFieldsValue(true);
+                RequestUtil.post(`/tower-science/supplyEntry/submit`, {
+
+                }).then(res => {
+                    history.goBack();
+                });
+            })
+        }
+    }
+
     return (
         <>
             <Modal
@@ -114,18 +157,24 @@ export default function Apply(): React.ReactNode {
                 onCancel={() => setVisible(false)}>
                 <AddPatch record={rowData} ref={addRef} />
             </Modal>
-            <DetailContent>
+            <DetailContent operation={[
+                <Space direction="horizontal" size="small" className={styles.bottomBtn}>
+                    <Button key="save" type="primary" onClick={save}>保存并关闭</Button>
+                    <Button key="saveC" type="primary" onClick={submit}>保存并发起</Button>
+                    <Button key="cancel" type="ghost" onClick={() => history.goBack()}>关闭</Button>
+                </Space>
+            ]}>
                 <Form form={form}>
                     <Descriptions bordered column={5} size="small" className={styles.description}>
                         <Descriptions.Item label="补件类型">
-                            <Form.Item name="status" rules={[
+                            <Form.Item name="supplyType" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择补件类型"
                                 }
                             ]}>
                                 <Select placeholder="请选择补件类型">
-                                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                    {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
                                         return <Select.Option key={index} value={id}>
                                             {name}
                                         </Select.Option>
@@ -134,7 +183,7 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="优先级">
-                            <Form.Item name="status" rules={[
+                            <Form.Item name="priority" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择优先级"
@@ -149,7 +198,7 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="申请部门">
-                            <Form.Item name="status" rules={[
+                            <Form.Item name="applyUserDept" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择申请部门"
@@ -167,7 +216,7 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="申请人">
-                            <Form.Item name="status" rules={[
+                            <Form.Item name="applyUser" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择申请人"
@@ -181,21 +230,27 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="计划号">
-                            <Form.Item name="status" rules={[
+                            <Form.Item name="planNumber" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择计划号"
                                 }
                             ]}>
-                                <Select placeholder="请选择计划号" style={{ width: "150px" }} onChange={(e) => planNumChange(e)}>
+                                <Select
+                                    placeholder="请选择计划号"
+                                    style={{ width: "150px" }}
+                                    filterOption={(input, option) =>
+                                        (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+                                    }
+                                    onChange={(e) => planNumChange(e)}>
                                     {planNums && planNums?.map((item: any) => {
-                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                        return <Select.Option key={item} value={item}>{item}</Select.Option>
                                     })}
                                 </Select>
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="塔型">
-                            <Form.Item name="status" rules={[
+                            <Form.Item name="productCategoryIds" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择塔型"
@@ -209,7 +264,7 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="计划发货日期">
-                            <Form.Item name="status" rules={[
+                            <Form.Item name="planDeliveryTime" rules={[
                                 {
                                     "required": true,
                                     "message": "请选择计划发货日期"
@@ -221,7 +276,7 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="说明">
-                            <Form.Item name="status">
+                            <Form.Item name="description">
                                 <Input.TextArea maxLength={400} />
                             </Form.Item>
                         </Descriptions.Item>
@@ -256,13 +311,52 @@ export default function Apply(): React.ReactNode {
                                     haveIndex
                                     columns={[
                                         ...patchColumns.map(res => {
-                                            if (res.dataIndex === 'num') {
+                                            if (res.dataIndex === 'basicsPartNum') {
                                                 return {
                                                     ...res,
                                                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                                                         <InputNumber min={0} max={9999} size="small" onChange={(e) => {
                                                             console.log(e)
+                                                            const newList = patchList.map((res: any, ind: number) => {
+                                                                if (ind === index) {
+                                                                    return {
+                                                                        ...res,
+                                                                        basicsPartNum: e
+                                                                    }
+                                                                } else {
+                                                                    return res
+                                                                }
+                                                            })
+                                                            console.log(newList)
+                                                            setPatchList([...newList])
                                                         }} />
+                                                    )
+                                                }
+                                            }
+                                            if (res.dataIndex === 'productNumber') {
+                                                return {
+                                                    ...res,
+                                                    render: async (_: any, record: Record<string, any>, index: number): Promise<React.ReactNode> => (
+                                                        <Select placeholder="请选择杆塔号" style={{ width: "150px" }} onChange={
+                                                            (e) => {
+                                                                const newList = patchList.map((res: any, ind: number) => {
+                                                                    if (ind === index) {
+                                                                        return {
+                                                                            ...res,
+                                                                            productNumber: e
+                                                                        }
+                                                                    } else {
+                                                                        return res
+                                                                    }
+                                                                    console.log(newList)
+                                                                    setPatchList([...newList])
+                                                                })
+                                                            }
+                                                        }>
+                                                            {(await productNumbers(record?.productCategoryId))?.map((item: any) => {
+                                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                                            })}
+                                                        </Select>
                                                     )
                                                 }
                                             }
@@ -274,15 +368,12 @@ export default function Apply(): React.ReactNode {
                                             dataIndex: 'operation',
                                             fixed: 'right' as FixedType,
                                             width: 50,
-                                            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                                                <Button type="link">删除</Button>
+                                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                                <Button type="link" onClick={() => delRow(index)}>删除</Button>
                                             )
                                         }
                                     ]}
-                                    dataSource={[{
-                                        id: '11'
-                                    }]
-                                    }
+                                    dataSource={patchList}
                                     pagination={false}
                                 />
                             </Form>

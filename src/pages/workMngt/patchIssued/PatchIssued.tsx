@@ -135,9 +135,6 @@ export default function PatchIssued(): React.ReactNode {
                 <Descriptions.Item label="补件条目" span={4}>
                     <Button type='text' onClick={() => setVisible(true)}>请选择</Button>
                 </Descriptions.Item>
-                <Descriptions.Item label="补件条目" span={4}>
-                    <Button type='text' onClick={() => setVisible(true)}>请选择</Button>
-                </Descriptions.Item>
             </Descriptions>
             <DetailTitle title="塔型工程信息" key={2} />
             <BaseInfo layout="vertical" columns={baseColums} dataSource={selectData?.supplyBatchEntryVO || {}} col={7} />

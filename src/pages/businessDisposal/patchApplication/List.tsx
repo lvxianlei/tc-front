@@ -5,19 +5,18 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, Modal, message, Popconfirm, Row, Col, TablePaginationConfig } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import Page, { IResponseData } from '../../common/Page';
-import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { Link, useHistory } from 'react-router-dom';
+import { IResponseData } from '../../common/Page';
+import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns, partsColumns } from "./patchApplication.json"
 import { CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 
 export default function List(): React.ReactNode {
-    const [filterValue, setFilterValue] = useState({});
     const history = useHistory();
     const [detailData, setDetailData] = useState<any>();
     const [partsData, setPartsData] = useState<any>();
@@ -30,7 +29,7 @@ export default function List(): React.ReactNode {
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(``, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
         setPage({ ...data });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
@@ -42,8 +41,9 @@ export default function List(): React.ReactNode {
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(``);
-            setDetailData(result)
+            const result = await RequestUtil.get<any>(`/tower-science/supplyEntry/productCategory/list/${id}`);
+            setDetailData(result);
+            result.length > 0 && partsRun(result[0]?.id)
             resole(result)
         } catch (error) {
             reject(error)
@@ -52,7 +52,7 @@ export default function List(): React.ReactNode {
 
     const { run: partsRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(``);
+            const result = await RequestUtil.get<any>(`/tower-science/supplyEntry/structure/list/${id}`);
             setPartsData(result)
             resole(result)
         } catch (error) {
@@ -75,32 +75,32 @@ export default function List(): React.ReactNode {
 
     const onSearch = (values: Record<string, any>) => {
         if (values.updateStatusTime) {
-        const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-        values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-        values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-    }
+            const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+            values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+            values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+        }
         setFilterValues(values);
         run({}, { ...values });
     }
 
     return <>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item label='日期' name="fuzzyMsg">
+            <Form.Item label='日期' name="updateStatusTime">
                 <DatePicker.RangePicker />
             </Form.Item>
-            <Form.Item label='审批状态' name="fuzzyMsg">
+            <Form.Item label='审批状态' name="status">
                 <Select placeholder="请选择审批状态">
                     <Select.Option value={1} key="1">未发起</Select.Option>
                     <Select.Option value={2} key="2">待审批</Select.Option>
-                    <Select.Option value={3} key="3">已通过</Select.Option>
-                    <Select.Option value={4} key="4">已拒绝</Select.Option>
+                    <Select.Option value={3} key="3">审批中</Select.Option>
+                    <Select.Option value={4} key="4">已通过</Select.Option>
                     <Select.Option value={5} key="5">已撤回</Select.Option>
-                    <Select.Option value={5} key="5">审批中</Select.Option>
+                    <Select.Option value={0} key="6">已拒绝</Select.Option>
                 </Select>
             </Form.Item>
-            <Form.Item label='补件类型' name="fuzzyMsg">
+            <Form.Item label='补件类型' name="supplyType">
                 <Select placeholder="请选择补件类型">
-                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
                         </Select.Option>
@@ -114,11 +114,11 @@ export default function List(): React.ReactNode {
                 <Space direction="horizontal">
                     <Button type="primary" htmlType="submit">搜索</Button>
                     <Button htmlType="reset">重置</Button>
-                    
+
                 </Space>
             </Form.Item>
         </Form>
-        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{margin: '6px 0'}} ghost>申请</Button></Link>
+        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '6px 0' }} ghost>申请</Button></Link>
         <CommonTable
             haveIndex
             columns={[
@@ -143,7 +143,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认发起?"
                                 onConfirm={() => {
-                                    RequestUtil.delete(``).then(res => {
+                                    RequestUtil.post(`/tower-science/supplyEntry/submit/${record.id}`).then(res => {
                                         message.success('发起成功');
                                         history.go(0);
                                     });
@@ -156,7 +156,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
-                                    RequestUtil.delete(``).then(res => {
+                                    RequestUtil.post(`/tower-science/supplyEntry/cancel/${record.id}`).then(res => {
                                         message.success('撤回成功');
                                         history.go(0);
                                     });
@@ -169,7 +169,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
-                                    RequestUtil.delete(``).then(res => {
+                                    RequestUtil.delete(`/tower-science/supplyEntry/${record.id}`).then(res => {
                                         message.success('删除成功');
                                         history.go(0);
                                     });
@@ -200,9 +200,7 @@ export default function List(): React.ReactNode {
                 <CommonTable
                     haveIndex
                     columns={tableColumns}
-                    dataSource={
-                        []
-                    }
+                    dataSource={detailData || []}
                     pagination={false}
                     onRow={(record: Record<string, any>) => ({
                         onClick: () => onPartsRowChange(record),
@@ -215,9 +213,7 @@ export default function List(): React.ReactNode {
                 <CommonTable
                     haveIndex
                     columns={partsColumns}
-                    dataSource={
-                        []
-                    }
+                    dataSource={partsData||[]}
                     pagination={false} />
 
             </Col>
