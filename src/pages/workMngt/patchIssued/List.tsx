@@ -10,7 +10,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchIssued.module.less';
 import { Link, useHistory } from 'react-router-dom';
 import Page from '../../common/Page';
-import { productTypeOptions } from '../../../configuration/DictionaryOptions';
+import { productTypeOptions, supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 
 export default function List(): React.ReactNode {
@@ -27,118 +27,118 @@ export default function List(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'planNumber',
+            key: 'supplyBatchNumber',
             title: '补件下达编号',
             width: 120,
-            dataIndex: 'planNumber'
+            dataIndex: 'supplyBatchNumber'
         },
         {
-            key: 'projectName',
-            title: '补件下达类型',
+            key: 'status',
+            title: '补件下达状态',
             width: 120,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '最新状态变更时间',
-            width: 120,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'projectName',
-            title: '补件类型',
-            width: 120,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'productCategoryName',
-            title: '计划号',
-            width: 120,
-            dataIndex: 'productCategoryName'
-        },
-        {
-            key: 'productCategoryProportion',
-            title: '塔型',
-            width: 100,
-            dataIndex: 'productCategoryProportion'
-        },
-        {
-            key: 'productProportion',
-            title: '工程名称',
-            dataIndex: 'productProportion',
-            width: 100
-        },
-        {
-            key: 'weight',
-            title: '电压等级',
-            width: 120,
-            dataIndex: 'weight'
-        },
-        {
-            key: 'statusName',
-            title: '产品类型',
-            dataIndex: 'statusName',
-            width: 120
+            dataIndex: 'status'
         },
         {
             key: 'updateStatusTime',
-            title: '补件数量',
+            title: '最新状态变更时间',
             width: 120,
             dataIndex: 'updateStatusTime'
         },
         {
-            key: 'plannedDeliveryTime',
+            key: 'supplyTypeName',
+            title: '补件类型',
+            width: 120,
+            dataIndex: 'supplyTypeName'
+        },
+        {
+            key: 'planNumber',
+            title: '计划号',
+            width: 120,
+            dataIndex: 'planNumber'
+        },
+        {
+            key: 'productCategory',
+            title: '塔型',
+            width: 100,
+            dataIndex: 'productCategory'
+        },
+        {
+            key: 'projectName',
+            title: '工程名称',
+            dataIndex: 'projectName',
+            width: 100
+        },
+        {
+            key: 'voltageGradeName',
+            title: '电压等级',
+            width: 120,
+            dataIndex: 'voltageGradeName'
+        },
+        {
+            key: 'productTypeName',
+            title: '产品类型',
+            dataIndex: 'productTypeName',
+            width: 120
+        },
+        {
+            key: 'totalNumber',
+            title: '补件数量',
+            width: 120,
+            dataIndex: 'totalNumber'
+        },
+        {
+            key: 'totalWeight',
             title: '补件重量',
             width: 150,
-            dataIndex: 'plannedDeliveryTime'
+            dataIndex: 'totalWeight'
         },
         {
-            key: 'taskNum',
+            key: 'applyUserDepartName',
             title: '申请部门',
             width: 150,
-            dataIndex: 'taskNum'
+            dataIndex: 'applyUserDepartName'
         },
         {
-            key: 'saleOrderNumber',
+            key: 'applyUserName',
             title: '申请人',
             width: 200,
-            dataIndex: 'saleOrderNumber'
+            dataIndex: 'applyUserName'
         },
         {
-            key: 'internalNumber',
+            key: 'createTime',
             title: '补件下达时间',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'createTime'
         },
         {
-            key: 'internalNumber',
+            key: 'description',
             title: '说明',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'description'
         },
         {
-            key: 'internalNumber',
+            key: 'machiningDemand',
             title: '加工说明',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'machiningDemand'
         },
         {
-            key: 'internalNumber',
+            key: 'weldingDemand',
             title: '电焊说明',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'weldingDemand'
         },
         {
-            key: 'internalNumber',
+            key: 'galvanizeDemand',
             title: '镀锌要求',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'galvanizeDemand'
         },
         {
-            key: 'internalNumber',
+            key: 'packDemand',
             title: '包装说明',
             width: 200,
-            dataIndex: 'internalNumber'
+            dataIndex: 'packDemand'
         },
         {
             key: 'operation',
@@ -150,12 +150,12 @@ export default function List(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Popconfirm
                         title="确认取消下达?"
-                        onConfirm={ () => {
-                            RequestUtil.delete(``).then(res => {
+                        onConfirm={() => {
+                            RequestUtil.delete(`/tower-science/supplyBatch/deleteBatch?id=${record.id}`).then(res => {
                                 message.success('取消下达成功');
                                 history.go(0);
                             });
-                        } }
+                        }}
                         okText="确认"
                         cancelText="取消"
                     >
@@ -169,7 +169,7 @@ export default function List(): React.ReactNode {
     ]
 
     return <Page
-        path="/tower-science/loftingTask/taskPage"
+        path="/tower-science/supplyBatch/batchPage"
         columns={columns}
         headTabs={[]}
         extraOperation={<Link to={`/workMngt/patchIssuedList/patchIssued`}><Button type='primary' ghost>补件下达</Button></Link>}
@@ -180,26 +180,26 @@ export default function List(): React.ReactNode {
                 children: <DatePicker.RangePicker />
             },
             {
-                name: 'updateStatusTime',
+                name: 'supplyType',
                 label: '补件类型',
                 children: <Select placeholder="请选择补件类型">
-                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                    return <Select.Option key={index} value={id}>
-                        {name}
-                    </Select.Option>
-                })}
-            </Select>
+                    {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
+                        </Select.Option>
+                    })}
+                </Select>
             },
             {
-                name: 'updateStatusTime',
+                name: 'productType',
                 label: '产品类型',
                 children: <Select placeholder="请选择产品类型">
-                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                    return <Select.Option key={index} value={id}>
-                        {name}
-                    </Select.Option>
-                })}
-            </Select>
+                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
+                        </Select.Option>
+                    })}
+                </Select>
             },
             {
                 name: 'fuzzyMsg',

@@ -9,13 +9,14 @@ import useRequest from '@ahooksjs/use-request';
 export default function IssuedDetail(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const params = useParams<{ id: string, productCategoryId: string }>()
+    const params = useParams<{ id: string }>()
     const history = useHistory();
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
         resole(value);
     }))
+
     const columns = [
         {
             key: 'index',
@@ -168,26 +169,26 @@ export default function IssuedDetail(): React.ReactNode {
     }
     return (
         <Page
-            path="/tower-science/loftingBatch/batchDetail"
+            path="/tower-science/supplyBatch/batchDetail"
             columns={columns}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={{ productCategoryId: params.productCategoryId, id: params.id }}
-            exportPath="/tower-science/loftingBatch/batchDetail"
+            requestData={{ id: params.id }}
+            exportPath="/tower-science/supplyBatch/batchDetail"
             extraOperation={<Space>
-                    <Button type='primary' ghost onClick={async () => {
-                        await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.id}`);
-                        message.success('更新成功！')
-                        history.go(0)
-                    }} >更新下达明细</Button>
-                    <Button type='primary' ghost onClick={async () => {
-                        await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.id}`);
-                        message.success('刷新成功！')
-                        history.go(0)
-                    }} >刷新件号数据</Button>
-                    <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
-                </Space>}
+                {/* <Button type='primary' ghost onClick={async () => {
+                    await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.id}`);
+                    message.success('更新成功！')
+                    history.go(0)
+                }} >更新下达明细</Button>
+                <Button type='primary' ghost onClick={async () => {
+                    await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.id}`);
+                    message.success('刷新成功！')
+                    history.go(0)
+                }} >刷新件号数据</Button> */}
+                <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
+            </Space>}
             searchFormItems={[
                 {
                     name: 'materialName',

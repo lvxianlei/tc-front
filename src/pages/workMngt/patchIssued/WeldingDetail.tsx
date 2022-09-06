@@ -10,7 +10,6 @@ import { downloadTemplate } from '../setOut/downloadTemplate';
 export default function WeldingDetail(): React.ReactNode {
     const history = useHistory();
     const [filterValue, setFilterValue] = useState<any>({});
-    const [segmentDataSource, setSegmentDataSource] = useState<any[]>([]);
     const params = useParams<{ id: string, weldingId: string }>()
     const [pages, setPages] = useState<any>({
         current: 1,
@@ -18,15 +17,26 @@ export default function WeldingDetail(): React.ReactNode {
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeld`, { ...pages, weldingId:params.weldingId, fuzzyMsg: data?.fuzzyMsg,id: params.id })
-            const dataSource:any = result?.records?.length>0? await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`,{segmentId: result?.records[0]?.id}):[];
-            setSegmentDataSource([...dataSource]);
+            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, weldingId: params.id, ...data });
+            if(result?.records.length > 0 && result?.records[0]?.id) {
+                getSegmentData(result?.records[0]?.id)
+            }
             resole(result?.records)
         } catch (error) {
             reject(error)
         }
     }), { refreshDeps: [params.id] })
-    const handleCHange = async (page: number, pageSize: number) => {
+    
+    const { data: segmentData, run: getSegmentData } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeldStructure`, { segmentId: data })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleChange = async (page: number, pageSize: number) => {
         setPages({
             ...params,
             size: pageSize,
@@ -93,8 +103,8 @@ export default function WeldingDetail(): React.ReactNode {
             title: '是否主件',
             width: 150,
             dataIndex: 'isMainPart',
-            render:(number:any)=>{
-                return number?[0,'0'].includes(number)?'否':'是':'-'
+            render: (number: any) => {
+                return number ? [0, '0'].includes(number) ? '否' : '是' : '-'
             }
         },
         {
@@ -110,10 +120,10 @@ export default function WeldingDetail(): React.ReactNode {
             dataIndex: 'structureTexture'
         },
         {
-            key: 'structureTexture',
+            key: 'structureSpec',
             title: '规格',
             width: 150,
-            dataIndex: 'structureTexture',
+            dataIndex: 'structureSpec',
         },
         {
             key: 'length',
@@ -142,58 +152,54 @@ export default function WeldingDetail(): React.ReactNode {
     ]
     return (
         <>
-        <Form layout="inline" onFinish={async (values) => {
-            console.log(values)
-            setFilterValue(values)
-            await run({
-            ...values
-        })}}>
-              <Form.Item label='模糊查询项' name='fuzzyMsg'>
-                <Input placeholder="" maxLength={200} />
-              </Form.Item>
-              <Form.Item>
-                  <Button type="primary" htmlType="submit">查询</Button>
-              </Form.Item>
-              <Form.Item>
-                  <Button htmlType="reset">重置</Button>
-              </Form.Item>
+            <Form layout="inline" onFinish={async (values) => {
+                setFilterValue(values)
+                await run({
+                    ...values
+                })
+            }}>
+                <Form.Item label='模糊查询项' name='fuzzyMsg'>
+                    <Input placeholder="" maxLength={200} />
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">查询</Button>
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType="reset">重置</Button>
+                </Form.Item>
             </Form>
-            <Space direction="horizontal" size="middle" style={{padding: '6px 0'}}>
-<Button type="primary" onClick={() => {
-            downloadTemplate(`/tower-science/welding/downloadBatch`, '组焊', {
-                id: params.id,
-                fuzzyMsg: filterValue?.fuzzyMsg,
-                weldingId: params.weldingId
-            },false, 'array')
-        }}>导出</Button>
-        <Button  onClick={() => history.goBack()} >返回</Button>
+            <Space direction="horizontal" size="middle" style={{ padding: '6px 0' }}>
+                <Button type="primary" onClick={() => {
+                    downloadTemplate(`/tower-science/supplyBatch/downloadBatch`, '组焊明细', {
+                        id: params.id,
+                        fuzzyMsg: filterValue?.fuzzyMsg
+                    }, false, 'array')
+                }}>导出</Button>
+                <Button onClick={() => history.goBack()} >返回</Button>
             </Space>
-        
-        <div style={{display:'flex',width:'100%'}} >
-            <div style={{width:'40%',paddingRight:'20px'}}>
-                <CommonTable
-                    style={{ padding: "0" }}
-                    loading={loading}
-                    columns={columns}
-                    rowKey={(item: any) => `${item.id}`}
-                    pagination={{
-                        current: pages?.current,
-                        pageSize: pages?.size,
-                        onChange: handleCHange
-                    }}
-                    onRow={(record:any) => ({
-                        onClick: async (event: any) => {
-                            const data:any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`,{segmentId: record.id});
-                            setSegmentDataSource([...data]);
-                        }
-                    })}
-                    dataSource={data as any || []}
-                />
+
+            <div style={{ display: 'flex', width: '100%' }} >
+                <div style={{ width: '40%', paddingRight: '20px' }}>
+                    <CommonTable
+                        style={{ padding: "0" }}
+                        loading={loading}
+                        columns={columns}
+                        rowKey={(item: any) => `${item.id}`}
+                        pagination={{
+                            current: pages?.current,
+                            pageSize: pages?.size,
+                            onChange: handleChange
+                        }}
+                        onRow={(record: any) => ({
+                            onClick: async (event: any) => getSegmentData(record?.id)
+                        })}
+                        dataSource={data as any || []}
+                    />
+                </div>
+                <div style={{ width: '60%' }} >
+                    <CommonTable columns={detailColumns} dataSource={segmentData} pagination={false} />
+                </div>
             </div>
-            <div style={{width:'60%'}} >
-                <CommonTable columns={detailColumns} dataSource={segmentDataSource} pagination={false}/>
-            </div>
-        </div>
         </>
     )
 }
