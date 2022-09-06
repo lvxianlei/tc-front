@@ -1,0 +1,840 @@
+{
+    "columns": [
+        {
+            "key": "userName",
+            "title": "补件编号",
+            "dataIndex": "userName",
+            "width": 100
+        },
+        {
+            "key": "process",
+            "title": "补件类型",
+            "dataIndex": "process",
+            "width": 100
+        },
+        {
+            "key": "workStatus",
+            "title": "审批状态",
+            "dataIndex": "workStatus",
+            "width": 100
+        },
+        {
+            "key": "totalProductCategoryNum",
+            "title": "最新状态变更时间",
+            "dataIndex": "totalProductCategoryNum",
+            "width": 150
+        },
+        {
+            "key": "productCategoryNum",
+            "title": "优先级",
+            "dataIndex": "productCategoryNum",
+            "width": 100
+        },
+        {
+            "key": "endTime",
+            "title": "申请部门",
+            "dataIndex": "endTime",
+            "width": 100
+        },
+        {
+            "key": "endTime",
+            "title": "申请人",
+            "dataIndex": "endTime",
+            "width": 100
+        },
+        {
+            "key": "userName",
+            "title": "计划号",
+            "dataIndex": "userName",
+            "width": 100
+        },
+        {
+            "key": "process",
+            "title": "工程名称",
+            "dataIndex": "process",
+            "width": 100
+        },
+        {
+            "key": "workStatus",
+            "title": "业务经理",
+            "dataIndex": "workStatus",
+            "width": 100
+        },
+        {
+            "key": "totalProductCategoryNum",
+            "title": "计划发货日期",
+            "dataIndex": "totalProductCategoryNum",
+            "width": 100
+        },
+        {
+            "key": "productCategoryNum",
+            "title": "零件数量",
+            "dataIndex": "productCategoryNum",
+            "width": 100
+        },
+        {
+            "key": "endTime",
+            "title": "零件重量",
+            "dataIndex": "endTime",
+            "width": 100
+        },
+        {
+            "key": "endTime",
+            "title": "是否结算",
+            "dataIndex": "endTime",
+            "width": 100
+        },
+        {
+            "key": "endTime",
+            "title": "说明",
+            "dataIndex": "endTime",
+            "width": 100
+        }
+    ],
+    "tableColumns": [
+        {
+            "key": "planNumber",
+            "title": "塔型",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "programName",
+            "title": "产品类型",
+            "dataIndex": "programName",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "电压等级",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productType",
+            "title": "下达状态",
+            "dataIndex": "productType",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "零件数量",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "key": "patternName",
+            "title": "重量kg",
+            "dataIndex": "patternName",
+            "width": 100
+        }
+    ],
+    "partsColumns": [
+        {
+            "key": "priorityName",
+            "title": "段名",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "部件号",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "材料",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "材质",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "规格",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "零件类型",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "长度（mm）",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "宽度（mm）",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "startTime",
+            "title": "厚度（mm）",
+            "dataIndex": "startTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "补件数量",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件重量",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "补件重量",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件孔数",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "电焊",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "火曲",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "切角",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "铲背",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "清根",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "打扁",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "压制",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开合角",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开槽形式",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "坡口",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "相贯线",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "钻孔",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        }
+    ],
+    "applyColumns": [
+        {
+            "key": "priorityName",
+            "title": "段名",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "塔型",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "部件号",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "材料",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "材质",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "规格",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "零件类型",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "长度（mm）",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "宽度（mm）",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "startTime",
+            "title": "厚度（mm）",
+            "dataIndex": "startTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "补件数量",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件重量",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "补件重量",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件孔数",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "电焊",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "火曲",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "切角",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "铲背",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "清根",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "打扁",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "压制",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开合角",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开槽形式",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "坡口",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "相贯线",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "钻孔",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        }
+    ],
+    "towerTypeColumns": [
+        {
+            "key": "expectCompleteTime",
+            "title": "塔型",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "产品类型",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "电压等级",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        }
+    ],
+    "patchColumns": [
+        {
+            "key": "expectCompleteTime",
+            "title": "段名",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "部件号",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "塔型",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "材料",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "材质",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "规格",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "零件类型",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "长度mm",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "宽度mm",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "厚度mm",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "num",
+            "title": "补件数量",
+            "dataIndex": "num",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件重量",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "补件重量",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件孔数",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "电焊",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "火曲",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "切角",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "铲背",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "清根",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "打扁",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "压制",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开合角",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开槽形式",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "坡口",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "相贯线",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "钻孔",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        }
+    ],
+    "addColumns":[
+        {
+            "key": "expectCompleteTime",
+            "title": "段名",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "部件号",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "材料",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "材质",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "规格",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "零件类型",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "长度mm",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "宽度mm",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "厚度mm",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单段数量",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件重量",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "单件孔数",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "特殊件",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "备注",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "电焊",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "火曲",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "切角",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "铲背",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "清根",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "打扁",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "压制",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开合角",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "开槽形式",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "坡口",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "相贯线",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "钻孔",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        }
+    ],
+    "detailColumns" :[
+        {
+            "key": "expectCompleteTime",
+            "title": "补件类型",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "计划号",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "塔型名称",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "电压等级",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "产品类型",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "线路名称",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "段落",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "放样人",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "工程名称",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "申请原因",
+            "dataIndex": "expectCompleteTime",
+            "width": 100
+        }
+    ]
+}

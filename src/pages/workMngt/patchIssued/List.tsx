@@ -5,10 +5,10 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, Modal, message, Popconfirm } from 'antd';
+import { Space, Input, DatePicker, Select, Button, message, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './SetOutTask.module.less';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import styles from './PatchIssued.module.less';
+import { Link, useHistory } from 'react-router-dom';
 import Page from '../../common/Page';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -31,6 +31,18 @@ export default function List(): React.ReactNode {
             title: '补件下达编号',
             width: 120,
             dataIndex: 'planNumber'
+        },
+        {
+            key: 'projectName',
+            title: '补件下达类型',
+            width: 120,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'projectName',
+            title: '最新状态变更时间',
+            width: 120,
+            dataIndex: 'projectName'
         },
         {
             key: 'projectName',

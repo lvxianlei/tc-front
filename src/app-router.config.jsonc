@@ -2830,6 +2830,27 @@
       "module": "./pages/workMngt/patchIssued/WeldingDetail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-补件申请
+      "name": "补件申请",
+      "path": "/businessDisposal/patchApplication",
+      "module": "./pages/businessDisposal/patchApplication/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-补件申请-申请
+      "name": "申请",
+      "path": "/businessDisposal/patchApplication/apply",
+      "module": "./pages/businessDisposal/patchApplication/Apply",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-补件申请-详情
+      "name": "申请",
+      "path": "/businessDisposal/patchApplication/detail/:id",
+      "module": "./pages/businessDisposal/patchApplication/Detail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
