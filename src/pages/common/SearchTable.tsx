@@ -26,6 +26,7 @@ interface SearchTableProps {
     extraOperation?: React.ReactNode | React.ReactNode[] | ((result: any) => any)
     tableProps?: { [i: string]: any }
     pagination?: boolean
+    pageSize?: number
     modal?: boolean // 分页栏是否固定到底部
     readonly exportPath?: string; //导出接口
     exportObject?: { [key: string]: any }, // 导出可能会包含的id等
@@ -50,11 +51,12 @@ export default function SearchTable({
     filterValue = {},
     tableProps,
     pagination,
+    pageSize = 10,
     modal = false,
     exportPath,
     exportObject = {},
     ...props }: SearchTableProps): JSX.Element {
-    const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: 1, pageSize: 10 })
+    const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: 1, pageSize })
     const [form] = Form.useForm()
     const [isExport, setIsExport] = useState<boolean>(false);
     const match = useRouteMatch()
@@ -153,6 +155,7 @@ export default function SearchTable({
                 <Pagination
                     className={styles.pagination}
                     total={data?.result?.total}
+                    pageSize={pagenationParams.pageSize}
                     current={pagenationParams.current}
                     showTotal={(total: number) => `共${total}条记录`}
                     showSizeChanger

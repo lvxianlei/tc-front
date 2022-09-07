@@ -33,7 +33,6 @@ export default function AnnouncementMngt(): React.ReactNode {
 
     const columns = [
         {
-            key: 'title',
             title: '标题',
             width: 150,
             dataIndex: 'title',
@@ -41,14 +40,12 @@ export default function AnnouncementMngt(): React.ReactNode {
                 <Link to={`/announcement/list/detail/${record.id}`}>{_}</Link>
             )
         },
-        // {
-        //     key: 'content',
-        //     title: '内容',
-        //     width: 150,
-        //     dataIndex: 'content'
-        // },
         {
-            key: 'state',
+            title: '标题',
+            width: 150,
+            dataIndex: 'createUserName'
+        },
+        {
             title: '状态',
             dataIndex: 'state',
             width: 120,
@@ -64,13 +61,11 @@ export default function AnnouncementMngt(): React.ReactNode {
             }
         },
         {
-            key: 'updateTime',
             title: '最新状态变更时间',
             width: 200,
             dataIndex: 'updateTime'
         },
         {
-            key: 'operation',
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
