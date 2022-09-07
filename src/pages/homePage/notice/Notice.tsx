@@ -8,13 +8,17 @@ export default function Notice(): React.ReactNode {
 
     const columns = [
         {
-            key: 'title',
             title: '标题',
             width: 150,
             dataIndex: 'title',
             render: (_: string, record: Record<string, any>): React.ReactNode => (
                 <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
             )
+        },
+        {
+            title: '发送人',
+            width: 150,
+            dataIndex: 'createUserName'
         },
         // {
         //     key: 'content',

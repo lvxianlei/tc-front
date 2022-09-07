@@ -124,10 +124,10 @@ export default function AnnouncementNew(): React.ReactNode {
                         onChange={handleChange}
                     />                
                 </Form.Item>
-                <Form.Item name="userNames" label="接收人" initialValue={detailData.userNames} rules={[{
+                <Form.Item name="userNames" label="分组" initialValue={detailData.userNames} rules={[{
                     "required": true,
-                    "message": "请选择接收人"
-                }]}>
+                    "message": "请选择分组"
+                }]}>  
                     <Input addonBefore={<>
                         <SelectUserTransfer save={(selectRows: IStaff[]) => {
                             const userNames = selectRows.map(res => { return res.name }).join(',');
