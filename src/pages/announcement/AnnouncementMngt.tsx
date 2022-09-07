@@ -41,7 +41,7 @@ export default function AnnouncementMngt(): React.ReactNode {
             )
         },
         {
-            title: '标题',
+            title: '发送人',
             width: 150,
             dataIndex: 'createUserName'
         },
