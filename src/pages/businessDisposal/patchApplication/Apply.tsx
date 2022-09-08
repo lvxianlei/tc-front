@@ -388,14 +388,10 @@ export default function Apply(): React.ReactNode {
                                                             }
                                                         }
                                                             onDropdownVisibleChange={(open) => {
-                                                                if (open) {
-                                                                    productNumbers(record?.productCategoryId)
-                                                                } else {
-                                                                    setNumbers([])
-                                                                }
+                                                                productNumbers(record?.productCategoryId)
                                                             }}>
                                                             {(numbers || [])?.map((item: any) => {
-                                                                return <Select.Option key={item.id} value={item.id}>{item.productNumber}</Select.Option>
+                                                                return <Select.Option key={item.id} value={item.productNumber}>{item.productNumber}</Select.Option>
                                                             })}
                                                         </Select>
                                                     )

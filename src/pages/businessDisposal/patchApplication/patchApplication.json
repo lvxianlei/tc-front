@@ -671,9 +671,9 @@
     ],
     "detailTableColumns": [
         {
-            "key": "productCategory",
+            "key": "productCategoryName",
             "title": "塔型名称",
-            "dataIndex": "productCategory",
+            "dataIndex": "productCategoryName",
             "width": 100
         },
         {
