@@ -139,7 +139,7 @@
         {
             "title": "单件重量（kg）",
             "width": 120,
-            "dataIndex": "weight",
+            "dataIndex": "basicsWeight",
             "type": "number"
         },
         {
@@ -156,7 +156,7 @@
         {
             "title": "备注",
             "width": 150,
-            "dataIndex": "--------------"
+            "dataIndex": "description"
         }
     ]
 }
