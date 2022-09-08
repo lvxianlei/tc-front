@@ -43,40 +43,48 @@
         {
             "title": "品名",
             "dataIndex": "materialName",
+            "width": 80,
             "type": "string"
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
+            "width": 80,
             "type": "string"
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
+            "width": 80,
             "type": "string"
         },
         {
             "title": "长度",
             "dataIndex": "length",
+            "width": 80,
             "type": "number"
         },
         {
             "title": "宽度",
             "dataIndex": "width",
+            "width": 80,
             "type": "number"
         },
         {
             "title": "数量",
             "dataIndex": "num",
+            "width": 80,
             "type": "number"
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "totalWeight"
+            "dataIndex": "totalWeight",
+            "width": 100
         },
         {
             "title": "所属塔型",
             "dataIndex": "productCategoryName",
+            "width": 100,
             "type": "string"
         }
     ],
@@ -84,56 +92,61 @@
         {
             "title": "件号",
             "dataIndex": "code",
+            "width": 60,
             "type": "string"
         },
         {
             "title": "品名",
             "dataIndex": "materialName",
+            "width": 80,
             "type": "string"
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
+            "width": 80,
             "type": "string"
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
+            "width": 80,
             "type": "string"
         },
         {
             "title": "长度（mm）",
-            "width": 120,
+            "width": 100,
             "dataIndex": "length",
             "type": "string"
         },
         {
             "title": "宽度（mm）",
-            "width": 120,
+            "width": 100,
             "dataIndex": "width",
             "type": "string"
         },
         {
             "title": "厚度（mm）",
-            "width": 120,
+            "width": 100,
             "dataIndex": "thickness",
             "type": "string"
         },
         {
             "title": "大头",
-            "width": 120,
+            "width": 60,
             "dataIndex": "bigHead",
             "type": "string"
         },
         {
             "title": "小头",
-            "width": 120,
+            "width": 60,
             "dataIndex": "smallHead",
             "type": "string"
         },
         {
             "title": "汇总数量",
             "dataIndex": "num",
+            "width": 100,
             "type": "number"
         },
         {
@@ -144,13 +157,13 @@
         },
         {
             "title": "总计重量（kg）",
-            "width": 150,
+            "width": 120,
             "dataIndex": "totalWeight",
             "type": "number"
         },
         {
             "title": "所属塔型",
-            "width": 150,
+            "width": 120,
             "dataIndex": "productCategoryName"
         },
         {
