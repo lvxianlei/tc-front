@@ -40,7 +40,6 @@ export default function PatchIssued(): React.ReactNode {
         if (form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
-                console.log(value)
                 RequestUtil.post<any>(`/tower-science/supplyBatch/saveBatchDetail`, {
                     ...value,
                     id: selectData?.supplyBatchEntryVO?.id
@@ -76,7 +75,7 @@ export default function PatchIssued(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         width: 50,
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                            <Button type='link' onClick={() => selectRun(record)}>选择</Button>
+                            <Button type='link' disabled={record?.batchStatus === 1} onClick={() => selectRun(record)}>选择</Button>
                         )
                     }]}
                 headTabs={[]}
@@ -106,10 +105,10 @@ export default function PatchIssued(): React.ReactNode {
                     {
                         name: 'batchStatus',
                         label: '下达状态',
-                        children: <Form.Item name="status">
+                        children: <Form.Item name="batchStatus">
                             <Select style={{ width: '120px' }} placeholder="请选择">
                                 <Select.Option value={1} key="1">已下达</Select.Option>
-                                <Select.Option value={2} key="2">已取消</Select.Option>
+                                <Select.Option value={2} key="2">未下达</Select.Option>
                             </Select>
                         </Form.Item>
                     },

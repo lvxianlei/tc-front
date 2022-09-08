@@ -79,6 +79,8 @@ export default function Apply(): React.ReactNode {
         form.setFieldsValue({
             productCategoryIds: []
         })
+        setTowerList([]);
+        setPatchList([]);
     }
 
     const handleOk = () => new Promise(async (resove, reject) => {
@@ -116,7 +118,7 @@ export default function Apply(): React.ReactNode {
     }
 
     const delRow = (index: number) => {
-        patchList.split(index, 1)
+        patchList.splice(index, 1)
         setPatchList([...patchList])
     }
 
