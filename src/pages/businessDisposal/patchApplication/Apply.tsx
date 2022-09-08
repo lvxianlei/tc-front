@@ -344,7 +344,7 @@ export default function Apply(): React.ReactNode {
                                                 return {
                                                     ...res,
                                                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                                        <InputNumber min={0} max={9999} size="small" defaultValue={record.basicsPartNum} onChange={(e) => {
+                                                        <InputNumber min={0} max={9999} precision={0} size="small" defaultValue={record.basicsPartNum} onChange={(e) => {
                                                             const newList = patchList.map((res: any, ind: number) => {
                                                                 if (ind === index) {
                                                                     return {
