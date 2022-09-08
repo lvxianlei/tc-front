@@ -35,6 +35,7 @@ export default function List(): React.ReactNode {
             detailRun(data.records[0]?.id)
         } else {
             setDetailData([]);
+            setPartsData([]);
         }
         resole(data?.records);
     }), {})
