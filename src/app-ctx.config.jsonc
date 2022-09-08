@@ -551,6 +551,11 @@
                         "authority": "tc_erp_sw_contract_inquiry_list"
                     },
                     {
+                        "label": "提料汇总",
+                        "path": "/ingredients/lifting",
+                        "authority": "tc_erp_sw_work_liftingSummary"
+                    },
+                    {
                         "label": "采购配料",
                         "path": "/ingredients/buyBurdening",
                         "authority": "tc_erp_sw_work_purchase"
