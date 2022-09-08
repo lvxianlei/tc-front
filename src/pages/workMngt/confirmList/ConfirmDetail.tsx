@@ -960,10 +960,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="呼高(m)" span={2}>
-                                    <Form.Item name={["confirmList", index, "basicHeight"]} wrapperCol={{ span: 24 }} rules={[{
-                                        "required": true,
-                                        "message": "请输入呼高(m)"
-                                    }]} >
+                                    <Form.Item name={["confirmList", index, "basicHeight"]} wrapperCol={{ span: 24 }} >
                                         <InputNumber precision={2} min={0.01} max={99.99} style={{ width: '100%' }} />
                                     </Form.Item>
                                 </Descriptions.Item>

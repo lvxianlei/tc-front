@@ -55,7 +55,7 @@ export default function ReleaseList(): React.ReactNode {
         },
         {
             key: 'mainPartId',
-            title: '组件号',
+            title: '主件号',
             width: 100,
             dataIndex: 'mainPartId'
         },
@@ -63,6 +63,18 @@ export default function ReleaseList(): React.ReactNode {
             key: 'processGroupNum',
             title: '加工组数',
             dataIndex: 'processGroupNum',
+            width: 120
+        },
+        {
+            key: 'weldGrade',
+            title: '电焊等级',
+            dataIndex: 'weldGrade',
+            width: 120
+        },
+        {
+            key: 'weldingTypeName',
+            title: '电焊类型',
+            dataIndex: 'weldingTypeName',
             width: 120
         },
         {
