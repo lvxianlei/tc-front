@@ -1,11 +1,12 @@
 import React from "react"
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, SearchTable as Page } from '../../common'
-import { Space, Spin } from "antd"
+import { Button, Space, Spin } from "antd"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 import { liftingDetail } from "./data.json"
 export default function Invoicing() {
+    const history = useHistory()
     const { planNumber, orderProjectName } = useParams<{
         planNumber: string
         orderProjectName: string
@@ -40,6 +41,7 @@ export default function Invoicing() {
             path="/tower-supply/liftingSummary/getLiftingDetail"
             exportPath="/tower-supply/liftingSummary/getLiftingDetail"
             extraOperation={<Space>
+                <Button onClick={() => history.goBack()}>返回</Button>
                 <div>计划总重(吨)：<span
                     style={{ color: "#FF8c00" }}
                 >{data?.purchasePlanTotalWeight}</span></div>
