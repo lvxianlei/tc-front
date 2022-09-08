@@ -147,7 +147,9 @@ export default function BidResultEdit(): JSX.Element {
             if (refFun?.getForm()) {
                 const fdata = refFun?.getForm().getFieldsValue()
                 return ({
-                    round, roundName, bidOpenRecordVos: fdata?.submit.map((item: any) => ({
+                    round,
+                    roundName,
+                    bidOpenRecordVos: fdata?.submit?.map((item: any) => ({
                         ...item,
                         unitPrice: null,
                         money: null
@@ -297,38 +299,50 @@ export default function BidResultEdit(): JSX.Element {
                                 dataSource={data}
                                 onChange={(changeFileds, allFields) => handleEditableChange(changeFileds, allFields, item.key)}
                                 opration={[
-                                    <UploadXLS key="xlxs" readEnd={async (_data) => {
-                                        const vilidateCols = ["包名称", "投标人名称", "分标编号", "物资资别", "项目单位", "总价（元）", "重量（吨）", "电压等级"]
-                                        if (_data.length <= 0) {
-                                            message.error("文件不能为空...")
-                                            return
-                                        }
-                                        if (Object.keys(_data[0]).length <= 0) {
-                                            message.error("文件不符合上传规则...")
-                                            return
-                                        }
-                                        const rowItem: string[] = Object.keys(_data[0])
-                                        const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
-                                        if (vilidateRow !== vilidateCols.length) {
-                                            message.error("文件不符合上传规则...")
-                                            return
-                                        }
-                                        const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
-                                        const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
-                                        const uploadData = filterUploadData.map((item: any, index) => {
-                                            let rowData: any = { uid: resultData.length + index }
-                                            Object.keys(item).forEach((columnItem: string) => {
-                                                const columnDataIndex = bidInfoColumns.find(bidItem => bidItem.title === columnItem)
-                                                if (columnDataIndex) {
-                                                    rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
-                                                }
+                                    <UploadXLS
+                                        key="xlxs"
+                                        readEnd={async (_data) => {
+                                            const vilidateCols = ["包名称", "投标人名称", "分标编号", "物资资别", "项目单位", "总价（元）", "重量（吨）", "电压等级"]
+                                            if (_data.length <= 0) {
+                                                message.error("文件不能为空...")
+                                                return
+                                            }
+                                            if (Object.keys(_data[0]).length <= 0) {
+                                                message.error("文件不符合上传规则...")
+                                                return
+                                            }
+                                            const rowItem: string[] = Object.keys(_data[0])
+                                            const vilidateRow: number = rowItem.filter(item => vilidateCols.includes(item)).length
+                                            if (vilidateRow !== vilidateCols.length) {
+                                                message.error("文件不符合上传规则...")
+                                                return
+                                            }
+                                            const resultData = bidOpenRecordVos.find((bidItem: any) => bidItem.round === item.key).bidOpenRecordVos
+                                            const filterUploadData = _data.filter(item => Object.keys(item).every(eItem => eItem))
+                                            const uploadData = filterUploadData.map((item: any, index) => {
+                                                let rowData: any = { uid: resultData.length + index }
+                                                Object.keys(item).forEach((columnItem: string) => {
+                                                    const columnDataIndex = bidInfoColumns.find(bidItem => bidItem.title === columnItem)
+                                                    if (columnDataIndex) {
+                                                        rowData[columnDataIndex.dataIndex] = generateFormatEditData(columnDataIndex, item[columnItem])
+                                                    }
+                                                })
+                                                return rowData
                                             })
-                                            return rowData
-                                        })
-                                        const editForm = tempRef?.ref[item.key].getForm()
-                                        const values = await editForm.getFieldsValue().submit
-                                        editForm.setFieldsValue({ submit: values.concat(uploadData) })
-                                    }} />,
+                                            const editForm = tempRef?.ref[item.key].getForm()
+                                            const values = await editForm.getFieldsValue().submit
+                                            setBidOpenRecordVos(bidOpenRecordVos.map((bidItem: any) => {
+                                                console.log(bidItem)
+                                                if (bidItem.round === item.key) {
+                                                    return {
+                                                        ...bidItem,
+                                                        bidOpenRecordVos: (values?.concat(uploadData) || uploadData)
+                                                    }
+                                                }
+                                                return bidItem
+                                            }))
+                                            // editForm.setFieldsValue({ submit: values?.concat(uploadData) || uploadData })
+                                        }} />,
                                     <Button
                                         type="link"
                                         key="export"

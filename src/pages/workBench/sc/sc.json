@@ -240,6 +240,37 @@
             ]
         },
         {
+            "title": "销售计划",
+            "dataIndex": "taskNoticeBenchVO",
+            "col": 2,
+            "path": "销售计划",
+            "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E7%BC%BA%E6%96%99%E5%A4%84%E7%90%86.png",
+            "workbenchItemVos": [
+                {
+                    "title": "未提交",
+                    "dataIndex": "notLaunchNum",
+                    "path": {
+                        "pathname": "/project/salePlan",
+                        "state": {
+                            "taskReviewStatus": "-1"
+                        }
+                    },
+                    "authority": "workbench_data12"
+                },
+                {
+                    "title": "审批中",
+                    "dataIndex": "launchNum",
+                    "path": {
+                        "pathname": "/project/salePlan",
+                        "state": {
+                            "taskReviewStatus": "0"
+                        }
+                    },
+                    "authority": "workbench_data12"
+                }
+            ]
+        },
+        {
             "title": "保函申请",
             "dataIndex": "guaranteeWorkVO",
             "col": 2,

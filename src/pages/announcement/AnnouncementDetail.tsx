@@ -1,14 +1,11 @@
-/**
- * @author zyc
- * @copyright © 2021 
- * @description 详情
-*/
 import React from 'react';
-import { Spin, Button, Space } from 'antd';
+import { Spin, Button, Space, Descriptions } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import BraftEditor from 'braft-editor'
+import 'braft-editor/dist/index.css'
 const tableColumns = [
     {
         key: 'recordType',
@@ -42,10 +39,10 @@ const baseColums = [
         "dataIndex": "title",
         "title": "标题"
     },
-    {
-        "dataIndex": "content",
-        "title": "内容"
-    },
+    // {
+    //     "dataIndex": "content",
+    //     "title": "内容"
+    // },
     {
         "dataIndex": "userNames",
         "title": "接收人"
@@ -86,6 +83,14 @@ export default function AssemblyWeldingInformation(): React.ReactNode {
         ]}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseColums} dataSource={detailData} col={2} />
+            <Descriptions bordered>
+                <Descriptions.Item label="内容">
+                <BraftEditor
+                    value={BraftEditor.createEditorState(detailData.content)}
+                    readOnly
+                /> 
+                </Descriptions.Item>
+            </Descriptions>
             <Attachment dataSource={detailData.attachInfoVos} />
             <DetailTitle title="操作信息" />
             <CommonTable columns={tableColumns} dataSource={detailData.businessRecordVos} pagination={false} />

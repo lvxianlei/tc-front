@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import AliTable from './AliTable'
 import { FormInstance, message, Button, Form, Space } from "antd"
 import FormItemType from './FormItemType'
 import { generateRules } from "./BaseInfo"
