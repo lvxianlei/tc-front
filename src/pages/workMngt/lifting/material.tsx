@@ -1,6 +1,6 @@
 import React from "react"
 import { useParams } from 'react-router-dom'
-import { DetailContent, SearchTable as Page } from '../../common'
+import { DetailTitle, SearchTable as Page } from '../../common'
 import { liftingMaterial } from "./data.json"
 export default function Invoicing() {
     const { planNumber, orderProjectName } = useParams<{
@@ -8,13 +8,20 @@ export default function Invoicing() {
         orderProjectName: string
     }>()
 
-    return <DetailContent title={<>
-        材料汇总
-        <span style={{ fontStyle: "normal" }}>
-            <span>计划号：<span>{planNumber}</span></span>
-            <span>工程名称：<span>{orderProjectName}</span></span>
-        </span>
-    </>}>
+    return <>
+        <DetailTitle title={<>
+            材料汇总
+            <span style={{
+                fontStyle: "normal",
+                fontSize: 12,
+                marginLeft: 16
+            }}>
+                <span>计划号：<span style={{ color: "#FF8c00" }}>{planNumber}</span></span>
+                <span style={{
+                    marginLeft: 16
+                }}>工程名称：<span style={{ color: "#FF8c00" }}>{orderProjectName}</span></span>
+            </span>
+        </>} />
         <Page
             path={`/tower-supply/task/scheme/planNumber/${planNumber}`}
             exportPath={`/tower-supply/task/scheme/planNumber/${planNumber}`}
@@ -30,5 +37,5 @@ export default function Invoicing() {
             ]}
             searchFormItems={[]}
         />
-    </DetailContent>
+    </>
 }
