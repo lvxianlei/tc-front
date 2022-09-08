@@ -36,7 +36,18 @@ export default function List(): React.ReactNode {
             key: 'status',
             title: '补件下达状态',
             width: 120,
-            dataIndex: 'status'
+            dataIndex: 'status',
+            type: 'select',
+            enum: [
+                {
+                    "value": 1,
+                    "label": "已下达"
+                },
+                {
+                    "value": 2,
+                    "label": "已取消"
+                },
+            ]
         },
         {
             key: 'updateStatusTime',
@@ -161,8 +172,8 @@ export default function List(): React.ReactNode {
                     >
                         <Button type="link">取消下达</Button>
                     </Popconfirm>
-                    <Link to={`/workMngt/patchIssuedList/issuedDetail/${record.id}`}>下达明细</Link>
-                    <Link to={`/workMngt/patchIssuedList/weldingDetail/${record.id}`}>电焊明细</Link>
+                    <Link to={`/workMngt/patchIssuedList/issuedDetail/${record.supplyProductCategoryId}`}>下达明细</Link>
+                    <Link to={`/workMngt/patchIssuedList/weldingDetail/${record.supplyProductCategoryId}`}>电焊明细</Link>
                 </Space>
             )
         }
@@ -204,7 +215,7 @@ export default function List(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="补件下达编号/计划号/塔型/工程名称" />
+                children: <Input style={{ width: '200px' }} placeholder="补件下达编号/计划号/塔型/工程名称" />
             }
         ]}
         filterValue={filterValue}

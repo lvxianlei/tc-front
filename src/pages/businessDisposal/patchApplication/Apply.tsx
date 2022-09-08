@@ -5,7 +5,7 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Input, Button, Form, Descriptions, Select, TreeSelect, DatePicker, Row, Col, Modal, InputNumber, Space } from 'antd';
+import { Input, Button, Form, Descriptions, Select, TreeSelect, DatePicker, Row, Col, Modal, InputNumber, Space, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -18,6 +18,7 @@ import { useForm } from 'antd/es/form/Form';
 import { towerTypeColumns, patchColumns } from "./patchApplication.json"
 import AddPatch from './AddPatch';
 import { useHistory } from 'react-router-dom';
+import { format } from 'path';
 
 export interface EditRefProps {
     onSubmit: () => void
@@ -28,13 +29,14 @@ export default function Apply(): React.ReactNode {
     const [applyUser, setApplyUser] = useState<any[]>();
     const [form] = useForm();
     const [tableForm] = useForm();
-    const [towerList, setTowerList] = useState([]);
+    const [towerList, setTowerList] = useState<any>([]);
     const [patchList, setPatchList] = useState<any>([]);
     const addRef = useRef<EditRefProps>();
     const [visible, setVisible] = useState<boolean>(false);
     const [rowData, setRowData] = useState<any>()
     const [towerSelects, setTowerSelects] = useState([]);
     const history = useHistory();
+    const [numbers, setNumbers] = useState<any>([]);
 
     const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
@@ -72,7 +74,6 @@ export default function Apply(): React.ReactNode {
     }
 
     const planNumChange = async (e: any) => {
-        console.log(e)
         const data: any = await RequestUtil.get(`/tower-science/productCategory/list/${e}`);
         setTowerSelects(data || [])
         form.setFieldsValue({
@@ -83,8 +84,8 @@ export default function Apply(): React.ReactNode {
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             const data: any = await addRef.current?.onSubmit();
-            console.log(data)
-            setPatchList([...(patchList || []), ...data])
+            const newPatchs = [...(patchList || []), ...data]
+            setPatchList([...newPatchs])
             setVisible(false)
             resove(true)
         } catch (error) {
@@ -93,24 +94,25 @@ export default function Apply(): React.ReactNode {
     })
 
     const getTowerList = (e: any[]) => {
-        console.log(e)
-        towerSelects.filter((res: any) => {
-            if (e?.findIndex(res?.id) !== -1) {
-                return res
+        const newTowerSelects: any[] = [];
+        towerSelects.forEach((res: any) => {
+            if (e?.indexOf(res?.productCategoryId) !== -1) {
+                newTowerSelects.push(res)
             }
         })
-        console.log(towerSelects)
-        patchList.filter((res: any) => {
-            if (e?.findIndex(res?.productCategoryId) !== -1) {
-                return res
+        const newPatchList: any[] = [];
+        patchList.forEach((res: any) => {
+            if (e?.indexOf(res?.productCategoryId) !== -1) {
+                newPatchList.push(res)
             }
         })
-        console.log(patchList)
+        setTowerList([...newTowerSelects])
+        setPatchList([...newPatchList])
     }
 
     const productNumbers = async (productCategoryId: string) => {
-        const data: any[] = await RequestUtil.get(``);
-        return data || [{ id: 111 }]
+        const data: any = await RequestUtil.get(`/tower-science/product/lofting?productCategoryId=${productCategoryId}&size=10000`);
+        setNumbers(data?.records)
     }
 
     const delRow = (index: number) => {
@@ -122,12 +124,25 @@ export default function Apply(): React.ReactNode {
         if (form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
-                console.log(value, patchList)
-                RequestUtil.post(`/tower-science/supplyEntry`, {
-
-                }).then(res => {
-                    history.goBack();
+                const tip: Boolean[] = [];
+                patchList.forEach((element: any) => {
+                    if (element.basicsPartNum > 0) {
+                        tip.push(true)
+                    } else {
+                        tip.push(false)
+                    }
                 });
+                if (tip.indexOf(false) === -1) {
+                    RequestUtil.post(`/tower-science/supplyEntry`, {
+                        ...value,
+                        planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
+                        supplyStructureList: [...patchList]
+                    }).then(res => {
+                        history.goBack();
+                    });
+                } else {
+                    message.warning('补件数量不可为0！')
+                }
             })
         }
     }
@@ -136,11 +151,25 @@ export default function Apply(): React.ReactNode {
         if (form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
-                RequestUtil.post(`/tower-science/supplyEntry/submit`, {
-
-                }).then(res => {
-                    history.goBack();
+                const tip: Boolean[] = [];
+                patchList.forEach((element: any) => {
+                    if (element.basicsPartNum > 0) {
+                        tip.push(true)
+                    } else {
+                        tip.push(false)
+                    }
                 });
+                if (tip.indexOf(false) === -1) {
+                    RequestUtil.post(`/tower-science/supplyEntry/submit`, {
+                        ...value,
+                        planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
+                        supplyStructureList: [...patchList]
+                    }).then(res => {
+                        history.goBack();
+                    });
+                } else {
+                    message.warning('补件数量不可为0！')
+                }
             })
         }
     }
@@ -243,8 +272,8 @@ export default function Apply(): React.ReactNode {
                                         (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                     }
                                     onChange={(e) => planNumChange(e)}>
-                                    {planNums && planNums?.map((item: any) => {
-                                        return <Select.Option key={item} value={item}>{item}</Select.Option>
+                                    {planNums && planNums?.map((item: any, index: number) => {
+                                        return <Select.Option key={index} value={item}>{item}</Select.Option>
                                     })}
                                 </Select>
                             </Form.Item>
@@ -258,7 +287,7 @@ export default function Apply(): React.ReactNode {
                             ]}>
                                 <Select placeholder="请选择塔型" style={{ width: "150px" }} mode="multiple" onChange={(e: any[]) => getTowerList(e)}>
                                     {towerSelects && towerSelects?.map((item: any) => {
-                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                        return <Select.Option key={item.productCategoryId} value={item.productCategoryId}>{item.productCategoryName}</Select.Option>
                                     })}
                                 </Select>
                             </Form.Item>
@@ -270,9 +299,7 @@ export default function Apply(): React.ReactNode {
                                     "message": "请选择计划发货日期"
                                 }
                             ]}>
-                                <Select placeholder="请选择计划发货日期" style={{ width: "150px" }}>
-                                    <DatePicker />
-                                </Select>
+                                <DatePicker />
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="说明">
@@ -315,19 +342,18 @@ export default function Apply(): React.ReactNode {
                                                 return {
                                                     ...res,
                                                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                                        <InputNumber min={0} max={9999} size="small" onChange={(e) => {
-                                                            console.log(e)
+                                                        <InputNumber min={0} max={9999} size="small" defaultValue={record.basicsPartNum} onChange={(e) => {
                                                             const newList = patchList.map((res: any, ind: number) => {
                                                                 if (ind === index) {
                                                                     return {
                                                                         ...res,
-                                                                        basicsPartNum: e
+                                                                        basicsPartNum: e,
+                                                                        totalWeight: Number(e) * Number(res?.basicsWeight || 0)
                                                                     }
                                                                 } else {
                                                                     return res
                                                                 }
                                                             })
-                                                            console.log(newList)
                                                             setPatchList([...newList])
                                                         }} />
                                                     )
@@ -336,10 +362,11 @@ export default function Apply(): React.ReactNode {
                                             if (res.dataIndex === 'productNumber') {
                                                 return {
                                                     ...res,
-                                                    render: async (_: any, record: Record<string, any>, index: number): Promise<React.ReactNode> => (
-                                                        <Select placeholder="请选择杆塔号" style={{ width: "150px" }} onChange={
+                                                    render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                                                        <Select placeholder="请选择杆塔号" size='small' key={index} style={{ width: "150px" }} defaultValue={record.productNumber} onChange={
                                                             (e) => {
-                                                                const newList = patchList.map((res: any, ind: number) => {
+
+                                                                const newList = (patchList || [])?.map((res: any, ind: number) => {
                                                                     if (ind === index) {
                                                                         return {
                                                                             ...res,
@@ -348,13 +375,19 @@ export default function Apply(): React.ReactNode {
                                                                     } else {
                                                                         return res
                                                                     }
-                                                                    console.log(newList)
-                                                                    setPatchList([...newList])
                                                                 })
+                                                                setPatchList([...newList])
                                                             }
-                                                        }>
-                                                            {(await productNumbers(record?.productCategoryId))?.map((item: any) => {
-                                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
+                                                        }
+                                                            onDropdownVisibleChange={(open) => {
+                                                                if (open) {
+                                                                    productNumbers(record?.productCategoryId)
+                                                                } else {
+                                                                    setNumbers([])
+                                                                }
+                                                            }}>
+                                                            {(numbers || [])?.map((item: any) => {
+                                                                return <Select.Option key={item.id} value={item.id}>{item.productNumber}</Select.Option>
                                                             })}
                                                         </Select>
                                                     )

@@ -5,13 +5,13 @@
  */
 
 import React from 'react';
-import { BaseInfo, DetailContent, OperationRecord } from '../../common';
+import { BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './PatchApplication.module.less';
-import { detailColumns } from "./patchApplication.json"
+import { detailColumns, detailTableColumns } from "./patchApplication.json"
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, Space } from 'antd';
+import { Button, Space, Spin } from 'antd';
 
 
 export default function Detail(): React.ReactNode {
@@ -19,20 +19,21 @@ export default function Detail(): React.ReactNode {
     const history = useHistory();
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<any>(`${params.id}`)
-        resole({
-            ...data
-        })
+        const data = await RequestUtil.get<any>(`/tower-science/supplyEntry/${params.id}`);
+        resole(data)
     }), {})
 
     return (
-        <DetailContent operation={[
-            <Space direction="horizontal" size="small" >
-                <Button onClick={() => history.push(`/businessDisposal/patchApplication`)}>关闭</Button>
-            </Space>
-        ]}>
-            <BaseInfo dataSource={data} columns={detailColumns} />
-            <OperationRecord title="操作信息" serviceId={params.id} serviceName="tower-science" />
-        </DetailContent>
+        <Spin spinning={loading}>
+            <DetailContent operation={[
+                <Space direction="horizontal" size="small" >
+                    <Button onClick={() => history.push(`/businessDisposal/patchApplication`)}>关闭</Button>
+                </Space>
+            ]}>
+                <BaseInfo columns={detailColumns} dataSource={data || {}} col={4} />
+                <CommonTable columns={detailTableColumns} dataSource={data?.supplyStructureVOList || []} />
+                <OperationRecord title="操作信息" serviceId={params.id} serviceName="tower-science" />
+            </DetailContent>
+        </Spin>
     )
 }

@@ -34,7 +34,7 @@ export default function PatchIssued(): React.ReactNode {
         let data = await RequestUtil.get<IPatchIssued>(`/tower-science/supplyBatch/getBatchDetail?id=${record?.id}`);
         setVisible(false)
         resole(data)
-    }), {})
+    }), { manual: true })
 
     const save = () => {
         if (form) {
@@ -43,7 +43,7 @@ export default function PatchIssued(): React.ReactNode {
                 console.log(value)
                 RequestUtil.post<any>(`/tower-science/supplyBatch/saveBatchDetail`, {
                     ...value,
-                    id: selectData.id
+                    id: selectData?.supplyBatchEntryVO?.id
                 }).then(res => {
                     history.goBack();
                 });

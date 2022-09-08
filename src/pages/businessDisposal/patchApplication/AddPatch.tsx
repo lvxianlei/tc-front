@@ -22,7 +22,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
     const { data: sectionsNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/productSegment/segmentList?productCategoryId=${record.id}`);
+        const data: any = await RequestUtil.get(`/tower-science/productSegment/segmentList?productCategoryId=${record.productCategoryId}`);
         resole(data)
     }), {})
 
@@ -31,8 +31,11 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
             resolve(selectedRows.map(res => {
                 return {
                     ...res,
-                    productCategoryId: record.id,
-                    productCategory: record.productCategoryName
+                    productCategoryId: record.productCategoryId,
+                    productCategory: record.productCategoryName,
+                    basicsPartNum: 0,
+                    totalWeight: 0,
+                    structureId: res.id
                 }
             }));
         } catch (error) {
@@ -59,12 +62,12 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                 render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
             }, ...addColumns]}
         headTabs={[]}
-        requestData={{ id: record?.id }}
+        requestData={{ productCategoryId: record?.productCategoryId }}
         searchFormItems={[
             {
                 name: 'productCategoryName',
                 label: '塔型名称',
-                children: <p>{record?.productCategoryName}</p>
+                children: <p style={{ marginTop: '6px' }}>{record?.productCategoryName}</p>
             },
             {
                 name: 'segmentId',
