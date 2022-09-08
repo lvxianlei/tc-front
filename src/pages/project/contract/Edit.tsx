@@ -42,7 +42,7 @@ export default function Edit() {
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract/${params.id}`)
-      setPlanType(result?.planType)
+      setPlanType(result?.planType || 0)
       resole({
         ...result,
         ...result.customerInfoVo,
@@ -109,11 +109,11 @@ export default function Edit() {
       message.error('回款计划无数据，需新增！');
       return
     }
-    if (totalReturnedRate !== "100.00") {
+    if (planType === 0 && (totalReturnedRate !== "100.00")) {
       message.error('计划回款总占比必须等于100');
       return
     }
-    if (totalReturnedAmount !== parseFloat(baseInfo.contractAmount).toFixed(2)) {
+    if (planType === 1 && (totalReturnedAmount !== parseFloat(baseInfo.contractAmount).toFixed(2))) {
       message.error('计划回款总金额必须等于合同总价');
       return
     }
@@ -139,7 +139,7 @@ export default function Edit() {
         ...item,
         contractId: params.id
       })),
-      fileIds: attchs?.map((item: any) => item.id)
+      fileIds: attchs
     })
     if (result) {
       setWhen(false)
@@ -186,7 +186,7 @@ export default function Edit() {
     if (fields.submit.length - 1 >= 0) {
       const contractAmount = form.getFieldValue("contractAmount")
       const result = allFields.submit[fields.submit.length - 1];
-      if (planType === 1 && (fields.type !== "add")) {
+      if (planType === 0 && (fields.type !== "add")) {
         editform.setFieldsValue({
           submit: allFields.submit.map((item: any) => {
             if (item.id === result.id) {
@@ -205,7 +205,7 @@ export default function Edit() {
             if (item.id === result.id) {
               return ({
                 ...item,
-                returnedRate: (parseFloat(contractAmount || 0) / (result.returnedAmount || 0) * 100).toFixed(2)
+                returnedRate: ((((result.returnedAmount || 0) / parseFloat(contractAmount || 0)) || 0) * 100).toFixed(2)
               })
             }
             return item

@@ -26,6 +26,7 @@ interface BaseInfoProps {
     form?: FormInstance<any>
     onChange?: (changedFields: any, allFields: any, dataSource: { [key: string]: any }) => void
     classStyle?: string
+    [key: string]: any
 }
 
 function formatSelectData(dataItem: any, value: string | number | boolean): string {
@@ -130,7 +131,7 @@ const generatePlaceholder = (columnItems: any): string => {
     }
     return placeholder
 }
-export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "" }: BaseInfoProps): JSX.Element {
+export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "", ...props}: BaseInfoProps): JSX.Element {
     
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
@@ -239,7 +240,7 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
             </Row>
         </Form >
     }
-    return <Descriptions bordered column={col} size="small" className={`bottom ${classStyle}`}>
+    return <Descriptions bordered column={col} size="small" className={`bottom ${classStyle}`} {...props}>
         {columns.map((item: any, index: number) => <Descriptions.Item
             contentStyle={{ ...item.contentStyle, width: `${100 / (col * 2)}%` }}
             labelStyle={{ ...item.labelStyle, width: `${100 / (col * 4)}%` }}

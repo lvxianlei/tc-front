@@ -535,6 +535,11 @@
                         "label": "下达列表",
                         "path": "/workMngt/releaseList",
                         "authority": "tc_erp_rd_work_release"
+                    },
+                    {
+                        "label": "补件下达列表",
+                        "path": "/workMngt/patchIssuedList",
+                        "authority": "tc_erp_rd_work_release"
                     }
                 ]
             },
@@ -617,6 +622,11 @@
                 "appName": "RD",
                 "authority": "tc_erp_rd_business",
                 "items": [
+                    {
+                        "label": "补件申请",
+                        "path": "/businessDisposal/patchApplication",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
                     {
                         "label": "取消暂停恢复",
                         "path": "/businessDisposal/cancelOrPauseOrrestore",

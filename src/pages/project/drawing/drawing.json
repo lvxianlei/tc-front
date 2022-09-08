@@ -22,6 +22,10 @@
             "dataIndex": "serviceManager"
         },
         {
+            "title": "确认人",
+            "dataIndex": "confirmUserName"
+        },
+        {
             "title": "拒绝原因",
             "dataIndex": "refuseMsg"
         },
@@ -55,6 +59,10 @@
         {
             "title": "制单人",
             "dataIndex": "createUserName"
+        },
+        {
+            "title": "下发时间",
+            "dataIndex": "auditTime"
         },
         {
             "title": "制单时间",
@@ -128,6 +136,12 @@
             "value": "name",
             "readOnly": true,
             "dependencies": true,
+            "search": [
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "fuzzyName"
+                }
+            ],
             "columns": [
                 {
                     "title": "登录账号",
@@ -135,8 +149,7 @@
                 },
                 {
                     "title": "用户姓名",
-                    "dataIndex": "name",
-                    "search": true
+                    "dataIndex": "name"
                 },
                 {
                     "title": "所属角色",

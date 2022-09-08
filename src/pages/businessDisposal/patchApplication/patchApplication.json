@@ -1,0 +1,836 @@
+{
+    "columns": [
+        {
+            "key": "supplyNumber",
+            "title": "补件编号",
+            "dataIndex": "supplyNumber",
+            "width": 100
+        },
+        {
+            "key": "supplyTypeName",
+            "title": "补件类型",
+            "dataIndex": "supplyTypeName",
+            "width": 100
+        },
+        {
+            "key": "statusName",
+            "title": "审批状态",
+            "dataIndex": "statusName",
+            "width": 100
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTime",
+            "width": 150
+        },
+        {
+            "key": "priorityName",
+            "title": "优先级",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "applyUserDeptName",
+            "title": "申请部门",
+            "dataIndex": "applyUserDeptName",
+            "width": 100
+        },
+        {
+            "key": "applyUserName",
+            "title": "申请人",
+            "dataIndex": "applyUserName",
+            "width": 100
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
+            "key": "businessUserName",
+            "title": "业务经理",
+            "dataIndex": "businessUserName",
+            "width": 100
+        },
+        {
+            "key": "planDeliveryTime",
+            "title": "计划发货日期",
+            "dataIndex": "planDeliveryTime",
+            "width": 100
+        },
+        {
+            "key": "materialStandardName",
+            "title": "材料标准",
+            "dataIndex": "materialStandardName",
+            "width": 100
+        },
+        {
+            "key": "totalNumber",
+            "title": "零件数量",
+            "dataIndex": "totalNumber",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "零件重量",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "isSettlement",
+            "title": "是否结算",
+            "dataIndex": "isSettlement",
+            "width": 100,
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "是" },
+                { "value": 0, "label": "否" }
+            ]
+        },
+        {
+            "key": "description",
+            "title": "说明",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ],
+    "tableColumns": [
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "key": "status",
+            "title": "下达状态",
+            "dataIndex": "status",
+            "width": 100
+        },
+        {
+            "key": "totalNumber",
+            "title": "零件数量",
+            "dataIndex": "totalNumber",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "重量kg",
+            "dataIndex": "totalWeight",
+            "width": 100
+        }
+    ],
+    "partsColumns": [
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "code",
+            "title": "部件号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "key": "materialName",
+            "title": "材料",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "type",
+            "title": "零件类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
+            "key": "length",
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "width",
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "key": "thickness",
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "width": 100
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "补件数量",
+            "dataIndex": "basicsPartNum",
+            "width": 100
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量",
+            "dataIndex": "basicsWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "补件重量",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "holesNum",
+            "title": "单件孔数",
+            "dataIndex": "holesNum",
+            "width": 100
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "dataIndex": "electricWelding",
+            "width": 100
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 100
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 100
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 100
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 100
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 130
+        },
+        {
+            "key": "suppress",
+            "title": "压制",
+            "dataIndex": "suppress",
+            "width": 130
+        },
+        {
+            "key": "openCloseAngle",
+            "title": "开合角",
+            "dataIndex": "openCloseAngle",
+            "width": 130
+        },
+        {
+            "key": "slottedForm",
+            "title": "开槽形式",
+            "dataIndex": "slottedForm",
+            "width": 130
+        },
+        {
+            "key": "groove",
+            "title": "坡口",
+            "dataIndex": "groove",
+            "width": 130
+        },
+        {
+            "key": "intersectingLine",
+            "title": "相贯线",
+            "dataIndex": "intersectingLine",
+            "width": 130
+        },
+        {
+            "key": "perforate",
+            "title": "钻孔",
+            "dataIndex": "perforate",
+            "width": 130
+        }
+    ],
+    "towerTypeColumns": [
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        }
+    ],
+    "patchColumns": [
+        {
+            "key": "productCategory",
+            "title": "塔型名称",
+            "dataIndex": "productCategory",
+            "width": 100
+        },
+        {
+            "key": "productNumber",
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
+            "width": 100
+        },
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "code",
+            "title": "部件号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "key": "materialName",
+            "title": "材料",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "type",
+            "title": "零件类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
+            "key": "length",
+            "title": "长度mm",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "width",
+            "title": "宽度mm",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "key": "thickness",
+            "title": "厚度mm",
+            "dataIndex": "thickness",
+            "width": 100
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "补件数量",
+            "dataIndex": "basicsPartNum",
+            "width": 100
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量",
+            "dataIndex": "basicsWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "补件重量",
+            "dataIndex": "totalWeight",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "key": "holesNum",
+            "title": "单件孔数",
+            "dataIndex": "holesNum",
+            "width": 100
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "dataIndex": "electricWelding",
+            "width": 100
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 100
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 100
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 100
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 100
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 130
+        },
+        {
+            "key": "suppress",
+            "title": "压制",
+            "dataIndex": "suppress",
+            "width": 130
+        },
+        {
+            "key": "openCloseAngle",
+            "title": "开合角",
+            "dataIndex": "openCloseAngle",
+            "width": 130
+        },
+        {
+            "key": "slottedForm",
+            "title": "开槽形式",
+            "dataIndex": "slottedForm",
+            "width": 130
+        },
+        {
+            "key": "groove",
+            "title": "坡口",
+            "dataIndex": "groove",
+            "width": 130
+        },
+        {
+            "key": "intersectingLine",
+            "title": "相贯线",
+            "dataIndex": "intersectingLine",
+            "width": 130
+        },
+        {
+            "key": "perforate",
+            "title": "钻孔",
+            "dataIndex": "perforate",
+            "width": 130
+        }
+    ],
+    "addColumns": [
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "code",
+            "title": "部件号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "key": "materialName",
+            "title": "材料",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "type",
+            "title": "零件类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
+            "key": "length",
+            "title": "长度mm",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "width",
+            "title": "宽度mm",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "key": "thickness",
+            "title": "厚度mm",
+            "dataIndex": "thickness",
+            "width": 100
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "单段数量",
+            "dataIndex": "basicsPartNum",
+            "width": 100
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量",
+            "dataIndex": "basicsWeight",
+            "width": 100
+        },
+        {
+            "key": "holesNum",
+            "title": "单件孔数",
+            "dataIndex": "holesNum",
+            "width": 100
+        },
+        {
+            "key": "specialCode",
+            "title": "特殊件",
+            "dataIndex": "specialCode",
+            "width": 100
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 100
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "dataIndex": "electricWelding",
+            "width": 100
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 100
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 100
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 100
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 100
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 130
+        },
+        {
+            "key": "suppress",
+            "title": "压制",
+            "dataIndex": "suppress",
+            "width": 130
+        },
+        {
+            "key": "openCloseAngle",
+            "title": "开合角",
+            "dataIndex": "openCloseAngle",
+            "width": 130
+        },
+        {
+            "key": "slottedForm",
+            "title": "开槽形式",
+            "dataIndex": "slottedForm",
+            "width": 130
+        },
+        {
+            "key": "groove",
+            "title": "坡口",
+            "dataIndex": "groove",
+            "width": 130
+        },
+        {
+            "key": "intersectingLine",
+            "title": "相贯线",
+            "dataIndex": "intersectingLine",
+            "width": 130
+        },
+        {
+            "key": "perforate",
+            "title": "钻孔",
+            "dataIndex": "perforate",
+            "width": 130
+        }
+    ],
+    "detailColumns": [
+        {
+            "title": "补件类型",
+            "dataIndex": "supplyTypeName"
+        },
+        {
+            "title": "优先级",
+            "dataIndex": "priorityName"
+        },
+        {
+            "title": "申请部门",
+            "dataIndex": "applyUserDeptName"
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applyUserName"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategory"
+        },
+        {
+            "title": "计划发货日期",
+            "dataIndex": "planDeliveryTime"
+        },
+        {
+            "title": "说明",
+            "dataIndex": "description"
+        }
+    ],
+    "detailTableColumns": [
+        {
+            "key": "productCategory",
+            "title": "塔型名称",
+            "dataIndex": "productCategory",
+            "width": 100
+        },
+        {
+            "key": "productNumber",
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
+            "width": 100
+        },
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "code",
+            "title": "部件号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "key": "materialName",
+            "title": "材料",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "type",
+            "title": "零件类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
+            "key": "length",
+            "title": "长度mm",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "width",
+            "title": "宽度mm",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "key": "thickness",
+            "title": "厚度mm",
+            "dataIndex": "thickness",
+            "width": 100
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "补件数量",
+            "dataIndex": "basicsPartNum",
+            "width": 100
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量",
+            "dataIndex": "basicsWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "补件重量",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "holesNum",
+            "title": "单件孔数",
+            "dataIndex": "holesNum",
+            "width": 100
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "dataIndex": "electricWelding",
+            "width": 100
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 100
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 100
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 100
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 100
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 130
+        },
+        {
+            "key": "suppress",
+            "title": "压制",
+            "dataIndex": "suppress",
+            "width": 130
+        },
+        {
+            "key": "openCloseAngle",
+            "title": "开合角",
+            "dataIndex": "openCloseAngle",
+            "width": 130
+        },
+        {
+            "key": "slottedForm",
+            "title": "开槽形式",
+            "dataIndex": "slottedForm",
+            "width": 130
+        },
+        {
+            "key": "groove",
+            "title": "坡口",
+            "dataIndex": "groove",
+            "width": 130
+        },
+        {
+            "key": "intersectingLine",
+            "title": "相贯线",
+            "dataIndex": "intersectingLine",
+            "width": 130
+        },
+        {
+            "key": "perforate",
+            "title": "钻孔",
+            "dataIndex": "perforate",
+            "width": 130
+        }
+    ]
+}
