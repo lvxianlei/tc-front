@@ -356,7 +356,7 @@ export default function Apply(): React.ReactNode {
                                                                     return {
                                                                         ...res,
                                                                         basicsPartNum: e,
-                                                                        totalWeight: Number(e) * Number(res?.basicsWeight || 0)
+                                                                        totalWeight: (Number(e) * Number(res?.basicsWeight || 0)).toFixed(2)
                                                                     }
                                                                 } else {
                                                                     return res
