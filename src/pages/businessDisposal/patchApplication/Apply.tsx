@@ -152,26 +152,31 @@ export default function Apply(): React.ReactNode {
     const submit = () => {
         if (form) {
             form.validateFields().then(res => {
-                let value = form.getFieldsValue(true);
-                const tip: Boolean[] = [];
-                patchList.forEach((element: any) => {
-                    if (element.basicsPartNum > 0) {
-                        tip.push(true)
-                    } else {
-                        tip.push(false)
-                    }
-                });
-                if (tip.indexOf(false) === -1) {
-                    RequestUtil.post(`/tower-science/supplyEntry/submit`, {
-                        ...value,
-                        planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
-                        supplyStructureList: [...patchList]
-                    }).then(res => {
-                        history.goBack();
+                if (patchList.length > 0) {
+                    let value = form.getFieldsValue(true);
+                    const tip: Boolean[] = [];
+                    patchList.forEach((element: any) => {
+                        if (element.basicsPartNum > 0) {
+                            tip.push(true)
+                        } else {
+                            tip.push(false)
+                        }
                     });
+                    if (tip.indexOf(false) === -1) {
+                        RequestUtil.post(`/tower-science/supplyEntry/submit`, {
+                            ...value,
+                            planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
+                            supplyStructureList: [...patchList]
+                        }).then(res => {
+                            history.goBack();
+                        });
+                    } else {
+                        message.warning('补件数量不可为0！')
+                    }
                 } else {
-                    message.warning('补件数量不可为0！')
+                    message.warning('补件数据不可为空！')
                 }
+
             })
         }
     }
@@ -268,6 +273,7 @@ export default function Apply(): React.ReactNode {
                                 }
                             ]}>
                                 <Select
+                                    showSearch
                                     placeholder="请选择计划号"
                                     style={{ width: "150px" }}
                                     filterOption={(input, option) =>
