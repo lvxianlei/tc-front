@@ -1,0 +1,162 @@
+{
+    "baseInfo": [
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 120,
+            "type": "string"
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "orderProjectName",
+            "width": 120,
+            "type": "string"
+        },
+        {
+            "title": "状态",
+            "width": 60,
+            "dataIndex": "batchingStatusName"
+        },
+        {
+            "title": "下发时间",
+            "dataIndex": "issuedTime",
+            "type": "date",
+            "formate": "YYYY-MM-DD HH:mm:ss",
+            "width": 120
+        },
+        {
+            "title": "提料完成时间",
+            "dataIndex": "liftingTime",
+            "type": "date",
+            "formate": "YYYY-MM-DD HH:mm:ss",
+            "width": 160
+        },
+        {
+            "title": "配料完成时间",
+            "dataIndex": "batchingTaskFinishTime",
+            "type": "date",
+            "formate": "YYYY-MM-DD HH:mm:ss",
+            "width": 160
+        }
+    ],
+    "liftingMaterial": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": "重量(吨)",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "所属塔型",
+            "dataIndex": "productCategoryName",
+            "type": "string"
+        }
+    ],
+    "liftingDetail": [
+        {
+            "title": "件号",
+            "dataIndex": "code",
+            "type": "string"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string"
+        },
+        {
+            "title": "长度（mm）",
+            "width": 120,
+            "dataIndex": "length",
+            "type": "string"
+        },
+        {
+            "title": "宽度（mm）",
+            "width": 120,
+            "dataIndex": "width",
+            "type": "string"
+        },
+        {
+            "title": "厚度（mm）",
+            "width": 120,
+            "dataIndex": "thickness",
+            "type": "string"
+        },
+        {
+            "title": "大头",
+            "width": 120,
+            "dataIndex": "bigHead",
+            "type": "string"
+        },
+        {
+            "title": "小头",
+            "width": 120,
+            "dataIndex": "smallHead",
+            "type": "string"
+        },
+        {
+            "title": "汇总数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": "单件重量（kg）",
+            "width": 120,
+            "dataIndex": "weight",
+            "type": "number"
+        },
+        {
+            "title": "总计重量（kg）",
+            "width": 150,
+            "dataIndex": "totalWeight",
+            "type": "number"
+        },
+        {
+            "title": "所属塔型",
+            "width": 150,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "title": "备注",
+            "width": 150,
+            "dataIndex": "--------------"
+        }
+    ]
+}
