@@ -1,8 +1,10 @@
+import { Button } from "antd"
 import React from "react"
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, SearchTable as Page } from '../../common'
 import { liftingMaterial } from "./data.json"
 export default function Invoicing() {
+    const history = useHistory()
     const { planNumber, orderProjectName } = useParams<{
         planNumber: string
         orderProjectName: string
@@ -25,6 +27,7 @@ export default function Invoicing() {
         <Page
             path={`/tower-supply/task/scheme/planNumber/${planNumber}`}
             exportPath={`/tower-supply/task/scheme/planNumber/${planNumber}`}
+            extraOperation={[<Button onClick={() => history.goBack()}>返回</Button>]}
             columns={[
                 {
                     title: "序号",

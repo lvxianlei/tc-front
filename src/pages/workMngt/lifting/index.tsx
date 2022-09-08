@@ -70,7 +70,7 @@ export default function Invoicing() {
                 children: <Select style={{ width: 200 }} defaultValue={""}>
                     <Select.Option value="">全部</Select.Option>
                     <Select.Option value="1">配料中</Select.Option>
-                    <Select.Option value="2">已配料</Select.Option>
+                    <Select.Option value="3">已配料</Select.Option>
                 </Select>
             },
             {
