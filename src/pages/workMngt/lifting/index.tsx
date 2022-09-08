@@ -10,13 +10,11 @@ export default function Invoicing() {
             const formatDate = value.startLiftingTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startLiftingTime = formatDate[0] + " 00:00:00"
             value.endLiftingTime = formatDate[1] + " 23:59:59"
-            delete value.startLiftingTime
         }
         if (value.startBatchingTaskFinishTime) {
             const formatDate = value.startBatchingTaskFinishTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startBatchingTaskFinishTime = formatDate[0] + " 00:00:00"
             value.endBatchingTaskFinishTime = formatDate[1] + " 23:59:59"
-            delete value.startBatchingTaskFinishTime
         }
         return value
     }
