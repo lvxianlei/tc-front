@@ -800,7 +800,7 @@
       "name": "询比价",
       "path": "/contract-mngt/enquiryCompare",
       "module": "./pages/contract-mngt/enquiryCompare/index",
-      "exact": true, 
+      "exact": true,
       "authority": "tc_erp_sw_contract_comparison_list"
     },
     { //合同管理-询比价-询价信息
@@ -1131,6 +1131,27 @@
       "module": "./pages/workMngt/shortageList/index",
       "exact": true,
       "authority": "tc_erp_sw_work_lackMaterial_list"
+    },
+    {
+      "name": "提料汇总",
+      "path": "/ingredients/lifting",
+      "module": "./pages/workMngt/lifting/index",
+      "exact": true,
+      "authority": "tc_erp_sw_work_liftingSummary_list"
+    },
+    {
+      "name": "提料明细",
+      "path": "/ingredients/lifting/detail/:planNumber/:orderProjectName",
+      "module": "./pages/workMngt/lifting/Overview",
+      "exact": true,
+      "authority": "tc_erp_sw_work_liftingSummary_detail"
+    },
+    {
+      "name": "材料汇总",
+      "path": "/ingredients/lifting/material/:planNumber/:orderProjectName",
+      "module": "./pages/workMngt/lifting/material",
+      "exact": true,
+      "authority": "tc_erp_sw_work_liftingSummary_material"
     },
     { // 工作管理-样板列表
       "name": "样板列表",
@@ -2811,12 +2832,12 @@
       "authority": "tc_erp_sys_system_app_deploy_list"
     },
     { // 通用中心-应用信息
-    "name": "应用信息",
-    "path": "/sys/appSetting/index",
-    "module": "./pages/system-mngt/appSetting/index",
-    "exact": true,
-    "authority": "tc_erp_sys_system_client_info"
-  },
+      "name": "应用信息",
+      "path": "/sys/appSetting/index",
+      "module": "./pages/system-mngt/appSetting/index",
+      "exact": true,
+      "authority": "tc_erp_sys_system_client_info"
+    },
     { // RD-系统设置-试组装配置
       "name": "试组装配置",
       "path": "/baseSetting/tryAssemble",
