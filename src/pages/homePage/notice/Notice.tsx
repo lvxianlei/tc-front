@@ -8,7 +8,6 @@ export default function Notice(): React.ReactNode {
 
     const columns = [
         {
-            key: 'title',
             title: '标题',
             width: 150,
             dataIndex: 'title',
@@ -17,14 +16,19 @@ export default function Notice(): React.ReactNode {
             )
         },
         {
-            key: 'content',
-            title: '内容',
+            title: '发送人',
             width: 150,
-            dataIndex: 'content',
-            render: (_: string, record: Record<string, any>): React.ReactNode => (
-                <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
-            )
+            dataIndex: 'createUserName'
         },
+        // {
+        //     key: 'content',
+        //     title: '内容',
+        //     width: 150,
+        //     dataIndex: 'content',
+        //     render: (_: string, record: Record<string, any>): React.ReactNode => (
+        //         <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
+        //     )
+        // },
         {
             key: 'releaseTime',
             title: '发布时间',

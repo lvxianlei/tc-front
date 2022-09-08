@@ -17,6 +17,11 @@
             "width": 120
         },
         {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
             "title": "申请人",
             "dataIndex": "applyStaffName",
             "width": 80

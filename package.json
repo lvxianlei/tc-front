@@ -21,6 +21,7 @@
     "antd": "4.15.4",
     "antd-img-crop": "^3.16.0",
     "babel-loader": "8.1.0",
+    "braft-editor": "^2.3.9",
     "camelcase-keys": "^6.2.2",
     "crypto-js": "^4.0.0",
     "dayjs": "^1.10.4",

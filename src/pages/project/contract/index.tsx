@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Button, Popconfirm, Space, message, Input, Upload } from 'antd';
+import { Button, Popconfirm, message, Input, Upload, Typography } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { IContract } from "../../IContract";
 import RequestUtil from "../../../utils/RequestUtil";
 import { IResponseData } from "../../common/Page";
 import MiddleModal from '../../../components/MiddleModal';
 import AuthUtil from '../../../utils/AuthUtil';
-
+const { Text } = Typography
 export default function ContractList(): JSX.Element {
   const history = useHistory();
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -26,12 +26,15 @@ export default function ContractList(): JSX.Element {
       width: 140,
       dataIndex: "contractNumber",
       render: (_: undefined, record: any): React.ReactNode => {
-        return (
-          <Link
-            to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}
-          >
+        return (<Link to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}>
+          <Text
+            style={{ width: "100%", color: "#FF8C00" }}
+            ellipsis={{
+              tooltip: record.contractNumber
+            }}>
             {(record as IContract).contractNumber}
-          </Link>
+          </Text>
+        </Link>
         );
       },
     },
@@ -39,13 +42,14 @@ export default function ContractList(): JSX.Element {
       title: "内部合同编号",
       width: 140,
       dataIndex: "internalNumber",
-      render: (_: undefined, record: any): React.ReactNode => {
-        return (
-          <Link to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}>
-            {(record as IContract).internalNumber}
-          </Link>
-        );
-      },
+      render: (_: undefined, record: any): React.ReactNode => (<Link to={`/project/${entryPath}/detail/contract/${record?.projectId}/${(record as IContract).id}`}>
+        <Text
+          style={{ width: "100%", color: "#FF8C00" }}
+          ellipsis={{
+            tooltip: record.internalNumber
+          }}>
+          {(record as IContract).internalNumber}
+        </Text></Link>),
     },
     {
       title: "合同/工程名称",
@@ -132,8 +136,9 @@ export default function ContractList(): JSX.Element {
       <Page
         path="/tower-market/contract/getContractPackPage"
         sourceKey=""
+        pageSize={50}
         onFilterSubmit={onFilterSubmit}
-        transformResult={(result:any)=>result.contractList}
+        transformResult={(result: any) => result.contractList}
         filterValue={filterValue}
         extraOperation={(data: any) => {
           return (<>
@@ -184,8 +189,9 @@ export default function ContractList(): JSX.Element {
             title: "操作",
             fixed: "right",
             dataIndex: "operation",
+            width: 300,
             render: (_: undefined, record: any): React.ReactNode => (
-              <Space direction="horizontal" size="small">
+              <>
                 <Button type="link">
                   <Link
                     to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}`}
@@ -234,7 +240,7 @@ export default function ContractList(): JSX.Element {
                   }}
                   projectId={record?.projectId}
                   selectKey={record?.bidStatisticsId} />
-              </Space>
+              </>
             ),
           },
         ]}
