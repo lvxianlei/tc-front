@@ -33,12 +33,6 @@ export default function IssuedDetail(): React.ReactNode {
             dataIndex: 'segmentName'
         },
         {
-            key: 'repeatNum',
-            title: '段重复数',
-            width: 150,
-            dataIndex: 'repeatNum'
-        },
-        {
             key: 'code',
             title: '构件编号',
             dataIndex: 'code',
@@ -97,12 +91,6 @@ export default function IssuedDetail(): React.ReactNode {
             title: '加工数',
             width: 200,
             dataIndex: 'processNum'
-        },
-        {
-            key: 'assembleNum',
-            title: '试装数',
-            width: 200,
-            dataIndex: 'assembleNum'
         },
         {
             key: 'basicsWeight',

@@ -63,7 +63,8 @@
         {
             "key": "description",
             "title": "说明",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "tableColumns": [

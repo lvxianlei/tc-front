@@ -142,7 +142,7 @@ export default function PatchIssued(): React.ReactNode {
                 </Descriptions.Item>
             </Descriptions>
             <DetailTitle title="塔型工程信息" key={2} />
-            <BaseInfo layout="vertical" columns={baseColums} dataSource={selectData?.supplyBatchEntryVO || {}} col={7} />
+            <BaseInfo layout="vertical" columns={baseColums} dataSource={selectData?.supplyBatchEntryVO || {}} col={6} />
             <DetailTitle title="下达信息" key={3} />
             <Form form={form} labelCol={{ span: 4 }}>
                 <Row >
