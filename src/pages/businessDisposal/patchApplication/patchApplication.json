@@ -125,7 +125,12 @@
             "key": "status",
             "title": "下达状态",
             "dataIndex": "status",
-            "width": 100
+            "width": 100,
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "已下达" },
+                { "value": 2, "label": "未下达" }
+            ]
         },
         {
             "key": "totalNumber",
@@ -655,10 +660,6 @@
         {
             "title": "计划号",
             "dataIndex": "planNumber"
-        },
-        {
-            "title": "塔型",
-            "dataIndex": "productCategory"
         },
         {
             "title": "计划发货日期",
