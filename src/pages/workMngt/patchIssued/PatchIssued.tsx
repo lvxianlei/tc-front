@@ -16,7 +16,7 @@ import { patchEntryColumns } from "./patchIssued.json"
 import { FixedType } from 'rc-table/lib/interface';
 
 interface IPatchIssued {
-
+    supplyBatchEntryVO: any;
 }
 
 export interface modalProps {
@@ -33,6 +33,12 @@ export default function PatchIssued(): React.ReactNode {
     const { data: selectData, run: selectRun } = useRequest<any>((record: Record<string, any>) => new Promise(async (resole, reject) => {
         let data = await RequestUtil.get<IPatchIssued>(`/tower-science/supplyBatch/getBatchDetail?id=${record?.id}`);
         setVisible(false)
+        form.setFieldsValue({
+            machiningDemand: data?.supplyBatchEntryVO?.machiningDemand,
+            weldingDemand: data?.supplyBatchEntryVO?.weldingDemand,
+            galvanizeDemand: data?.supplyBatchEntryVO?.galvanizeDemand,
+            packDemand: data?.supplyBatchEntryVO?.packDemand,
+        })
         resole(data)
     }), { manual: true })
 
