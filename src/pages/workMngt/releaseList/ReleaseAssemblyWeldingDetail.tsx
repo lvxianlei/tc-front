@@ -127,10 +127,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'structureTexture'
         },
         {
-            key: 'structureTexture',
+            key: 'structureSpec',
             title: '规格',
             width: 150,
-            dataIndex: 'structureTexture',
+            dataIndex: 'structureSpec',
         },
         {
             key: 'length',
