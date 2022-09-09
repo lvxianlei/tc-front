@@ -16,7 +16,7 @@ import { patchEntryColumns } from "./patchIssued.json"
 import { FixedType } from 'rc-table/lib/interface';
 
 interface IPatchIssued {
-
+    supplyBatchEntryVO: any;
 }
 
 export interface modalProps {
@@ -33,6 +33,12 @@ export default function PatchIssued(): React.ReactNode {
     const { data: selectData, run: selectRun } = useRequest<any>((record: Record<string, any>) => new Promise(async (resole, reject) => {
         let data = await RequestUtil.get<IPatchIssued>(`/tower-science/supplyBatch/getBatchDetail?id=${record?.id}`);
         setVisible(false)
+        form.setFieldsValue({
+            machiningDemand: data?.supplyBatchEntryVO?.machiningDemand,
+            weldingDemand: data?.supplyBatchEntryVO?.weldingDemand,
+            galvanizeDemand: data?.supplyBatchEntryVO?.galvanizeDemand,
+            packDemand: data?.supplyBatchEntryVO?.packDemand,
+        })
         resole(data)
     }), { manual: true })
 
@@ -40,7 +46,6 @@ export default function PatchIssued(): React.ReactNode {
         if (form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
-                console.log(value)
                 RequestUtil.post<any>(`/tower-science/supplyBatch/saveBatchDetail`, {
                     ...value,
                     id: selectData?.supplyBatchEntryVO?.id
@@ -76,7 +81,7 @@ export default function PatchIssued(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         width: 50,
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                            <Button type='link' onClick={() => selectRun(record)}>选择</Button>
+                            <Button type='link' disabled={record?.batchStatus === 1} onClick={() => selectRun(record)}>选择</Button>
                         )
                     }]}
                 headTabs={[]}
@@ -106,10 +111,10 @@ export default function PatchIssued(): React.ReactNode {
                     {
                         name: 'batchStatus',
                         label: '下达状态',
-                        children: <Form.Item name="status">
+                        children: <Form.Item name="batchStatus">
                             <Select style={{ width: '120px' }} placeholder="请选择">
                                 <Select.Option value={1} key="1">已下达</Select.Option>
-                                <Select.Option value={2} key="2">已取消</Select.Option>
+                                <Select.Option value={2} key="2">未下达</Select.Option>
                             </Select>
                         </Form.Item>
                     },
@@ -137,7 +142,7 @@ export default function PatchIssued(): React.ReactNode {
                 </Descriptions.Item>
             </Descriptions>
             <DetailTitle title="塔型工程信息" key={2} />
-            <BaseInfo layout="vertical" columns={baseColums} dataSource={selectData?.supplyBatchEntryVO || {}} col={7} />
+            <BaseInfo layout="vertical" columns={baseColums} dataSource={selectData?.supplyBatchEntryVO || {}} col={6} />
             <DetailTitle title="下达信息" key={3} />
             <Form form={form} labelCol={{ span: 4 }}>
                 <Row >

@@ -79,6 +79,8 @@ export default function Apply(): React.ReactNode {
         form.setFieldsValue({
             productCategoryIds: []
         })
+        setTowerList([]);
+        setPatchList([]);
     }
 
     const handleOk = () => new Promise(async (resove, reject) => {
@@ -116,7 +118,7 @@ export default function Apply(): React.ReactNode {
     }
 
     const delRow = (index: number) => {
-        patchList.split(index, 1)
+        patchList.splice(index, 1)
         setPatchList([...patchList])
     }
 
@@ -150,26 +152,31 @@ export default function Apply(): React.ReactNode {
     const submit = () => {
         if (form) {
             form.validateFields().then(res => {
-                let value = form.getFieldsValue(true);
-                const tip: Boolean[] = [];
-                patchList.forEach((element: any) => {
-                    if (element.basicsPartNum > 0) {
-                        tip.push(true)
-                    } else {
-                        tip.push(false)
-                    }
-                });
-                if (tip.indexOf(false) === -1) {
-                    RequestUtil.post(`/tower-science/supplyEntry/submit`, {
-                        ...value,
-                        planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
-                        supplyStructureList: [...patchList]
-                    }).then(res => {
-                        history.goBack();
+                if (patchList.length > 0) {
+                    let value = form.getFieldsValue(true);
+                    const tip: Boolean[] = [];
+                    patchList.forEach((element: any) => {
+                        if (element.basicsPartNum > 0) {
+                            tip.push(true)
+                        } else {
+                            tip.push(false)
+                        }
                     });
+                    if (tip.indexOf(false) === -1) {
+                        RequestUtil.post(`/tower-science/supplyEntry/submit`, {
+                            ...value,
+                            planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
+                            supplyStructureList: [...patchList]
+                        }).then(res => {
+                            history.goBack();
+                        });
+                    } else {
+                        message.warning('补件数量不可为0！')
+                    }
                 } else {
-                    message.warning('补件数量不可为0！')
+                    message.warning('补件数据不可为空！')
                 }
+
             })
         }
     }
@@ -266,6 +273,7 @@ export default function Apply(): React.ReactNode {
                                 }
                             ]}>
                                 <Select
+                                    showSearch
                                     placeholder="请选择计划号"
                                     style={{ width: "150px" }}
                                     filterOption={(input, option) =>
@@ -342,13 +350,13 @@ export default function Apply(): React.ReactNode {
                                                 return {
                                                     ...res,
                                                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                                        <InputNumber min={0} max={9999} size="small" defaultValue={record.basicsPartNum} onChange={(e) => {
+                                                        <InputNumber min={0} max={9999} precision={0} size="small" defaultValue={record.basicsPartNum} onChange={(e) => {
                                                             const newList = patchList.map((res: any, ind: number) => {
                                                                 if (ind === index) {
                                                                     return {
                                                                         ...res,
                                                                         basicsPartNum: e,
-                                                                        totalWeight: Number(e) * Number(res?.basicsWeight || 0)
+                                                                        totalWeight: (Number(e) * Number(res?.basicsWeight || 0)).toFixed(2)
                                                                     }
                                                                 } else {
                                                                     return res
@@ -380,14 +388,10 @@ export default function Apply(): React.ReactNode {
                                                             }
                                                         }
                                                             onDropdownVisibleChange={(open) => {
-                                                                if (open) {
-                                                                    productNumbers(record?.productCategoryId)
-                                                                } else {
-                                                                    setNumbers([])
-                                                                }
+                                                                productNumbers(record?.productCategoryId)
                                                             }}>
                                                             {(numbers || [])?.map((item: any) => {
-                                                                return <Select.Option key={item.id} value={item.id}>{item.productNumber}</Select.Option>
+                                                                return <Select.Option key={item.id} value={item.productNumber}>{item.productNumber}</Select.Option>
                                                             })}
                                                         </Select>
                                                     )

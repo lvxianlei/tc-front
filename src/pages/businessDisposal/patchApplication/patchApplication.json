@@ -125,7 +125,12 @@
             "key": "status",
             "title": "下达状态",
             "dataIndex": "status",
-            "width": 100
+            "width": 100,
+            "type": "select",
+            "enum": [
+                { "value": 1, "label": "已下达" },
+                { "value": 2, "label": "未下达" }
+            ]
         },
         {
             "key": "totalNumber",
@@ -223,73 +228,85 @@
             "key": "electricWelding",
             "title": "电焊",
             "dataIndex": "electricWelding",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "bend",
             "title": "火曲",
             "dataIndex": "bend",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "chamfer",
             "title": "切角",
             "dataIndex": "chamfer",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "shovelBack",
             "title": "铲背",
             "dataIndex": "shovelBack",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "rootClear",
             "title": "清根",
             "dataIndex": "rootClear",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "squash",
             "title": "打扁",
             "dataIndex": "squash",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "suppress",
             "title": "压制",
             "dataIndex": "suppress",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "openCloseAngle",
             "title": "开合角",
             "dataIndex": "openCloseAngle",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "slottedForm",
             "title": "开槽形式",
             "dataIndex": "slottedForm",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "groove",
             "title": "坡口",
             "dataIndex": "groove",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "intersectingLine",
             "title": "相贯线",
             "dataIndex": "intersectingLine",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "perforate",
             "title": "钻孔",
             "dataIndex": "perforate",
-            "width": 130
+            "width": 130,
+            "type": "number"
         }
     ],
     "towerTypeColumns": [
@@ -408,73 +425,85 @@
             "key": "electricWelding",
             "title": "电焊",
             "dataIndex": "electricWelding",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "bend",
             "title": "火曲",
             "dataIndex": "bend",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "chamfer",
             "title": "切角",
             "dataIndex": "chamfer",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "shovelBack",
             "title": "铲背",
             "dataIndex": "shovelBack",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "rootClear",
             "title": "清根",
             "dataIndex": "rootClear",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "squash",
             "title": "打扁",
             "dataIndex": "squash",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "suppress",
             "title": "压制",
             "dataIndex": "suppress",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "openCloseAngle",
             "title": "开合角",
             "dataIndex": "openCloseAngle",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "slottedForm",
             "title": "开槽形式",
             "dataIndex": "slottedForm",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "groove",
             "title": "坡口",
             "dataIndex": "groove",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "intersectingLine",
             "title": "相贯线",
             "dataIndex": "intersectingLine",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "perforate",
             "title": "钻孔",
             "dataIndex": "perforate",
-            "width": 130
+            "width": 130,
+            "type": "number"
         }
     ],
     "addColumns": [
@@ -566,73 +595,85 @@
             "key": "electricWelding",
             "title": "电焊",
             "dataIndex": "electricWelding",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "bend",
             "title": "火曲",
             "dataIndex": "bend",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "chamfer",
             "title": "切角",
             "dataIndex": "chamfer",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "shovelBack",
             "title": "铲背",
             "dataIndex": "shovelBack",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "rootClear",
             "title": "清根",
             "dataIndex": "rootClear",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "squash",
             "title": "打扁",
             "dataIndex": "squash",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "suppress",
             "title": "压制",
             "dataIndex": "suppress",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "openCloseAngle",
             "title": "开合角",
             "dataIndex": "openCloseAngle",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "slottedForm",
             "title": "开槽形式",
             "dataIndex": "slottedForm",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "groove",
             "title": "坡口",
             "dataIndex": "groove",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "intersectingLine",
             "title": "相贯线",
             "dataIndex": "intersectingLine",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "perforate",
             "title": "钻孔",
             "dataIndex": "perforate",
-            "width": 130
+            "width": 130,
+            "type": "number"
         }
     ],
     "detailColumns": [
@@ -657,10 +698,6 @@
             "dataIndex": "planNumber"
         },
         {
-            "title": "塔型",
-            "dataIndex": "productCategory"
-        },
-        {
             "title": "计划发货日期",
             "dataIndex": "planDeliveryTime"
         },
@@ -671,9 +708,9 @@
     ],
     "detailTableColumns": [
         {
-            "key": "productCategory",
+            "key": "productCategoryName",
             "title": "塔型名称",
-            "dataIndex": "productCategory",
+            "dataIndex": "productCategoryName",
             "width": 100
         },
         {
@@ -764,73 +801,85 @@
             "key": "electricWelding",
             "title": "电焊",
             "dataIndex": "electricWelding",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "bend",
             "title": "火曲",
             "dataIndex": "bend",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "chamfer",
             "title": "切角",
             "dataIndex": "chamfer",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "shovelBack",
             "title": "铲背",
             "dataIndex": "shovelBack",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "rootClear",
             "title": "清根",
             "dataIndex": "rootClear",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "squash",
             "title": "打扁",
             "dataIndex": "squash",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "suppress",
             "title": "压制",
             "dataIndex": "suppress",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "openCloseAngle",
             "title": "开合角",
             "dataIndex": "openCloseAngle",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "slottedForm",
             "title": "开槽形式",
             "dataIndex": "slottedForm",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "groove",
             "title": "坡口",
             "dataIndex": "groove",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "intersectingLine",
             "title": "相贯线",
             "dataIndex": "intersectingLine",
-            "width": 130
+            "width": 130,
+            "type": "number"
         },
         {
             "key": "perforate",
             "title": "钻孔",
             "dataIndex": "perforate",
-            "width": 130
+            "width": 130,
+            "type": "number"
         }
     ]
 }

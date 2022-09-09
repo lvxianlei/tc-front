@@ -17,7 +17,7 @@ export default function WeldingDetail(): React.ReactNode {
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, weldingId: params.id, ...data });
+            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, id: params.id, ...data });
             if(result?.records.length > 0 && result?.records[0]?.id) {
                 getSegmentData(result?.records[0]?.id)
             }

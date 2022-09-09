@@ -72,7 +72,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
             {
                 name: 'segmentId',
                 label: '段名',
-                children: <Select placeholder="请选择段名">
+                children: <Select placeholder="请选择段名" mode="multiple" allowClear style={{width: '200px'}}>
                     {sectionsNames && sectionsNames.map(({ id, segmentName }: any, index: number) => {
                         return <Select.Option key={index} value={id}>
                             {segmentName}
@@ -110,6 +110,9 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
             }
         }}
         onFilterSubmit={(values: Record<string, any>) => {
+            if(values.segmentId) {
+                values.segmentId = values.segmentId.join(',');
+            }
             setFilterValue(values);
             return values;
         }}
