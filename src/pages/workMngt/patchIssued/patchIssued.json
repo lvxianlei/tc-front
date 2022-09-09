@@ -1,0 +1,410 @@
+{
+    "baseColums": [
+        {
+            "key": "supplyNumber",
+            "title": "补件编号",
+            "dataIndex": "supplyNumber"
+        },
+        {
+            "key": "supplyTypeName",
+            "title": "补件类型",
+            "dataIndex": "supplyTypeName"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "key": "planDeliveryTime",
+            "title": "要求完成日期",
+            "dataIndex": "planDeliveryTime"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "key": "totalNumber",
+            "title": "补件数量",
+            "dataIndex": "totalNumber"
+        },
+        {
+            "key": "totalWeight",
+            "title": "补件重量",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "key": "applyUserDepartName",
+            "title": "申请部门",
+            "dataIndex": "applyUserDepartName"
+        },
+        {
+            "key": "applyUserName",
+            "title": "申请人",
+            "dataIndex": "applyUserName"
+        },
+        {
+            "key": "description",
+            "title": "说明",
+            "dataIndex": "description",
+            "type": "textarea"
+        }
+    ],
+    "tableColumns": [
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "code",
+            "title": "构件编号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "materialName",
+            "title": "材料名称",
+            "dataIndex": "materialName",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "length",
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "width",
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "key": "thickness",
+            "title": "厚度（mm）",
+            "dataIndex": "thickness",
+            "width": 130
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "单段件数",
+            "dataIndex": "basicsPartNum",
+            "width": 130
+        },
+        {
+            "key": "apertureNumber",
+            "title": "各孔径孔数",
+            "dataIndex": "apertureNumber",
+            "width": 130
+        },
+        {
+            "key": "holesNum",
+            "title": "单件孔数",
+            "dataIndex": "holesNum",
+            "width": 130
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "dataIndex": "electricWelding",
+            "width": 130
+        },
+        {
+            "key": "groove",
+            "title": "坡口",
+            "dataIndex": "groove",
+            "width": 130
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 130
+        },
+        {
+            "key": "openCloseAngle",
+            "title": "开合角",
+            "dataIndex": "openCloseAngle",
+            "width": 130
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 130
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 130
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 130
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 130
+        },
+        {
+            "key": "specialCode",
+            "title": "特殊件号",
+            "dataIndex": "specialCode",
+            "width": 130
+        },
+        {
+            "key": "suppress",
+            "title": "压制",
+            "dataIndex": "suppress",
+            "width": 130
+        },
+        {
+            "key": "grooveMeters",
+            "title": "坡口米数（米）",
+            "dataIndex": "grooveMeters",
+            "width": 130
+        },
+        {
+            "key": "spellNumber",
+            "title": "拼数",
+            "dataIndex": "spellNumber",
+            "width": 130
+        },
+        {
+            "key": "slottedForm",
+            "title": "开槽形式",
+            "dataIndex": "slottedForm",
+            "width": 130
+        },
+        {
+            "key": "intersectingLine",
+            "title": "相贯线",
+            "dataIndex": "intersectingLine",
+            "width": 130
+        },
+        {
+            "key": "type",
+            "title": "零件类型",
+            "dataIndex": "type",
+            "width": 130
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 130
+        },
+        {
+            "key": "arcContaining",
+            "title": "含弧",
+            "dataIndex": "arcContaining",
+            "width": 130
+        },
+        {
+            "key": "perforate",
+            "title": "钻孔",
+            "dataIndex": "perforate",
+            "width": 130
+        },
+        {
+            "key": "perforateNumber",
+            "title": "钻孔孔径孔数",
+            "dataIndex": "perforateNumber",
+            "width": 130
+        },
+        {
+            "key": "withReaming",
+            "title": "扩孔",
+            "dataIndex": "withReaming",
+            "width": 130
+        },
+        {
+            "key": "reamingNumber",
+            "title": "扩孔孔径孔数",
+            "dataIndex": "reamingNumber",
+            "width": 130
+        },
+        {
+            "key": "gasCutting",
+            "title": "气割孔（0/1）",
+            "dataIndex": "gasCutting",
+            "width": 130
+        },
+        {
+            "key": "gasCuttingNumber",
+            "title": "气割孔孔径孔数",
+            "dataIndex": "gasCuttingNumber",
+            "width": 130
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量（kg）",
+            "dataIndex": "basicsWeight",
+            "width": 130
+        },
+        {
+            "key": "totalWeight",
+            "title": "总重（kg）",
+            "dataIndex": "totalWeight",
+            "width": 130
+        },
+        {
+            "key": "craftName",
+            "title": "工艺列（核对）",
+            "dataIndex": "craftName",
+            "width": 130
+        },
+        {
+            "key": "sides",
+            "title": "边数",
+            "dataIndex": "sides",
+            "width": 130
+        },
+        {
+            "key": "perimeter",
+            "title": "周长",
+            "dataIndex": "perimeter",
+            "width": 130
+        },
+        {
+            "key": "surfaceArea",
+            "title": "表面积(m²)",
+            "dataIndex": "surfaceArea",
+            "width": 130
+        },
+        {
+            "key": "weldingEdge",
+            "title": "焊接边（mm）",
+            "dataIndex": "weldingEdge",
+            "width": 130
+        }
+    ],
+    "patchEntryColumns": [
+        {
+            "key": "supplyNumber",
+            "title": "补件编号",
+            "dataIndex": "supplyNumber",
+            "width": 100
+        },
+        {
+            "key": "batchStatusName",
+            "title": "状态",
+            "dataIndex": "batchStatusName",
+            "width": 100
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "materialStandardName",
+            "title": "材料标准",
+            "dataIndex": "materialStandardName",
+            "width": 100
+        },
+        {
+            "key": "supplyTypeName",
+            "title": "补件类型",
+            "dataIndex": "supplyTypeName",
+            "width": 100
+        },
+        {
+            "key": "planDeliveryTime",
+            "title": "要求完成日期",
+            "dataIndex": "planDeliveryTime",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "totalNumber",
+            "title": "补件数量",
+            "dataIndex": "totalNumber",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "补件重量",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "applyUserDepartName",
+            "title": "申请部门",
+            "dataIndex": "applyUserDepartName",
+            "width": 100
+        },
+        {
+            "key": "applyUserName",
+            "title": "申请人",
+            "dataIndex": "applyUserName",
+            "width": 100
+        },
+        {
+            "key": "description",
+            "title": "说明",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ]
+}
