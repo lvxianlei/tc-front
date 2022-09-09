@@ -68,10 +68,10 @@ export default function List(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
-            key: 'productCategory',
+            key: 'supplyProductCategory',
             title: '塔型',
             width: 100,
-            dataIndex: 'productCategory'
+            dataIndex: 'supplyProductCategory'
         },
         {
             key: 'projectName',
