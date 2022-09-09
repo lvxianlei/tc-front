@@ -1543,7 +1543,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                 </Descriptions.Item>
                                 <Descriptions.Item label="备注" span={7}>
                                     <Form.Item name={["confirmList", index, "description"]} wrapperCol={{ span: 24 }}>
-                                        <TextArea rows={1} maxLength={400} style={{ width: '100%' }} />
+                                        <TextArea rows={1} maxLength={800} style={{ width: '100%' }} />
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item span={2}>
