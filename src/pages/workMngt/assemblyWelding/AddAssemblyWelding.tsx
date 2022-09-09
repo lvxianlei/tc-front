@@ -622,7 +622,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             const newLeftSelectedRows = leftSelectedRows.filter(res => res.basicsPartNumNow > 0)
             newLeftSelectedRows.map(record => {
                 let weldingLength: number = form?.getFieldsValue(true)?.electricWeldingMeters;
-                let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.singleNum) || 1);
+                let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.basicsPartNumNow) || 1);
                 let isNewComponent: boolean = newWeldingDetailedStructureList.every((items: IComponentList) => {
                     return record.id !== items.structureId;
                 })
