@@ -43,7 +43,6 @@ export default function IntgSelect({ onChange, width, value = { value: "", label
 
     return <Select
         showSearch
-        value={IValue}
         style={{ width }}
         defaultActiveFirstOption={false}
         showArrow={false}

@@ -204,7 +204,7 @@ export default function Invoicing() {
                 {
                     name: "createUserId",
                     label: "制单人",
-                    children: <IntgSelect width={200} />
+                    children: <IntgSelect width={200} placeholder="请输入" />
                 },
                 {
                     name: 'startStatusUpdateTime',

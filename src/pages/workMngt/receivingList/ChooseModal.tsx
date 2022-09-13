@@ -109,26 +109,26 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         const formData = await form.validateFields()
         const currentData = selectList.find((item: any) => item.id === id)
         const currentChooseData = chooseList.find((item: any) => item.id === id)
-        if ((currentData.num - formData.num) === 0) {
-            setSelectList(selectList.filter((item: any) => item.id !== id))
-            setWaitingArea(waitingArea.filter((item: any) => item.id !== id))
-            if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-            } else {
-                setChooseList([...chooseList, { ...currentData, num: formData.num }])
-            }
-        } else if ((currentData.num - formData.num) < 0) {
-            message.error("选择数量不能大于可选数量...")
-            return
+        // if ((currentData.num - formData.num) === 0) {
+        //     setSelectList(selectList.filter((item: any) => item.id !== id))
+        //     setWaitingArea(waitingArea.filter((item: any) => item.id !== id))
+        //     if (currentChooseData) {
+        //         setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+        //     } else {
+        //         setChooseList([...chooseList, { ...currentData, num: formData.num }])
+        //     }
+        // } else if ((currentData.num - formData.num) < 0) {
+        //     message.error("选择数量不能大于可选数量...")
+        //     return
+        // } else {
+        setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        if (currentChooseData) {
+            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
         } else {
-            setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-            setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-            if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-            } else {
-                setChooseList([...chooseList, { ...currentData, num: formData.num }])
-            }
+            setChooseList([...chooseList, { ...currentData, num: formData.num }])
         }
+        // }
         setVisible(false)
         form.resetFields()
     }
