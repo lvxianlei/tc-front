@@ -365,7 +365,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                 }
             }
         })
-        form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': (Number(weldingLength || 0) + (Number(record.singleNum) || 1) * Number(record.weldingEdge || 0))?.toFixed(3) });
+        form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': (Number(weldingLength || 0) + (Number(num) || 1) * Number(record.weldingEdge || 0))?.toFixed(3) });
         const newList = Object.keys(newComponentList).length > 0 ? [...newWeldingDetailedStructureList, newComponentList] : [...newWeldingDetailedStructureList]
         setWeldingDetailedStructureList([...newList]);
         toLeftNum.length = newList.length;
@@ -622,7 +622,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             const newLeftSelectedRows = leftSelectedRows.filter(res => res.basicsPartNumNow > 0)
             newLeftSelectedRows.map(record => {
                 let weldingLength: number = form?.getFieldsValue(true)?.electricWeldingMeters;
-                let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.singleNum) || 1);
+                let weight: number = Number(form.getFieldsValue(true).singleGroupWeight || 0) + (Number(record.basicsWeight) || 0) * (Number(record.basicsPartNumNow) || 1);
                 let isNewComponent: boolean = newWeldingDetailedStructureList.every((items: IComponentList) => {
                     return record.id !== items.structureId;
                 })
@@ -648,7 +648,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         }
                     }
                 })
-                form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': (Number(weldingLength || 0) + (Number(record.singleNum) || 1) * Number(record.weldingEdge || 0))?.toFixed(3) });
+                form.setFieldsValue({ 'singleGroupWeight': weight?.toFixed(3), 'electricWeldingMeters': (Number(weldingLength || 0) + (Number(record.basicsPartNumNow) || 1) * Number(record.weldingEdge || 0))?.toFixed(3) });
                 newWeldingDetailedStructureList = Object.keys(newComponentList).length > 0 ? [...newWeldingDetailedStructureList, newComponentList] : [...newWeldingDetailedStructureList];
                 newcom = newcom?.map((res: IComponentList) => {
                     if (res.id === record.id) {
