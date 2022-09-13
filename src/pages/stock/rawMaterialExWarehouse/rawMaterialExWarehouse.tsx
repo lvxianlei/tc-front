@@ -4,7 +4,7 @@
  * 时间：2022/01/11
  */
 import React, { useState } from 'react';
-import { Input, Select, DatePicker, Button } from 'antd';
+import { Input, Select, DatePicker, Button, Radio } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
@@ -77,6 +77,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 extraOperation={
                     <>
                         <Button type='primary' ghost onClick={() => setIsOpenId(true)}>创建</Button>
+                        <div style={{ width: "2000px" }}>
+                            <Radio.Group defaultValue="a">
+                                <Radio.Button value="a">出库单列表</Radio.Button>
+                                <Radio.Button value="b">出库明细</Radio.Button>
+                            </Radio.Group>
+                        </div>
                     </>
                 }
                 searchFormItems={[

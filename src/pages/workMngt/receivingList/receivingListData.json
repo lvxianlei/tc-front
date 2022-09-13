@@ -390,6 +390,26 @@
             "width": 120
         },
         {
+            "title": "含税运费（元）------",
+            "dataIndex": "transportPriceCount",
+            "width": 120
+        },
+        {
+            "title": "不含税运费（元）-------",
+            "dataIndex": "transportPriceCount",
+            "width": 120
+        },
+        {
+            "title": "含税装卸费（元）--------",
+            "dataIndex": "unloadPriceCount",
+            "width": 120
+        },
+        {
+            "title": "不含税装卸费--------",
+            "dataIndex": "unloadPriceCount",
+            "width": 120
+        },
+        {
             "title": "炉批号",
             "dataIndex": "furnaceBatchNumber",
             "width": 100

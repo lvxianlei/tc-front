@@ -117,6 +117,26 @@
             "width": 120
         },
         {
+            "title": "含税单价（元/吨）--------",
+            "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "含税金额（元）-------",
+            "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "不含税单价（元/吨）--------",
+            "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "不含税金额------",
+            "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
             "title": "备注",
             "dataIndex": "remark",
             "width": 120

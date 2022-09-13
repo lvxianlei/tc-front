@@ -127,17 +127,13 @@ export default function SearchTable({
             </Row>
         </Form>}
         <Space style={{
-            marginBottom: 12,
-            paddingLeft: 12
-        }} size={12}>
+            marginBottom: 0,
+            paddingLeft: 12,
+        }} size={12} wrap>
             {
-                exportPath && (
-                    <Space direction="horizontal" size="middle" style={{ width: "100%" }}>
-                        {exportPath && <Button type="primary" ghost onClick={() => {
-                            setIsExport(true)
-                        }}>导出</Button>}
-                    </Space>
-                )
+                exportPath && exportPath && <Button type="primary" ghost onClick={() => {
+                    setIsExport(true)
+                }}>导出</Button>
             }
             {typeof extraOperation === "function" ? extraOperation(data?.source) : extraOperation}
         </Space>
