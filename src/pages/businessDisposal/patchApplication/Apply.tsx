@@ -19,6 +19,7 @@ import { towerTypeColumns, patchColumns } from "./patchApplication.json"
 import AddPatch from './AddPatch';
 import { useHistory } from 'react-router-dom';
 import { format } from 'path';
+import AuthUtil from '../../../utils/AuthUtil';
 
 export interface EditRefProps {
     onSubmit: () => void
@@ -37,6 +38,21 @@ export default function Apply(): React.ReactNode {
     const [towerSelects, setTowerSelects] = useState([]);
     const history = useHistory();
     const [numbers, setNumbers] = useState<any>([]);
+
+    // 获取当前操作人信息
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/personalCenter`);
+            deptChange(result.dept)
+            form.setFieldsValue({
+                applyUserDept: result.dept,
+                applyUser: result.userId
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
@@ -181,6 +197,11 @@ export default function Apply(): React.ReactNode {
         }
     }
 
+    const deptChange = async (value: any) => {
+        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
+        setApplyUser(userData.records);
+    }
+
     return (
         <>
             <Modal
@@ -219,7 +240,7 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="优先级">
-                            <Form.Item name="priority" rules={[
+                            <Form.Item name="priority" initialValue={3} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择优先级"
@@ -234,15 +255,14 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="申请部门">
-                            <Form.Item name="applyUserDept" rules={[
+                            <Form.Item name="applyUserDept" initialValue={data?.dept} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择申请部门"
                                 }
                             ]}>
-                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value: any) => {
-                                    const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-                                    setApplyUser(userData.records);
+                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={(value: any) => {
+                                    deptChange(value);
                                     form.setFieldsValue({
                                         applyUser: ''
                                     })
