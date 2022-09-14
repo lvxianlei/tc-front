@@ -229,7 +229,8 @@
         {
             "title": "所属区域",
             "dataIndex": "region",
-            "disabled": true
+            "type": "select",
+            "enum": []
         },
         {
             "title": "国家",
@@ -320,8 +321,7 @@
         },
         {
             "title": "招标批次",
-            "dataIndex": "bidBatch",
-            "disabled": true
+            "dataIndex": "bidBatch"
         },
         {
             "title": "归属业务经理",

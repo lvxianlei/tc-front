@@ -107,7 +107,8 @@ export default function SeeGuarantee(): JSX.Element {
                 saleType: result.saleType, // 销售类型
                 orderProjectName: result.contractName, // 订单工程名称
                 contractName: result.contractName, // 合同名称
-                deliveryAddress: result.deliveryAddress // 交货地点
+                deliveryAddress: result.deliveryAddress, // 交货地点
+                salesman: result.salesman // 销售业务员
             })
             return;
         }
@@ -401,6 +402,5 @@ export default function SeeGuarantee(): JSX.Element {
                     dataSource={editFormData} />
             </Spin>
         </DetailContent>
-
     )
 }
