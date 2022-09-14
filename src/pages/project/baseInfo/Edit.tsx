@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { useHistory, useParams } from "react-router-dom"
 import { Button, Form, message, Spin } from "antd"
-import { DetailContent, BaseInfo, EditTable, DetailTitle, Attachment, AttachmentRef, EditableTable, CommonTable } from '../../common'
+import { DetailContent, BaseInfo, DetailTitle, Attachment, AttachmentRef, EditableTable, CommonTable } from '../../common'
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { baseInfoData, cargoVOListColumns, portedCargoColumns } from './baseInfo.json'
 import useRequest from '@ahooksjs/use-request'
