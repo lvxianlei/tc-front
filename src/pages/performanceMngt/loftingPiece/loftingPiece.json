@@ -1,0 +1,133 @@
+{
+    "columns": [
+        {
+            "key": "taskNumber",
+            "title": "放样任务编号",
+            "width": 100,
+            "dataIndex": "taskNumber"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "submitTime",
+            "title": "放样完成日期",
+            "dataIndex": "submitTime",
+            "width": 80
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
+            "key": "name",
+            "title": "塔型名称",
+            "dataIndex": "name",
+            "width": 80
+        },
+        {
+            "key": "productType",
+            "title": "产品类型",
+            "dataIndex": "productType",
+            "width": 80
+        },
+        {
+            "key": "voltageGrade",
+            "title": "电压等级",
+            "dataIndex": "voltageGrade",
+            "width": 80
+        },
+        {
+            "key": "accuracyRate",
+            "title": "塔型准确率",
+            "dataIndex": "accuracyRate",
+            "width": 80
+        },
+        {
+            "key": "partLabelNum",
+            "title": "件号数汇总",
+            "dataIndex": "partLabelNum",
+            "width": 80,
+            "type": "number"
+        },
+        {
+            "key": "loftLeaderName",
+            "title": "放样负责人",
+            "dataIndex": "loftLeaderName",
+            "width": 80
+        },
+        {
+            "key": "leaderPunish",
+            "title": "负责人扣惩",
+            "dataIndex": "leaderPunish",
+            "width": 80
+        }
+    ],
+    "performanceColumns": [
+        {
+            "key": "loftUserName",
+            "title": "放样人员",
+            "width": 50,
+            "dataIndex": "loftUserName"
+        },
+        {
+            "key": "countLoftPart",
+            "title": "放样件号数（总）",
+            "width": 80,
+            "dataIndex": "countLoftPart",
+            "type": "number"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "放样绩效（总）",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "countErrorPart",
+            "title": "错误件号数（总）",
+            "width": 80,
+            "dataIndex": "countErrorPart",
+            "type": "number"
+        },
+        {
+            "key": "accuracyRate",
+            "title": "个人准确率",
+            "width": 50,
+            "dataIndex": "accuracyRate"
+        }
+    ],
+    "checkColumns": [
+        {
+            "key": "checkUserName",
+            "title": "校核人员",
+            "width": 50,
+            "dataIndex": "checkUserName"
+        },
+        {
+            "key": "countLoftPart",
+            "title": "审核件号数（总）",
+            "width": 80,
+            "dataIndex": "countLoftPart",
+            "type": "number"
+        },
+        {
+            "key": "countErrorPart",
+            "title": "纠错件号数（总）",
+            "width": 80,
+            "dataIndex": "countErrorPart",
+            "type": "number"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "绩效金额",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        }
+    ]
+}

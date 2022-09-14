@@ -1,0 +1,180 @@
+{
+    "columns": [
+        {
+            "key": "supplyNumber",
+            "title": "返修单编号",
+            "dataIndex": "supplyNumber",
+            "width": 100
+        },
+        {
+            "key": "supplyTypeName",
+            "title": "返修单状态",
+            "dataIndex": "supplyTypeName",
+            "width": 100
+        },
+        {
+            "key": "statusName",
+            "title": "最新状态变更时间",
+            "dataIndex": "statusName",
+            "width": 100
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "返修日期",
+            "dataIndex": "updateStatusTime",
+            "width": 150
+        },
+        {
+            "key": "priorityName",
+            "title": "不合格处置单编号",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "applyUserDeptName",
+            "title": "产品类型",
+            "dataIndex": "applyUserDeptName",
+            "width": 100
+        },
+        {
+            "key": "applyUserName",
+            "title": "生产环节",
+            "dataIndex": "applyUserName",
+            "width": 100
+        },
+        {
+            "key": "planNumber",
+            "title": "原下达单号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "计划号",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
+            "key": "businessUserName",
+            "title": "塔型",
+            "dataIndex": "businessUserName",
+            "width": 100
+        },
+        {
+            "key": "planDeliveryTime",
+            "title": "罚款金额",
+            "dataIndex": "planDeliveryTime",
+            "width": 100
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "productCategoryName",
+            "title": "段号",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "零件号",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "材质",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "key": "status",
+            "title": "规格",
+            "dataIndex": "status",
+            "width": 100
+        },
+        {
+            "key": "totalNumber",
+            "title": "长度",
+            "dataIndex": "totalNumber",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "宽度",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "单重kg",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "总重kg",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "单段返修数量",
+            "dataIndex": "totalWeight",
+            "width": 160
+        },
+        {
+            "key": "totalWeight",
+            "title": "单基段数",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "基数",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "返修总数量",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "零件类型",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "返修类型",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "返修车间",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "返修工序",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "责任人",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "罚款金额（元）",
+            "dataIndex": "totalWeight",
+            "width": 100
+        }
+    ]
+}

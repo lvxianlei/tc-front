@@ -1,0 +1,98 @@
+{
+    "columns": [
+        {
+            "key": "userName",
+            "title": "姓名",
+            "dataIndex": "userName"
+        },
+        {
+            "key": "process",
+            "title": "累计放样件号数",
+            "dataIndex": "process"
+        },
+        {
+            "key": "workStatus",
+            "title": "累计错误件号数",
+            "dataIndex": "workStatus"
+        },
+        {
+            "key": "totalProductCategoryNum",
+            "title": "正确率%",
+            "dataIndex": "totalProductCategoryNum"
+        }
+    ],
+    "tableColumns": [
+        {
+            "key": "year",
+            "title": "年份",
+            "dataIndex": "year",
+            "width": 100
+        },
+        {
+            "key": "type",
+            "title": "产品类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "角钢塔",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productType",
+            "title": "钢管杆",
+            "dataIndex": "productType",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "三管塔/四管塔放",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "key": "patternName",
+            "title": "架构",
+            "dataIndex": "patternName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "钢结构",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "startTime",
+            "title": "基础",
+            "dataIndex": "startTime",
+            "type": "date",
+            "width": 130
+        },
+        {
+            "key": "expectCompleteTime",
+            "title": "小计",
+            "dataIndex": "expectCompleteTime",
+            "width": 130
+        }
+    ],
+    "correctColumns": [
+        {
+            "key": "userName",
+            "title": "项目",
+            "dataIndex": "userName"
+        },
+        {
+            "key": "process",
+            "title": "参数",
+            "dataIndex": "process"
+        },
+        {
+            "key": "status",
+            "title": "状态",
+            "dataIndex": "status"
+        }
+    ]
+}
