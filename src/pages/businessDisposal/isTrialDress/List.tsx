@@ -86,8 +86,8 @@ export default function List(): React.ReactNode {
             footer={<Space direction="horizontal" size="small">
                 {type === 'new' ?
                     <>
-                        <Button onClick={handleOk}>保存并关闭</Button>
-                        <Button>保存并发起</Button>
+                        <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
+                        <Button type="primary" ghost>保存并发起</Button>
                     </>
                     :
                     null
@@ -101,7 +101,7 @@ export default function List(): React.ReactNode {
                     addRef.current?.resetFields();
                 }}>关闭</Button>
             </Space>}
-            width="80%"
+            width="60%"
             onCancel={() => {
                 setVisible(false);
                 addRef.current?.resetFields();

@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, TablePaginationConfig } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './RepairList.module.less';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { IResponseData } from '../../common/Page';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';

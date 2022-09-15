@@ -165,14 +165,76 @@
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "A",
             "title": "责任人",
-            "dataIndex": "totalWeight",
+            "dataIndex": "A",
             "width": 100
         },
         {
             "key": "totalWeight",
             "title": "罚款金额（元）",
+            "dataIndex": "totalWeight",
+            "width": 100
+        }
+    ],
+    "baseColumns": [
+        {
+            "key": "totalWeight",
+            "title": "返修单编号",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "返修单状态",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "返修日期",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "不合格处置单编号",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "产品类型",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "生产环节",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "原下达单号",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "计划号",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "塔型",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "罚款金额",
             "dataIndex": "totalWeight",
             "width": 100
         }

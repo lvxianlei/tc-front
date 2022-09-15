@@ -80,83 +80,83 @@ const EditableCell: React.FC<EditableCellProps> = ({
 export default function List(): React.ReactNode {
 
     const problemColumns = [
-    {
-        key: 'segI',
-        title: '段号',
-        width: 50,
-        dataIndex: 'segI'
-    },
-    {
-        key: 'countLoftPart',
-        title: '放样件号数',
-        width: 80,
-        dataIndex: 'countLoftPart',
-        type: 'number'
-    },
-    {
-        key: 'countErrorPart',
-        title: '错误件号数',
-        width: 80,
-        dataIndex: 'countErrorPart',
-        type: 'number'
-    },
-    {
-        key: 'loftUserName',
-        title: '放样人',
-        width: 80,
-        dataIndex: 'loftUserName'
-    },
-    {
-        key: 'loftPrice',
-        title: '放样单价',
-        width: 80,
-        dataIndex: 'loftPrice',
-        editable: true
-    },
-    {
-        key: 'loftPunish',
-        title: '放样人扣惩',
-        width: 80,
-        dataIndex: 'loftPunish'
-    },
-    {
-        key: 'leaderPunish',
-        title: '负责人扣惩',
-        width: 80,
-        dataIndex: 'leaderPunish'
-    },
-    {
-        key: 'loftPerformance',
-        title: '放样绩效',
-        width: 80,
-        dataIndex: 'loftPerformance'
-    },
-    {
-        key: 'checkUserName',
-        title: '校核人',
-        width: 80,
-        dataIndex: 'checkUserName'
-    },
-    {
-        key: 'checkPrice',
-        title: '审核单价',
-        width: 80,
-        dataIndex: 'checkPrice',
-        editable: true
-    },
-    {
-        key: 'checkReward',
-        title: '校核人奖励',
-        width: 80,
-        dataIndex: 'checkReward'
-    },
-    {
-        key: 'checkPerformance',
-        title: '校核绩效',
-        width: 80,
-        dataIndex: 'checkPerformance'
-    },
-    {
+        {
+            key: 'segI',
+            title: '段号',
+            width: 50,
+            dataIndex: 'segI'
+        },
+        {
+            key: 'countLoftPart',
+            title: '放样件号数',
+            width: 80,
+            dataIndex: 'countLoftPart',
+            type: 'number'
+        },
+        {
+            key: 'countErrorPart',
+            title: '错误件号数',
+            width: 80,
+            dataIndex: 'countErrorPart',
+            type: 'number'
+        },
+        {
+            key: 'loftUserName',
+            title: '放样人',
+            width: 80,
+            dataIndex: 'loftUserName'
+        },
+        {
+            key: 'loftPrice',
+            title: '放样单价',
+            width: 80,
+            dataIndex: 'loftPrice',
+            editable: true
+        },
+        {
+            key: 'loftPunish',
+            title: '放样人扣惩',
+            width: 80,
+            dataIndex: 'loftPunish'
+        },
+        {
+            key: 'leaderPunish',
+            title: '负责人扣惩',
+            width: 80,
+            dataIndex: 'leaderPunish'
+        },
+        {
+            key: 'loftPerformance',
+            title: '放样绩效',
+            width: 80,
+            dataIndex: 'loftPerformance'
+        },
+        {
+            key: 'checkUserName',
+            title: '校核人',
+            width: 80,
+            dataIndex: 'checkUserName'
+        },
+        {
+            key: 'checkPrice',
+            title: '审核单价',
+            width: 80,
+            dataIndex: 'checkPrice',
+            editable: true
+        },
+        {
+            key: 'checkReward',
+            title: '校核人奖励',
+            width: 80,
+            dataIndex: 'checkReward'
+        },
+        {
+            key: 'checkPerformance',
+            title: '校核绩效',
+            width: 80,
+            dataIndex: 'checkPerformance'
+        },
+        {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',

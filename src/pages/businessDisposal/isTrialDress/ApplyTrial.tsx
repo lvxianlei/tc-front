@@ -144,7 +144,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
                 <BaseInfo dataSource={data} columns={applyColumns} col={3} />
                 :
                 <Form form={form}>
-                    <Descriptions bordered column={3} size="small" className={styles.description}>
+                    <Descriptions bordered size="small" className={styles.description}>
                         <Descriptions.Item label="申请类型">
                             <Form.Item name="supplyType" rules={[
                                 {
@@ -212,10 +212,10 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
                         <Descriptions.Item label="放样人">
                             { }
                         </Descriptions.Item>
-                        <Descriptions.Item label="工程名称">
+                        <Descriptions.Item span={2} label="工程名称">
                             { }
                         </Descriptions.Item>
-                        <Descriptions.Item label="申请说明">
+                        <Descriptions.Item span={3} label="申请说明">
                             <Form.Item name="supplyType" rules={[
                                 {
                                     "required": true,
