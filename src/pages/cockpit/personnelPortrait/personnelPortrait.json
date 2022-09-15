@@ -77,22 +77,5 @@
             "dataIndex": "expectCompleteTime",
             "width": 130
         }
-    ],
-    "correctColumns": [
-        {
-            "key": "userName",
-            "title": "项目",
-            "dataIndex": "userName"
-        },
-        {
-            "key": "process",
-            "title": "参数",
-            "dataIndex": "process"
-        },
-        {
-            "key": "status",
-            "title": "状态",
-            "dataIndex": "status"
-        }
     ]
 }

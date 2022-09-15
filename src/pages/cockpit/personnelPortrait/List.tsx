@@ -83,17 +83,16 @@ export default function List(): React.ReactNode {
 
     return <Spin spinning={loading}>
         <Modal
-                destroyOnClose
-                key='CorrectSetting'
-                visible={visible}
-                title={'正确率设置'}
-                footer={
-                    <Button type='primary' onClick={() => setVisible(false)} ghost>关闭</Button>
-                }
-                width="80%"
-                onCancel={() => setVisible(false)}>
-                <CorrectSetting />
-            </Modal>
+            destroyOnClose
+            key='CorrectSetting'
+            visible={visible}
+            title={'正确率设置'}
+            footer={
+                <Button type='primary' onClick={() => setVisible(false)} ghost>关闭</Button>
+            }
+            onCancel={() => setVisible(false)}>
+            <CorrectSetting />
+        </Modal>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
             <Form.Item name="userNme">
                 <Input style={{ width: '200px' }} placeholder="姓名" />
@@ -105,7 +104,7 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Button type='primary' className={styles.btnTop} ghost>正确率设置</Button>
+        <Button type='primary' className={styles.btnTop} onClick={() => setVisible(true)} ghost>正确率设置</Button>
         <div className={styles.left}>
             <CommonTable
                 haveIndex
