@@ -232,7 +232,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
             disabled={data.disabled}
             style={{ width: "100%", height: "100%", ...props.style }}
             onChange={inputChange}
-            onClick={!!data.readOnly ? (() => !data.disabled && setVisible(true)) : () => { }}
+            onClick={(data.readOnly === undefined || data.readOnly) ? (() => !data.disabled && setVisible(true)) : (() => { })}
             readOnly={data.readOnly === undefined ? true : data.readOnly}
             value={formatValue()}
             suffix={<PlusOutlined onClick={() => !data.disabled && setVisible(true)} />} />

@@ -464,7 +464,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...(baseColumn as any),
+                    ...(baseColumn as any).map((item: any) => {
+                        if (item.dataIndex === "num0") {
+                            return ({ ...item, render: (value: any, records: any) => <>{records.outStockItemStatus === 0 ? records.num : "-"}</> })
+                        }
+                        if (item.dataIndex === "num2") {
+                            return ({ ...item, render: (value: any, records: any) => <>{records.outStockItemStatus === 2 ? records.num : "-"}</> })
+                        }
+                        return item
+                    }),
                     {
                         title: '操作',
                         width: 80,
@@ -487,7 +495,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'status',
+                        name: 'outStockItemStatus',
                         label: '状态',
                         children: (
                             <Select placeholder="请选择状态" style={{ width: "140px" }}>
