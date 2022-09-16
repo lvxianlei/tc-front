@@ -23,12 +23,12 @@
         },
         {
             "title": "待出库数量",
-            "dataIndex": "num",
+            "dataIndex": "num0",
             "width": 120
         },
         {
             "title": "已出库数量",
-            "dataIndex": "num",
+            "dataIndex": "num2",
             "width": 120
         },
         {

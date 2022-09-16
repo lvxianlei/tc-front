@@ -3,12 +3,17 @@
         {
             "title": "领料编号",
             "dataIndex": "pickingNumber",
-            "width": 120
+            "width": 100
         },
         {
             "title": "状态",
             "dataIndex": "stockStatusName",
             "width": 80
+        },
+        {
+            "title": "总重量(吨)/出库重量(吨)",
+            "dataIndex": "totalWeight",
+            "width": 180
         },
         {
             "title": "最新状态变更时间",
