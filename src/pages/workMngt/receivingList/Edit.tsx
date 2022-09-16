@@ -492,7 +492,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return ({
                             ...item,
                             enum: materialTextureOptions?.map(item => ({
-                                value: item.id,
+                                value: item.name,
                                 label: item.name
                             }))
                         })
