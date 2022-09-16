@@ -8,7 +8,7 @@ import useRequest from "@ahooksjs/use-request";
 import { Button, Form, Input, InputNumber, Select, Space, Spin } from "antd";
 import { useForm } from "antd/es/form/Form";
 import React, { useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { componentTypeOptions } from "../../../configuration/DictionaryOptions";
 import RequestUtil from "../../../utils/RequestUtil";
 import { Attachment, BaseInfo, CommonTable, DetailContent, DetailTitle } from "../../common";
@@ -20,6 +20,7 @@ export default function Dispose(): React.ReactNode {
     const [repairTypes, setRepairTypes] = useState<any>([]);
     const history = useHistory();
     const [form] = useForm();
+    const params = useParams<{ id: string }>();
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(``);
@@ -28,6 +29,15 @@ export default function Dispose(): React.ReactNode {
             list: []
         })
         // resole(result?.records);
+    }), {})
+    
+    const { data: partsTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
+            resole(resData);
+        } catch (error) {
+            reject(error)
+        }
     }), {})
 
     const save = () => new Promise(async (resolve, reject) => {
@@ -50,7 +60,6 @@ export default function Dispose(): React.ReactNode {
             </Space>
         ]}>
             <DetailTitle title="基础信息" />
-            
             <Form form={form}>
             <BaseInfo dataSource={{}} layout="vertical" col={10} columns={baseColumns.map(res => {
                 if (res.dataIndex === "supplyTypeName") {
@@ -131,9 +140,17 @@ export default function Dispose(): React.ReactNode {
                                 required: true,
                                 message: "请选择零件类型"
                             }]}>
-                                <Select placeholder="请选择" size="small">
+                                <Select placeholder="请选择" size="small" onChange={(e) => {
+                                    let data: any = []
+                                    partsTypes.forEach((element: any) => {
+                                        if(element.typeId === e) {
+                                            data = element.fixItemConfigList
+                                        }
+                                    });
+                                    setRepairTypes(data)
+                                 }}>
                                     {
-                                        componentTypeOptions?.map((item: any, index: number) =>
+                                        partsTypes?.map((item: any, index: number) =>
                                             <Select.Option value={item.id} key={index}>
                                                 {item.name}
                                             </Select.Option>
@@ -153,51 +170,26 @@ export default function Dispose(): React.ReactNode {
                                 required: true,
                                 message: "请选择返修类型"
                             }]}>
-                                <Select placeholder="请选择返修类型" size="small">
-                                    {
-                                        repairTypes?.map((item: any, index: number) =>
-                                            <Select.Option value={item.id} key={index}>
-                                                {item.name}
-                                            </Select.Option>
-                                        )
+                                <Select placeholder="请选择返修类型" size="small" onChange={(e) => {
+                                    console.log(e)
+                                    let data: any = {}
+                                    repairTypes.forEach((element: any) => {
+                                        if(element.typeId === e) {
+                                            data = element
+                                        }
+                                    });
+                                    console.log(data,'---189')
+                                    let num = 0
+                                    if(data.measuringUnit === '件数') {
+                                        num = Number(data.maxAmount) - Number(data.amount) * Number()  > 0 ? Number(data.maxAmount) : Number(data.maxAmount) - Number(data.amount)
+                                        // 处理数量
+                                    } else if(data.measuringUnit === '件号数') {
+                                        num = Number(data.maxAmount) - Number(data.amount) * Number(1)  > 0 ? Number(data.maxAmount) : Number(data.maxAmount) - Number(data.amount)
+                                    } else {
+                                        // 单件重量
+                                        num = Number(data.maxAmount) - Number(data.amount) * Number()  > 0 ? Number(data.maxAmount) : Number(data.maxAmount) - Number(data.amount)
                                     }
-                                </Select>
-                            </Form.Item>
-                        )
-                    })
-                }
-                if (res.dataIndex === "") {
-                    // 返修车间
-                    return ({
-                        ...res,
-                        render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Form.Item name={["list", index, ""]} rules={[{
-                                required: true,
-                                message: "请选择返修车间"
-                            }]}>
-                                <Select placeholder="请选择返修车间" size="small">
-                                    {
-                                        repairTypes?.map((item: any, index: number) =>
-                                            <Select.Option value={item.id} key={index}>
-                                                {item.name}
-                                            </Select.Option>
-                                        )
-                                    }
-                                </Select>
-                            </Form.Item>
-                        )
-                    })
-                }
-                if (res.dataIndex === "") {
-                    // 返修工序
-                    return ({
-                        ...res,
-                        render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Form.Item name={["list", index, ""]} rules={[{
-                                required: true,
-                                message: "请选择返修工序"
-                            }]}>
-                                <Select placeholder="请选择返修工序" size="small">
+                                }}>
                                     {
                                         repairTypes?.map((item: any, index: number) =>
                                             <Select.Option value={item.id} key={index}>
