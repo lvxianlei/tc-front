@@ -7,13 +7,14 @@ interface SelectUserProps {
     onSelect: (selectedRows: Record<string, any>) => void;
     selectedKey?: string[];
     selectType?: 'radio' | 'checkbox';
-
+    disabled?: boolean;
 }
 
 export default function SelectUser({
     onSelect,
     selectedKey = [],
-    selectType= 'radio'
+    selectType = 'radio',
+    disabled = false
 }: SelectUserProps): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
@@ -53,7 +54,7 @@ export default function SelectUser({
     ]
 
     return <>
-    <Button type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
+        <Button disabled={disabled} type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
         <Modal
             visible={visible}
             title="选择人员"

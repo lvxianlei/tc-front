@@ -58,11 +58,6 @@
                         "authority": "tc_erp_sys_system_cost"
                     },
                     {
-                        "label": "定额配置",
-                        "path": "/sys/quotaConfig",
-                        "authority": "tc_erp_sys_system_quota"
-                    },
-                    {
                         "label": "第三方应用配置",
                         "path": "/sys/otherSetting/index",
                         "authority": "tc_erp_sys_system_app_deploy"
@@ -1284,6 +1279,16 @@
                         "label": "返修件条目配置",
                         "path": "/baseSetting/itemRepair",
                         "authority": "tc_erp_rd_fix_item_config"
+                    },
+                    {
+                        "label": "定额配置",
+                        "path": "/baseSetting/quotaConfig",
+                        "authority": "tc_erp_sys_system_quota"
+                    },
+                    {
+                        "label": "审核配置",
+                        "path": "/baseSetting/checkConfig",
+                        "authority": "tc_erp_sys_system_quota"
                     }
                 ]
             }
