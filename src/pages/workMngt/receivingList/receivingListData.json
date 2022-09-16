@@ -316,31 +316,36 @@
             "width": 70
         },
         {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber",
+            "width": 70
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName",
-            "width": 50,
+            "width": 80,
             "type": "string"
         },
         {
             "title": "标准",
             "dataIndex": "materialStandardName",
-            "width": 50
+            "width": 80
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "width": 50
+            "width":80
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
-            "width": 50
+            "width": 80
         },
         {
             "title": "长度",
             "dataIndex": "length",
             "type": "number",
-            "width": 50
+            "width": 80
         },
         {
             "title": "宽度（mm）",
@@ -390,24 +395,24 @@
             "width": 120
         },
         {
-            "title": "含税运费（元）------",
-            "dataIndex": "transportPriceCount",
+            "title": "含税运费（元）",
+            "dataIndex": "totalTransportTaxPrice",
             "width": 120
         },
         {
-            "title": "不含税运费（元）-------",
-            "dataIndex": "transportPriceCount",
+            "title": "不含税运费（元）",
+            "dataIndex": "totalTransportPrice",
             "width": 120
         },
         {
-            "title": "含税装卸费（元）--------",
-            "dataIndex": "unloadPriceCount",
+            "title": "含税装卸费（元）",
+            "dataIndex": "totalUnloadTaxPrice",
             "width": 120
         },
         {
-            "title": "不含税装卸费--------",
-            "dataIndex": "unloadPriceCount",
-            "width": 120
+            "title": "不含税装卸费（元）",
+            "dataIndex": "totalUnloadPrice",
+            "width": 140
         },
         {
             "title": "炉批号",
@@ -423,6 +428,21 @@
             "title": "轧制批号",
             "dataIndex": "rollingNumber",
             "width": 100
+        },
+        {
+            "title": "肢宽",
+            "dataIndex": "limbWidth",
+            "width": 50
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness",
+            "width": 50
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber",
+            "width": 50
         },
         {
             "title": "外观检验结果",
