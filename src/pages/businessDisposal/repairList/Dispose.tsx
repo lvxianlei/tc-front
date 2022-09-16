@@ -5,28 +5,29 @@
  */
 
 import useRequest from "@ahooksjs/use-request";
-import { Button, Form, InputNumber, Select, Space, Spin } from "antd";
+import { Button, Form, Input, InputNumber, Select, Space, Spin } from "antd";
 import { useForm } from "antd/es/form/Form";
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import { componentTypeOptions } from "../../../configuration/DictionaryOptions";
 import RequestUtil from "../../../utils/RequestUtil";
-import { Attachment, BaseInfo, CommonTable, DetailContent, DetailTitle, IntgSelect } from "../../common";
+import { Attachment, BaseInfo, CommonTable, DetailContent, DetailTitle } from "../../common";
+import SelectUser from "../../common/SelectUser";
 import { baseColumns, detailColumns } from "./repairList.json"
+import styles from './RepairList.module.less';
 
 export default function Dispose(): React.ReactNode {
     const [repairTypes, setRepairTypes] = useState<any>([]);
     const history = useHistory();
     const [form] = useForm();
 
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(``);
-        resole(data?.records);
-    }), {})
-
-    const { data: user } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
-        resole(data?.records);
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get(``);
+        form.setFieldsValue({
+            supplyTypeName: 1,
+            list: []
+        })
+        // resole(result?.records);
     }), {})
 
     const save = () => new Promise(async (resolve, reject) => {
@@ -40,7 +41,7 @@ export default function Dispose(): React.ReactNode {
     })
 
     return <Spin spinning={false}>
-        <DetailContent operation={[
+        <DetailContent className={styles.dispose} operation={[
             <Space size="small">
                 <Button type="primary" onClick={save} ghost>保存</Button>
             <Button onClick={() => {
@@ -48,14 +49,15 @@ export default function Dispose(): React.ReactNode {
             }}>关闭</Button>
             </Space>
         ]}>
-            <Form form={form}>
             <DetailTitle title="基础信息" />
+            
+            <Form form={form}>
             <BaseInfo dataSource={{}} layout="vertical" col={10} columns={baseColumns.map(res => {
-                if (res.dataIndex === "") {
+                if (res.dataIndex === "supplyTypeName") {
                     return ({
                         ...res,
                         render: (): React.ReactNode => (
-                            <Form.Item name="" rules={[{
+                            <Form.Item name="supplyTypeName" rules={[{
                                 required: true,
                                 message: "请选择状态"
                             }]}>
@@ -217,18 +219,27 @@ export default function Dispose(): React.ReactNode {
                                 required: true,
                                 message: "请选择责任人"
                             }]}>
-                                <IntgSelect width={"100%"} />
+                                <Input value={1} suffix={
+                                <SelectUser  key={index} onSelect={(selectedRows: Record<string, any>) => {
+                                    console.log(selectedRows)
+                                    // const list = form.getFieldsValue(true).list;
+                                    // list[index] = {
+                                    //     ...list[index],
+                                    //     a: selectedRows[0]?.userId
+                                    // }
+                                    // form.setFieldsValue({
+                                    //     list: [...list]
+                                    // })
+                                }} />
+                                }/>
                             </Form.Item>
                         )
                     })
                 }
                 return res
-            })} dataSource={[{
-                id: 4,
-                a: '444'
-            }]} />
+            })} dataSource={[]} />
             </Form>
-            <Attachment dataSource={[]} />
+            <Attachment dataSource={[]} isBatchDel={true} edit/>
         </DetailContent>
     </Spin>
 }

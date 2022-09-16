@@ -185,9 +185,9 @@
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "supplyTypeName",
             "title": "返修单状态",
-            "dataIndex": "totalWeight",
+            "dataIndex": "supplyTypeName",
             "width": 100
         },
         {
