@@ -59,7 +59,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 30,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...baseColumn as any,
+                    ...(baseColumn as any).map((item: any) => {
+                        if (item.dataIndex === "totalWeight") {
+                            return ({ ...item, render: (_value: any, records: any) => <>{`${records.totalWeight || 0}/${records.outStockWeight || 0}`}</> })
+                        }
+                        return item
+                    }),
                     {
                         title: '操作',
                         dataIndex: 'key',
