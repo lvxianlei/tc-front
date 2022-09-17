@@ -100,85 +100,54 @@
             ]
         },
         {
-            "title": "合同编号",
-            "dataIndex": "contractNumber",
+            "title": "供应商",
+            "dataIndex": "supplierId",
             "type": "popTable",
-            "path": "/tower-supply/materialContract?contractStatus=1",
+            "path": "/tower-supply/supplier",
             "width": 1011,
-            "value": "contractNumber",
+            "value": "supplierName",
             "dependencies": true,
             "readOnly": true,
             "required": true,
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "编号/名称/联系人/联系人电话"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssurance",
+                    "type": "select",
+                    "placeholder": "请选择"
+                }
+            ],
             "columns": [
                 {
-                    "title": "合同编号",
-                    "dataIndex": "contractNumber",
-                    "search": true
-                },
-                {
-                    "title": "合同状态",
-                    "dataIndex": "contractStatus",
-                    "type": "select",
-                    "enum": [
-                        {
-                            "label": "执行中",
-                            "value": 1
-                        },
-                        {
-                            "label": "已完成",
-                            "value": 2
-                        }
-                    ]
-                },
-                {
-                    "title": "采购计划编号",
-                    "dataIndex": "purchasePlanNumber",
-                    "search": true
-                },
-                {
-                    "title": "签订时间",
-                    "dataIndex": "signingTime"
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
                 },
                 {
                     "title": "供应商名称",
                     "dataIndex": "supplierName"
                 },
                 {
-                    "title": "运输承担",
-                    "dataIndex": "transportBear",
-                    "type": "select",
-                    "enum": [
-                        {
-                            "value": 1,
-                            "label": "供方"
-                        },
-                        {
-                            "value": 2,
-                            "label": "需方"
-                        }
-                    ]
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
                 },
                 {
-                    "title": "卸货承担",
-                    "dataIndex": "unloadBear",
-                    "type": "select",
-                    "enum": [
-                        {
-                            "value": 1,
-                            "label": "供方"
-                        },
-                        {
-                            "value": 2,
-                            "label": "需方"
-                        }
-                    ]
+                    "title": "联系电话",
+                    "dataIndex": "contactManTel"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssuranceName"
+                },
+                {
+                    "title": "供货产品",
+                    "dataIndex": "supplyProductsName"
                 }
             ]
-        },
-        {
-            "title": "供应商",
-            "dataIndex": "supplierName",
-            "disabled": true
         },
         {
             "title": "纸质单号",
@@ -334,7 +303,7 @@
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "width":80
+            "width": 80
         },
         {
             "title": "规格",
@@ -451,6 +420,12 @@
         }
     ],
     "editCargoDetails": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber",
+            "type": "string",
+            "disabled": true
+        },
         {
             "title": "理算单重",
             "dataIndex": "weight",
@@ -584,6 +559,14 @@
     ],
     "SelectedArea": [
         {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
             "title": "材质",
             "dataIndex": "structureTexture"
         },
@@ -621,6 +604,14 @@
         }
     ],
     "Selected": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
         {
             "title": "材质",
             "dataIndex": "structureTexture"

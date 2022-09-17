@@ -41,14 +41,14 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
-            setSelectList(result?.materialContractDetailVos.map((item: any) => ({
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/supplier/${id}`)
+            setSelectList(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
                 id: item.id,
                 materialContractDetailId: item.id
             })).filter((item: any) => item.num))
-            setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
+            setWaitingArea(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
                 id: item.id,
@@ -63,12 +63,12 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const resetFields = () => {
         setCurrentId("")
         setChooseList(initChooseList)
-        setSelectList(data?.materialContractDetailVos.map((item: any) => ({
+        setSelectList(data?.materialContractDetailVos?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
         })).filter((item: any) => item.num))
-        setWaitingArea(data?.materialContractDetailVos.map((item: any) => ({
+        setWaitingArea(data?.materialContractDetailVos?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
@@ -252,7 +252,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                 render: (_: any, records: any) => <Button
                     size="small"
                     type="link"
-                    disabled={records.receiveDetailStatus === 1}
+                    disabled={records.receiveDetailStatus !== 0}
                     onClick={() => {
                         setCurrentId(records.id)
                         setOprationType("remove")

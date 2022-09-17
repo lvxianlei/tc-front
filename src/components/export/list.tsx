@@ -16,6 +16,7 @@ interface Props extends RouteComponentProps {
     current: number,
     total: number,
     url: string | undefined,
+    fileName?: string
 }
 
 interface State {
@@ -36,7 +37,7 @@ class ExportList extends Component<Props, State>  {
     }
     UNSAFE_componentWillMount() {
         let columnsKey = this.props.columnsKey()
-        if(columnsKey[0].title === '序号') {
+        if (columnsKey[0].title === '序号') {
             columnsKey.splice(0, 1)
         }
         let initColumnsKey = columnsKey.map((item) => {
@@ -75,6 +76,7 @@ class ExportList extends Component<Props, State>  {
         this.download(fields)
     }
     download = async (fields: any): Promise<void> => {
+        const that = this
         let object: any = {
             ...this.props.serchObj,
             size: this.state.exportType === 1 ? this.props.size : this.props.total,
@@ -83,7 +85,7 @@ class ExportList extends Component<Props, State>  {
         let paramsArray: any = [];
         //拼接参数
         Object.keys(object).forEach(key => paramsArray.push(key + '=' + object[key]))
-        return fetch(`${ process.env.REQUEST_API_PATH_PREFIX }${this.props.url}?${paramsArray.join('&')}`, {
+        return fetch(`${process.env.REQUEST_API_PATH_PREFIX}${this.props.url}?${paramsArray.join('&')}`, {
             mode: 'cors',
             method: 'GET',
             headers: {
@@ -102,7 +104,7 @@ class ExportList extends Component<Props, State>  {
             reader.readAsDataURL(blob);
             reader.onload = function (e) {
                 var a = document.createElement('a');
-                a.download = '导出数据' + '.xlsx';
+                a.download = (that.props.fileName || '导出数据') + '.xlsx';
                 // a.download = fileName
                 a.href = URL.createObjectURL(blob);
                 document.querySelector('body').append(a);
