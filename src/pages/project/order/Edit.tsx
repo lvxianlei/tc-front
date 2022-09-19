@@ -208,14 +208,14 @@ export default function SeeGuarantee(): JSX.Element {
             message.error('回款计划无数据，需新增！');
             return
         }
-        if (totalReturnedRate !== "100.00") {
-            message.error('计划回款总占比必须等于100');
-            return
-        }
-        if (totalReturnedAmount !== parseFloat(baseData.taxAmount).toFixed(2)) {
-            message.error('计划回款总金额必须等于含税金额');
-            return
-        }
+        // if (totalReturnedRate !== "100.00") {
+        //     message.error('计划回款总占比必须等于100');
+        //     return
+        // }
+        // if (totalReturnedAmount !== parseFloat(baseData.taxAmount).toFixed(2)) {
+        //     message.error('计划回款总金额必须等于含税金额');
+        //     return
+        // }
 
         const result = {
             projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined,
