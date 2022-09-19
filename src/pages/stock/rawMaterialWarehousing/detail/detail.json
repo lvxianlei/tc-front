@@ -8,22 +8,22 @@
         {
             "title": "收货批次",
             "dataIndex": "receiveBatchNumber",
-            "width": 80
+            "width": 120
         },
         {
             "title": "品名",
             "dataIndex": "materialName",
-            "width": 40
+            "width": 80
         },
         {
             "title": "标准",
             "dataIndex": "materialStandardName",
-            "width": 40
+            "width": 80
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "width": 40
+            "width": 80
         },
         {
             "title": "规格",
