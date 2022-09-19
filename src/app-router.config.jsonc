@@ -2956,13 +2956,6 @@
       "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
-    },
-    { // RD-系统设置-审核配置
-      "name": "审核配置",
-      "path": "/baseSetting/checkConfig",
-      "module": "./pages/baseSetting/CheckConfigList",
-      "exact": true,
-      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }

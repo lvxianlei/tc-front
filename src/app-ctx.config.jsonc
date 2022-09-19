@@ -1284,11 +1284,6 @@
                         "label": "定额配置",
                         "path": "/baseSetting/quotaConfig",
                         "authority": "tc_erp_sys_system_quota"
-                    },
-                    {
-                        "label": "审核配置",
-                        "path": "/baseSetting/checkConfig",
-                        "authority": "tc_erp_sys_system_quota"
                     }
                 ]
             }
