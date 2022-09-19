@@ -1,0 +1,263 @@
+{
+    "columns": [
+        {
+            "key": "taskNumber",
+            "title": "计划号",
+            "width": 80,
+            "dataIndex": "taskNumber"
+        },
+        {
+            "key": "planNumber",
+            "title": "放样任务编号",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "submitTime",
+            "title": "塔型",
+            "dataIndex": "submitTime",
+            "width": 80
+        },
+        {
+            "key": "projectName",
+            "title": "产品类型",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
+            "key": "name",
+            "title": "不合格件号数",
+            "dataIndex": "name",
+            "width": 120
+        },
+        {
+            "key": "productType",
+            "title": "不合格总件数",
+            "dataIndex": "productType",
+            "width": 120
+        },
+        {
+            "key": "voltageGrade",
+            "title": "考核金额（元）",
+            "dataIndex": "voltageGrade",
+            "width": 120
+        },
+        {
+            "key": "accuracyRate",
+            "title": "报废重量（kg）",
+            "dataIndex": "accuracyRate",
+            "width": 120
+        },
+        {
+            "key": "partLabelNum",
+            "title": "考核金额（元）",
+            "dataIndex": "partLabelNum",
+            "width": 120,
+            "type": "number"
+        }
+    ],
+    "statisticalColumns": [
+        {
+            "key": "loftUserName",
+            "title": "不合格项目",
+            "width": 100,
+            "dataIndex": "loftUserName"
+        },
+        {
+            "key": "countLoftPart",
+            "title": "不合格件号数",
+            "width": 100,
+            "dataIndex": "countLoftPart",
+            "type": "number"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "不合格总件数",
+            "width": 100,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "countErrorPart",
+            "title": "考核金额（元）",
+            "width": 100,
+            "dataIndex": "countErrorPart",
+            "type": "number"
+        },
+        {
+            "key": "accuracyRate",
+            "title": "报废金额（元）",
+            "width": 100,
+            "dataIndex": "accuracyRate"
+        },
+        {
+            "key": "accuracyRate",
+            "title": "考核金额（元）",
+            "width": 100,
+            "dataIndex": "accuracyRate"
+        }
+    ],
+    "defectiveItemColumns": [
+        {
+            "key": "checkUserName",
+            "title": "不合格项目",
+            "width": 100,
+            "dataIndex": "checkUserName"
+        },
+        {
+            "key": "countLoftPart",
+            "title": "角钢塔",
+            "width": 80,
+            "dataIndex": "countLoftPart",
+            "type": "number"
+        },
+        {
+            "key": "countErrorPart",
+            "title": "钢管杆",
+            "width": 80,
+            "dataIndex": "countErrorPart",
+            "type": "number"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "四管塔",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "架构",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "钢管杆",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "错误件号数（合计）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "错误件数（合计）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "报废重量（kg）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "报废金额（元）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "考核金额（元）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "错误数占比%",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "报废金额占比%",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "考核金额占比%",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        }
+    ],
+    "personColumns": [
+        {
+            "key": "loftPerformance",
+            "title": "人员",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "错误件号数",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "错误件数",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "个人报废重量（kg）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "个人报废金额（元）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "个人考核金额（元）",
+            "width": 120,
+            "dataIndex": "loftPerformance"
+        }
+    ],
+    "totalColumns": [
+        {
+            "key": "loftPerformance",
+            "title": "合计",
+            "width": 80,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "角钢塔（总）",
+            "width": 100,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "钢管杆（总）",
+            "width": 100,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "四管塔（总）",
+            "width": 100,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "架构（总）",
+            "width": 100,
+            "dataIndex": "loftPerformance"
+        },
+        {
+            "key": "loftPerformance",
+            "title": "钢管杆（总）",
+            "width": 100,
+            "dataIndex": "loftPerformance"
+        }
+    ]
+}
