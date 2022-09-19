@@ -27,6 +27,7 @@ export default function Edit() {
   const params = useParams<{ projectId: string, id: string }>()
   const [planType, setPlanType] = useState<0 | 1>(0)
   const [when, setWhen] = useState<boolean>(true)
+  const [region, setRegion] = useState<string>()
   const attchmentRef = useRef<AttachmentRef>()
   const [form] = Form.useForm()
   const [editform] = Form.useForm()
@@ -34,11 +35,25 @@ export default function Edit() {
   const { loading: projectLoading, data: projectData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/projectInfo/${params.projectId}`)
+      setRegion(result?.address)
       resole(result)
     } catch (error) {
       reject(error)
     }
   }), { ready: (params.projectId !== "undefined") })
+
+  const { loading: addressLoading, data: addressList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    try {
+      const addressList: any[] = await RequestUtil.get(`/tower-system/region/00`)
+      resole([...addressList.map(item => ({
+        value: `${item.bigRegion}-${item.name}`,
+        label: `${item.bigRegion}-${item.name}`
+      })), { value: "其他-国外", label: "其他-国外" }])
+    } catch (error) {
+      reject(error)
+    }
+  }))
+
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/contract/${params.id}`)
@@ -180,6 +195,12 @@ export default function Edit() {
         payCompany: customerCompany
       })
     }
+    if (fields.region) {
+      if (fields.region === "其他-国外") {
+        form.setFieldsValue({ country: "" })
+      }
+      setRegion(fields.region)
+    }
   }
 
   const handleEditableChange = (fields: any, allFields: any) => {
@@ -245,8 +266,10 @@ export default function Edit() {
               return ({ ...item, enum: deliverywayEnum })
             case "currencyType":
               return ({ ...item, enum: currencyTypeEnum })
+            case "region":
+              return ({ ...item, enum: addressList })
             case "country":
-              return ({ ...item, hidden: projectData?.address !== "其他-国外" })
+              return ({ ...item, hidden: region !== "其他-国外" })
             default:
               return item
           }
@@ -255,10 +278,10 @@ export default function Edit() {
         dataSource={{
           ...data,
           bidBatch: projectData?.bidBatch,
-          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? "" : `${projectData.bigRegion || ""}-${projectData.address || ""}`),
+          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
           country: projectData?.country || ""
         } || {
-          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? "" : `${projectData.bigRegion || ""}-${projectData.address || ""}`),
+          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
           country: projectData?.country || ""
         }}
         edit />

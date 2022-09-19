@@ -41,14 +41,14 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
-            setSelectList(result?.materialContractDetailVos.map((item: any) => ({
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/supplier/${id}`)
+            setSelectList(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
                 id: item.id,
                 materialContractDetailId: item.id
             })).filter((item: any) => item.num))
-            setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
+            setWaitingArea(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
                 id: item.id,
@@ -63,12 +63,12 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const resetFields = () => {
         setCurrentId("")
         setChooseList(initChooseList)
-        setSelectList(data?.materialContractDetailVos.map((item: any) => ({
+        setSelectList(data?.materialContractDetailVos?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
         })).filter((item: any) => item.num))
-        setWaitingArea(data?.materialContractDetailVos.map((item: any) => ({
+        setWaitingArea(data?.materialContractDetailVos?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
@@ -109,26 +109,26 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         const formData = await form.validateFields()
         const currentData = selectList.find((item: any) => item.id === id)
         const currentChooseData = chooseList.find((item: any) => item.id === id)
-        if ((currentData.num - formData.num) === 0) {
-            setSelectList(selectList.filter((item: any) => item.id !== id))
-            setWaitingArea(waitingArea.filter((item: any) => item.id !== id))
-            if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-            } else {
-                setChooseList([...chooseList, { ...currentData, num: formData.num }])
-            }
-        } else if ((currentData.num - formData.num) < 0) {
-            message.error("选择数量不能大于可选数量...")
-            return
+        // if ((currentData.num - formData.num) === 0) {
+        //     setSelectList(selectList.filter((item: any) => item.id !== id))
+        //     setWaitingArea(waitingArea.filter((item: any) => item.id !== id))
+        //     if (currentChooseData) {
+        //         setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+        //     } else {
+        //         setChooseList([...chooseList, { ...currentData, num: formData.num }])
+        //     }
+        // } else if ((currentData.num - formData.num) < 0) {
+        //     message.error("选择数量不能大于可选数量...")
+        //     return
+        // } else {
+        setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        if (currentChooseData) {
+            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
         } else {
-            setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-            setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-            if (currentChooseData) {
-                setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-            } else {
-                setChooseList([...chooseList, { ...currentData, num: formData.num }])
-            }
+            setChooseList([...chooseList, { ...currentData, num: formData.num }])
         }
+        // }
         setVisible(false)
         form.resetFields()
     }
@@ -252,7 +252,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                 render: (_: any, records: any) => <Button
                     size="small"
                     type="link"
-                    disabled={records.receiveDetailStatus === 1}
+                    disabled={records.receiveDetailStatus !== 0}
                     onClick={() => {
                         setCurrentId(records.id)
                         setOprationType("remove")

@@ -834,7 +834,7 @@
     { // 库存管理-原材料出库
       "name": "原材料出库",
       "path": "/stock/rawMaterialExWarehouse",
-      "module": "./pages/stock/rawMaterialExWarehouse/rawMaterialExWarehouse",
+      "module": "./pages/stock/rawMaterialExWarehouse/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_list"
     },

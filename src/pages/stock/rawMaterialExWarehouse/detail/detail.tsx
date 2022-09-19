@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Table } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../../common';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
 import { materialStandardOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
@@ -15,6 +15,7 @@ import { baseColumn } from "./detail.json";
 
 import '../../StockPublicStyle.less';
 import './detail.less';
+import ExportList from '../../../../components/export/list';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
     // 标准
@@ -30,6 +31,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }))
     const history = useHistory();
     const params = useParams<{ id: string }>();
+    const match = useRouteMatch()
+    const location = useLocation<{ state: {} }>();
     const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
     const [WarehousingListdata, setWarehousingListdata] = useState<any[]>([{}]);//详情-入库信息列表数据
     const [ExWarehousingListdata, setExWarehousingListdata] = useState<any[]>([{}]);//详情-出库信息列表数据
@@ -316,6 +319,20 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }), {})
 
+    // 用友格式导出
+    const { run: exportRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(
+                `/tower-storage/outStock/export/${params.id}`,
+                {},
+                { isExport: 'true' }
+            )
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         const result: any = {
@@ -429,7 +446,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             // 刷新列表
             history.go(0);
         }
-
     }
     // 缺料申请
     const shortage = async () => {
@@ -442,16 +458,25 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }
 
+    const handleExport = () => {
+        exportRun()
+    }
+
     return (
         <>
             <Page
                 path="/tower-storage/outStock/detail"
                 exportPath={"/tower-storage/outStock/detail"}
                 exportObject={{ id: params.id }}
+                exportFileName="原材料出库明细"
                 extraOperation={(data: any) => {
                     return <>
+                        <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
                         <span style={{ marginLeft: "20px" }}>
-                            总重量： {weightData?.weightCount || "0.00"} 吨， 缺料总重量：{weightData?.excessWeight || "0.00"} 吨
+                            总重量： {weightData?.weightCount || "0.00"} 吨
+                        </span>
+                        <span style={{ marginLeft: "10px" }}>
+                            缺料总重量：{weightData?.excessWeight || "0.00"} 吨
                         </span>
                     </>
                 }}
@@ -487,7 +512,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'status',
+                        name: 'outStockItemStatus',
                         label: '状态',
                         children: (
                             <Select placeholder="请选择状态" style={{ width: "140px" }}>
