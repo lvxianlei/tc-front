@@ -63,12 +63,12 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const resetFields = () => {
         setCurrentId("")
         setChooseList(initChooseList)
-        setSelectList(data?.materialContractDetailVos?.map((item: any) => ({
+        setSelectList(data?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
         })).filter((item: any) => item.num))
-        setWaitingArea(data?.materialContractDetailVos?.map((item: any) => ({
+        setWaitingArea(data?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
@@ -121,13 +121,13 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         //     message.error("选择数量不能大于可选数量...")
         //     return
         // } else {
-        setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-        setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-        if (currentChooseData) {
-            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-        } else {
-            setChooseList([...chooseList, { ...currentData, num: formData.num }])
-        }
+        // setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        // setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        // if (currentChooseData) {
+        //     setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+        // } else {
+        setChooseList([...chooseList, { ...currentData, receiveDetailStatus: 0, id: Math.random() + new Date().getTime(), num: formData.num }])
+        // }
         // }
         setVisible(false)
         form.resetFields()
@@ -245,7 +245,8 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             </Form>
         </Modal>
         <DetailTitle title="选定区" />
-        <CommonTable columns={[
+        <CommonTable 
+        columns={[
             ...SelectedArea, {
                 title: "操作",
                 dataIndex: "opration",
