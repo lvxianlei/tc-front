@@ -22,13 +22,8 @@
             "width": 120
         },
         {
-            "title": "待出库数量",
-            "dataIndex": "num0",
-            "width": 120
-        },
-        {
-            "title": "已出库数量",
-            "dataIndex": "num2",
+            "title": "出库数量",
+            "dataIndex": "num",
             "width": 120
         },
         {
@@ -114,6 +109,26 @@
         {
             "title": "库位",
             "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice",
             "width": 120
         },
         {

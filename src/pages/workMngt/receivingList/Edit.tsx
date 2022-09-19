@@ -1,12 +1,11 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Button, Form, message, Spin, Modal, InputNumber, Select, Space } from 'antd'
+import { Button, Form, message, Spin, Modal, Space } from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
-import { BasicInformation, editCargoDetails, } from "./receivingListData.json"
-import Item from "antd/lib/list/Item"
+import { BasicInformation, editCargoDetails } from "./receivingListData.json"
 
 /**
  * 纸质单号，原材料税款合计，车辆牌照
@@ -87,7 +86,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const modalRef = useRef<ModalRef>({ dataSource: [], resetFields: () => { } })
     const [visible, setVisible] = useState<boolean>(false)
     const [cargoData, setCargoData] = useState<any[]>([])
-    const [contractId, setContractId] = useState<string>("")
     const [supplierId, setSupplierId] = useState<string>("")
     let [number, setNumber] = useState<number>(0);
     const [total, setTotal] = useState<TotalState>({});
@@ -114,19 +112,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     }))
 
-    const { run: getSupplier } = useRequest<any[]>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.get(`/tower-supply/supplier/${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
-            setContractId(result?.contractId)
             setSupplierId(result?.supplierId)
             setCargoData(result?.lists.map((item: any) => ({
                 ...item,
@@ -134,21 +122,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })) || [])
             resole({
                 ...formatData(BasicInformation, result),
-                supplierName: result.supplierName,
-                contractNumber: {
-                    id: result.contractId,
-                    value: result.contractNumber,
-                    records: [{
-                        id: result.contractId,
-                        transportBear: result?.transportBear, // 运输承担
-                        transportCompany: result?.transportCompany, // 运输公司
-                        transportTaxPrice: result?.transportTaxPrice, // 合同单价
-                        transportPriceCount: result?.transportPriceCount, // 运费价税合计（元）
-                        unloadBear: result?.unloadBear,
-                        unloadCompany: result?.unloadCompany,
-                        unloadTaxPrice: result?.unloadTaxPrice,
-                        unloadPriceCount: result?.unloadPriceCount
-                    }]
+                supplierId: {
+                    id: result.supplierId,
+                    value: result.supplierName,
                 },
                 unloadUsersName: {
                     value: result.unloadUsersName,
@@ -221,28 +197,17 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const baseFormData = await form.validateFields()
             const listsFormData = await editForm.validateFields()
-            console.log(listsFormData, "listsFormData", cargoData, editForm.getFieldsValue(true))
             listsFormData?.submit?.map((item: any, index: number) => {
                 const v = editForm?.getFieldsValue(true)?.submit[index];
                 item["weight"] = v?.weight || item?.weightAlgorithm === "1" ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === "2" ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) / 1000).toFixed(3)
+                    : item?.weightAlgorithm === "2" ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) / 1000).toFixed(3)
             })
-            const contractNumberData = baseFormData.contractNumber.records[0]
             const result = {
                 ...baseFormData,
-                transportBear: contractNumberData?.transportBear, // 运输承担
-                transportTaxPrice: contractNumberData?.transportTaxPrice, // 合同单价
-                unloadBear: contractNumberData?.unloadBear,
-                unloadTaxPrice: contractNumberData?.unloadTaxPrice,
-                transportPrice: contractNumberData?.transportPrice,
-                unloadPrice: contractNumberData?.unloadPrice,
-                transportCompany: contractNumberData?.transportCompany,
-                unloadCompany: contractNumberData?.unloadCompany,
                 supplierId,
-                supplierName: baseFormData.supplierName,
-                contractId: baseFormData.contractNumber.id,
-                contractNumber: baseFormData.contractNumber.value,
+                supplierName: baseFormData.supplierId.value,
+                // contractNumber: baseFormData.contractNumber.value,
                 lists: listsFormData.submit?.map((item: any, index: number) => ({
                     ...cargoData[index],
                     ...item,
@@ -268,17 +233,15 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
 
     const handleBaseInfoChange = async (fields: any) => {
-        if (fields.contractNumber) {
-            setContractId(fields.contractNumber.id);
-            setSupplierId(fields.contractNumber.records[0].supplierId)
+        if (fields.supplierId) {
+            console.log(fields.supplierId)
+            setSupplierId(fields.supplierId.id)
             modalRef.current?.resetFields()
-            const supplierData: any = await getSupplier(fields.contractNumber.records[0].supplierId)
+            const supplierData: any = fields.supplierId.records[0]
             form.setFieldsValue({
-                supplierName: supplierData.supplierName,
+                // supplierName: supplierData.supplierName,
                 contactsUser: supplierData.contactMan,
-                contactsPhone: supplierData.contactManTel,
-                meteringMode: fields.contractNumber.records?.[0]?.meteringMode,
-                settlementMode: fields.contractNumber.records?.[0]?.settlementMode
+                contactsPhone: supplierData.contactManTel
             })
             setCargoData([])
         }
@@ -394,7 +357,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 setNumber(++number)
             }}
             onOk={handleModalOk}>
-            <ChooseModal id={contractId} ref={modalRef} initChooseList={cargoData} numberStatus={number} />
+            <ChooseModal id={supplierId} ref={modalRef} initChooseList={cargoData} numberStatus={number} />
         </Modal>
         <DetailTitle title="收货单基础信息" />
         <BaseInfo
@@ -415,7 +378,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                                 }
                             ]
                         })
-                    case "contractNumber":
+                    case "supplierId":
                         return ({
                             ...item,
                             disabled: type === "edit"
@@ -457,8 +420,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     key="choose"
                     ghost
                     onClick={() => {
-                        if (!contractId) {
-                            message.warning("请先选择合同编号...")
+                        if (!supplierId) {
+                            message.warning("请先选择供应商...")
                             return
                         }
                         setVisible(true)

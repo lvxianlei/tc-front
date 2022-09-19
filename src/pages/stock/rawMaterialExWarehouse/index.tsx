@@ -4,14 +4,67 @@
  * 时间：2022/01/11
  */
 import React, { useState } from 'react';
-import { Input, Select, DatePicker, Button } from 'antd';
+import { Input, Select, DatePicker, Button, Radio } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
-import { baseColumn } from "./rawMaterialExWarehouse.json";
+import { baseColumn, outStockDetail } from "./data.json";
 import CreatePlan from "./CreatePlan";
+const outStockList = [
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        fixed: "left",
+        width: 30,
+        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
+    ...(baseColumn as any).map((item: any) => {
+        if (item.dataIndex === "totalWeight") {
+            return ({ ...item, render: (_value: any, records: any) => <>{`${records.totalWeight || 0}/${records.completeOutStock || 0}`}</> })
+        }
+        return item
+    }),
+    {
+        title: '操作',
+        dataIndex: 'key',
+        width: 40,
+        fixed: 'right' as FixedType,
+        render: (_: undefined, record: any): React.ReactNode => (
+            <>
+                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`}>明细</Link>
+            </>
+        )
+    }
+]
+
+const outStock = [
+    {
+        key: 'index',
+        title: '序号',
+        dataIndex: 'index',
+        fixed: "left",
+        width: 50,
+        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+    },
+    ...outStockDetail,
+    {
+        title: '操作',
+        dataIndex: 'key',
+        width: 100,
+        fixed: 'right' as FixedType,
+        render: (_: undefined, record: any): React.ReactNode => (
+            <>
+                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`}>所在单据</Link>
+            </>
+        )
+    }
+]
+
 export default function RawMaterialWarehousing(): React.ReactNode {
     const history = useHistory()
+    const [pagePath, setPagePath] = useState<string>("/tower-storage/outStock")
+    const [columns, setColumns] = useState<any[]>(outStockList)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<any>({
         selectName: "",
@@ -44,44 +97,35 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         setIsOpenId(false);
     }
-
+    const handleRadioChange = (event: any) => {
+        if (event.target.value === "b") {
+            setPagePath("/tower-storage/outStock/detail")
+            setColumns(outStock)
+            return
+        }
+        if (event.target.value === "a") {
+            setPagePath("/tower-storage/outStock")
+            setColumns(outStockList)
+            return
+        }
+    }
     return (
         <>
             <Page
-                path="/tower-storage/outStock"
-                exportPath={"/tower-storage/outStock"}
-                columns={[
-                    {
-                        key: 'index',
-                        title: '序号',
-                        dataIndex: 'index',
-                        fixed: "left",
-                        width: 30,
-                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                    },
-                    ...(baseColumn as any).map((item: any) => {
-                        if (item.dataIndex === "totalWeight") {
-                            return ({ ...item, render: (_value: any, records: any) => <>{`${records.totalWeight || 0}/${records.completeOutStock || 0}`}</> })
-                        }
-                        return item
-                    }),
-                    {
-                        title: '操作',
-                        dataIndex: 'key',
-                        width: 40,
-                        fixed: 'right' as FixedType,
-                        render: (_: undefined, record: any): React.ReactNode => (
-                            <>
-                                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`}>明细</Link>
-                            </>
-                        )
-                    }
-                ]}
+                path={pagePath}
+                exportPath={pagePath}
+                columns={columns}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 extraOperation={
                     <>
                         <Button type='primary' ghost onClick={() => setIsOpenId(true)}>创建</Button>
+                        <div style={{ width: "2000px" }}>
+                            <Radio.Group defaultValue="a" onChange={handleRadioChange}>
+                                <Radio.Button value="a">出库单列表</Radio.Button>
+                                <Radio.Button value="b">出库明细</Radio.Button>
+                            </Radio.Group>
+                        </div>
                     </>
                 }
                 searchFormItems={[
