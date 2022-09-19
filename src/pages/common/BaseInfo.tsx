@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { Fragment, useEffect } from "react"
 import { Descriptions, Form, FormInstance, Row, Col, Typography } from "antd"
 import { FormItemType } from '../common'
 import { FormItemTypesType } from "./FormItemType"
@@ -41,6 +41,13 @@ function formatSelectData(dataItem: any, value: string | number | boolean): stri
     return ((value || value === 0 || value === false) && dataItem.enum) ? (dataItem.enum.find((item: any) => item.value === value)?.label || "-") : "-"
 }
 
+function formatTextarea(value: string, dataItem: any): string {
+    if (dataItem.type !== "textarea") {
+        return "-"
+    }
+    return value.replace(/\n/g, '<br/>') || value.replace(/\r\n/g, '<br/>') || value.replace(/\r/g, '<br/>')
+}
+
 function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
@@ -50,7 +57,7 @@ function formatDataType(dataItem: any, dataSource: any): string {
         string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         text: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         phone: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
-        textarea: value || "-",
+        textarea: <div dangerouslySetInnerHTML={{ __html: value ? formatTextarea(value, dataItem) : "-" }} />,
         popTable: value || "-"
     }
     return types[dataItem.type || "string"]
@@ -131,8 +138,8 @@ const generatePlaceholder = (columnItems: any): string => {
     }
     return placeholder
 }
-export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "", ...props}: BaseInfoProps): JSX.Element {
-    
+export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onChange = () => { }, classStyle = "", ...props }: BaseInfoProps): JSX.Element {
+
     useEffect(() => {
         form && form.setFieldsValue(formatData(columns, dataSource))
     }, [JSON.stringify(dataSource), form])

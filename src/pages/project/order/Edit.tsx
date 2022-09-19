@@ -107,7 +107,8 @@ export default function SeeGuarantee(): JSX.Element {
                 saleType: result.saleType, // 销售类型
                 orderProjectName: result.contractName, // 订单工程名称
                 contractName: result.contractName, // 合同名称
-                deliveryAddress: result.deliveryAddress // 交货地点
+                deliveryAddress: result.deliveryAddress, // 交货地点
+                salesman: result.salesman // 销售业务员
             })
             return;
         }
@@ -207,14 +208,14 @@ export default function SeeGuarantee(): JSX.Element {
             message.error('回款计划无数据，需新增！');
             return
         }
-        if (totalReturnedRate !== "100.00") {
-            message.error('计划回款总占比必须等于100');
-            return
-        }
-        if (totalReturnedAmount !== parseFloat(baseData.taxAmount).toFixed(2)) {
-            message.error('计划回款总金额必须等于含税金额');
-            return
-        }
+        // if (totalReturnedRate !== "100.00") {
+        //     message.error('计划回款总占比必须等于100');
+        //     return
+        // }
+        // if (totalReturnedAmount !== parseFloat(baseData.taxAmount).toFixed(2)) {
+        //     message.error('计划回款总金额必须等于含税金额');
+        //     return
+        // }
 
         const result = {
             projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined,
@@ -401,6 +402,5 @@ export default function SeeGuarantee(): JSX.Element {
                     dataSource={editFormData} />
             </Spin>
         </DetailContent>
-
     )
 }

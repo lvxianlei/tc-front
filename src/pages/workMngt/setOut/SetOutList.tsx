@@ -128,14 +128,16 @@ export default function SetOutList(): React.ReactNode {
         resole(data?.records);
     }), {})
     const checkUser: any = data || [];
+    const [filterValue, setFilterValue] = useState<any>({});
 
     return <Page
         path="/tower-science/loftingList"
         exportPath={`/tower-science/loftingList`}
         columns={columns}
         filterValue={{
-            status: location.state?.state,
-            loftingLeader: location.state?.userId,
+            ...filterValue,
+            status: filterValue?.status || location.state?.state,
+            loftingLeader: filterValue?.loftingLeader || location.state?.userId,
             whether: 0
         }}
         searchFormItems={[
@@ -193,6 +195,7 @@ export default function SetOutList(): React.ReactNode {
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            setFilterValue(values)
             return values;
         }}
     />
