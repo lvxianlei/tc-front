@@ -1,10 +1,9 @@
 //供应商管理
 import React, { Key, useRef, useState } from 'react'
 import { Input, Select, Button, Modal, message } from 'antd'
-import { useHistory, useParams } from 'react-router-dom'
-import { Page } from '../../common'
+import { useHistory } from 'react-router-dom'
+import { SearchTable as Page } from '../../common'
 import { supplierMngt } from "./supplier.json"
-import ApplicationContext from "../../../configuration/ApplicationContext"
 import Edit from "./Edit"
 import Overview from "./Overview"
 import RequestUtil from '../../../utils/RequestUtil'
@@ -91,6 +90,7 @@ export default function SupplierMngt(): React.ReactNode {
                 {
                     title: "序号",
                     dataIndex: "index",
+                    width: 40,
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 }
                 ,
@@ -107,6 +107,8 @@ export default function SupplierMngt(): React.ReactNode {
                 {
                     title: "操作",
                     dataIndex: "opration",
+                    width: 200,
+                    fixed: "right",
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" style={{ marginRight: 12 }} onClick={() => {

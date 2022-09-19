@@ -338,9 +338,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         const seletTotal = selectRows.reduce((total: TotalState, current: any) => ({
             count: parseFloat(total.count || "0") + parseFloat(current.num),
-            weight: parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight),
-            taxPrice: parseFloat(total.taxPrice || "0") + parseFloat(current.totalTaxPrice),
-            unTaxPrice: parseFloat(total.unTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)
+            weight: (parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(3),
+            taxPrice: (parseFloat(total.taxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+            unTaxPrice: (parseFloat(total.unTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
         }), {})
         setTotal(seletTotal)
         setSelect(selectedRowKeys)
