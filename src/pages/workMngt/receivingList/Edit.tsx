@@ -239,7 +239,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const editData = editForm.getFieldsValue().submit
             // 所有明细理算重量总和
             const allTotalWeight = editData?.reduce((total: any, item: any) =>
-                (parseFloat(total) + parseFloat(item.totalWeight)).toFixed(4), 0)
+                (parseFloat(total) + parseFloat(calcObj.totalWeight({
+                    length: item.length,
+                    width: item.width,
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion,
+                    num: item.num
+                }))).toFixed(4), 0)
             const dataSource: any[] = editData?.map((item: any, index: number) => {
                 // 结算重量
                 const balanceTotalWeight = calcObj.balanceTotalWeight(
@@ -248,7 +254,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         length: item.length,
                         width: item.width,
                         weightAlgorithm: item.weightAlgorithm,
-                        proportion: item.proportion,
+                        proportion: item.proportion
                     }),
                     item.num,
                     totalPonderationWeight,
@@ -267,6 +273,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight)
                 // 不含税装卸费
                 const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
+              
                 const postData = {
                     ...item,
                     ...cargoData[index],
@@ -308,7 +315,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
         if (changeFiled.length || changeFiled.width) {
             const result = editForm.getFieldsValue(true).submit[changeIndex];
-            console.log(result, "--------")
             const dataSource: any[] = cargoData
             const meteringMode = form.getFieldValue("meteringMode")
             const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
@@ -321,7 +327,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     proportion: item.proportion,
                     num: item.num
                 }))).toFixed(4), 0)
-
             // 结算重量
             const balanceTotalWeight = calcObj.balanceTotalWeight(
                 meteringMode,
@@ -333,13 +338,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }),
                 result.num,
                 totalPonderationWeight,
-                allTotalWeight)
-            console.log(calcObj.weight({
-                length: result.length,
-                width: result.width,
-                weightAlgorithm: result.weightAlgorithm,
-                proportion: result.proportion,
-            }), balanceTotalWeight, "--------", result)
+                allTotalWeight
+            )
             // 含税金额
             const totalTaxPrice = calcObj.totalTaxPrice(result.taxPrice, balanceTotalWeight)
             // 不含税金额

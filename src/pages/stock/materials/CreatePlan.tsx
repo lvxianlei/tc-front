@@ -205,7 +205,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                         proportion: item.proportion,
                         num: item.num
                     }),
-                    // 盈亏重量 = 盘点重量 - 账目重量
+                    // 盈亏重量 = 盘点重量 - 账目重量 
                     profitAndLossWeight: ((+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
                             : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
