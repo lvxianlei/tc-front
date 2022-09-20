@@ -16,6 +16,8 @@ import { baseColumn } from "./detail.json";
 import '../../StockPublicStyle.less';
 import './detail.less';
 import ExportList from '../../../../components/export/list';
+import AuthUtil from '@utils/AuthUtil';
+import { exportDown } from '@utils/Export';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
     // 标准
@@ -340,13 +342,30 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }), { manual: true })
 
     // 用友格式导出
-    const { run: exportRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: exportRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-storage/outStock/export/${params.id}`,
                 {},
-                { isExport: 'true' }
+                {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                    'Tenant-Id': AuthUtil.getTenantId(),
+                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+                    isExport: 'true',
+                }
             )
+            const data = await result.blob()
+            console.log(data, "----------")
+            var blob = new Blob([data]);
+            var reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = function (e) {
+                var a = document.createElement('a');
+                a.download = `出库明细-${params.id}` + '.xlsx';
+                a.href = URL.createObjectURL(blob);
+                a.click();
+            }
             resole(result)
         } catch (error) {
             reject(error)
@@ -478,7 +497,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }
 
-    const handleExport = () => exportRun()
+    const handleExport = () => exportDown(
+        `/tower-storage/outStock/export/${params.id}`,
+        "GET",
+        {},
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        `出库明细-${params.id}`
+    )
 
     const handleRevocation = async (id: string) => {
         await revocationRun(id)

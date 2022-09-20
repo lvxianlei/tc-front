@@ -112,11 +112,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
-        if (value.startRefundTime) {
-            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateTimeStart = `${formatDate[0]} 00:00:00`
-            value.updateTimeEnd = `${formatDate[1]} 23:59:59`
-            delete value.startRefundTime
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.createTimeStart = `${formatDate[0]} 00:00:00`
+            value.createTimeEnd = `${formatDate[1]} 23:59:59`
+            delete value.createTime
         }
         if (value.batcherId) {
             value.applyStaffId = value.batcherId.value
@@ -175,8 +175,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 }
                 searchFormItems={[
                     {
-                        name: 'startRefundTime',
-                        label: '最新状态变更时间',
+                        name: 'createTime',
+                        label: '创建时间',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
