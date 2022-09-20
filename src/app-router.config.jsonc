@@ -2830,6 +2830,118 @@
       "module": "./pages/baseSetting/ItemRepair",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 工作台-售后
+      "name": "售后工作台",
+      "path": "/workBenchASM/asm",
+      "module": "./pages/asm/workBench/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后中心-售后工单
+      "name": "售后工单",
+      "path": "/afterSales/afterSale",
+      "module": "./pages/asm/afterSales/list",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后中心-售后工单-新增
+      "name": "新增",
+      "path": "/afterSales/afterSale/add",
+      "module": "./pages/asm/afterSales/Add",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后中心-售后工单-编辑
+      "name": "编辑",
+      "path": "/afterSales/afterSale/edit/:id",
+      "module": "./pages/asm/afterSales/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后中心-售后工单-详情
+      "name": "详情",
+      "path": "/afterSales/afterSale/detail/:id",
+      "module": "./pages/asm/afterSales/Detail",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-费用记录
+      "name": "费用记录",
+      "path": "/expenseRecord/index",
+      "module": "./pages/asm/expenseRecord/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-问题记录
+      "name": "问题记录",
+      "path": "/problemRecord/index",
+      "module": "./pages/asm/problemRecord/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-考核记录
+      "name": "考核记录",
+      "path": "/assessmentRecord/index",
+      "module": "./pages/asm/assessmentRecord/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-配置-费用分类配置
+      "name": "费用分类配置",
+      "path": "/setting/cost/index",
+      "module": "./pages/asm/setting/cost/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-配置-问题分类配置
+      "name": "问题分类配置",
+      "path": "/setting/question/index",
+      "module": "./pages/asm/setting/question/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-配置-考核信息配置
+      "name": "考核信息配置",
+      "path": "/setting/assessment/index",
+      "module": "./pages/asm/setting/assessment/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-配置-部门配置
+      "name": "部门配置",
+      "path": "/setting/dept/index",
+      "module": "./pages/asm/setting/dept/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-日历管理-工作日历管理
+      "name": "工作日历管理",
+      "path": "/calendar/calendar",
+      "module": "./pages/asm/calendar/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-日历管理-工作日历管理-新增
+    "name": "新增",
+    "path": "/calendar/calendar/add",
+    "module": "./pages/asm/calendar/Add",
+    "exact": true,
+    "authority": "tc_erp_sc_workbench"
+  },
+    { // 售后-打卡管理-打卡记录
+      "name": "打卡记录",
+      "path": "/clock/clockRecord",
+      "module": "./pages/asm/clock/record/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
+    { // 售后-打卡管理-人员网络图
+      "name": "人员网络图",
+      "path": "/clock/network",
+      "module": "./pages/asm/clock/network/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
     }
   ]
 }

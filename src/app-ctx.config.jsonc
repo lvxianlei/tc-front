@@ -1232,6 +1232,152 @@
                         "authority": "tc_erp_rd_fix_item_config"
                     }
                 ]
+            },
+            { 
+                "label": "工作台",
+                "icon": "customer",
+                "path": "/workBenchASM",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "售后工作台",
+                        "path": "/workBenchASM/asm",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "售后工单",
+                "icon": "customer",
+                "path": "/afterSales",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "售后工单",
+                        "path": "/afterSales/afterSale",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "费用记录",
+                "icon": "customer",
+                "path": "/expenseRecord",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "费用记录",
+                        "path": "/expenseRecord/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "问题记录",
+                "icon": "customer",
+                "path": "/problemRecord",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "问题记录",
+                        "path": "/problemRecord/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "考核记录",
+                "icon": "customer",
+                "path": "/assessmentRecord",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "考核记录",
+                        "path": "/assessmentRecord/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            // {  
+            //     "label": "人员管理",
+            //     "icon": "customer",
+            //     "path": "/assessmentRecord",
+            //     "appName": "ASM",
+            //     "authority": "tc_erp_sc_workbench",
+            //     "items": [
+            //         {
+            //             "label": "人员管理",
+            //             "path": "/assessmentRecord/index",
+            //             "authority": "tc_erp_sc_workbench_list"
+            //         }
+            //     ]
+            // },
+            {  
+                "label": "配置",
+                "icon": "customer",
+                "path": "/setting",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "费用分类配置",
+                        "path": "/setting/cost/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "问题分类配置",
+                        "path": "/setting/question/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "考核信息配置",
+                        "path": "/setting/assessment/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "部门配置",
+                        "path": "/setting/dept/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "日历管理",
+                "icon": "customer",
+                "path": "/calendar",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "工作日历管理",
+                        "path": "/calendar/calendar",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "打卡管理",
+                "icon": "customer",
+                "path": "/clock",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "打卡记录",
+                        "path": "/clock/clockRecord",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "人员网络图",
+                        "path": "/clock/network",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
             }
         ]
     },
