@@ -772,8 +772,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     setDescription(e.target.value)
                 }} disabled={params.status !== '3'} /> : null}
             </div>
-
-            <Attachment dataSource={attachInfo} multiple isBatchDel={userId !== params.confirmId ?false:true} edit={userId !== params.confirmId ? false : params.status === '3' ? true : false} title="附件信息" ref={attchsRef}
+            <Attachment dataSource={attachInfo} multiple isBatchDel={userId !== params.confirmId ? false : true} edit={userId !== params.confirmId ? false : true} title="附件信息" ref={attchsRef}
                 onDoneChange={(dataInfo: FileProps[]) => {
                     setAttachInfo([...dataInfo])
                 }}
