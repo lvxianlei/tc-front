@@ -2902,7 +2902,7 @@
       "authority": "tc_erp_rd_fix_item_config_list"
     },
     { // RD-业务处置管理-补件申请-详情
-      "name": "申请",
+      "name": "详情",
       "path": "/businessDisposal/patchApplication/detail/:id",
       "module": "./pages/businessDisposal/patchApplication/Detail",
       "exact": true,
