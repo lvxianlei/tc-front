@@ -10,14 +10,12 @@ import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
-import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export default function AssemblyWeldingList(): React.ReactNode {
-    const userId = AuthUtil.getUserId();
 
     const columns = [
         {
@@ -97,11 +95,11 @@ export default function AssemblyWeldingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
-                    {
+                    {/* {
                         record.weldingLeader.split(',').indexOf(userId) === -1 ?
-                            <Button type="link" disabled>组焊清单</Button>
-                            : <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}`, state: { status: record.status } }}>组焊清单</Link>
-                    }
+                            <Button type="link" disabled>组焊清单</Button> */}
+                            <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}/${record.weldingLeader}`, state: { status: record.status } }}>组焊清单</Link>
+                    {/* } */}
                     {/* <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);

@@ -1344,28 +1344,28 @@
     },
     { // 工作管理-组焊列表-组焊清单
       "name": "组焊清单",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingListing",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed"
     },
     { // 工作管理-组焊列表-组焊清单-添加组焊
       "name": "添加组焊",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/new",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader/new",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed_add"
     },
     { // 工作管理-组焊列表-组焊清单-编辑
       "name": "编辑",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/edit/:segmentId",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader/edit/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed_add"
     },
     { // 工作管理-组焊列表-组焊清单-套用
       "name": "套用",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/apply/:segmentId",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader/apply/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed_add"
