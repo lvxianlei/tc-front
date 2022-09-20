@@ -1,7 +1,7 @@
 {
     "baseColumn": [
         {
-            "title": "领料编号",
+            "title": "出库单号",
             "dataIndex": "pickingNumber",
             "width": 100
         },
@@ -19,6 +19,7 @@
             "title": "最新状态变更时间",
             "dataIndex": "updateTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "width": 120
         },
         {
@@ -30,11 +31,22 @@
             "title": "申请人",
             "dataIndex": "applyStaffName",
             "width": 80
+        },
+        {
+            "title": "出库类型",
+            "dataIndex": "outStockTypeName",
+            "width": 80
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "width": 100
         }
     ],
     "outStockDetail": [
         {
-            "title": "库单号",
+            "title": "出库单号",
             "dataIndex": "pickingNumber",
             "width": 100
         },
