@@ -248,7 +248,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         length: item.length,
                         width: item.width,
                         weightAlgorithm: item.weightAlgorithm,
-                        proportion: item.proportion,
+                        proportion: item.proportion
                     }),
                     item.num,
                     totalPonderationWeight,
@@ -308,7 +308,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
         if (changeFiled.length || changeFiled.width) {
             const result = editForm.getFieldsValue(true).submit[changeIndex];
-            console.log(result, "--------")
             const dataSource: any[] = cargoData
             const meteringMode = form.getFieldValue("meteringMode")
             const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
