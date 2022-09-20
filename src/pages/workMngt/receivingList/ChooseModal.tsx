@@ -94,8 +94,8 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         } else {
             setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
             if (currentSelectData) {
-                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+                setSelectList(selectList)
+                setWaitingArea(waitingArea)
             } else {
                 setSelectList([...selectList, { ...currentData, num: formData.num }])
                 setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])

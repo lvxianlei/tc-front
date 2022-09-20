@@ -105,8 +105,12 @@ export const totalUnloadTaxPrice = (price: any = 0, weight: any = 0) => (weight 
 
 /**
  * 不含税装卸费
- *  不含税装卸费=含税装卸费/(1+装卸费税率/100)
+ * 不含税装卸费=含税装卸费/(1+装卸费税率/100)
  */
 export const totalUnloadPrice = (totalUnloadTaxPrice: any = 0, taxMode: any = 0) =>
     (totalUnloadTaxPrice / (1 + taxMode / 100)).toFixed(2)
-
+/**
+ * 盈亏重量
+ * 盈亏重量 = 盘点重量 - 账目重量 
+ */
+export const profitAndLossWeight = () => { }
