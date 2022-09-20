@@ -315,7 +315,7 @@ export default function ConfirmDetail(): React.ReactNode {
             width: 90,
             key: 'basicHeight',
             render: (value: any) => {
-                return parseFloat(value).toFixed(2)
+                return value ? parseFloat(value).toFixed(2) : '-'
             }
         },
         {
@@ -922,7 +922,7 @@ export default function ConfirmDetail(): React.ReactNode {
                                 </Descriptions.Item>
                                 <Descriptions.Item label="呼高(m)" span={2}>
                                     <Form.Item name={["confirmList", index, "basicHeight"]} wrapperCol={{ span: 24 }} >
-                                        <InputNumber precision={2} min={0.01} max={99.99} style={{ width: '100%' }} />
+                                        <InputNumber precision={2} min={0} max={99.99} style={{ width: '100%' }} />
                                     </Form.Item>
                                 </Descriptions.Item>
                                 <Descriptions.Item label="本体重量(kg)" span={2}>
