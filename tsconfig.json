@@ -18,17 +18,10 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "paths": {
-      "@utils": [
-        "./src/utils/index.ts"
-      ],
-      "@utils/*": [
-        "./src/utils/*"
-      ]
-    }
+    "jsx": "react-jsx"
   },
   "include": [
     "src"
-  ]
+  ],
+  "extends": "./alias.json"
 }
