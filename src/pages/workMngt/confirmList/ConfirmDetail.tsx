@@ -806,7 +806,7 @@ export default function ConfirmDetail(): React.ReactNode {
             }} />
             <div style={{ paddingBottom: '24px' }}>
                 <DetailTitle title="备注" />
-                {detailData ? <TextArea maxLength={200} defaultValue={detailData?.description} onChange={(e) => {
+                {detailData ? <TextArea maxLength={800} defaultValue={detailData?.description} onChange={(e) => {
                     setDescription(e.target.value)
                 }} disabled={params.status !== '3'} /> : null}
             </div>
