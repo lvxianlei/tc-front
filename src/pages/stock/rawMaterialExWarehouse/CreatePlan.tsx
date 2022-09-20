@@ -149,7 +149,11 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/outStock/save`, data)
+            const path = props.type === "create" ? `/tower-storage/outStock/save` : '/tower-storage/outStock'
+            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
+                ...data,
+                id: props.id
+            })
             message.success("创建成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
@@ -161,12 +165,14 @@ export default function CreatePlan(props: any): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`)
+            setPopDataList(result?.outStockDetailVOList)
             resole({
                 ...result,
                 pickingUserId: {
                     id: result?.applyStaffId,
                     value: result?.applyStaffName
-                }
+                },
+                pickingTime: result?.createTime
             })
         } catch (error) {
             reject(error)
@@ -206,7 +212,8 @@ export default function CreatePlan(props: any): JSX.Element {
                     确定
                 </Button>
             ]}
-        ><Spin spinning={loading}>
+        >
+            <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo
                     form={addCollectionForm}
