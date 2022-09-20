@@ -27,24 +27,24 @@ interface Parmas {
 export function exportDown(
     path: string,
     methods: string = "POST",
-    parmas:Parmas = {},
+    parmas: Parmas = {},
     type: string = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     fileName: string = "模板"
 ) {
     return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${`${path}`.replace(/^\/*/, '')}`, {
         mode: 'cors',
-        method: 'POST',
+        method: methods,
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-          'Tenant-Id': AuthUtil.getTenantId(),
-          'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+            'Content-Type': 'application/json',
+            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+            'Tenant-Id': AuthUtil.getTenantId(),
+            'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
         },
-        body: JSON.stringify(parmas)
+        ...(methods === "GET" ? {} : { body: JSON.stringify(parmas) })
     }).then((res) => {
         return res.blob();
     }).then((data) => {
-        let blob = new Blob([data], {type});
+        let blob = new Blob([data], { type });
         // 获取heads中的filename文件名
         let downloadElement = document.createElement('a');
         // 创建下载的链接
