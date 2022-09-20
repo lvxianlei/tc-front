@@ -938,7 +938,7 @@
     },
     { // 工作管理-确认列表-确认明细
       "name": "确认明细",
-      "path": "/workMngt/confirmList/confirmDetail/:id/:status",
+      "path": "/workMngt/confirmList/confirmDetail/:id/:status/:confirmId",
       "module": "./pages/workMngt/confirmList/ConfirmDetail",
       "exact": true,
       "authority": "tc_erp_rd_work_draw_massage"

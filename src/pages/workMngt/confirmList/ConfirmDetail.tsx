@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Modal, Form, Upload, message, Image, Descriptions } from 'antd';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import { Button, Spin, Space, Modal, Form, Upload, message, Descriptions } from 'antd';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle, Attachment, AttachmentRef } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import TextArea from 'antd/lib/input/TextArea';
-import { Table, Input, InputNumber, Popconfirm, Select } from 'antd';
+import { Input, InputNumber, Popconfirm, Select } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
 import { patternTypeOptions, productTypeOptions, towerStructureOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import { downloadTemplate } from '../setOut/downloadTemplate';
@@ -38,7 +38,6 @@ export default function ConfirmDetail(): React.ReactNode {
         description: '',
     }]);
     const [form] = Form.useForm();
-    const [formRef] = Form.useForm();
     const location = useLocation<{ state: {} }>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
@@ -111,7 +110,6 @@ export default function ConfirmDetail(): React.ReactNode {
                 run();
             } else {
                 const value = await form.validateFields();
-                console.log(value)
                 const submitData = value?.confirmList.map((item: any) => {
                     return {
                         ...item,
@@ -219,7 +217,8 @@ export default function ConfirmDetail(): React.ReactNode {
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
-    const params = useParams<{ id: string, status: string }>()
+    const params = useParams<{ id: string, status: string, confirmId: string }>()
+    const userId = AuthUtil.getUserId();
     const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         setTableDataSource(data?.drawProductDetailList.map((item: any, index: number) => {
@@ -259,46 +258,6 @@ export default function ConfirmDetail(): React.ReactNode {
         labelCol: { span: 6 },
         wrapperCol: { span: 16 }
     };
-
-
-    /**
-     * @description 验证杆塔号
-     */
-    const checkProductNumber = (value: string): Promise<void | any> => {
-        return new Promise(async (resolve, reject) => {  // 返回一个promise
-            const formData = form.getFieldsValue(true)
-            if (value && formData.productCategory && tableDataSource.length > 0) {
-                resolve(tableDataSource.findIndex((item: any) =>
-                    item.name === value && formData.productCategory === item.productCategory
-                ))
-            } else {
-                resolve(!formData.productCategory || tableDataSource.length === 0 ? -1 : false)
-            }
-        }).catch(error => {
-            Promise.reject(error)
-        })
-    }
-
-    /**
-     * @description 验证杆塔号
-     */
-    const checkProductNumber1 = (value: string, index: number): Promise<void | any> => {
-        return new Promise(async (resolve, reject) => {
-            const formData = formRef.getFieldsValue(true)
-            let dataSource = JSON.parse(JSON.stringify(tableDataSource))
-            if (value && formData.productCategory) {
-                const a = dataSource.filter((item: any) => {
-                    return item.name === value && formData.productCategory === item.productCategory && item.index !== formData.index
-                })
-                resolve(a.length)
-            }
-            else {
-                resolve(1)
-            }
-        }).catch(error => {
-            Promise.reject(error)
-        })
-    }
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
@@ -583,7 +542,7 @@ export default function ConfirmDetail(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={() => {
+                    <Button type="link" disabled={userId !== params.confirmId} onClick={() => {
                         setEdit('编辑')
                         setRowId(record?.id)
                         form.setFieldsValue({
@@ -633,8 +592,9 @@ export default function ConfirmDetail(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={userId !== params.confirmId}
                     >
-                        <Button type="link">删除</Button>
+                        <Button type="link" disabled={userId !== params.confirmId}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -645,62 +605,66 @@ export default function ConfirmDetail(): React.ReactNode {
         <DetailContent operation={[
             <>
                 {params.status === '3' ? <Space>
-                    <Button type='primary' onClick={async () => {
-                        try {
-                            const saveData: any = {
-                                drawTaskId: params.id,
-                                fileVOList: attchsRef.current.getDataSource(),
-                                drawProductDetailList: tableDataSource.map((item: any) => {
-                                    return {
-                                        ...item,
-                                        drawTaskId: params.id,
-                                    }
-                                }),
-                                description
+                    <Button type='primary'
+                        disabled={userId !== params.confirmId}
+                        onClick={async () => {
+                            try {
+                                const saveData: any = {
+                                    drawTaskId: params.id,
+                                    fileVOList: attchsRef.current.getDataSource(),
+                                    drawProductDetailList: tableDataSource.map((item: any) => {
+                                        return {
+                                            ...item,
+                                            drawTaskId: params.id,
+                                        }
+                                    }),
+                                    description
+                                }
+                                if (tableDataSource.length > 0) {
+                                    console.log(saveData)
+                                    await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(() => {
+                                        message.success('保存成功！');
+                                    }).then(() => {
+                                        history.push('/workMngt/confirmList')
+                                    })
+                                }
+                                else {
+                                    message.error('未添加塔信息不可保存或提交！')
+                                }
+                            } catch (error) {
+                                console.log(error)
                             }
-                            if (tableDataSource.length > 0) {
-                                console.log(saveData)
-                                await RequestUtil.post('/tower-science/drawProductDetail/saveDrawProduct', saveData).then(() => {
-                                    message.success('保存成功！');
-                                }).then(() => {
-                                    history.push('/workMngt/confirmList')
-                                })
+                        }}>保存</Button>
+                    <Button type='primary'
+                        disabled={userId !== params.confirmId}
+                        onClick={async () => {
+                            try {
+                                const submitData: any = {
+                                    drawTaskId: params.id,
+                                    fileVOList: attchsRef.current.getDataSource(),
+                                    drawProductDetailList: tableDataSource.map((item: any) => {
+                                        return {
+                                            ...item,
+                                            drawTaskId: params.id,
+                                        }
+                                    }),
+                                    description
+                                }
+                                if (tableDataSource.length > 0) {
+                                    console.log(submitData)
+                                    await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(() => {
+                                        message.success('提交成功！');
+                                    }).then(() => {
+                                        history.push('/workMngt/confirmList')
+                                    })
+                                }
+                                else {
+                                    message.error('未添加塔信息不可保存或提交！')
+                                }
+                            } catch (error) {
+                                console.log(error)
                             }
-                            else {
-                                message.error('未添加塔信息不可保存或提交！')
-                            }
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    }}>保存</Button>
-                    <Button type='primary' onClick={async () => {
-                        try {
-                            const submitData: any = {
-                                drawTaskId: params.id,
-                                fileVOList: attchsRef.current.getDataSource(),
-                                drawProductDetailList: tableDataSource.map((item: any) => {
-                                    return {
-                                        ...item,
-                                        drawTaskId: params.id,
-                                    }
-                                }),
-                                description
-                            }
-                            if (tableDataSource.length > 0) {
-                                console.log(submitData)
-                                await RequestUtil.post('/tower-science/drawProductDetail/submitDrawProduct', submitData).then(() => {
-                                    message.success('提交成功！');
-                                }).then(() => {
-                                    history.push('/workMngt/confirmList')
-                                })
-                            }
-                            else {
-                                message.error('未添加塔信息不可保存或提交！')
-                            }
-                        } catch (error) {
-                            console.log(error)
-                        }
-                    }}>完成确认明细</Button>
+                        }}>完成确认明细</Button>
                     {tableDataSource.length > 0 || attachInfo.length > 0 || description ? <Popconfirm
                         title="是否放弃已添加信息?"
                         onConfirm={() => history.goBack()}
@@ -771,15 +735,13 @@ export default function ConfirmDetail(): React.ReactNode {
                                 }
                             }}
                         >
-                            <Button type="primary" ghost>导入</Button>
+                            <Button type="primary" disabled={userId !== params.confirmId} ghost >导入</Button>
                         </Upload> : null}
-
-                    {params.status === '3' ? <Button type='primary' ghost onClick={() => {
+                    {params.status === '3' ? <Button type='primary' ghost disabled={userId !== params.confirmId} onClick={() => {
                         setEdit('添加')
                         setVisible(true)
-
                     }}>添加</Button> : null}
-                    <Button type='primary' disabled={selectedKeys.length <= 0} onClick={
+                    <Button type='primary' disabled={selectedKeys.length <= 0 || userId !== params.confirmId} onClick={
                         async () => {
                             await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',')}`,)
                             message.success('删除成功！')
@@ -811,7 +773,7 @@ export default function ConfirmDetail(): React.ReactNode {
                 }} disabled={params.status !== '3'} /> : null}
             </div>
 
-            <Attachment dataSource={attachInfo} multiple isBatchDel={true} edit={params.status === '3' ? true : false} title="附件信息" ref={attchsRef}
+            <Attachment dataSource={attachInfo} multiple isBatchDel={userId !== params.confirmId ?false:true} edit={userId !== params.confirmId ? false : params.status === '3' ? true : false} title="附件信息" ref={attchsRef}
                 onDoneChange={(dataInfo: FileProps[]) => {
                     setAttachInfo([...dataInfo])
                 }}
@@ -942,8 +904,8 @@ export default function ConfirmDetail(): React.ReactNode {
                                                 : legValueSum[index].name.indexOf('-') > -1
                                                     ? Number(legValueSum[index].name.split('-')[1].replace(/[^0-9]/ig, "")) - Number(legValueSum[index].name.split('-')[0].replace(/[^0-9]/ig, "")) + 1
                                                     : legValueSum[index].name.indexOf('~') > -1
-                                                    ? Number(legValueSum[index].name.split('~')[1].replace(/[^0-9]/ig, "")) - Number(legValueSum[index].name.split('~')[0].replace(/[^0-9]/ig, "")) + 1
-                                                    : 1
+                                                        ? Number(legValueSum[index].name.split('~')[1].replace(/[^0-9]/ig, "")) - Number(legValueSum[index].name.split('~')[0].replace(/[^0-9]/ig, "")) + 1
+                                                        : 1
                                             legValueSum[index].monomerWeight = data + dataA + dataB + dataC + dataD + otherA + otherB + otherC + otherD + otherE + otherF + otherG + otherH + otherI + otherJ + otherK + otherL
                                             legValueSum[index].totalWeight = legValueSum[index].A * legValueSum[index].monomerWeight
 
