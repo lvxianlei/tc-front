@@ -6,11 +6,10 @@ import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails } from "./receivingListData.json"
-
+import * as calcObj from '@utils/calcUtil'
 /**
  * 纸质单号，原材料税款合计，车辆牌照
  */
-
 interface EditProps {
     id: string,
     type: "new" | "edit"
@@ -27,61 +26,6 @@ interface TotalState {
     unTaxPrice?: string
 }
 
-export const calcObj = {
-    /**
-     *  含税金额 
-     * 选择过磅计量时，含税金额 = 单价 × 结算重量
-     * @meteringMode 计量方式
-    */
-    totalTaxPrice: (
-        price: any = 0,
-        weight: any = 0
-    ) => (price * weight).toFixed(2),
-    /** 
-     *  不含税金额
-     * 含税金额 / ( 1 + 材料税率 / 100 )
-     */
-    totalUnTaxPrice: (totalTaxPrice: any = 0, taxMode: any = 0) =>
-        (totalTaxPrice / (1 + taxMode / 100)).toFixed(2),
-    /** 
-     *  结算重量
-     * 选择理算计算时，取理算重量
-     * 选择过磅计算时，结算重量 = 过磅重量 *（ 当前原材料理重 / 收货单中所有原材料理重之和 ）
-     * 可修改，修改后过磅重量同步调整
-     * @meteringMode 计量方式 1:理重；2:过磅
-     * @totalPonderationWeight 过磅重量
-     * @allTotalWeight 收货单中所有原材料理重之和
-     * @totalWeight 理算重量  选填
-    */
-    balanceTotalWeight: (
-        meteringMode: 1 | 2,
-        weight: any = 0,
-        num: any = 0,
-        totalPonderationWeight: any = 0,
-        allTotalWeight: any = 0,
-        totalWeight?: any
-    ) => {
-        //当前理重
-        const currentWeight: any = totalWeight === undefined ? (weight * num).toFixed(4) : totalWeight
-        if (meteringMode === 1) {
-            return currentWeight
-        }
-        return (totalPonderationWeight * (currentWeight / allTotalWeight)) || "0"
-    },
-    /**
-     *  不含税单价
-     * 含税单价 / ( 1 + 材料税率 / 100 )
-     * 保留六位小数
-     */
-    unTaxPrice: (taxPrice: any = 0, taxMode: any = 0) =>
-        (taxPrice / (1 + taxMode / 100)).toFixed(6),
-    /**
-     *  理算总重量
-     * 单重 * 数量
-     */
-    totalWeight: (weight: any = 0, num: any = 0) => (weight * num).toFixed(4)
-}
-
 export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Element {
     const modalRef = useRef<ModalRef>({ dataSource: [], resetFields: () => { } })
     const [visible, setVisible] = useState<boolean>(false)
@@ -94,10 +38,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const [select, setSelect] = useState<any[]>([])
 
-    const { loading: materialLoading, data: materialData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading: materialLoading, data: taxData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
-            resole(result)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax`)
+            resole({
+                material: result.find((item: any) => item.modeName === "材料税率").taxVal,
+                transport: result.find((item: any) => item.modeName === "运费税率").taxVal,
+                unload: result.find((item: any) => item.modeName === "装卸税率").taxVal
+            })
         } catch (error) {
             reject(error)
         }
@@ -165,7 +113,15 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             // 含税金额
             const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight)
             // 不含税金额
-            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
+            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
+            // 含税运费
+            const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight)
+            // 不含税运费
+            const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport)
+            // 含税装卸费
+            const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight)
+            // 不含税装卸费
+            const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
 
             const postData = {
                 ...item,
@@ -183,8 +139,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 balanceTotalWeight,
                 totalTaxPrice,
                 totalUnTaxPrice,
-                unTaxPrice: calcObj.unTaxPrice(item.taxPrice, materialData?.taxVal),
-                appearance: item.appearance || 1
+                unTaxPrice: calcObj.unTaxPrice(item.taxPrice, taxData?.materia),
+                appearance: item.appearance || 1,
+                totalTransportTaxPrice,
+                totalTransportPrice,
+                totalUnloadTaxPrice,
+                totalUnloadPrice
             }
             delete postData.id
             return postData
@@ -265,13 +225,25 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 // 含税金额
                 const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight)
                 // 不含税金额
-                const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
+                const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
+                // 含税运费
+                const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight)
+                // 不含税运费
+                const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport)
+                // 含税装卸费
+                const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight)
+                // 不含税装卸费
+                const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
                 const postData = {
                     ...item,
                     ...cargoData[index],
                     totalTaxPrice,
                     totalUnTaxPrice,
-                    balanceTotalWeight
+                    balanceTotalWeight,
+                    totalTransportTaxPrice,
+                    totalTransportPrice,
+                    totalUnloadTaxPrice,
+                    totalUnloadPrice
                 }
                 return postData
             })
@@ -288,7 +260,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const totalTaxPrice = calcObj.totalTaxPrice(
                 dataSource[changeIndex].taxPrice,
                 changeFiled.balanceTotalWeight)
-            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
+            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
             dataSource[changeIndex] = {
                 ...dataSource[changeIndex],
                 totalTaxPrice,
@@ -316,10 +288,20 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 result.num,
                 totalPonderationWeight,
                 allTotalWeight)
+
             // 含税金额
             const totalTaxPrice = calcObj.totalTaxPrice(result.taxPrice, balanceTotalWeight)
             // 不含税金额
-            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, materialData?.taxVal)
+            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
+            // 含税运费
+            const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(result.transportTaxPrice, balanceTotalWeight)
+            // 不含税运费
+            const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport)
+            // 含税装卸费
+            const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(result.unloadTaxPrice, balanceTotalWeight)
+            // 不含税装卸费
+            const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
+
             dataSource[changeIndex] = {
                 ...dataSource[changeIndex],
                 /** 理算重量 */
@@ -329,7 +311,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 balanceTotalWeight,
                 totalTaxPrice,
                 totalUnTaxPrice,
-                unTaxPrice: calcObj.unTaxPrice(result.taxPrice, materialData?.taxVal),
+                unTaxPrice: calcObj.unTaxPrice(result.taxPrice, taxData?.material),
+                totalTransportTaxPrice,
+                totalTransportPrice,
+                totalUnloadTaxPrice,
+                totalUnloadPrice
             }
             setCargoData(dataSource || [])
         }

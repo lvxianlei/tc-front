@@ -127,7 +127,7 @@ export default function Invoicing() {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
-                width: 170,
+                width: 200,
                 render: (_: any, record: any) => {
                     return <>
                         <Link className="btn-operation-link" to={`/stock/receiving/detail/${record.id}`}>明细</Link>
@@ -146,7 +146,6 @@ export default function Invoicing() {
                         }}>详情</Button>
                         <Popconfirm
                             title="确定删除此收货单信息吗？"
-                            disabled={record.lists && record.lists.length !== 0}
                             onConfirm={async () => {
                                 await deleteRun(record?.id)
                                 message.success("删除成功...")
@@ -159,7 +158,7 @@ export default function Invoicing() {
                                 type="link"
                                 size="small"
                                 className="btn-operation-link"
-                                disabled={record.lists && record.lists.length !== 0}
+                                disabled={record.receiveStatus === 1 || (record.lists && record.lists.length !== 0)}
                             >删除</Button>
                         </Popconfirm>
                     </>
