@@ -1,3 +1,13 @@
+interface WeightParams {
+    width: number | string
+    length: number | string
+    weightAlgorithm: number
+    proportion: number | string
+}
+
+interface TotalWeightParmas extends WeightParams {
+    num: number | string
+}
 
 /**
  *  含税金额 
@@ -37,10 +47,11 @@ export const balanceTotalWeight = (
 ) => {
     //当前理重
     const currentWeight: any = totalWeight === undefined ? (weight * num).toFixed(4) : totalWeight
+    console.log(meteringMode, weight, num, totalPonderationWeight, allTotalWeight, totalWeight, "------")
     if (meteringMode === 1) {
         return currentWeight
     }
-    return (totalPonderationWeight * (currentWeight / allTotalWeight)) || "0"
+    return (totalPonderationWeight * (currentWeight / allTotalWeight)).toFixed(3) || "0"
 }
 
 /**
@@ -52,10 +63,29 @@ export const unTaxPrice = (taxPrice: any = 0, taxMode: any = 0) =>
     (taxPrice / (1 + taxMode / 100)).toFixed(6)
 
 /**
- *  理算总重量
- * 单重 * 数量
+     * 理重
+     */
+export const weight = ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
+    if (weightAlgorithm === 1) {
+        return ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
+    }
+    if (weightAlgorithm === 2) {
+        return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
+    }
+    return (Number(proportion || 1) / 1000).toFixed(3)
+}
+/**
+ * 总重量
  */
-export const totalWeight = (weight: any = 0, num: any = 0) => (weight * num).toFixed(4)
+export const totalWeight = ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
+    if (weightAlgorithm === 1) {
+        return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
+    }
+    if (weightAlgorithm === 2) {
+        return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
+    }
+    return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
+}
 /**
 * 含税运费
 * 含税运费=材料所在合同的含税运费单价*结算重量
