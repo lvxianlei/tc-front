@@ -245,8 +245,8 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             }
             return item
         })
-        setMaterialList([...list]);
-        setPopDataList([...list])
+        setMaterialList(list);
+        setPopDataList(list)
     }
 
     const widthChange = (value: number, id: string) => {

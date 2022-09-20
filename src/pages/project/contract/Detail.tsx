@@ -1,5 +1,5 @@
 import React from "react"
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { Button, Spin, Tabs } from "antd";
 import { Attachment, BaseInfo, CommonAliTable, DetailContent, DetailTitle } from "../../common"
 import useRequest from "@ahooksjs/use-request";
@@ -8,7 +8,9 @@ import { contractDetail, orderDetail } from "./contract.json"
 import "./Detail.less"
 import ManagementContractRefundRecord from "./ContractRefundRecord";
 export default function Detail() {
-    const { id: contractId, projectId } = useParams<{ id: string, projectId: string }>()
+    // const { id: contractId, projectId } = useParams<{ id: string, projectId: string }>()
+    const routerMatch = useRouteMatch("/project/:entryPath/detail/contract/:projectId/:id")
+    const { id: contractId, projectId, entryPath } = routerMatch?.params as any
     const history = useHistory()
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -34,7 +36,7 @@ export default function Detail() {
             title={<Button type="primary" onClick={handleNewRecord}>添加回款记录</Button>}
             operation={[
                 <Button key="setting" type="primary" style={{ marginRight: 16 }}
-                    onClick={() => history.push(`/project/management/edit/contract/${projectId}/${contractId}`)}
+                onClick={() => history.push(`/project/${entryPath}/edit/contract/${projectId}/${contractId}`)}
                 >编辑</Button>,
                 <Button key="default" onClick={() => history.goBack()}>返回</Button>
             ]}>

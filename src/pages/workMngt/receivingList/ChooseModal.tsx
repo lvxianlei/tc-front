@@ -126,7 +126,13 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         // if (currentChooseData) {
         //     setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
         // } else {
-        setChooseList([...chooseList, { ...currentData, receiveDetailStatus: 0, id: Math.random() + new Date().getTime(), num: formData.num }])
+        setChooseList([
+            ...chooseList,
+            {
+                ...currentData,
+                receiveDetailStatus: 0,
+                num: formData.num
+            }])
         // }
         // }
         setVisible(false)
@@ -245,21 +251,26 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             </Form>
         </Modal>
         <DetailTitle title="选定区" />
-        <CommonTable 
-        columns={[
-            ...SelectedArea, {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <Button
-                    size="small"
-                    type="link"
-                    disabled={records.receiveDetailStatus !== 0}
-                    onClick={() => {
-                        setCurrentId(records.id)
-                        setOprationType("remove")
-                        setVisible(true)
-                    }}>移除</Button>
-            }]} dataSource={chooseList} />
+        <CommonTable
+            rowKey="key"
+            columns={[
+                ...SelectedArea, {
+                    title: "操作",
+                    dataIndex: "opration",
+                    render: (_: any, records: any) => <Button
+                        size="small"
+                        type="link"
+                        disabled={records.receiveDetailStatus !== 0}
+                        onClick={() => {
+                            setCurrentId(records.id)
+                            setOprationType("remove")
+                            setVisible(true)
+                        }}>移除</Button>
+                }]}
+            dataSource={chooseList.map((item: any) => ({
+                ...item,
+                key: item.id || Math.random() + new Date().getTime()
+            }))} />
         <DetailTitle title="待选区" />
         <div>
             <Form form={serarchForm} style={{ paddingLeft: "14px" }}>
