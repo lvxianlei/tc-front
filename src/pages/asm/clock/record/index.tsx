@@ -26,15 +26,22 @@ export default () => {
         },{
             title: "日期",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "clockDate",
+            render: (clockDate: any): React.ReactNode => {
+                return <span>{clockDate.format('YYYY-MM-DD')}</span>
+            } 
         },{
             title: "时间要求",
             width: 150,
             dataIndex: "datetime"
+              
         },{
             title: "打卡时间",
             width: 150,
-            dataIndex: "clockDate"
+            dataIndex: "clockDate",
+            render: (clockDate: any): React.ReactNode => {
+                return <span>{clockDate.format('HH:mm:ss')}</span>
+            }
         },{
             title: "打卡位置",
             width: 150,

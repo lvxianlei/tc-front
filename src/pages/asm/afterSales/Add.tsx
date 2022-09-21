@@ -177,7 +177,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                                 productCategory: select?.selectedRows[0].productCategoryName,
                                                 productCategoryId: select?.selectedRows[0].productCategoryId,
                                             });
-                                            const value:any[] = await RequestUtil.get(`/tower-science/productStructure/listByProduct?current=1&pageSize=10000&productId=${select?.selectRows[0].id}`)
+                                            const value:any[] = await RequestUtil.get(`/tower-science/productStructure/listByProductForSales?current=1&pageSize=10000&productId=${select?.selectRows[0].id}`)
                                             setPieceCode(value)
                                         }} selectedKey={[]} planNumber={form.getFieldsValue(true)?.planNumber}/>
                                     } disabled />

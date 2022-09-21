@@ -134,7 +134,7 @@ export default function Cost(): React.ReactNode {
     const onSortEnd = async (props: { oldIndex: number; newIndex: number; }) => {
         if (props.oldIndex !== props.newIndex) {
             const newData: any = arrayMove(dataSource, props.oldIndex, props.newIndex).filter(el => !!el);
-            await RequestUtil.post(`/tower-as/cost`,newData.map((item:any,index:number)=>{
+            await RequestUtil.post(`/tower-as/cost/sort`,newData.map((item:any,index:number)=>{
                 return{
                     ...item,
                     sort:index+1
