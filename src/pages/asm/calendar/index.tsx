@@ -9,9 +9,7 @@ export default () => {
     const history = useHistory()
     const [isAdd, setIsAdd] = useState<boolean>(false)
     const [refresh, setRefresh] = useState<boolean>(false)
-    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({
-        status:1
-    });
+    const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
     const [form] = Form.useForm();
     const [cyclePlanType,setCyclePlanType] = useState<any[]>([]);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
@@ -53,7 +51,7 @@ export default () => {
         },{
             title: "工作段",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "workTime"
         },{
             title: "状态",
             width: 150,
@@ -110,7 +108,7 @@ export default () => {
                     })
                     message.success("调整成功！")
                     history.go(0)
-                }}>调整工作状态</Button>,
+                }} disabled={!(selectedKeys.length>0)}>调整工作状态</Button>,
                 <Popconfirm
                     title="确认删除?"
                     onConfirm={async () => {
@@ -121,8 +119,9 @@ export default () => {
                     }}
                     okText="确认"
                     cancelText="取消"
+                    disabled={!(selectedKeys.length>0)}
                 >
-                    <Button type="primary">删除</Button>
+                    <Button type="primary" disabled={!(selectedKeys.length>0)}>删除</Button>
                 </Popconfirm>
             ]}
             searchFormItems={[
@@ -141,8 +140,8 @@ export default () => {
                 {
                     name: "status",
                     label: "状态",
-                    children: <Form.Item name='status' initialValue={1}>
-                        <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    children: <Form.Item name='status' >
+                        <Select placeholder="请选择"  style={{ width: "150px" }}>
                             {/* <Select.Option value='' key="">全部</Select.Option> */}
                             <Select.Option value={1}>工作</Select.Option>
                             <Select.Option value={2}>休息</Select.Option>

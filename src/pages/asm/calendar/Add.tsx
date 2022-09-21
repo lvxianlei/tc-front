@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Spin, Button, Space, Form, Input, message, Col, Row, Radio, InputNumber, Checkbox, DatePicker, Table, Modal, Popconfirm } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { DetailTitle, DetailContent, AttachmentRef } from '../../common';
+import { DetailTitle, DetailContent, AttachmentRef, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import Dept from './Dept';
@@ -33,53 +33,18 @@ export default function AnnouncementNew(): React.ReactNode {
             })
             resole({});
     }), {})
-    const  handleChange = (editorState:any) => {
-        setEditorState(editorState.toHTML())
-        // const result = await saveEditorContent(htmlContent)
-      }
+    const [selectKeys, setSelectKeys] = useState<React.Key[]>([]);
+    const [selectRows, setSelectRows] = useState<any[]>([]);
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectKeys(selectedRowKeys);
+        setSelectRows(selectedRows)
+    }
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
 
-    const save = (state: number) => {
-        if (form) {
-            form.validateFields().then(res => {
-                let value = form.getFieldsValue(true);
-                if (location.state.type === 'new') {
-                    if(editorState =='<p></p>'){
-                        return message.error('内容不可为空！')
-                    }
-                    RequestUtil.post<any>(`/tower-system/notice`, {
-                        id: detailData.id,
-                        ...value,
-                        fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList.map((res: any) => { return res?.id }),
-                        state: state,
-                        content: editorState
-
-                    }).then(res => {
-                        history.goBack();
-                    });
-                } else {
-                    if(editorState==='<p></p>'){
-                        return message.error('内容不可为空！')
-                    }
-                    RequestUtil.put<any>(`/tower-system/notice`, {
-                        id: detailData.id,
-                        ...value,
-                        fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList.map((res: any) => { return res?.id }),
-                        state: state,
-                        content: editorState
-                    }).then(res => {
-                        history.goBack();
-                    });
-                }
-            })
-        }
-    }
     const tableColumns = [
         {
             key: 'shiftName',
@@ -104,6 +69,35 @@ export default function AnnouncementNew(): React.ReactNode {
             title: '默认班次',
             dataIndex: 'defaultShift',
             width: 210,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Radio
+                    key={record.structureId}
+                    checked={shiftList && shiftList[index].defaultShift === 1}
+                    onChange={(e) => {
+                        let newShiftList: any[] = shiftList || [];
+                        if (e.target.checked) {
+                            newShiftList = newShiftList.map((item: any, ind: number) => {
+                                if (index === ind) {
+                                    return {
+                                        ...item,
+                                        defaultShift: 1
+                                    }
+                                } else {
+                                    return {
+                                        ...item,
+                                        defaultShift: 0
+                                    }
+                                }
+                            })
+                        } else {
+                            newShiftList[index] = {
+                                ...newShiftList[index],
+                                defaultShift: 0
+                            }
+                        }
+                        setShiftList([...newShiftList])
+                    }}></Radio>
+            )
         },
         {
             key: 'operation',
@@ -145,15 +139,42 @@ export default function AnnouncementNew(): React.ReactNode {
                 <Button key="saveC" type="primary" onClick={async () => {
                     await form.validateFields();
                     const value = form.getFieldsValue(true);
+                    if(selectKeys.length===0){
+                        return message.error('未选择班次!')
+                    }
+                    if(!(shiftList.map((item:any)=>{return item?.defaultShift?item?.defaultShift:0}).indexOf(1)>-1)){
+                        return message.error('未选择默认班次!')
+                    }
                     if(value.calendar){
                         const formatDate = value.calendar.map((item: any) => item.format("YYYY-MM-DD"))
                         value.startCalendar = formatDate[0] + ' 00:00:00';
                         value.endCalendar = formatDate[1] + ' 23:59:59';
-                        delete value.calendar
+                        // delete value.calendar
                     }
+                    if(value?.weekStatus){
+                        const res:any[]=[0,0,0,0,0,0,0]
+                        const newRes = res.map((item:any,index:number)=>{
+                            if(value?.weekStatus.indexOf(index+1)>-1){
+                                return 1
+                            }else{
+                                return 0
+                            }
+
+                        })
+                        value.status = newRes 
+                    }
+                   
+                    
                     await RequestUtil.post(`/tower-as/calendar`,{
                         ...value,
-                        calendarShiftDTOS:shiftList
+                        weekStatus:value.status,
+                        calendarShiftDTOS:shiftList.map((item:any)=>{
+                            return {
+                                ...item,
+                                shiftStatus: item.index===selectKeys[0]?1:2,
+                                defaultShift:item?.defaultShift?item?.defaultShift:0
+                            }
+                        })
                     }).then(()=>{
                         message.success('保存成功！')
                         history.goBack()
@@ -170,11 +191,11 @@ export default function AnnouncementNew(): React.ReactNode {
                 }]}>
                     <DatePicker.RangePicker format="YYYY-MM-DD" />
                 </Form.Item>
-                <Form.Item name="companyName" label="公司"  rules={[{
+                <Form.Item name="companyName" label="公司"  initialValue={'汇金通'} rules={[{
                     "required": true,
                     "message": "请选择公司"
                 }]}>
-                    <Input  maxLength={20}/>
+                    <Input  maxLength={20} disabled/>
                 </Form.Item>
                 <Form.Item name="deptId" label=""  style={{display:'none'}}>
                     <Input  type='hidden'/>
@@ -211,12 +232,16 @@ export default function AnnouncementNew(): React.ReactNode {
                         setTitle('新增')
                    }}
                 >新增</Button>]}/>
-                <Table
-                    scroll={{ x: 500 }}
-                    rowKey="id"
+                <CommonTable
+                    rowKey="index"
                     dataSource={[...shiftList]}
                     pagination={false}
                     columns={tableColumns}
+                    rowSelection={{
+                        selectedRowKeys: selectKeys,
+                        type: "radio",
+                        onChange: SelectChange,
+                    }}
                 />
                 <Modal
                     visible={visible}
@@ -231,16 +256,12 @@ export default function AnnouncementNew(): React.ReactNode {
                         const value = await formRef.getFieldsValue(true)
                         value.startTime = value?.startTime.format('HH:ss:mm')
                         value.endTime = value?.endTime.format('HH:ss:mm')
-                        value.defaultShift = 1
                         setVisible(false)
                         if(title==='新增'){
-                            setShiftList(shiftList.map((item:any)=>{
-                                return {
-                                    ...item,
-                                    defaultShift:0
-                                }
-                            }))
-                            shiftList.push(value)
+                            shiftList.push({
+                                ...value,
+                                index: shiftList.length
+                            })
                         }else{
                             shiftList.splice(value?.index,1)
                             shiftList.push(value)

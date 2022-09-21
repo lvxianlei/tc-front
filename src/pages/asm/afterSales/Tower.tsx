@@ -6,7 +6,7 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './tower.module.less';
 const { Step } = Steps
-export default function Tower({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
+export default function Tower({ onSelect, selectedKey = [], planNumber , ...props}: any): JSX.Element {
 
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ form ] = Form.useForm();
@@ -45,10 +45,10 @@ export default function Tower({ onSelect, selectedKey = [], ...props }: any): JS
     }
     const columns = [
         {
-            key: 'name',
+            key: 'productCategoryName',
             title: '塔型',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'productCategoryName'
         },
         {
             key: 'voltageGradeName',
@@ -98,7 +98,7 @@ export default function Tower({ onSelect, selectedKey = [], ...props }: any): JS
     const renderContent =()=> {
         if(current !== steps.length - 1 ){
             return <Page
-            path="/tower-science/loftingList"
+            path={`/tower-science/productCategory/list/${planNumber}`}
             columns={columns}
             headTabs={[]}
             extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}

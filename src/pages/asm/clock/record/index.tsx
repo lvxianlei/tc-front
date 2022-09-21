@@ -22,7 +22,7 @@ export default () => {
         {
             title: "姓名",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "userName"
         },{
             title: "日期",
             width: 150,
@@ -30,30 +30,45 @@ export default () => {
         },{
             title: "时间要求",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "datetime"
         },{
             title: "打卡时间",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "clockDate"
         },{
             title: "打卡位置",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "address"
         },{
             title: "状态",
             width: 150,
-            dataIndex: "cyclePlanNumber"
+            dataIndex: "status",
+            type: "select",
+            enum: [
+                {
+                    "value": 1,
+                    "label": "正常"
+                },
+                {
+                    "value": 2,
+                    "label": "迟到"
+                },
+                {
+                    "value": 3,
+                    "label": "早退"
+                }
+            ]
         }
     ] 
     return  <Page
-            path="/tower-aps/cyclePlan"
+            path="/tower-as/workClock"
             filterValue={filterValue}
             columns={[
                 ...columns as any
             ]}
             searchFormItems={[
                 {
-                    name: "fuzzyMsg",
+                    name: "userName",
                     label: '姓名',
                     children: <Input placeholder="姓名" style={{ width: 150 }} />
                 },
@@ -67,8 +82,8 @@ export default () => {
             onFilterSubmit={(values: any) => {
                 if (values.date) {
                     const formatDate = values.date.map((item: any) => item.format("YYYY-MM-DD"))
-                    values.planStartTime = formatDate[0] + ' 00:00:00';
-                    values.planEndTime = formatDate[1] + ' 23:59:59';
+                    values.startTime = formatDate[0] + ' 00:00:00';
+                    values.endTime = formatDate[1] + ' 23:59:59';
                     delete values.date
                 }
                 setFilterValue(values)

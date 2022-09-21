@@ -311,12 +311,12 @@ export default function InformationDetail(): React.ReactNode {
                                 console.log(select)
                                 formQuestion.setFieldsValue({ 
                                     productNumber: select?.selectRows[0].productNumber,
-                                    productCategory: select?.selectedRows[0].name,
-                                    productCategoryId: select?.selectedRows[0].id,
+                                    productCategory: select?.selectedRows[0].productCategoryName,
+                                    productCategoryId: select?.selectedRows[0].productCategoryId,
                                 });
                                 const value:any[] = await RequestUtil.get(`/tower-science/productStructure/listByProduct?current=1&pageSize=10000&productId=${select?.selectRows[0].id}`)
                                 setPieceCode(value)
-                            }} selectedKey={[]} />
+                            }} selectedKey={[]} planNumber={detailData.planNumber}/>
                         } disabled />
                     </Form.Item>
                     <Form.Item name="pieceCode" label="件号"  rules={[{
@@ -324,10 +324,15 @@ export default function InformationDetail(): React.ReactNode {
                         "message": "请选择件号"
                     }]}>
                         <Select style={{width:'100%'}} mode='multiple' onChange={(value:any)=>{
-                            console.log(value)
-                            formQuestion.setFieldsValue({ 
-                                // pieceCodeNum: value.split[].map()
-                            });
+                            if(value.length>0){
+                                const num = value.map((item: string)=> item.split(',')[2]) 
+                                const numberAll = num.reduce((pre: any,cur:  any)=>{
+                                    return parseFloat(pre!==null?pre:0 )+ parseFloat(cur!==null?cur:0 )
+                                },0)
+                                formQuestion.setFieldsValue({ 
+                                    pieceCodeNum: numberAll
+                                });
+                            }
                         }}>
                             { pieceCode && pieceCode.map((item:any)=>{
                                     return <Select.Option key={item.id} value={item.id+','+item.code+','+item.structureCountNum}>{item.code}</Select.Option>
