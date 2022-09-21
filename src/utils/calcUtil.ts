@@ -69,10 +69,10 @@ export const unTaxPrice = (taxPrice: any = 0, taxMode: any = 0) =>
 export const weight = ({ length = 0, width = 0, weightAlgorithm, proportion = 1 }: WeightParams) => {
     const cLenght = Number(length) * 0.001
     const cWidth = Number(width) * 0.001
-    if (weightAlgorithm === 1) {
+    if ([1, "1"].includes(weightAlgorithm)) {
         return (Number(proportion) * cLenght * 0.001).toFixed(3)
     }
-    if (weightAlgorithm === 2) {
+    if ([1, "1"].includes(weightAlgorithm)) {
         return (Number(proportion) * cLenght * cWidth * 0.001).toFixed(3)
     }
     return (Number(proportion) * 0.001).toFixed(3)
