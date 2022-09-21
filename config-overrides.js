@@ -25,6 +25,9 @@ const envConfig = Dotenv.config({
 });
 const WebpackBar = require("webpackbar");
 module.exports = process.env.REACT_APP_ENV === "dll" ? dllConfig : {
+  externals:{
+    'BMap':'BMap',
+  },
   webpack: override(
     function (config) {
       const scopePluginIndex = config.resolve.plugins.findIndex(
