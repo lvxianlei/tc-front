@@ -30,6 +30,7 @@ interface SearchTableProps {
     modal?: boolean // 分页栏是否固定到底部
     readonly exportPath?: string; //导出接口
     exportObject?: { [key: string]: any }, // 导出可能会包含的id等
+    exportFileName?: string
     getDataSource?: (dataSource: any[]) => void
     [key: string]: any
 }
@@ -47,6 +48,7 @@ export default function SearchTable({
     extraOperation,
     transformResult,
     getDataSource,
+    exportFileName,
     searchFormItems = [],
     filterValue = {},
     tableProps,
@@ -79,7 +81,7 @@ export default function SearchTable({
         } catch (error) {
             reject(false)
         }
-    }), { refreshDeps: [pagenationParams.current, pagenationParams.pageSize, JSON.stringify(filterValue)] })
+    }), { refreshDeps: [pagenationParams.current, pagenationParams.pageSize, JSON.stringify(filterValue), path] })
 
     const paginationChange = useCallback((page: number, pageSize?: number) => {
         setPagenationParams({
@@ -127,17 +129,13 @@ export default function SearchTable({
             </Row>
         </Form>}
         <Space style={{
-            marginBottom: 12,
-            paddingLeft: 12
-        }} size={12}>
+            marginBottom: 0,
+            paddingLeft: 12,
+        }} size={12} wrap>
             {
-                exportPath && (
-                    <Space direction="horizontal" size="middle" style={{ width: "100%" }}>
-                        {exportPath && <Button type="primary" ghost onClick={() => {
-                            setIsExport(true)
-                        }}>导出</Button>}
-                    </Space>
-                )
+                exportPath && exportPath && <Button type="primary" ghost onClick={() => {
+                    setIsExport(true)
+                }}>导出</Button>
             }
             {typeof extraOperation === "function" ? extraOperation(data?.source) : extraOperation}
         </Space>
@@ -172,6 +170,7 @@ export default function SearchTable({
             size={pagenationParams.pageSize || 10}
             total={data?.result?.total || 0}
             url={exportPath}
+            fileName={exportFileName}
             serchObj={{
                 ...JSON.parse(JSON.stringify(filterValue || {})),
                 ...JSON.parse(JSON.stringify(exportObject || {}))

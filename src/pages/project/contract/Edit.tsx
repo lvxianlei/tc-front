@@ -40,7 +40,7 @@ export default function Edit() {
     } catch (error) {
       reject(error)
     }
-  }), { ready: (params.projectId !== "undefined") })
+  }), { ready: !["undefined", undefined, "null", null].includes(params.projectId) })
 
   const { loading: addressLoading, data: addressList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {

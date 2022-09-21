@@ -124,7 +124,7 @@
         },
         {
             "title": "理算重量（吨）",
-            "dataIndex": "weight"
+            "dataIndex": "totalWeight"
         },
         {
             "title": "结算重量（吨）",
@@ -219,7 +219,7 @@
             },
             {
                 "title": "理算重量",
-                "dataIndex": "weight"
+                "dataIndex": "totalWeight"
             },
             {
                 "title": "结算重量",

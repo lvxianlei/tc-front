@@ -2,7 +2,7 @@
  * 创建计划列表
  */
 import React, { useState } from 'react';
-import { Modal, Form, Button, InputNumber, Select, message, Input } from 'antd';
+import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
@@ -12,7 +12,6 @@ import { materialStandardOptions, materialTextureOptions } from "../../../config
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { spawn } from 'child_process';
 
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
@@ -21,26 +20,12 @@ export default function CreatePlan(props: any): JSX.Element {
     const [visibleNumber, setVisibleNumber] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-    
+
     let [count, setCount] = useState<number>(1);
     let [indexNumber, setIndexNumber] = useState<number>(0);
     let [dataCopy, setDataCopy] = useState<any[]>([]);
 
-    const formatSpec = (spec: any): { width: string, length: string } => {
-        if (!spec) {
-            return ({
-                width: "0",
-                length: "0"
-            })
-        }
-        const splitArr = spec.replace("∠", "").split("*")
-        return ({
-            width: splitArr[0] || "0",
-            length: splitArr[1] || "0"
-        })
-    }
-
-    const handleAddModalOkNumber = async() => {
+    const handleAddModalOkNumber = async () => {
         const baseData = await addCollectionNumberForm.validateFields();
         let ix = count,
             materialListCopy = materialList,
@@ -110,11 +95,11 @@ export default function CreatePlan(props: any): JSX.Element {
                     ...item,
                     planPurchaseNum: value,
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
                     totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * value / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * value / 1000).toFixed(3)
                 })
             }
             return item
@@ -133,8 +118,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                             : (Number(item?.proportion || 1) / 1000).toFixed(3),
                     totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * value) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * (item.planPurchaseNum || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
                 })
             }
             return item
@@ -153,8 +138,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * value / 1000 / 1000 / 1000).toFixed(3)
                             : (Number(item?.proportion || 1) / 1000).toFixed(3),
                     totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * value * (item.planPurchaseNum || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * value * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
                 })
             }
             return item
@@ -279,13 +264,23 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (["planPurchaseNum"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                render: (value: number, records: any, key: number) => <InputNumber
+                                    min={1}
+                                    precision={0}
+                                    value={value || undefined}
+                                    onChange={(value: number) => handleNumChange(value, records.id)}
+                                    key={key}
+                                />
                             })
                         }
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || 0} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                render: (value: number, records: any, key: number) => <InputNumber
+                                    min={0}
+                                    precision={0}
+                                    value={value || 0}
+                                    onChange={(value: number) => lengthChange(value, records.id)} key={key} />
                             })
                         }
                         if (item.dataIndex === "width") {
@@ -401,8 +396,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
                             totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.planPurchaseNum || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
                         })) || [])
                     }}
                 />
@@ -431,7 +426,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         <InputNumber
                             min={1}
                             max={100}
-                            style={{width: 200}}
+                            style={{ width: 200 }}
                         />
                     </Form.Item>
 

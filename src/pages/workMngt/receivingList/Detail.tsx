@@ -76,14 +76,14 @@ export default function Detail(props: OverViewProps): JSX.Element {
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={baseInfomation}
-                col={2}
+                col={3}
                 columns={[...freightInfo]}
             />
             <DetailTitle title="装卸费信息" />
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={baseInfomation}
-                col={2}
+                col={3}
                 columns={[...handlingChargesInfo]}
             />
             <DetailTitle title="货物明细" />
