@@ -1,51 +1,51 @@
 {
     "columns": [
         {
-            "key": "supplyNumber",
+            "key": "trialAssembleName",
             "title": "单据类型",
-            "dataIndex": "supplyNumber",
-            "width": 100
-        },
-        {
-            "key": "supplyTypeName",
-            "title": "审批状态",
-            "dataIndex": "supplyTypeName",
+            "dataIndex": "trialAssembleName",
             "width": 100
         },
         {
             "key": "statusName",
-            "title": "最新状态变更时间",
+            "title": "审批状态",
             "dataIndex": "statusName",
             "width": 100
         },
         {
             "key": "updateStatusTime",
-            "title": "单号",
+            "title": "最新状态变更时间",
             "dataIndex": "updateStatusTime",
+            "width": 100
+        },
+        {
+            "key": "trialNumber",
+            "title": "单号",
+            "dataIndex": "trialNumber",
             "width": 150
         },
         {
-            "key": "priorityName",
-            "title": "计划号",
-            "dataIndex": "priorityName",
-            "width": 100
-        },
-        {
-            "key": "applyUserDeptName",
-            "title": "塔型",
-            "dataIndex": "applyUserDeptName",
-            "width": 100
-        },
-        {
-            "key": "applyUserName",
-            "title": "产品类型",
-            "dataIndex": "applyUserName",
-            "width": 100
-        },
-        {
             "key": "planNumber",
-            "title": "电压等级",
+            "title": "计划号",
             "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
             "width": 100
         },
         {
@@ -55,69 +55,69 @@
             "width": 100
         },
         {
-            "key": "businessUserName",
+            "key": "segmentName",
             "title": "段名",
-            "dataIndex": "businessUserName",
+            "dataIndex": "segmentName",
             "width": 100
         },
         {
-            "key": "planDeliveryTime",
+            "key": "loftingUserName",
             "title": "放样人",
-            "dataIndex": "planDeliveryTime",
+            "dataIndex": "loftingUserName",
             "width": 100
         },
         {
-            "key": "materialStandardName",
+            "key": "description",
             "title": "说明",
-            "dataIndex": "materialStandardName",
+            "dataIndex": "description",
             "width": 100
         }
     ],
     "applyColumns": [
         {
-            "key": "productCategoryName",
+            "key": "trialAssembleName",
             "title": "申请类型",
+            "dataIndex": "trialAssembleName"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
             "dataIndex": "productCategoryName"
         },
         {
-            "key": "productTypeName",
-            "title": "计划号",
-            "dataIndex": "productTypeName"
-        },
-        {
             "key": "voltageGradeName",
-            "title": "塔型名称",
+            "title": "电压等级",
             "dataIndex": "voltageGradeName"
         },
         {
-            "key": "status",
-            "title": "电压等级",
-            "dataIndex": "status"
-        },
-        {
-            "key": "totalNumber",
+            "key": "productTypeName",
             "title": "产品类型",
-            "dataIndex": "totalNumber"
+            "dataIndex": "productTypeName"
         },
         {
-            "key": "totalWeight",
+            "key": "segmentName",
             "title": "段落",
-            "dataIndex": "totalWeight"
+            "dataIndex": "segmentName"
         },
         {
-            "key": "totalWeight",
+            "key": "loftingUserName",
             "title": "放样人",
-            "dataIndex": "totalWeight"
+            "dataIndex": "loftingUserName"
         },
         {
-            "key": "totalWeight",
+            "key": "projectName",
             "title": "工程名称",
-            "dataIndex": "totalWeight"
+            "dataIndex": "projectName"
         },
         {
-            "key": "totalWeight",
+            "key": "description",
             "title": "申请原因",
-            "dataIndex": "totalWeight"
+            "dataIndex": "description"
         }
     ]
 }

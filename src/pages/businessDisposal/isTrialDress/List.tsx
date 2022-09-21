@@ -77,6 +77,18 @@ export default function List(): React.ReactNode {
         }
     })
 
+    const handleLaunchOk = () => new Promise(async (resove, reject) => {
+        try {
+            await addRef.current?.onSubmit
+            message.success("保存并发起成功！")
+            setVisible(false)
+            addRef.current?.resetFields();
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
     return <>
         <Modal
             destroyOnClose
@@ -87,7 +99,7 @@ export default function List(): React.ReactNode {
                 {type === 'new' ?
                     <>
                         <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
-                        <Button type="primary" ghost>保存并发起</Button>
+                        <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
                     </>
                     :
                     null
@@ -109,7 +121,7 @@ export default function List(): React.ReactNode {
             <ApplyTrial type={type} id={rowId} ref={addRef} />
         </Modal>
         <Page
-            path="/tower-science/supplyBatch/batchPage"
+            path="/tower-science/trialAssembly"
             columns={[
                 {
                     key: 'index',
@@ -136,7 +148,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认发起?"
                                 onConfirm={() => {
-                                    RequestUtil.post(`/${record.id}`).then(res => {
+                                    RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/launch/${record.id}`).then(res => {
                                         message.success('发起成功');
                                         history.go(0);
                                     });
@@ -149,7 +161,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
-                                    RequestUtil.post(`/${record.id}`).then(res => {
+                                    RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/withdraw/${record.id}`).then(res => {
                                         message.success('撤回成功');
                                         history.go(0);
                                     });
@@ -162,7 +174,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
-                                    RequestUtil.delete(`/${record.id}`).then(res => {
+                                    RequestUtil.delete(`/tower-science/trialAssembly/trialAssembly//${record.id}`).then(res => {
                                         message.success('删除成功');
                                         history.go(0);
                                     });
@@ -188,19 +200,19 @@ export default function List(): React.ReactNode {
                     children: <DatePicker.RangePicker />
                 },
                 {
-                    name: 'supplyType',
+                    name: 'status',
                     label: '审批状态',
-                    children: <Select placeholder="请选择补件类型">
+                    children: <Select placeholder="请选择审批状态">
                         <Select.Option key={1} value={1}>未发起</Select.Option>
                         <Select.Option key={2} value={2}>待审批</Select.Option>
-                        <Select.Option key={3} value={3}>已通过</Select.Option>
-                        <Select.Option key={4} value={4}>已撤回</Select.Option>
-                        <Select.Option key={5} value={5}>审批中</Select.Option>
-                        <Select.Option key={6} value={6}>已拒绝</Select.Option>
+                        <Select.Option key={3} value={3}>审批中</Select.Option>
+                        <Select.Option key={4} value={4}>已通过</Select.Option>
+                        <Select.Option key={5} value={5}>已撤回</Select.Option>
+                        <Select.Option key={0} value={0}>已拒绝</Select.Option>
                     </Select>
                 },
                 {
-                    name: 'personnel',
+                    name: 'loftingUser',
                     label: '人员',
                     children: <Row>
                         <Col>
@@ -214,7 +226,7 @@ export default function List(): React.ReactNode {
                             </Form.Item>
                         </Col>
                         <Col>
-                            <Form.Item name="personnel">
+                            <Form.Item name="loftingUser">
                                 <Select placeholder="请选择" style={{ width: "150px" }}>
                                     <Select.Option value="" key="6">全部</Select.Option>
                                     {user && user.map((item: any) => {
@@ -226,7 +238,7 @@ export default function List(): React.ReactNode {
                     </Row>
                 },
                 {
-                    name: 'supplyType',
+                    name: 'trialAssemble',
                     label: '单据类型',
                     children: <Select placeholder="请选择补件类型">
                         <Select.Option key={0} value={'免试装'}>免试装</Select.Option>
@@ -245,7 +257,7 @@ export default function List(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'productType',
+                    name: 'voltageGrade',
                     label: '电压等级',
                     children: <Select placeholder="请选择电压等级">
                         {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
@@ -258,7 +270,7 @@ export default function List(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input style={{ width: '300px' }} placeholder="计划号/单号/塔型/工程名称/线路名称/说明" />
+                    children: <Input style={{ width: '300px' }} placeholder="计划号/单号/塔型/工程名称/说明" />
                 }
             ]}
             filterValue={filterValues}
