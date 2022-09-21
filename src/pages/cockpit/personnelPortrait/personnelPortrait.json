@@ -1,31 +1,31 @@
 {
     "columns": [
         {
-            "key": "userName",
+            "key": "loftingUserName",
             "title": "姓名",
-            "dataIndex": "userName"
+            "dataIndex": "loftingUserName"
         },
         {
-            "key": "process",
+            "key": "loftingNum",
             "title": "累计放样件号数",
-            "dataIndex": "process"
+            "dataIndex": "loftingNum"
         },
         {
-            "key": "workStatus",
+            "key": "loftingErrorNum",
             "title": "累计错误件号数",
-            "dataIndex": "workStatus"
+            "dataIndex": "loftingErrorNum"
         },
         {
-            "key": "totalProductCategoryNum",
+            "key": "rate",
             "title": "正确率%",
-            "dataIndex": "totalProductCategoryNum"
+            "dataIndex": "rate"
         }
     ],
     "tableColumns": [
         {
-            "key": "year",
+            "key": "years",
             "title": "年份",
-            "dataIndex": "year",
+            "dataIndex": "years",
             "width": 100
         },
         {
@@ -35,46 +35,46 @@
             "width": 100
         },
         {
-            "key": "productCategoryName",
+            "key": "angleSteelTower",
             "title": "角钢塔",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "angleSteelTower",
             "width": 100
         },
         {
-            "key": "productType",
+            "key": "steelPipePole",
             "title": "钢管杆",
-            "dataIndex": "productType",
+            "dataIndex": "steelPipePole",
             "width": 100
         },
         {
-            "key": "voltageGradeName",
+            "key": "pipeTower",
             "title": "三管塔/四管塔放",
-            "dataIndex": "voltageGradeName",
+            "dataIndex": "pipeTower",
             "width": 100
         },
         {
-            "key": "patternName",
+            "key": "framework",
             "title": "架构",
-            "dataIndex": "patternName",
+            "dataIndex": "framework",
             "width": 100
         },
         {
-            "key": "priorityName",
+            "key": "steelStructure",
             "title": "钢结构",
-            "dataIndex": "priorityName",
+            "dataIndex": "steelStructure",
             "width": 100
         },
         {
-            "key": "startTime",
+            "key": "basics",
             "title": "基础",
-            "dataIndex": "startTime",
+            "dataIndex": "basics",
             "type": "date",
             "width": 130
         },
         {
-            "key": "expectCompleteTime",
+            "key": "subtotal",
             "title": "小计",
-            "dataIndex": "expectCompleteTime",
+            "dataIndex": "subtotal",
             "width": 130
         }
     ]

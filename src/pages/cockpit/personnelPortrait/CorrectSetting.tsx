@@ -66,15 +66,15 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
 
     const correctColumns = [
         {
-            "key": "userName",
+            "key": "name",
             "title": "项目",
-            "dataIndex": "userName",
+            "dataIndex": "name",
             "editable": false
         },
         {
-            "key": "process",
+            "key": "parameter",
             "title": "参数",
-            "dataIndex": "process",
+            "dataIndex": "parameter",
             "editable": true
         },
         {
@@ -82,7 +82,7 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
             "title": "状态",
             "dataIndex": "status",
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Button type="link" onClick={() => changeStatus(record?.id)}>{record?.status}</Button>
+                <Button type="link" onClick={() => changeStatus(record)}>{record?.status}</Button>
             )
         },
         {
@@ -107,13 +107,17 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
     ]
 
     const { loading, data, run } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-        // const data: IResponseData = await RequestUtil.get<IResponseData>(``, {  });
-        // resole(data?.records);
-        resole([]);
+        const data: any = await RequestUtil.get(`/tower-science/loftingUserWork/getAccuracyConfig`);
+        resole(data);
     }), {})
 
-    const changeStatus = (id: string) => {
-        RequestUtil.post(``, { id: id }).then(res => {
+    const changeStatus = (record: Record<string, any>) => {
+        RequestUtil.post(`/tower-science/loftingUserWork/updateAccuracyConfig`, [{
+            id: record.id,
+            name: record.name,
+            parameter: record.parameter,
+            status: record.status === 0 ? 1 : 0
+        }]).then(res => {
             run()
         })
     }
@@ -148,16 +152,33 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
     const onSubmit = (key: React.Key) => new Promise(async (resolve, reject) => {
         try {
             const row = form.getFieldsValue(true);
+            console.log(row)
             // const newData = [];
             // const index = newData.findIndex(item => key === item.id);
             // console.log(index,row)
             resolve(
-                []
+                saveRun([{
+                    id: row.id,
+                    name: row.name,
+                    parameter: row.parameter,
+                    status: row.status,
+                }])
             );
         } catch (error) {
             reject(false)
         }
     })
+
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
+        try {
+            RequestUtil.post(`/tower-science/loftingUserWork/updateAccuracyConfig`, data).then(res => {
+                setEditingKey('');
+            })
+            resove(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit]);
 
@@ -165,7 +186,7 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
         <Form form={form}>
             <CommonTable
                 columns={mergedColumns}
-                dataSource={[]}
+                dataSource={data}
                 pagination={false}
                 changeHeight={false}
                 scroll={{ y: 200 }}

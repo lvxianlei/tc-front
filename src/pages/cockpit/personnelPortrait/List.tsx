@@ -25,21 +25,13 @@ export interface IResponseData {
 }
 
 export default function List(): React.ReactNode {
-    // const [page, setPage] = useState({
-    //     current: 1,
-    //     size: 10,
-    //     total: 0
-    // })
-
     const [form] = Form.useForm();
-    const [filterValues, setFilterValues] = useState<Record<string, any>>();
-    const [status, setStatus] = useState<number>(1);
     const [detailData, setDetailData] = useState<any>();
     const [visible, setVisible] = useState<boolean>(false);
+    const halfYear = (new Date().getMonth() > 6) ? `${new Date().getFullYear()}-07,${new Date().getFullYear()}-12` : `${new Date().getFullYear()}-01,${new Date().getFullYear()}-06`;
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
-        // setPage({ ...data });
+        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/loftingUserWork`, { ...filterValue });
         if (data?.length > 0 && data[0]?.id) {
             detailRun(data[0]?.userId, data[0]?.type)
         } else {
@@ -50,16 +42,49 @@ export default function List(): React.ReactNode {
 
     const { run: detailRun } = useRequest<any>((id: string, type: number) => new Promise(async (resole, reject) => {
         try {
-            let result = await RequestUtil.get<any>(`/tower-science/personal/work/load/detail/list`, {
-                userId: id,
-                type: type
+            let result = await RequestUtil.get<any>(`/tower-science/loftingUserWork/getLoftingUserWork`, {
+                loftingUser: id,
+                timeEnd: halfYear.split(',')[1],
+                timeStart: halfYear.split(',')[0]
             });
-            result = result.map((res: any) => {
-                return {
-                    ...res,
-                    type
-                }
-            })
+            const data = [];
+            result.forEach((element: any) => {
+                data.push([
+                    {
+                        years : element.years,
+                        type : '放样数',
+                        angleSteelTower : element.angleSteelTowerLoftingNum,
+                        steelPipePole : element.steelPipePoleLoftingNum,
+                        pipeTower : element.pipeTowerLoftingNum,
+                        framework : element.frameworkLoftingNum,
+                        steelStructure : element.steelStructureLoftingNum,
+                        basics : element.basicsLoftingNum,
+                        subtotal : element.subtotalLoftingNum,
+                    },
+                    {
+                        years : element.years,
+                        type : '错误数',
+                        angleSteelTower : element.angleSteelTowerLoftingErrorNum,
+                        steelPipePole : element.steelPipePoleLoftingErrorNum,
+                        pipeTower : element.pipeTowerLoftingErrorNum,
+                        framework : element.frameworkLoftingErrorNum,
+                        steelStructure : element.steelStructureLoftingErrorNum,
+                        basics : element.basicsLoftingErrorNum,
+                        subtotal : element.subtotalLoftingErrorNum,
+                    },
+                    {
+                        years : element.years,
+                        type : '正确率',
+                        angleSteelTower : element.angleSteelTowerRate,
+                        steelPipePole : element.steelPipePoleRate,
+                        pipeTower : element.pipeTowerRate,
+                        framework : element.frameworkRate,
+                        steelStructure : element.steelStructureRate,
+                        basics : element.basicsRate,
+                        subtotal : element.subtotalRate,
+                    }
+                ])
+            });
             setDetailData(result)
             resole(result)
         } catch (error) {
@@ -67,15 +92,27 @@ export default function List(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { data: yearLists } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const now = new Date().getFullYear();
+            var startYear = now - 3;//起始年份
+            var arr = new Array();
+            for (var i = startYear; i <= now; i++) {
+                var obj = [
+                    { "id": i + '-01,' + i + '-06', "label": i + "上半年" },
+                    { "id": i + '-07,' + i + '-12', "label": i + "下半年" }
+                ];
+                arr.push(...obj);
+            }
+            resole(arr)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
     const onSearch = (values: Record<string, any>) => {
-        setFilterValues(values);
         run({ ...values });
     }
-
-    // const handleChangePage = (current: number, pageSize: number) => {
-    //     setPage({ ...page, current: current, size: pageSize });
-    //     run({ current: current, size: pageSize }, { ...filterValues })
-    // }
 
     const onRowChange = async (record: Record<string, any>) => {
         detailRun(record.userId, record.type)
@@ -94,7 +131,7 @@ export default function List(): React.ReactNode {
             <CorrectSetting />
         </Modal>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item name="userNme">
+            <Form.Item name="fuzzyMsg">
                 <Input style={{ width: '200px' }} placeholder="姓名" />
             </Form.Item>
             <Form.Item>
@@ -128,20 +165,20 @@ export default function List(): React.ReactNode {
                                     return <>
                                         <Row>年份选择</Row>
                                         <Row>
-                                            <Select size="small" placeholder="请选择" style={{ width: "150px" }} onChange={(e) => {
+                                            <Select size="small" placeholder="请选择" style={{ width: "150px" }} defaultValue={halfYear} onChange={(e) => {
                                                 console.log(e)
                                             }}>
-                                                <Select.Option value={'2021'} key="2021">2021</Select.Option>
-                                                <Select.Option value={0} key="0">待入库</Select.Option>
-                                                <Select.Option value={1} key="1">在库</Select.Option>
-                                                <Select.Option value={2} key="2">借出</Select.Option>
-                                                <Select.Option value={3} key="3">遗失</Select.Option>
+                                                {
+                                                    yearLists && yearLists.map((res: any, index: number) => (
+                                                        <Select.Option key={index} value={res.id}>{res.label}</Select.Option>
+                                                    ))
+                                                }
                                             </Select>
                                         </Row>
                                     </>
                                 }
                             })
-                        }
+                        }  
                         return item
                     })
                 ]}

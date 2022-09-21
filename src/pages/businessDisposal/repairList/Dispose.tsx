@@ -89,7 +89,7 @@ export default function Dispose(): React.ReactNode {
                         render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
                             <Form.Item name={["list", index, ""]} rules={[{
                                 required: true,
-                                message: "请输入返修信息"
+                                message: "请输入单段返修数量"
                             }]}>
                                 <InputNumber max={9999} min={1} onChange={(e: number) => {
                                     console.log(e)
