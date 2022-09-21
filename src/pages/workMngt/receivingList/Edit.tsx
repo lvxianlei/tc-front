@@ -99,7 +99,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const handleModalOk = () => {
         const meteringMode = form.getFieldValue("meteringMode")
         const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
-
         // 所有明细理算重量总和
         const allTotalWeight = modalRef.current?.dataSource.reduce((total, item) =>
             (parseFloat(total) + parseFloat(calcObj.totalWeight({
@@ -109,6 +108,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 proportion: item.proportion,
                 num: item.num
             }))).toFixed(4), 0)
+        console.log("modalRef", modalRef.current?.dataSource)
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             const weight = calcObj.weight({
                 length: item.length,
@@ -227,7 +227,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             modalRef.current?.resetFields()
             const supplierData: any = fields.supplierId.records[0]
             form.setFieldsValue({
-                // supplierName: supplierData.supplierName,
                 contactsUser: supplierData.contactMan,
                 contactsPhone: supplierData.contactManTel
             })
@@ -236,7 +235,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         if (fields.meteringMode || fields.totalPonderationWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
             const totalPonderationWeight = fields.totalPonderationWeight || form.getFieldValue("totalPonderationWeight") || "0"
-            const editData = editForm.getFieldsValue().submit
+            const editData = editForm.getFieldsValue(true).submit
             // 所有明细理算重量总和
             const allTotalWeight = editData?.reduce((total: any, item: any) =>
                 (parseFloat(total) + parseFloat(calcObj.totalWeight({
@@ -258,9 +257,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     }),
                     item.num,
                     totalPonderationWeight,
-                    allTotalWeight,
-                    item.totalWeight
+                    allTotalWeight
                 )
+
                 // 含税金额
                 const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight)
                 // 不含税金额
@@ -291,15 +290,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     }
 
-    const handleEditableChange = (data: any, allValues: any) => {
+    const handleEditableChange = (data: any) => {
         const changeIndex = data.submit.length - 1
         const changeFiled = data.submit[changeIndex]
         if (changeFiled.balanceTotalWeight) {
             const meteringMode = form.getFieldValue("meteringMode")
-            const dataSource: any[] = [...allValues?.submit]
+            const dataSource: any[] = editForm.getFieldsValue(true)?.submit
             const totalTaxPrice = calcObj.totalTaxPrice(
                 dataSource[changeIndex].taxPrice,
-                changeFiled.balanceTotalWeight)
+                changeFiled.balanceTotalWeight
+            )
             const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
             dataSource[changeIndex] = {
                 ...dataSource[changeIndex],
@@ -307,7 +307,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 totalUnTaxPrice
             }
             if (meteringMode === 2) {
-                const totalPonderationWeight = allValues.submit?.reduce((count: string, item: any) =>
+                const totalPonderationWeight = dataSource.reduce((count: string, item: any) =>
                     (parseFloat(count) + parseFloat(`${item.balanceTotalWeight}`)).toFixed(3), "0")
                 form.setFieldsValue({ totalPonderationWeight })
             }
@@ -315,11 +315,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
         if (changeFiled.length || changeFiled.width) {
             const result = editForm.getFieldsValue(true).submit[changeIndex];
-            const dataSource: any[] = cargoData
+            const dataSource: any[] = editForm.getFieldsValue(true).submit
             const meteringMode = form.getFieldValue("meteringMode")
             const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
             // 所有明细理算重量总和
-            const allTotalWeight = editForm.getFieldsValue(true).submit?.reduce((total: any, item: any) =>
+            const allTotalWeight = dataSource?.reduce((total: any, item: any) =>
                 (parseFloat(total) + parseFloat(calcObj.totalWeight({
                     length: item.length,
                     width: item.width,
@@ -370,6 +370,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     proportion: result.proportion,
                     num: result.num
                 }),
+                /** 结算重量 */
                 balanceTotalWeight,
                 totalTaxPrice,
                 totalUnTaxPrice,

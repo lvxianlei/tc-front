@@ -97,6 +97,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         updateTimeEnd: "",
         departmentId: "",
         applyStaffId: "",
+        outStockItemStatus: 2,
         ...history.location.state as object
     });
 
@@ -121,7 +122,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (value.batcherId) {
             value.applyStaffId = value.batcherId.value
         }
-        setFilterValue({ ...value })
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -183,9 +184,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'status',
                         label: '状态',
                         children: (
-                            <Select placeholder="请选择状态" style={{ width: "140px" }}>
+                            <Select placeholder="请选择" style={{ width: "140px" }}>
                                 <Select.Option value="0">待完成</Select.Option>
                                 <Select.Option value="1">已完成</Select.Option>
+                            </Select>
+                        )
+                    },
+                    {
+                        name: 'outStockType',
+                        label: '出库类型',
+                        children: (
+                            <Select placeholder="请选择" style={{ width: "140px" }}>
+                                <Select.Option value="0">正常出库</Select.Option>
+                                <Select.Option value="1">盘点出库</Select.Option>
                             </Select>
                         )
                     },
@@ -195,9 +206,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <IntgSelect width={200} />
                     },
                     {
+                        name: 'materialName',
+                        label: '品名',
+                        children: <Input placeholder="请输入品名" style={{ width: 150 }} />
+                    },
+                    {
+                        name: 'structureSpec',
+                        label: '规格',
+                        children: <Input placeholder="请输入规格" style={{ width: 150 }} />
+                    },
+                    {
                         name: 'fuzzyQuery',
                         label: "关键字",
-                        children: <Input placeholder="请输入领料编号/生产批次进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="领料编号/生产批次" style={{ width: 200 }} />
                     }
                 ]}
             />

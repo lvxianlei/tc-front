@@ -166,6 +166,7 @@ export default function CreatePlan(props: any): JSX.Element {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`)
             setPopDataList(result?.outStockDetailVOList)
+            setMaterialList(result?.outStockDetailVOList)
             resole({
                 ...result,
                 pickingUserId: {
@@ -239,7 +240,6 @@ export default function CreatePlan(props: any): JSX.Element {
                     <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择</Button>
                 </div>
                 <CommonTable
-                    rowKey={"id"}
                     style={{ padding: "0" }}
                     columns={[
                         {
