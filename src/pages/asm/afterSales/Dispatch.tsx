@@ -99,14 +99,14 @@ export default function Dispatch({ onSelect, selectedKey = [], ...props }: any):
             }}
             searchFormItems={[
                 {
-                    name: 'type',
+                    name: 'name',
                     label: '模糊查询项',
-                    children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
+                    children: <Input maxLength={50} placeholder="请输入姓名进行查询" />
                 },
                 {
                     name: 'type',
                     label: '未完成工单',
-                    children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
+                    children: <Input maxLength={50} placeholder="请输入未完成工单进行查询" />
                 }
             ]}
             filterValue={filterValue}
@@ -116,7 +116,7 @@ export default function Dispatch({ onSelect, selectedKey = [], ...props }: any):
             }}
         />
     </Modal>
-    <Button type='link'  onClick={()=>setVisible(true)}>派工</Button>
+    <Button type='primary'  onClick={()=>setVisible(true)}>派工</Button>
     </>
 }
 

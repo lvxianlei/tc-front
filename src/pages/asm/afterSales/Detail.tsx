@@ -343,7 +343,7 @@ export default function InformationDetail(): React.ReactNode {
                         "required": true,
                         "message": "请输入件数"
                     }]}>
-                        <InputNumber min={0} />
+                        <InputNumber min={0} style={{width:'100%'}}/>
                     </Form.Item>
                     <Form.Item name="description" label="问题描述"  rules={[{
                         "required": true,
@@ -383,6 +383,7 @@ export default function InformationDetail(): React.ReactNode {
             if(title==='添加'){
                 await RequestUtil.post(`/tower-as/workCost`,{
                     ...value,
+                    workOrderId: params.id,
                     fileIds: attachRef.current?.getDataSource().map(item => item.id),
                 }).then(()=>{
                     message.success('新增成功！')
@@ -395,6 +396,7 @@ export default function InformationDetail(): React.ReactNode {
             }else{
                 await RequestUtil.put(`/tower-as/workCost`,{
                     ...value,
+                    workOrderId: params.id,
                     fileIds: attachRef.current?.getDataSource().map(item => item.id),
                 }).then(()=>{
                     message.success('编辑成功！')
@@ -420,7 +422,7 @@ export default function InformationDetail(): React.ReactNode {
                             message:"请输入金额"
                         }
                     ]}>
-                        <InputNumber precision={2} min={0} />
+                        <InputNumber precision={2} min={0} style={{width:'100%'}}/>
                     </Form.Item>
                     <Form.Item name="cost" label="费用分类" rules={[
                         {
@@ -475,7 +477,7 @@ export default function InformationDetail(): React.ReactNode {
                     }).then(()=>{
                         history.goBack()
                     })
-                }}>关闭工单</Button>,
+                }} disabled={ detailData?.status < 5 }>关闭工单</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回列表</Button>
             ]}>
             <Steps current={detailData?.status}  >
@@ -495,17 +497,15 @@ export default function InformationDetail(): React.ReactNode {
                     console.log(selectRows)
                     // form.setFieldsValue({  });
                     
-                    await RequestUtil.post(`/tower-as/workOrder/dispatch`,{
-                        workOrderId:params?.id,
-                        userId: selectRows[0]?.userId
-                    })
+                    await RequestUtil.post(`/tower-as/workOrder/dispatch?workOrderId=${params?.id}&userId=${selectRows[0]?.userId}`)
                     message.success("派工成功！")
                     history.go(0)
                 }} selectedKey={[]}/>]}/>
-            <CommonTable haveIndex columns={[...afterSaleInfo as any,
+            <CommonTable columns={[...afterSaleInfo as any,
                 {
                     title: "操作",
                     dataIndex: "opration",
+                    width: 100,
                     fixed: "right",
                     render: (_:any,record: any) => 
                         {
@@ -523,7 +523,7 @@ export default function InformationDetail(): React.ReactNode {
                         </Popconfirm>:
                             <Button type="link" disabled>取消派工</Button>
                         }
-                }]} dataSource={detailData?.workOrderUserVO&&[...detailData?.workOrderUserVO]||[]} pagination={false}/>
+                }]} dataSource={[detailData?.workOrderUserVO]} pagination={false}/>
             <Row style={{marginTop:"10px"}}>
                 <Radio.Group defaultValue={viewBidList} onChange={(event: any) => setViewBidList(event.target.value)}>
                     <Radio.Button value="detail" key="detail">问题信息</Radio.Button>
@@ -541,6 +541,7 @@ export default function InformationDetail(): React.ReactNode {
                             title: "操作",
                             dataIndex: "opration",
                             fixed: "right",
+                            width: 150,
                             render: (_:any,record: any) => <Space>
                                 <Button type="link" onClick={ () => {
                                     formQuestion.setFieldsValue({ record });
@@ -595,6 +596,10 @@ export default function InformationDetail(): React.ReactNode {
                             onClick={() =>{ 
                                 setIsAdd(true)
                                 setTitle('添加')
+                                formRef.setFieldsValue({
+                                    workOrderNumber: detailData?.workOrderNumber,
+                                    workOrderId: params.id
+                                })
                             }}
                         >添加费用</Button>}
                         columns={[
@@ -603,6 +608,7 @@ export default function InformationDetail(): React.ReactNode {
                                 title: "操作",
                                 dataIndex: "opration",
                                 fixed: "right",
+                                width: 100,
                                 render: (_:any,record: any) => <Space>
                                     <Button type="link" onClick={ async () => {
                                         setTitle('编辑');
