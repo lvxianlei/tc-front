@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
 import { useHistory } from 'react-router';
-import { Input, Select, Form, Row, Modal, message, Spin, Button, Upload, InputNumber } from 'antd';
+import { Input, Select, Modal, message, Spin, Button, Upload, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"

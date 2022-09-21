@@ -5,7 +5,7 @@ import { addPriceHead, supplier } from "./enquiry.json"
 import { BaseInfo, CommonTable, DetailTitle, Attachment, AttachmentRef } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { calcObj } from "../../workMngt/receivingList/Edit"
+import * as calcObj from '@utils/calcUtil'
 
 interface AddPriceProps {
     id: string,

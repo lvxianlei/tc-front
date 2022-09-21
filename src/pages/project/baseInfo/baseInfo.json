@@ -370,13 +370,7 @@
             "dataIndex": "amount",
             "type": "number",
             "min": 0,
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入数量（吨）..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "首批交货日期",

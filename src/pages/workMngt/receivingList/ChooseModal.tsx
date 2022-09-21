@@ -16,7 +16,8 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({
         ...item,
         price: item.unTaxPrice,
-        id: item.materialContractDetailId
+        id: item.materialContractDetailId,
+        key: `${item.id}-${Math.random()}-${new Date().getTime()}`
     })))
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
@@ -41,14 +42,14 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
-            setSelectList(result?.materialContractDetailVos.map((item: any) => ({
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/supplier/${id}`)
+            setSelectList(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
                 id: item.id,
                 materialContractDetailId: item.id
             })).filter((item: any) => item.num))
-            setWaitingArea(result?.materialContractDetailVos.map((item: any) => ({
+            setWaitingArea(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
                 id: item.id,
@@ -62,13 +63,18 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
 
     const resetFields = () => {
         setCurrentId("")
-        setChooseList(initChooseList)
-        setSelectList(data?.materialContractDetailVos.map((item: any) => ({
+        setChooseList(initChooseList.map((item: any) => ({
+            ...item,
+            price: item.unTaxPrice,
+            id: item.materialContractDetailId,
+            key: `${item.id}-${Math.random()}-${new Date().getTime()}`
+        })))
+        setSelectList(data?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
         })).filter((item: any) => item.num))
-        setWaitingArea(data?.materialContractDetailVos.map((item: any) => ({
+        setWaitingArea(data?.map((item: any) => ({
             ...item,
             num: item.surplusNum,
             id: item.id
@@ -77,29 +83,29 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
 
     const handleRemove = async (id: string) => {
         const formData = await form.validateFields()
-        const currentData = chooseList.find((item: any) => item.id === id)
-        const currentSelectData = selectList.find((item: any) => item.id === id)
+        const currentData = chooseList.find((item: any) => item.key === id)
+        const currentSelectData = selectList.find((item: any) => item.key === id)
         if ((currentData.num - formData.num) === 0) {
-            setChooseList(chooseList.filter((item: any) => item.id !== id))
-            if (currentSelectData) {
-                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-            } else {
-                setSelectList([...selectList, { ...currentData, num: formData.num }])
-                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
-            }
+            setChooseList(chooseList.filter((item: any) => item.key !== id))
+            // if (currentSelectData) {
+            //     setSelectList(selectList.map((item: any) => item.key === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+            //     // setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+            // } else {
+            //     setSelectList([...selectList, { ...currentData, num: formData.num }])
+            //     // setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
+            // }
         } else if ((currentData.num - formData.num) < 0) {
             message.error("移除数量不能大于已选数量...")
             return
         } else {
-            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: item.num - formData.num }) : item))
-            if (currentSelectData) {
-                setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-                setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-            } else {
-                setSelectList([...selectList, { ...currentData, num: formData.num }])
-                setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
-            }
+            setChooseList(chooseList.map((item: any) => item.key === id ? ({ ...item, num: item.num - formData.num }) : item))
+            // if (currentSelectData) {
+            //     setSelectList(selectList.map((item: any) => item.key === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+            //     // setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+            // } else {
+            //     setSelectList([...selectList, { ...currentData, num: formData.num }])
+            //     // setWaitingArea([...waitingArea, { ...currentData, num: formData.num }])
+            // }
         }
         setVisible(false)
         form.resetFields()
@@ -121,13 +127,20 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         //     message.error("选择数量不能大于可选数量...")
         //     return
         // } else {
-        setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-        setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
-        if (currentChooseData) {
-            setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
-        } else {
-            setChooseList([...chooseList, { ...currentData, num: formData.num }])
-        }
+        // setSelectList(selectList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        // setWaitingArea(waitingArea.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) - parseFloat(formData.num) }) : item))
+        // if (currentChooseData) {
+        //     setChooseList(chooseList.map((item: any) => item.id === id ? ({ ...item, num: parseFloat(item.num) + parseFloat(formData.num) }) : item))
+        // } else {
+        setChooseList([
+            ...chooseList,
+            {
+                ...currentData,
+                receiveDetailStatus: 0,
+                num: formData.num,
+                key: `${currentData.id}-${Math.random()}-${new Date().getTime()}`
+            }])
+        // }
         // }
         setVisible(false)
         form.resetFields()
@@ -245,20 +258,22 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             </Form>
         </Modal>
         <DetailTitle title="选定区" />
-        <CommonTable columns={[
-            ...SelectedArea, {
-                title: "操作",
-                dataIndex: "opration",
-                render: (_: any, records: any) => <Button
-                    size="small"
-                    type="link"
-                    disabled={records.receiveDetailStatus === 1}
-                    onClick={() => {
-                        setCurrentId(records.id)
-                        setOprationType("remove")
-                        setVisible(true)
-                    }}>移除</Button>
-            }]} dataSource={chooseList} />
+        <CommonTable
+            rowKey="key"
+            columns={[
+                ...SelectedArea, {
+                    title: "操作",
+                    dataIndex: "opration",
+                    render: (_: any, records: any) => <Button
+                        size="small"
+                        type="link"
+                        disabled={records.receiveDetailStatus !== 0}
+                        onClick={() => {
+                            setCurrentId(records.key)
+                            setOprationType("remove")
+                            setVisible(true)
+                        }}>移除</Button>
+                }]} dataSource={chooseList} />
         <DetailTitle title="待选区" />
         <div>
             <Form form={serarchForm} style={{ paddingLeft: "14px" }}>
