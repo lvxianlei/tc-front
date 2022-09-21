@@ -28,19 +28,22 @@ export default () => {
             width: 150,
             dataIndex: "clockDate",
             render: (clockDate: any): React.ReactNode => {
-                return <span>{clockDate.format('YYYY-MM-DD')}</span>
+                return <span>{clockDate&&clockDate.split(' ')[0]}</span>
             } 
         },{
             title: "时间要求",
             width: 150,
-            dataIndex: "datetime"
+            dataIndex: "datetime",
+            render: (datetime: any): React.ReactNode => {
+                return <span>{datetime&&datetime.split(' ')[1]}</span>
+            }
               
         },{
             title: "打卡时间",
             width: 150,
             dataIndex: "clockDate",
             render: (clockDate: any): React.ReactNode => {
-                return <span>{clockDate.format('HH:mm:ss')}</span>
+                return <span>{clockDate&&clockDate.split(' ')[1]}</span>
             }
         },{
             title: "打卡位置",
@@ -68,7 +71,7 @@ export default () => {
         }
     ] 
     return  <Page
-            path="/tower-as/workClock"
+            path="/tower-as/workclock"
             filterValue={filterValue}
             columns={[
                 ...columns as any
