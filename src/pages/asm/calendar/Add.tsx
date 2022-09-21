@@ -152,12 +152,12 @@ export default function AnnouncementNew(): React.ReactNode {
                         // delete value.calendar
                     }
                     if(value?.weekStatus){
-                        const res:any[]=[0,0,0,0,0,0,0]
+                        const res:any[]=[2,2,2,2,2,2,2]
                         const newRes = res.map((item:any,index:number)=>{
                             if(value?.weekStatus.indexOf(index+1)>-1){
                                 return 1
                             }else{
-                                return 0
+                                return 2
                             }
 
                         })

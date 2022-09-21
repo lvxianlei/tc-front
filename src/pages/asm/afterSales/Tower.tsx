@@ -93,7 +93,7 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
         setCurrent(current - 1);
     };
     const onFinish = (value: Record<string, any>) => {
-        run({current:1, pageSize:20, value});
+        run({current:1, pageSize:20, fuzzyMsg:value});
     }
     const renderContent =()=> {
         if(current !== steps.length - 1 ){
@@ -128,7 +128,7 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
         }else{
             return <>
             <Form form={ form } onFinish={ onFinish } layout="inline" className={ styles.topForm }>
-                <Form.Item name="productNumber" label="模糊查询项">
+                <Form.Item name="fuzzyMsg" label="模糊查询项">
                     <Input placeholder="请输入杆塔号进行查询"/>
                 </Form.Item>
                 <Space direction="horizontal">
