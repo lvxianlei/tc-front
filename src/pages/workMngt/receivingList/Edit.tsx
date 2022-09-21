@@ -108,7 +108,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 proportion: item.proportion,
                 num: item.num
             }))).toFixed(4), 0)
-        console.log("modalRef", modalRef.current?.dataSource)
+
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             const weight = calcObj.weight({
                 length: item.length,
@@ -116,6 +116,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 weightAlgorithm: item.weightAlgorithm,
                 proportion: item.proportion
             })
+
             // 结算重量
             const balanceTotalWeight = calcObj.balanceTotalWeight(
                 meteringMode,
@@ -145,6 +146,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 num: item.num,
                 contractUnitPrice: item.taxPrice,
                 taxPrice: item.taxPrice,
+                /** 不含税单价 */
+                unTaxPrice: item.price,
                 /** 理算重量 */
                 weight: calcObj.weight({
                     length: item.length,
@@ -163,7 +166,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 balanceTotalWeight,
                 totalTaxPrice,
                 totalUnTaxPrice,
-                unTaxPrice: calcObj.unTaxPrice(item.taxPrice, taxData?.materia),
                 appearance: item.appearance || 1,
                 totalTransportTaxPrice,
                 totalTransportPrice,
@@ -180,28 +182,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const onSubmit = () => new Promise(async (resole, reject) => {
         try {
             const baseFormData = await form.validateFields()
-            const listsFormData = await editForm.validateFields()
-            listsFormData?.submit?.map((item: any, index: number) => {
-                const v = editForm?.getFieldsValue(true)?.submit[index];
-                return ({
-                    ...item,
-                    weight: calcObj.weight({
-                        length: v.length,
-                        width: v.width,
-                        weightAlgorithm: v.weightAlgorithm,
-                        proportion: v.proportion
-                    })
-                })
-            })
+            await editForm.validateFields()
+            const editData = editForm.getFieldsValue(true).submit
             const result = {
                 ...baseFormData,
                 supplierId,
                 supplierName: baseFormData.supplierId.value,
-                lists: listsFormData.submit?.map((item: any, index: number) => ({
-                    ...cargoData[index],
-                    ...item,
-                    materialContractDetailId: cargoData[index].materialContractDetailId
-                })),
+                lists: editData,
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
@@ -276,6 +263,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 const postData = {
                     ...item,
                     ...cargoData[index],
+
                     totalTaxPrice,
                     totalUnTaxPrice,
                     balanceTotalWeight,

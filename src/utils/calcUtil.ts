@@ -23,9 +23,9 @@ export const totalTaxPrice = (
 *  不含税金额
 * 含税金额 / ( 1 + 材料税率 / 100 )
 */
-export const totalUnTaxPrice =
-    (totalTaxPrice: any = 0, taxMode: any = 0) =>
-        (totalTaxPrice / (1 + taxMode / 100)).toFixed(2)
+export const totalUnTaxPrice = (totalTaxPrice: any = 0, taxMode: any = 0) => {
+    return (totalTaxPrice / (1 + taxMode / 100)).toFixed(2)
+}
 
 /** 
  *  结算重量
@@ -83,10 +83,10 @@ export const weight = ({ length = 0, width = 0, weightAlgorithm, proportion = 1 
 export const totalWeight = ({ length = 0, width = 0, weightAlgorithm, proportion = 1, num }: TotalWeightParmas) => {
     const cLenght = Number(length) * 0.001
     const cWidth = Number(width) * 0.001
-    if (weightAlgorithm === 1) {
+    if ([1, "1"].includes(weightAlgorithm)) {
         return (Number(proportion) * cLenght * Number(num) * 0.001).toFixed(3)
     }
-    if (weightAlgorithm === 2) {
+    if ([2, "2"].includes(weightAlgorithm)) {
         return (Number(proportion) * cLenght * cWidth * Number(num) * 0.001).toFixed(3)
     }
     return (Number(proportion) * Number(num) * 0.001).toFixed(3)
@@ -96,7 +96,6 @@ export const totalWeight = ({ length = 0, width = 0, weightAlgorithm, proportion
 * 含税运费=材料所在合同的含税运费单价*结算重量
 */
 export const totalTransportTaxPrice = (price: any = 0, weight: any = 0) => {
-    console.log("含税运费", price, weight)
     return (weight * price).toFixed(2)
 }
 /**
@@ -104,7 +103,6 @@ export const totalTransportTaxPrice = (price: any = 0, weight: any = 0) => {
  * 不含税运费=含税运费/(1+运费税率/100)
  */
 export const totalTransportPrice = (totalTransportTaxPrice: any = 0, taxMode: any = 0) => {
-    console.log("不含税运费", totalTransportTaxPrice, taxMode)
     return (totalTransportTaxPrice / (1 + taxMode / 100)).toFixed(2)
 }
 
@@ -114,7 +112,6 @@ export const totalTransportPrice = (totalTransportTaxPrice: any = 0, taxMode: an
 * 含税装卸费=材料所在合同的含税装卸费单价*结算重量
 */
 export const totalUnloadTaxPrice = (price: any = 0, weight: any = 0) => {
-    console.log("含税装卸费", price, weight)
     return (weight * price).toFixed(2)
 }
 
@@ -123,7 +120,6 @@ export const totalUnloadTaxPrice = (price: any = 0, weight: any = 0) => {
  * 不含税装卸费=含税装卸费/(1+装卸费税率/100)
  */
 export const totalUnloadPrice = (totalUnloadTaxPrice: any = 0, taxMode: any = 0) => {
-    console.log("不含税装卸费", totalUnloadTaxPrice, taxMode)
     return (totalUnloadTaxPrice / (1 + taxMode / 100)).toFixed(2)
 }
 /**
