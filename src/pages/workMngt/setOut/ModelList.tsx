@@ -23,6 +23,7 @@ export default function ModelList(): React.ReactNode {
     const [segmentName, setSegmentName] = useState('');
     const [segmentId, setSegmentId] = useState('');
     const [checked, setChecked] = useState(false);
+    const [filterValue, setFilterValue] = useState<any>();
 
     const columns = [
         {
@@ -99,14 +100,14 @@ export default function ModelList(): React.ReactNode {
             columns={columns}
             headTabs={[]}
             refresh={refresh}
+            filterValue={filterValue}
             requestData={{ productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
                 <Checkbox checked={checked} onChange={
                     (e: CheckboxChangeEvent) => {
-                        RequestUtil.post(``).then(res => {
-                            setRefresh(!refresh);
-                            setChecked(e.target.checked);
-                        })
+                        setFilterValue({ flag: e.target.checked ? 1 : 2 })
+                        setRefresh(!refresh);
+                        setChecked(e.target.checked);
                     }
                 }>相同名称显示</Checkbox>
                 <UploadModal id={params.id} path="/tower-science/productSegment/segmentModelUpload" updateList={() => setRefresh(!refresh)} />
