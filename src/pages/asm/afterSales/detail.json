@@ -1,0 +1,225 @@
+{
+    "baseInfoData": [
+        {
+            "title": "工单编号",
+            "width": 120,
+            "dataIndex": "workOrderNumber"
+        },
+        {
+            "title": "工程地址",
+            "dataIndex": "deliveryAddress"
+        },
+        {
+            "title": "工程状态",
+            "width": 120,
+            "dataIndex": "status",
+            "type": "select",
+            "required": true,
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "未派工"
+                },
+                {
+                    "value": 2,
+                    "label": "待处理"
+                },
+                {
+                    "value": 3,
+                    "label": "处理中"
+                },
+                {
+                    "value": 4,
+                    "label": "已完成"
+                },
+                {
+                    "value": 5,
+                    "label": "已关闭"
+                }
+            ]
+        },
+        {
+            "title": "订单编号",
+            "width": 200,
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "业务经理",
+            "width": 200,
+            "dataIndex": "serviceManager"
+        },
+        {
+            "title": "创建人",
+            "width": 120,
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 120
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "linkman",
+            "width": 120
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime",
+            "type": "date",
+            "width": 120,
+            "format": "YYYY-MM-DD HH:mm:ss"
+        },
+        {
+            "title": "工程名称",
+            "width": 120,
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "联系电话",
+            "width": 120,
+            "dataIndex": "phone"
+        }
+    ],
+
+    "afterSaleInfo": [
+        {
+            "title": "售后人员",
+            "dataIndex": "afterSaleUser",
+            "maxLength": 50
+        },
+        {
+            "title": "售后开始日期",
+            "width": 120,
+            "dataIndex": "startTime"
+        },
+        {
+            "title": "售后开始打卡",
+            "width": 120,
+            "dataIndex": "goodsType"
+        },
+        {
+            "title": "售后完成日期",
+            "dataIndex": "endTime",
+            "type": "date",
+            "width": 120,
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "售后完成打卡",
+            "width": 120,
+            "dataIndex": "goodsExplain"
+        },
+        {
+            "title": "售后周期",
+            "width": 120,
+            "dataIndex": "cycle"
+        }
+    ],
+    "pageInfo": [
+        {
+            "title": "问题分类",
+            "dataIndex": "issueType",
+            "type": "text",
+            "maxLength": 50
+        },
+        {
+            "title": "塔型",
+            "width": 120,
+            "dataIndex": "productCategory"
+        },
+        {
+            "title": "杆塔号",
+            "width": 120,
+            "dataIndex": "productNumber"
+        },
+        {
+            "title": "件号",
+            "width": 120,
+            "dataIndex": "pieceCode"
+        },
+        {
+            "title": "件数",
+            "width": 120,
+            "dataIndex": "pieceCodeNum"
+        },
+        {
+            "title": "问题描述",
+            "width": 120,
+            "dataIndex": "description"
+        },
+        {
+            "title": "解决方案",
+            "width": 120,
+            "dataIndex": "plan"
+        },
+        {
+            "title": "图片/视频",
+            "width": 70,
+            "dataIndex": "picNumber"
+        },
+        {
+            "title": "记录人",
+            "width": 120,
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "记录时间",
+            "width": 120,
+            "dataIndex": "createTime"
+        }
+    ],
+    "pageInfoCount": [
+        {
+            "title": "费用分类",
+            "width": 120,
+            "dataIndex": "typeName"
+        },
+        {
+            "title": "金额",
+            "width": 120,
+            "dataIndex": "money"
+        },
+        {
+            "title": "发生日期",
+            "width": 120,
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "图片",
+            "width": 70,
+            "dataIndex": "picNumber"
+        },
+        {
+            "title": "备注",
+            "width": 120,
+            "dataIndex": "description"
+        },
+        {
+            "title": "状态",
+            "dataIndex": "status",
+            "type": "select",
+            "width": 120,
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未报销"
+                },
+                {
+                    "value": 1,
+                    "label": "已处理"
+                }
+            ]
+        },
+        {
+            "title": "创建人",
+            "width": 120,
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "创建时间",
+            "width": 120,
+            "dataIndex": "createTime"
+        }
+    ]
+}

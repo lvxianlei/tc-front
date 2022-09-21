@@ -66,7 +66,7 @@ export const calcObj = {
         if (meteringMode === 1) {
             return currentWeight
         }
-        return (totalPonderationWeight * (currentWeight / allTotalWeight)) || "0"
+        return (totalPonderationWeight * ((currentWeight / allTotalWeight))) === (1 / 0) ? totalPonderationWeight * ((currentWeight / allTotalWeight)) : "0"
     },
     /**
      *  不含税单价
