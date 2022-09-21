@@ -535,6 +535,11 @@
                         "label": "下达列表",
                         "path": "/workMngt/releaseList",
                         "authority": "tc_erp_rd_work_release"
+                    },
+                    {
+                        "label": "补件下达列表",
+                        "path": "/workMngt/patchIssuedList",
+                        "authority": "tc_erp_rd_work_release"
                     }
                 ]
             },
@@ -549,6 +554,11 @@
                         "label": "工程报价列表",
                         "path": "/ingredients/enquiry",
                         "authority": "tc_erp_sw_contract_inquiry_list"
+                    },
+                    {
+                        "label": "提料汇总",
+                        "path": "/ingredients/lifting",
+                        "authority": "tc_erp_sw_work_liftingSummary"
                     },
                     {
                         "label": "采购配料",
@@ -617,6 +627,11 @@
                 "appName": "RD",
                 "authority": "tc_erp_rd_business",
                 "items": [
+                    {
+                        "label": "补件申请",
+                        "path": "/businessDisposal/patchApplication",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
                     {
                         "label": "取消暂停恢复",
                         "path": "/businessDisposal/cancelOrPauseOrrestore",

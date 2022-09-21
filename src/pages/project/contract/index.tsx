@@ -136,6 +136,7 @@ export default function ContractList(): JSX.Element {
       <Page
         path="/tower-market/contract/getContractPackPage"
         sourceKey=""
+        pageSize={50}
         onFilterSubmit={onFilterSubmit}
         transformResult={(result: any) => result.contractList}
         filterValue={filterValue}

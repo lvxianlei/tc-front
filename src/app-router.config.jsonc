@@ -800,7 +800,7 @@
       "name": "询比价",
       "path": "/contract-mngt/enquiryCompare",
       "module": "./pages/contract-mngt/enquiryCompare/index",
-      "exact": true, 
+      "exact": true,
       "authority": "tc_erp_sw_contract_comparison_list"
     },
     { //合同管理-询比价-询价信息
@@ -1131,6 +1131,27 @@
       "module": "./pages/workMngt/shortageList/index",
       "exact": true,
       "authority": "tc_erp_sw_work_lackMaterial_list"
+    },
+    {
+      "name": "提料汇总",
+      "path": "/ingredients/lifting",
+      "module": "./pages/workMngt/lifting/index",
+      "exact": true,
+      "authority": "tc_erp_sw_work_liftingSummary_list"
+    },
+    {
+      "name": "提料明细",
+      "path": "/ingredients/lifting/detail/:planNumber/:orderProjectName",
+      "module": "./pages/workMngt/lifting/Overview",
+      "exact": true,
+      "authority": "tc_erp_sw_work_liftingSummary_detail"
+    },
+    {
+      "name": "材料汇总",
+      "path": "/ingredients/lifting/material/:planNumber/:orderProjectName",
+      "module": "./pages/workMngt/lifting/material",
+      "exact": true,
+      "authority": "tc_erp_sw_work_liftingSummary_material"
     },
     { // 工作管理-样板列表
       "name": "样板列表",
@@ -2811,12 +2832,12 @@
       "authority": "tc_erp_sys_system_app_deploy_list"
     },
     { // 通用中心-应用信息
-    "name": "应用信息",
-    "path": "/sys/appSetting/index",
-    "module": "./pages/system-mngt/appSetting/index",
-    "exact": true,
-    "authority": "tc_erp_sys_system_client_info"
-  },
+      "name": "应用信息",
+      "path": "/sys/appSetting/index",
+      "module": "./pages/system-mngt/appSetting/index",
+      "exact": true,
+      "authority": "tc_erp_sys_system_client_info"
+    },
     { // RD-系统设置-试组装配置
       "name": "试组装配置",
       "path": "/baseSetting/tryAssemble",
@@ -2942,6 +2963,55 @@
       "module": "./pages/asm/clock/network/index",
       "exact": true,
       "authority": "tc_erp_sc_workbench"
+    },
+    { // RD-放样过程管理-补件下达列表
+      "name": "补件下达列表",
+      "path": "/workMngt/patchIssuedList",
+      "module": "./pages/workMngt/patchIssued/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-放样过程管理-补件下达列表-补件下达
+      "name": "补件下达",
+      "path": "/workMngt/patchIssuedList/patchIssued",
+      "module": "./pages/workMngt/patchIssued/PatchIssued",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-放样过程管理-补件下达列表-下达明细
+      "name": "下达明细",
+      "path": "/workMngt/patchIssuedList/issuedDetail/:id",
+      "module": "./pages/workMngt/patchIssued/IssuedDetail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-放样过程管理-补件下达列表-电焊明细
+      "name": "电焊明细",
+      "path": "/workMngt/patchIssuedList/weldingDetail/:id",
+      "module": "./pages/workMngt/patchIssued/WeldingDetail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-补件申请
+      "name": "补件申请",
+      "path": "/businessDisposal/patchApplication",
+      "module": "./pages/businessDisposal/patchApplication/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-补件申请-申请
+      "name": "申请",
+      "path": "/businessDisposal/patchApplication/apply",
+      "module": "./pages/businessDisposal/patchApplication/Apply",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-补件申请-详情
+      "name": "申请",
+      "path": "/businessDisposal/patchApplication/detail/:id",
+      "module": "./pages/businessDisposal/patchApplication/Detail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }

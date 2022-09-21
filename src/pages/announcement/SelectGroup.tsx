@@ -13,6 +13,7 @@ interface IPersonal {
     readonly description?: string;
     readonly number?: string;
 }
+
 export default function SelectGroup({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
 
     const [ visible, setVisible ] = useState<boolean>(false);

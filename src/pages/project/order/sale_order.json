@@ -92,7 +92,8 @@
         {
             "title": "合同要求交货日期",
             "dataIndex": "deliveryTime",
-            "disabled": true
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "产品类型",

@@ -1,6 +1,6 @@
 import React from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import { Button, Form, Spin } from "antd"
+import { Button, Form, Space, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable, OperationRecord } from "../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
@@ -40,10 +40,20 @@ export default function SalesPlanEdit() {
                 columns={salesAssist}
                 scroll={{ x: true }}
                 dataSource={data?.productInfos} />
-            <DetailTitle title="统计信息" />
+            <DetailTitle title={<nav>
+                统计信息
+                <span style={{ fontWeight: "normal", fontSize: 14, marginLeft: 16 }}>
+                    <span>总基数: <i style={{ color: "#FF8C00", fontStyle: "normal", marginLeft: 6 }}>{data?.totalNumber || 0}</i></span>
+                    <span style={{ marginLeft: 18 }}>总重量: <i style={{ color: "#FF8C00", fontStyle: "normal", marginLeft: 6 }}>{data?.totalWeight || 0}</i></span>
+                </span>
+            </nav>} />
             <CommonTable
                 rowKey={(record: any) => record.productCategoryName.toString()}
                 columns={[
+                    {
+                        "title": "产品类型",
+                        "dataIndex": "productTypeName"
+                    },
                     {
                         "title": "塔型",
                         "dataIndex": "productCategoryName"
@@ -64,5 +74,5 @@ export default function SalesPlanEdit() {
                 serviceName="tower-market"
                 operateTypeEnum="APPROVAL" />
         </Spin>
-    </DetailContent>
+    </DetailContent >
 }

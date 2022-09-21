@@ -26,6 +26,56 @@ interface CreateInterface {
     takingNumberStatus?: number | string
 }
 
+interface WeightParams {
+    width: number | string
+    length: number | string
+    weightAlgorithm: number
+    proportion: number | string
+}
+interface TotalWeightParmas extends WeightParams {
+    num: number | string
+}
+
+interface StockTakingWeightParmas extends TotalWeightParmas {
+    stockTakingNum: number | string
+}
+
+export const calcFun = {
+    /**
+     * 理重
+     */
+    weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
+        if (weightAlgorithm === 1) {
+            return ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
+        }
+        if (weightAlgorithm === 2) {
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
+        }
+        return (Number(proportion || 1) / 1000).toFixed(3)
+    },
+    /**
+     * 总重量
+     */
+    totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
+        if (weightAlgorithm === 1) {
+            return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
+        }
+        if (weightAlgorithm === 2) {
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
+        }
+        return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
+    },
+    stockTakingWeight: ({ length, width, weightAlgorithm, stockTakingNum = 1, proportion, num }: StockTakingWeightParmas) => {
+        if (weightAlgorithm === 1) {
+            return ((Number(proportion || 1) * Number(length)) * Number(stockTakingNum) / 1000 / 1000).toFixed(3)
+        }
+        if (weightAlgorithm === 2) {
+            return (Number(proportion || 1) * Number(length) * Number(width || 0) * Number(stockTakingNum) / 1000 / 1000 / 1000).toFixed(3)
+        }
+        return (Number(proportion || 1) * Number(stockTakingNum) / 1000).toFixed(3)
+    }
+}
+
 export default function CreatePlan(props: CreateInterface): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
@@ -70,64 +120,76 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     const handleNumChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
+                const weight = calcFun.weight({
+                    length: value,
+                    width: item.width,
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion
+                })
                 return ({
                     ...item,
                     stockTakingNum: value,
                     profitAndLossNum: (((value) - item.num)) + "" + "   ", // 盈亏数量
                     // 不含税单价
                     unTaxPrice: ((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6),
-
+                    // 盘点重量
                     stockTakingWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3),
                     // 盈亏重量 = 盘点重量 - 账目重量
                     profitAndLossWeight: ((+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3),
-                    
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    // totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.num) || 1)) / 1000 / 1000).toFixed(3), // 账面重量
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3),
+                    weight,
+                    //账面重量
+                    totalWeight: calcFun.totalWeight({
+                        length: value,
+                        width: item.width,
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        num: item.num
+                    }),
                     taxPrice: item.taxPrice || 0, // 单价
                     // 账目金额
                     totalTaxPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2),
                     // 盘点金额
                     // stockTakingPrice: (((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000) * (item.taxPrice || 0)).toFixed(2),
                     stockTakingPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2),
                     // 盈亏金额
                     profitAndLossPrice: ((+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2)) - (+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2))).toFixed(2),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2)) - (+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2))).toFixed(2),
                     // 不含税金额
                     totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * value / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * value / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
                 })
             }
             return item
         })
-        console.log(list, "============>>>")
-        setMaterialList(list.slice(0));
-        setPopDataList(list.slice(0))
+        setMaterialList([...list]);
+        setPopDataList([...list])
     }
 
     const lengthChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
+                const weight = calcFun.weight({
+                    length: value,
+                    width: item.width,
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion
+                })
                 return ({
                     ...item,
                     length: value,
@@ -135,49 +197,56 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                     profitAndLossNum: ((item.stockTakingNum || item.num) || 1) - item.num, // 盈亏数量
                     // 不含税单价
                     unTaxPrice: ((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6),
-                    stockTakingWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3),
+                    stockTakingWeight: calcFun.stockTakingWeight({
+                        length: value,
+                        width: item.width,
+                        weightAlgorithm: item.weightAlgorithm,
+                        stockTakingNum: item.stockTakingNum || item.num,
+                        proportion: item.proportion,
+                        num: item.num
+                    }),
                     // 盈亏重量 = 盘点重量 - 账目重量
                     profitAndLossWeight: ((+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3),
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3),
+                    weight,
                     // totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.num) || 1)) / 1000 / 1000).toFixed(3), // 账面重量
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * value) * (item.stockTakingNum || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * (item.stockTakingNum || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.stockTakingNum || 1) / 1000).toFixed(3),
+                    totalWeight: calcFun.totalWeight({
+                        length: value,
+                        width: item.width,
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        num: item.num
+                    }),
                     // 账目金额
                     totalTaxPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * value) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2),
                     // 盘点金额
                     // stockTakingPrice: (((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000) * (item.taxPrice || 0)).toFixed(2),
                     stockTakingPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * (value)) * (item.stockTakingNum || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * (value) * Number(item.width || 0) * (item.stockTakingNum || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.stockTakingNum || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * (value) * Number(item.width || 0) * (item.stockTakingNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (item.stockTakingNum || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2),
                     // 盈亏金额
                     profitAndLossPrice: ((+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2)) - (+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2))).toFixed(2),
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2)) - (+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2))).toFixed(2),
                     // 不含税金额
                     totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * value) * (item.stockTakingNum || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * (item.stockTakingNum || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.stockTakingNum || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * value) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * (item.stockTakingNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (item.stockTakingNum || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * value) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
                 })
             }
             return item
         })
-        setMaterialList(list.slice(0));
-        setPopDataList(list.slice(0))
+        setMaterialList([...list]);
+        setPopDataList([...list])
     }
 
     const widthChange = (value: number, id: string) => {
@@ -190,8 +259,8 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             }
             return item
         })
-        setMaterialList(list);
-        setPopDataList(list)
+        setMaterialList([...list]);
+        setPopDataList([...list])
     }
 
     const handleSuccessClick = async () => {
@@ -346,7 +415,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 addCollectionForm.resetFields();
                 setWarehouseId("");
             }
-        } 
+        }
     }, [props.visible])
 
     return (
@@ -356,7 +425,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
-                props?.handleCreate({code: 0});
+                props?.handleCreate({ code: 0 });
             }}
             destroyOnClose
             maskClosable={false}
@@ -365,7 +434,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate({code: 0});
+                    props?.handleCreate({ code: 0 });
                 }}>
                     关闭
                 </Button>,
@@ -388,10 +457,12 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 classStyle="baseInfo"
                 columns={(props.isEdit ? baseInfoEditColumn : baseInfoColumn).map((item: any) => {
                     if (item.dataIndex === "warehouseId") {
-                        return ({ ...item, enum: batchingStrategy?.map((item: any) => ({
-                            value: item.id,
-                            label: item.name
-                        })) })
+                        return ({
+                            ...item, enum: batchingStrategy?.map((item: any) => ({
+                                value: item.id,
+                                label: item.name
+                            }))
+                        })
                     }
                     return item
                 })}
@@ -429,12 +500,16 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                     onChange={(value: number) => widthChange(value, records.id)} key={key} />
                             })
                         }
-                        if (item.dataIndex === "materialStandardName") {
+                        if (item.dataIndex === "materialStandard") {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <Select
                                     style={{ width: '150px' }}
-                                    value={popDataList[key]?.materialStandard && popDataList[key]?.materialStandard + ',' + popDataList[key]?.materialStandardName}
+                                    labelInValue
+                                    value={{
+                                        label: popDataList[key]?.materialStandardName,
+                                        value: popDataList[key]?.materialStandard
+                                    } as any}
                                     onChange={(e: string) => {
                                         const newData = popDataList.map((item: any, index: number) => {
                                             if (index === key) {
@@ -448,7 +523,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                         })
                                         setPopDataList(newData)
                                     }}>
-                                    {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                                    {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                                 </Select>
                             })
                         }
@@ -457,7 +532,8 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 ...item,
                                 render: (value: number, records: any, key: number) => <Select
                                     style={{ width: '150px' }}
-                                    value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
+                                    labelInValue
+                                    value={{ label: popDataList[key]?.structureTexture, value: popDataList[key]?.structureTextureId } as any}
                                     onChange={(e: string) => {
                                         const newData = popDataList.map((item: any, index: number) => {
                                             if (index === key) {
@@ -471,14 +547,14 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                         })
                                         setPopDataList(newData)
                                     }}>
-                                    {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
+                                    {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                                 </Select>
                             })
                         }
                         if (item.dataIndex === "profitAndLossNum") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <span>{ `${records.profitAndLossNum}` }</span>
+                                render: (value: number, records: any, key: number) => <span>{`${records.profitAndLossNum}`}</span>
                             })
                         }
                         return item
@@ -512,77 +588,77 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                         value: ""
                     }}
                     onChange={(fields: any[]) => {
-                        console.log(((110.83  || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6), "====>>", statisticsData?.taxVal)
+                        console.log(((110.83 || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6), "====>>", statisticsData?.taxVal)
                         setMaterialList([
                             // ...materialList,
                             ...fields.map((item: any) => ({
-                            ...item,
-                            materialId: item.id,
-                            source: item.source || 2,
-                            materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
-                            materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
-                            structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
-                            structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
-                            
+                                ...item,
+                                materialId: item.id,
+                                source: item.source || 2,
+                                materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                                materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                                structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                                structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
 
-                            /**
-                             *  账面数量=当前收货批次下当前原材料的库存数量
-                                账面重量=根据账面数量计算，按照各自重量计算公式计算（保留三位小数）
-                                盘点数量=用户手动输入的数值，默认显示库存数量，用户可手动修改
-                                盘点重量=根据盘点数量计算，根据账面数量计算，按照各自重量计算公式计算（保留三位小数）
-                                盈亏数量=盘点数量-账面数量
-                                盈亏重量=盘点重量-账面重量
-                                单价=库存中当前原材料的含税单价
-                                账面金额=当前原材料重量*单价（保留两位小数）
-                                盘点金额=盘点重量*单价（保留两位小数）
-                                盈亏金额=盘点金额-账面金额
-                                不含税单价=单价/(1+材料税率/100)（保留六位小数）
-                                不含税金额=不含税单价*盈亏重量（保留两位小数）
-                             */
-                            stockTakingNum: item.stockTakingNum || item.num, // 盘点数量
-                            profitAndLossNum: ((item.stockTakingNum || item.num) || 1) - item.num, // 盈亏数量
-                            // stockTakingWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000).toFixed(3), // 盘点重量
-                            stockTakingWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3),
-                            // 盈亏重量 = 盘点重量 - 账目重量
-                            profitAndLossWeight: ((+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3),
-                            weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                            // totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.num) || 1)) / 1000 / 1000).toFixed(3), // 账面重量
-                            totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3),
-                            taxPrice: item.taxPrice || 0, // 单价
-                            // 账目金额
-                            totalTaxPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2),
-                            // 盘点金额
-                            // stockTakingPrice: (((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000) * (item.taxPrice || 0)).toFixed(2),
-                            stockTakingPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2),
-                            // 盈亏金额
-                            profitAndLossPrice: ((+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2)) - (+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) *  (item.taxPrice || 0)).toFixed(2))).toFixed(2),
-                            // 不含税单价
-                            unTaxPrice: ((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6),
-                            // 不含税金额
-                            totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
-                        }))
+
+                                /**
+                                 *  账面数量=当前收货批次下当前原材料的库存数量
+                                    账面重量=根据账面数量计算，按照各自重量计算公式计算（保留三位小数）
+                                    盘点数量=用户手动输入的数值，默认显示库存数量，用户可手动修改
+                                    盘点重量=根据盘点数量计算，根据账面数量计算，按照各自重量计算公式计算（保留三位小数）
+                                    盈亏数量=盘点数量-账面数量
+                                    盈亏重量=盘点重量-账面重量
+                                    单价=库存中当前原材料的含税单价
+                                    账面金额=当前原材料重量*单价（保留两位小数）
+                                    盘点金额=盘点重量*单价（保留两位小数）
+                                    盈亏金额=盘点金额-账面金额
+                                    不含税单价=单价/(1+材料税率/100)（保留六位小数）
+                                    不含税金额=不含税单价*盈亏重量（保留两位小数）
+                                 */
+                                stockTakingNum: item.stockTakingNum || item.num, // 盘点数量
+                                profitAndLossNum: ((item.stockTakingNum || item.num) || 1) - item.num, // 盈亏数量
+                                // stockTakingWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000).toFixed(3), // 盘点重量
+                                stockTakingWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3),
+                                // 盈亏重量 = 盘点重量 - 账目重量
+                                profitAndLossWeight: ((+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3),
+                                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                                // totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.num) || 1)) / 1000 / 1000).toFixed(3), // 账面重量
+                                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3),
+                                taxPrice: item.taxPrice || 0, // 单价
+                                // 账目金额
+                                totalTaxPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2),
+                                // 盘点金额
+                                // stockTakingPrice: (((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000) * (item.taxPrice || 0)).toFixed(2),
+                                stockTakingPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2),
+                                // 盈亏金额
+                                profitAndLossPrice: ((+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2)) - (+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2))).toFixed(2),
+                                // 不含税单价
+                                unTaxPrice: ((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6),
+                                // 不含税金额
+                                totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
+                            }))
                         ] || [])
                     }}
                 />

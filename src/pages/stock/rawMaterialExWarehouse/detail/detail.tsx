@@ -487,7 +487,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'status',
+                        name: 'outStockItemStatus',
                         label: '状态',
                         children: (
                             <Select placeholder="请选择状态" style={{ width: "140px" }}>

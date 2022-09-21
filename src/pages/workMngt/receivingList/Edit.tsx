@@ -67,7 +67,7 @@ export const calcObj = {
         if (meteringMode === 1) {
             return currentWeight
         }
-        return (totalPonderationWeight * (currentWeight / allTotalWeight)) || "0"
+        return (totalPonderationWeight * ((currentWeight / allTotalWeight))) === (1 / 0) ? totalPonderationWeight * ((currentWeight / allTotalWeight)) : "0"
     },
     /**
      *  不含税单价
@@ -221,12 +221,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const baseFormData = await form.validateFields()
             const listsFormData = await editForm.validateFields()
-            console.log(listsFormData, "listsFormData", cargoData, editForm.getFieldsValue(true))
             listsFormData?.submit?.map((item: any, index: number) => {
                 const v = editForm?.getFieldsValue(true)?.submit[index];
                 item["weight"] = v?.weight || item?.weightAlgorithm === "1" ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === "2" ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) / 1000).toFixed(3)
+                    : item?.weightAlgorithm === "2" ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) / 1000).toFixed(3)
             })
             const contractNumberData = baseFormData.contractNumber.records[0]
             const result = {
@@ -493,7 +492,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return ({
                             ...item,
                             enum: materialTextureOptions?.map(item => ({
-                                value: item.id,
+                                value: item.name,
                                 label: item.name
                             }))
                         })
