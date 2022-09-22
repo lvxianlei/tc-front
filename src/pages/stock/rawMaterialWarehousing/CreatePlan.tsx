@@ -2,20 +2,19 @@
  * 创建计划列表
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
+import { Modal, Form, Button, message } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
     baseInfoColumn,
     addMaterial
 } from "./CreatePlan.json";
-import { materialStandardOptions, materialTextureOptions, qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
+import { qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 
 export default function CreatePlan(props: any): JSX.Element {
-    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
@@ -23,22 +22,9 @@ export default function CreatePlan(props: any): JSX.Element {
     const [warehouseId, setWarehouseId] = useState<string>("");
     const [supplierId, setSupplierId] = useState<any>("");
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    
+
     let [count, setCount] = useState<number>(1);
 
-    const formatSpec = (spec: any): { width: string, length: string } => {
-        if (!spec) {
-            return ({
-                width: "0",
-                length: "0"
-            })
-        }
-        const splitArr = spec.replace("∠", "").split("*")
-        return ({
-            width: splitArr[0] || "0",
-            length: splitArr[1] || "0"
-        })
-    }
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -54,9 +40,10 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...item,
             })
         })])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
+        setPopDataList([...materialList, ...newMaterialList.map((item: any, index: number) => {
             return ({
-                ...item
+                ...item,
+                key: `${item.id}-${index}-${Math.random()}-${new Date().getTime()}`
             })
         })])
         setVisible(false)
@@ -64,8 +51,8 @@ export default function CreatePlan(props: any): JSX.Element {
 
     // 移除
     const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.id !== id))
-        setPopDataList(materialList.filter((item: any) => item.id !== id))
+        setMaterialList(materialList.filter((item: any) => item.key !== id))
+        setPopDataList(materialList.filter((item: any) => item.key !== id))
     }
 
     // 复制
@@ -138,7 +125,7 @@ export default function CreatePlan(props: any): JSX.Element {
             addCollectionForm.setFieldsValue({
                 warehousingType: "1"
             })
-        } 
+        }
     }, [props.visible])
 
     // 获取所有的仓库
@@ -195,10 +182,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 classStyle="baseInfo"
                 columns={baseInfoColumn.map((item: any) => {
                     if (item.dataIndex === "warehouseId") {
-                        return ({ ...item, enum: batchingStrategy?.map((item: any) => ({
-                            value: item.id,
-                            label: item.name
-                        })) })
+                        return ({
+                            ...item, enum: batchingStrategy?.map((item: any) => ({
+                                value: item.id,
+                                label: item.name
+                            }))
+                        })
                     }
                     if (item.dataIndex === "supplierId") {
                         return ({
@@ -247,7 +236,11 @@ export default function CreatePlan(props: any): JSX.Element {
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
                             {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
-                            <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
+                            <Button
+                                type="link"
+                                disabled={records.source === 1}
+                                onClick={() => handleRemove(records.key)}
+                            >移除</Button>
                         </>
                     }]}
                 pagination={false}

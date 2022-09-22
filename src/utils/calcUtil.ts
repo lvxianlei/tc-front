@@ -23,9 +23,9 @@ export const totalTaxPrice = (
 *  不含税金额
 * 含税金额 / ( 1 + 材料税率 / 100 )
 */
-export const totalUnTaxPrice =
-    (totalTaxPrice: any = 0, taxMode: any = 0) =>
-        (totalTaxPrice / (1 + taxMode / 100)).toFixed(2)
+export const totalUnTaxPrice = (totalTaxPrice: any = 0, taxMode: any = 0) => {
+    return (totalTaxPrice / (1 + taxMode / 100)).toFixed(2)
+}
 
 /** 
  *  结算重量
@@ -62,53 +62,66 @@ export const unTaxPrice = (taxPrice: any = 0, taxMode: any = 0) =>
     (taxPrice / (1 + taxMode / 100)).toFixed(6)
 
 /**
-     * 理重
-     */
-export const weight = ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
-    if (weightAlgorithm === 1) {
-        return ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
+ * 理重
+ * @weightAlgorithm 材料计算类型
+ * @proportion 比重
+ */
+export const weight = ({ length = 0, width = 0, weightAlgorithm, proportion = 1 }: WeightParams) => {
+    const cLenght = Number(length) * 0.001
+    const cWidth = Number(width) * 0.001
+    if ([1, "1"].includes(weightAlgorithm)) {
+        return (Number(proportion) * cLenght * 0.001).toFixed(3)
     }
-    if (weightAlgorithm === 2) {
-        return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
+    if ([1, "1"].includes(weightAlgorithm)) {
+        return (Number(proportion) * cLenght * cWidth * 0.001).toFixed(3)
     }
-    return (Number(proportion || 1) / 1000).toFixed(3)
+    return (Number(proportion) * 0.001).toFixed(3)
 }
 /**
  * 总重量
  */
-export const totalWeight = ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
-    if (weightAlgorithm === 1) {
-        return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
+export const totalWeight = ({ length = 0, width = 0, weightAlgorithm, proportion = 1, num }: TotalWeightParmas) => {
+    const cLenght = Number(length) * 0.001
+    const cWidth = Number(width) * 0.001
+    if ([1, "1"].includes(weightAlgorithm)) {
+        return (Number(proportion) * cLenght * Number(num) * 0.001).toFixed(3)
     }
-    if (weightAlgorithm === 2) {
-        return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
+    if ([2, "2"].includes(weightAlgorithm)) {
+        return (Number(proportion) * cLenght * cWidth * Number(num) * 0.001).toFixed(3)
     }
-    return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
+    return (Number(proportion) * Number(num) * 0.001).toFixed(3)
 }
 /**
 * 含税运费
 * 含税运费=材料所在合同的含税运费单价*结算重量
 */
-export const totalTransportTaxPrice = (price: any = 0, weight: any = 0) => (weight * price).toFixed(2)
+export const totalTransportTaxPrice = (price: any = 0, weight: any = 0) => {
+    return (weight * price).toFixed(2)
+}
 /**
  * 不含税运费
  * 不含税运费=含税运费/(1+运费税率/100)
  */
-export const totalTransportPrice = (totalTransportTaxPrice: any = 0, taxMode: any = 0) =>
-    (totalTransportTaxPrice / (1 + taxMode / 100)).toFixed(2)
+export const totalTransportPrice = (totalTransportTaxPrice: any = 0, taxMode: any = 0) => {
+    return (totalTransportTaxPrice / (1 + taxMode / 100)).toFixed(2)
+}
+
 
 /**
 * 含税装卸费
 * 含税装卸费=材料所在合同的含税装卸费单价*结算重量
 */
-export const totalUnloadTaxPrice = (price: any = 0, weight: any = 0) => (weight * price).toFixed(2)
+export const totalUnloadTaxPrice = (price: any = 0, weight: any = 0) => {
+    return (weight * price).toFixed(2)
+}
 
 /**
  * 不含税装卸费
  * 不含税装卸费=含税装卸费/(1+装卸费税率/100)
  */
-export const totalUnloadPrice = (totalUnloadTaxPrice: any = 0, taxMode: any = 0) =>
-    (totalUnloadTaxPrice / (1 + taxMode / 100)).toFixed(2)
+export const totalUnloadPrice = (totalUnloadTaxPrice: any = 0, taxMode: any = 0) => {
+    return (totalUnloadTaxPrice / (1 + taxMode / 100)).toFixed(2)
+}
 /**
  * 盈亏重量
  * 盈亏重量 = 盘点重量 - 账目重量 

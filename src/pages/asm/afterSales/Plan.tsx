@@ -20,21 +20,21 @@ export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX
     
     const columns = [
         {
-            key: 'name',
+            key: 'planNumber',
             title: '计划号',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'planNumber'
         },
         {
-            key: 'employeeNames',
+            key: 'projectName',
             title: '工程名称',
             width: 150,
-            dataIndex: 'employeeNames'
+            dataIndex: 'projectName'
         },
         {
-            key: 'type',
+            key: 'businessUserName',
             title: '业务经理',
-            dataIndex: 'type',
+            dataIndex: 'businessUserName',
             width: 120
         }
     ]
@@ -66,14 +66,15 @@ export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX
     >
              
         <Page
-            path="/tower-science/productCategory/planNumber/list"
+            path="/tower-science/productCategory/planNumber/listForSales"
             columns={columns}
             headTabs={[]}
-            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}
+            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.planNumber:''}</span>}
             // refresh={refresh}
           
             tableProps={{
-                rowKey:'index',
+                rowKey:'planNumber',
+                pagination:false,
                 rowSelection: {
                     type:'radio',
                     selectedRowKeys: selectedKeys,
