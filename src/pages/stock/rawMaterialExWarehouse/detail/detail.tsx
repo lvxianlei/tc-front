@@ -374,25 +374,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
-        const result: any = {
-            selectName: value.selectName || "",
-            status: value.status || "",
-            updateTimeStart: "",
-            updateTimeEnd: "",
-            departmentId: "",
-            outStockStaffId: "",
-
-            materialTexture: value.materialTexture || "",
-            standard: value.standard || ""
+        if (value.updateTime) {
+            const formatDate = value.updateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateTimeStart = `${formatDate[0]} 00:00:00`
+            value.updateTimeEnd = `${formatDate[1]} 23:59:59`
+            delete value.updateTime
         }
-        if (value.startRefundTime) {
-            const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            result.updateTimeStart = `${formatDate[0]} 00:00:00`
-            result.updateTimeEnd = `${formatDate[1]} 23:59:59`
-            delete value.startRefundTime
-        }
-        if (value.batcherId) {
-            result.outStockStaffId = value.batcherId.value
+        if (value.outStockStaffId) {
+            value.outStockStaffId = value.outStockStaffId.value
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -579,12 +568,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 filterValue={filterValue}
                 searchFormItems={[
                     {
-                        name: 'startRefundTime',
+                        name: 'updateTime',
                         label: '最新状态变更时间',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'outStockItemStatus',
+                        name: 'status',
                         label: '状态',
                         children: (
                             <Select placeholder="请选择状态" style={{ width: "140px" }}>
@@ -595,12 +584,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'batcherId',
+                        name: 'outStockStaffId',
                         label: '出库人',
                         children: <IntgSelect width={200} />
                     },
                     {
-                        name: 'materialTexture',
+                        name: 'structureTexture',
                         label: '材质',
                         children: (
                             <Select placeholder="请选择材质" style={{ width: "140px" }}>
@@ -613,7 +602,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'standard',
+                        name: 'materialStandard',
                         label: '标准',
                         children: (
                             <Select placeholder="请选择标准" style={{ width: "140px" }}>
@@ -626,8 +615,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'selectName',
-                        label: "关键字",
+                        name: 'fuzzyQuery',
+                        label: "模糊查询",
                         children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号进行查询" style={{ width: 300 }} />
                     }
                 ]}

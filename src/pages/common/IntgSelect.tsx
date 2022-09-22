@@ -51,7 +51,7 @@ export default function IntgSelect({ onChange, width, value = { value: "", label
         notFoundContent={fetching ? <Spin size="small" /> : null}
         onSearch={handleSearch}
         onChange={handleChange}
-        placeholder={props.placeholder}
+        placeholder={props.placeholder || "请输入"}
         {...props} >
         {userData?.records?.map((item: any) => <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>)}
     </Select>
