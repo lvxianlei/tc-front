@@ -105,7 +105,7 @@ export default function ProcessCardList(): React.ReactNode {
             headTabs={[]}
             refresh={refresh}
             filterValue={filterValue}
-            requestData={{ productCategoryId: params.id }}
+            requestData={{ productCategoryId: params.id, flag: 2 }}
             extraOperation={<Space direction="horizontal" size="small">
                 <Checkbox checked={checked} onChange={
                     (e: CheckboxChangeEvent) => {
