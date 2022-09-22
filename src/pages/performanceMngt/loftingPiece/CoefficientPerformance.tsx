@@ -50,50 +50,20 @@ export default forwardRef(function CoefficientPerformance({ data }: modalProps, 
 
     return <DetailContent key='CoefficientPerformance'>
         <Form form={form} layout="horizontal" labelCol={{ span: 8 }}>
-            {
-                data?.map((items: any, index: number) => {
-                    return <>
-                        <DetailTitle title={items?.rateType} key={index} />
-                        {
-                            items?.performanceConfigDetailVOList?.map((res: ICoefficient, ind: number) => (
-                                <>
-                                    <Form.Item name={[index, ind, 'id']} style={{ display: 'none' }} initialValue={res?.id}></Form.Item>
-                                    <Form.Item name={[index, ind, 'rateName']} style={{ display: 'none' }} initialValue={res?.rateName}></Form.Item>
-                                    <Form.Item name={[index, ind, 'rateType']} style={{ display: 'none' }} initialValue={res?.rateType}></Form.Item>
+        <DetailTitle title="奖惩系数" key={0} />
                                     <Form.Item
-                                        name={[index, ind, 'rate']}
-                                        key={res.id}
-                                        label={res.rateName}
-                                        initialValue={res.rate}
+                                        name={'rate'}
+                                        label={'放样员扣惩系数'}
+                                        initialValue={''}
                                         rules={[
                                             {
                                                 required: true,
-                                                message: `请输入${res.rateName}`
+                                                message: `请选择放样员扣惩系数`
                                             }
-                                            // {
-                                            //     required: true,
-                                            //     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                                            //         if (res.rateType === '奖惩系数') {
-                                            //             if (/^[0-9]{1}?(\.[0-9]{1,2})?$/.test(value)) {
-                                            //                 callback()
-                                            //             } else {
-                                            //                 callback('仅可输入0-9')
-                                            //             }
-                                            //         } else {
-                                            //             if (/^[1-9]{1}?(\.[0-9]{1,2})?$/.test(value)) {
-                                            //                 callback()
-                                            //             } else {
-                                            //                 callback('仅可输入1-9')
-                                            //             }
-                                            //         }
-                                            //     }
-                                            // }
                                         ]}>
 
                                         <Select placeholder="请选择" style={{ width: "150px" }}>
-                                            {
-                                                res.rateType === '奖惩系数' ? <Select.Option value={0} key="0">0</Select.Option> : null
-                                            }
+                                            <Select.Option value={0} key="0">0</Select.Option>
                                             <Select.Option value={1} key="1">1</Select.Option>
                                             <Select.Option value={2} key="2">2</Select.Option>
                                             <Select.Option value={3} key="3">3</Select.Option>
@@ -103,16 +73,103 @@ export default forwardRef(function CoefficientPerformance({ data }: modalProps, 
                                             <Select.Option value={7} key="7">7</Select.Option>
                                             <Select.Option value={8} key="8">8</Select.Option>
                                             <Select.Option value={9} key="9">9</Select.Option>
-
                                         </Select>
-
                                     </Form.Item>
-                                </>
-                            ))
-                        }
-                    </>
-                })
-            }
+                                    <Form.Item
+                                        name={'rate'}
+                                        label={'负责人扣惩系数'}
+                                        initialValue={''}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: `请选择负责人扣惩系数`
+                                            }
+                                        ]}>
+
+                                        <Select placeholder="请选择" style={{ width: "150px" }}>
+                                            <Select.Option value={0} key="0">0</Select.Option>
+                                            <Select.Option value={1} key="1">1</Select.Option>
+                                            <Select.Option value={2} key="2">2</Select.Option>
+                                            <Select.Option value={3} key="3">3</Select.Option>
+                                            <Select.Option value={4} key="4">4</Select.Option>
+                                            <Select.Option value={5} key="5">5</Select.Option>
+                                            <Select.Option value={6} key="6">6</Select.Option>
+                                            <Select.Option value={7} key="7">7</Select.Option>
+                                            <Select.Option value={8} key="8">8</Select.Option>
+                                            <Select.Option value={9} key="9">9</Select.Option>
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item
+                                        name={'rate'}
+                                        label={'校核员扣惩系数'}
+                                        initialValue={''}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: `请选择校核员扣惩系数`
+                                            }
+                                        ]}>
+
+                                        <Select placeholder="请选择" style={{ width: "150px" }}>
+                                            <Select.Option value={0} key="0">0</Select.Option>
+                                            <Select.Option value={1} key="1">1</Select.Option>
+                                            <Select.Option value={2} key="2">2</Select.Option>
+                                            <Select.Option value={3} key="3">3</Select.Option>
+                                            <Select.Option value={4} key="4">4</Select.Option>
+                                            <Select.Option value={5} key="5">5</Select.Option>
+                                            <Select.Option value={6} key="6">6</Select.Option>
+                                            <Select.Option value={7} key="7">7</Select.Option>
+                                            <Select.Option value={8} key="8">8</Select.Option>
+                                            <Select.Option value={9} key="9">9</Select.Option>
+                                        </Select>
+                                    </Form.Item>
+        <DetailTitle title="严重等级系数" key={1} />
+                                    <Form.Item
+                                        name={'rate'}
+                                        label={'严重'}
+                                        initialValue={''}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: `请选择严重`
+                                            }
+                                        ]}>
+
+                                        <Select placeholder="请选择" style={{ width: "150px" }}>
+                                            <Select.Option value={1} key="1">1</Select.Option>
+                                            <Select.Option value={2} key="2">2</Select.Option>
+                                            <Select.Option value={3} key="3">3</Select.Option>
+                                            <Select.Option value={4} key="4">4</Select.Option>
+                                            <Select.Option value={5} key="5">5</Select.Option>
+                                            <Select.Option value={6} key="6">6</Select.Option>
+                                            <Select.Option value={7} key="7">7</Select.Option>
+                                            <Select.Option value={8} key="8">8</Select.Option>
+                                            <Select.Option value={9} key="9">9</Select.Option>
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item
+                                        name={'rate'}
+                                        label={'一般'}
+                                        initialValue={''}
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: `请选择一般`
+                                            }
+                                        ]}>
+
+                                        <Select placeholder="请选择" style={{ width: "150px" }}>
+                                            <Select.Option value={1} key="1">1</Select.Option>
+                                            <Select.Option value={2} key="2">2</Select.Option>
+                                            <Select.Option value={3} key="3">3</Select.Option>
+                                            <Select.Option value={4} key="4">4</Select.Option>
+                                            <Select.Option value={5} key="5">5</Select.Option>
+                                            <Select.Option value={6} key="6">6</Select.Option>
+                                            <Select.Option value={7} key="7">7</Select.Option>
+                                            <Select.Option value={8} key="8">8</Select.Option>
+                                            <Select.Option value={9} key="9">9</Select.Option>
+                                        </Select>
+                                    </Form.Item>
         </Form>
     </DetailContent>
 })

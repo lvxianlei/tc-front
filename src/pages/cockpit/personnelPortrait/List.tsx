@@ -31,7 +31,7 @@ export default function List(): React.ReactNode {
     const halfYear = (new Date().getMonth() > 6) ? `${new Date().getFullYear()}-07,${new Date().getFullYear()}-12` : `${new Date().getFullYear()}-01,${new Date().getFullYear()}-06`;
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/loftingUserWork`, { ...filterValue });
+        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/loftingUserWork`, { fuzzyMsg: filterValue?.fuzzyMsg || '' });
         if (data?.length > 0 && data[0]?.id) {
             detailRun(data[0]?.userId, data[0]?.type)
         } else {
