@@ -18,6 +18,7 @@ import useRequest from '@ahooksjs/use-request';
 
 export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
+    const [fileData, setFileData] = useState<any>();
     const [page, setPage] = useState({
         current: 1,
         size: 10,
@@ -27,20 +28,32 @@ export default function List(): React.ReactNode {
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(``, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/repair`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
         setPage({ ...data });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
+            fileRun(data.records[0]?.id)
         } else {
             setDetailData([]);
+            setFileData([]);
         }
         resole(data?.records);
     }), {})
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(`/tower-science/supplyEntry/productCategory/list/${id}`);
+            const result = await RequestUtil.get<any>(`/tower-science/repair/getRepairStructure/${id}`);
             setDetailData(result);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: fileRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get<any>(`/tower-science/repair/getRepairDetails/${id}`);
+            setFileData(result?.fileVOList || []);
             resole(result)
         } catch (error) {
             reject(error)
@@ -79,7 +92,7 @@ export default function List(): React.ReactNode {
                     <Select.Option value={2} key="2">已处理</Select.Option>
                 </Select>
             </Form.Item>
-            <Form.Item label='产品类型' name="supplyType">
+            <Form.Item label='产品类型' name="productType">
                 <Select placeholder="请选择产品类型">
                     <Select.Option value={''} key="0">全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
@@ -132,7 +145,7 @@ export default function List(): React.ReactNode {
             columns={detailColumns}
             dataSource={detailData || []}
             pagination={false} />
-        <Attachment title="" dataSource={detailData?.attachInfoVos || []} />
+        <Attachment title="" dataSource={fileData || []} />
         </Space>
     </>
 }

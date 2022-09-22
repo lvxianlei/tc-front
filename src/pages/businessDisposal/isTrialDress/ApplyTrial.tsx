@@ -33,12 +33,12 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
     }), { manual: type === 'detail', refreshDeps: [id, type] })
 
     const { data: planNums } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/list`);
+        const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/listAll`);
         resole(nums)
     }), {})
 
     const planNumChange = async (e: any) => {
-        const data: any = await RequestUtil.get(`/tower-science/productCategory/list/${e}`);
+        const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
         setTowerSelects(data || [])
         form.setFieldsValue({
             productCategoryIds: []

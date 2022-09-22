@@ -1,113 +1,113 @@
 {
     "columns": [
         {
-            "key": "supplyNumber",
+            "key": "repairNumber",
             "title": "返修单编号",
-            "dataIndex": "supplyNumber",
-            "width": 100
-        },
-        {
-            "key": "supplyTypeName",
-            "title": "返修单状态",
-            "dataIndex": "supplyTypeName",
+            "dataIndex": "repairNumber",
             "width": 100
         },
         {
             "key": "statusName",
-            "title": "最新状态变更时间",
+            "title": "返修单状态",
             "dataIndex": "statusName",
             "width": 100
         },
         {
             "key": "updateStatusTime",
-            "title": "返修日期",
+            "title": "最新状态变更时间",
             "dataIndex": "updateStatusTime",
+            "width": 100
+        },
+        {
+            "key": "repairTime",
+            "title": "返修日期",
+            "dataIndex": "repairTime",
             "width": 150
         },
         {
-            "key": "priorityName",
+            "key": "wasteProductReceiptNumber",
             "title": "不合格处置单编号",
-            "dataIndex": "priorityName",
+            "dataIndex": "wasteProductReceiptNumber",
             "width": 100
         },
         {
-            "key": "applyUserDeptName",
+            "key": "productTypeName",
             "title": "产品类型",
-            "dataIndex": "applyUserDeptName",
+            "dataIndex": "productTypeName",
             "width": 100
         },
         {
-            "key": "applyUserName",
+            "key": "productionLink",
             "title": "生产环节",
-            "dataIndex": "applyUserName",
+            "dataIndex": "productionLink",
+            "width": 100
+        },
+        {
+            "key": "issuedNumber",
+            "title": "原下达单号",
+            "dataIndex": "issuedNumber",
             "width": 100
         },
         {
             "key": "planNumber",
-            "title": "原下达单号",
+            "title": "计划号",
             "dataIndex": "planNumber",
             "width": 100
         },
         {
-            "key": "projectName",
-            "title": "计划号",
-            "dataIndex": "projectName",
-            "width": 100
-        },
-        {
-            "key": "businessUserName",
+            "key": "productCategoryName",
             "title": "塔型",
-            "dataIndex": "businessUserName",
+            "dataIndex": "productCategoryName",
             "width": 100
         },
         {
-            "key": "planDeliveryTime",
-            "title": "罚款金额",
-            "dataIndex": "planDeliveryTime",
+            "key": "actualPenaltyAmount",
+            "title": "实际罚款金额",
+            "dataIndex": "actualPenaltyAmount",
             "width": 100
         }
     ],
     "detailColumns": [
         {
-            "key": "productCategoryName",
+            "key": "segmentName",
             "title": "段号",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "segmentName",
             "width": 100
         },
         {
-            "key": "productTypeName",
+            "key": "code",
             "title": "零件号",
-            "dataIndex": "productTypeName",
+            "dataIndex": "code",
             "width": 100
         },
         {
-            "key": "voltageGradeName",
+            "key": "structureTexture",
             "title": "材质",
-            "dataIndex": "voltageGradeName",
+            "dataIndex": "structureTexture",
             "width": 100
         },
         {
-            "key": "status",
+            "key": "structureSpec",
             "title": "规格",
-            "dataIndex": "status",
+            "dataIndex": "structureSpec",
             "width": 100
         },
         {
-            "key": "totalNumber",
+            "key": "length",
             "title": "长度",
-            "dataIndex": "totalNumber",
+            "dataIndex": "length",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "width",
             "title": "宽度",
-            "dataIndex": "totalWeight",
+            "dataIndex": "width",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "basicsWeight",
             "title": "单重kg",
-            "dataIndex": "totalWeight",
+            "dataIndex": "basicsWeight",
             "width": 100
         },
         {
@@ -117,125 +117,131 @@
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "basicsPartNum",
             "title": "单段返修数量",
-            "dataIndex": "totalWeight",
+            "dataIndex": "basicsPartNum",
             "width": 160
         },
         {
-            "key": "totalWeight",
+            "key": "segmentCount",
             "title": "单基段数",
-            "dataIndex": "totalWeight",
+            "dataIndex": "segmentCount",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "baseNum",
             "title": "基数",
-            "dataIndex": "totalWeight",
+            "dataIndex": "baseNum",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "repairTotalNum",
             "title": "返修总数量",
-            "dataIndex": "totalWeight",
+            "dataIndex": "repairTotalNum",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "typeDictName",
             "title": "零件类型",
-            "dataIndex": "totalWeight",
+            "dataIndex": "typeDictName",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "repairTypeName",
             "title": "返修类型",
-            "dataIndex": "totalWeight",
+            "dataIndex": "repairTypeName",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "repairWorkshop",
             "title": "返修车间",
-            "dataIndex": "totalWeight",
+            "dataIndex": "repairWorkshop",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "repairWorkProcedure",
             "title": "返修工序",
-            "dataIndex": "totalWeight",
+            "dataIndex": "repairWorkProcedure",
             "width": 100
         },
         {
-            "key": "A",
+            "key": "repairLeaderName",
             "title": "责任人",
-            "dataIndex": "A",
+            "dataIndex": "repairLeaderName",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "penaltyAmount",
             "title": "罚款金额（元）",
-            "dataIndex": "totalWeight",
+            "dataIndex": "penaltyAmount",
+            "width": 100
+        },
+        {
+            "key": "actualPenaltyAmount",
+            "title": "实际罚款金额",
+            "dataIndex": "actualPenaltyAmount",
             "width": 100
         }
     ],
     "baseColumns": [
         {
-            "key": "totalWeight",
+            "key": "repairNumber",
             "title": "返修单编号",
-            "dataIndex": "totalWeight",
+            "dataIndex": "repairNumber",
             "width": 100
         },
         {
-            "key": "supplyTypeName",
+            "key": "status",
             "title": "返修单状态",
-            "dataIndex": "supplyTypeName",
+            "dataIndex": "status",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "repairTime",
             "title": "返修日期",
-            "dataIndex": "totalWeight",
+            "dataIndex": "repairTime",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "wasteProductReceiptNumber",
             "title": "不合格处置单编号",
-            "dataIndex": "totalWeight",
+            "dataIndex": "wasteProductReceiptNumber",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "productTypeName",
             "title": "产品类型",
-            "dataIndex": "totalWeight",
+            "dataIndex": "productTypeName",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "productionLink",
             "title": "生产环节",
-            "dataIndex": "totalWeight",
+            "dataIndex": "productionLink",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "issuedNumber",
             "title": "原下达单号",
-            "dataIndex": "totalWeight",
+            "dataIndex": "issuedNumber",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "totalWeight",
+            "dataIndex": "planNumber",
             "width": 100
         },
         {
-            "key": "totalWeight",
+            "key": "productCategoryName",
             "title": "塔型",
-            "dataIndex": "totalWeight",
+            "dataIndex": "productCategoryName",
             "width": 100
         },
         {
-            "key": "totalWeight",
-            "title": "罚款金额",
-            "dataIndex": "totalWeight",
+            "key": "actualPenaltyAmount",
+            "title": "实际罚款金额",
+            "dataIndex": "actualPenaltyAmount",
             "width": 100
         }
     ]
