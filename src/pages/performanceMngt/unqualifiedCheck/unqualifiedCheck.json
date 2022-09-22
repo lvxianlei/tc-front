@@ -1,263 +1,263 @@
 {
     "columns": [
         {
-            "key": "taskNumber",
-            "title": "计划号",
-            "width": 80,
-            "dataIndex": "taskNumber"
-        },
-        {
             "key": "planNumber",
-            "title": "放样任务编号",
+            "title": "计划号",
             "width": 80,
             "dataIndex": "planNumber"
         },
         {
-            "key": "submitTime",
+            "key": "loftingTaskNumber",
+            "title": "放样任务编号",
+            "width": 80,
+            "dataIndex": "loftingTaskNumber"
+        },
+        {
+            "key": "productCategoryName",
             "title": "塔型",
-            "dataIndex": "submitTime",
+            "dataIndex": "productCategoryName",
             "width": 80
         },
         {
-            "key": "projectName",
+            "key": "productTypeName",
             "title": "产品类型",
-            "dataIndex": "projectName",
+            "dataIndex": "productTypeName",
             "width": 80
         },
         {
-            "key": "name",
+            "key": "wasteStructureNum",
             "title": "不合格件号数",
-            "dataIndex": "name",
+            "dataIndex": "wasteStructureNum",
             "width": 120
         },
         {
-            "key": "productType",
+            "key": "wasteNum",
             "title": "不合格总件数",
-            "dataIndex": "productType",
+            "dataIndex": "wasteNum",
             "width": 120
         },
         {
-            "key": "voltageGrade",
+            "key": "penaltyAmount",
             "title": "考核金额（元）",
-            "dataIndex": "voltageGrade",
+            "dataIndex": "penaltyAmount",
             "width": 120
         },
         {
-            "key": "accuracyRate",
+            "key": "rejectWeight",
             "title": "报废重量（kg）",
-            "dataIndex": "accuracyRate",
+            "dataIndex": "rejectWeight",
             "width": 120
         },
         {
-            "key": "partLabelNum",
-            "title": "考核金额（元）",
-            "dataIndex": "partLabelNum",
+            "key": "rejectAmount",
+            "title": "报废金额（元）",
+            "dataIndex": "rejectAmount",
             "width": 120,
             "type": "number"
         }
     ],
     "statisticalColumns": [
         {
-            "key": "loftUserName",
+            "key": "wasteEntryName",
             "title": "不合格项目",
             "width": 100,
-            "dataIndex": "loftUserName"
+            "dataIndex": "wasteEntryName"
         },
         {
-            "key": "countLoftPart",
+            "key": "wasteStructureNum",
             "title": "不合格件号数",
             "width": 100,
-            "dataIndex": "countLoftPart",
+            "dataIndex": "wasteStructureNum",
             "type": "number"
         },
         {
-            "key": "loftPerformance",
+            "key": "wasteNum",
             "title": "不合格总件数",
             "width": 100,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "wasteNum"
         },
         {
-            "key": "countErrorPart",
+            "key": "penaltyAmount",
             "title": "考核金额（元）",
             "width": 100,
-            "dataIndex": "countErrorPart",
+            "dataIndex": "penaltyAmount",
             "type": "number"
         },
         {
-            "key": "accuracyRate",
+            "key": "rejectAmount",
             "title": "报废金额（元）",
             "width": 100,
-            "dataIndex": "accuracyRate"
+            "dataIndex": "rejectAmount"
         },
         {
-            "key": "accuracyRate",
-            "title": "考核金额（元）",
+            "key": "rejectWeight",
+            "title": "报废重量（kg）",
             "width": 100,
-            "dataIndex": "accuracyRate"
+            "dataIndex": "rejectWeight"
         }
     ],
     "defectiveItemColumns": [
         {
-            "key": "checkUserName",
+            "key": "wasteEntryName",
             "title": "不合格项目",
             "width": 100,
-            "dataIndex": "checkUserName"
+            "dataIndex": "wasteEntryName"
         },
         {
-            "key": "countLoftPart",
+            "key": "angleTowerNum",
             "title": "角钢塔",
             "width": 80,
-            "dataIndex": "countLoftPart",
+            "dataIndex": "angleTowerNum",
             "type": "number"
         },
         {
-            "key": "countErrorPart",
+            "key": "steelPoleNum",
             "title": "钢管杆",
             "width": 80,
-            "dataIndex": "countErrorPart",
+            "dataIndex": "steelPoleNum",
             "type": "number"
         },
         {
-            "key": "loftPerformance",
+            "key": "fourTubeTowerNum",
             "title": "四管塔",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "fourTubeTowerNum"
         },
         {
-            "key": "loftPerformance",
-            "title": "架构",
+            "key": "frameworkNum",
+            "title": "构架",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "frameworkNum"
         },
         {
-            "key": "loftPerformance",
-            "title": "钢管杆",
+            "key": "steelStructureNum",
+            "title": "钢结构",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "steelStructureNum"
         },
         {
-            "key": "loftPerformance",
+            "key": "wasteStructureNum",
             "title": "错误件号数（合计）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "wasteStructureNum"
         },
         {
-            "key": "loftPerformance",
+            "key": "wasteNum",
             "title": "错误件数（合计）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "wasteNum"
         },
         {
-            "key": "loftPerformance",
+            "key": "rejectWeight",
             "title": "报废重量（kg）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "rejectWeight"
         },
         {
-            "key": "loftPerformance",
+            "key": "rejectAmount",
             "title": "报废金额（元）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "rejectAmount"
         },
         {
-            "key": "loftPerformance",
+            "key": "penaltyAmount",
             "title": "考核金额（元）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "penaltyAmount"
         },
         {
-            "key": "loftPerformance",
+            "key": "wasteProportion",
             "title": "错误数占比%",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "wasteProportion"
         },
         {
-            "key": "loftPerformance",
+            "key": "rejectAmountProportion",
             "title": "报废金额占比%",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "rejectAmountProportion"
         },
         {
-            "key": "loftPerformance",
+            "key": "penaltyAmountProportion",
             "title": "考核金额占比%",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "penaltyAmountProportion"
         }
     ],
     "personColumns": [
         {
-            "key": "loftPerformance",
+            "key": "repairLeader",
             "title": "人员",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "repairLeader"
         },
         {
-            "key": "loftPerformance",
+            "key": "wasteStructureNum",
             "title": "错误件号数",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "wasteStructureNum"
         },
         {
-            "key": "loftPerformance",
+            "key": "wasteNum",
             "title": "错误件数",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "wasteNum"
         },
         {
-            "key": "loftPerformance",
+            "key": "rejectWeight",
             "title": "个人报废重量（kg）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "rejectWeight"
         },
         {
-            "key": "loftPerformance",
+            "key": "rejectAmount",
             "title": "个人报废金额（元）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "rejectAmount"
         },
         {
-            "key": "loftPerformance",
+            "key": "penaltyAmount",
             "title": "个人考核金额（元）",
             "width": 120,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "penaltyAmount"
         }
     ],
     "totalColumns": [
         {
-            "key": "loftPerformance",
+            "key": "total",
             "title": "合计",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "total"
         },
         {
-            "key": "loftPerformance",
+            "key": "angleTower",
             "title": "角钢塔（总）",
             "width": 100,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "angleTower"
         },
         {
-            "key": "loftPerformance",
+            "key": "steelPole",
             "title": "钢管杆（总）",
             "width": 100,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "steelPole"
         },
         {
-            "key": "loftPerformance",
+            "key": "fourTubeTower",
             "title": "四管塔（总）",
             "width": 100,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "fourTubeTower"
         },
         {
-            "key": "loftPerformance",
-            "title": "架构（总）",
+            "key": "framework",
+            "title": "构架（总）",
             "width": 100,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "framework"
         },
         {
-            "key": "loftPerformance",
-            "title": "钢管杆（总）",
+            "key": "steelStructure",
+            "title": "钢结构（总）",
             "width": 100,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "steelStructure"
         }
     ]
 }
