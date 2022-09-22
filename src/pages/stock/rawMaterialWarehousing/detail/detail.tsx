@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { Button, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
-import { Page } from '../../../common';
+import { SearchTable as Page } from '../../../common';
 import RequestUtil from '../../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useParams, useHistory } from 'react-router-dom';

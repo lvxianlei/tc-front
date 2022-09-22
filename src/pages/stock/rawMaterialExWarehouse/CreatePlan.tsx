@@ -2,42 +2,25 @@
  * 创建计划列表
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
+import { Modal, Form, Button, InputNumber, message, Spin } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '../../../utils/RequestUtil';
 import {
     material,
     baseInfoColumn,
     addMaterial
 } from "./CreatePlan.json";
-import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
-import "./CreatePlan.less";
-import useRequest from '@ahooksjs/use-request';
-import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
+import "./CreatePlan.less";
 
 export default function CreatePlan(props: any): JSX.Element {
-    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-    
     let [count, setCount] = useState<number>(1);
     const [warehouseId, setWarehouseId] = useState<string>("");
-
-    const formatSpec = (spec: any): { width: string, length: string } => {
-        if (!spec) {
-            return ({
-                width: "0",
-                length: "0"
-            })
-        }
-        const splitArr = spec.replace("∠", "").split("*")
-        return ({
-            width: splitArr[0] || "0",
-            length: splitArr[1] || "0"
-        })
-    }
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -55,8 +38,8 @@ export default function CreatePlan(props: any): JSX.Element {
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                         : (Number(item?.proportion || 1) / 1000).toFixed(3),
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
             })
         })])
         setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
@@ -66,8 +49,8 @@ export default function CreatePlan(props: any): JSX.Element {
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                         : (Number(item?.proportion || 1) / 1000).toFixed(3),
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
             })
         })])
         setVisible(false)
@@ -83,8 +66,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                             : (Number(item?.proportion || 1) / 1000).toFixed(3),
                     totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value  / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * value / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * value / 1000).toFixed(3)
                 })
             }
             return item
@@ -161,12 +144,16 @@ export default function CreatePlan(props: any): JSX.Element {
             addCollectionForm.setFieldsValue({
                 pickingTime: moment(new Date()).format("YYYY-MM-DD")
             })
-        } 
+        }
     }, [props.visible])
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/outStock/save`, data)
+            const path = props.type === "create" ? `/tower-storage/outStock/save` : '/tower-storage/outStock'
+            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
+                ...data,
+                id: props.id
+            })
             message.success("创建成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
@@ -174,6 +161,23 @@ export default function CreatePlan(props: any): JSX.Element {
             reject(error)
         }
     }), { manual: true })
+
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`)
+            setPopDataList(result?.outStockDetailVOList)
+            resole({
+                ...result,
+                pickingUserId: {
+                    id: result?.applyStaffId,
+                    value: result?.applyStaffName
+                },
+                pickingTime: result?.createTime
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
 
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -209,66 +213,70 @@ export default function CreatePlan(props: any): JSX.Element {
                 </Button>
             ]}
         >
-            <DetailTitle title="基本信息" />
-            <BaseInfo
-                form={addCollectionForm}
-                edit
-                dataSource={[]}
-                col={2}
-                classStyle="baseInfo"
-                columns={baseInfoColumn.map((item: any) => {
-                    if (item.dataIndex === "wareHouseId") {
-                        return ({ ...item, enum: batchingStrategy?.map((item: any) => ({
-                            value: item.id,
-                            label: item.name
-                        })) })
-                    }
-                    return item
-                })}
-                onChange={performanceBondChange}
-            />
-            <DetailTitle title="出库明细" />
-            <div className='btnWrapper'>
-                <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择</Button>
-            </div>
-            <CommonTable
-                rowKey={"id"}
-                style={{ padding: "0" }}
-                columns={[
-                    {
-                        key: 'index',
-                        title: '序号',
-                        dataIndex: 'index',
-                        fixed: "left",
-                        width: 50,
-                        render: (_a: any, _b: any, index: number): React.ReactNode => {
-                            return (
-                                <span>
-                                    {index + 1}
-                                </span>
-                            )
-                        }
-                    },
-                    ...material.map((item: any) => {
-                        if (["num"].includes(item.dataIndex)) {
+            <Spin spinning={loading}>
+                <DetailTitle title="基本信息" />
+                <BaseInfo
+                    form={addCollectionForm}
+                    edit
+                    dataSource={data || {}}
+                    col={2}
+                    classStyle="baseInfo"
+                    columns={baseInfoColumn.map((item: any) => {
+                        if (item.dataIndex === "wareHouseId") {
                             return ({
-                                ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                ...item, enum: batchingStrategy?.map((item: any) => ({
+                                    value: item.id,
+                                    label: item.name
+                                }))
                             })
                         }
-                        return item;
-                    }),
-                    {
-                        title: "操作",
-                        fixed: "right",
-                        dataIndex: "opration",
-                        render: (_: any, records: any) => <>
-                            {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
-                            <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
-                        </>
-                    }]}
-                pagination={false}
-                dataSource={popDataList} />
+                        return item
+                    })}
+                    onChange={performanceBondChange}
+                />
+                <DetailTitle title="出库明细" />
+                <div className='btnWrapper'>
+                    <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择</Button>
+                </div>
+                <CommonTable
+                    rowKey={"id"}
+                    style={{ padding: "0" }}
+                    columns={[
+                        {
+                            key: 'index',
+                            title: '序号',
+                            dataIndex: 'index',
+                            fixed: "left",
+                            width: 50,
+                            render: (_a: any, _b: any, index: number): React.ReactNode => {
+                                return (
+                                    <span>
+                                        {index + 1}
+                                    </span>
+                                )
+                            }
+                        },
+                        ...material.map((item: any) => {
+                            if (["num"].includes(item.dataIndex)) {
+                                return ({
+                                    ...item,
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                })
+                            }
+                            return item;
+                        }),
+                        {
+                            title: "操作",
+                            fixed: "right",
+                            dataIndex: "opration",
+                            render: (_: any, records: any) => <>
+                                {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
+                                <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
+                            </>
+                        }]}
+                    pagination={false}
+                    dataSource={popDataList} />
+            </Spin>
             <Modal width={1100} title={`选择库存`} destroyOnClose
                 visible={visible}
                 onOk={handleAddModalOk}
@@ -293,8 +301,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
                             totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1)  / 1000 / 1000 / 1000).toFixed(3)
-                                : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
                         })) || [])
                     }}
                 />

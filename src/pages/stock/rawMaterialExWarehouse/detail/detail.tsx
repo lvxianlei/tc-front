@@ -4,7 +4,7 @@
  * 时间：2022/01/11
  */
 import React, { useState } from 'react';
-import { Input, Select, DatePicker, Button, Modal, message, Table } from 'antd';
+import { Input, Select, DatePicker, Button, Modal, message, Table, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../../common';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
@@ -16,6 +16,8 @@ import { baseColumn } from "./detail.json";
 import '../../StockPublicStyle.less';
 import './detail.less';
 import ExportList from '../../../../components/export/list';
+import AuthUtil from '@utils/AuthUtil';
+import { exportDown } from '@utils/Export';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
     // 标准
@@ -319,14 +321,51 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }), {})
 
+    // 撤销
+    const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/detail/revocation/${id}`,)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    // 删除
+    const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/outStock/detail/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     // 用友格式导出
-    const { run: exportRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: exportRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-storage/outStock/export/${params.id}`,
                 {},
-                { isExport: 'true' }
+                {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                    'Tenant-Id': AuthUtil.getTenantId(),
+                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+                    isExport: 'true',
+                }
             )
+            const data = await result.blob()
+            console.log(data, "----------")
+            var blob = new Blob([data]);
+            var reader = new FileReader();
+            reader.readAsDataURL(blob);
+            reader.onload = function (e) {
+                var a = document.createElement('a');
+                a.download = `出库明细-${params.id}` + '.xlsx';
+                a.href = URL.createObjectURL(blob);
+                a.click();
+            }
             resole(result)
         } catch (error) {
             reject(error)
@@ -342,7 +381,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             updateTimeEnd: "",
             departmentId: "",
             outStockStaffId: "",
-            id: params.id,
+
             materialTexture: value.materialTexture || "",
             standard: value.standard || ""
         }
@@ -355,7 +394,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (value.batcherId) {
             result.outStockStaffId = value.batcherId.value
         }
-        setFilterValue({ ...value })
+        setFilterValue({ ...filterValue, ...value })
         return value
     }
 
@@ -458,8 +497,24 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }
 
-    const handleExport = () => {
-        exportRun()
+    const handleExport = () => exportDown(
+        `/tower-storage/outStock/export/${params.id}`,
+        "GET",
+        {},
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        `出库明细-${params.id}`
+    )
+
+    const handleRevocation = async (id: string) => {
+        await revocationRun(id)
+        await message.success("撤销成功...")
+        history.go(0)
+    }
+
+    const handleDelete = async (id: string) => {
+        await deleteRun(id)
+        await message.success("成功删除...")
+        history.go(0)
     }
 
     return (
@@ -472,6 +527,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 extraOperation={(data: any) => {
                     return <>
                         <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
+                        <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>
                             总重量： {weightData?.weightCount || "0.00"} 吨
                         </span>
@@ -492,13 +548,29 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     ...(baseColumn as any),
                     {
                         title: '操作',
-                        width: 80,
+                        width: 180,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             // 0待出库 2 已出库  1缺料中
                             <>
-                                {record.outStockItemStatus == 0 ? <Button type='link' onClick={() => { IssueOperation(record) }}>出库</Button> : null}
-                                {record.outStockItemStatus == 2 ? <Button type='link' onClick={() => { getDetailData(record.id) }}>详情</Button> : null}
+                                <Button type='link' disabled={record.outStockItemStatus !== 0} onClick={() => { IssueOperation(record) }}>出库</Button>
+                                <Button type='link' disabled={record.outStockItemStatus !== 2} onClick={() => { getDetailData(record.id) }}>详情</Button>
+                                <Popconfirm
+                                    title="确认撤销?"
+                                    onConfirm={() => handleRevocation(record.id)}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2} type="link">撤销</Button>
+                                </Popconfirm>
+                                <Popconfirm
+                                    title="确认删除?"
+                                    onConfirm={() => handleDelete(record?.id)}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
+                                </Popconfirm>
                             </>
                         )
                     }
