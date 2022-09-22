@@ -1,9 +1,8 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react"
-import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select, Spin } from "antd"
+import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Spin } from "antd"
 import { CommonTable, DetailTitle } from "../../common"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
-import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 import { SelectedArea, Selected } from "./receivingListData.json"
 
 interface ChooseModalProps {
@@ -25,31 +24,11 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [oprationType, setOprationType] = useState<"select" | "remove">("select")
     const [form] = Form.useForm();
     const [serarchForm] = Form.useForm();
-    // 定义承接待选区的所有数据
-    const [waitingArea, setWaitingArea] = useState<any[]>([])
 
-    // 标准
-    const standardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
-
-    // 材质 
-    const materialEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
-
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/supplier/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/supplier/${id}`, { ...params })
             setSelectList(result?.map((item: any) => ({
-                ...item,
-                num: item.surplusNum,
-                id: item.id,
-                materialContractDetailId: item.id
-            })).filter((item: any) => item.num))
-            setWaitingArea(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
                 id: item.id,
@@ -74,17 +53,12 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             num: item.surplusNum,
             id: item.id
         })).filter((item: any) => item.num))
-        setWaitingArea(data?.map((item: any) => ({
-            ...item,
-            num: item.surplusNum,
-            id: item.id
-        })).filter((item: any) => item.num))
     }
 
     const handleRemove = async (id: string) => {
         const formData = await form.validateFields()
         const currentData = chooseList.find((item: any) => item.key === id)
-        const currentSelectData = selectList.find((item: any) => item.key === id)
+        // const currentSelectData = selectList.find((item: any) => item.key === id)
         if ((currentData.num - formData.num) === 0) {
             setChooseList(chooseList.filter((item: any) => item.key !== id))
             // if (currentSelectData) {
@@ -114,7 +88,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const handleSelect = async (id: string) => {
         const formData = await form.validateFields()
         const currentData = selectList.find((item: any) => item.id === id)
-        const currentChooseData = chooseList.find((item: any) => item.id === id)
+        // const currentChooseData = chooseList.find((item: any) => item.id === id)
         // if ((currentData.num - formData.num) === 0) {
         //     setSelectList(selectList.filter((item: any) => item.id !== id))
         //     setWaitingArea(waitingArea.filter((item: any) => item.id !== id))
@@ -152,86 +126,8 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
 
     // 模糊搜索
     const handleSearch = () => {
-        let result = [];
-        // 标准存在
-        if (serarchForm.getFieldValue("materialStandardName")) {
-            result = waitingArea.filter((item: any) => item.materialStandardName === serarchForm.getFieldValue("materialStandardName"));
-        }
-        // 材质存在
-        if (serarchForm.getFieldValue("materialTexture")) {
-            if (result.length > 0) {
-                result = result.filter((item: any) => item.materialTexture === serarchForm.getFieldValue("materialTexture"));
-            } else {
-                result = waitingArea.filter((item: any) => item.materialTexture === serarchForm.getFieldValue("materialTexture"));
-            }
-        }
-        // 规格
-        if (serarchForm.getFieldValue("spec")) {
-            let v = []
-            if (result.length > 0) {
-                for (let i = 0; i < result.length; i += 1) {
-                    if (result[i].spec.indexOf(serarchForm.getFieldValue("spec")) !== -1) {
-                        v.push(result[i]);
-                    }
-                }
-            } else {
-                for (let i = 0; i < waitingArea.length; i += 1) {
-                    if (waitingArea[i].spec.indexOf(serarchForm.getFieldValue("spec")) !== -1) {
-                        v.push(waitingArea[i]);
-                    }
-                }
-            }
-            result = v;
-        }
-        // 长度
-        if (serarchForm.getFieldValue("length1") && serarchForm.getFieldValue("length2")) {
-            if (serarchForm.getFieldValue("length1") > serarchForm.getFieldValue("length2")) {
-                // 前者比后者大
-                let v = [];
-                if (result.length > 0) {
-                    for (let i = 0; i < result.length; i += 1) {
-                        if (result[i].length >= serarchForm.getFieldValue("length2") && result[i].length <= serarchForm.getFieldValue("length1")) {
-                            v.push(result[i]);
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < waitingArea.length; i += 1) {
-                        if (waitingArea[i].length >= serarchForm.getFieldValue("length2") && waitingArea[i].length <= serarchForm.getFieldValue("length1")) {
-                            v.push(waitingArea[i]);
-                        }
-                    }
-                }
-                result = v;
-            } else {
-                // 后者比前者大
-                let v = [];
-                if (result.length > 0) {
-                    for (let i = 0; i < result.length; i += 1) {
-                        if (result[i].length <= serarchForm.getFieldValue("length2") && result[i].length >= serarchForm.getFieldValue("length1")) {
-                            v.push(result[i]);
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < waitingArea.length; i += 1) {
-                        if (waitingArea[i].length <= serarchForm.getFieldValue("length2") && waitingArea[i].length >= serarchForm.getFieldValue("length1")) {
-                            v.push(waitingArea[i]);
-                        }
-                    }
-                }
-                result = v;
-            }
-        }
-        if (serarchForm.getFieldValue("materialStandardName")
-            || serarchForm.getFieldValue("materialTexture")
-            || serarchForm.getFieldValue("num2")
-            || serarchForm.getFieldValue("spec")
-            || serarchForm.getFieldValue("length1")
-            || serarchForm.getFieldValue("length2")
-        ) {
-            setSelectList(result.slice(0));
-        } else {
-            setSelectList(waitingArea.slice(0));
-        }
+        const params = serarchForm.getFieldsValue()
+        run(params)
     }
 
     return <Spin spinning={loading}>
@@ -277,54 +173,21 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         <DetailTitle title="待选区" />
         <div>
             <Form form={serarchForm} style={{ paddingLeft: "14px" }}>
-                <Row>
-                    <Col span={4}>
+                <Row gutter={[4, 4]}>
+                    <Col span={6}>
                         <Form.Item
-                            name="materialStandardName"
-                            label="标准">
-                            <Select style={{ width: 120 }} placeholder="请选择">
-                                {
-                                    standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
-                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
-                                    })
-                                }
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={4}>
-                        <Form.Item
-                            name="materialTexture"
-                            label="材质">
-                            <Select style={{ width: 120 }} placeholder="请选择">
-                                {
-                                    materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
-                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
-                                    })
-                                }
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={4}>
-                        <Form.Item
-                            name="length1"
-                            label="长度">
-                            <InputNumber min={1} step={1} />
-                        </Form.Item>
-                    </Col>
-                    <Col span={3}>
-                        <Form.Item
-                            name="length2">
-                            <InputNumber min={1} step={1} />
-                        </Form.Item>
-                    </Col>
-                    <Col span={3}>
-                        <Form.Item
-                            name="spec"
+                            name="structureSpec"
                             label="规格">
                             <Input placeholder="请输入规格" />
                         </Form.Item>
-                    </Col>&nbsp;&nbsp;
-
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            name="fuzzyQuery"
+                            label="模糊搜索">
+                            <Input placeholder="品名/合同编号" />
+                        </Form.Item>
+                    </Col>
                     <Col span={4}>
                         <Form.Item>
                             <Button type="primary" onClick={handleSearch}>搜索</Button>&nbsp;&nbsp;

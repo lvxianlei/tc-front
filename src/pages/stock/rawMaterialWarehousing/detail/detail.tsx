@@ -118,9 +118,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             console.log(selectedRowKeys)
                             setSelectedRowKeys(selectedRowKeys);
                         },
-                        getCheckboxProps: (record: any) => ({ // 这里是禁用已入库的
-                            disabled: record.warehousingEntryStatus === 1, // Column configuration not to be checked
-                        })
+                        getCheckboxProps: (record: any) => record.warehousingEntryStatus === 1
                     }
                 }}
             />

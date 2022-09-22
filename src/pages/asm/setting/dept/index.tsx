@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Modal, Form, Input, Select, message } from 'antd';
+import { Space, Button, Popconfirm, Modal, Form, Input, Select, message, InputNumber } from 'antd';
 import { CommonTable, DetailTitle, Page } from '../../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../../utils/RequestUtil';
@@ -22,7 +22,14 @@ export default function DeptMngt(): React.ReactNode {
         authorities.forEach((authority: any,index:number): void => {
             if (authority.configDeptProductVOS && authority.configDeptProductVOS.length) {
                 wrapAuthority2DataNode(authority.configDeptProductVOS as (any)[]);
-                authority.children = authority.configDeptProductVOS
+                authority.children = authority.configDeptProductVOS.map((item:any)=>{
+                    return {
+                        ...item,
+                        nameNull: authority.name,
+                        component: item?.componentId+','+item?.componentName
+                    }
+                })
+             
             }
         });
         return authorities;
@@ -86,7 +93,14 @@ export default function DeptMngt(): React.ReactNode {
                     {record.status===1?<Popconfirm
                         title="是否禁用?"
                         onConfirm={ () => {
-                            RequestUtil.put(`/tower-as/dept/dept`,{
+                            record?.name&&RequestUtil.put(`/tower-as/dept/dept`,{
+                                ...record,
+                                status:2
+                            }).then(res => {
+                                message.success('禁用成功！')
+                                history.go(0)
+                            });
+                            record?.productName&&RequestUtil.put(`/tower-as/dept/product`,{
                                 ...record,
                                 status:2
                             }).then(res => {
@@ -102,7 +116,14 @@ export default function DeptMngt(): React.ReactNode {
                     :<Popconfirm
                         title="是否启用?"
                         onConfirm={ () => {
-                            RequestUtil.put(`/tower-as/dept/dept`,{
+                            record?.name&&RequestUtil.put(`/tower-as/dept/dept`,{
+                                ...record,
+                                status:1
+                            }).then(res => {
+                                message.success('启用成功！')
+                                history.go(0)
+                            });
+                            record?.productName&&RequestUtil.put(`/tower-as/dept/product`,{
                                 ...record,
                                 status:1
                             }).then(res => {
@@ -119,13 +140,29 @@ export default function DeptMngt(): React.ReactNode {
                     <Button type="link" onClick={ () => {
                         setTitle('编辑');
                         setVisible(true);
-                        form.setFieldsValue({ ...record });
+                        console.log(record)
+                        record?.name&&setDetail(record)
+                        record?.name&&setList(record?.children)
+                        record?.name&&form.setFieldsValue({ 
+                            name:record?.name, 
+                            data: record?.children, 
+                            deptId: record?.id,
+                            id:record?.id 
+                        });
+                        record?.productName&&setDetail({...record, name: record?.nameNull})
+                        record?.productName&&setList([{ ...record }]);
+                        record?.productName&&form.setFieldsValue({ data: [record] });
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            RequestUtil.delete(`/tower-system/dataPlace?id=${ record.id }`).then(res => {
-                                setRefresh(!refresh);
+                            record?.name&&RequestUtil.delete(`/tower-system/dataPlace?id=${ record.id }`).then(res => {
+                                message.success('删除成功！')
+                                history.go(0)
+                            });
+                            record?.productName&&RequestUtil.delete(`/tower-as/dept/${ record.id }`).then(res => {
+                                message.success('删除成功！')
+                                history.go(0)
                             });
                         } }
                         okText="确认"
@@ -142,35 +179,61 @@ export default function DeptMngt(): React.ReactNode {
         if(form) {
             await form.validateFields();
             const value = form.getFieldsValue(true)
-            if(value?.data){
-                value.configDeptProductDTOS = value?.data.map((item:any)=>{
-                    return {
-                        ...item,
-                        deptName: value?.name,
-                        deptId: value?.deptId
-                    }
-                })
-                delete value?.data
-            }
-            if(title==='编辑') {
-                RequestUtil.put(`/tower-as/dept`, value).then(res => {
+            console.log(value?.data)
+            if(detail?.productName){
+                if(value?.data[0]?.component){
+                    value.data[0].componentId = value?.data[0]?.component.split(',')[0]
+                    value.data[0].componentName = value?.data[0]?.component.split(',')[1]
+                    delete value.data[0].component
+                }
+                RequestUtil.put(`/tower-as/dept/product`, value.data[0]).then(res => {
                     setVisible(false); 
                     setDetail({}); 
+                    setTitle('新增')
                     form.resetFields(); 
                     setRefresh(!refresh);
-                    form.setFieldsValue({ name: '', dept: '',data:[] });
+                    form.setFieldsValue({ id:'',name: '', deptId: '',data:[] });
                     history.go(0)
                 })
-            } else {
-                RequestUtil.post(`/tower-as/dept`, value).then(res => {
-                    setVisible(false); 
-                    setDetail({}); 
-                    form.resetFields(); 
-                    setRefresh(!refresh);
-                    form.setFieldsValue({ name: '', dept: '',data:[]});
-                    history.go(0)
-                })
+            }else{
+                if(value?.data){
+                    value.configDeptProductDTOS = value?.data.map((item:any)=>{
+                        return {
+                            ...item,
+                            deptName: value?.name,
+                            deptId: value?.deptId,
+                            componentId: item?.component&&item?.component.length>0&&item.component.split(',')[0],
+                            componentName: item?.component&&item?.component.length>0&&item.component.split(',')[1]
+                        }
+                    })
+                    delete value?.data
+                }
+                if(title==='编辑') {
+                    RequestUtil.put(`/tower-as/dept`, {
+                        ...value,
+                        status:detail?.status
+                    }).then(res => {
+                        setVisible(false); 
+                        setDetail({}); 
+                        setTitle('新增')
+                        form.resetFields(); 
+                        setRefresh(!refresh);
+                        form.setFieldsValue({ sort:'',id:'' , name: '', deptId: '',data:[] });
+                        history.go(0)
+                    })
+                } else {
+                    RequestUtil.post(`/tower-as/dept`, value).then(res => {
+                        setVisible(false); 
+                        setDetail({}); 
+                        setTitle('新增')
+                        form.resetFields(); 
+                        setRefresh(!refresh);
+                        form.setFieldsValue({ name: '', deptId: '',data:[]});
+                        history.go(0)
+                    })
+                }
             }
+            
         }
     }
     
@@ -197,6 +260,7 @@ export default function DeptMngt(): React.ReactNode {
                 setVisible(false); 
                 setDetail({}); 
                 setList([])
+                setTitle('新增')
                 form.resetFields(); 
                 form.setFieldsValue({ name: '', dept: '',data:[] }); 
             } }
@@ -204,10 +268,32 @@ export default function DeptMngt(): React.ReactNode {
             <Form form={ form }>
                 <DetailTitle title='基本信息'/>
                 { 
-                    detail.pid !== undefined && detail.pid !== '' 
-                    ? <Form.Item label={<span><span style={{color: 'red'}}>*</span>部门</span>} name="name" initialValue={ detail.name }>
+                    detail.id !== undefined && detail.id !== '' 
+                    ?<>
+                     <Form.Item label='部门' name="name" initialValue={ detail.name } rules={[{
+                        "required": true,
+                        "message": "请选择部门"
+                    }]}>
                         <Input  disabled/>
                     </Form.Item> 
+                    <Form.Item name="deptId" style={{ display: "none" }}>
+                        <Input size="small" type='hidden' />
+                    </Form.Item>
+                    <Form.Item name="id" style={{ display: "none" }}>
+                        <Input size="small" type='hidden' />
+                    </Form.Item>
+                    <Form.Item
+                        name="sort"
+                        label='排序'
+                        initialValue={detail.sort||1}
+                        rules={[{
+                            "required": true,
+                            "message": "请填写排序"
+                        }]}
+                    >
+                        <InputNumber precision={0} min={1} disabled={detail?.nameNull}/>
+                    </Form.Item>
+                    </>
                     : <><Form.Item name="name" label="部门" initialValue={detail.name} rules={[{
                         "required": true,
                         "message": "请选择部门"
@@ -222,9 +308,20 @@ export default function DeptMngt(): React.ReactNode {
                     <Form.Item name="deptId" style={{ display: "none" }}>
                         <Input size="small" type='hidden' />
                     </Form.Item>
+                    <Form.Item
+                        name="sort"
+                        label='排序'
+                        initialValue={detail.sort||1}
+                        rules={[{
+                            "required": true,
+                            "message": "请填写排序"
+                        }]}
+                    >
+                        <InputNumber precision={0} min={1}/>
+                    </Form.Item>
                     </>
                 }
-                <DetailTitle title='产品类型' operation={[<ProductType onSelect={(selectRows: any[]) => {
+                <DetailTitle title='产品类型' operation={[detail?.nameNull?null:<ProductType onSelect={(selectRows: any[]) => {
                     console.log(selectRows)
                     const value = selectRows.map((item:any)=>{
                         return{
@@ -240,7 +337,7 @@ export default function DeptMngt(): React.ReactNode {
                     {
                         key: 'productName',
                         title: '产品类型',
-                        width: 150,
+                        width: 120,
                         dataIndex: 'productName',
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                             <><span>{_}</span>
@@ -255,13 +352,13 @@ export default function DeptMngt(): React.ReactNode {
                         
                     },
                     {
-                        key: 'componentName',
+                        key: 'component',
                         title: '构件类型',
                         width: 150,
-                        dataIndex: 'componentName',
+                        dataIndex: 'component',
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                             <Form.Item
-                                name={['data', index, "componentName"]}
+                                name={['data', index, "component"]}
                                 initialValue={_}
                             >
                                 <Select  style={{width:'100%'}} >
@@ -270,9 +367,23 @@ export default function DeptMngt(): React.ReactNode {
                                             {name}
                                         </Select.Option>
                                     })} */}
-                                    <Select.Option key={1} value={1}>角钢</Select.Option>
-                                    <Select.Option key={2} value={2}>钢板</Select.Option>
+                                    <Select.Option key={1} value={'1,角钢'}>角钢</Select.Option>
+                                    <Select.Option key={2} value={'2,钢板'}>钢板</Select.Option>
                                 </Select>
+                            </Form.Item>
+                        )
+                    },
+                    {
+                        key: 'sort',
+                        title: '排序',
+                        width: 50,
+                        dataIndex: 'sort',
+                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Form.Item
+                                name={['data', index, "sort"]}
+                                initialValue={_||1}
+                            >
+                                <InputNumber precision={0} min={1}/>
                             </Form.Item>
                         )
                     },
@@ -281,7 +392,7 @@ export default function DeptMngt(): React.ReactNode {
                         title: '操作',
                         dataIndex: 'operation',
                         fixed: 'right' as FixedType,
-                        width: 70,
+                        width: 50,
                         render: (_: undefined, record: Record<string, any>, index:number): React.ReactNode => (
                             <Space direction="horizontal" size="small">
                                 <Popconfirm
