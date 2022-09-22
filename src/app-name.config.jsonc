@@ -77,16 +77,16 @@
         "corsWeb": true,
         "appName": "TMS"
     },
-    {
-        "authority": "tc_erp_sc",
-        "icon": "sales",
-        "title": "售后中心",
-        "description": "售后服务相关功能",
-        "iconFont": "icon-shouhouzhongxin2", // iconfont
-        "color": "#9D45FF", // iconfont的颜色
-        "path": "/workBenchASM/asm",
-        "appName": "ASM"
-    },
+    // {
+    //     "authority": "tc_erp_sc",
+    //     "icon": "sales",
+    //     "title": "售后中心",
+    //     "description": "售后服务相关功能",
+    //     "iconFont": "icon-shouhouzhongxin2", // iconfont
+    //     "color": "#9D45FF", // iconfont的颜色
+    //     "path": "/workBenchASM/asm",
+    //     "appName": "ASM"
+    // },
     {
         "authority": "tc_erp_hr",
         "title": "人资中心",
