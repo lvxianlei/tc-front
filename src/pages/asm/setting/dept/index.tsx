@@ -142,7 +142,7 @@ export default function DeptMngt(): React.ReactNode {
                         setVisible(true);
                         console.log(record)
                         record?.name&&setDetail(record)
-                        record?.name&&setList(record?.children)
+                        record?.name&&setList(record?.children||[])
                         record?.name&&form.setFieldsValue({ 
                             name:record?.name, 
                             data: record?.children, 
@@ -156,11 +156,11 @@ export default function DeptMngt(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={ () => {
-                            record?.name&&RequestUtil.delete(`/tower-system/dataPlace?id=${ record.id }`).then(res => {
+                            record?.name&&RequestUtil.delete(`/tower-as/dept/${ record.id }`).then(res => {
                                 message.success('删除成功！')
                                 history.go(0)
                             });
-                            record?.productName&&RequestUtil.delete(`/tower-as/dept/${ record.id }`).then(res => {
+                            record?.productName&&RequestUtil.delete(`/tower-as/dept/product/${ record.id }`).then(res => {
                                 message.success('删除成功！')
                                 history.go(0)
                             });

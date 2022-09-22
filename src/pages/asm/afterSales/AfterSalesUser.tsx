@@ -25,10 +25,10 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
             dataIndex: 'name'
         },
         {
-            key: 'employeeNames',
+            key: 'phone',
             title: '手机号',
             width: 150,
-            dataIndex: 'employeeNames'
+            dataIndex: 'phone'
         },
         {
             key: 'type',
@@ -99,15 +99,15 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
             }}
             searchFormItems={[
                 {
-                    name: 'type',
+                    name: 'fuzzyQuery',
                     label: '模糊查询项',
                     children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
                 },
-                {
-                    name: 'type',
-                    label: '未完成工单',
-                    children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
-                }
+                // {
+                //     name: 'workOrder',
+                //     label: '未完成工单',
+                //     children: 
+                // }
             ]}
             filterValue={filterValue}
             onFilterSubmit={(values: Record<string, any>) => {

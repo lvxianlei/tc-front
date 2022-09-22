@@ -46,7 +46,9 @@ export default function AnnouncementNew(): React.ReactNode {
                     description: value?.description?value?.description:'',
                     issueType: value?.issue?value?.issue.split(',')[0]:'',
                     typeId: value?.type?value?.type.split(',')[0]:'',
-                    pieceCode: value?.pieceCode?value?.pieceCode:'',
+                    pieceCode: value?.pieceCode?value?.pieceCode.map((item:any)=>{
+                        return item.split(',')[1]
+                    }).join(','):'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
                     productCategoryId: value?.productCategoryId?value?.productCategoryId:'',
@@ -191,7 +193,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                                 return parseFloat(pre!==null?pre:0 )+ parseFloat(cur!==null?cur:0 )
                                             },0)
                                             form.setFieldsValue({ 
-                                                pieceCodeNum: numberAll
+                                                pieceCodeNum: Number(numberAll)
                                             });
                                         }
                                        
@@ -230,7 +232,8 @@ export default function AnnouncementNew(): React.ReactNode {
                                     form.setFieldsValue({ afterSaleUser: selectRows[0].name });
                                     setDetailData({ 
                                         ...detailData, 
-                                        afterSaleUser: selectRows[0].name 
+                                        afterSaleUser: selectRows[0].name,
+                                        afterSaleUserId: selectRows[0].userId  
                                     })
                                 }} selectedKey={detailData?.staffList||[]} />
                             } disabled />

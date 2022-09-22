@@ -648,19 +648,17 @@ export default function InformationDetail(): React.ReactNode {
             </Form>
         </Modal>
         <DetailContent
-            operation={[
+            operation={detailData?.status!==5?[
                 <Button key="setting" type="primary" style={{ marginRight: "16px" }} onClick={() => {
                    
-                    RequestUtil.post(`/tower-as/workOrder/close`,{
-                        id:params.id
-                    }).then(()=>{
+                    RequestUtil.post(`/tower-as/workOrder/close?id=${params.id}`).then(()=>{
                         message.success('已关闭订单！')
                     }).then(()=>{
                         history.goBack()
                     })
-                }} disabled={ detailData?.status < 5 }>关闭工单</Button>,
+                }} disabled={ detailData?.status < 4 }>关闭工单</Button>,
                 <Button key="new" onClick={() => history.goBack()}>返回列表</Button>
-            ]}>
+            ]:[<Button key="new" onClick={() => history.goBack()}>返回列表</Button>]}>
             <Steps current={detailData?.status}  >
                 <Step title="派工" />
                 <Step title="到场"/>
@@ -673,7 +671,7 @@ export default function InformationDetail(): React.ReactNode {
                 columns={baseInfoData}
                 dataSource={detailData || {}}
                 col={4} />
-            <DetailTitle title="售后人员" operation={[
+            <DetailTitle title="售后人员" operation={detailData?.status!==5?[
                 <Dispatch onSelect={async (selectRows: any[]) => {
                     console.log(selectRows)
                     // form.setFieldsValue({  });
@@ -681,16 +679,15 @@ export default function InformationDetail(): React.ReactNode {
                     await RequestUtil.post(`/tower-as/workOrder/dispatch?workOrderId=${params?.id}&userId=${selectRows[0]?.userId}`)
                     message.success("派工成功！")
                     history.go(0)
-                }} selectedKey={[]}/>]}/>
+                }} selectedKey={[]}/>]:[]}/>
             <CommonTable columns={[...afterSaleInfo as any,
                 {
                     title: "操作",
-                    dataIndex: "opration",
+                    dataIndex: "operation",
                     width: 100,
                     fixed: "right",
                     render: (_:any,record: any) => 
-                        {
-                            record?.status === 1||record?.isChanged!==1?<Popconfirm
+                        {return <Popconfirm
                             title="确定取消?"
                             onConfirm={async () => {
                                 await RequestUtil.delete(`/tower-as/workOrder/cancelDispatch?workOrderId=${params?.id}&userId=${record?.afterSaleUserId}`)
@@ -699,10 +696,10 @@ export default function InformationDetail(): React.ReactNode {
                             }}
                             okText="确认"
                             cancelText="取消"
+                            disabled={detailData?.status > 2}
                         >
-                            <Button type="link">取消派工</Button>
-                        </Popconfirm>:
-                            <Button type="link" disabled>取消派工</Button>
+                            <Button type="link"  disabled={detailData?.status > 2}>取消派工</Button>
+                        </Popconfirm>
                         }
                 }]} dataSource={[detailData?.workOrderUserVO]} pagination={false}/>
             <Row style={{marginTop:"10px"}}>
@@ -757,7 +754,7 @@ export default function InformationDetail(): React.ReactNode {
                                 </Space>
                         }
                         ]}
-                    extraOperation={[
+                    extraOperation={detailData?.status!==5&&[
                         <Button
                             type="primary"
                             onClick={() =>{ 
@@ -778,7 +775,7 @@ export default function InformationDetail(): React.ReactNode {
                         path="/tower-as/workCost"
                         exportPath="/tower-as/workCost"
                         requestData={{workOrderId: params?.id}}
-                        extraOperation={<Button
+                        extraOperation={detailData?.status!==5&&<Button
                             type="primary"
                             onClick={() =>{ 
                                 setIsAdd(true)
