@@ -83,9 +83,9 @@ export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX
             }}
             searchFormItems={[
                 {
-                    name: 'type',
+                    name: 'planNumber',
                     label: '模糊查询项',
-                    children: <Input maxLength={50} placeholder="请输入计划号/工程名称进行查询" />
+                    children: <Input maxLength={50} placeholder="请输入计划号进行查询" />
                 }
             ]}
             filterValue={filterValue}
