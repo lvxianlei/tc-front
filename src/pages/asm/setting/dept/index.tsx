@@ -142,7 +142,7 @@ export default function DeptMngt(): React.ReactNode {
                         setVisible(true);
                         console.log(record)
                         record?.name&&setDetail(record)
-                        record?.name&&setList(record?.children)
+                        record?.name&&setList(record?.children||[])
                         record?.name&&form.setFieldsValue({ 
                             name:record?.name, 
                             data: record?.children, 
