@@ -188,7 +188,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...baseFormData,
                 supplierId,
                 supplierName: baseFormData.supplierId.value,
-                lists: editData,
+                lists: editData.map((item: any) => {
+                    if ([2, "2"].includes(baseFormData.meteringMode)) {
+                        return ({ ...item, ponderationWeight: item.balanceTotalWeight })
+                    }
+                    return item
+                }),
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
