@@ -18,6 +18,7 @@ export default function InformationDetail(): React.ReactNode {
     const params = useParams<{ id: string }>()
     const [form] = Form.useForm();
     const [formAssess] = Form.useForm();
+    const [formEdit] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [assessVisible, setAssessVisible] = useState<boolean>(false)
     const [viewBidList, setViewBidList] = useState<"detail" | "count">("detail")
@@ -31,13 +32,15 @@ export default function InformationDetail(): React.ReactNode {
     const attachCostRef = useRef<AttachmentRef>()
     const [detailData, setDetailData] = useState<any>({});
     const [detailCostData, setDetailCostData] = useState<any>({});
-    const [detailAssessData, setDetailAssessData] = useState<any>({});
+    const [detailAssessData, setDetailAssessData] = useState<any[]>([]);
     const [assessDataSource, setAssessDataSource] = useState<any[]>([]);
     const [pieceCode, setPieceCode] = useState<any[]>([]);
     const formItemLayout = {
         labelCol: { span: 4 },
         wrapperCol: { span: 16 }
     };
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [typeName, setTypeName] = useState<any[]>([])
     const [name, setName] = useState<any[]>([])
     const [costType,setCostType] = useState<any[]>([]);
@@ -98,24 +101,61 @@ export default function InformationDetail(): React.ReactNode {
     ]
     const columns = [
         {
-            key: 'recordType',
+            key: 'deptName',
             title: '责任部门',
-            dataIndex: 'recordType'
+            dataIndex: 'deptName',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <><span>{_}</span>
+                <Form.Item name={ ["list", index, "deptId"] } style={{display:'none'}}>
+                    <Input type='hidden'/>
+                </Form.Item>
+                <Form.Item name={ ["list", index, "deptName"] } style={{display:'none'}}>
+                    <Input type='hidden'/>
+                </Form.Item>
+                </>
+            ) 
         },
         {
-            key: 'stateFront',
+            key: 'userName',
             title: '责任人',
-            dataIndex: 'stateFront'
+            dataIndex: 'userName',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <><span>{_}</span>
+                <Form.Item name={ ["list", index, "userId"] } style={{display:'none'}}>
+                    <Input type='hidden'/>
+                </Form.Item>
+                <Form.Item name={ ["list", index, "userName"] } style={{display:'none'}}>
+                    <Input type='hidden'/>
+                </Form.Item>
+                </>
+            )  
         },
         {
-            key: 'stateAfter',
+            key: 'stationName',
             title: '责任人岗位',
-            dataIndex: 'stateAfter'
+            dataIndex: 'stationName',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <><span>{_}</span>
+                <Form.Item name={ ["list", index, "stationId"] } style={{display:'none'}}>
+                    <Input type='hidden'/>
+                </Form.Item>
+                <Form.Item name={ ["list", index, "stationName"] }  style={{display:'none'}}>
+                    <Input type='hidden'/>
+                </Form.Item>
+                </>
+            )  
         },
         {
-            key: 'createUserName',
+            key: 'type',
             title: '考核方式',
-            dataIndex: 'createUserName'
+            dataIndex: 'type',
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <><span>{_===1?'扣款':''}</span>
+                <Form.Item name={ ["list", index, "type"] }  style={{display:'none'}}>
+                    <Input type='hidden'/>
+                </Form.Item>
+                </>
+            )  
         },
         {
             key: 'money',
@@ -162,28 +202,169 @@ export default function InformationDetail(): React.ReactNode {
             )
         }
     ]
+    const onExpand= (expanded:any, record:any) => {
+        setSelectedRows(selectedRows.concat(record?.noticeGroupEmployeeVOList))
+        setSelectedKeys(selectedKeys.concat(record?.noticeGroupEmployeeVOList.map((item:any)=>{return item?.employeeId})))
+    }
+    const expandedRowRender = (record:any) => {
+        console.log('2')
+        // 
+        const columnsOther = [
+            {
+                key: 'deptName',
+                title: '责任部门',
+                dataIndex: 'deptName'
+            },
+            {
+                key: 'userName',
+                title: '责任人',
+                dataIndex: 'userName'
+            },
+            {
+                key: 'type',
+                title: '考核方式',
+                dataIndex: 'type'
+            },
+            {
+                key: 'money',
+                title: '考核金额',
+                dataIndex: 'money'
+            },
+            {
+                key: 'description',
+                title: '备注',
+                dataIndex: 'description'
+            },
+            {
+                key: 'description',
+                title: '记录人',
+                dataIndex: 'description'
+            },
+            {
+                key: 'description',
+                title: '记录时间',
+                dataIndex: 'description'
+            },
+            {
+                key: 'operation',
+                title: '操作',
+                dataIndex: 'operation',
+                width: 150,
+                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                    <Space direction="horizontal" size="small">
+                        <Button type="link" onClick={async ()=>{
+                            await formEdit.setFieldsValue({
+                                ...record
+                            })
+                            Modal.confirm({
+                                title: "编辑考核",
+                                icon: null,
+                                content: <Form form={formEdit}>
+                                    <Form.Item name={ "id" }  label="" style={{display:'none'}}>
+                                        <Input type='hidden' />
+                                    </Form.Item>
+                                    <Form.Item name={ "stationName" }  label="" style={{display:'none'}}>
+                                        <Input type='hidden' />
+                                    </Form.Item>
+                                    <Form.Item name={ "stationId" }  label="" style={{display:'none'}}>
+                                        <Input type='hidden' />
+                                    </Form.Item>
+                                    <Form.Item name={ "workIssueId" }  label="" style={{display:'none'}}>
+                                        <Input type='hidden' />
+                                    </Form.Item>
+                                    <Form.Item name={ "deptName" }  label="责任部门" >
+                                        <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item name={ "deptId" }  label="" style={{display:'none'}}>
+                                        <Input type='hidden'/>
+                                    </Form.Item>
+                                    <Form.Item name={ "userName" }  label="责任人" >
+                                        <Input disabled />
+                                    </Form.Item>
+                                    <Form.Item name={ "userId" }  label="" style={{display:'none'}}>
+                                        <Input type='hidden'/>
+                                    </Form.Item>
+                                    <Form.Item name={ "type" }  label="考核方式" >
+                                    <Select style={{width:'100%'}} >
+                                        <Select.Option key={1} value={1}>扣款</Select.Option>
+                                    </Select>
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="考核金额"
+                                        name="money"
+                                        rules={[{ required: true, message: '请输入考核金额' }]}>
+                                        <InputNumber min={0} precision={2}/>
+                                    </Form.Item>
+                                    <Form.Item name={ "description" }  label="备注" >
+                                        <Input.TextArea />
+                                    </Form.Item>
+                                </Form>,
+                                onOk: () => new Promise(async (resove, reject) => {
+                                    try {
+                                        const value = await formEdit.validateFields()
+                                        await RequestUtil.put(`/tower-as/workAssess`,{
+                                            ...value,
+                                            workOrderId: params.id
+                                        })
+                                        await message.success("编辑成功！")
+                                        setSelectedKeys([])
+                                        setSelectedRows([])
+                                        formEdit.resetFields()
+                                        history.go(0)
+                                        resove(true)
+                                    } catch (error) {
+                                        reject(false)
+                                    }
+                                }),
+                                onCancel() {
+                                    formEdit.resetFields()
+                                    history.go(0)
+                                }
+                            })
+                        }}>编辑</Button>
+                        <Popconfirm
+                            title="确认删除?"
+                            onConfirm={ async () => {
+                                await RequestUtil.delete(`/tower-as/workAssess/${record?.id}`)
+                                message.success('删除成功！')
+                                history.go(0)
+                            } }
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type="link">删除</Button>
+                        </Popconfirm>
+                    </Space>
+                )
+            }
+        ]
+        return <CommonTable 
+            columns={columnsOther} 
+            dataSource={record&&record?.workAssessVOList?[...record?.workAssessVOList]:[]} 
+            rowKey='id'
+            pagination={false} 
+        />;
+    }
 
     return <>
+    
          <Modal visible={assessVisible} title={assessTitle+"考核"} onOk={async ()=>{
             await formAssess.validateFields()
             const value = formAssess.getFieldsValue(true)
             console.log(value)
             if(assessTitle==='添加'){
-                await RequestUtil.post(`/tower-aps/cyclePlan`,value).then(()=>{
+                await RequestUtil.post(`/tower-as/assess`,value?.map((item:any)=>{
+                    return {
+                        ...item,
+                        workIssueId: detailAssessData[0].id,
+                        workOrderId: params.id
+                    }
+                })).then(()=>{
                     message.success('新增成功！')
                 }).then(()=>{
                     formQuestion.resetFields()
                     setAssessVisible(false)
                     setQuestionTitle('添加')
-                    history.go(0)
-                })
-            }else{
-                await RequestUtil.put(`/tower-aps/cyclePlan`,value).then(()=>{
-                    message.success('编辑成功！')
-                }).then(()=>{
-                    formAssess.resetFields()
-                    setAssessVisible(false)
-                    setAssessTitle('添加')
                     history.go(0)
                 })
             }
@@ -196,7 +377,7 @@ export default function InformationDetail(): React.ReactNode {
                 <DetailTitle title='基本信息'/>
                 <CommonTable 
                     columns={tableColumns} 
-                    dataSource={detailData} 
+                    dataSource={detailAssessData} 
                     pagination={false} 
                 />
                 <DetailTitle title='根据上述条件匹配到下面责任人' operation={[<HandSelect
@@ -512,7 +693,7 @@ export default function InformationDetail(): React.ReactNode {
                             record?.status === 1||record?.isChanged!==1?<Popconfirm
                             title="确定取消?"
                             onConfirm={async () => {
-                                await RequestUtil.delete(`/tower-aps/cyclePlan/${record?.id}`)
+                                await RequestUtil.delete(`/tower-as/workOrder/cancelDispatch?workOrderId=${params?.id}&userId=${record?.afterSaleUserId}`)
                                 message.success("取消成功！")
                                 history.go(0)
                             }}
@@ -536,6 +717,12 @@ export default function InformationDetail(): React.ReactNode {
                 <Page
                     path="/tower-as/workIssue"
                     requestData={{workOrderId: params?.id}}
+                    tableProps={{
+                        expandable:{
+                            expandedRowRender ,
+                            onExpand
+                        }
+                    }}
                     columns={[...pageInfo as any,
                         {
                             title: "操作",
