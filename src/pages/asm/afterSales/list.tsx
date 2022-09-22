@@ -133,7 +133,7 @@ export default () => {
                             record?.status<3?<Popconfirm
                             title="删除后不可恢复，确认删除?"
                             onConfirm={async () => {
-                                await RequestUtil.delete(`/tower-as/workOrder`,{id:record?.id})
+                                await RequestUtil.delete(`/tower-as/workOrder?id=record?.id`,{id:record?.id})
                                 message.success("删除成功！")
                                 history.go(0)
                                 setRefresh(!refresh)

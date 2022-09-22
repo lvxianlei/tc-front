@@ -80,15 +80,12 @@ export default function AnnouncementNew(): React.ReactNode {
                                 <Plan onSelect={(selectRows: any[]) => {
                                     console.log(selectRows)
                                     form.setFieldsValue({ 
-                                        // planNumber:selectRows[0]?.planNumber, 
-                                        // projectName:selectRows[0]?.projectName,
-                                        // serviceManager:selectRows[0]?.serviceManager 
-                                        planNumber: selectRows[0],
-                                        projectName:'测试',
-                                        serviceManager:'测试人员',
-                                        serviceManagerId:'1497088596242460673',
+                                        planNumber:selectRows[0]?.planNumber, 
+                                        projectName:selectRows[0]?.projectName,
+                                        serviceManager:selectRows[0]?.businessUserName,
+                                        serviceManagerId:selectRows[0]?.businessUser,
                                     });
-                                    setDetailData({ ...detailData, planNumber: selectRows[0]?.planNumber,serviceManagerId:'1497088596242460673', })
+                                    setDetailData({ ...detailData, planNumber: selectRows[0]?.planNumber,serviceManagerId:selectRows[0]?.businessUser,serviceManager:selectRows[0]?.businessUserName,projectName:selectRows[0]?.projectName})
                                 }} selectedKey={detailData?.staffList||[]} />
                             } disabled />
                         </Form.Item>
