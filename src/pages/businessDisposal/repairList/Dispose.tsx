@@ -46,7 +46,9 @@ export default function Dispose(): React.ReactNode {
             console.log(data)
             console.log(attachRef.current?.getDataSource())
             console.log(data)
-            RequestUtil.post(`/tower-science/repair/save`, {}).then(res => {
+            RequestUtil.post(`/tower-science/repair/save`, {
+                wasteProductReceiptId: data.wasteProductReceiptId
+            }).then(res => {
                 message.success('处理成功！')
             })
             resolve(true);

@@ -194,14 +194,14 @@ export default function List(): React.ReactNode {
     const [coefficientData, setCoefficientData] = useState<any>([]);
 
     const { loading, data, run } = useRequest<ILofting[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        // const data: IResponseData = await RequestUtil.get<IResponseData>(``, { current: pagenation?.current || 1, size: pagenation?.size || 10, status: 3, ...filterValue });
-        // setPage({ ...data });
-        // if (data.records.length > 0 && data.records[0].id) {
-        //     detailRun(data.records[0]?.id)
-        // } else {
-        //     setDetailData([])
-        // }
-        // resole(data?.records);
+        const data: IResponseData = await RequestUtil.get<IResponseData>(``, { current: pagenation?.current || 1, size: pagenation?.size || 10, status: 3, ...filterValue });
+        setPage({ ...data });
+        if (data.records.length > 0 && data.records[0].id) {
+            detailRun(data.records[0]?.id)
+        } else {
+            setDetailData([])
+        }
+        resole(data?.records);
         resole([]);
     }), {})
 
