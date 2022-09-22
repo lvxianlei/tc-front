@@ -25,10 +25,10 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
             dataIndex: 'name'
         },
         {
-            key: 'employeeNames',
+            key: 'phone',
             title: '手机号',
             width: 150,
-            dataIndex: 'employeeNames'
+            dataIndex: 'phone'
         },
         {
             key: 'type',
