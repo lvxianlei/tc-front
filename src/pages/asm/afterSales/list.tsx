@@ -127,7 +127,7 @@ export default () => {
                         <Link
                             to={`/afterSales/afterSale/edit/${record?.id}`}
                         >
-                            <Button type="link" size="small"  disabled={record?.status>3}>编辑</Button>
+                            <Button type="link" size="small"  disabled={record?.status>2}>编辑</Button>
                         </Link>
                         {
                             record?.status<3?<Popconfirm
