@@ -195,7 +195,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     </Col>
                     <Col span={12}>
                         <DetailTitle title="售后人员" key={1} />
-                        <Form.Item name="afterSaleUser" label="售后人员" initialValue={detailData.afterSaleUser} rules={[
+                        <Form.Item name="afterSaleUser" label="售后人员" initialValue={detailData?.workOrderUserVO?.afterSaleUser} rules={[
                             {
                                 required:true,
                                 message:"请选择售后人员"
@@ -207,9 +207,11 @@ export default function AnnouncementNew(): React.ReactNode {
                                     form.setFieldsValue({ afterSaleUser: selectRows[0].name });
                                     setDetailData({ 
                                         ...detailData, 
-                                        afterSaleUser: selectRows[0].name 
+                                        serviceManager: selectRows[0].name,
+                                        serviceManagerId:selectRows[0].userId,
+                                        afterSaleUserId:selectRows[0].userId,
                                     })
-                                }} selectedKey={detailData?.afterSaleUserId||[]} />
+                                }} selectedKey={detailData?.workOrderUserVO||[]} />
                             } disabled />
                         </Form.Item>
                     </Col>
