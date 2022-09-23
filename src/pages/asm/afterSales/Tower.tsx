@@ -102,7 +102,7 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
             path={`/tower-science/productCategory/list/${planNumber}`}
             columns={columns}
             headTabs={[]}
-            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}
+            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.productCategoryName:''}</span>}
             // refresh={refresh}
           
             tableProps={{
@@ -137,7 +137,7 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
                     <Button type="ghost" htmlType="reset">重置</Button>
                 </Space>
             </Form>
-            <span>已选：{selectRows.length>0?selectRows[0]?.productCategoryName:''}/{selectRows.length>0?selectRows[0]?.productNumber:''}</span>
+            <span>已选：{selectedRows.length>0?selectedRows[0]?.productCategoryName:''}/{selectRows.length>0?selectRows[0]?.productNumber:''}</span>
             <CommonTable
                 columns={towerColumns}
                 dataSource={data}
