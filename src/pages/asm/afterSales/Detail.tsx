@@ -104,6 +104,7 @@ export default function InformationDetail(): React.ReactNode {
             key: 'deptName',
             title: '责任部门',
             dataIndex: 'deptName',
+            width:100,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_}</span>
                 <Form.Item name={ ["list", index, "deptId"] } style={{display:'none'}}>
@@ -118,6 +119,7 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'userName',
             title: '责任人',
+            width:100,
             dataIndex: 'userName',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_}</span>
@@ -133,6 +135,7 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'stationName',
             title: '责任人岗位',
+            width: 150,
             dataIndex: 'stationName',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_}</span>
@@ -148,6 +151,7 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'type',
             title: '考核方式',
+            width: 80,
             dataIndex: 'type',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_===1?'扣款':''}</span>
@@ -161,6 +165,7 @@ export default function InformationDetail(): React.ReactNode {
             key: 'money',
             title: '考核金额',
             dataIndex: 'money',
+            width: 120,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "money"] } key={ index } initialValue={ _ } rules={[{ 
                     "required": true,
@@ -173,10 +178,11 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'description',
             title: '备注',
+            width: 200,
             dataIndex: 'description',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "description"] } key={ index } initialValue={ _ }>
-                    <Input.TextArea />
+                    <Input.TextArea rows={1}/>
                 </Form.Item>
             )  
         },
@@ -191,7 +197,7 @@ export default function InformationDetail(): React.ReactNode {
                         title="确认删除?"
                         onConfirm={ () => {
                             assessDataSource.splice(index,1)
-                            setAssessDataSource(assessDataSource)
+                            setAssessDataSource([...assessDataSource])
                         } }
                         okText="确认"
                         cancelText="取消"
@@ -202,13 +208,8 @@ export default function InformationDetail(): React.ReactNode {
             )
         }
     ]
-    // const onExpand= (expanded:any, record:any) => {
-    //     setSelectedRows(selectedRows.concat(record?.workAssessVOList))
-    //     setSelectedKeys(selectedKeys.concat(record?.workAssessVOList.map((item:any)=>{return item?.employeeId})))
-    // }
+
     const expandedRowRender = (record:any) => {
-        console.log('2')
-        // 
         const columnsOther = [
             {
                 key: 'deptName',
@@ -348,12 +349,12 @@ export default function InformationDetail(): React.ReactNode {
 
     return <>
     
-         <Modal visible={assessVisible} title={assessTitle+"考核"} onOk={async ()=>{
+         <Modal visible={assessVisible} title={assessTitle+"考核"} width="60%" onOk={async ()=>{
             await formAssess.validateFields()
             const value = formAssess.getFieldsValue(true)
             console.log(value)
             if(assessTitle==='添加'){
-                await RequestUtil.post(`/tower-as/assess`,value?.map((item:any)=>{
+                await RequestUtil.post(`/tower-as/workAssess`,value?.list.map((item:any)=>{
                     return {
                         ...item,
                         workIssueId: detailAssessData[0].id,
@@ -382,9 +383,22 @@ export default function InformationDetail(): React.ReactNode {
                 />
                 <DetailTitle title='根据上述条件匹配到下面责任人' operation={[<HandSelect
                     onSelect={(selectRows:any[])=>{
-                        setAssessDataSource(selectRows)
+                        setAssessDataSource(selectRows.map((item:any)=>{
+                            return {
+                                ...item,
+                                type:1,
+                                userName: item?.name
+                            }
+                        }))
                         formAssess.setFieldsValue({
-                            list:selectRows
+                            list:selectRows.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    type:1,
+                                    userName: item?.name,
+                                    description:''
+                                }
+                            })
                         })
                     }}
                 />
@@ -405,8 +419,10 @@ export default function InformationDetail(): React.ReactNode {
                     ...value,
                     workOrderId: params.id,
                     description: value?.description?value?.description:'',
-                    issueType: value?.issue?value?.issue.split(',')[0]:'',
-                    typeId: value?.type?value?.type.split(',')[0]:'',
+                    issueTypeId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueTypeName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.type?value?.type.split(',')[0]:'',
+                    issueName: value?.type?value?.type.split(',')[1]:'',
                     pieceCode: value?.pieceCode?value?.pieceCode.join(','):'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
@@ -426,8 +442,10 @@ export default function InformationDetail(): React.ReactNode {
                     ...value,
                     workOrderId: params.id,
                     description: value?.description?value?.description:'',
-                    issueType: value?.issue?value?.issue.split(',')[0]:'',
-                    typeId: value?.type?value?.type.split(',')[0]:'',
+                    issueTypeId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueTypeName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.type?value?.type.split(',')[0]:'',
+                    issueName: value?.type?value?.type.split(',')[1]:'',
                     pieceCode: value?.pieceCode?value?.pieceCode.join(','):'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
