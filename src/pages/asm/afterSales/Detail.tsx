@@ -690,7 +690,7 @@ export default function InformationDetail(): React.ReactNode {
                         {return <Popconfirm
                             title="确定取消?"
                             onConfirm={async () => {
-                                await RequestUtil.delete(`/tower-as/workOrder/cancelDispatch?workOrderId=${params?.id}&userId=${record?.afterSaleUserId}`)
+                                await RequestUtil.post(`/tower-as/workOrder/cancelDispatch?workOrderId=${params?.id}&userId=${record?.afterSaleUserId}`)
                                 message.success("取消成功！")
                                 history.go(0)
                             }}
