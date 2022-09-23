@@ -143,9 +143,13 @@ export default function AssessmentMngt(): React.ReactNode {
                     <Button type="link" onClick={ async () => {
                         setTitle('编辑');
                         setIsAdd(true); 
-                        const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueTypeId}`);
+                        const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueId}`);
                         setName(result)
-                        form.setFieldsValue({ ...record });
+                        form.setFieldsValue({ 
+                            ...record, 
+                            type:record?.issueTypeId&&record?.issueTypeName?record?.issueTypeId+','+record?.issueTypeName:"" ,
+                            issue: record?.issueId&&record?.issueName?record?.issueId+','+record?.issueName:"" ,
+                        });
                     } }>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
@@ -208,8 +212,8 @@ export default function AssessmentMngt(): React.ReactNode {
                 delete value?.issue
             }
             if(value?.type){
-                value.typeId = value?.type.split(',')[0]
-                value.typeName = value?.type.split(',')[1]
+                value.issueTypeId = value?.type.split(',')[0]
+                value.issueTypeName = value?.type.split(',')[1]
                 delete value?.type
             }
             if(title==='新增'){
