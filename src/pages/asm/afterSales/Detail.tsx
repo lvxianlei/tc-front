@@ -701,7 +701,7 @@ export default function InformationDetail(): React.ReactNode {
                             <Button type="link"  disabled={detailData?.status > 2}>取消派工</Button>
                         </Popconfirm>
                         }
-                }]} dataSource={[detailData?.workOrderUserVO]} pagination={false}/>
+                }]} dataSource={detailData?.workOrderUserVO!==null?[detailData?.workOrderUserVO]:[]} pagination={false}/>
             <Row style={{marginTop:"10px"}}>
                 <Radio.Group defaultValue={viewBidList} onChange={(event: any) => setViewBidList(event.target.value)}>
                     <Radio.Button value="detail" key="detail">问题信息</Radio.Button>
