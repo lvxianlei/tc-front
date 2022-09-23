@@ -23,7 +23,7 @@ export default () => {
         {
             title: "工单编号",
             width: 150,
-            dataIndex: "wordOrderNumber"
+            dataIndex: "workOrderNumber"
         },{
             title: "计划号",
             width: 150,
@@ -35,7 +35,7 @@ export default () => {
         },{
             title: "问题分类",
             width: 150,
-            dataIndex: "issueType"
+            dataIndex: "issueName"
         },{
             title: "塔型",
             width: 150,
