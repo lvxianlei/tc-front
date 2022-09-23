@@ -565,7 +565,7 @@ export default function InformationDetail(): React.ReactNode {
                 await RequestUtil.post(`/tower-as/workCost`,{
                     ...value,
                     workOrderId: params.id,
-                    fileIds: attachRef.current?.getDataSource().map(item => item.id),
+                    fileIds: attachCostRef.current?.getDataSource().map(item => item.id),
                 }).then(()=>{
                     message.success('新增成功！')
                 }).then(()=>{
@@ -578,7 +578,7 @@ export default function InformationDetail(): React.ReactNode {
                 await RequestUtil.put(`/tower-as/workCost`,{
                     ...value,
                     workOrderId: params.id,
-                    fileIds: attachRef.current?.getDataSource().map(item => item.id),
+                    fileIds: attachCostRef.current?.getDataSource().map(item => item.id),
                 }).then(()=>{
                     message.success('编辑成功！')
                 }).then(()=>{
@@ -690,7 +690,7 @@ export default function InformationDetail(): React.ReactNode {
                         {return <Popconfirm
                             title="确定取消?"
                             onConfirm={async () => {
-                                await RequestUtil.delete(`/tower-as/workOrder/cancelDispatch?workOrderId=${params?.id}&userId=${record?.afterSaleUserId}`)
+                                await RequestUtil.post(`/tower-as/workOrder/cancelDispatch?workOrderId=${params?.id}&userId=${record?.afterSaleUserId}`)
                                 message.success("取消成功！")
                                 history.go(0)
                             }}
