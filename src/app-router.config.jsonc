@@ -2908,30 +2908,37 @@
       "exact": true,
       "authority": "tc_erp_sc_workbench"
     },
+    { // 售后-人员管理
+      "name": "人员管理",
+      "path": "/userRecord/index",
+      "module": "./pages/asm/userRecord/index",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
     { // 售后-配置-费用分类配置
       "name": "费用分类配置",
-      "path": "/setting/cost/index",
+      "path": "/setting/cost",
       "module": "./pages/asm/setting/cost/index",
       "exact": true,
       "authority": "tc_erp_sc_workbench"
     },
     { // 售后-配置-问题分类配置
       "name": "问题分类配置",
-      "path": "/setting/question/index",
+      "path": "/setting/question",
       "module": "./pages/asm/setting/question/index",
       "exact": true,
       "authority": "tc_erp_sc_workbench"
     },
     { // 售后-配置-考核信息配置
       "name": "考核信息配置",
-      "path": "/setting/assessment/index",
+      "path": "/setting/assessment",
       "module": "./pages/asm/setting/assessment/index",
       "exact": true,
       "authority": "tc_erp_sc_workbench"
     },
     { // 售后-配置-部门配置
       "name": "部门配置",
-      "path": "/setting/dept/index",
+      "path": "/setting/dept",
       "module": "./pages/asm/setting/dept/index",
       "exact": true,
       "authority": "tc_erp_sc_workbench"
