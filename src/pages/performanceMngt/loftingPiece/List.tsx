@@ -81,55 +81,55 @@ export default function List(): React.ReactNode {
 
     const problemColumns = [
         {
-            key: 'segI',
+            key: 'segmentName',
             title: '段号',
             width: 50,
-            dataIndex: 'segI'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'countLoftPart',
+            key: 'partNum',
             title: '放样件号数',
             width: 80,
-            dataIndex: 'countLoftPart',
+            dataIndex: 'partNum',
             type: 'number'
         },
         {
-            key: 'countErrorPart',
+            key: 'mistakenPartNum',
             title: '错误件号数',
             width: 80,
-            dataIndex: 'countErrorPart',
+            dataIndex: 'mistakenPartNum',
             type: 'number'
         },
         {
-            key: 'loftUserName',
+            key: 'loftingUserName',
             title: '放样人',
             width: 80,
-            dataIndex: 'loftUserName'
+            dataIndex: 'loftingUserName'
         },
         {
-            key: 'loftPrice',
+            key: 'loftingPrice',
             title: '放样单价',
             width: 80,
-            dataIndex: 'loftPrice',
+            dataIndex: 'loftingPrice',
             editable: true
         },
         {
-            key: 'loftPunish',
+            key: 'loftingPunishmentAmount',
             title: '放样人扣惩',
             width: 80,
-            dataIndex: 'loftPunish'
+            dataIndex: 'loftingPunishmentAmount'
         },
         {
-            key: 'leaderPunish',
+            key: 'leaderPunishmentAmount',
             title: '负责人扣惩',
             width: 80,
-            dataIndex: 'leaderPunish'
+            dataIndex: 'leaderPunishmentAmount'
         },
         {
-            key: 'loftPerformance',
+            key: 'loftingPerformanceAmount',
             title: '放样绩效',
             width: 80,
-            dataIndex: 'loftPerformance'
+            dataIndex: 'loftingPerformanceAmount'
         },
         {
             key: 'checkUserName',
@@ -145,16 +145,16 @@ export default function List(): React.ReactNode {
             editable: true
         },
         {
-            key: 'checkReward',
+            key: 'checkRewardAmount',
             title: '校核人奖励',
             width: 80,
-            dataIndex: 'checkReward'
+            dataIndex: 'checkRewardAmount'
         },
         {
-            key: 'checkPerformance',
+            key: 'checkPerformanceAmount',
             title: '校核绩效',
             width: 80,
-            dataIndex: 'checkPerformance'
+            dataIndex: 'checkPerformanceAmount'
         },
         {
             key: 'operation',
@@ -177,12 +177,6 @@ export default function List(): React.ReactNode {
         }
     ]
 
-    const [page, setPage] = useState({
-        current: 1,
-        size: 10,
-        total: 0
-    })
-
     const [form] = Form.useForm();
     const [problemForm] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
@@ -191,24 +185,48 @@ export default function List(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
     const history = useHistory();
-    const [coefficientData, setCoefficientData] = useState<any>([]);
+    const [loftStatistical, setLoftStatistical] = useState<any>([]);
+    const [checkStatistical, setCheckStatistical] = useState<any>([]);
 
-    const { loading, data, run } = useRequest<ILofting[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(``, { current: pagenation?.current || 1, size: pagenation?.size || 10, status: 3, ...filterValue });
-        setPage({ ...data });
-        if (data.records.length > 0 && data.records[0].id) {
-            detailRun(data.records[0]?.id)
+    const { loading, data, run } = useRequest<ILofting[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/performance/product/category`, { ...filterValue });
+        if (data?.length > 0 && data[0].id) {
+            detailRun(data[0]?.id)
+            checkStatisticalRun(data[0]?.id)
+            loftStatisticallRun(data[0]?.id)
         } else {
-            setDetailData([])
+            setDetailData([]);
+            setLoftStatistical([]);
+            setCheckStatistical([]);
         }
-        resole(data?.records);
-        resole([]);
+        resole(data);
     }), {})
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get(`${id}`);
+            const result = await RequestUtil.get(`/tower-science/performance/product/segment/${id}`);
             setDetailData(result);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+
+    const { run: loftStatisticallRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get(`/tower-science/performance/lofting/user/${id}`);
+            setLoftStatistical(result);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: checkStatisticalRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.get(`/tower-science/performance/check/user/${id}`);
+            setCheckStatistical(result);
             resole(result)
         } catch (error) {
             reject(error)
@@ -218,16 +236,11 @@ export default function List(): React.ReactNode {
     const onSearch = (values: Record<string, any>) => {
         if (values.time) {
             const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"))
-            values.submitStartTime = formatDate[0] + ' 00:00:00';
-            values.submitEndTime = formatDate[1] + ' 23:59:59';
+            values.startTime = formatDate[0] + ' 00:00:00';
+            values.endTime = formatDate[1] + ' 23:59:59';
         }
         setFilterValues(values);
-        run({}, { ...values });
-    }
-
-    const handleChangePage = (current: number, pageSize: number) => {
-        setPage({ ...page, current: current, size: pageSize });
-        run({ current: current, size: pageSize }, { ...filterValues })
+        run({ ...values });
     }
 
     const onRowChange = async (record: Record<string, any>) => {
@@ -251,10 +264,10 @@ export default function List(): React.ReactNode {
             const newData = [...detailData?.performanceDetailVOList];
             const index = newData.findIndex(item => key === item.id);
             if (index > -1) {
-                RequestUtil.post(``, [row]).then(res => {
+                RequestUtil.post(`/tower-science/performance/config`, [row]).then(res => {
                     setEditingKey('');
                     message.success('编辑成功');
-                    run({}, { ...filterValues })
+                    run({ ...filterValues })
                 });
 
             } else {
@@ -301,15 +314,15 @@ export default function List(): React.ReactNode {
             visible={visible}
             title="绩效系数配置"
             onOk={handleOk}
-            onCancel={() => setVisible(false)}>
-            <CoefficientPerformance data={coefficientData} ref={ref} />
+            onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
+            <CoefficientPerformance ref={ref} />
         </Modal>
         <div className={styles.search}>
             <Form form={form} layout="inline" onFinish={onSearch}>
                 <Form.Item name="time" label="日期">
                     <DatePicker.RangePicker />
                 </Form.Item>
-                <Form.Item name="voltageGradeId" label="电压等级" initialValue={""}>
+                <Form.Item name="voltageGrade" label="电压等级" initialValue={""}>
                     <Select style={{ width: '150px' }}
                         showSearch
                         allowClear
@@ -325,7 +338,7 @@ export default function List(): React.ReactNode {
                         }
                     </Select>
                 </Form.Item>
-                <Form.Item name="productTypeId" label="产品类型" initialValue={""}>
+                <Form.Item name="productType" label="产品类型" initialValue={""}>
                     <Select style={{ width: '150px' }} >
                         <Select.Option key={0} value={""}>全部</Select.Option>
                         {
@@ -350,8 +363,6 @@ export default function List(): React.ReactNode {
             <Space className={styles.topBtn}>
                 <Button type="primary" onClick={async () => {
                     setVisible(true);
-                    const result = await RequestUtil.get<any>(``);
-                    setCoefficientData(result)
                 }} ghost>奖惩配置</Button>
                 <Button type="primary" onClick={() => {
                     downloadTemplate(``, '放样计件', { ...filterValues }, false, 'array')
@@ -364,13 +375,7 @@ export default function List(): React.ReactNode {
                     haveIndex
                     columns={columns}
                     dataSource={data}
-                    pagination={{
-                        current: page.current,
-                        pageSize: page.size,
-                        total: page?.total,
-                        showSizeChanger: true,
-                        onChange: handleChangePage
-                    }}
+                    pagination={false}
                     onRow={(record: Record<string, any>) => ({
                         onClick: () => onRowChange(record),
                         className: styles.tableRow
@@ -397,7 +402,7 @@ export default function List(): React.ReactNode {
                 <div className={styles.right_middle}>
                     <CommonTable
                         columns={performanceColumns}
-                        dataSource={detailData?.performanceLoftVOList}
+                        dataSource={loftStatistical}
                         pagination={false}
                         changeHeight={false}
                         scroll={{ y: 200 }}
@@ -406,7 +411,7 @@ export default function List(): React.ReactNode {
                 <div className={styles.right_bottom}>
                     <CommonTable
                         columns={checkColumns}
-                        dataSource={detailData?.performanceLoftCheckVOList}
+                        dataSource={checkStatistical}
                         pagination={false}
                         changeHeight={false}
                         scroll={{ y: 200 }}

@@ -8,12 +8,14 @@
         {
             "key": "loftingNum",
             "title": "累计放样件号数",
-            "dataIndex": "loftingNum"
+            "dataIndex": "loftingNum",
+            "type": "number"
         },
         {
             "key": "loftingErrorNum",
             "title": "累计错误件号数",
-            "dataIndex": "loftingErrorNum"
+            "dataIndex": "loftingErrorNum",
+            "type": "number"
         },
         {
             "key": "rate",

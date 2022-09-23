@@ -30,7 +30,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'detail', refreshDeps: [id, type] })
+    }), { manual: type === 'new', refreshDeps: [id, type] })
 
     const { data: planNums } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/listAll`);
@@ -40,8 +40,9 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
     const planNumChange = async (e: any) => {
         const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
         setTowerSelects(data || [])
+        setProductCategoryData({})
         form.setFieldsValue({
-            productCategoryIds: []
+            productCategoryId: ''
         });
     }
 
@@ -50,7 +51,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
             const value = await form.validateFields();
             console.log(value)
             await saveRun({
-
+                ...value
             })
             resolve(true);
         } catch (error) {
@@ -71,7 +72,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
         try {
             const value = await form.validateFields();
             await submitRun({
-
+                ...value
             })
             resolve(true);
         } catch (error) {

@@ -41,18 +41,18 @@ const EditableCell: React.FC<EditableCellProps> = ({
     return (
         <td {...restProps}>
             {editing ? (
-                <Form.Item
-                    name={dataIndex}
-                    style={{ margin: 0 }}
-                    rules={[
-                        {
-                            required: true,
-                            message: `请输入 ${title}!`,
-                        },
-                    ]}
-                >
-                    {inputNode}
-                </Form.Item>
+                    <Form.Item
+                        name={dataIndex}
+                        style={{ margin: 0 }}
+                        rules={[
+                            {
+                                required: true,
+                                message: `请输入 ${title}!`,
+                            },
+                        ]}
+                    >
+                        {inputNode}
+                    </Form.Item>
             ) : (
                 children
             )}
@@ -112,13 +112,19 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
     }), {})
 
     const changeStatus = (record: Record<string, any>) => {
+        console.log(editingKey)
         RequestUtil.post(`/tower-science/loftingUserWork/updateAccuracyConfig`, [{
             id: record.id,
             name: record.name,
             parameter: record.parameter,
             status: record.status === 0 ? 1 : 0
         }]).then(res => {
-            run()
+            run();
+        if(editingKey === record.name) {
+            form.setFieldsValue({
+                status: record.status === 0 ? 1 : 0
+            })
+        }
         })
     }
 
@@ -186,7 +192,7 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
                 dataSource={data}
                 pagination={false}
                 changeHeight={false}
-                scroll={{ y: 200 }}
+                rowKey="name"
                 components={{
                     body: {
                         cell: EditableCell,

@@ -1,10 +1,10 @@
 {
     "columns": [
         {
-            "key": "taskNumber",
+            "key": "taskNum",
             "title": "放样任务编号",
             "width": 100,
-            "dataIndex": "taskNumber"
+            "dataIndex": "taskNum"
         },
         {
             "key": "planNumber",
@@ -13,9 +13,9 @@
             "dataIndex": "planNumber"
         },
         {
-            "key": "submitTime",
+            "key": "loftingCompleteTime",
             "title": "放样完成日期",
-            "dataIndex": "submitTime",
+            "dataIndex": "loftingCompleteTime",
             "width": 80
         },
         {
@@ -25,81 +25,81 @@
             "width": 80
         },
         {
-            "key": "name",
+            "key": "productCategoryName",
             "title": "塔型名称",
-            "dataIndex": "name",
+            "dataIndex": "productCategoryName",
             "width": 80
         },
         {
-            "key": "productType",
+            "key": "productTypeName",
             "title": "产品类型",
-            "dataIndex": "productType",
+            "dataIndex": "productTypeName",
             "width": 80
         },
         {
-            "key": "voltageGrade",
+            "key": "voltageGradeName",
             "title": "电压等级",
-            "dataIndex": "voltageGrade",
+            "dataIndex": "voltageGradeName",
             "width": 80
         },
         {
-            "key": "accuracyRate",
+            "key": "towerAccuracy",
             "title": "塔型准确率",
-            "dataIndex": "accuracyRate",
+            "dataIndex": "towerAccuracy",
             "width": 80
         },
         {
-            "key": "partLabelNum",
+            "key": "partNum",
             "title": "件号数汇总",
-            "dataIndex": "partLabelNum",
+            "dataIndex": "partNum",
             "width": 80,
             "type": "number"
         },
         {
-            "key": "loftLeaderName",
+            "key": "loftingLeaderName",
             "title": "放样负责人",
-            "dataIndex": "loftLeaderName",
+            "dataIndex": "loftingLeaderName",
             "width": 80
         },
         {
-            "key": "leaderPunish",
+            "key": "leaderPunishmentAmount",
             "title": "负责人扣惩",
-            "dataIndex": "leaderPunish",
+            "dataIndex": "leaderPunishmentAmount",
             "width": 80
         }
     ],
     "performanceColumns": [
         {
-            "key": "loftUserName",
+            "key": "loftingUserName",
             "title": "放样人员",
             "width": 50,
-            "dataIndex": "loftUserName"
+            "dataIndex": "loftingUserName"
         },
         {
-            "key": "countLoftPart",
+            "key": "partNum",
             "title": "放样件号数（总）",
             "width": 80,
-            "dataIndex": "countLoftPart",
+            "dataIndex": "partNum",
             "type": "number"
         },
         {
-            "key": "loftPerformance",
+            "key": "loftingPerformanceAmount",
             "title": "放样绩效（总）",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "loftingPerformanceAmount"
         },
         {
-            "key": "countErrorPart",
+            "key": "mistakenPartNum",
             "title": "错误件号数（总）",
             "width": 80,
-            "dataIndex": "countErrorPart",
+            "dataIndex": "mistakenPartNum",
             "type": "number"
         },
         {
-            "key": "accuracyRate",
+            "key": "accuracy",
             "title": "个人准确率",
             "width": 50,
-            "dataIndex": "accuracyRate"
+            "dataIndex": "accuracy"
         }
     ],
     "checkColumns": [
@@ -110,24 +110,24 @@
             "dataIndex": "checkUserName"
         },
         {
-            "key": "countLoftPart",
+            "key": "checkPartNum",
             "title": "审核件号数（总）",
             "width": 80,
-            "dataIndex": "countLoftPart",
+            "dataIndex": "checkPartNum",
             "type": "number"
         },
         {
-            "key": "countErrorPart",
+            "key": "mistakenPartNum",
             "title": "纠错件号数（总）",
             "width": 80,
-            "dataIndex": "countErrorPart",
+            "dataIndex": "mistakenPartNum",
             "type": "number"
         },
         {
-            "key": "loftPerformance",
+            "key": "checkPerformanceAmount",
             "title": "绩效金额",
             "width": 80,
-            "dataIndex": "loftPerformance"
+            "dataIndex": "checkPerformanceAmount"
         }
     ]
 }

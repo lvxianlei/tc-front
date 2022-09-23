@@ -79,7 +79,7 @@ export default function List(): React.ReactNode {
 
     const handleLaunchOk = () => new Promise(async (resove, reject) => {
         try {
-            await addRef.current?.onSubmit
+            await addRef.current?.onSubmit()
             message.success("保存并发起成功！")
             setVisible(false)
             addRef.current?.resetFields();

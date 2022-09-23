@@ -28,60 +28,62 @@ export default function List(): React.ReactNode {
     const [form] = Form.useForm();
     const [detailData, setDetailData] = useState<any>();
     const [visible, setVisible] = useState<boolean>(false);
+    const [rowId, setRowId] = useState<string>()
     const halfYear = (new Date().getMonth() > 6) ? `${new Date().getFullYear()}-07,${new Date().getFullYear()}-12` : `${new Date().getFullYear()}-01,${new Date().getFullYear()}-06`;
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any[] = await RequestUtil.get<any[]>(`/tower-science/loftingUserWork`, { fuzzyMsg: filterValue?.fuzzyMsg || '' });
         if (data?.length > 0 && data[0]?.loftingUser) {
-            detailRun(data[0]?.loftingUser)
+            detailRun(data[0]?.loftingUser);
+            setRowId(data[0]?.loftingUser)
         } else {
             setDetailData([]);
         }
         resole(data);
     }), {})
 
-    const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+    const { run: detailRun } = useRequest<any>((id: string, time: string) => new Promise(async (resole, reject) => {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/loftingUserWork/getLoftingUserWork`, {
                 loftingUser: id,
-                timeEnd: halfYear.split(',')[1],
-                timeStart: halfYear.split(',')[0]
+                timeEnd: time ? time.split(',')[1] : halfYear.split(',')[1],
+                timeStart: time ? time.split(',')[0] : halfYear.split(',')[0]
             });
             const data = [];
             result.forEach((element: any) => {
                 data.push([
                     {
-                        years : element.years,
-                        type : '放样数',
-                        angleSteelTower : element.angleSteelTowerLoftingNum,
-                        steelPipePole : element.steelPipePoleLoftingNum,
-                        pipeTower : element.pipeTowerLoftingNum,
-                        framework : element.frameworkLoftingNum,
-                        steelStructure : element.steelStructureLoftingNum,
-                        basics : element.basicsLoftingNum,
-                        subtotal : element.subtotalLoftingNum,
+                        years: element.years,
+                        type: '放样数',
+                        angleSteelTower: element.angleSteelTowerLoftingNum,
+                        steelPipePole: element.steelPipePoleLoftingNum,
+                        pipeTower: element.pipeTowerLoftingNum,
+                        framework: element.frameworkLoftingNum,
+                        steelStructure: element.steelStructureLoftingNum,
+                        basics: element.basicsLoftingNum,
+                        subtotal: element.subtotalLoftingNum,
                     },
                     {
-                        years : element.years,
-                        type : '错误数',
-                        angleSteelTower : element.angleSteelTowerLoftingErrorNum,
-                        steelPipePole : element.steelPipePoleLoftingErrorNum,
-                        pipeTower : element.pipeTowerLoftingErrorNum,
-                        framework : element.frameworkLoftingErrorNum,
-                        steelStructure : element.steelStructureLoftingErrorNum,
-                        basics : element.basicsLoftingErrorNum,
-                        subtotal : element.subtotalLoftingErrorNum,
+                        years: element.years,
+                        type: '错误数',
+                        angleSteelTower: element.angleSteelTowerLoftingErrorNum,
+                        steelPipePole: element.steelPipePoleLoftingErrorNum,
+                        pipeTower: element.pipeTowerLoftingErrorNum,
+                        framework: element.frameworkLoftingErrorNum,
+                        steelStructure: element.steelStructureLoftingErrorNum,
+                        basics: element.basicsLoftingErrorNum,
+                        subtotal: element.subtotalLoftingErrorNum,
                     },
                     {
-                        years : element.years,
-                        type : '正确率',
-                        angleSteelTower : element.angleSteelTowerRate,
-                        steelPipePole : element.steelPipePoleRate,
-                        pipeTower : element.pipeTowerRate,
-                        framework : element.frameworkRate,
-                        steelStructure : element.steelStructureRate,
-                        basics : element.basicsRate,
-                        subtotal : element.subtotalRate,
+                        years: element.years,
+                        type: '正确率',
+                        angleSteelTower: element.angleSteelTowerRate,
+                        steelPipePole: element.steelPipePoleRate,
+                        pipeTower: element.pipeTowerRate,
+                        framework: element.frameworkRate,
+                        steelStructure: element.steelStructureRate,
+                        basics: element.basicsRate,
+                        subtotal: element.subtotalRate,
                     }
                 ])
             });
@@ -116,6 +118,7 @@ export default function List(): React.ReactNode {
 
     const onRowChange = async (record: Record<string, any>) => {
         detailRun(record.loftingUser)
+        setRowId(record?.loftingUser)
     }
 
     return <Spin spinning={loading}>
@@ -166,7 +169,7 @@ export default function List(): React.ReactNode {
                                         <Row>年份选择</Row>
                                         <Row>
                                             <Select size="small" placeholder="请选择" style={{ width: "150px" }} defaultValue={halfYear} onChange={(e) => {
-                                                console.log(e)
+                                                detailRun(rowId, e)
                                             }}>
                                                 {
                                                     yearLists && yearLists.map((res: any, index: number) => (
@@ -178,7 +181,7 @@ export default function List(): React.ReactNode {
                                     </>
                                 }
                             })
-                        }  
+                        }
                         return item
                     })
                 ]}

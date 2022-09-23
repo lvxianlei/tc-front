@@ -41,7 +41,7 @@ export default function List(): React.ReactNode {
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any>(`/tower-science/wasteProductReceipt/assessment/product/category`, { current: pagenation?.current || 1, size: pagenation?.size || 10, status: 3, ...filterValue });
         setPage({ ...data });
-        if (data.records.length > 0 && data.records[0].id) {
+        if (data?.records?.length > 0 && data?.records[0].id) {
             detailRun(data.records[0]?.id)
         } else {
             setDetailData([])
@@ -98,8 +98,8 @@ export default function List(): React.ReactNode {
 
     const { data: monthData, run: monthTableRun } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/wasteProductReceipt/assessment/product/entry`, { ...filterValue });
-        if (data.records.length > 0 && data.records[0].id) {
-            personRun(data.records[0]?.id)
+        if (data?.length > 0 && data[0].id) {
+            personRun(data[0]?.id)
         } else {
             setPersonData([])
         }
