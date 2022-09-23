@@ -98,7 +98,7 @@ export default () => {
             exportPath="/tower-as/workIssue"
             searchFormItems={[
                 {
-                    name: "fuzzyMsg",
+                    name: "fuzzyQuery",
                     label: '模糊查询',
                     children: <Input placeholder="请输入工单编号/订单编号/计划号/工程名进行查询" style={{ width: 150 }} />
                 },

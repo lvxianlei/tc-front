@@ -250,7 +250,7 @@ export default () => {
             ]}
             searchFormItems={[
                 {
-                    name: "fuzzyMsg",
+                    name: "fuzzyQuery",
                     label: '模糊查询',
                     children: <Input placeholder="请输入工单编号/计划号/工程名称进行查询" style={{ width: 150 }} />
                 },
