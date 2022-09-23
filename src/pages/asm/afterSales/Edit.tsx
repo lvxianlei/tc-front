@@ -86,7 +86,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                         serviceManagerId:selectRows[0]?.businessUser,
                                     });
                                     setDetailData({ ...detailData, planNumber: selectRows[0]?.planNumber,serviceManagerId:selectRows[0]?.businessUser,serviceManager:selectRows[0]?.businessUserName,projectName:selectRows[0]?.projectName})
-                                }} selectedKey={detailData?.staffList||[]} />
+                                }} selectedKey={detailData?.planNumber||[]} />
                             } disabled />
                         </Form.Item>
                         <Form.Item name="projectName" label="工程名称" initialValue={detailData.projectName} >
@@ -115,100 +115,19 @@ export default function AnnouncementNew(): React.ReactNode {
                         }]}>
                             <Input  maxLength={20}/>
                         </Form.Item>
-                        {/* <Form.Item name="isProblem" label="问题信息" initialValue={isProblem} rules={[{
-                            "required": true,
-                            "message": "请选择问题信息"
-                        }]}>
-                            <Radio.Group onChange={(e:any)=>{
-                                setIsProblem(e?.target?.value)
-                            }}>
-                                <Radio value={1}>添加问题</Radio>
-                                <Radio value={2}>不添加问题</Radio>
-                            </Radio.Group>
-                        </Form.Item> */}
-                        {/* {
-                            isProblem===1&&<>
-                                <Form.Item name="type" label="问题阶段" rules={[
-                                    {
-                                        required:true,
-                                        message:"请选择问题阶段"
-                                    }
-                                ]}>
-                                    <Select style={{width:'100%'}} onChange={async (value:any)=>{
-                                        const result: any = await RequestUtil.get(`/tower-as/issue/issue/${value.split(',')[0]}`);
-                                        setName(result)
-                                    }}>
-                                        { typeName && typeName.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id+','+item.typeName}>{item.typeName}</Select.Option>
-                                            }) }
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="issue" label="问题分类" rules={[
-                                    {
-                                        required:true,
-                                        message:"请选择问题分类"
-                                    }
-                                ]}>
-                                    <Select style={{width:'100%'}}>
-                                        { name && name.map((item:any)=>{
-                                                return <Select.Option key={item.id} value={item.id+','+item.name}>{item.name}</Select.Option>
-                                            }) }
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="productCategory" label="塔型" initialValue={detailData.productCategory} >
-                                    <Input disabled />
-                                </Form.Item>
-                                <Form.Item name="productNumber" label="杆塔号" initialValue={detailData.productNumber} >
-                                    <Input addonBefore={
-                                        <Tower onSelect={(selectRows: any[]) => {
-                                            console.log(selectRows)
-                                            form.setFieldsValue({ 
-                                                productNumber: selectRows[0].productNumber,
-                                                productCategory: selectRows[0].productCategory,
-                                            });
-                                            setDetailData({ ...detailData, productNumber: selectRows[0].productNumber})
-                                        }} selectedKey={detailData?.staffList||[]} />
-                                    } disabled />
-                                </Form.Item>
-                                <Form.Item name="pieceCode" label="件号" initialValue={detailData.pieceCode} >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item name="pieceCodeNum" label="件数" initialValue={detailData.pieceCodeNum} >
-                                    <InputNumber min={0} />
-                                </Form.Item>
-                                <Form.Item name="description" label="问题描述" initialValue={detailData.description} >
-                                    <Input.TextArea showCount maxLength={600} />
-                                </Form.Item>
-                                <Attachment 
-                                    ref={attachRef} 
-                                    dataSource={detailData.attachInfoVos} 
-                                    edit 
-                                    accept="image/png,image/jpeg" 
-                                    multiple 
-                                    maxCount={5}
-                                    onDoneChange={(dataInfo: FileProps[]) => {
-                                        setDetailData({attachInfoVos: [...dataInfo]})
-                                    }}
-                                />
-                            </>
-                        } */}
                     </Col>
                     <Col span={12}>
                         <DetailTitle title="售后人员" key={1} />
-                        <Form.Item name="afterSaleUser" label="售后人员" initialValue={detailData?.workOrderUserVO?.afterSaleUser} rules={[
-                            {
-                                required:true,
-                                message:"请选择售后人员"
-                            }
-                        ]}>
+                        <Form.Item name="afterSaleUser" label="售后人员" initialValue={detailData?.workOrderUserVO?.afterSaleUser}>
                             <Input addonBefore={
                                 <AfterSalesUser onSelect={(selectRows: any[]) => {
                                     console.log(selectRows)
                                     form.setFieldsValue({ afterSaleUser: selectRows[0].name });
                                     setDetailData({ 
                                         ...detailData, 
-                                        serviceManager: selectRows[0].name,
-                                        serviceManagerId:selectRows[0].userId,
+                                        afterSaleUser: selectRows[0].name,
+                                        // serviceManager: selectRows[0].name,
+                                        // serviceManagerId:selectRows[0].userId,
                                         afterSaleUserId:selectRows[0].userId,
                                     })
                                 }} selectedKey={detailData?.workOrderUserVO||[]} />

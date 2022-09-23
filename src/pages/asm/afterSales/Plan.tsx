@@ -11,8 +11,8 @@ export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX
     const [filterValue, setFilterValue] = useState<any>({});
     const history = useHistory();
     const [detailData, setDetailData] = useState<any[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey);
-    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey?[selectedKey]:[]);
+    const [selectedRows, setSelectedRows] = useState<any[]>(selectedKey?[{planNumber:selectedKey}]:[]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
