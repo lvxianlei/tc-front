@@ -237,14 +237,14 @@ export default function InformationDetail(): React.ReactNode {
                 dataIndex: 'description'
             },
             {
-                key: 'description',
+                key: 'createUserName',
                 title: '记录人',
-                dataIndex: 'description'
+                dataIndex: 'createUserName'
             },
             {
-                key: 'description',
+                key: 'createTime',
                 title: '记录时间',
-                dataIndex: 'description'
+                dataIndex: 'createTime'
             },
             {
                 key: 'operation',
@@ -419,10 +419,10 @@ export default function InformationDetail(): React.ReactNode {
                     ...value,
                     workOrderId: params.id,
                     description: value?.description?value?.description:'',
-                    issueTypeId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueTypeId: value?.type?value?.type.split(',')[0]:'',
                     issueTypeName: value?.type?value?.type.split(',')[1]:'',
-                    issueId: value?.type?value?.type.split(',')[0]:'',
-                    issueName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueName: value?.issue?value?.issue.split(',')[1]:'',
                     pieceCode: value?.pieceCode?value?.pieceCode.join(','):'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
@@ -442,10 +442,10 @@ export default function InformationDetail(): React.ReactNode {
                     ...value,
                     workOrderId: params.id,
                     description: value?.description?value?.description:'',
-                    issueTypeId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueTypeId: value?.type?value?.type.split(',')[0]:'',
                     issueTypeName: value?.type?value?.type.split(',')[1]:'',
-                    issueId: value?.type?value?.type.split(',')[0]:'',
-                    issueName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueName: value?.issue?value?.issue.split(',')[1]:'',
                     pieceCode: value?.pieceCode?value?.pieceCode.join(','):'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
@@ -764,14 +764,14 @@ export default function InformationDetail(): React.ReactNode {
                                     setAssessVisible(true); 
                                 } }>添加考核</Button>
                                 <Button type="link" onClick={ async () => {
-                                    const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.typeId}`);
+                                    const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueTypeId}`);
                                     const value:any[] = await RequestUtil.get(`/tower-science/productStructure/listByProductForSales?current=1&pageSize=10000&productId=${record?.productId}`)
                                     setPieceCode(value)
                                     setName(result)
                                     formQuestion.setFieldsValue({ 
                                         ...record, 
-                                        type:record?.type,
-                                        issue: record?.issueType,
+                                        type:record?.issueTypeId&&record?.issueTypeName?record?.issueTypeId+','+record?.issueTypeName:'',
+                                        issue: record?.issueId&&record?.issueName?record?.issueId+','+record?.issueName:"",
                                         pieceCode: record?.pieceCode?record?.pieceCode.split(','):''
                                     });
                                    
@@ -799,7 +799,7 @@ export default function InformationDetail(): React.ReactNode {
                             type="primary"
                             onClick={() =>{ 
                                 setVisible(true)
-                                setQuestionTitle('新增')
+                                setQuestionTitle('添加')
                             }}
                             // style={{marginBottom:"10px"}}
                         >添加问题</Button>

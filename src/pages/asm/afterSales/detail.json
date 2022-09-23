@@ -119,7 +119,7 @@
     "pageInfo": [
         {
             "title": "问题分类",
-            "dataIndex": "issueType",
+            "dataIndex": "issueName",
             "type": "text",
             "maxLength": 50
         },
