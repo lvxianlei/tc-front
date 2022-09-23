@@ -143,7 +143,7 @@ export default function AssessmentMngt(): React.ReactNode {
                     <Button type="link" onClick={ async () => {
                         setTitle('编辑');
                         setIsAdd(true); 
-                        const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueId}`);
+                        const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueTypeId}`);
                         setName(result)
                         form.setFieldsValue({ 
                             ...record, 
