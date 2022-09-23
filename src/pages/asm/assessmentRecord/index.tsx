@@ -30,7 +30,7 @@ export default () => {
         },{
             title: "问题分类",
             width: 150,
-            dataIndex: "issueType"
+            dataIndex: "issueName"
         },{
             title: "塔型",
             width: 150,
@@ -128,7 +128,7 @@ export default () => {
                     children: <Input placeholder="请输入工单编号/计划号/工程名进行查询" style={{ width: 150 }} />
                 },
                 {
-                    name: "issueType",
+                    name: "issueName",
                     label: '问题分类',
                     children: <Input placeholder="请输入"/>
                 },

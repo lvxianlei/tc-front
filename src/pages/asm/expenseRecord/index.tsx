@@ -149,7 +149,7 @@ export default () => {
                                     workOrderId: selectRows[0].id
                                 })
                                 form.setFieldsValue({ dept: selectRows.map(item => item.name) });
-                            }} selectedKey={form.getFieldsValue(true)?.workOrderNumber||[]} />
+                            }} selectedKey={detailData||[]} />
                         } disabled />
                     </Form.Item>
                     <Form.Item name="money" label="金额" rules={[
@@ -198,7 +198,7 @@ export default () => {
                 multiple 
                 maxCount={5}
                 onDoneChange={(dataInfo: FileProps[]) => {
-                    setDetailData({attachInfoVos: [...dataInfo]})
+                    setDetailData({...detailData,attachInfoVos: [...dataInfo]})
                 }}
             />
         </Modal>
@@ -221,10 +221,10 @@ export default () => {
                     fixed: "right",
                     render: (_:any,record: any) => <Space>
                         <Button type="link" onClick={ async () => {
+                            const value:any = await RequestUtil.get(`/tower-as/workCost/${record?.id}`)
+                            setDetailData({...value, workOrderNumber: record?.workOrderNumber})
                             setTitle('编辑');
                             setIsAdd(true); 
-                            const value = await RequestUtil.get(`/tower-as/workCost/${record?.id}`)
-                            setDetailData(value)
                             form.setFieldsValue({ 
                                 ...record,
                                 date: record?.date?moment(record?.date):'',
@@ -250,7 +250,7 @@ export default () => {
             ]}
             searchFormItems={[
                 {
-                    name: "fuzzyMsg",
+                    name: "fuzzyQuery",
                     label: '模糊查询',
                     children: <Input placeholder="请输入工单编号/计划号/工程名称进行查询" style={{ width: 150 }} />
                 },

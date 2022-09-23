@@ -4,12 +4,12 @@ import { Page } from '../../common';
 
 
 export default function Dept({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
-
+    console.log(selectedKey)
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ form ] = Form.useForm();
     const [filterValue, setFilterValue] = useState<any>({});
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey);
-    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey?[selectedKey?.workOrderId]:[]);
+    const [selectedRows, setSelectedRows] = useState<any[]>(selectedKey?[{workOrderNumber:selectedKey?.workOrderNumber}]:[]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -69,7 +69,7 @@ export default function Dept({ onSelect, selectedKey = [], ...props }: any): JSX
             path="/tower-as/workOrder"
             columns={columns}
             headTabs={[]}
-            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}
+            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.workOrderNumber:''}</span>}
             tableProps={{
                 rowSelection: {
                     type:'radio',
