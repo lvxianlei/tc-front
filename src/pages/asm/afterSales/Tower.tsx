@@ -41,7 +41,7 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
     }), {manual:true})
     const handleChangePage = (current: number, pageSize: number) => {
         setPage({ ...page, current: current, size: pageSize });
-        run({ current: current, size: pageSize, productCategoryId:selectedRows[0]?.productCategoryId })
+        run({ current: current, size: pageSize },{productCategoryId:selectedRows[0]?.productCategoryId})
     }
     const columns = [
         {
@@ -86,7 +86,7 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
         setCurrent(current + 1);
         if(current===0){
             console.log(selectedRows)
-            run({current:1, pageSize:20,productCategoryId:selectedRows[0]?.productCategoryId})
+            run({current:1, pageSize:20},{productCategoryId:selectedRows[0]?.productCategoryId})
         }
     };
 
@@ -94,7 +94,8 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
         setCurrent(current - 1);
     };
     const onFinish = (value: Record<string, any>) => {
-        run({current:1, pageSize:20, fuzzyMsg:value});
+        console.log(value)
+        run({current:1, pageSize:20},value);
     }
     const renderContent =()=> {
         if(current !== steps.length - 1 ){
@@ -134,7 +135,12 @@ export default function Tower({ onSelect, selectedKey = [], planNumber , ...prop
                 </Form.Item>
                 <Space direction="horizontal">
                     <Button type="primary" htmlType="submit">搜索</Button>
-                    <Button type="ghost" htmlType="reset">重置</Button>
+                    <Button type="ghost" onClick={()=>{
+                        form.setFieldsValue({
+                            fuzzyMsg:''
+                        })
+                        run({current:1, pageSize:20},{productCategoryId:selectedRows[0]?.productCategoryId})
+                    }}>重置</Button>
                 </Space>
             </Form>
             <span>已选：{selectedRows.length>0?selectedRows[0]?.productCategoryName:''}/{selectRows.length>0?selectRows[0]?.productNumber:''}</span>

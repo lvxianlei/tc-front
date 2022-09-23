@@ -164,6 +164,9 @@ export default function AnnouncementNew(): React.ReactNode {
                                 <Form.Item name="productCategoryId" label="" style={{display:'none'}} >
                                     <Input type='hidden' />
                                 </Form.Item>
+                                <Form.Item name="productId" label="" style={{display:'none'}} >
+                                    <Input type='hidden' />
+                                </Form.Item>
                                 <Form.Item name="productNumber" label="杆塔号" rules={[{
                                     "required": true,
                                     "message": "请选择杆塔号"
@@ -172,6 +175,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                         <Tower onSelect={async (select: any) => {
                                             console.log(select)
                                             form.setFieldsValue({ 
+                                                productId: select?.selectRows[0].id,
                                                 productNumber: select?.selectRows[0].productNumber,
                                                 productCategory: select?.selectedRows[0].productCategoryName,
                                                 productCategoryId: select?.selectedRows[0].productCategoryId,
