@@ -69,34 +69,34 @@ export default function InformationDetail(): React.ReactNode {
 
     const tableColumns = [
         {
-            key: 'recordType',
+            key: 'issueName',
             title: '问题分类',
-            dataIndex: 'recordType'
+            dataIndex: 'issueName'
         },
         {
-            key: 'stateFront',
+            key: 'productCategory',
             title: '塔型',
-            dataIndex: 'stateFront'
+            dataIndex: 'productCategory'
         },
         {
-            key: 'stateAfter',
+            key: 'productNumber',
             title: '杆塔号',
-            dataIndex: 'stateAfter'
+            dataIndex: 'productNumber'
         },
         {
-            key: 'createUserName',
+            key: 'pieceCode',
             title: '件号',
-            dataIndex: 'createUserName'
+            dataIndex: 'pieceCode'
         },
         {
-            key: 'createTime',
+            key: 'pieceCodeNum',
             title: '件数',
-            dataIndex: 'createTime'
+            dataIndex: 'pieceCodeNum'
         },
         {
-            key: 'createTime',
+            key: 'description',
             title: '问题描述',
-            dataIndex: 'createTime'
+            dataIndex: 'description'
         }
     ]
     const columns = [
@@ -104,6 +104,7 @@ export default function InformationDetail(): React.ReactNode {
             key: 'deptName',
             title: '责任部门',
             dataIndex: 'deptName',
+            width:100,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_}</span>
                 <Form.Item name={ ["list", index, "deptId"] } style={{display:'none'}}>
@@ -118,6 +119,7 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'userName',
             title: '责任人',
+            width:100,
             dataIndex: 'userName',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_}</span>
@@ -133,6 +135,7 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'stationName',
             title: '责任人岗位',
+            width: 150,
             dataIndex: 'stationName',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_}</span>
@@ -148,6 +151,7 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'type',
             title: '考核方式',
+            width: 80,
             dataIndex: 'type',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <><span>{_===1?'扣款':''}</span>
@@ -161,6 +165,7 @@ export default function InformationDetail(): React.ReactNode {
             key: 'money',
             title: '考核金额',
             dataIndex: 'money',
+            width: 120,
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "money"] } key={ index } initialValue={ _ } rules={[{ 
                     "required": true,
@@ -173,10 +178,11 @@ export default function InformationDetail(): React.ReactNode {
         {
             key: 'description',
             title: '备注',
+            width: 200,
             dataIndex: 'description',
             render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={ ["list", index, "description"] } key={ index } initialValue={ _ }>
-                    <Input.TextArea />
+                    <Input.TextArea rows={1}/>
                 </Form.Item>
             )  
         },
@@ -191,7 +197,7 @@ export default function InformationDetail(): React.ReactNode {
                         title="确认删除?"
                         onConfirm={ () => {
                             assessDataSource.splice(index,1)
-                            setAssessDataSource(assessDataSource)
+                            setAssessDataSource([...assessDataSource])
                         } }
                         okText="确认"
                         cancelText="取消"
@@ -202,13 +208,8 @@ export default function InformationDetail(): React.ReactNode {
             )
         }
     ]
-    const onExpand= (expanded:any, record:any) => {
-        setSelectedRows(selectedRows.concat(record?.noticeGroupEmployeeVOList))
-        setSelectedKeys(selectedKeys.concat(record?.noticeGroupEmployeeVOList.map((item:any)=>{return item?.employeeId})))
-    }
+
     const expandedRowRender = (record:any) => {
-        console.log('2')
-        // 
         const columnsOther = [
             {
                 key: 'deptName',
@@ -236,14 +237,14 @@ export default function InformationDetail(): React.ReactNode {
                 dataIndex: 'description'
             },
             {
-                key: 'description',
+                key: 'createUserName',
                 title: '记录人',
-                dataIndex: 'description'
+                dataIndex: 'createUserName'
             },
             {
-                key: 'description',
+                key: 'createTime',
                 title: '记录时间',
-                dataIndex: 'description'
+                dataIndex: 'createTime'
             },
             {
                 key: 'operation',
@@ -348,12 +349,12 @@ export default function InformationDetail(): React.ReactNode {
 
     return <>
     
-         <Modal visible={assessVisible} title={assessTitle+"考核"} onOk={async ()=>{
+         <Modal visible={assessVisible} title={assessTitle+"考核"} width="60%" onOk={async ()=>{
             await formAssess.validateFields()
             const value = formAssess.getFieldsValue(true)
             console.log(value)
             if(assessTitle==='添加'){
-                await RequestUtil.post(`/tower-as/assess`,value?.map((item:any)=>{
+                await RequestUtil.post(`/tower-as/workAssess`,value?.list.map((item:any)=>{
                     return {
                         ...item,
                         workIssueId: detailAssessData[0].id,
@@ -382,9 +383,22 @@ export default function InformationDetail(): React.ReactNode {
                 />
                 <DetailTitle title='根据上述条件匹配到下面责任人' operation={[<HandSelect
                     onSelect={(selectRows:any[])=>{
-                        setAssessDataSource(selectRows)
+                        setAssessDataSource(selectRows.map((item:any)=>{
+                            return {
+                                ...item,
+                                type:1,
+                                userName: item?.name
+                            }
+                        }))
                         formAssess.setFieldsValue({
-                            list:selectRows
+                            list:selectRows.map((item:any)=>{
+                                return {
+                                    ...item,
+                                    type:1,
+                                    userName: item?.name,
+                                    description:''
+                                }
+                            })
                         })
                     }}
                 />
@@ -403,10 +417,13 @@ export default function InformationDetail(): React.ReactNode {
             if(questionTitle==='添加'){
                 await RequestUtil.post(`/tower-as/workIssue`,{
                     ...value,
+                    workOrderId: params.id,
                     description: value?.description?value?.description:'',
-                    issueType: value?.issue?value?.issue.split(',')[0]:'',
-                    typeId: value?.type?value?.type.split(',')[0]:'',
-                    pieceCode: value?.pieceCode?value?.pieceCode:'',
+                    issueTypeId: value?.type?value?.type.split(',')[0]:'',
+                    issueTypeName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueName: value?.issue?value?.issue.split(',')[1]:'',
+                    pieceCode: value?.pieceCode?value?.pieceCode.join(','):'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
                     productCategoryId: value?.productCategoryId?value?.productCategoryId:'',
@@ -423,10 +440,13 @@ export default function InformationDetail(): React.ReactNode {
             }else{
                 await RequestUtil.put(`/tower-as/workIssue`,{
                     ...value,
+                    workOrderId: params.id,
                     description: value?.description?value?.description:'',
-                    issueType: value?.issue?value?.issue.split(',')[0]:'',
-                    typeId: value?.type?value?.type.split(',')[0]:'',
-                    pieceCode: value?.pieceCode?value?.pieceCode:'',
+                    issueTypeId: value?.type?value?.type.split(',')[0]:'',
+                    issueTypeName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueName: value?.issue?value?.issue.split(',')[1]:'',
+                    pieceCode: value?.pieceCode?value?.pieceCode.join(','):'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
                     productCategoryId: value?.productCategoryId?value?.productCategoryId:'',
@@ -483,6 +503,9 @@ export default function InformationDetail(): React.ReactNode {
                     <Form.Item name="id" label=""  style={{display:'none'}} >
                         <Input  type='hidden'/>
                     </Form.Item>
+                    <Form.Item name="productId" label=""  style={{display:'none'}} >
+                        <Input  type='hidden'/>
+                    </Form.Item>
                     <Form.Item name="productNumber" label="杆塔号" rules={[{
                         "required": true,
                         "message": "请选择杆塔号"
@@ -491,6 +514,7 @@ export default function InformationDetail(): React.ReactNode {
                             <Tower onSelect={async (select: any) => {
                                 console.log(select)
                                 formQuestion.setFieldsValue({ 
+                                    productId: select?.selectRows[0].id,
                                     productNumber: select?.selectRows[0].productNumber,
                                     productCategory: select?.selectedRows[0].productCategoryName,
                                     productCategoryId: select?.selectedRows[0].productCategoryId,
@@ -506,17 +530,23 @@ export default function InformationDetail(): React.ReactNode {
                     }]}>
                         <Select style={{width:'100%'}} mode='multiple' onChange={(value:any)=>{
                             if(value.length>0){
-                                const num = value.map((item: string)=> item.split(',')[2]) 
-                                const numberAll = num.reduce((pre: any,cur:  any)=>{
-                                    return parseFloat(pre!==null?pre:0 )+ parseFloat(cur!==null?cur:0 )
+                                const arr:any[]=[];
+                                value.map((item:any,index:number)=>{
+                                    const everyOne = pieceCode.filter((every:any)=>{
+                                        return every?.code === item
+                                    })
+                                    arr.push(everyOne[0])
+                                })
+                                const numberAll = arr.reduce((pre: any,cur:  any)=>{
+                                    return parseFloat(pre!==null?pre:0) + parseFloat(cur.basicsPartNum!==null?cur.basicsPartNum:0) 
                                 },0)
                                 formQuestion.setFieldsValue({ 
-                                    pieceCodeNum: numberAll
+                                    pieceCodeNum: Number(numberAll)
                                 });
                             }
                         }}>
                             { pieceCode && pieceCode.map((item:any)=>{
-                                    return <Select.Option key={item.id} value={item.id+','+item.code+','+item.structureCountNum}>{item.code}</Select.Option>
+                                    return <Select.Option key={item.id} value={item.code}>{item.code}</Select.Option>
                                 }) }
                         </Select>
                     </Form.Item>
@@ -679,7 +709,7 @@ export default function InformationDetail(): React.ReactNode {
                     await RequestUtil.post(`/tower-as/workOrder/dispatch?workOrderId=${params?.id}&userId=${selectRows[0]?.userId}`)
                     message.success("派工成功！")
                     history.go(0)
-                }} selectedKey={[]}/>]:[]}/>
+                }} selectedKey={detailData?.workOrderUserVO}/>]:[]}/>
             <CommonTable columns={[...afterSaleInfo as any,
                 {
                     title: "操作",
@@ -717,7 +747,7 @@ export default function InformationDetail(): React.ReactNode {
                     tableProps={{
                         expandable:{
                             expandedRowRender ,
-                            onExpand
+                            // onExpand
                         }
                     }}
                     columns={[...pageInfo as any,
@@ -733,8 +763,18 @@ export default function InformationDetail(): React.ReactNode {
                                     setAssessTitle('添加');
                                     setAssessVisible(true); 
                                 } }>添加考核</Button>
-                                <Button type="link" onClick={ () => {
-                                    formQuestion.setFieldsValue({ record });
+                                <Button type="link" onClick={ async () => {
+                                    const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueTypeId}`);
+                                    const value:any[] = await RequestUtil.get(`/tower-science/productStructure/listByProductForSales?current=1&pageSize=10000&productId=${record?.productId}`)
+                                    setPieceCode(value)
+                                    setName(result)
+                                    formQuestion.setFieldsValue({ 
+                                        ...record, 
+                                        type:record?.issueTypeId&&record?.issueTypeName?record?.issueTypeId+','+record?.issueTypeName:'',
+                                        issue: record?.issueId&&record?.issueName?record?.issueId+','+record?.issueName:"",
+                                        pieceCode: record?.pieceCode?record?.pieceCode.split(','):''
+                                    });
+                                   
                                     setQuestionTitle('编辑');
                                     setVisible(true); 
                                 } }>编辑</Button>
@@ -759,7 +799,7 @@ export default function InformationDetail(): React.ReactNode {
                             type="primary"
                             onClick={() =>{ 
                                 setVisible(true)
-                                setQuestionTitle('新增')
+                                setQuestionTitle('添加')
                             }}
                             // style={{marginBottom:"10px"}}
                         >添加问题</Button>

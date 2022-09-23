@@ -11,8 +11,8 @@ export default function Dispatch({ onSelect, selectedKey = [], ...props }: any):
     const [filterValue, setFilterValue] = useState<any>({});
     const history = useHistory();
     const [detailData, setDetailData] = useState<any[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey);
-    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey?[selectedKey?.afterSaleUserId]:[]);
+    const [selectedRows, setSelectedRows] = useState<any[]>(selectedKey?[{...selectedKey,name:selectedKey?.afterSaleUser}]:[]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -25,10 +25,10 @@ export default function Dispatch({ onSelect, selectedKey = [], ...props }: any):
             dataIndex: 'name'
         },
         {
-            key: 'employeeNames',
+            key: 'phone',
             title: '手机号',
             width: 150,
-            dataIndex: 'employeeNames'
+            dataIndex: 'phone'
         },
         {
             key: 'type',
@@ -90,7 +90,7 @@ export default function Dispatch({ onSelect, selectedKey = [], ...props }: any):
             // refresh={refresh}
           
             tableProps={{
-                
+                rowKey:'userId',
                 rowSelection: {
                     type:'radio',
                     selectedRowKeys: selectedKeys,

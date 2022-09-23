@@ -16,10 +16,10 @@ export default function Dept({ onSelect, selectedKey = [], ...props }: any): JSX
     }
     const columns = [
         {
-            key: 'wordOrderNumber',
+            key: 'workOrderNumber',
             title: '工单编号',
             width: 150,
-            dataIndex: 'wordOrderNumber'
+            dataIndex: 'workOrderNumber'
         },
         {
             key: 'planNumber',

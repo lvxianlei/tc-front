@@ -91,6 +91,9 @@ export default function AnnouncementNew(): React.ReactNode {
                                     setDetailData({ ...detailData, planNumber: selectRows[0]?.planNumber,serviceManagerId:selectRows[0]?.businessUser,serviceManager:selectRows[0]?.businessUserName,projectName:selectRows[0]?.projectName})
                                 }} selectedKey={detailData?.staffList||[]} />
                             } disabled />
+                        <Form.Item name="serviceManagerId" label="" style={{display:'none'}} >
+                            <Input type='hidden' />
+                        </Form.Item>
                         </Form.Item>
                         <Form.Item name="projectName" label="工程名称" initialValue={detailData.projectName} >
                             <Input  disabled placeholder='选择计划自动带出'/>
@@ -164,6 +167,9 @@ export default function AnnouncementNew(): React.ReactNode {
                                 <Form.Item name="productCategoryId" label="" style={{display:'none'}} >
                                     <Input type='hidden' />
                                 </Form.Item>
+                                <Form.Item name="productId" label="" style={{display:'none'}} >
+                                    <Input type='hidden' />
+                                </Form.Item>
                                 <Form.Item name="productNumber" label="杆塔号" rules={[{
                                     "required": true,
                                     "message": "请选择杆塔号"
@@ -172,6 +178,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                         <Tower onSelect={async (select: any) => {
                                             console.log(select)
                                             form.setFieldsValue({ 
+                                                productId: select?.selectRows[0].id,
                                                 productNumber: select?.selectRows[0].productNumber,
                                                 productCategory: select?.selectedRows[0].productCategoryName,
                                                 productCategoryId: select?.selectedRows[0].productCategoryId,
@@ -217,7 +224,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                     multiple 
                                     maxCount={5}
                                     onDoneChange={(dataInfo: FileProps[]) => {
-                                        setDetailData({attachInfoVos: [...dataInfo]})
+                                        setDetailData({...detailData,attachInfoVos: [...dataInfo]})
                                     }}
                                 />
                             </>

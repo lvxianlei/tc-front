@@ -11,8 +11,8 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
     const [filterValue, setFilterValue] = useState<any>({});
     const history = useHistory();
     const [detailData, setDetailData] = useState<any[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey);
-    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey?[selectedKey?.afterSaleUserId]:[]);
+    const [selectedRows, setSelectedRows] = useState<any[]>(selectedKey?[{...selectedKey,name:selectedKey?.afterSaleUser}]:[]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -88,11 +88,12 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
             headTabs={[]}
             extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}
             // refresh={refresh}
-          
+            
             tableProps={{
-                
+                rowKey:'userId',
                 rowSelection: {
                     type:'radio',
+                    
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
                 }
