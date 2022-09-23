@@ -183,11 +183,12 @@
         {
             "title": "发生日期",
             "width": 120,
-            "dataIndex": "updateTime"
+            "dataIndex": "date"
         },
         {
             "title": "图片",
             "width": 70,
+            "type":"number",
             "dataIndex": "picNumber"
         },
         {
