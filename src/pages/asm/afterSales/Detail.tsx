@@ -354,7 +354,7 @@ export default function InformationDetail(): React.ReactNode {
             const value = formAssess.getFieldsValue(true)
             console.log(value)
             if(assessTitle==='添加'){
-                await RequestUtil.post(`/tower-as/assess`,value?.list.map((item:any)=>{
+                await RequestUtil.post(`/tower-as/workAssess`,value?.list.map((item:any)=>{
                     return {
                         ...item,
                         workIssueId: detailAssessData[0].id,
