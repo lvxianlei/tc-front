@@ -69,9 +69,9 @@ export default function InformationDetail(): React.ReactNode {
 
     const tableColumns = [
         {
-            key: 'issueType',
+            key: 'issueName',
             title: '问题分类',
-            dataIndex: 'issueType'
+            dataIndex: 'issueName'
         },
         {
             key: 'productCategory',
