@@ -32,15 +32,15 @@ export default function List(): React.ReactNode {
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any[] = await RequestUtil.get<any[]>(`/tower-science/loftingUserWork`, { fuzzyMsg: filterValue?.fuzzyMsg || '' });
-        if (data?.length > 0 && data[0]?.id) {
-            detailRun(data[0]?.userId, data[0]?.type)
+        if (data?.length > 0 && data[0]?.loftingUser) {
+            detailRun(data[0]?.loftingUser)
         } else {
             setDetailData([]);
         }
         resole(data);
     }), {})
 
-    const { run: detailRun } = useRequest<any>((id: string, type: number) => new Promise(async (resole, reject) => {
+    const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/loftingUserWork/getLoftingUserWork`, {
                 loftingUser: id,
@@ -115,7 +115,7 @@ export default function List(): React.ReactNode {
     }
 
     const onRowChange = async (record: Record<string, any>) => {
-        detailRun(record.userId, record.type)
+        detailRun(record.loftingUser)
     }
 
     return <Spin spinning={loading}>
@@ -158,7 +158,7 @@ export default function List(): React.ReactNode {
             <CommonTable
                 columns={[
                     ...tableColumns.map((item: any) => {
-                        if (item.dataIndex === 'year') {
+                        if (item.dataIndex === 'years') {
                             return ({
                                 ...item,
                                 title: () => {

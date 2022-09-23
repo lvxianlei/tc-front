@@ -82,7 +82,7 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
             "title": "状态",
             "dataIndex": "status",
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Button type="link" onClick={() => changeStatus(record)}>{record?.status}</Button>
+                <Button type="link" onClick={() => changeStatus(record)}>{record?.statusName}</Button>
             )
         },
         {
@@ -141,7 +141,7 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
     const isEditing = (record: Record<string, any>) => record.id === editingKey;
 
     const editRow = (record: Record<string, any>) => {
-        form.setFieldsValue({ ...record });
+        form.setFieldsValue({ ...record, id: record.id });
         setEditingKey(record.id);
     }
 
@@ -152,10 +152,6 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
     const onSubmit = (key: React.Key) => new Promise(async (resolve, reject) => {
         try {
             const row = form.getFieldsValue(true);
-            console.log(row)
-            // const newData = [];
-            // const index = newData.findIndex(item => key === item.id);
-            // console.log(index,row)
             resolve(
                 saveRun([{
                     id: row.id,
@@ -173,6 +169,7 @@ export default forwardRef(function CorrectSetting({ record }: modalProps, ref) {
         try {
             RequestUtil.post(`/tower-science/loftingUserWork/updateAccuracyConfig`, data).then(res => {
                 setEditingKey('');
+                run();
             })
             resove(true)
         } catch (error) {
