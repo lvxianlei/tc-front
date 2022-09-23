@@ -111,7 +111,7 @@ export default () => {
                     name: "status",
                     label: "问题状态",
                     children: <Form.Item name='status' initialValue={1}>
-                        <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                        <Select placeholder="请选择"  style={{ width: "150px" }}>
                             {/* <Select.Option value='' key="">全部</Select.Option> */}
                             <Select.Option value={1}>未解决</Select.Option>
                             <Select.Option value={2}>已解决</Select.Option>

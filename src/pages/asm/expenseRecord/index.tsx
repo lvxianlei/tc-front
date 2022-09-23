@@ -257,10 +257,10 @@ export default () => {
                 {
                     name: "afterSaleUserId",
                     label: '售后人员',
-                    children: <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                    children: <Select placeholder="请选择"  style={{ width: "150px" }}>
                         {/* <Select.Option value='' key="">全部</Select.Option> */}
-                        {users && users.map(({ id, name }, index) => {
-                            return <Select.Option key={index} value={id}>
+                        {users && users.map(({ userId, name }, index) => {
+                            return <Select.Option key={index} value={userId}>
                                 {name}
                             </Select.Option>
                         })}

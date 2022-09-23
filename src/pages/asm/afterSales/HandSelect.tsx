@@ -20,17 +20,17 @@ export default function HandSelect({ onSelect, selectedKey = [], ...props }: any
         setSelectedRows(selectedRows)
     }
     const [dataSource, setDataSource] = useState<any[]>([])
-    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
-            const list: any = await RequestUtil.get(`/tower-as/issue/list`);
-            setDataSource(list)
-            resole({});
+    const { data,loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
+            const list: any = await RequestUtil.get(`/tower-system/employee?current=1&pageSize=10000`);
+            setDataSource(list?.records)
+            resole(list?.records);
     }), {})
     const columns = [
         {
-            key: 'name',
+            key: 'deptName',
             title: '责任部门',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'deptName'
         },
         {
             key: 'name',
@@ -39,10 +39,10 @@ export default function HandSelect({ onSelect, selectedKey = [], ...props }: any
             dataIndex: 'name'
         },
         {
-            key: 'name',
+            key: 'stationName',
             title: '责任人岗位',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'stationName'
         }
     ]
 
