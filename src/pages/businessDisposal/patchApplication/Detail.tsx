@@ -11,7 +11,7 @@ import useRequest from '@ahooksjs/use-request';
 import styles from './PatchApplication.module.less';
 import { detailColumns, detailTableColumns } from "./patchApplication.json"
 import { useHistory, useParams } from 'react-router-dom';
-import { Button, Space, Spin } from 'antd';
+import { Button, Space, Spin, Tooltip } from 'antd';
 
 
 export default function Detail(): React.ReactNode {
@@ -30,7 +30,19 @@ export default function Detail(): React.ReactNode {
                     <Button onClick={() => history.push(`/businessDisposal/patchApplication`)}>关闭</Button>
                 </Space>
             ]}>
-                <BaseInfo columns={detailColumns} dataSource={data || {}} col={4} />
+                <BaseInfo columns={detailColumns.map(res => {
+                    if (res.dataIndex === 'description') {
+                        return {
+                            ...res,
+                            render: (_: any): React.ReactNode => (
+                                <Tooltip placement="topLeft" title={_?.description}>
+                                    {_ && _.description ? _?.description?.substring(0, 49) + '...' : '-'}
+                                </Tooltip>
+                            ),
+                        }
+                    }
+                    return res
+                })} dataSource={data || {}} col={4} />
                 <CommonTable columns={detailTableColumns} dataSource={data?.supplyStructureVOList || []} />
                 <OperationRecord title="操作信息" serviceId={params.id} serviceName="tower-science" />
             </DetailContent>

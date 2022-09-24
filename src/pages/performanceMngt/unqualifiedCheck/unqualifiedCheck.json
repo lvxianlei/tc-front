@@ -1,0 +1,288 @@
+{
+    "columns": [
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "loftingTaskNumber",
+            "title": "放样任务编号",
+            "width": 120,
+            "dataIndex": "loftingTaskNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "不合格件号数",
+            "dataIndex": "wasteStructureNum",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "wasteNum",
+            "title": "不合格总件数",
+            "dataIndex": "wasteNum",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "考核金额（元）",
+            "dataIndex": "penaltyAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "报废重量（kg）",
+            "dataIndex": "rejectWeight",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "报废金额（元）",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        }
+    ],
+    "statisticalColumns": [
+        {
+            "key": "wasteEntryName",
+            "title": "不合格项目",
+            "width": 100,
+            "dataIndex": "wasteEntryName"
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "不合格件号数",
+            "width": 100,
+            "dataIndex": "wasteStructureNum",
+            "type": "number"
+        },
+        {
+            "key": "wasteNum",
+            "title": "不合格总件数",
+            "width": 100,
+            "dataIndex": "wasteNum",
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "考核金额（元）",
+            "width": 100,
+            "dataIndex": "penaltyAmount",
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "报废金额（元）",
+            "width": 100,
+            "dataIndex": "rejectAmount",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "报废重量（kg）",
+            "width": 100,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        }
+    ],
+    "defectiveItemColumns": [
+        {
+            "key": "wasteEntryName",
+            "title": "不合格项目",
+            "width": 100,
+            "dataIndex": "wasteEntryName"
+        },
+        {
+            "key": "angleTowerNum",
+            "title": "角钢塔",
+            "width": 80,
+            "dataIndex": "angleTowerNum",
+            "type": "number"
+        },
+        {
+            "key": "steelPoleNum",
+            "title": "钢管杆",
+            "width": 80,
+            "dataIndex": "steelPoleNum",
+            "type": "number"
+        },
+        {
+            "key": "fourTubeTowerNum",
+            "title": "四管塔",
+            "width": 80,
+            "dataIndex": "fourTubeTowerNum"
+        },
+        {
+            "key": "frameworkNum",
+            "title": "构架",
+            "width": 80,
+            "dataIndex": "frameworkNum"
+        },
+        {
+            "key": "steelStructureNum",
+            "title": "钢结构",
+            "width": 80,
+            "dataIndex": "steelStructureNum"
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "错误件号数（合计）",
+            "width": 120,
+            "dataIndex": "wasteStructureNum",
+            "type": "number"
+        },
+        {
+            "key": "wasteNum",
+            "title": "错误件数（合计）",
+            "width": 120,
+            "dataIndex": "wasteNum",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "报废重量（kg）",
+            "width": 120,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "报废金额（元）",
+            "width": 120,
+            "dataIndex": "rejectAmount",
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "考核金额（元）",
+            "width": 120,
+            "dataIndex": "penaltyAmount",
+            "type": "number"
+        },
+        {
+            "key": "wasteProportion",
+            "title": "错误数占比%",
+            "width": 120,
+            "dataIndex": "wasteProportion",
+            "type": "number"
+        },
+        {
+            "key": "rejectAmountProportion",
+            "title": "报废金额占比%",
+            "width": 120,
+            "dataIndex": "rejectAmountProportion",
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmountProportion",
+            "title": "考核金额占比%",
+            "width": 120,
+            "dataIndex": "penaltyAmountProportion",
+            "type": "number"
+        }
+    ],
+    "personColumns": [
+        {
+            "key": "repairLeaderName",
+            "title": "人员",
+            "width": 80,
+            "dataIndex": "repairLeaderName"
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "错误件号数",
+            "width": 80,
+            "dataIndex": "wasteStructureNum",
+            "type": "number"
+        },
+        {
+            "key": "wasteNum",
+            "title": "错误件数",
+            "width": 80,
+            "dataIndex": "wasteNum",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "个人报废重量（kg）",
+            "width": 120,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "个人报废金额（元）",
+            "width": 120,
+            "dataIndex": "rejectAmount",
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "个人考核金额（元）",
+            "width": 120,
+            "dataIndex": "penaltyAmount",
+            "type": "number"
+        }
+    ],
+    "totalColumns": [
+        {
+            "key": "total",
+            "title": "合计",
+            "width": 120,
+            "dataIndex": "total"
+        },
+        {
+            "key": "angleTower",
+            "title": "角钢塔（总）",
+            "width": 100,
+            "dataIndex": "angleTower",
+            "type": "number"
+        },
+        {
+            "key": "steelPole",
+            "title": "钢管杆（总）",
+            "width": 100,
+            "dataIndex": "steelPole",
+            "type": "number"
+        },
+        {
+            "key": "fourTubeTower",
+            "title": "四管塔（总）",
+            "width": 100,
+            "dataIndex": "fourTubeTower",
+            "type": "number"
+        },
+        {
+            "key": "framework",
+            "title": "构架（总）",
+            "width": 100,
+            "dataIndex": "framework",
+            "type": "number"
+        },
+        {
+            "key": "steelStructure",
+            "title": "钢结构（总）",
+            "width": 100,
+            "dataIndex": "steelStructure",
+            "type": "number"
+        }
+    ]
+}
