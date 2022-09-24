@@ -21,6 +21,8 @@ export default function Dispose(): React.ReactNode {
     const [form] = useForm();
     const params = useParams<{ id: string }>();
     const attachRef = useRef<AttachmentRef>()
+    const [repairStructure, setRepairStructureList] = useState<any>([]);
+    const [status, setStatus] = useState<number>();
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/repair/getRepairDetails/${params.id}`);
@@ -28,6 +30,8 @@ export default function Dispose(): React.ReactNode {
             ...result,
             list: result?.repairStructureVOList || []
         })
+        setRepairStructureList(result?.repairStructureVOList || []);
+        setStatus(result?.status)
         resole(result);
     }), {})
 
@@ -42,16 +46,19 @@ export default function Dispose(): React.ReactNode {
 
     const save = () => new Promise(async (resolve, reject) => {
         try {
-            const data = await form.getFieldsValue(true);
-            console.log(data)
-            console.log(attachRef.current?.getDataSource())
-            console.log(data)
-            RequestUtil.post(`/tower-science/repair/save`, {
-                wasteProductReceiptId: data.wasteProductReceiptId
-            }).then(res => {
-                message.success('处理成功！')
+            form.validateFields().then(async (res: any) => {
+                const data = await form.getFieldsValue(true);
+                RequestUtil.post(`/tower-science/repair/save`, {
+                    ...data,
+                    repairStructureDTOList: data?.list,
+                    fileVOList: attachRef.current?.getDataSource()
+                }).then(res => {
+                    message.success('处理成功！')
+                    history.push(`/businessDisposal/repairList`)
+                })
+                resolve(true);
             })
-            resolve(true);
+
         } catch (error) {
             reject(false)
         }
@@ -68,7 +75,7 @@ export default function Dispose(): React.ReactNode {
         ]}>
             <DetailTitle title="基础信息" />
             <Form form={form}>
-                <BaseInfo dataSource={{}} layout="vertical" col={10} columns={baseColumns.map(res => {
+                <BaseInfo dataSource={data || {}} layout="vertical" col={10} columns={baseColumns.map(res => {
                     if (res.dataIndex === "status") {
                         return ({
                             ...res,
@@ -77,7 +84,9 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择状态"
                                 }]}>
-                                    <Select placeholder="请选择状态">
+                                    <Select placeholder="请选择状态" onChange={(e: number) => {
+                                        setStatus(e)
+                                    }}>
                                         <Select.Option value={1} key="1">待处理</Select.Option>
                                         <Select.Option value={2} key="2">已处理</Select.Option>
                                     </Select>
@@ -98,38 +107,44 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请输入单段返修数量"
                                 }]}>
-                                    <InputNumber max={9999} min={1} onChange={(e: number) => {
-                                        console.log(e)
+                                    <InputNumber disabled={status === 2} max={9999} min={1} onChange={(e: number) => {
                                         const list = form.getFieldsValue(true).list;
-                                        list[index] = {
-                                            ...list[index],
-                                            repairTotalNum: Number(e) * Number(list[index]?.segmentCount || 0) * Number(list[index]?.baseNum || 0)
-                                        }
                                         let num = 0
                                         if (list[index].repairType) {
                                             let data: any = {}
-                                            repairTypes.forEach((element: any) => {
-                                                if (element.typeId === list[index].repairType) {
+                                            let repairTypesData: any = []
+                                            partsTypes?.forEach((element: any) => {
+                                                if (list[index].typeDictId === element.typeId) {
+                                                    repairTypesData = element.fixItemConfigList
+                                                }
+                                            });
+                                            repairTypesData?.forEach((element: any) => {
+                                                if (element.id === list[index]?.repairType) {
                                                     data = element
                                                 }
                                             });
-                                            console.log(data, '---189')
-                                            if (data.measuringUnit === '件数') {
-                                                num = Number(data.maxAmount) - Number(data.amount) * Number(e) < 0 ? Number(data.maxAmount) : Number(data.amount) * Number(e)
+                                            if (data?.measuringUnit === '件数') {
+                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(e) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(e)
                                                 // 处理数量
-                                            } else if (data.measuringUnit === '件号数') {
-                                                num = Number(data.maxAmount) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount) : Number(data.amount) * Number(1)
-                                            } else {
+                                            }
+                                            if (data?.measuringUnit === '件号数') {
+                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(1)
+                                            }
+                                            if (data?.measuringUnit === '重量（吨）') {
                                                 // 单件重量
-                                                num = Number(data.maxAmount) - Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount) : Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0)
+                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0)
                                             }
                                         }
                                         list[index] = {
                                             ...list[index],
                                             actualPenaltyAmount: num,
-                                            penaltyAmount: num
+                                            penaltyAmount: num,
+                                            repairTotalNum: (Number(e) * Number(list[index]?.segmentCount || 0) * Number(list[index]?.baseNum || 0) || 0)
                                         }
-                                        console.log(list)
+                                        form.setFieldsValue({
+                                            list: [...list]
+                                        })
+                                        setRepairStructureList([...list])
                                     }} />
                                 </Form.Item>
                             )
@@ -144,14 +159,16 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请输入单基段数"
                                 }]}>
-                                    <InputNumber max={9999} min={1} onChange={(e: number) => {
-                                        console.log(e)
+                                    <InputNumber disabled={status === 2} max={9999} min={1} onChange={(e: number) => {
                                         const list = form.getFieldsValue(true).list;
                                         list[index] = {
                                             ...list[index],
                                             repairTotalNum: Number(e) * Number(list[index]?.basicsPartNum || 0) * Number(list[index]?.baseNum || 0)
                                         }
-                                        console.log(list)
+                                        form.setFieldsValue({
+                                            list: [...list]
+                                        })
+                                        setRepairStructureList([...list])
                                     }} />
                                 </Form.Item>
                             )
@@ -166,14 +183,16 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请输入基数"
                                 }]}>
-                                    <InputNumber max={9999} min={1} onChange={(e: number) => {
-                                        console.log(e)
+                                    <InputNumber disabled={status === 2} max={9999} min={1} onChange={(e: number) => {
                                         const list = form.getFieldsValue(true).list;
                                         list[index] = {
                                             ...list[index],
                                             repairTotalNum: Number(e) * Number(list[index]?.basicsPartNum || 0) * Number(list[index]?.segmentCount || 0)
                                         }
-                                        console.log(list)
+                                        form.setFieldsValue({
+                                            list: [...list]
+                                        })
+                                        setRepairStructureList([...list])
                                     }} />
                                 </Form.Item>
                             )
@@ -188,19 +207,11 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择零件类型"
                                 }]}>
-                                    <Select placeholder="请选择" size="small" onChange={(e) => {
-                                        let data: any = []
-                                        partsTypes.forEach((element: any) => {
-                                            if (element.typeId === e) {
-                                                data = element.fixItemConfigList
-                                            }
-                                        });
-                                        setRepairTypes(data)
-                                    }}>
+                                    <Select disabled={status === 2} placeholder="请选择">
                                         {
                                             partsTypes?.map((item: any, index: number) =>
-                                                <Select.Option value={item.id} key={index}>
-                                                    {item.name}
+                                                <Select.Option value={item.typeId} key={index}>
+                                                    {item.typeName}
                                                 </Select.Option>
                                             )
                                         }
@@ -218,36 +229,48 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择返修类型"
                                 }]}>
-                                    <Select placeholder="请选择返修类型" size="small" onChange={(e) => {
-                                        console.log(e)
+                                    <Select disabled={status === 2} value={record?.repairTypeName} placeholder="请选择返修类型" onChange={(e) => {
                                         const list = form.getFieldsValue(true).list;
                                         let data: any = {}
                                         repairTypes.forEach((element: any) => {
-                                            if (element.typeId === e) {
+                                            if (element.id === e) {
                                                 data = element
                                             }
                                         });
-                                        console.log(data, '---189')
                                         let num = 0
                                         if (data.measuringUnit === '件数') {
-                                            num = Number(data.maxAmount) - Number(data.amount) * Number(list[index]?.basicsPartNum) < 0 ? Number(data.maxAmount) : Number(data.amount) * Number(list[index]?.basicsPartNum)
+                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(list[index]?.basicsPartNum) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(list[index]?.basicsPartNum)
                                             // 处理数量
                                         } else if (data.measuringUnit === '件号数') {
-                                            num = Number(data.maxAmount) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount) : Number(data.amount) * Number(1)
+                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(1)
                                         } else {
                                             // 单件重量
-                                            num = Number(data.maxAmount) - Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount) : Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0)
+                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0)
                                         }
                                         list[index] = {
                                             ...list[index],
                                             actualPenaltyAmount: num,
                                             penaltyAmount: num
                                         }
-                                    }}>
+                                        form.setFieldsValue({
+                                            list: [...list]
+                                        })
+                                        setRepairStructureList([...list])
+                                    }}
+                                        onDropdownVisibleChange={(open) => {
+                                            let data: any = []
+                                            const list = form.getFieldsValue(true).list;
+                                            partsTypes.forEach((element: any) => {
+                                                if (element.typeId === list[index].typeDictId) {
+                                                    data = element.fixItemConfigList
+                                                }
+                                            });
+                                            setRepairTypes(data)
+                                        }}>
                                         {
                                             repairTypes?.map((item: any, index: number) =>
                                                 <Select.Option value={item.id} key={index}>
-                                                    {item.name}
+                                                    {item.fixType}
                                                 </Select.Option>
                                             )
                                         }
@@ -261,22 +284,22 @@ export default function Dispose(): React.ReactNode {
                         return ({
                             ...res,
                             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name={["list", index, "repairLeader"]} rules={[{
+                                <Form.Item name={["list", index, "repairLeaderName"]} rules={[{
                                     required: true,
                                     message: "请选择责任人"
                                 }]}>
-                                    <Input value={1} suffix={
+                                    <Input disabled={status === 2} value={1} suffix={
                                         <SelectUser key={index} onSelect={(selectedRows: Record<string, any>) => {
-                                            console.log(selectedRows)
                                             const list = form.getFieldsValue(true).list;
                                             list[index] = {
                                                 ...list[index],
-                                                repairLeader: selectedRows[0]?.userId
+                                                repairLeader: selectedRows[0]?.userId,
+                                                repairLeaderName: selectedRows[0]?.name,
                                             }
-                                            console.log([...list])
                                             form.setFieldsValue({
                                                 list: [...list]
                                             })
+                                            setRepairStructureList([...list])
                                         }} />
                                     } />
                                 </Form.Item>
@@ -292,13 +315,13 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请输入实际罚款金额"
                                 }]}>
-                                    <InputNumber max={99999.99} min={0} />
+                                    <InputNumber disabled={status === 2} max={99999.99} min={0} />
                                 </Form.Item>
                             )
                         })
                     }
                     return res
-                })} dataSource={data?.repairStructureVOList || []} />
+                })} isPage={false} dataSource={[...repairStructure] || []} />
             </Form>
             <Attachment dataSource={data?.fileVOList || []} ref={attachRef} isBatchDel={true} edit />
         </DetailContent>

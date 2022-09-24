@@ -264,7 +264,7 @@ export default function List(): React.ReactNode {
             const newData = [...detailData?.performanceDetailVOList];
             const index = newData.findIndex(item => key === item.id);
             if (index > -1) {
-                RequestUtil.post(`/tower-science/performance/config`, [row]).then(res => {
+                RequestUtil.post(`/tower-science/performance/product/segment`, [row]).then(res => {
                     setEditingKey('');
                     message.success('编辑成功');
                     run({ ...filterValues })

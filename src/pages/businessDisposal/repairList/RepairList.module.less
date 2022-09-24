@@ -1,5 +1,18 @@
+@import "../../../App.module.less";
+
 .dispose{
     :global(.ant-form-item) {
         margin-bottom: 0;
+    }
+}
+
+.tableRow{
+    padding: 0;
+    height: @tableRowHeight;
+    line-height: @tableRowHeight;
+    box-sizing: border-box;
+    border: none;
+    &:nth-child(odd){
+      background-color: #F8F8F8;
     }
 }

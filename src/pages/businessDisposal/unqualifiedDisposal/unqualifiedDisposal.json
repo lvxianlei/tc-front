@@ -19,9 +19,9 @@
             "width": 100,
             "type":"select",
             "enum": [
-                { "value": "1", "label": "待处理" },
-                { "value": "2", "label": "已处理" },
-                { "value": "0", "label": "已拒绝" }
+                { "value": 1, "label": "待处理" },
+                { "value": 2, "label": "已处理" },
+                { "value": 0, "label": "已拒绝" }
             ]
         },
         {
@@ -159,9 +159,9 @@
             "width": 100
         },
         {
-            "key": "responsibleProcedure",
+            "key": "responsibleProcedureName",
             "title": "责任工序",
-            "dataIndex": "responsibleProcedure",
+            "dataIndex": "responsibleProcedureName",
             "width": 100
         },
         {
@@ -195,9 +195,9 @@
             "width": 100
         },
         {
-            "key": "responsibleProcedure",
+            "key": "repairProcess",
             "title": "返修工序",
-            "dataIndex": "responsibleProcedure",
+            "dataIndex": "repairProcess",
             "width": 100
         },
         {

@@ -16,17 +16,17 @@ import { baseColumns, unqualifiedColumns } from "./unqualifiedDisposal.json"
 import styles from './UnqualifiedDisposal.module.less';
 
 export default function Dispose(): React.ReactNode {
-    const [repairTypes, setRepairTypes] = useState<any>([]);
     const history = useHistory();
     const [form] = useForm();
     const params = useParams<{ id: string }>();
+    const [wasteProductStructureList, setWasteProductStructureList] = useState<any>([]);
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/wasteProductReceipt/${params.id}`);
         form.setFieldsValue({
-            supplyTypeName: 1,
-            list: []
+            list: result?.wasteProductStructureList || []
         })
+        setWasteProductStructureList(result?.wasteProductStructureList)
         resole(result);
     }), {})
 
@@ -46,34 +46,42 @@ export default function Dispose(): React.ReactNode {
 
     const save = (status: number) => new Promise(async (resolve, reject) => {
         try {
-            const data = await form.getFieldsValue(true);
-            console.log(data)
-            RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
-                status: status,
-                id: data.id,
-                description: data.description,
-                wasteProductStructureList: []
-            }).then(res => {
-                message.success('处理成功！')
+            form.validateFields().then(async (res: any) => {
+                const data = await form.getFieldsValue(true);
+                console.log(data)
+                RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
+                    id: params.id,
+                    status: status,
+                    description: data.description,
+                    wasteProductStructureList: data.list
+                }).then(res => {
+                    message.success('处理成功！');
+                    history.push(`/businessDisposal/unqualifiedDisposal`)
+                })
+                resolve(true);
             })
-            resolve(true);
+
         } catch (error) {
             reject(false)
         }
     })
 
     return <Spin spinning={false}>
-        <DetailContent className={styles.dispose} operation={[
+        <DetailContent className={styles.unqualifiedDisposal} operation={[
             <Space size="small">
-                <Button type="primary" onClick={() => save(0)} ghost>拒绝</Button>
-                <Button type="primary" onClick={() => save(2)} ghost>提交并生成返修单</Button>
+                {data?.status === 1 ?
+                    <>
+                        <Button type="primary" onClick={() => save(0)} ghost>拒绝</Button>
+                        <Button type="primary" onClick={() => save(2)} ghost>提交并生成返修单</Button>
+                    </>
+                    : null}
                 <Button onClick={() => {
                     history.push(`/businessDisposal/unqualifiedDisposal`);
                 }}>关闭</Button>
             </Space>
         ]}>
             <DetailTitle title="基础信息" />
-            <BaseInfo dataSource={data} layout="vertical" col={10} columns={baseColumns} />
+            <BaseInfo dataSource={data || {}} layout="vertical" col={10} columns={baseColumns} />
             <DetailTitle title="不合格信息" />
             <Form form={form}>
                 <CommonTable columns={unqualifiedColumns.map(res => {
@@ -86,13 +94,16 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请输入处理数量"
                                 }]}>
-                                    <InputNumber max={9999} min={1} onChange={(e: number) => {
-                                        console.log(e)
+                                    <InputNumber disabled={data?.status !== 1} max={9999} min={1} onChange={(e: number) => {
                                         const list = form.getFieldsValue(true).list;
                                         list[index] = {
                                             ...list[index],
-
+                                            disposeWeight: Number(list[index].basicsWeight || 0) * Number(e)
                                         }
+                                        form.setFieldsValue({
+                                            list: [...list]
+                                        })
+                                        setWasteProductStructureList([...list])
                                     }} />
                                 </Form.Item>
                             )
@@ -103,21 +114,23 @@ export default function Dispose(): React.ReactNode {
                         return ({
                             ...res,
                             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name={["list", index, "leaderId"]} rules={[{
+                                <Form.Item name={["list", index, "leaderName"]} rules={[{
                                     required: true,
                                     message: "请选择责任人"
                                 }]}>
-                                    <Input value={1} suffix={
+                                    <Input size="small" disabled={data?.status !== 1} suffix={
                                         <SelectUser key={index} onSelect={(selectedRows: Record<string, any>) => {
-                                            console.log(selectedRows)
-                                            // const list = form.getFieldsValue(true).list;
-                                            // list[index] = {
-                                            //     ...list[index],
-                                            //     a: selectedRows[0]?.userId
-                                            // }
-                                            // form.setFieldsValue({
-                                            //     list: [...list]
-                                            // })
+                                            const list = form.getFieldsValue(true).list;
+                                            list[index] = {
+                                                ...list[index],
+                                                leaderId: selectedRows[0]?.userId,
+                                                leaderName: selectedRows[0]?.name,
+                                                responsibleTeam: selectedRows[0]?.deptName
+                                            }
+                                            form.setFieldsValue({
+                                                list: [...list]
+                                            })
+                                            setWasteProductStructureList([...list])
                                         }} />
                                     } />
                                 </Form.Item>
@@ -133,7 +146,7 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择责任工序"
                                 }]}>
-                                    <Select placeholder="请选择" size="small">
+                                    <Select disabled={data?.status !== 1} placeholder="请选择" size="small">
                                         {
                                             processList?.map((item: any, index: number) =>
                                                 <Select.Option value={item.id} key={index}>
@@ -155,41 +168,11 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择零件类型"
                                 }]}>
-                                    <Select placeholder="请选择" size="small" onChange={(e) => {
-                                        let data: any = []
-                                        partsTypes.forEach((element: any) => {
-                                            if (element.typeId === e) {
-                                                data = element.fixItemConfigList
-                                            }
-                                        });
-                                        setRepairTypes(data)
-                                    }}>
+                                    <Select disabled={data?.status !== 1} placeholder="请选择" size="small">
                                         {
                                             partsTypes?.map((item: any, index: number) =>
-                                                <Select.Option value={item.id} key={index}>
-                                                    {item.name}
-                                                </Select.Option>
-                                            )
-                                        }
-                                    </Select>
-                                </Form.Item>
-                            )
-                        })
-                    }
-                    if (res.dataIndex === "repairType") {
-                        // 返修类型
-                        return ({
-                            ...res,
-                            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                                <Form.Item name={["list", index, "repairType"]} rules={[{
-                                    required: true,
-                                    message: "请选择返修类型"
-                                }]}>
-                                    <Select placeholder="请选择返修类型" size="small">
-                                        {
-                                            repairTypes?.map((item: any, index: number) =>
                                                 <Select.Option value={item.typeId} key={index}>
-                                                    {item.name}
+                                                    {item.typeName}
                                                 </Select.Option>
                                             )
                                         }
@@ -199,13 +182,13 @@ export default function Dispose(): React.ReactNode {
                         })
                     }
                     return res
-                })} dataSource={data?.wasteProductStructureList || []} />
+                })} dataSource={wasteProductStructureList || []} />
+                <OperationRecord title="审批信息" serviceId={params.id} serviceName="tower-science" />
+                <DetailTitle title="信息" />
+                <Form.Item name='description'>
+                    <Input.TextArea disabled={data?.status !== 1} />
+                </Form.Item>
             </Form>
-            <OperationRecord title="审批信息" serviceId={params.id} serviceName="tower-science" />
-            <DetailTitle title="信息" />
-            <Form.Item name='description'>
-                <Input.TextArea />
-            </Form.Item>
         </DetailContent>
     </Spin>
 }

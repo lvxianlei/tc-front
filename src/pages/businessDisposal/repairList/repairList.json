@@ -174,7 +174,8 @@
             "key": "penaltyAmount",
             "title": "罚款金额（元）",
             "dataIndex": "penaltyAmount",
-            "width": 100
+            "width": 100,
+            "type": "number"
         },
         {
             "key": "actualPenaltyAmount",

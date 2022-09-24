@@ -142,7 +142,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
     return <DetailContent>
         {
             type === 'detail' ?
-                <BaseInfo dataSource={data} columns={applyColumns} col={3} />
+                <BaseInfo dataSource={data || {}} columns={applyColumns} col={3} />
                 :
                 <Form form={form}>
                     <Descriptions bordered size="small" className={styles.description}>
@@ -233,7 +233,11 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
                     </Descriptions>
                 </Form>
         }
-        <OperationRecord title="操作信息" serviceId={id} serviceName="tower-science" />
+        {
+            type === 'detail' ?
+                <OperationRecord title="操作信息" serviceId={id} serviceName="tower-science" />
+                : null
+        }
         {/* {
             type === 'detail' ?
 

@@ -43,9 +43,7 @@ export default forwardRef(function CoefficientPerformance({ }: modalProps, ref) 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const value = await form.validateFields();
-            await saveRun([
-                ...value,
-            ])
+            await saveRun(value)
             resolve(true);
         } catch (error) {
             reject(false)

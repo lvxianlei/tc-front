@@ -55,14 +55,14 @@ export default function List(): React.ReactNode {
             setDetailData(result);
             setWasteStructureNumPie((result || [])?.map((res: any) => {
                 return {
-                    value: res.wasteEntryName,
-                    name: res.wasteStructureNum
+                    value: res.wasteStructureNum,
+                    name: res.wasteEntryName
                 }
             }))
             setWasteNumPie((result || [])?.map((res: any) => {
                 return {
-                    value: res.wasteEntryName,
-                    name: res.wasteNum
+                    value: res.wasteNum,
+                    name: res.wasteEntryName
                 }
             }))
             resole(result)
@@ -97,13 +97,15 @@ export default function List(): React.ReactNode {
     };
 
     const { data: monthData, run: monthTableRun } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/wasteProductReceipt/assessment/product/entry`, { ...filterValue });
+        const data: any = await RequestUtil.get(`/tower-science/wasteProductReceipt/assessment/product/entry`, { monthDate: filterValue });
         if (data?.length > 0 && data[0].id) {
             personRun(data[0]?.id)
+            personRun(data[0]?.id)
+            totalRun(data[0]?.id)
         } else {
             setPersonData([])
         }
-        resole(data?.records);
+        resole(data);
     }), {})
 
     const { run: personRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
@@ -113,13 +115,13 @@ export default function List(): React.ReactNode {
             setThreePie((result || [])?.map((res: any) => {
                 return {
                     value: res.wasteStructureNum,
-                    name: res.repairLeader
+                    name: res.repairLeaderName
                 }
             }))
             setFourPie((result || [])?.map((res: any) => {
                 return {
                     value: res.wasteNum,
-                    name: res.repairLeader
+                    name: res.repairLeaderName
                 }
             }))
             resole(result)
