@@ -8,7 +8,7 @@
         {
             "title": "收货批次",
             "dataIndex": "receiveBatchNumber",
-            "width": 80
+            "width": 140
         },
         {
             "title": "库位",
@@ -23,7 +23,7 @@
         {
             "title": "供应商",
             "dataIndex": "supplierName",
-            "width": 80
+            "width": 100
         },
         {
             "title": "物料编码",
@@ -53,7 +53,7 @@
         {
             "title": "规格",
             "dataIndex": "structureSpec",
-            "width": 50
+            "width": 70
         },
         {
             "title": "长度(mm)",
@@ -78,12 +78,12 @@
         {
             "title": "炉批号",
             "dataIndex": "furnaceBatchNumber",
-            "width": 50
+            "width": 60
         },
         {
             "title": "质保书号",
             "dataIndex": "warrantyNumber",
-            "width": 50
+            "width": 100
         },
         {
             "title": "含税单价(元/吨)",

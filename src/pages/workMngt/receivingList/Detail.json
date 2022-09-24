@@ -5,10 +5,6 @@
             "dataIndex": "receiveNumber"
         },
         {
-            "title": "合同编号",
-            "dataIndex": "contractNumber"
-        },
-        {
             "title": "供应商",
             "dataIndex": "supplierName"
         },
@@ -98,10 +94,6 @@
             "title": "运输公司"
         },
         {
-            "dataIndex": "transportTaxPrice",
-            "title": "合同单价（元/吨）"
-        },
-        {
             "dataIndex": "transportPriceCount",
             "title": "运费价税合计（元）"
         }
@@ -127,15 +119,16 @@
             "title": "装卸公司"
         },
         {
-            "dataIndex": "unloadTaxPrice",
-            "title": "合同单价（元/吨）"
-        },
-        {
             "dataIndex": "unloadPriceCount",
             "title": "装卸费价税合计（元）"
         }
     ],
     "goodsDetail": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber",
+            "width": 70
+        },
         {
             "title": "品名",
             "dataIndex": "materialName",
@@ -205,6 +198,26 @@
             "title": "不含税金额（元）",
             "dataIndex": "totalUnTaxPrice",
             "disabled": true
+        },
+        {
+            "title": "含税运费（元）",
+            "dataIndex": "totalTransportTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税运费（元）",
+            "dataIndex": "totalTransportPrice",
+            "width": 120
+        },
+        {
+            "title": "含税装卸费（元）",
+            "dataIndex": "totalUnloadTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "totalUnloadPrice",
+            "width": 140
         },
         {
             "title": "炉批号",

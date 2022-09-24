@@ -644,7 +644,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     })))
                 }} />
         </Modal>
-        <DetailTitle title="合同基本信息" />
+        <DetailTitle title="合同基本信息" key="a" />
         <BaseInfo
             form={baseForm}
             col={2}
@@ -670,7 +670,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 deliveryMethod: deliveryMethodEnum?.[1]?.value,
                 settlementMode: settlementModeEnum?.[0]?.value
             }} edit />
-        <DetailTitle title="运费信息" />
+        <DetailTitle title="运费信息" key="b" />
         <BaseInfo
             form={freightForm}
             col={2}
@@ -688,7 +688,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 })
             }
             dataSource={{ transportBear: 1 }} edit />
-        <DetailTitle title="装卸费信息" />
+        <DetailTitle title="装卸费信息" key="c" />
         <BaseInfo
             form={stevedoringForm}
             col={2}
@@ -722,6 +722,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         ]} />
         <CommonTable
             style={{ padding: "0" }}
+            rowKey="key"
             columns={[
                 ...material.map((item: any) => {
                     if (item.dataIndex === "num") {
@@ -813,7 +814,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={popDataList} />
+            dataSource={popDataList.map((item: any) => ({
+                ...item,
+                key: item.id || Math.random() + new Date().getTime()
+            }))} />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })

@@ -1,11 +1,11 @@
-import React, { forwardRef, useState, useImperativeHandle, useRef } from "react"
+import React, { forwardRef, useImperativeHandle, useRef } from "react"
 import { useParams } from "react-router-dom"
-import { Form, Spin, InputNumber } from "antd"
+import { Form, Spin } from "antd"
 import { batchSupplier } from "./enquiry.json"
-import { BaseInfo, CommonTable, DetailTitle, Attachment, AttachmentRef } from "../../common"
+import { BaseInfo, DetailTitle, Attachment, AttachmentRef } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { calcObj } from "../../workMngt/receivingList/Edit"
+import * as calcObj from '@utils/calcUtil'
 interface AddPriceProps {
     id: string,
     type: "batch_new" | "batch_edit"

@@ -25,6 +25,9 @@ const envConfig = Dotenv.config({
 });
 const WebpackBar = require("webpackbar");
 module.exports = process.env.REACT_APP_ENV === "dll" ? dllConfig : {
+  externals:{
+    'BMap':'BMap',
+  },
   webpack: override(
     function (config) {
       const scopePluginIndex = config.resolve.plugins.findIndex(
@@ -69,6 +72,7 @@ module.exports = process.env.REACT_APP_ENV === "dll" ? dllConfig : {
     }),
     addWebpackAlias({
       "@utils": path.resolve(__dirname, "./src/utils"),
+      '@utils/': path.resolve(__dirname, './src/utils/'),
       "@components": path.resolve(__dirname, "./src/components"),
       "@pages": path.resolve(__dirname, "./src/pages")
     }),
