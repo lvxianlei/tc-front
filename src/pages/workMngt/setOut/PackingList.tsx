@@ -122,8 +122,8 @@ export default function PackingList(): React.ReactNode {
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16} ${styles.btnRight}`}>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
-            <Button type="primary" ghost onClick={() => setVisible(true)} disabled={isShow}>套用包</Button>
-            <Button type="primary" disabled={isShow} onClick={() => {
+            <Button type="primary" ghost onClick={() => setVisible(true)} disabled={!isShow}>套用包</Button>
+            <Button type="primary" disabled={!isShow} onClick={() => {
                 RequestUtil.post(`/tower-science/packageStructure/automatic/${params.id}/${params.productId}`).then(res => {
                     history.go(0)
                     message.success('自动打包成功');
@@ -131,7 +131,7 @@ export default function PackingList(): React.ReactNode {
                     console.log(error)
                 })
             }} ghost>自动打包</Button>
-            <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" disabled={isShow} ghost>添加</Button></Link>
+            <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListNew`, state: { productCategoryName: detailData?.productCategoryName, productNumber: detailData?.productNumber } }}><Button type="primary" disabled={!isShow} ghost>添加</Button></Link>
             <Popconfirm
                 title="确认完成?"
                 onConfirm={() => {
@@ -140,11 +140,11 @@ export default function PackingList(): React.ReactNode {
                         setLoading1(false);
                     })
                 }}
-                disabled={location.state?.status === 4 || isShow}
+                disabled={location.state?.status === 4 || !isShow}
                 okText="确认"
                 cancelText="取消"
             >
-                <Button loading={loading1} disabled={location.state?.status === 4 || isShow} type="primary">完成</Button>
+                <Button loading={loading1} disabled={location.state?.status === 4 || !isShow} type="primary">完成</Button>
             </Popconfirm>
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>
@@ -162,7 +162,7 @@ export default function PackingList(): React.ReactNode {
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                             <Space direction="horizontal" size="small" className={styles.operationBtn}>
                                 <Link to={`/workMngt/setOutList/poleInformation/${params.id}/packingList/${params.productId}/packingListSetting/${record.id}`}>
-                                    <Button type="link" disabled={record.packStatus === 2 || isShow}>编辑</Button>
+                                    <Button type="link" disabled={record.packStatus === 2 || !isShow}>编辑</Button>
                                 </Link>
                                 {/* 已接收不可删除 */}
                                 <Popconfirm
@@ -170,9 +170,9 @@ export default function PackingList(): React.ReactNode {
                                     onConfirm={() => { RequestUtil.delete(`/tower-science/packageStructure?id=${record.id}`).then(res => history.go(0)) }}
                                     okText="确认"
                                     cancelText="取消"
-                                    disabled={record.packStatus === 2 || isShow}
+                                    disabled={record.packStatus === 2 || !isShow}
                                 >
-                                    <Button type="link" disabled={record.packStatus === 2 || isShow}>删除</Button>
+                                    <Button type="link" disabled={record.packStatus === 2 || !isShow}>删除</Button>
                                 </Popconfirm>
                             </Space>
                         )
