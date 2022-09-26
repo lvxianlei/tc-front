@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, message } from 'antd';
+import { Button, Modal, Form, Input, message, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../../common';
 
@@ -31,27 +31,27 @@ export default function Dispatch({ onSelect, selectedKey = [], disabled= false, 
             dataIndex: 'phone'
         },
         {
-            key: 'type',
+            key: 'countOrder',
             title: '未完成工单',
-            dataIndex: 'type',
-            width: 120
+            dataIndex: 'countOrder',
+            width: 120 
         },
         {
-            key: 'type',
-            title: '当前所在地址',
-            dataIndex: 'type',
+            key: 'address',
+            title: '当前地址',
+            dataIndex: 'address',
             width: 250
         },
         {
-            key: 'type',
+            key: 'distance',
             title: '距离',
-            dataIndex: 'type',
+            dataIndex: 'distance',
             width: 250
         },
         {
-            key: 'type',
+            key: 'project',
             title: '未完工程',
-            dataIndex: 'type',
+            dataIndex: 'project',
             width: 250
         }
     ]
@@ -83,7 +83,7 @@ export default function Dispatch({ onSelect, selectedKey = [], disabled= false, 
     >
              
         <Page
-            path="/tower-system/employee"
+            path="/tower-as/employee/employeeOrderList"
             columns={columns}
             headTabs={[]}
             extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}
@@ -104,9 +104,12 @@ export default function Dispatch({ onSelect, selectedKey = [], disabled= false, 
                     children: <Input maxLength={50} placeholder="请输入姓名进行查询" />
                 },
                 {
-                    name: 'type',
+                    name: 'isFree',
                     label: '未完成工单',
-                    children: <Input maxLength={50} placeholder="请输入未完成工单进行查询" />
+                    children:  <Select placeholder="请选择"  style={{ width: "150px" }}>
+                        <Select.Option value={1}>无</Select.Option>
+                        <Select.Option value={0}>有</Select.Option>
+                    </Select>
                 }
             ]}
             filterValue={filterValue}
