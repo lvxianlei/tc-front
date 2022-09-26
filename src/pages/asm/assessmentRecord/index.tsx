@@ -151,8 +151,8 @@ export default () => {
             onFilterSubmit={(values: any) => {
                 if (values.date) {
                     const formatDate = values.date.map((item: any) => item.format("YYYY-MM-DD"))
-                    values.planStartTime = formatDate[0] + ' 00:00:00';
-                    values.planEndTime = formatDate[1] + ' 23:59:59';
+                    values.startTime = formatDate[0] + ' 00:00:00';
+                    values.endTime = formatDate[1] + ' 23:59:59';
                     delete values.date
                 }
                 setFilterValue(values)
