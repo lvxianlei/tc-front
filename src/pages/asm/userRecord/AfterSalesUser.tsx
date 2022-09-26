@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, message, Select } from 'antd';
+import { Button, Modal, Form, Input, message } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../../common';
 
@@ -11,13 +11,18 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
     const [filterValue, setFilterValue] = useState<any>({});
     const history = useHistory();
     const [detailData, setDetailData] = useState<any[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey?[selectedKey?.afterSaleUserId]:[]);
-    const [selectedRows, setSelectedRows] = useState<any[]>(selectedKey?[{...selectedKey,name:selectedKey?.afterSaleUser}]:[]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
     const columns = [
+        {
+            title: '部门',
+            width: 150,
+            dataIndex: 'deptName'
+        },
         {
             key: 'name',
             title: '姓名',
@@ -31,28 +36,10 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
             dataIndex: 'phone'
         },
         {
-            key: 'countOrder',
-            title: '未完成工单',
-            dataIndex: 'countOrder',
+            key: 'stationName',
+            title: '岗位',
+            dataIndex: 'stationName',
             width: 120
-        },
-        {
-            key: 'address',
-            title: '当前地址',
-            dataIndex: 'address',
-            width: 250
-        },
-        {
-            key: 'distance',
-            title: '距离',
-            dataIndex: 'distance',
-            width: 250
-        },
-        {
-            key: 'project',
-            title: '未完工程',
-            dataIndex: 'project',
-            width: 250
         }
     ]
 
@@ -60,7 +47,7 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
     return <>
     <Modal 
         visible={ visible } 
-        title="选择售后人员" 
+        title="选择员工" 
         onCancel={ () => { 
             setVisible(false); 
             setDetailData([])
@@ -76,25 +63,23 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
                 setDetailData([])
             }
             else {
-                message.error('未选择售后人员！')
+                message.error('未选择员工！')
             }
         }}
         width='60%'
     >
              
         <Page
-            path="/tower-as/employee/employeeOrderList"
+            path="/tower-system/employee"
             columns={columns}
             headTabs={[]}
-            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}
+            extraOperation={<span>已选：{selectedRows.length>0?selectedRows.map(item=>item?.name)?.join(','):''}</span>}
             // refresh={refresh}
-            
+          
             tableProps={{
-                pagination:false,
-                rowKey:'userId',
+                
                 rowSelection: {
-                    type:'radio',
-                    
+                    type:'checkbox',
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
                 }
@@ -105,14 +90,11 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
                     label: '模糊查询项',
                     children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
                 },
-                {
-                    name: 'isFree',
-                    label: '未完成工单',
-                    children:  <Select placeholder="请选择"  style={{ width: "150px" }}>
-                        <Select.Option value={1}>无</Select.Option>
-                        <Select.Option value={0}>有</Select.Option>
-                    </Select>
-                }
+                // {
+                //     name: 'workOrder',
+                //     label: '未完成工单',
+                //     children: 
+                // }
             ]}
             filterValue={filterValue}
             onFilterSubmit={(values: Record<string, any>) => {
@@ -121,7 +103,7 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
             }}
         />
     </Modal>
-    <Button type='link'  onClick={()=>setVisible(true)}>选择售后人员</Button>
+    <Button type='primary'  onClick={()=>setVisible(true)}>添加员工</Button>
     </>
 }
 
