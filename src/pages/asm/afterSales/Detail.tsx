@@ -32,6 +32,7 @@ export default function InformationDetail(): React.ReactNode {
     const attachCostRef = useRef<AttachmentRef>()
     const [detailData, setDetailData] = useState<any>({});
     const [detailCostData, setDetailCostData] = useState<any>({});
+    const [detailQuestionData, setDetailQuestionData] = useState<any>({});
     const [detailAssessData, setDetailAssessData] = useState<any[]>([]);
     const [assessDataSource, setAssessDataSource] = useState<any[]>([]);
     const [pieceCode, setPieceCode] = useState<any[]>([]);
@@ -571,13 +572,13 @@ export default function InformationDetail(): React.ReactNode {
                     </Form.Item>
                     <Attachment 
                         ref={attachRef} 
-                        dataSource={detailData.attachInfoVos} 
+                        dataSource={detailQuestionData.attachInfoVos} 
                         edit 
                         accept="image/png,image/jpeg,mp4" 
                         multiple 
                         maxCount={5}
                         onDoneChange={(dataInfo: FileProps[]) => {
-                            setDetailData({attachInfoVos: [...dataInfo]})
+                            setDetailQuestionData({attachInfoVos: [...dataInfo]})
                         }}
                     />
                 </Form>
@@ -778,7 +779,7 @@ export default function InformationDetail(): React.ReactNode {
                                         issue: record?.issueId&&record?.issueName?record?.issueId+','+record?.issueName:"",
                                         pieceCode: record?.pieceCode?record?.pieceCode.split(','):''
                                     });
-                                   
+                                    setDetailQuestionData({attachInfoVos: record?.attachVos})
                                     setQuestionTitle('编辑');
                                     setVisible(true); 
                                 } }>编辑</Button>
