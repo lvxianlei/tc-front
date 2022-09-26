@@ -43,9 +43,9 @@
             "width": 80
         },
         {
-            "key": "towerAccuracy",
+            "key": "towerAccuracyName",
             "title": "塔型准确率",
-            "dataIndex": "towerAccuracy",
+            "dataIndex": "towerAccuracyName",
             "width": 80
         },
         {
@@ -96,10 +96,10 @@
             "type": "number"
         },
         {
-            "key": "accuracy",
+            "key": "accuracyName",
             "title": "个人准确率",
             "width": 50,
-            "dataIndex": "accuracy"
+            "dataIndex": "accuracyName"
         }
     ],
     "checkColumns": [
