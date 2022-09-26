@@ -753,7 +753,7 @@ export default function InformationDetail(): React.ReactNode {
                     columns={[...pageInfo as any,
                         {
                             title: "操作",
-                            dataIndex: "opration",
+                            dataIndex: "operation",
                             fixed: "right",
                             width: 150,
                             render: (_:any,record: any) => <Space>
@@ -830,7 +830,7 @@ export default function InformationDetail(): React.ReactNode {
                             ...pageInfoCount as any,
                             {
                                 title: "操作",
-                                dataIndex: "opration",
+                                dataIndex: "operation",
                                 fixed: "right",
                                 width: 100,
                                 render: (_:any,record: any) => <Space>
