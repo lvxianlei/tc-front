@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Page } from '../../common';
 
 
-export default function Dispatch({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
+export default function Dispatch({ onSelect, selectedKey = [], disabled= false,  ...props }: any): JSX.Element {
 
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ form ] = Form.useForm();
@@ -116,7 +116,7 @@ export default function Dispatch({ onSelect, selectedKey = [], ...props }: any):
             }}
         />
     </Modal>
-    <Button type='primary'  onClick={()=>setVisible(true)}>派工</Button>
+    <Button type='primary'  onClick={()=>setVisible(true)} disabled={disabled}>派工</Button>
     </>
 }
 
