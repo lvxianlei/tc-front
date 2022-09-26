@@ -227,7 +227,14 @@ export default function InformationDetail(): React.ReactNode {
             {
                 key: 'type',
                 title: '考核方式',
-                dataIndex: 'type'
+                dataIndex: 'type',
+                type: "select",
+                enum: [
+                    {
+                        "value": 1,
+                        "label": "扣款"
+                    }
+                ]
             },
             {
                 key: 'money',
