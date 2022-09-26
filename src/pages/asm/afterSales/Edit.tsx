@@ -116,7 +116,7 @@ export default function AnnouncementNew(): React.ReactNode {
                             <Input  maxLength={20}/>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    {/* <Col span={12}>
                         <DetailTitle title="售后人员" key={1} />
                         <Form.Item name="afterSaleUser" label="售后人员" initialValue={detailData?.workOrderUserVO?.afterSaleUser}>
                             <Input addonBefore={
@@ -133,7 +133,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                 }} selectedKey={detailData?.workOrderUserVO||[]} />
                             } disabled />
                         </Form.Item>
-                    </Col>
+                    </Col> */}
                 </Row>
             </Form>
         </DetailContent>
