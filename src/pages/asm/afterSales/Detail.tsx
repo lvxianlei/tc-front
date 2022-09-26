@@ -50,7 +50,9 @@ export default function InformationDetail(): React.ReactNode {
             const detailData: any = await RequestUtil.get(`/tower-as/workOrder/${params.id}`);
             setDetailData(detailData)
             const typeList: any = await RequestUtil.get(`/tower-as/issue/list`);
-            setTypeName(typeList)
+            setTypeName(typeList.filter((item:any)=>{
+                return item?.status!==2
+            }))
             const data: any = await RequestUtil.get(`/tower-as/cost`)
             setCostType(data)
             resole(data)
@@ -475,7 +477,9 @@ export default function InformationDetail(): React.ReactNode {
                     ]}>
                         <Select style={{width:'100%'}} onChange={async (value:any)=>{
                             const result: any = await RequestUtil.get(`/tower-as/issue/issue/${value.split(',')[0]}`);
-                            setName(result)
+                            setName(result.filter((item:any)=>{
+                                return item?.status!==2
+                            }))
                         }}>
                             { typeName && typeName.map((item:any)=>{
                                     return <Select.Option key={item.id} value={item.id+','+item.typeName}>{item.typeName}</Select.Option>
