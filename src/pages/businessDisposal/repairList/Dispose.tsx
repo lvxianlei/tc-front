@@ -7,7 +7,7 @@
 import useRequest from "@ahooksjs/use-request";
 import { Button, Form, Input, InputNumber, message, Select, Space, Spin } from "antd";
 import { useForm } from "antd/es/form/Form";
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from "react-router-dom";
 import RequestUtil from "../../../utils/RequestUtil";
 import { Attachment, AttachmentRef, BaseInfo, CommonTable, DetailContent, DetailTitle } from "../../common";
@@ -16,13 +16,14 @@ import { baseColumns, detailColumns } from "./repairList.json"
 import styles from './RepairList.module.less';
 
 export default function Dispose(): React.ReactNode {
-    const [repairTypes, setRepairTypes] = useState<any>([]);
+    const [repairTypes, setRepairTypes] = useState<any>();
     const history = useHistory();
     const [form] = useForm();
     const params = useParams<{ id: string }>();
     const attachRef = useRef<AttachmentRef>()
     const [repairStructure, setRepairStructureList] = useState<any>([]);
     const [status, setStatus] = useState<number>();
+    const [partsTypes, setPartsTypes] = useState<any>();
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/repair/getRepairDetails/${params.id}`);
@@ -31,18 +32,34 @@ export default function Dispose(): React.ReactNode {
             list: result?.repairStructureVOList || []
         })
         setRepairStructureList(result?.repairStructureVOList || []);
-        setStatus(result?.status)
+        setStatus(result?.status);
+        let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
+        setPartsTypes(resData)
+        let newData: any = {}
+        result?.repairStructureVOList?.forEach((res: any, index: number) => {
+            let result: any = []
+            resData?.forEach((element: any) => {
+                if (element.typeId === res.typeDictId) {
+                    result = element.fixItemConfigList
+                }
+            });
+            newData = {
+                ...newData,
+                [index]: result
+            }
+        })
+        setRepairTypes(newData)
         resole(result);
     }), {})
 
-    const { data: partsTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
-            resole(resData);
-        } catch (error) {
-            reject(error)
-        }
-    }), {})
+    // const { data: partsTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    //     try {
+    //         let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
+    //         resole(resData);
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), {})
 
     const save = () => new Promise(async (resolve, reject) => {
         try {
@@ -229,10 +246,10 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择返修类型"
                                 }]}>
-                                    <Select disabled={status === 2} value={record?.repairTypeName} placeholder="请选择返修类型" onChange={(e) => {
+                                    <Select disabled={status === 2} placeholder="请选择返修类型" onChange={(e) => {
                                         const list = form.getFieldsValue(true).list;
                                         let data: any = {}
-                                        repairTypes.forEach((element: any) => {
+                                        repairTypes && repairTypes[index].forEach((element: any) => {
                                             if (element.id === e) {
                                                 data = element
                                             }
@@ -265,10 +282,12 @@ export default function Dispose(): React.ReactNode {
                                                     data = element.fixItemConfigList
                                                 }
                                             });
-                                            setRepairTypes(data)
+                                            setRepairTypes({
+                                                [index]: data
+                                            })
                                         }}>
                                         {
-                                            repairTypes?.map((item: any, index: number) =>
+                                            repairTypes && repairTypes[index]?.map((item: any, index: number) =>
                                                 <Select.Option value={item.id} key={index}>
                                                     {item.fixType}
                                                 </Select.Option>
@@ -288,8 +307,8 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择责任人"
                                 }]}>
-                                    <Input disabled={status === 2} value={1} suffix={
-                                        <SelectUser key={index} onSelect={(selectedRows: Record<string, any>) => {
+                                    <Input disabled suffix={
+                                        <SelectUser key={index} disabled={status === 2} onSelect={(selectedRows: Record<string, any>) => {
                                             const list = form.getFieldsValue(true).list;
                                             list[index] = {
                                                 ...list[index],

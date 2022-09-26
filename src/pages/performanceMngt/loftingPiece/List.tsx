@@ -261,10 +261,10 @@ export default function List(): React.ReactNode {
     const save = async (key: React.Key) => {
         try {
             const row = problemForm.getFieldsValue(true);
-            const newData = [...detailData?.performanceDetailVOList];
+            const newData = [...detailData];
             const index = newData.findIndex(item => key === item.id);
             if (index > -1) {
-                RequestUtil.post(`/tower-science/performance/product/segment`, [row]).then(res => {
+                RequestUtil.post(`/tower-science/performance/product/segment`, row).then(res => {
                     setEditingKey('');
                     message.success('编辑成功');
                     run({ ...filterValues })
@@ -387,7 +387,7 @@ export default function List(): React.ReactNode {
                     <Form form={problemForm}>
                         <CommonTable
                             columns={mergedColumns}
-                            dataSource={detailData?.performanceDetailVOList}
+                            dataSource={detailData}
                             pagination={false}
                             changeHeight={false}
                             scroll={{ y: 200 }}
