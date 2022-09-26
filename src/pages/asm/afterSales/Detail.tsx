@@ -714,7 +714,7 @@ export default function InformationDetail(): React.ReactNode {
                     await RequestUtil.post(`/tower-as/workOrder/dispatch?workOrderId=${params?.id}&userId=${selectRows[0]?.userId}`)
                     message.success("派工成功！")
                     history.go(0)
-                }} selectedKey={detailData?.workOrderUserVO}/>]:[]}/>
+                }} selectedKey={detailData?.workOrderUserVO} disabled={detailData?.workOrderUserVO!==null?true:false}/>]:[]}/>
             <CommonTable columns={[...afterSaleInfo as any,
                 {
                     title: "操作",
