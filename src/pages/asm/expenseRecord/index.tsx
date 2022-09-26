@@ -217,7 +217,7 @@ export default () => {
                 ...columns as any,
                 {
                     title: "操作",
-                    dataIndex: "opration",
+                    dataIndex: "operation",
                     fixed: "right",
                     render: (_:any,record: any) => <Space>
                         <Button type="link" onClick={ async () => {
