@@ -51,7 +51,6 @@ export default function List(): React.ReactNode {
             });
             const data: any[] = [];
             result.forEach((element: any) => {
-                element.redColumn = ['angleSteelTowerLoftingNum', 'steelStructureLoftingErrorNum']
                 data.push(
                     {
                         years: element.years?.split('-')[1],
