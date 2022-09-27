@@ -46,8 +46,10 @@ export default function AnnouncementNew(): React.ReactNode {
                 // deliveryAddress:'北京',
                 workIssueDTOS:isProblem===1?[{
                     description: value?.description?value?.description:'',
-                    issueType: value?.issue?value?.issue.split(',')[0]:'',
-                    typeId: value?.type?value?.type.split(',')[0]:'',
+                    issueTypeId: value?.type?value?.type.split(',')[0]:'',
+                    issueTypeName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueName: value?.issue?value?.issue.split(',')[1]:'',
                     pieceCode: value?.pieceCode?value?.pieceCode.map((item:any)=>{
                         return item.split(',')[1]
                     }).join(','):'',
