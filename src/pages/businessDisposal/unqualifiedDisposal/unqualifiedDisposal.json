@@ -202,13 +202,13 @@
         },
         {
             "key": "assessmentAmount",
-            "title": "考核金额（元）",
+            "title": "罚款金额（元）",
             "dataIndex": "assessmentAmount",
             "width": 100
         },
         {
             "key": "realAssessmentAmount",
-            "title": "实际考核金额（元）",
+            "title": "实际罚款金额（元）",
             "dataIndex": "realAssessmentAmount",
             "width": 100
         }
