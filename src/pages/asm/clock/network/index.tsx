@@ -37,7 +37,12 @@ export default function Statements(): React.ReactNode {
       const { data:userData, run: getUserData } = useRequest<any>((date: string) => new Promise(async (resole, reject) => {
         try {
             const value: any = await RequestUtil.get<any>(`/tower-as/workclock/person`);
-            resole(value)
+            resole(value?.map((item:any)=>{
+                return {
+                    ...item,
+                    number: Number(item?.number)
+                }
+            }))
         } catch (error) {
             reject(error)
         }
@@ -61,7 +66,7 @@ export default function Statements(): React.ReactNode {
           return {
               ...item,
               name: item.userName,
-              value: item?.lonLat.split(',').concat(`${item?.address}`),
+              value: item?.lonLat.split(',').concat(`${item?.number}`),
               userId: item.userId
             }
            
@@ -71,6 +76,7 @@ export default function Statements(): React.ReactNode {
     const option = {
         tooltip: {
           trigger: 'item',
+         
         },
         backgroundColor: '#050224',
         geo: {
