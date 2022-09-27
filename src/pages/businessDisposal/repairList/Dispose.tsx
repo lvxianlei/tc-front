@@ -224,7 +224,20 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择零件类型"
                                 }]}>
-                                    <Select disabled={status === 2} placeholder="请选择">
+                                    <Select disabled={status === 2} placeholder="请选择" onChange={() => {
+                                        const list = form.getFieldsValue(true).list;
+                                        list[index] = {
+                                            ...list[index],
+                                            repairType: '',
+                                            actualPenaltyAmount: 0,
+                                            penaltyAmount: 0
+
+                                        }
+                                        form.setFieldsValue({
+                                            list: [...list]
+                                        })
+                                        setRepairStructureList([...list])
+                                    }}>
                                         {
                                             partsTypes?.map((item: any, index: number) =>
                                                 <Select.Option value={item.typeId} key={index}>
