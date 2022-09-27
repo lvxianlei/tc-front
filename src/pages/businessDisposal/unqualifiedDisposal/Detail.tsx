@@ -48,7 +48,6 @@ export default function Dispose(): React.ReactNode {
         try {
             form.validateFields().then(async (res: any) => {
                 const data = await form.getFieldsValue(true);
-                console.log(data)
                 RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
                     id: params.id,
                     status: status,
@@ -98,7 +97,7 @@ export default function Dispose(): React.ReactNode {
                                         const list = form.getFieldsValue(true).list;
                                         list[index] = {
                                             ...list[index],
-                                            disposeWeight: Number(list[index].basicsWeight || 0) * Number(e)
+                                            disposeWeight: (Number(list[index].basicsWeight || 0) * Number(e)).toFixed(4)
                                         }
                                         form.setFieldsValue({
                                             list: [...list]

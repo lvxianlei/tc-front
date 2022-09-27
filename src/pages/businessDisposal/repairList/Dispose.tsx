@@ -126,7 +126,7 @@ export default function Dispose(): React.ReactNode {
                                 }]}>
                                     <InputNumber disabled={status === 2} max={9999} min={1} onChange={(e: number) => {
                                         const list = form.getFieldsValue(true).list;
-                                        let num = 0
+                                        let num: string | number = 0
                                         if (list[index].repairType) {
                                             let data: any = {}
                                             let repairTypesData: any = []
@@ -141,22 +141,22 @@ export default function Dispose(): React.ReactNode {
                                                 }
                                             });
                                             if (data?.measuringUnit === '件数') {
-                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(e) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(e)
+                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(e) < 0 ? Number(data.maxAmount || 0) : (Number(data.amount) * Number(e)).toFixed(4)
                                                 // 处理数量
                                             }
                                             if (data?.measuringUnit === '件号数') {
-                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(1)
+                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount || 0) :( Number(data.amount) * Number(1)).toFixed(4)
                                             }
                                             if (data?.measuringUnit === '重量（吨）') {
                                                 // 单件重量
-                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0)
+                                                num = Number(data.maxAmount || 0) - Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount || 0) : (Number(data.amount) * Number(e) * Number(list[index]?.basicsWeight || 0)).toFixed(4)
                                             }
                                         }
                                         list[index] = {
                                             ...list[index],
                                             actualPenaltyAmount: num,
                                             penaltyAmount: num,
-                                            repairTotalNum: (Number(e) * Number(list[index]?.segmentCount || 0) * Number(list[index]?.baseNum || 0) || 0)
+                                            repairTotalNum: ((Number(e) * Number(list[index]?.segmentCount || 0) * Number(list[index]?.baseNum || 0) || 0)).toFixed(4)
                                         }
                                         form.setFieldsValue({
                                             list: [...list]
@@ -180,7 +180,7 @@ export default function Dispose(): React.ReactNode {
                                         const list = form.getFieldsValue(true).list;
                                         list[index] = {
                                             ...list[index],
-                                            repairTotalNum: Number(e) * Number(list[index]?.basicsPartNum || 0) * Number(list[index]?.baseNum || 0)
+                                            repairTotalNum: (Number(e) * Number(list[index]?.basicsPartNum || 0) * Number(list[index]?.baseNum || 0)).toFixed(4)
                                         }
                                         form.setFieldsValue({
                                             list: [...list]
@@ -204,7 +204,7 @@ export default function Dispose(): React.ReactNode {
                                         const list = form.getFieldsValue(true).list;
                                         list[index] = {
                                             ...list[index],
-                                            repairTotalNum: Number(e) * Number(list[index]?.basicsPartNum || 0) * Number(list[index]?.segmentCount || 0)
+                                            repairTotalNum: (Number(e) * Number(list[index]?.basicsPartNum || 0) * Number(list[index]?.segmentCount || 0)).toFixed(4)
                                         }
                                         form.setFieldsValue({
                                             list: [...list]
@@ -254,15 +254,15 @@ export default function Dispose(): React.ReactNode {
                                                 data = element
                                             }
                                         });
-                                        let num = 0
+                                        let num: string | number = 0
                                         if (data.measuringUnit === '件数') {
-                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(list[index]?.basicsPartNum) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(list[index]?.basicsPartNum)
+                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(list[index]?.basicsPartNum) < 0 ? Number(data.maxAmount || 0) : (Number(data.amount) * Number(list[index]?.basicsPartNum)).toFixed(4)
                                             // 处理数量
                                         } else if (data.measuringUnit === '件号数') {
-                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(1)
+                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(1) < 0 ? Number(data.maxAmount || 0) : (Number(data.amount) * Number(1)).toFixed(4)
                                         } else {
                                             // 单件重量
-                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount || 0) : Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0)
+                                            num = Number(data.maxAmount || 0) - Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0) < 0 ? Number(data.maxAmount || 0) : (Number(data.amount) * Number(list[index]?.basicsPartNum) * Number(list[index]?.basicsWeight || 0)).toFixed(4)
                                         }
                                         list[index] = {
                                             ...list[index],
