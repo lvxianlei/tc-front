@@ -182,6 +182,12 @@
             "title": "实际罚款金额",
             "dataIndex": "actualPenaltyAmount",
             "width": 100
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 100
         }
     ],
     "baseColumns": [

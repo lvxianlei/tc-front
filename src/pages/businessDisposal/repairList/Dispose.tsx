@@ -339,6 +339,17 @@ export default function Dispose(): React.ReactNode {
                             )
                         })
                     }
+                    if (res.dataIndex === "description") {
+                        // 备注
+                        return ({
+                            ...res,
+                            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={["list", index, "description"]}>
+                                    <Input.TextArea disabled={status === 2} maxLength={200} />
+                                </Form.Item>
+                            )
+                        })
+                    }
                     return res
                 })} isPage={false} dataSource={[...repairStructure] || []} />
             </Form>

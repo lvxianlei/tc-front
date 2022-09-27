@@ -49,11 +49,11 @@ export default function List(): React.ReactNode {
                 timeEnd: time ? time.split(',')[1] : halfYear.split(',')[1],
                 timeStart: time ? time.split(',')[0] : halfYear.split(',')[0]
             });
-            const data = [];
+            const data: any[] = [];
             result.forEach((element: any) => {
-                data.push([
+                data.push(
                     {
-                        years: element.years,
+                        years: element.years?.split('-')[1],
                         type: '放样数',
                         angleSteelTower: element.angleSteelTowerLoftingNum,
                         steelPipePole: element.steelPipePoleLoftingNum,
@@ -62,9 +62,28 @@ export default function List(): React.ReactNode {
                         steelStructure: element.steelStructureLoftingNum,
                         basics: element.basicsLoftingNum,
                         subtotal: element.subtotalLoftingNum,
+                        redColumn: element.redColumn.map((res: string) => {
+                            if (res === 'angleSteelTowerLoftingNum') {
+                                return 'angleSteelTower'
+                            } else if (res === 'steelPipePoleLoftingNum') {
+                                return 'steelPipePole'
+                            } else if (res === 'pipeTowerLoftingNum') {
+                                return 'pipeTower'
+                            } else if (res === 'frameworkLoftingNum') {
+                                return 'framework'
+                            } else if (res === 'steelStructureLoftingNum') {
+                                return 'steelStructure'
+                            } else if (res === 'basicsLoftingNum') {
+                                return 'basics'
+                            } else if (res === 'subtotalLoftingNum') {
+                                return 'subtotal'
+                            } else {
+                                return null
+                            }
+                        })
                     },
                     {
-                        years: element.years,
+                        years: element.years?.split('-')[1],
                         type: '错误数',
                         angleSteelTower: element.angleSteelTowerLoftingErrorNum,
                         steelPipePole: element.steelPipePoleLoftingErrorNum,
@@ -73,9 +92,28 @@ export default function List(): React.ReactNode {
                         steelStructure: element.steelStructureLoftingErrorNum,
                         basics: element.basicsLoftingErrorNum,
                         subtotal: element.subtotalLoftingErrorNum,
+                        redColumn: element.redColumn.map((res: string) => {
+                            if (res === 'angleSteelTowerLoftingErrorNum') {
+                                return 'angleSteelTower'
+                            } else if (res === 'steelPipePoleLoftingErrorNum') {
+                                return 'steelPipePole'
+                            } else if (res === 'pipeTowerLoftingErrorNum') {
+                                return 'pipeTower'
+                            } else if (res === 'frameworkLoftingErrorNum') {
+                                return 'framework'
+                            } else if (res === 'steelStructureLoftingErrorNum') {
+                                return 'steelStructure'
+                            } else if (res === 'basicsLoftingErrorNum') {
+                                return 'basics'
+                            } else if (res === 'subtotalLoftingErrorNum') {
+                                return 'subtotal'
+                            } else {
+                                return null
+                            }
+                        })
                     },
                     {
-                        years: element.years,
+                        years: element.years?.split('-')[1],
                         type: '正确率',
                         angleSteelTower: element.angleSteelTowerRate,
                         steelPipePole: element.steelPipePoleRate,
@@ -84,15 +122,45 @@ export default function List(): React.ReactNode {
                         steelStructure: element.steelStructureRate,
                         basics: element.basicsRate,
                         subtotal: element.subtotalRate,
+                        redColumn: element.redColumn.map((res: string) => {
+                            if (res === 'angleSteelTowerRate') {
+                                return 'angleSteelTower'
+                            } else if (res === 'steelPipePoleRate') {
+                                return 'steelPipePole'
+                            } else if (res === 'pipeTowerRate') {
+                                return 'pipeTower'
+                            } else if (res === 'frameworkRate') {
+                                return 'framework'
+                            } else if (res === 'steelStructureRate') {
+                                return 'steelStructure'
+                            } else if (res === 'basicsRate') {
+                                return 'basics'
+                            } else if (res === 'subtotalRate') {
+                                return 'subtotal'
+                            } else {
+                                return null
+                            }
+                        })
                     }
-                ])
+                )
             });
-            setDetailData(result)
+            console.log(data)
+            setDetailData(data)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
+
+
+    const checkColor = (record: Record<string, any>, dataIndex: string) => {
+        const brown: number = record.redColumn?.indexOf(dataIndex);
+        if (brown !== -1) {
+            return 'brown';
+        } else {
+            return 'normal'
+        }
+    }
 
     const { data: yearLists } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -182,7 +250,12 @@ export default function List(): React.ReactNode {
                                 }
                             })
                         }
-                        return item
+                        return {
+                            ...item,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                <p className={checkColor(record, item.dataIndex) === 'brown' ? styles.brown : styles.normal}>{_ || '-'}</p>
+                            )
+                        }
                     })
                 ]}
                 dataSource={[...detailData || []]}
