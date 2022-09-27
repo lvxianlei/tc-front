@@ -244,8 +244,8 @@ export default function List(): React.ReactNode {
                     name: 'trialAssemble',
                     label: '单据类型',
                     children: <Select placeholder="请选择补件类型">
-                        <Select.Option key={0} value={'免试装'}>免试装</Select.Option>
-                        <Select.Option key={1} value={'试组装'}>试组装</Select.Option>
+                        <Select.Option key={0} value={0}>免试装</Select.Option>
+                        <Select.Option key={1} value={1}>试组装</Select.Option>
                     </Select>
                 },
                 {
