@@ -105,7 +105,7 @@ export default () => {
         },
         {
             title: "创建人",
-            dataIndex: "creatUserName",
+            dataIndex: "createUserName",
             width: 150,
         },
         {
