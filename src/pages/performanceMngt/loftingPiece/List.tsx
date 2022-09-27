@@ -245,6 +245,8 @@ export default function List(): React.ReactNode {
 
     const onRowChange = async (record: Record<string, any>) => {
         detailRun(record.id)
+        checkStatisticalRun(record.id)
+        loftStatisticallRun(record.id)
     }
 
     const isEditing = (record: Record<string, any>) => record.id === editingKey;
@@ -376,6 +378,7 @@ export default function List(): React.ReactNode {
                     columns={columns}
                     dataSource={data}
                     pagination={false}
+                    scroll={{ y: 700 }}
                     onRow={(record: Record<string, any>) => ({
                         onClick: () => onRowChange(record),
                         className: styles.tableRow
