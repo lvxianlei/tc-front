@@ -12,6 +12,7 @@ import { China } from './china.json';
  
 export default function Statements(): React.ReactNode {
       const [isFull, setIsFull] = useState<boolean>(false)
+      const [isClick, setIsClick] = useState<boolean>(false)
       const [detail, setDetail] = useState<any>({})
       useEffect(() => {
             echarts.registerMap('china', ( China )as any);
@@ -53,7 +54,7 @@ export default function Statements(): React.ReactNode {
     const { data:projectData, run: getProjectData } = useRequest<any>((afterSaleUser: string) => new Promise(async (resole, reject) => {
       try {
           const value: any = await RequestUtil.get<any>(`/tower-as/workOrder?current=1&size=10000&afterSaleUserId=${afterSaleUser}`);
-          setIsFull(true)
+          setIsClick(true)
           resole([{}])
       } catch (error) {
           reject(error)
@@ -1556,18 +1557,19 @@ export default function Statements(): React.ReactNode {
                  <div className={styles.headerbg}>
                      <span className={styles.headerTitle}>汇金通售后资源网络分布图</span>
                  </div>
-                 {/* <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button> */}
+                 <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button>
              </div>
              <div className={styles.top}>
                  <div className={styles.left}>
                      {/* <div>
                          <span className={styles.title}>放样统计分析</span>
                      </div> */}
-                     <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '780px' }} key={'LoftingStatisticalAnalysis'} />
+                     <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '865px' }} key={'LoftingStatisticalAnalysis'} />
+                {/* <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button> */}
 
                  </div>
                  <div className={styles.right}>
-                    {isFull&&<div className={styles.rightTop}>
+                    {isClick&&<div className={styles.rightTop}>
                         <div className={styles.title}>点击数据</div>
                         <div style={{color:'#fff',margin:'10px 0px',marginBottom:'20px'}}>
                           <div>名称：{detail?.data?.userName}</div>
@@ -1591,10 +1593,18 @@ export default function Statements(): React.ReactNode {
      }
  
      return <Spin spinning={false}>
-         {
+        {
+            isFull ?
+                <Modal width='100%' className={styles.statementsModal} visible={isFull} closable={false} footer={false} onCancel={() => setIsFull(false)}>
+                    {chartsContent()}
+                </Modal>
+                :
+                <>{chartsContent()}</>
+        }
+         {/* {
              
                  <>{chartsContent()}</>
-         }
+         } */}
  
      </Spin>
  }
