@@ -242,11 +242,11 @@ export default function AnnouncementNew(): React.ReactNode {
                                 <AfterSalesUser onSelect={(selectRows: any[]) => {
                                     console.log(selectRows)
                                     form.setFieldsValue({ afterSaleUser: selectRows[0].name });
-                                    // setDetailData({ 
-                                    //     ...detailData, 
-                                    //     afterSaleUser: selectRows[0].name,
-                                    //     afterSaleUserId: selectRows[0].userId  
-                                    // })
+                                    setDetailData({ 
+                                        ...detailData, 
+                                        afterSaleUser: selectRows[0].name,
+                                        afterSaleUserId: selectRows[0].userId  
+                                    })
                                 }} selectedKey={detailData?.staffList||[]} />
                             } disabled />
                         </Form.Item>
