@@ -7,7 +7,7 @@ import { CommonTable, DetailTitle } from '../../common';
 import Line from './Line';
 import { CheckCircleOutlined, RightOutlined, SoundOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import useRequest from '@ahooksjs/use-request';
-import { Spin, Table , Image} from 'antd';
+import { Spin, Table, Image } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
 import ApplicationContext from '../../../configuration/ApplicationContext';
 import { Link } from 'react-router-dom';
@@ -32,6 +32,7 @@ interface IList {
 	readonly createUserId?: string;
 	readonly authority?: string;
 	readonly weldingUserId?: string;
+	readonly url?: string;
 }
 
 export interface IResponseData {
@@ -46,6 +47,7 @@ export interface IResponseData {
 export default function WorkBenchMngt(): React.ReactNode {
 	const userId = AuthUtil.getUserId();
 	const authorities = ApplicationContext.get().authorities;
+	const host = window.location.hostname?.split('.')[0]?.split('-')[2];
 	const workBenchList = [
 		{
 			title: '评估任务',
@@ -224,7 +226,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'problem_pending'
 				}
 			]
-		},  {
+		},
+		{
 			title: '组焊工作',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%BB%84%E7%84%8A%E5%B7%A5%E4%BD%9C.png',
 			col: 4,
@@ -246,7 +249,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'welding_to_be_welding'
 				}
 			]
-		}, {
+		},
+		{
 			title: '螺栓列表',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%BC%96%E7%BB%84%2021.png',
 			col: 4,
@@ -276,7 +280,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'bolt_to_be_check'
 				}
 			]
-		}, {
+		},
+		{
 			title: '小样图工作',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E5%B0%8F%E6%A0%B7%E5%9B%BE.png',
 			col: 4,
@@ -290,7 +295,8 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'sample_to_be_uploaded'
 				}
 			]
-		}, {
+		},
+		{
 			title: '图纸',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E5%9B%BE%E7%BA%B8.png',
 			col: 4,
@@ -304,10 +310,11 @@ export default function WorkBenchMngt(): React.ReactNode {
 					authority: 'draw_to_upload'
 				}
 			]
-		},  {
+		},
+		{
 			title: '放样任务',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%94%BE%E6%A0%B7%E4%BB%BB%E5%8A%A1.png',
-			col:5,
+			col: 5,
 			child: [
 				{
 					title: '待指派',
@@ -316,26 +323,30 @@ export default function WorkBenchMngt(): React.ReactNode {
 					state: 1,
 					userId: userId,
 					authority: 'product_to_be_assigned'
-				}, {
+				},
+				{
 					title: '待出单',
 					dataIndex: 'rodProductToBeIssue',
 					path: '/workMngt/setOutList',
 					state: 4,
 					authority: 'rod_product_to_be_issue'
-				}, {
+				},
+				{
 					title: '待配段',
 					dataIndex: 'rodProductToBeMatch',
 					path: '/workMngt/setOutList',
 					state: 4,
 					authority: 'rod_product_to_be_match'
-				}, {
+				},
+				{
 					title: '待校核',
 					dataIndex: 'segmentProductToBeCheck',
 					path: '/workMngt/setOutList',
 					state: 2,
 					userId: userId,
 					authority: 'segment_product_to_be_check'
-				}, {
+				},
+				{
 					title: '待放样',
 					dataIndex: 'segmentProductToBeLofting',
 					path: '/workMngt/setOutList',
@@ -345,6 +356,37 @@ export default function WorkBenchMngt(): React.ReactNode {
 				}
 			]
 		},
+		{
+			title: '审批',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%94%BE%E6%A0%B7%E4%BB%BB%E5%8A%A1.png',
+			col: 4,
+			child: [
+				{
+					title: '待办事宜',
+					dataIndex: 'loftingToBeAssigned',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowTodo`,
+					authority: ''
+				},
+				{
+					title: '已办事宜',
+					dataIndex: 'rodProductToBeIssue',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowDone`,
+					authority: ''
+				},
+				{
+					title: '抄送事宜',
+					dataIndex: 'rodProductToBeMatch',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowCirculate`,
+					authority: ''
+				},
+				{
+					title: '我发起的',
+					dataIndex: 'segmentProductToBeCheck',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowLaunch`,
+					authority: ''
+				}
+			]
+		}
 	]
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -363,39 +405,52 @@ export default function WorkBenchMngt(): React.ReactNode {
 	}
 
 	const getChildContent = (res: IList, ind: number, data: Record<string, any>) => {
-		return <div key={ind} className={res.col ===4 ? styles.border : styles.border2}>
-			<div style={{padding:'10px',display:'flex'}}>
+		return <div key={ind} className={res.col === 4 ? styles.border : styles.border2}>
+			<div style={{ padding: '10px', display: 'flex' }}>
 				<div>
-					<span style={{marginRight:"10px"}}><img src={res.icon} /></span>
+					<span style={{ marginRight: "10px" }}><img src={res.icon} /></span>
 					<span className={styles.detailTitle}>{res.title}</span>
 				</div>
 			</div>
-			
-			<div style={{backgroundColor:"#fff",}}>{
+			<div style={{ backgroundColor: "#fff", }}>{
 				res?.child && res?.child.map((item: IList, index: number) => {
 					const dataIndex: string | undefined = item.dataIndex;
 					if (authorities?.indexOf(item?.authority || '') === -1) {
-						return null
+						if (res.title === '审批') {
+							return <div className={res.col === 4 ? styles.content : styles.content2}
+								style={res.col && res.col !== 4 ? { width: `${((res?.col) * 10 + 11) / res?.col}%` } : { width: '22%' }}
+								key={ind + '_' + index} onClick={() => {
+									if (item.url) {
+										window.open(item.url)
+									}
+								}}>
+								<div className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</div>
+								<div style={{ textAlign: 'center' }}>
+									{item.title}
+								</div>
+							</div>
+						} else {
+							return null
+						}
 					} else {
 						return <div className={res.col === 4 ? styles.content : styles.content2}
-						style={res.col&&res.col !== 4?{width:`${((res?.col)*10+11)/res?.col}%`}:{width:'22%'}}
-						 key={ind + '_' + index} onClick={() => {
-							if (item.path) {
-								history.push({
-									pathname: item.path,
-									state: {
-										state: item?.state,
-										type: item?.type,
-										userId: item?.userId,
-										createUserId: item?.createUserId,
-										weldingUserId: item?.weldingUserId
-									}
-								})
-							}
-						}}>
-							
+							style={res.col && res.col !== 4 ? { width: `${((res?.col) * 10 + 11) / res?.col}%` } : { width: '22%' }}
+							key={ind + '_' + index} onClick={() => {
+								if (item.path) {
+									history.push({
+										pathname: item.path,
+										state: {
+											state: item?.state,
+											type: item?.type,
+											userId: item?.userId,
+											createUserId: item?.createUserId,
+											weldingUserId: item?.weldingUserId
+										}
+									})
+								}
+							}}>
 							<div className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</div>
-							<div style={{textAlign:'center'}}>
+							<div style={{ textAlign: 'center' }}>
 								{item.title}
 							</div>
 							{/* <div className={styles.draw}>
@@ -435,34 +490,34 @@ export default function WorkBenchMngt(): React.ReactNode {
 					<Link to={`/homePage/notice`} className={styles.more}>更多<RightOutlined /></Link>
 				</p>
 				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[
-				{
-					key: 'title',
-					title: '文案',
-					dataIndex: 'title',
-					render: (_: string, record: Record<string, any>): React.ReactNode => (
-						<span onClick={()=>{history.push(`/homePage/notice/detail/${record.id}`)}} className={styles.titleColor}>{_.length>18?_.slice(0,18)+'...':_}</span>
-					)
-				},{
-					key: 'releaseTime',
-					title: '时间',
-					dataIndex: 'releaseTime',
-				}]}/>
+					{
+						key: 'title',
+						title: '文案',
+						dataIndex: 'title',
+						render: (_: string, record: Record<string, any>): React.ReactNode => (
+							<span onClick={() => { history.push(`/homePage/notice/detail/${record.id}`) }} className={styles.titleColor}>{_.length > 18 ? _.slice(0, 18) + '...' : _}</span>
+						)
+					}, {
+						key: 'releaseTime',
+						title: '时间',
+						dataIndex: 'releaseTime',
+					}]} />
 			</div>
 			<div className={styles.notice}>
 				<p> 提醒</p>
 				<Table dataSource={[]} pagination={false} showHeader={false} columns={[
-				{
-					key: 'description',
-					title: '文案',
-					dataIndex: 'description',
-					render: (_: string, record: Record<string, any>): React.ReactNode => (
-						<span>{_.length>18?_.slice(0,18)+'...':_}</span>
-					)
-				},{
-					key: 'time',
-					title: '时间',
-					dataIndex: 'time',
-				}]} />
+					{
+						key: 'description',
+						title: '文案',
+						dataIndex: 'description',
+						render: (_: string, record: Record<string, any>): React.ReactNode => (
+							<span>{_.length > 18 ? _.slice(0, 18) + '...' : _}</span>
+						)
+					}, {
+						key: 'time',
+						title: '时间',
+						dataIndex: 'time',
+					}]} />
 			</div>
 		</div>
 	</div>
