@@ -132,17 +132,17 @@ export default function TowerInformation(): React.ReactNode {
             )
         },
         {
-            key: 'patterName',
+            key: 'patternName',
             title: '段模式',
-            width: 50,
-            dataIndex: 'patterName',
+            width: 80,
+            dataIndex: 'patternName',
             editable: false
         },
         {
-            key: 'trialAssemble',
+            key: 'trialAssembleName',
             title: '试装',
             width: 50,
-            dataIndex: 'trialAssemble',
+            dataIndex: 'trialAssembleName',
             type: "select",
             enum: [
                 {label: '是', value: 1},
@@ -150,7 +150,7 @@ export default function TowerInformation(): React.ReactNode {
             ],
             editable: true,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "trialAssemble"]} initialValue={record?.structureId}>
+                <Form.Item name={['data', index, "trialAssemble"]}>
                     <Select style={{ width: '120px' }} placeholder="请选择试装" onChange={() => rowChange(index)} allowClear>
                         <Select.Option value={1} key={1}>是</Select.Option>
                         <Select.Option value={0} key={0}>否</Select.Option>
