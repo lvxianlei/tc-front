@@ -59,19 +59,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'assessToBeConfirmed',
 					path: '/taskMngt/assessmentTaskList',
 					state: 1,
-					authority: 'assess_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_assess_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'assessToBeAssigned',
 					path: '/taskMngt/assessmentTaskList',
 					state: 2,
-					authority: 'assess_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_assess_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'assessToBeSubmitted',
 					path: '/taskMngt/assessmentTaskList',
 					state: 4,
-					authority: 'assess_to_be_submitted'
+					authority: 'tc_erp_rd_workbench_work_assess_submitted'
 				}
 			]
 		},
@@ -85,19 +85,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'confirmToBeConfirmed',
 					path: '/taskMngt/ConfirmTaskMngt',
 					state: 1,
-					authority: 'confirm_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_confirm_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'confirmToBeAssigned',
 					path: '/taskMngt/ConfirmTaskMngt',
 					state: 2,
-					authority: 'confirm_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_confirm_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'confirmToBeSubmitted',
 					path: '/taskMngt/ConfirmTaskMngt',
 					state: 4,
-					authority: 'confirm_to_be_submitted'
+					authority: 'tc_erp_rd_workbench_work_confirm_submitted'
 				}
 			]
 		},
@@ -111,19 +111,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'loftingToBeConfirmed',
 					path: '/taskMngt/setOutTaskList',
 					state: 1,
-					authority: 'lofting_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_lofting_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'loftingToBeAssigned',
 					path: '/workMngt/scheduleList',
 					state: 2,
-					authority: 'lofting_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_lofting_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'loftingToBeSubmitted',
 					path: '/taskMngt/setOutTaskList',
 					state: 4,
-					authority: 'lofting_to_be_submitted'
+					authority: 'tc_erp_rd_workbench_work_lofting_submitted'
 				}
 			]
 		},
@@ -138,7 +138,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/evaluationList',
 					state: 3,
 					userId: userId,
-					authority: 'assess_to_be_complete'
+					authority: 'tc_erp_rd_workbench_work_assess_complete'
 				}
 			]
 		},
@@ -153,7 +153,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/confirmList',
 					state: 3,
 					userId: userId,
-					authority: 'confirm_to_be_complete'
+					authority: 'tc_erp_rd_workbench_work_confirm_complete'
 				}
 			]
 		},
@@ -167,27 +167,27 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'segmentMaterialToBeMaterial',
 					path: '/workMngt/pickList',
 					state: 2,
-					authority: 'segment_material_to_be_material'
+					authority: 'tc_erp_rd_workbench_work_material_material'
 				}, {
 					title: '待校核',
 					dataIndex: 'segmentMaterialToBeCheck',
 					path: '/workMngt/pickList',
 					state: 2,
-					authority: 'segment_material_to_be_check'
+					authority: 'tc_erp_rd_workbench_work_material_check'
 				}, {
 					title: '待指派',
 					dataIndex: 'materialToBeAssigned',
 					path: '/workMngt/pickList',
 					state: 1,
 					userId: userId,
-					authority: 'material_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_material_assigned'
 				}, {
 					title: '待配段',
 					dataIndex: 'rodMaterialToBeMatch',
 					path: '/workMngt/pickList',
 					state: 3,
 					userId: userId,
-					authority: 'rod_material_to_be_match'
+					authority: 'tc_erp_rd_workbench_work_rod_material_match'
 				}
 			]
 		},
@@ -202,28 +202,28 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/question/questionMngt',
 					type: 'WTD-TL',
 					createUserId: userId,
-					authority: 'problem_establish'
+					authority: 'tc_erp_rd_workbench_work_material_problem_establish'
 				}, {
 					title: '放样任务', //问题单-我创建的-放样任务-塔
 					dataIndex: 'segmentProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-FY',
 					createUserId: userId,
-					authority: 'segment_problem_establish'
+					authority: 'tc_erp_rd_workbench_work_loft_problem_establish'
 				}, {
 					title: '螺栓',//问题单-我创建的-放样任务-螺栓
 					dataIndex: 'boltProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-LS',
 					createUserId: userId,
-					authority: 'bolt_problem_establish'
+					authority: 'tc_erp_rd_workbench_work_bolt_problem_establish'
 				}, {
 					title: '待修改',//问题单-待修改
 					dataIndex: 'problemPending',
 					path: '/question/questionMngt',
 					state: 1,
 					userId: userId,
-					authority: 'problem_pending'
+					authority: 'tc_erp_rd_workbench_work_problem_pending'
 				}
 			]
 		},
@@ -238,7 +238,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/assemblyWeldingList',
 					state: 2,
 					userId: userId,
-					authority: 'welding_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_welding_assigned'
 				},
 				{
 					title: '待组焊',
@@ -246,7 +246,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/assemblyWeldingList',
 					state: 3,
 					weldingUserId: userId,
-					authority: 'welding_to_be_welding'
+					authority: 'tc_erp_rd_workbench_work_welding_welding'
 				}
 			]
 		},
@@ -261,7 +261,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/boltList',
 					state: 2,
 					weldingUserId: userId,
-					authority: 'bolt_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_bolt_assigned'
 				},
 				{
 					title: '待制作',
@@ -269,7 +269,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/boltList',
 					state: 3,
 					userId: userId,
-					authority: 'bolt_to_be_made'
+					authority: 'tc_erp_rd_workbench_work_bolt_made'
 				},
 				{
 					title: '待校核',
@@ -277,7 +277,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/boltList',
 					state: 4,
 					userId: userId,
-					authority: 'bolt_to_be_check'
+					authority: 'tc_erp_rd_workbench_work_bolt_check'
 				}
 			]
 		},
@@ -292,7 +292,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/sampleDrawList',
 					state: 2,
 					userId: userId,
-					authority: 'sample_to_be_uploaded'
+					authority: 'tc_erp_rd_workbench_work_sample_uploaded'
 				}
 			]
 		},
@@ -307,7 +307,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/templateList',
 					state: 1,
 					userId: userId,
-					authority: 'draw_to_upload'
+					authority: 'tc_erp_rd_workbench_work_draw_to_upload'
 				}
 			]
 		},
@@ -322,21 +322,21 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/setOutList',
 					state: 1,
 					userId: userId,
-					authority: 'product_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_lofting_assigned'
 				},
 				{
 					title: '待出单',
 					dataIndex: 'rodProductToBeIssue',
 					path: '/workMngt/setOutList',
 					state: 4,
-					authority: 'rod_product_to_be_issue'
+					authority: 'tc_erp_rd_workbench_work_loft_rod_match'
 				},
 				{
 					title: '待配段',
 					dataIndex: 'rodProductToBeMatch',
 					path: '/workMngt/setOutList',
 					state: 4,
-					authority: 'rod_product_to_be_match'
+					authority: 'tc_erp_rd_workbench_work_loft_rod_match'
 				},
 				{
 					title: '待校核',
@@ -344,7 +344,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/setOutList',
 					state: 2,
 					userId: userId,
-					authority: 'segment_product_to_be_check'
+					authority: 'tc_erp_rd_workbench_work_loft_product_check'
 				},
 				{
 					title: '待放样',
@@ -352,7 +352,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/setOutList',
 					state: 2,
 					userId: userId,
-					authority: 'segment_product_to_be_lofting'
+					authority: 'tc_erp_rd_workbench_work_loft_product_lofting'
 				}
 			]
 		},
@@ -363,25 +363,25 @@ export default function WorkBenchMngt(): React.ReactNode {
 			child: [
 				{
 					title: '待办事宜',
-					dataIndex: 'loftingToBeAssigned',
+					dataIndex: '',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowTodo`,
 					authority: ''
 				},
 				{
 					title: '已办事宜',
-					dataIndex: 'rodProductToBeIssue',
+					dataIndex: '',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowDone`,
 					authority: ''
 				},
 				{
 					title: '抄送事宜',
-					dataIndex: 'rodProductToBeMatch',
+					dataIndex: '',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowCirculate`,
 					authority: ''
 				},
 				{
 					title: '我发起的',
-					dataIndex: 'segmentProductToBeCheck',
+					dataIndex: '',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowLaunch`,
 					authority: ''
 				}
