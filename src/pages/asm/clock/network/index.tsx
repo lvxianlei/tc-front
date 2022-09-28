@@ -1574,11 +1574,11 @@ export default function Statements(): React.ReactNode {
                         <div style={{color:'#fff',margin:'10px 0px',marginBottom:'20px'}}>
                           <div>名称：{detail?.data?.userName}</div>
                           <div>地址：{detail?.data?.address}</div>
-                          {
-                              projectData && projectData.map((res: any, index: number) => (
-                                  <div>工程名称：{res?.projectName}</div>
-                              ))
-                          }
+                          <div>工程名称：{
+                              projectData && projectData.map((res: any, index: number) => {
+                                  return res?.projectName
+                                }).join(',')
+                          }</div>
                         </div>
                             
                     </div>}
