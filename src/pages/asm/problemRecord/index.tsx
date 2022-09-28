@@ -23,7 +23,7 @@ export default () => {
         {
             title: "工单编号",
             width: 150,
-            dataIndex: "wordOrderNumber"
+            dataIndex: "workOrderNumber"
         },{
             title: "计划号",
             width: 150,
@@ -35,7 +35,7 @@ export default () => {
         },{
             title: "问题分类",
             width: 150,
-            dataIndex: "issueType"
+            dataIndex: "issueName"
         },{
             title: "塔型",
             width: 150,
@@ -98,7 +98,7 @@ export default () => {
             exportPath="/tower-as/workIssue"
             searchFormItems={[
                 {
-                    name: "fuzzyMsg",
+                    name: "fuzzyQuery",
                     label: '模糊查询',
                     children: <Input placeholder="请输入工单编号/订单编号/计划号/工程名进行查询" style={{ width: 150 }} />
                 },
@@ -111,7 +111,7 @@ export default () => {
                     name: "status",
                     label: "问题状态",
                     children: <Form.Item name='status' initialValue={1}>
-                        <Select placeholder="请选择" getPopupContainer={triggerNode => triggerNode.parentNode} style={{ width: "150px" }}>
+                        <Select placeholder="请选择"  style={{ width: "150px" }}>
                             {/* <Select.Option value='' key="">全部</Select.Option> */}
                             <Select.Option value={1}>未解决</Select.Option>
                             <Select.Option value={2}>已解决</Select.Option>

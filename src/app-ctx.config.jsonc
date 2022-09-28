@@ -1318,20 +1318,20 @@
                     }
                 ]
             },
-            // {  
-            //     "label": "人员管理",
-            //     "icon": "customer",
-            //     "path": "/assessmentRecord",
-            //     "appName": "ASM",
-            //     "authority": "tc_erp_sc_workbench",
-            //     "items": [
-            //         {
-            //             "label": "人员管理",
-            //             "path": "/assessmentRecord/index",
-            //             "authority": "tc_erp_sc_workbench_list"
-            //         }
-            //     ]
-            // },
+            {  
+                "label": "人员管理",
+                "icon": "customer",
+                "path": "/userRecord",
+                "appName": "ASM",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "人员管理",
+                        "path": "/userRecord/index",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
             {  
                 "label": "配置",
                 "icon": "customer",
@@ -1341,22 +1341,22 @@
                 "items": [
                     {
                         "label": "费用分类配置",
-                        "path": "/setting/cost/index",
+                        "path": "/setting/cost",
                         "authority": "tc_erp_sc_workbench_list"
                     },
                     {
                         "label": "问题分类配置",
-                        "path": "/setting/question/index",
+                        "path": "/setting/question",
                         "authority": "tc_erp_sc_workbench_list"
                     },
                     {
                         "label": "考核信息配置",
-                        "path": "/setting/assessment/index",
+                        "path": "/setting/assessment",
                         "authority": "tc_erp_sc_workbench_list"
                     },
                     {
                         "label": "部门配置",
-                        "path": "/setting/dept/index",
+                        "path": "/setting/dept",
                         "authority": "tc_erp_sc_workbench_list"
                     }
                 ]

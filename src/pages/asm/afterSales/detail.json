@@ -113,13 +113,14 @@
         {
             "title": "售后周期",
             "width": 120,
-            "dataIndex": "cycle"
+            "dataIndex": "cycle",
+            "type":"number"
         }
     ],
     "pageInfo": [
         {
             "title": "问题分类",
-            "dataIndex": "issueType",
+            "dataIndex": "issueName",
             "type": "text",
             "maxLength": 50
         },
@@ -183,11 +184,12 @@
         {
             "title": "发生日期",
             "width": 120,
-            "dataIndex": "updateTime"
+            "dataIndex": "date"
         },
         {
             "title": "图片",
             "width": 70,
+            "type":"number",
             "dataIndex": "picNumber"
         },
         {

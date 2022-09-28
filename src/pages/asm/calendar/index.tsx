@@ -133,9 +133,7 @@ export default () => {
                 {
                     name: "deptName",
                     label: '部门',
-                    children: <Select placeholder="请选择"  style={{ width: "150px" }}>
-                        <Input placeholder="请输入部门名称进行查询" style={{ width: 150 }}/>
-                    </Select>
+                    children: <Input placeholder="请输入部门名称进行查询" style={{ width: 150 }}/>
                 },
                 {
                     name: "status",

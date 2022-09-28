@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, message } from 'antd';
+import { Button, Modal, Form, Input, message, Select } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../../common';
 
@@ -11,8 +11,8 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
     const [filterValue, setFilterValue] = useState<any>({});
     const history = useHistory();
     const [detailData, setDetailData] = useState<any[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey);
-    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey?[selectedKey?.afterSaleUserId]:[]);
+    const [selectedRows, setSelectedRows] = useState<any[]>(selectedKey?[{...selectedKey,name:selectedKey?.afterSaleUser}]:[]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -25,33 +25,33 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
             dataIndex: 'name'
         },
         {
-            key: 'employeeNames',
+            key: 'phone',
             title: '手机号',
             width: 150,
-            dataIndex: 'employeeNames'
+            dataIndex: 'phone'
         },
         {
-            key: 'type',
+            key: 'countOrder',
             title: '未完成工单',
-            dataIndex: 'type',
+            dataIndex: 'countOrder',
             width: 120
         },
         {
-            key: 'type',
+            key: 'address',
             title: '当前地址',
-            dataIndex: 'type',
+            dataIndex: 'address',
             width: 250
         },
         {
-            key: 'type',
+            key: 'distance',
             title: '距离',
-            dataIndex: 'type',
+            dataIndex: 'distance',
             width: 250
         },
         {
-            key: 'type',
+            key: 'project',
             title: '未完工程',
-            dataIndex: 'type',
+            dataIndex: 'project',
             width: 250
         }
     ]
@@ -83,30 +83,35 @@ export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }:
     >
              
         <Page
-            path="/tower-system/employee"
+            path="/tower-as/employee/employeeOrderList"
             columns={columns}
             headTabs={[]}
             extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.name:''}</span>}
             // refresh={refresh}
-          
+            
             tableProps={{
-                
+                pagination:false,
+                rowKey:'userId',
                 rowSelection: {
                     type:'radio',
+                    
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
                 }
             }}
             searchFormItems={[
                 {
-                    name: 'type',
+                    name: 'fuzzyQuery',
                     label: '模糊查询项',
                     children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
                 },
                 {
-                    name: 'type',
+                    name: 'isFree',
                     label: '未完成工单',
-                    children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
+                    children:  <Select placeholder="请选择"  style={{ width: "150px" }}>
+                        <Select.Option value={1}>无</Select.Option>
+                        <Select.Option value={0}>有</Select.Option>
+                    </Select>
                 }
             ]}
             filterValue={filterValue}
