@@ -32,10 +32,10 @@ export default function Dispose(): React.ReactNode {
         let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
         setPartsTypes(resData)
         let newData: any = {}
-        result?.repairStructureVOList?.forEach((res: any, index: number) => {
+        result?.wasteProductStructureList?.forEach((res: any, index: number) => {
             let result: any = []
             resData?.forEach((element: any) => {
-                if (element.typeId === res.typeDictId) {
+                if (element.typeId === res.typeId) {
                     result = element.fixItemConfigList
                 }
             });
@@ -57,18 +57,33 @@ export default function Dispose(): React.ReactNode {
         try {
             form.validateFields().then(async (res: any) => {
                 const data = await form.getFieldsValue(true);
-                RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
-                    id: params.id,
-                    status: status,
-                    description: data.description,
-                    wasteProductStructureList: data.list
-                }).then(res => {
-                    message.success('处理成功！');
-                    history.push(`/businessDisposal/unqualifiedDisposal`)
-                })
+                if (status === 0) {
+                    if (data.description) {
+                        RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
+                            id: params.id,
+                            status: status,
+                            description: data.description,
+                            wasteProductStructureList: data.list
+                        }).then(res => {
+                            message.success('处理成功！');
+                            history.push(`/businessDisposal/unqualifiedDisposal`)
+                        })
+                    } else {
+                        message.warning('请填写信息！')
+                    }
+                } else {
+                    RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
+                        id: params.id,
+                        status: status,
+                        description: data.description,
+                        wasteProductStructureList: data.list
+                    }).then(res => {
+                        message.success('处理成功！');
+                        history.push(`/businessDisposal/unqualifiedDisposal`)
+                    })
+                }
                 resolve(true);
             })
-
         } catch (error) {
             reject(false)
         }
@@ -176,7 +191,7 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择零件类型"
                                 }]}>
-                                    <Select placeholder="请选择" size="small">
+                                    <Select placeholder="请选择" disabled={data?.status !== 1} size="small">
                                         {
                                             partsTypes?.map((item: any, index: number) =>
                                                 <Select.Option value={item.typeId} key={index}>
@@ -198,7 +213,7 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择返修类型"
                                 }]}>
-                                    <Select placeholder="请选择返修类型" onChange={(e) => {
+                                    <Select placeholder="请选择返修类型" disabled={data?.status !== 1} onChange={(e) => {
                                         let data: any = {}
                                         repairTypes && repairTypes[index].forEach((element: any) => {
                                             if (element.id === e) {
