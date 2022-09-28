@@ -1570,14 +1570,16 @@ export default function Statements(): React.ReactNode {
                  </div>
                  <div className={styles.right}>
                     {isClick&&<div className={styles.rightTop}>
-                        <div className={styles.title}>点击数据</div>
+                        <div className={styles.title}>{detail?.data?.userName}</div>
                         <div style={{color:'#fff',margin:'10px 0px',marginBottom:'20px'}}>
-                          <div>名称：{detail?.data?.userName}</div>
+                          {/* <div>名称：</div> */}
                           <div>地址：{detail?.data?.address}</div>
                           <div>工程名称：{
-                              projectData && projectData.map((res: any, index: number) => {
+                              projectData && projectData.filter((item:any)=>{return item?.isClose===0}).map((res: any, index: number) => {
                                   return res?.projectName
-                                }).join(',')
+                                }).join(',').length>0?projectData && projectData.filter((item:any)=>{return item?.isClose===0}).map((res: any, index: number) => {
+                                  return res?.projectName
+                                }).join(','):'无'
                           }</div>
                         </div>
                             
