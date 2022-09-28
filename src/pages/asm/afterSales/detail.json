@@ -113,7 +113,8 @@
         {
             "title": "售后周期",
             "width": 120,
-            "dataIndex": "cycle"
+            "dataIndex": "cycle",
+            "type":"number"
         }
     ],
     "pageInfo": [
