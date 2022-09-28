@@ -233,18 +233,10 @@ export default function WorkBenchMngt(): React.ReactNode {
 			col: 4,
 			child: [
 				{
-					title: '待指派',
-					dataIndex: 'weldingToBeAssigned',
-					path: '/workMngt/assemblyWeldingList',
-					state: 2,
-					userId: userId,
-					authority: 'tc_erp_rd_workbench_work_welding_assigned'
-				},
-				{
 					title: '待组焊',
 					dataIndex: 'weldingToBeWelding',
 					path: '/workMngt/assemblyWeldingList',
-					state: 3,
+					state: 2,
 					weldingUserId: userId,
 					authority: 'tc_erp_rd_workbench_work_welding_welding'
 				}
@@ -259,15 +251,15 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待指派',
 					dataIndex: 'boltToBeAssigned',
 					path: '/workMngt/boltList',
-					state: 2,
-					weldingUserId: userId,
+					state: 1,
+					userId: userId,
 					authority: 'tc_erp_rd_workbench_work_bolt_assigned'
 				},
 				{
 					title: '待制作',
 					dataIndex: 'boltToBeMade',
 					path: '/workMngt/boltList',
-					state: 3,
+					state: 2,
 					userId: userId,
 					authority: 'tc_erp_rd_workbench_work_bolt_made'
 				},
@@ -290,7 +282,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待上传',
 					dataIndex: 'sampleToBeUploaded',
 					path: '/workMngt/sampleDrawList',
-					state: 2,
+					state: 1,
 					userId: userId,
 					authority: 'tc_erp_rd_workbench_work_sample_uploaded'
 				}
