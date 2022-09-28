@@ -55,7 +55,7 @@ export default function Statements(): React.ReactNode {
       try {
           const value: any = await RequestUtil.get<any>(`/tower-as/workOrder?current=1&size=10000&afterSaleUserId=${afterSaleUser}`);
           setIsClick(true)
-          resole([{}])
+          resole(value?.records)
       } catch (error) {
           reject(error)
       }
