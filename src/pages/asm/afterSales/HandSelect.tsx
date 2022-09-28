@@ -104,7 +104,7 @@ export default function HandSelect({ onSelect, selectedKey = [], ...props }: any
                 selectedRowKeys: selectedKeys,
                 onChange: SelectChange
             }}
-            scroll={{y:500}}
+            scroll={{y:300}}
             pagination={false}
             dataSource = {[...dataSource]}
         />
