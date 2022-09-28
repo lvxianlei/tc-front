@@ -53,7 +53,7 @@ export default function Statements(): React.ReactNode {
  
     const { data:projectData, run: getProjectData } = useRequest<any>((afterSaleUser: string) => new Promise(async (resole, reject) => {
       try {
-          const value: any = await RequestUtil.get<any>(`/tower-as/workOrder?current=1&size=10000&afterSaleUserId=${afterSaleUser}`);
+          const value: any = await RequestUtil.get<any>(`/tower-as/workOrder?current=1&size=10000&afterSaleUserId=${afterSaleUser}&isClose=0`);
           setIsClick(true)
           resole(value?.records)
       } catch (error) {
@@ -1583,9 +1583,9 @@ export default function Statements(): React.ReactNode {
                           {/* <div>名称：</div> */}
                           <div>地址：{detail?.data?.address}</div>
                           <div>工程名称：{
-                              projectData && projectData.filter((item:any)=>{return item?.isClose===0}).map((res: any, index: number) => {
+                              projectData && projectData.map((res: any, index: number) => {
                                   return res?.projectName
-                                }).join(',').length>0?projectData && projectData.filter((item:any)=>{return item?.isClose===0}).map((res: any, index: number) => {
+                                }).join(',').length>0?projectData && projectData.map((res: any, index: number) => {
                                   return res?.projectName
                                 }).join(','):'无'
                           }</div>
