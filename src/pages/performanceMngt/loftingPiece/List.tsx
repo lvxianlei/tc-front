@@ -366,9 +366,9 @@ export default function List(): React.ReactNode {
                 <Button type="primary" onClick={async () => {
                     setVisible(true);
                 }} ghost>奖惩配置</Button>
-                <Button type="primary" onClick={() => {
+                {/* <Button type="primary" onClick={() => {
                     downloadTemplate(``, '放样计件', { ...filterValues }, false, 'array')
-                }} ghost>导出</Button>
+                }} ghost>导出</Button> */}
             </Space>
         </div>
         <div className={styles.content}>
