@@ -53,6 +53,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     pieceCode: value?.pieceCode?value?.pieceCode.map((item:any)=>{
                         return item.split(',')[1]
                     }).join(','):'',
+                    productId:  value?.productId?value?.productId:'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
                     productCategoryId: value?.productCategoryId?value?.productCategoryId:'',
