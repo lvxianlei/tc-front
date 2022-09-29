@@ -26,7 +26,8 @@ export default function Dispose(): React.ReactNode {
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/wasteProductReceipt/${params.id}`);
         form.setFieldsValue({
-            list: result?.wasteProductStructureList || []
+            list: result?.wasteProductStructureList || [],
+            description: result.description
         })
         setWasteProductStructureList(result?.wasteProductStructureList)
         let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
