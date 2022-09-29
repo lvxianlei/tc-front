@@ -859,6 +859,41 @@
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     },
+    { // 库存管理-辅材库存
+      "name": "辅材库存",
+      "path": "/auxStock/rawMaterialStock",
+      "module": "./pages/auxStock/rawMaterialStock/rawMaterialStock",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_list"
+    },
+    { // 库存管理-辅材入库
+      "name": "辅材入库",
+      "path": "/auxStock/rawMaterialWarehousing",
+      "module": "./pages/auxStock/rawMaterialWarehousing/rawMaterialWarehousing",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_list"
+    },
+    { // 库存管理-辅材入库-详情
+      "name": "辅材入库明细",
+      "path": "/auxStock/rawMaterialWarehousing/detail/:id",
+      "module": "./pages/auxStock/rawMaterialWarehousing/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_info"
+    },
+    { // 库存管理-辅材出库
+      "name": "辅材出库",
+      "path": "/auxStock/rawMaterialExWarehouse",
+      "module": "./pages/auxStock/rawMaterialExWarehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_list"
+    },
+    { // 库存管理-辅材出库-详情
+      "name": "辅材出库详情",
+      "path": "/auxStock/rawMaterialExWarehouse/detail/:id",
+      "module": "./pages/auxStock/rawMaterialExWarehouse/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_info"
+    },
     { // 库存管理-余料入库
       "name": "余料入库",
       "path": "/stock/surplusMaterialWarehousing",
@@ -1129,6 +1164,27 @@
       "name": "收货列表编辑",
       "path": "/stock/receiving/edit/:id",
       "module": "./pages/workMngt/receivingList/Edit",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_receive_edit"
+    },
+    { // 工作管理-收货列表
+      "name": "辅材收货单",
+      "path": "/auxStock/receiving",
+      "module": "./pages/auxStock/receivingList/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_receive_list"
+    },
+    { // 工作管理-收获列表-详情
+      "name": "收货列表明细",
+      "path": "/auxStock/receiving/detail/:id",
+      "module": "./pages/auxStock/receivingList/Overview",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_receive_info"
+    },
+    { // 工作管理-收获列表-编辑
+      "name": "收货列表编辑",
+      "path": "/auxStock/receiving/edit/:id",
+      "module": "./pages/auxStock/receivingList/Edit",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_receive_edit"
     },

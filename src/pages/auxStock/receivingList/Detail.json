@@ -1,0 +1,256 @@
+{
+    "baseInfo": [
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "纸质单号",
+            "dataIndex": "paperNumber"
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser"
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone"
+        },
+        {
+            "title": "到货时间",
+            "dataIndex": "receiveTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "车辆牌照",
+            "dataIndex": "carNumber"
+        },
+        {
+            "title": "卸车方式",
+            "dataIndex": "unloadMode",
+            "type": "select"
+        },
+        {
+            "title": "卸车人员",
+            "dataIndex": "unloadUsersName"
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringMode",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "理重",
+                    "value": 1
+                },
+                {
+                    "label": "过磅",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementMode",
+            "type": "select"
+        },
+        {
+            "title": "到货去向",
+            "dataIndex": "warehouseName"
+        },
+        {
+            "title": "过磅重量(吨)",
+            "dataIndex": "totalPonderationWeight"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
+        }
+    ],
+    "freightInfo": [
+        {
+            "dataIndex": "transportBear",
+            "title": "运输承担",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
+        },
+        {
+            "dataIndex": "transportCompany",
+            "title": "运输公司"
+        },
+        {
+            "dataIndex": "transportPriceCount",
+            "title": "运费价税合计（元）"
+        }
+    ],
+    "handlingChargesInfo": [
+        {
+            "dataIndex": "unloadBear",
+            "title": "卸车承担",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
+        },
+        {
+            "dataIndex": "unloadCompany",
+            "title": "装卸公司"
+        },
+        {
+            "dataIndex": "unloadPriceCount",
+            "title": "装卸费价税合计（元）"
+        }
+    ],
+    "goodsDetail": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber",
+            "width": 70
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "理算重量（吨）",
+            "dataIndex": "totalWeight",
+            "disabled": true
+        },
+        {
+            "title": "结算重量（吨）",
+            "dataIndex": "balanceTotalWeight"
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税运费（元）",
+            "dataIndex": "totalTransportTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税运费（元）",
+            "dataIndex": "totalTransportPrice",
+            "width": 120
+        },
+        {
+            "title": "含税装卸费（元）",
+            "dataIndex": "totalUnloadTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "totalUnloadPrice",
+            "width": 140
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
+        },
+        {
+            "title": "轧制批号",
+            "dataIndex": "rollingNumber"
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30
+        },
+        {
+            "title": "肢宽",
+            "dataIndex": "limbWidth"
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness"
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber"
+        },
+        {
+            "title": "外观检验效果",
+            "dataIndex": "appearanceName"
+        }
+    ]
+}

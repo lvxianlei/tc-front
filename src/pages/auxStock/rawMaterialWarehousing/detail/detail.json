@@ -1,0 +1,124 @@
+{
+    "baseColumn": [
+        {
+            "title": "收货状态",
+            "dataIndex": "warehousingEntryStatusName",
+            "width": 80
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "width": 120
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 80
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 80
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 80
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 120
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length",
+            "width": 120
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width",
+            "width": 120
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 120
+        },
+        {
+            "title": "理算重量（吨）",
+            "dataIndex": "totalWeight",
+            "width": 120
+        },
+        {
+            "title": "结算重量（吨）",
+            "dataIndex": "balanceTotalWeight",
+            "width": 120
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice",
+            "width": 160
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice",
+            "width": 160
+        },
+        {
+            "title": "不含税运费（元）",
+            "dataIndex": "unTransportTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "unUnloadTaxPrice",
+            "width": 160
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName",
+            "width": 120
+        },
+        {
+            "title": "到货日期",
+            "dataIndex": "receiveTime",
+            "width": 120
+        },
+        {
+            "title": "所在仓库",
+            "dataIndex": "warehouseName",
+            "width": 120
+        },
+        {
+            "title": "库区",
+            "dataIndex": "reservoirName",
+            "width": 120
+        },
+        {
+            "title": "库位",
+            "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "width": 120
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "width": 120
+        }
+    ]
+}
