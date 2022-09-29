@@ -24,7 +24,9 @@ export default function AnnouncementNew(): React.ReactNode {
     const [pieceCode, setPieceCode] = useState<any[]>([]);
     const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
             const typeList: any = await RequestUtil.get(`/tower-as/issue/list`);
-            setTypeName(typeList)
+            setTypeName(typeList.filter((item:any)=>{
+                return item?.status!==2
+            }))
             resole({});
     }), {})
     if (loading) {
@@ -44,9 +46,14 @@ export default function AnnouncementNew(): React.ReactNode {
                 // deliveryAddress:'北京',
                 workIssueDTOS:isProblem===1?[{
                     description: value?.description?value?.description:'',
-                    issueType: value?.issue?value?.issue.split(',')[0]:'',
-                    typeId: value?.type?value?.type.split(',')[0]:'',
-                    pieceCode: value?.pieceCode?value?.pieceCode:'',
+                    issueTypeId: value?.type?value?.type.split(',')[0]:'',
+                    issueTypeName: value?.type?value?.type.split(',')[1]:'',
+                    issueId: value?.issue?value?.issue.split(',')[0]:'',
+                    issueName: value?.issue?value?.issue.split(',')[1]:'',
+                    pieceCode: value?.pieceCode?value?.pieceCode.map((item:any)=>{
+                        return item.split(',')[1]
+                    }).join(','):'',
+                    productId:  value?.productId?value?.productId:'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
                     productCategoryId: value?.productCategoryId?value?.productCategoryId:'',
@@ -58,7 +65,6 @@ export default function AnnouncementNew(): React.ReactNode {
             });
         }
     }
-
     return <>
         <DetailContent operation={[
             <Space direction="horizontal" size="small" >
@@ -70,36 +76,36 @@ export default function AnnouncementNew(): React.ReactNode {
                 <Row>
                     <Col span={12}>
                         <DetailTitle title="基本信息" key={1} />
-                        <Form.Item name="saleOrderNumber" label="工单编号" initialValue={detailData.saleOrderNumber}>
+                        <Form.Item name="saleOrderNumber" label="工单编号" >
                             <Input placeholder="系统自动生产"  disabled/>
                         </Form.Item>
-                        <Form.Item name="planNumber" label="计划号" initialValue={detailData.planNumber} rules={[{
+                        <Form.Item name="planNumber" label="计划号"  rules={[{
                             "required": true,
                             "message": "请选择计划号"
-                        }]}>
+                        }]} initialValue={detailData?.planNumber}>
                             <Input addonBefore={
                                 <Plan onSelect={(selectRows: any[]) => {
                                     console.log(selectRows)
                                     form.setFieldsValue({ 
-                                        // planNumber:selectRows[0]?.planNumber, 
-                                        // projectName:selectRows[0]?.projectName,
-                                        // serviceManager:selectRows[0]?.serviceManager 
-                                        planNumber: selectRows[0],
-                                        projectName:'测试',
-                                        serviceManager:'测试人员',
-                                        serviceManagerId:'1497088596242460673',
+                                        projectName:selectRows[0]?.projectName,
+                                        serviceManager:selectRows[0]?.businessUserName,
+                                        serviceManagerId:selectRows[0]?.businessUser,
+                                        planNumber:selectRows[0]?.planNumber, 
                                     });
-                                    setDetailData({ ...detailData, planNumber: selectRows[0]?.planNumber,serviceManagerId:'1497088596242460673', })
-                                }} selectedKey={detailData?.staffList||[]} />
+                                    setDetailData({ ...detailData, planNumber: selectRows[0]?.planNumber,serviceManagerId:selectRows[0]?.businessUser,serviceManager:selectRows[0]?.businessUserName,projectName:selectRows[0]?.projectName})
+                                }} selectedKey={detailData?.planNumber||[]}/>
                             } disabled />
                         </Form.Item>
-                        <Form.Item name="projectName" label="工程名称" initialValue={detailData.projectName} >
+                        <Form.Item name="serviceManagerId" label="" style={{display:'none'}} >
+                            <Input type='hidden' />
+                        </Form.Item>
+                        <Form.Item name="projectName" label="工程名称"  >
                             <Input  disabled placeholder='选择计划自动带出'/>
                         </Form.Item>
-                        <Form.Item name="serviceManager" label="业务经理" initialValue={detailData.serviceManager} >
+                        <Form.Item name="serviceManager" label="业务经理"  >
                             <Input  disabled placeholder='选择计划自动带出'/>
                         </Form.Item>
-                        <Form.Item name="linkman" label="联系人" initialValue={detailData.linkman} rules={[{
+                        <Form.Item name="linkman" label="联系人"  rules={[{
                             "required": true,
                             "message": "请输入联系人"
                         },
@@ -109,7 +115,7 @@ export default function AnnouncementNew(): React.ReactNode {
                         }]}>
                             <Input  maxLength={20}/>
                         </Form.Item>
-                        <Form.Item name="phone" label="联系方式" initialValue={detailData.phone} rules={[{
+                        <Form.Item name="phone" label="联系方式"  rules={[{
                             "required": true,
                             "message": "请输入联系方式"
                         },
@@ -140,7 +146,9 @@ export default function AnnouncementNew(): React.ReactNode {
                                 ]}>
                                     <Select style={{width:'100%'}} onChange={async (value:any)=>{
                                         const result: any = await RequestUtil.get(`/tower-as/issue/issue/${value.split(',')[0]}`);
-                                        setName(result)
+                                        setName(result.filter((item:any)=>{
+                                            return item?.status!==2
+                                        }))
                                     }}>
                                         { typeName && typeName.map((item:any)=>{
                                                 return <Select.Option key={item.id} value={item.id+','+item.typeName}>{item.typeName}</Select.Option>
@@ -159,10 +167,13 @@ export default function AnnouncementNew(): React.ReactNode {
                                             }) }
                                     </Select>
                                 </Form.Item>
-                                <Form.Item name="productCategory" label="塔型" initialValue={detailData.productCategory} >
+                                <Form.Item name="productCategory" label="塔型"  >
                                     <Input disabled placeholder='选择杆塔号自动带出'/>
                                 </Form.Item>
                                 <Form.Item name="productCategoryId" label="" style={{display:'none'}} >
+                                    <Input type='hidden' />
+                                </Form.Item>
+                                <Form.Item name="productId" label="" style={{display:'none'}} >
                                     <Input type='hidden' />
                                 </Form.Item>
                                 <Form.Item name="productNumber" label="杆塔号" rules={[{
@@ -173,6 +184,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                         <Tower onSelect={async (select: any) => {
                                             console.log(select)
                                             form.setFieldsValue({ 
+                                                productId: select?.selectRows[0].id,
                                                 productNumber: select?.selectRows[0].productNumber,
                                                 productCategory: select?.selectedRows[0].productCategoryName,
                                                 productCategoryId: select?.selectedRows[0].productCategoryId,
@@ -194,7 +206,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                                 return parseFloat(pre!==null?pre:0 )+ parseFloat(cur!==null?cur:0 )
                                             },0)
                                             form.setFieldsValue({ 
-                                                pieceCodeNum: numberAll
+                                                pieceCodeNum: Number(numberAll)
                                             });
                                         }
                                        
@@ -204,10 +216,10 @@ export default function AnnouncementNew(): React.ReactNode {
                                             }) }
                                     </Select>
                                 </Form.Item>
-                                <Form.Item name="pieceCodeNum" label="件数" initialValue={detailData.pieceCodeNum} >
+                                <Form.Item name="pieceCodeNum" label="件数"  >
                                     <InputNumber min={0} />
                                 </Form.Item>
-                                <Form.Item name="description" label="问题描述" initialValue={detailData.description} >
+                                <Form.Item name="description" label="问题描述" >
                                     <Input.TextArea showCount maxLength={600} />
                                 </Form.Item>
                                 <Attachment 
@@ -218,7 +230,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                     multiple 
                                     maxCount={5}
                                     onDoneChange={(dataInfo: FileProps[]) => {
-                                        setDetailData({attachInfoVos: [...dataInfo]})
+                                        setDetailData({...detailData,attachInfoVos: [...dataInfo]})
                                     }}
                                 />
                             </>
@@ -233,7 +245,8 @@ export default function AnnouncementNew(): React.ReactNode {
                                     form.setFieldsValue({ afterSaleUser: selectRows[0].name });
                                     setDetailData({ 
                                         ...detailData, 
-                                        afterSaleUser: selectRows[0].name 
+                                        afterSaleUser: selectRows[0].name,
+                                        afterSaleUserId: selectRows[0].userId  
                                     })
                                 }} selectedKey={detailData?.staffList||[]} />
                             } disabled />

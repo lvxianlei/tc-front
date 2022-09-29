@@ -12,7 +12,7 @@ export default function ASMWorkBench(): React.ReactNode {
     const history = useHistory()
     const authorities = ApplicationContext.get().authorities
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        const data: { [key: string]: any } = await RequestUtil.get(`/tower-supply/workbench/getWorkbenchData`);
+        const data: { [key: string]: any } = await RequestUtil.get(`/tower-as/workbench`);
         resole(data)
     }))
 

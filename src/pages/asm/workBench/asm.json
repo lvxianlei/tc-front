@@ -2,12 +2,13 @@
     "asmWork": [
         {
             "title": "售后工单",
-            "dataIndex": "payApplyWorkVO",
+            "dataIndex": "workOrderBenchVO",
             "path": "售后工单",
             "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%A4%87%E6%96%99%E7%A1%AE%E8%AE%A4.png",
             "workbenchItemVos": [
                 {
                     "title": "未派工",
+                    "dataIndex": "noWork",
                     "path": {
                         "pathname": "/afterSales/afterSale",
                         "state": {
@@ -18,6 +19,7 @@
                 },
                 {
                     "title": "待处理",
+                    "dataIndex": "waitWork",
                     "path": {
                         "pathname": "/afterSales/afterSale",
                         "state": {
@@ -28,6 +30,7 @@
                 },
                 {
                     "title": "处理中",
+                    "dataIndex": "working",
                     "path": {
                         "pathname": "/afterSales/afterSale",
                         "state": {
@@ -38,6 +41,7 @@
                 },
                 {
                     "title": "未关闭",
+                    "dataIndex": "notClose",
                     "path": {
                         "pathname": "/afterSales/afterSale",
                         "state": {
