@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Spin, Form, Button, Modal, message, Row, Radio, Popconfirm, Steps, Space, Input, InputNumber, Select, DatePicker, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment, Page } from '../../common'
-import { baseInfoData, afterSaleInfo,  pageInfo, pageInfoCount } from './detail.json'
+import { baseInfoData,  pageInfo, pageInfoCount } from './detail.json'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import Dispatch from './Dispatch'
@@ -69,7 +69,45 @@ export default function InformationDetail(): React.ReactNode {
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
-
+    const afterSaleInfo = [
+        {
+            title: "售后人员",
+            dataIndex: "afterSaleUser",
+            width:50
+        },
+        {
+            title: "售后开始日期",
+            width: 120,
+            dataIndex: "startTime"
+        },
+        {
+            title: "售后开始打卡",
+            width: 120,
+            dataIndex: "goodsType",
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>{record?.startTime? '已打卡':'-'}</>
+            ) 
+        },
+        {
+            title: "售后完成日期",
+            dataIndex: "endTime",
+            width : 120,
+        },
+        {
+            title: "售后完成打卡",
+            width: 120,
+            dataIndex: "goodsExplain",
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>{record?.endTime? '已打卡':'-'}</>
+            ) 
+        },
+        {
+            title: "售后周期",
+            width: 120,
+            dataIndex: "cycle",
+            type:"number"
+        }
+    ]
     const tableColumns = [
         {
             key: 'issueName',
