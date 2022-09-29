@@ -276,6 +276,20 @@
       "exact": true,
       "authority": "material_management"
     },
+    { // 辅材类型管理
+      "name": "辅材类型管理",
+      "path": "/config/configList/auxiliaryMaterialType",
+      "module": "./pages/system-mngt/auxiliaryMaterial/MaterialTypeMngt",
+      "exact": true,
+      "authority": "tc_erp_sw_config_list_type"
+    },
+    { // 辅材管理
+      "name": "辅材管理",
+      "path": "/config/configList/auxiliaryMaterial",
+      "module": "./pages/system-mngt/materialMngt/auxMaterialMngt",
+      "exact": true,
+      "authority": "tc_erp_sw_config_list_materials"
+    },
     { //塔型管理
       "name": "塔型管理",
       "path": "/product/towershape",
@@ -2951,12 +2965,12 @@
       "authority": "tc_erp_sc_workbench"
     },
     { // 售后-日历管理-工作日历管理-新增
-    "name": "新增",
-    "path": "/calendar/calendar/add",
-    "module": "./pages/asm/calendar/Add",
-    "exact": true,
-    "authority": "tc_erp_sc_workbench"
-  },
+      "name": "新增",
+      "path": "/calendar/calendar/add",
+      "module": "./pages/asm/calendar/Add",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
     { // 售后-打卡管理-打卡记录
       "name": "打卡记录",
       "path": "/clock/clockRecord",
