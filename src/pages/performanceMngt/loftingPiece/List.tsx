@@ -245,6 +245,8 @@ export default function List(): React.ReactNode {
 
     const onRowChange = async (record: Record<string, any>) => {
         detailRun(record.id)
+        checkStatisticalRun(record.id)
+        loftStatisticallRun(record.id)
     }
 
     const isEditing = (record: Record<string, any>) => record.id === editingKey;
@@ -364,9 +366,9 @@ export default function List(): React.ReactNode {
                 <Button type="primary" onClick={async () => {
                     setVisible(true);
                 }} ghost>奖惩配置</Button>
-                <Button type="primary" onClick={() => {
+                {/* <Button type="primary" onClick={() => {
                     downloadTemplate(``, '放样计件', { ...filterValues }, false, 'array')
-                }} ghost>导出</Button>
+                }} ghost>导出</Button> */}
             </Space>
         </div>
         <div className={styles.content}>
@@ -376,6 +378,7 @@ export default function List(): React.ReactNode {
                     columns={columns}
                     dataSource={data}
                     pagination={false}
+                    scroll={{ y: 700 }}
                     onRow={(record: Record<string, any>) => ({
                         onClick: () => onRowChange(record),
                         className: styles.tableRow

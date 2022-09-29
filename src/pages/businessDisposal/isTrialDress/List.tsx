@@ -155,10 +155,11 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link">发起</Button>
+                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">发起</Button>
                             </Popconfirm>
-                            <Popconfirm
+                            {/* <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
                                     RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/withdraw/${record.id}`).then(res => {
@@ -168,9 +169,11 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={record.status !== 2}
                             >
-                                <Button type="link">撤回</Button>
-                            </Popconfirm>
+                                <Button disabled={record.status !== 2} type="link">撤回</Button>
+                            </Popconfirm> */}
+                            {/* 和补件申请撤回一样，先隐藏 */}
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
@@ -181,8 +184,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link">删除</Button>
+                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">删除</Button>
                             </Popconfirm>
                         </Space>
                     )
@@ -241,8 +245,8 @@ export default function List(): React.ReactNode {
                     name: 'trialAssemble',
                     label: '单据类型',
                     children: <Select placeholder="请选择补件类型">
-                        <Select.Option key={0} value={'免试装'}>免试装</Select.Option>
-                        <Select.Option key={1} value={'试组装'}>试组装</Select.Option>
+                        <Select.Option key={0} value={0}>免试装</Select.Option>
+                        <Select.Option key={1} value={1}>试组装</Select.Option>
                     </Select>
                 },
                 {

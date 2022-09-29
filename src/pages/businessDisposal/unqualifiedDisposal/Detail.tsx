@@ -16,10 +16,12 @@ import { baseColumns, unqualifiedColumns } from "./unqualifiedDisposal.json"
 import styles from './UnqualifiedDisposal.module.less';
 
 export default function Dispose(): React.ReactNode {
+    const [repairTypes, setRepairTypes] = useState<any>();
     const history = useHistory();
     const [form] = useForm();
     const params = useParams<{ id: string }>();
     const [wasteProductStructureList, setWasteProductStructureList] = useState<any>([]);
+    const [partsTypes, setPartsTypes] = useState<any>();
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/wasteProductReceipt/${params.id}`);
@@ -27,6 +29,22 @@ export default function Dispose(): React.ReactNode {
             list: result?.wasteProductStructureList || []
         })
         setWasteProductStructureList(result?.wasteProductStructureList)
+        let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
+        setPartsTypes(resData)
+        let newData: any = {}
+        result?.wasteProductStructureList?.forEach((res: any, index: number) => {
+            let result: any = []
+            resData?.forEach((element: any) => {
+                if (element.typeId === res.typeId) {
+                    result = element.fixItemConfigList
+                }
+            });
+            newData = {
+                ...newData,
+                [index]: result
+            }
+        })
+        setRepairTypes(newData)
         resole(result);
     }), {})
 
@@ -35,32 +53,37 @@ export default function Dispose(): React.ReactNode {
         resole(data);
     }), {})
 
-    const { data: partsTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
-            resole(resData);
-        } catch (error) {
-            reject(error)
-        }
-    }), {})
-
     const save = (status: number) => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async (res: any) => {
                 const data = await form.getFieldsValue(true);
-                console.log(data)
-                RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
-                    id: params.id,
-                    status: status,
-                    description: data.description,
-                    wasteProductStructureList: data.list
-                }).then(res => {
-                    message.success('处理成功！');
-                    history.push(`/businessDisposal/unqualifiedDisposal`)
-                })
+                if (status === 0) {
+                    if (data.description) {
+                        RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
+                            id: params.id,
+                            status: status,
+                            description: data.description,
+                            wasteProductStructureList: data.list
+                        }).then(res => {
+                            message.success('处理成功！');
+                            history.push(`/businessDisposal/unqualifiedDisposal`)
+                        })
+                    } else {
+                        message.warning('请填写信息！')
+                    }
+                } else {
+                    RequestUtil.post(`/tower-science/wasteProductReceipt/examine`, {
+                        id: params.id,
+                        status: status,
+                        description: data.description,
+                        wasteProductStructureList: data.list
+                    }).then(res => {
+                        message.success('处理成功！');
+                        history.push(`/businessDisposal/unqualifiedDisposal`)
+                    })
+                }
                 resolve(true);
             })
-
         } catch (error) {
             reject(false)
         }
@@ -98,7 +121,7 @@ export default function Dispose(): React.ReactNode {
                                         const list = form.getFieldsValue(true).list;
                                         list[index] = {
                                             ...list[index],
-                                            disposeWeight: Number(list[index].basicsWeight || 0) * Number(e)
+                                            disposeWeight: (Number(list[index].basicsWeight || 0) * Number(e)).toFixed(4)
                                         }
                                         form.setFieldsValue({
                                             list: [...list]
@@ -168,11 +191,52 @@ export default function Dispose(): React.ReactNode {
                                     required: true,
                                     message: "请选择零件类型"
                                 }]}>
-                                    <Select disabled={data?.status !== 1} placeholder="请选择" size="small">
+                                    <Select placeholder="请选择" disabled={data?.status !== 1} size="small">
                                         {
                                             partsTypes?.map((item: any, index: number) =>
                                                 <Select.Option value={item.typeId} key={index}>
                                                     {item.typeName}
+                                                </Select.Option>
+                                            )
+                                        }
+                                    </Select>
+                                </Form.Item>
+                            )
+                        })
+                    }
+                    if (res.dataIndex === "repairTypeName") {
+                        // 返修类型
+                        return ({
+                            ...res,
+                            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                                <Form.Item name={["list", index, "repairType"]} rules={[{
+                                    required: true,
+                                    message: "请选择返修类型"
+                                }]}>
+                                    <Select placeholder="请选择返修类型" disabled={data?.status !== 1} onChange={(e) => {
+                                        let data: any = {}
+                                        repairTypes && repairTypes[index].forEach((element: any) => {
+                                            if (element.id === e) {
+                                                data = element
+                                            }
+                                        });
+                                    }}
+                                        onDropdownVisibleChange={(open) => {
+                                            let data: any = []
+                                            const list = form.getFieldsValue(true).list;
+                                            partsTypes.forEach((element: any) => {
+                                                if (element.typeId === list[index].typeId) {
+                                                    data = element.fixItemConfigList
+                                                }
+                                            });
+                                            setRepairTypes({
+                                                [index]: data
+                                            })
+                                        }}>
+                                        {
+                                            repairTypes && repairTypes[index]?.map((item: any, index: number) =>
+                                                <Select.Option value={item.id} key={index}>
+                                                    {item.fixType}
                                                 </Select.Option>
                                             )
                                         }
