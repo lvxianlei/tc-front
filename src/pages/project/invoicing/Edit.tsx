@@ -110,7 +110,7 @@ export default function Edit() {
                 contractSignTime: contractValue.signContractTime,
                 reasonWeight: logicWeight.logicWeight,
                 planCode: logicWeight.planNumbers,
-                planWeight: contractValue.plannedWeight,
+                planWeight: logicWeight.logicWeight,
                 contractDevTime: contractValue.deliveryTime,
                 business: contractValue.salesman,
                 projectCode: contractValue.projectNumber, // 项目编码

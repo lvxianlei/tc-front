@@ -544,8 +544,7 @@
         },
         {
             "title": "电话",
-            "dataIndex": "phone",
-            "type": "phone"
+            "dataIndex": "phone"
         },
         {
             "title": "开户行及账号",
