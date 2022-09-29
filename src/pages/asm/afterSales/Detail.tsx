@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Spin, Form, Button, Modal, message, Row, Radio, Popconfirm, Steps, Space, Input, InputNumber, Select, DatePicker, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment, Page } from '../../common'
-import { baseInfoData, afterSaleInfo,  pageInfo, pageInfoCount } from './detail.json'
+import { baseInfoData,  pageInfo, pageInfoCount } from './detail.json'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import Dispatch from './Dispatch'
@@ -69,7 +69,45 @@ export default function InformationDetail(): React.ReactNode {
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
-
+    const afterSaleInfo = [
+        {
+            title: "售后人员",
+            dataIndex: "afterSaleUser",
+            width:50
+        },
+        {
+            title: "售后开始日期",
+            width: 120,
+            dataIndex: "startTime"
+        },
+        {
+            title: "售后开始打卡",
+            width: 120,
+            dataIndex: "goodsType",
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>{record?.startTime? '已打卡':'-'}</>
+            ) 
+        },
+        {
+            title: "售后完成日期",
+            dataIndex: "endTime",
+            width : 120,
+        },
+        {
+            title: "售后完成打卡",
+            width: 120,
+            dataIndex: "goodsExplain",
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>{record?.endTime? '已打卡':'-'}</>
+            ) 
+        },
+        {
+            title: "售后周期",
+            width: 120,
+            dataIndex: "cycle",
+            type:"number"
+        }
+    ]
     const tableColumns = [
         {
             key: 'issueName',
@@ -332,7 +370,7 @@ export default function InformationDetail(): React.ReactNode {
                                     history.go(0)
                                 }
                             })
-                        }}>编辑</Button>
+                        }}  disabled={detailData?.status===5}>编辑</Button>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={ async () => {
@@ -342,8 +380,9 @@ export default function InformationDetail(): React.ReactNode {
                             } }
                             okText="确认"
                             cancelText="取消"
+                            disabled={detailData?.status===5}
                         >
-                            <Button type="link">删除</Button>
+                            <Button type="link"  disabled={detailData?.status===5}>删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -774,7 +813,7 @@ export default function InformationDetail(): React.ReactNode {
                                     setDetailAssessData([{...record}])
                                     setAssessTitle('添加');
                                     setAssessVisible(true); 
-                                } }>添加考核</Button>
+                                } }  disabled={detailData?.status===5}>添加考核</Button>
                                 <Button type="link" onClick={ async () => {
                                     const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueTypeId}`);
                                     const value:any[] = await RequestUtil.get(`/tower-science/productStructure/listByProductForSales?current=1&pageSize=10000&productId=${record?.productId}`)
@@ -789,7 +828,7 @@ export default function InformationDetail(): React.ReactNode {
                                     setDetailQuestionData({attachInfoVos: record?.attachVos})
                                     setQuestionTitle('编辑');
                                     setVisible(true); 
-                                } }>编辑</Button>
+                                } }  disabled={detailData?.status===5}>编辑</Button>
                                 <Popconfirm
                                     title="确认删除?"
                                     onConfirm={ async () => {
@@ -800,8 +839,9 @@ export default function InformationDetail(): React.ReactNode {
                                     } }
                                     okText="确认"
                                     cancelText="取消"
+                                    disabled={detailData?.status===5}
                                 >
-                                    <Button type="link">删除</Button>
+                                    <Button type="link"  disabled={detailData?.status===5}>删除</Button>
                                 </Popconfirm>
                                 </Space>
                         }
@@ -857,7 +897,7 @@ export default function InformationDetail(): React.ReactNode {
                                             cost: record?.type&&record?.typeName?record?.type+','+record?.typeName:'',
                                             workOrderNumber: record?.workOrderNumber
                                         });
-                                    } }>编辑</Button>
+                                    } } disabled={detailData?.status===5}>编辑</Button>
                                     <Popconfirm
                                         title="删除后不可恢复，确认删除?"
                                         onConfirm={async () => {
@@ -867,8 +907,9 @@ export default function InformationDetail(): React.ReactNode {
                                         }}
                                         okText="确认"
                                         cancelText="取消"
+                                        disabled={detailData?.status===5}
                                     >
-                                        <Button type="link" >删除</Button>
+                                        <Button type="link"  disabled={detailData?.status===5}>删除</Button>
                                     </Popconfirm>
                                 </Space>
                             }
