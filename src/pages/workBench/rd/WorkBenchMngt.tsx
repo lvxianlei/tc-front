@@ -355,25 +355,25 @@ export default function WorkBenchMngt(): React.ReactNode {
 			child: [
 				{
 					title: '待办事宜',
-					dataIndex: '',
+					dataIndex: 'flowTodo',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowTodo`,
 					authority: ''
 				},
 				{
 					title: '已办事宜',
-					dataIndex: '',
+					dataIndex: 'flowDone',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowDone`,
 					authority: ''
 				},
 				{
 					title: '抄送事宜',
-					dataIndex: '',
+					dataIndex: 'flowCirculate',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowCirculate`,
 					authority: ''
 				},
 				{
 					title: '我发起的',
-					dataIndex: '',
+					dataIndex: 'flowLaunch',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowLaunch`,
 					authority: ''
 				}
