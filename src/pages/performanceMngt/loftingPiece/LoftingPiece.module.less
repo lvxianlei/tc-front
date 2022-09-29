@@ -1,0 +1,54 @@
+
+@import "../../../App.module.less";
+
+.search {
+    margin-bottom: 16px;
+}
+
+.topBtn {
+    position: relative;
+    right: 0%;
+    left: 88%;
+}
+
+.tableRow{
+    height: @tableRowHeight;
+    border: none;
+    &:nth-child(odd){
+        background-color: @backgroundColor;
+       :global(.ant-table-cell-fix-right) {
+            background: @backgroundColor !important;
+        }
+        :global(.ant-table-cell-fix-left) {
+            background: @backgroundColor !important;
+        }
+    }
+}
+
+.content {
+    display: flex;
+    width: 100%;
+
+    .left {
+        width: 50%;
+    }
+
+    .right {
+        width: 49%;
+        margin-left: 1%;
+
+        .right_top {
+            overflow-y: hidden;
+            margin-bottom: 2%;
+        }
+
+        .right_middle {
+            overflow-y: hidden;
+            margin-bottom: 2%;
+        } 
+
+        .right_bottom{
+            overflow-y: hidden;
+        }
+    }
+}

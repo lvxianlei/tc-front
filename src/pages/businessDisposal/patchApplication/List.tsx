@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig, Tooltip } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
 import { Link, useHistory } from 'react-router-dom';
@@ -123,7 +123,22 @@ export default function List(): React.ReactNode {
         <CommonTable
             haveIndex
             columns={[
-                ...columns,
+                ...columns.map(res => {
+                    if (res.dataIndex === 'description') {
+                        return {
+                            ...res,
+                            ellipsis: {
+                                showTitle: false,
+                            },
+                            render: (_: string) => (
+                                <Tooltip placement="topLeft" title={_}>
+                                    {_ ? _?.substring(0, 5) + '...' : '-'}
+                                </Tooltip>
+                            ),
+                        }
+                    }
+                    return res
+                }),
                 {
                     key: 'operation',
                     title: '操作',
@@ -146,7 +161,7 @@ export default function List(): React.ReactNode {
                             >
                                 <Button type="link">发起</Button>
                             </Popconfirm>
-                            <Popconfirm
+                            {/* <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
                                     RequestUtil.post(`/tower-science/supplyEntry/cancel/${record.id}`).then(res => {
@@ -158,7 +173,8 @@ export default function List(): React.ReactNode {
                                 cancelText="取消"
                             >
                                 <Button type="link">撤回</Button>
-                            </Popconfirm>
+                            </Popconfirm> */}
+                            {/* 张运刚说撤回功能青岛没有提供接口，并没有实现，先隐藏 */}
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
@@ -206,7 +222,7 @@ export default function List(): React.ReactNode {
                 <CommonTable
                     haveIndex
                     columns={partsColumns}
-                    dataSource={partsData||[]}
+                    dataSource={partsData || []}
                     pagination={false} />
 
             </Col>
