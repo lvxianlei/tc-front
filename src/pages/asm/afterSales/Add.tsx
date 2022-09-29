@@ -53,6 +53,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     pieceCode: value?.pieceCode?value?.pieceCode.map((item:any)=>{
                         return item.split(',')[1]
                     }).join(','):'',
+                    productId:  value?.productId?value?.productId:'',
                     pieceCodeNum: value?.pieceCodeNum?value?.pieceCodeNum:'',
                     productCategory: value?.productCategory?value?.productCategory:'',
                     productCategoryId: value?.productCategoryId?value?.productCategoryId:'',
@@ -242,11 +243,11 @@ export default function AnnouncementNew(): React.ReactNode {
                                 <AfterSalesUser onSelect={(selectRows: any[]) => {
                                     console.log(selectRows)
                                     form.setFieldsValue({ afterSaleUser: selectRows[0].name });
-                                    // setDetailData({ 
-                                    //     ...detailData, 
-                                    //     afterSaleUser: selectRows[0].name,
-                                    //     afterSaleUserId: selectRows[0].userId  
-                                    // })
+                                    setDetailData({ 
+                                        ...detailData, 
+                                        afterSaleUser: selectRows[0].name,
+                                        afterSaleUserId: selectRows[0].userId  
+                                    })
                                 }} selectedKey={detailData?.staffList||[]} />
                             } disabled />
                         </Form.Item>

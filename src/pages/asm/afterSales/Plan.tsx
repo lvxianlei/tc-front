@@ -71,8 +71,9 @@ export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX
             headTabs={[]}
             extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.planNumber:''}</span>}
             // refresh={refresh}
-          
+           
             tableProps={{
+                scroll:{ y: 300 },
                 rowKey:'planNumber',
                 pagination:false,
                 rowSelection: {

@@ -12,6 +12,7 @@ import { China } from './china.json';
  
 export default function Statements(): React.ReactNode {
       const [isFull, setIsFull] = useState<boolean>(false)
+      const [isClick, setIsClick] = useState<boolean>(false)
       const [detail, setDetail] = useState<any>({})
       useEffect(() => {
             echarts.registerMap('china', ( China )as any);
@@ -52,9 +53,9 @@ export default function Statements(): React.ReactNode {
  
     const { data:projectData, run: getProjectData } = useRequest<any>((afterSaleUser: string) => new Promise(async (resole, reject) => {
       try {
-          const value: any = await RequestUtil.get<any>(`/tower-as/workOrder?current=1&size=10000&afterSaleUserId=${afterSaleUser}`);
-          setIsFull(true)
-          resole([{}])
+          const value: any = await RequestUtil.get<any>(`/tower-as/workOrder?current=1&size=10000&afterSaleUserId=${afterSaleUser}&isClose=0`);
+          setIsClick(true)
+          resole(value?.records)
       } catch (error) {
           reject(error)
       }
@@ -86,7 +87,7 @@ export default function Statements(): React.ReactNode {
           geoIndex: 1,
           center: [107.47, 35.71],
           aspectScale: 0.8,
-          zoom: 1.4,  //地图的比例
+          zoom: 1.6,  //地图的比例
           label: {
             normal: {
               show: true,
@@ -1481,6 +1482,7 @@ export default function Statements(): React.ReactNode {
  
      const initCharts = () => {
          (document as HTMLElement | any).getElementById('LoftingStatisticalAnalysis').removeAttribute("_echarts_instance_");
+         (document as HTMLElement | any).getElementById('LoftingStatisticalAnalysis').style.height='100%'
          const myChart = echarts.init((document as HTMLElement | any).getElementById('LoftingStatisticalAnalysis'));
 
          // 绘制图表
@@ -1548,6 +1550,11 @@ export default function Statements(): React.ReactNode {
             }
           ]
         })
+        
+        window.addEventListener('resize', ()=>{
+          myChart.resize();
+          myDisChart.resize();
+        })
      }
  
      const chartsContent = (): React.ReactNode => {
@@ -1556,27 +1563,32 @@ export default function Statements(): React.ReactNode {
                  <div className={styles.headerbg}>
                      <span className={styles.headerTitle}>汇金通售后资源网络分布图</span>
                  </div>
-                 {/* <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button> */}
+                 <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button>
              </div>
              <div className={styles.top}>
                  <div className={styles.left}>
                      {/* <div>
                          <span className={styles.title}>放样统计分析</span>
                      </div> */}
-                     <div id={'LoftingStatisticalAnalysis'} style={{ width: '100%', height: '780px' }} key={'LoftingStatisticalAnalysis'} />
+                     <div className={styles.count}>
+                     <div id={'LoftingStatisticalAnalysis'}  key={'LoftingStatisticalAnalysis'} />
+                     </div>
+                {/* <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button> */}
 
                  </div>
                  <div className={styles.right}>
-                    {isFull&&<div className={styles.rightTop}>
-                        <div className={styles.title}>点击数据</div>
+                    {isClick&&<div className={styles.rightTop}>
+                        <div className={styles.title}>{detail?.data?.userName}</div>
                         <div style={{color:'#fff',margin:'10px 0px',marginBottom:'20px'}}>
-                          <div>名称：{detail?.data?.userName}</div>
+                          {/* <div>名称：</div> */}
                           <div>地址：{detail?.data?.address}</div>
-                          {
-                              projectData && projectData.map((res: any, index: number) => (
-                                  <div>工程名称：{res?.projectName}</div>
-                              ))
-                          }
+                          <div>工程名称：{
+                              projectData && projectData.map((res: any, index: number) => {
+                                  return res?.projectName
+                                }).join(',').length>0?projectData && projectData.map((res: any, index: number) => {
+                                  return res?.projectName
+                                }).join(','):'无'
+                          }</div>
                         </div>
                             
                     </div>}
@@ -1591,10 +1603,18 @@ export default function Statements(): React.ReactNode {
      }
  
      return <Spin spinning={false}>
-         {
+        {
+            isFull ?
+                <Modal width='100%' className={styles.statementsModal} visible={isFull} closable={false} footer={false} onCancel={() => setIsFull(false)}>
+                    {chartsContent()}
+                </Modal>
+                :
+                <>{chartsContent()}</>
+        }
+         {/* {
              
                  <>{chartsContent()}</>
-         }
+         } */}
  
      </Spin>
  }
