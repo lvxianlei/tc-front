@@ -355,25 +355,25 @@ export default function WorkBenchMngt(): React.ReactNode {
 			child: [
 				{
 					title: '待办事宜',
-					dataIndex: 'flowTodo',
+					dataIndex: 'todo',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowTodo`,
 					authority: ''
 				},
 				{
 					title: '已办事宜',
-					dataIndex: 'flowDone',
+					dataIndex: 'done',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowDone`,
 					authority: ''
 				},
 				{
 					title: '抄送事宜',
-					dataIndex: 'flowCirculate',
+					dataIndex: 'circulate',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowCirculate`,
 					authority: ''
 				},
 				{
 					title: '我发起的',
-					dataIndex: 'flowLaunch',
+					dataIndex: 'launch',
 					url: `http://workflow-${host}.dhwy.cn/#/tower/flowLaunch`,
 					authority: ''
 				}
@@ -382,10 +382,14 @@ export default function WorkBenchMngt(): React.ReactNode {
 	]
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-		const data = await RequestUtil.get(`/tower-science/workbench`);
+		const data = await RequestUtil.get<any>(`/tower-science/workbench`);
 		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice/staff/list?size=10&state=1`);
+		const result = await RequestUtil.get<any>(`/tower-workflow/workflow/Engine/FlowBefore/count`);
 		setAnnounceData(announceData.records)
-		resole(data)
+		resole({
+			...data,
+			...result
+		})
 	}), {})
 	const detailData: any = data;
 	const history = useHistory();
