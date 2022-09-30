@@ -44,7 +44,7 @@ export interface IResponseData {
 }
 
 export default function WorkBenchMngt(): React.ReactNode {
-	const userId = AuthUtil.getUserId();
+	const userId = AuthUtil.getUserInfo().user_id();
 	const authorities = ApplicationContext.get().authorities;
 	const workBenchList = [
 		{

@@ -17,7 +17,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export default function AssemblyWeldingList(): React.ReactNode {
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id();
 
     const columns = [
         {

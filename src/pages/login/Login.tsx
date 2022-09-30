@@ -25,7 +25,6 @@ interface ICaptcha {
 }
 interface ILoginState {
     readonly captcha: ICaptcha
-    readonly tenant: ITenant
 }
 
 export default function Login(): JSX.Element {
@@ -36,22 +35,18 @@ export default function Login(): JSX.Element {
     const { data, run: updateRun } = useRequest<ILoginState>(() => new Promise(async (resole, reject) => {
         try {
             const captcha: ICaptcha = await RequestUtil.get(`/sinzetech-auth/oauth/captcha`)
-            const tenant: ITenant = await RequestUtil.get<ITenant>(`/sinzetech-system/tenantClient/info?domain=${window.location.protocol}//${window.location.host}`)
-            // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-test.dhwy.cn`)
-            // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-dev.dhwy.cn`)
-            // const tenant: ITenant = await RequestUtil.get(`/sinzetech-system/tenantClient/info?domain=http://tc-erp-gxhd.dhwy.cn`)
-            resole({ captcha, tenant })
+            resole({ captcha })
         } catch (error) {
             reject(false)
         }
     }))
+
     const { loading: saveLoading, run } = useRequest<any>((values: { [key: string]: any }) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(
                 '/sinzetech-auth/oauth/token',
                 {
-                    ...values,
-                    tenantId: data?.tenant.tenantId
+                    ...values
                 },
                 {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -66,13 +61,20 @@ export default function Login(): JSX.Element {
     }), { manual: true })
 
     const onSubmit = async (values: Record<string, any>) => {
-        AuthUtil.setTenantId(data!.tenant.tenantId, { expires: 7 })
         //values.password = MD5(values.password).toString()
         if (!verify) {
             message.error("请先按住滑块，拖动至最右边完成验证")
             return
         }
-        const { access_token, refresh_token, user_id, tenant_id, tenant_name, ...result } = await run(values)
+        const {
+            access_token,
+            refresh_token,
+            user_id,
+            tenant_id,
+            tenant_name,
+            tenants,
+            ...result
+        } = await run(values)
         if (result.error) {
             // 错误提示
             notification.error({
@@ -89,8 +91,14 @@ export default function Login(): JSX.Element {
             Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
             Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
-            AuthUtil.setUserId(user_id)
+            AuthUtil.setUserInfo({
+                user_id,
+                password:values.password,
+                username:values.username
+            })
+            AuthUtil.setTenantId(tenant_id, { expires: 7 })
             AuthUtil.setTenantName(tenant_name)
+            AuthUtil.setTenants(tenants)
             AuthUtil.setRealName(result.real_name)
             AuthUtil.setAccout(result.account)
             history.push(ctxConfig.home || '/')
