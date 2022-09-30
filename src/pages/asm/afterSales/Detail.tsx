@@ -889,8 +889,9 @@ export default function InformationDetail(): React.ReactNode {
                                     <Button type="link" onClick={ async () => {
                                         setTitle('编辑');
                                         setIsAdd(true); 
-                                        const value = await RequestUtil.get(`/tower-as/workCost/${record?.id}`)
-                                        setDetailData(value)
+                                        const value:any = await RequestUtil.get(`/tower-as/workCost/${record?.id}`)
+                                        // setDetailData(value)
+                                        setDetailCostData({ ...value, attachInfoVos: value?.attachVos})
                                         formRef.setFieldsValue({ 
                                             ...record,
                                             date: record?.date?moment(record?.date):'',
