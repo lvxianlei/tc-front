@@ -8,7 +8,7 @@ import { Input, Select, DatePicker, Button, Modal, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
-import { baseColumn } from "./RawMaterialWarehousing.json";
+import { baseColumn } from "./data.json";
 // 引入新增纸质单号
 import PaperOrderModal from './PaperOrderModal';
 import CreatePlan from "./CreatePlan";
@@ -60,7 +60,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         setIsOpenId(false);
     }
-    
+
     return (
         <>
             <Page
@@ -84,10 +84,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
                                 <Link className='btn-operation-link' to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>明细</Link>
-                                {/* <Button className='btn-operation-link' type="link" onClick={() => {
-                                    setVisible(true);
-                                    setId(record.id);
-                                }}>纸质单号</Button> */}
                             </>
                         )
                     }
@@ -157,7 +153,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             >
                 <PaperOrderModal ref={addRef} id={id} />
             </Modal>
-            
+
             <CreatePlan
                 visible={isOpenId}
                 handleCreate={handleCreate}

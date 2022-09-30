@@ -6,16 +6,6 @@
             "width": 150
         },
         {
-            "title": "纸质单号",
-            "dataIndex": "paperNumber",
-            "width": 100
-        },
-        {
-            "title": "合同编号",
-            "dataIndex": "contractNumber",
-            "width": 180
-        },
-        {
             "title": "状态",
             "dataIndex": "receiveStatusName",
             "width": 60
@@ -31,22 +21,17 @@
             "width": 100
         },
         {
-            "title": "到货时间",
-            "dataIndex": "receiveTime",
+            "title": "联系人",
+            "dataIndex": "contactsUser",
             "width": 100
         },
         {
-            "title": "理算重量（吨）",
-            "dataIndex": "totalWeight",
+            "title": "联系电话",
+            "dataIndex": "contactsPhone",
             "width": 120
         },
         {
-            "title": "过磅重量（吨）",
-            "dataIndex": "totalPonderationWeight",
-            "width": 120
-        },
-        {
-            "title": "原材料含税金额合计（元）",
+            "title": "辅材含税金额合计（元）",
             "dataIndex": "price",
             "width": 160
         },
@@ -64,16 +49,6 @@
             "title": "制单人",
             "dataIndex": "createUserName",
             "width": 100
-        },
-        {
-            "title": "联系人",
-            "dataIndex": "contactsUser",
-            "width": 100
-        },
-        {
-            "title": "联系电话",
-            "dataIndex": "contactsPhone",
-            "width": 120
         },
         {
             "title": "最新状态变更时间",
@@ -148,11 +123,6 @@
                     "dataIndex": "supplyProductsName"
                 }
             ]
-        },
-        {
-            "title": "纸质单号",
-            "dataIndex": "paperNumber",
-            "type": "string"
         },
         {
             "title": "联系人",
@@ -237,22 +207,6 @@
             ]
         },
         {
-            "title": "计量方式",
-            "dataIndex": "meteringMode",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "理重",
-                    "value": 1
-                },
-                {
-                    "label": "过磅",
-                    "value": 2
-                }
-            ],
-            "required": true
-        },
-        {
             "title": "结算方式",
             "dataIndex": "settlementMode",
             "type": "select",
@@ -265,12 +219,6 @@
             "type": "select",
             "enum": [],
             "required": true
-        },
-        {
-            "title": "过磅重量(吨)",
-            "dataIndex": "totalPonderationWeight",
-            "type": "number",
-            "precision": 4
         },
         {
             "title": "备注",
@@ -427,25 +375,10 @@
             "disabled": true
         },
         {
-            "title": "理算单重",
-            "dataIndex": "weight",
-            "hidden": true
-        },
-        {
             "title": "品名",
             "dataIndex": "materialName",
             "type": "string",
             "disabled": true
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandard",
-            "type": "select"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "type": "select"
         },
         {
             "title": "规格",
@@ -454,35 +387,25 @@
             "disabled": true
         },
         {
-            "title": "长度（mm）",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "宽度（mm）",
-            "dataIndex": "width",
-            "type": "number"
-        },
-        {
             "title": "数量",
             "dataIndex": "num",
             "type": "number",
             "disabled": true
         },
         {
-            "title": "理算重量（吨）",
-            "dataIndex": "totalWeight",
-            "type": "number",
-            "precision": 4,
+            "title": "单位----",
+            "dataIndex": "",
             "disabled": true
         },
         {
-            "title": "结算重量（吨）",
-            "dataIndex": "balanceTotalWeight",
-            "type": "number",
-            "precision": 3,
-            "max": 99999.999,
-            "required": true
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30
+        },
+        {
+            "title": "税率----",
+            "dataIndex": "",
+            "disabled": true
         },
         {
             "title": "含税单价（元/吨）",
@@ -523,58 +446,6 @@
             "title": "不含税装卸费（元）",
             "dataIndex": "totalUnloadPrice",
             "disabled": true
-        },
-        {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber",
-            "maxLength": 30,
-            "required": true
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber",
-            "required": true,
-            "maxLength": 30
-        },
-        {
-            "title": "轧制批号",
-            "dataIndex": "rollingNumber",
-            "maxLength": 30
-        },
-        {
-            "title": "生产厂家",
-            "dataIndex": "manufacturer",
-            "maxLength": 30
-        },
-        {
-            "title": "肢宽",
-            "dataIndex": "limbWidth",
-            "maxLength": 50
-        },
-        {
-            "title": "厚度",
-            "dataIndex": "thickness",
-            "maxLength": 50
-        },
-        {
-            "title": "管径",
-            "dataIndex": "caliber",
-            "maxLength": 50
-        },
-        {
-            "title": "外观检验结果",
-            "dataIndex": "appearance",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "合格",
-                    "value": 1
-                },
-                {
-                    "label": "不合格",
-                    "value": 2
-                }
-            ]
         }
     ],
     "SelectedArea": [
@@ -587,40 +458,21 @@
             "dataIndex": "supplierName"
         },
         {
-            "title": "材质",
-            "dataIndex": "structureTexture"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandardName"
+            "title": "品名",
+            "dataIndex": "materialName"
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec"
         },
         {
-            "title": "配料品名",
-            "dataIndex": "materialName"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "宽度",
-            "dataIndex": "width",
-            "type": "number"
-        },
-        {
-            "title": " 单个重量 （吨）",
-            "dataIndex": "weight",
-            "type": "number"
-        },
-        {
             "title": "已选数量",
             "dataIndex": "num",
             "type": "number"
+        },
+        {
+            "title": " 单位----",
+            "dataIndex": ""
         }
     ],
     "Selected": [
@@ -633,41 +485,22 @@
             "dataIndex": "supplierName"
         },
         {
-            "title": "材质",
-            "dataIndex": "structureTexture"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandardName"
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string"
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec"
         },
         {
-            "title": "配料品名",
-            "dataIndex": "materialName",
-            "type": "string"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number"
-        },
-        {
-            "title": "宽度",
-            "dataIndex": "width",
-            "type": "number"
-        },
-        {
-            "title": " 单个重量 （吨）",
-            "dataIndex": "weight",
-            "type": "number"
-        },
-        {
             "title": "可选数量",
             "dataIndex": "num",
             "type": "number"
+        },
+        {
+            "title": " 单位----",
+            "dataIndex": ""
         }
     ],
     "DetailPage": [

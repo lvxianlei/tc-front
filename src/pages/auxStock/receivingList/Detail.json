@@ -9,10 +9,6 @@
             "dataIndex": "supplierName"
         },
         {
-            "title": "纸质单号",
-            "dataIndex": "paperNumber"
-        },
-        {
             "title": "联系人",
             "dataIndex": "contactsUser"
         },
@@ -40,21 +36,6 @@
             "dataIndex": "unloadUsersName"
         },
         {
-            "title": "计量方式",
-            "dataIndex": "meteringMode",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "理重",
-                    "value": 1
-                },
-                {
-                    "label": "过磅",
-                    "value": 2
-                }
-            ]
-        },
-        {
             "title": "结算方式",
             "dataIndex": "settlementMode",
             "type": "select"
@@ -62,10 +43,6 @@
         {
             "title": "到货去向",
             "dataIndex": "warehouseName"
-        },
-        {
-            "title": "过磅重量(吨)",
-            "dataIndex": "totalPonderationWeight"
         },
         {
             "title": "备注",

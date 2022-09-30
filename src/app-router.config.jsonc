@@ -862,14 +862,14 @@
     { // 库存管理-辅材库存
       "name": "辅材库存",
       "path": "/auxStock/rawMaterialStock",
-      "module": "./pages/auxStock/rawMaterialStock/rawMaterialStock",
+      "module": "./pages/auxStock/rawMaterialStock/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_list"
     },
     { // 库存管理-辅材入库
       "name": "辅材入库",
       "path": "/auxStock/rawMaterialWarehousing",
-      "module": "./pages/auxStock/rawMaterialWarehousing/rawMaterialWarehousing",
+      "module": "./pages/auxStock/rawMaterialWarehousing/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_in_list"
     },

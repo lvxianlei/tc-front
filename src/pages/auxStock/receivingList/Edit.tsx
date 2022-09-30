@@ -409,17 +409,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             onChange={handleBaseInfoChange}
             columns={BasicInformation.map(item => {
                 switch (item.dataIndex) {
-                    case "paperNumber":
-                        return ({
-                            ...item,
-                            maxLength: 20,
-                            rules: [
-                                {
-                                    pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
-                                    message: "请输入正确的纸质单号"
-                                }
-                            ]
-                        })
                     case "supplierId":
                         return ({
                             ...item,
@@ -439,11 +428,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return ({
                             ...item,
                             enum: warehouseData || []
-                        })
-                    case "totalPonderationWeight":
-                        return ({
-                            ...item,
-                            required: form.getFieldValue("meteringMode") === 2
                         })
                     default:
                         return item

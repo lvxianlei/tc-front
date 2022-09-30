@@ -1,7 +1,7 @@
 {
     "baseColumn": [
         {
-            "title": "出库单号",
+            "title": "辅材出库单号",
             "dataIndex": "pickingNumber",
             "width": 100
         },
@@ -11,11 +11,6 @@
             "width": 80
         },
         {
-            "title": "总重量(吨)/出库重量(吨)",
-            "dataIndex": "totalWeight",
-            "width": 180
-        },
-        {
             "title": "最新状态变更时间",
             "dataIndex": "updateTime",
             "type": "date",
@@ -23,18 +18,8 @@
             "width": 120
         },
         {
-            "title": "工程名称",
-            "dataIndex": "projectName",
-            "width": 80
-        },
-        {
             "title": "申请人",
             "dataIndex": "applyStaffName",
-            "width": 80
-        },
-        {
-            "title": "出库类型",
-            "dataIndex": "outStockTypeName",
             "width": 80
         },
         {
@@ -63,28 +48,8 @@
             "width": 100
         },
         {
-            "title": "标准",
-            "dataIndex": "materialStandardName",
-            "width": 100
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "width": 100
-        },
-        {
             "title": "规格",
             "dataIndex": "structureSpec",
-            "width": 100
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "width": 100
-        },
-        {
-            "title": "宽度",
-            "dataIndex": "width",
             "width": 100
         },
         {
@@ -93,8 +58,8 @@
             "width": 100
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight",
+            "title": "单位----",
+            "dataIndex": "num",
             "width": 100
         },
         {
@@ -131,16 +96,6 @@
             "title": "库位",
             "dataIndex": "locatorName",
             "width": 120
-        },
-        {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatch",
-            "width": 100
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber",
-            "width": 100
         },
         {
             "title": "出库类型",

@@ -113,8 +113,8 @@ export default function Invoicing() {
             onOk={() => setVisibleSee(false)}
         />
         <Page
-            path="/tower-storage/receiveStock"
-            exportPath={"/tower-storage/receiveStock"}
+            path="/tower-storage/auxiliaryReceiveStock"
+            exportPath={"/tower-storage/auxiliaryReceiveStock"}
             columns={[{
                 title: "序号",
                 dataIndex: "index",
