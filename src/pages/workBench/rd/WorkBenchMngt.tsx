@@ -47,7 +47,7 @@ export interface IResponseData {
 export default function WorkBenchMngt(): React.ReactNode {
 	const userId = AuthUtil.getUserId();
 	const authorities = ApplicationContext.get().authorities;
-	const host = window.location.hostname?.split('.')[0]?.split('-')[2];
+	const host = window.location.hostname?.split('.')[0]?.split('-')[2] === 'gxhd' ? 'uat' : window.location.hostname?.split('.')[0]?.split('-')[2];
 	const workBenchList = [
 		{
 			title: '评估任务',
