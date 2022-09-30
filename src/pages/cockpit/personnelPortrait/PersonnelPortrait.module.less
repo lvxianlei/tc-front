@@ -1,0 +1,47 @@
+@import "../../../App.module.less";
+
+.search {
+    margin-bottom: 16px;
+}
+
+.btnTop {
+    position: relative;
+    right: 0;
+    margin-bottom: 16px;
+}
+
+.left {
+    position: absolute;
+    width: 30%;
+}
+
+.right {
+    width: 69%;
+    position: absolute;
+    left: 31%;
+}
+
+.tableRow{
+    padding: 0;
+    height: @tableRowHeight;
+    line-height: @tableRowHeight;
+    box-sizing: border-box;
+    border: none;
+    &:nth-child(odd){
+      background-color: #F8F8F8;
+    }
+}
+
+:global(p) {
+    margin-bottom: 0;
+}
+
+.normal {
+    width: 100%;
+    height: 12px;
+}
+
+.brown {
+    background-color: #FF8C00 !important;
+    color: #FFF;
+}

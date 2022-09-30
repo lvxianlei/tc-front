@@ -58,11 +58,6 @@
                         "authority": "tc_erp_sys_system_cost"
                     },
                     {
-                        "label": "定额配置",
-                        "path": "/sys/quotaConfig",
-                        "authority": "tc_erp_sys_system_quota"
-                    },
-                    {
                         "label": "第三方应用配置",
                         "path": "/sys/otherSetting/index",
                         "authority": "tc_erp_sys_system_app_deploy"
@@ -246,6 +241,11 @@
                     {
                         "label": "人员工作负荷",
                         "path": "/cockpit/personnelLoad",
+                        "authority": "tc_erp_rd_work_load"
+                    },
+                    {
+                        "label": "放样人员画像",
+                        "path": "/cockpit/personnelPortrait",
                         "authority": "tc_erp_rd_work_load"
                     },
                     {
@@ -621,6 +621,25 @@
                 ]
             },
             {
+                "label": "绩效管理",
+                "icon": "jichuguanliTY_jichuguanli",
+                "path": "/performanceMngt",
+                "appName": "RD",
+                "authority": "tc_erp_rd_system",
+                "items": [
+                    {
+                        "label": "放样计件",
+                        "path": "/performanceMngt/loftingPiece",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
+                        "label": "不合格处置单考核",
+                        "path": "/performanceMngt/unqualifiedCheck",
+                        "authority": "tc_erp_rd_trial_config"
+                    }
+                ]
+            },
+            {
                 "label": "业务处置管理",
                 "icon": "RD-tuzhitaxing",
                 "path": "/businessDisposal",
@@ -633,8 +652,23 @@
                         "authority": "tc_erp_rd_order_adjustment"
                     },
                     {
+                        "label": "试装、免试装申请",
+                        "path": "/businessDisposal/isTrialDress",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
                         "label": "取消暂停恢复",
                         "path": "/businessDisposal/cancelOrPauseOrrestore",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
+                        "label": "返修单",
+                        "path": "/businessDisposal/repairList",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
+                        "label": "不合格处置单",
+                        "path": "/businessDisposal/unqualifiedDisposal",
                         "authority": "tc_erp_rd_order_adjustment"
                     }
                 ]
@@ -1245,6 +1279,11 @@
                         "label": "返修件条目配置",
                         "path": "/baseSetting/itemRepair",
                         "authority": "tc_erp_rd_fix_item_config"
+                    },
+                    {
+                        "label": "定额配置",
+                        "path": "/baseSetting/quotaConfig",
+                        "authority": "tc_erp_sys_system_quota"
                     }
                 ]
             },

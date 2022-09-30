@@ -1,19 +1,16 @@
 /**
  * @author zyc
  * @copyright © 2022 
- * @description rd1.2 调拨
+ * @description rd1.2 特殊件号(调拨)
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, Descriptions, InputNumber, Input, Modal, message, Button } from 'antd';
-import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import { Spin, Form, Descriptions, InputNumber, Input, Modal, Button } from 'antd';
+import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './TowerLoftingAssign.module.less';
 import { IAllot, ILoftingProductStructureVOS } from "./ISetOut";
-import { RuleObject } from "antd/es/form";
-import { StoreValue } from "antd/es/form/interface";
-import { PlusOutlined } from "@ant-design/icons"
 
 interface AllotModalProps {
     id: string;
@@ -53,6 +50,7 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
             reject(error)
         }
     }), { refreshDeps: [id, allotData, status] })
+
     const { run: visibleData } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
@@ -134,7 +132,6 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
         form.resetFields();
     }
 
-
     const columns = [
         {
             key: 'index',
@@ -163,7 +160,7 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
         },
         {
             key: 'basicsPartNum',
-            title: '数量',
+            title: '单基数量',
             width: 120,
             dataIndex: 'basicsPartNum',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (

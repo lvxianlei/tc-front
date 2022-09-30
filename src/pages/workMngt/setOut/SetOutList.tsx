@@ -133,6 +133,7 @@ export default function SetOutList(): React.ReactNode {
     return <Page
         path="/tower-science/loftingList"
         exportPath={`/tower-science/loftingList`}
+        pageSize={20}
         columns={columns}
         filterValue={{
             ...filterValue,
