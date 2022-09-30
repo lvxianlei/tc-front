@@ -733,6 +733,13 @@
       "exact": true,
       "authority": "tc_erp_rd_work_load_list"
     },
+    { // 驾驶舱-放样人员画像
+      "name": "放样人员画像",
+      "path": "/cockpit/personnelPortrait",
+      "module": "./pages/cockpit/personnelPortrait/List",
+      "exact": true,
+      "authority": "tc_erp_rd_work_load_list"
+    },
     { // 驾驶舱-报表
       "name": "报表",
       "path": "/cockpit/statements",
@@ -980,7 +987,7 @@
     },
     { // 工作管理-确认列表-确认明细
       "name": "确认明细",
-      "path": "/workMngt/confirmList/confirmDetail/:id/:status",
+      "path": "/workMngt/confirmList/confirmDetail/:id/:status/:confirmId",
       "module": "./pages/workMngt/confirmList/ConfirmDetail",
       "exact": true,
       "authority": "tc_erp_rd_work_draw_massage"
@@ -1407,28 +1414,28 @@
     },
     { // 工作管理-组焊列表-组焊清单
       "name": "组焊清单",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader",
       "module": "./pages/workMngt/assemblyWelding/AssemblyWeldingListing",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed"
     },
     { // 工作管理-组焊列表-组焊清单-添加组焊
       "name": "添加组焊",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/new",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader/new",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed_add"
     },
     { // 工作管理-组焊列表-组焊清单-编辑
       "name": "编辑",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/edit/:segmentId",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader/edit/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed_add"
     },
     { // 工作管理-组焊列表-组焊清单-套用
       "name": "套用",
-      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/apply/:segmentId",
+      "path": "/workMngt/assemblyWeldingList/assemblyWeldingListing/:id/:productCategoryId/:weldingLeader/apply/:segmentId",
       "module": "./pages/workMngt/assemblyWelding/AddAssemblyWelding",
       "exact": true,
       "authority": "tc_erp_rd_work_weld_detailed_add"
@@ -2847,7 +2854,7 @@
     },
     { // RD-定额配置
       "name": "定额配置",
-      "path": "/sys/quotaConfig",
+      "path": "/baseSetting/quotaConfig",
       "module": "./pages/system-mngt/quotaConfig/List",
       "exact": true,
       "authority": "tc_erp_sys_system_quota_list"
@@ -3084,9 +3091,58 @@
       "authority": "tc_erp_rd_fix_item_config_list"
     },
     { // RD-业务处置管理-补件申请-详情
-      "name": "申请",
+      "name": "详情",
       "path": "/businessDisposal/patchApplication/detail/:id",
       "module": "./pages/businessDisposal/patchApplication/Detail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-放样计件
+      "name": "放样计件",
+      "path": "/performanceMngt/loftingPiece",
+      "module": "./pages/performanceMngt/loftingPiece/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-不合格处置单考核
+      "name": "不合格处置单考核",
+      "path": "/performanceMngt/unqualifiedCheck",
+      "module": "./pages/performanceMngt/unqualifiedCheck/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-试装、免试装申请
+      "name": "试装、免试装申请",
+      "path": "/businessDisposal/isTrialDress",
+      "module": "./pages/businessDisposal/isTrialDress/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-返修单
+      "name": "返修单",
+      "path": "/businessDisposal/repairList",
+      "module": "./pages/businessDisposal/repairList/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-返修单-处理
+      "name": "处理",
+      "path": "/businessDisposal/repairList/dispose/:id",
+      "module": "./pages/businessDisposal/repairList/Dispose",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-不合格处置单
+      "name": "不合格处置单",
+      "path": "/businessDisposal/unqualifiedDisposal",
+      "module": "./pages/businessDisposal/unqualifiedDisposal/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-不合格处置单-详情
+      "name": "详情",
+      "path": "/businessDisposal/unqualifiedDisposal/detail/:id",
+      "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     }

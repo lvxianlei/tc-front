@@ -825,6 +825,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         haveIndex
                         columns={componentColumns}
                         dataSource={componentList}
+                        style={{ height: 600, overflow: 'auto' }}
                         pagination={false}
                         code={1}
                         rowSelection={{
@@ -843,6 +844,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         rowKey="structureId"
                         dataSource={[...(weldingDetailedStructureList || [])]}
                         pagination={false}
+                        style={{ height: 600, overflow: 'auto' }}
                         rowSelection={{
                             selectedRowKeys: rightSelectedRowKeys,
                             onChange: (selectedRowKeys: string[], selectRows: any[]) => {

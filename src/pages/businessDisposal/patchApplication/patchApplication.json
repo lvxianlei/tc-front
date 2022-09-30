@@ -98,8 +98,7 @@
         {
             "key": "description",
             "title": "说明",
-            "dataIndex": "description",
-            "width": 100
+            "dataIndex": "description"
         }
     ],
     "tableColumns": [
@@ -703,7 +702,8 @@
         },
         {
             "title": "说明",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "detailTableColumns": [
