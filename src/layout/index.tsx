@@ -269,7 +269,7 @@ export default function (): JSX.Element {
                 closable={false}
                 visible={visible}
                 className="drawer"
-                // height={500}
+                height={"auto"}
                 getContainer={false}
                 style={{
                     position: "absolute",
