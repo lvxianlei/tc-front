@@ -78,25 +78,25 @@ export default function ChooseApply(): JSX.Element {
             <Tabs type="card">
                 <Tabs.TabPane tab="待办事项" key="1">
                     <iframe
-                        style={{ width: "100%", height: "auto" }}
+                        style={{ width: "100%", minHeight: 500 }}
                         src=" http://workflow-dev.dhwy.cn/#/tower/flowTodo"
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="我发起的" key="2">
                     <iframe
-                        style={{ width: "100%", height: "auto" }}
+                        style={{ width: "100%", minHeight: 500 }}
                         src="http://workflow-dev.dhwy.cn/#/tower/flowLaunch"
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="已办事宜" key="3">
                     <iframe
-                        style={{ width: "100%", height: "auto" }}
+                        style={{ width: "100%", minHeight: 500 }}
                         src="http://workflow-dev.dhwy.cn/#/tower/flowDone"
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="抄送事宜" key="4">
                     <iframe
-                        style={{ width: "100%", height: "auto" }}
+                        style={{ width: "100%", minHeight: 500 }}
                         src="http://workflow-dev.dhwy.cn/#/tower/flowCirculate"
                     />
                 </Tabs.TabPane>
