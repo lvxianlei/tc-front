@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { DetailTitle } from "../common";
 import styles from "./ChooseApply.module.less";
 import { useHistory } from "react-router";
@@ -8,6 +8,7 @@ import { Col, Row, Tabs } from "antd";
 import { useAuthorities } from "../../hooks";
 import Charts from "./Charts"
 import Lines from "./Lines";
+const baseUrl = process.env.IFRAME_BASE_URL;
 type AppType = "SC" | "SW" | "FC" | "RD" | "TMS" | "HR" | "COMM" | "ASM" | "QMS" | "MC" | "MC2" | "PC"
 interface IApplyType {
     readonly authority?: string;
@@ -79,25 +80,25 @@ export default function ChooseApply(): JSX.Element {
                 <Tabs.TabPane tab="待办事项" key="1">
                     <iframe
                         style={{ width: "100%", minHeight: 500 }}
-                        src=" http://workflow-dev.dhwy.cn/#/tower/flowTodo"
+                        src={`${baseUrl}/#/tower/flowTodo`}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="我发起的" key="2">
                     <iframe
                         style={{ width: "100%", minHeight: 500 }}
-                        src="http://workflow-dev.dhwy.cn/#/tower/flowLaunch"
+                        src={`${baseUrl}/#/tower/flowLaunch`}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="已办事宜" key="3">
                     <iframe
                         style={{ width: "100%", minHeight: 500 }}
-                        src="http://workflow-dev.dhwy.cn/#/tower/flowDone"
+                        src={`${baseUrl}/#/tower/flowDone`}
                     />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab="抄送事宜" key="4">
                     <iframe
                         style={{ width: "100%", minHeight: 500 }}
-                        src="http://workflow-dev.dhwy.cn/#/tower/flowCirculate"
+                        src={`${baseUrl}/#/tower/flowCirculate`}
                     />
                 </Tabs.TabPane>
             </Tabs>
