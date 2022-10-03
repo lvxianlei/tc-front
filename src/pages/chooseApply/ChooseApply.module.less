@@ -1,18 +1,25 @@
 .content {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-   .apply {
-        background-color: #FBFBFB;
-        padding: 20px;
-        margin: 10px;
-        box-sizing: border-box;
-        cursor: pointer;
-        transition: .1s;
-        .title, .description {
-            text-align: center;
-            font-size: 14px;
-            color: #000000;
-        }
-    } 
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  .apply {
+    background-color: #fbfbfb;
+    padding: 20px;
+    margin: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.1s;
+    &:hover {
+      transform: scale(1.1);
+      .title{
+        color: #FF8C00;
+      }
+    }
+    .title,
+    .description {
+      text-align: center;
+      font-size: 14px;
+      color: #000000;
+    }
+  }
 }
