@@ -868,36 +868,36 @@
     },
     { // 库存管理-辅材库存
       "name": "辅材库存",
-      "path": "/auxStock/rawMaterialStock",
-      "module": "./pages/auxStock/rawMaterialStock/index",
+      "path": "/auxStock/warehouse",
+      "module": "./pages/auxStock/warehouse/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_list"
     },
     { // 库存管理-辅材入库
       "name": "辅材入库",
-      "path": "/auxStock/rawMaterialWarehousing",
-      "module": "./pages/auxStock/rawMaterialWarehousing/index",
+      "path": "/auxStock/entryWarehouse",
+      "module": "./pages/auxStock/entryWarehouse/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_in_list"
     },
     { // 库存管理-辅材入库-详情
       "name": "辅材入库明细",
-      "path": "/auxStock/rawMaterialWarehousing/detail/:id",
-      "module": "./pages/auxStock/rawMaterialWarehousing/detail/detail",
+      "path": "/auxStock/entryWarehouse/detail/:id",
+      "module": "./pages/auxStock/entryWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_in_info"
     },
     { // 库存管理-辅材出库
       "name": "辅材出库",
-      "path": "/auxStock/rawMaterialExWarehouse",
-      "module": "./pages/auxStock/rawMaterialExWarehouse/index",
+      "path": "/auxStock/outputWarehouse",
+      "module": "./pages/auxStock/outputWarehouse/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_list"
     },
     { // 库存管理-辅材出库-详情
       "name": "辅材出库详情",
-      "path": "/auxStock/rawMaterialExWarehouse/detail/:id",
-      "module": "./pages/auxStock/rawMaterialExWarehouse/detail/detail",
+      "path": "/auxStock/outputWarehouse/detail/:id",
+      "module": "./pages/auxStock/outputWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     },

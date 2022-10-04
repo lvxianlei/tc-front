@@ -31,8 +31,8 @@
             "width": 50
         },
         {
-            "title": "单位-------",
-            "dataIndex": "",
+            "title": "单位",
+            "dataIndex": "unit",
             "width": 50
         },
         {
@@ -108,8 +108,8 @@
             "width": 50
         },
         {
-            "title": "单位-------",
-            "dataIndex": "",
+            "title": "单位",
+            "dataIndex": "unit",
             "width": 50
         },
         {
@@ -133,8 +133,8 @@
             "width": 120
         },
         {
-            "title": "库龄(天)---------",
-            "dataIndex": "----",
+            "title": "库龄(天)",
+            "dataIndex": "storageAge",
             "width": 120
         }
     ]

@@ -21,7 +21,7 @@
             "width": 80
         },
         {
-            "title": "创建人-------",
+            "title": "创建人",
             "dataIndex": "createUserName",
             "width": 80
         },
@@ -74,6 +74,13 @@
             "width": 150
         },
         {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 150
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName",
             "width": 80
@@ -89,8 +96,8 @@
             "width": 120
         },
         {
-            "title": "单位--------",
-            "dataIndex": "--------",
+            "title": "单位",
+            "dataIndex": "unit",
             "width": 120
         },
         {
@@ -129,13 +136,13 @@
             "width": 120
         },
         {
-            "title": "入库类型-------",
-            "dataIndex": "---------",
+            "title": "入库类型",
+            "dataIndex": "warehousingTypeName",
             "width": 120
         },
         {
             "title": "入库人",
-            "dataIndex": "--------",
+            "dataIndex": "createUserName",
             "width": 120
         },
         {

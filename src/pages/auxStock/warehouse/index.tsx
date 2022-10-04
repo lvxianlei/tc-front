@@ -14,7 +14,7 @@ import '../StockPublicStyle.less';
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory()
     const [tabs, setTabs] = useState<1 | 2>(1)
-    const [pagePath, setPagePath] = useState<string>("/tower-storage/materialStock")
+    const [pagePath, setPagePath] = useState<string>("/tower-storage/materialStock/auxiliary")
     const [filterValue, setFilterValue] = useState({})
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -36,12 +36,12 @@ export default function RawMaterialStock(): React.ReactNode {
     const handleRadioChange = (event: any) => {
         if (event.target.value === 1) {
             setTabs(1)
-            setPagePath("/tower-storage/materialStock")
+            setPagePath("/tower-storage/materialStock/auxiliary")
             return
         }
         if (event.target.value === 2) {
             setTabs(2)
-            setPagePath("/tower-storage/outStock")
+            setPagePath("/tower-storage/materialStock/auxiliary/details")
             return
         }
     }
@@ -87,7 +87,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
             <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
             <div style={{ width: "2000px" }}>
-                <Radio.Group defaultValue={1} onChange={handleRadioChange}>
+                <Radio.Group defaultValue={tabs} onChange={handleRadioChange}>
                     <Radio.Button value={1}>出库单列表</Radio.Button>
                     <Radio.Button value={2}>出库明细</Radio.Button>
                 </Radio.Group>
@@ -117,33 +117,9 @@ export default function RawMaterialStock(): React.ReactNode {
                 </Select>
             },
             {
-                name: 'structureTexture',
-                label: '材质',
-                children: <Select style={{ width: "100px" }} defaultValue={""}>
-                    <Select.Option value='' key={'aa'}>全部</Select.Option>
-                    {
-                        materialTextureOptions?.map((item: { id: string, name: string }) => <Select.Option
-                            value={item.name}
-                            key={item.id}>{item.name}</Select.Option>)
-                    }
-                </Select>
-            },
-            {
                 name: 'materialName',
                 label: '品名',
                 children: <Input width={100} maxLength={200} placeholder="请输入品名" />
-            },
-            {
-                name: 'materialStandard',
-                label: '标准',
-                children: <Select style={{ width: "100px" }} defaultValue={""}>
-                    <Select.Option value='' key={'aa'}>全部</Select.Option>
-                    {
-                        materialStandardOptions?.map((item: { id: string, name: string }) => <Select.Option
-                            value={item.id}
-                            key={item.id}>{item.name}</Select.Option>)
-                    }
-                </Select>
             },
             {
                 name: 'classifyId',
@@ -156,16 +132,6 @@ export default function RawMaterialStock(): React.ReactNode {
                             key={item.materialCategoryId}>{item.materialCategoryName}</Select.Option>)
                     }
                 </Select>
-            },
-            {
-                name: 'length',
-                label: '长度',
-                children: <InputNumber />
-            },
-            {
-                name: 'width',
-                label: '宽度',
-                children: <InputNumber />
             },
             {
                 name: 'fuzzyQuery',

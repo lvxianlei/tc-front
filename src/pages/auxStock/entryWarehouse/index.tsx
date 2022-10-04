@@ -4,11 +4,11 @@
  * 时间：2022/01/06
  */
 import React, { useState, useRef } from 'react';
-import { Input, Select, DatePicker, Button, Modal, message } from 'antd';
+import { Input, Select, DatePicker, Button, Modal, message, Radio } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
-import { baseColumn } from "./data.json";
+import { baseColumn, baseDetail } from "./data.json";
 // 引入新增纸质单号
 import PaperOrderModal from './PaperOrderModal';
 import CreatePlan from "./CreatePlan";
@@ -20,6 +20,8 @@ interface EditRefProps {
 export default function RawMaterialWarehousing(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [tabs, setTabs] = useState<1 | 2>(1)
+    const [pagePath, setPagePath] = useState<string>("/tower-storage/warehousingEntry/auxiliary")
     const [id, setId] = useState<string>();
     const addRef = useRef<EditRefProps>();
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
@@ -61,11 +63,24 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         setIsOpenId(false);
     }
 
+    const handleRadioChange = (event: any) => {
+        if (event.target.value === 1) {
+            setTabs(1)
+            setPagePath("/tower-storage/warehousingEntry/auxiliary")
+            return
+        }
+        if (event.target.value === 2) {
+            setTabs(2)
+            setPagePath("/tower-storage/warehousingEntry/auxiliary/detailList")
+            return
+        }
+    }
+
     return (
         <>
             <Page
-                path="/tower-storage/warehousingEntry"
-                exportPath={"/tower-storage/warehousingEntry"}
+                path={pagePath}
+                exportPath={pagePath}
                 columns={[
                     {
                         key: 'index',
@@ -75,7 +90,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...(baseColumn as any),
+                    ...(tabs === 1 ? baseColumn : baseDetail) as any,
                     {
                         title: '操作',
                         dataIndex: 'key',
@@ -93,6 +108,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 extraOperation={
                     <>
                         <Button type='primary' ghost onClick={() => setIsOpenId(true)}>创建</Button>
+                        <div style={{ width: "2000px" }}>
+                            <Radio.Group defaultValue={tabs} onChange={handleRadioChange}>
+                                <Radio.Button value={1}>入库单列表</Radio.Button>
+                                <Radio.Button value={2}>入库明细</Radio.Button>
+                            </Radio.Group>
+                        </div>
                     </>
                 }
                 searchFormItems={[

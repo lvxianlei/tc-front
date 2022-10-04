@@ -60,7 +60,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`)}
+                        onClick={() => history.push(`/auxstock/entryWarehouse/detail/${record.id}`)}
                     >明细</Button>
                     <Button
                         type="link"
