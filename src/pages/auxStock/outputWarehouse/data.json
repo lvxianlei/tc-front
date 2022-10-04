@@ -58,8 +58,8 @@
             "width": 100
         },
         {
-            "title": "单位----",
-            "dataIndex": "num",
+            "title": "单位",
+            "dataIndex": "unit",
             "width": 100
         },
         {

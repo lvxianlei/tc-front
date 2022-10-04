@@ -383,23 +383,23 @@
                 "authority": "tc_erp_sw_stock",
                 "items": [
                     {
-                        "label": "辅材库存",
-                        "path": "/auxStock/rawMaterialStock",
-                        "authority": "tc_erp_sw_stock_material"
-                    },
-                    {
                         "label": "辅材收货单",
                         "path": "/auxStock/receiving",
                         "authority": "tc_erp_sw_stock_material_receive"
                     },
                     {
+                        "label": "辅材库存",
+                        "path": "/auxStock/warehouse",
+                        "authority": "tc_erp_sw_stock_material"
+                    },
+                    {
                         "label": "辅材入库",
-                        "path": "/auxStock/rawMaterialWarehousing",
+                        "path": "/auxStock/entryWarehouse",
                         "authority": "tc_erp_sw_stock_material_in"
                     },
                     {
                         "label": "辅材出库",
-                        "path": "/auxStock/rawMaterialExWarehouse",
+                        "path": "/auxStock/outputWarehouse",
                         "authority": "tc_erp_sw_stock_material_out"
                     }
                 ]
