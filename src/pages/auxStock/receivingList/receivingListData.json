@@ -393,8 +393,8 @@
             "disabled": true
         },
         {
-            "title": "单位----",
-            "dataIndex": "",
+            "title": "单位",
+            "dataIndex": "unit",
             "disabled": true
         },
         {
@@ -471,8 +471,8 @@
             "type": "number"
         },
         {
-            "title": " 单位----",
-            "dataIndex": ""
+            "title": " 单位",
+            "dataIndex": "unit"
         }
     ],
     "Selected": [
@@ -499,8 +499,8 @@
             "type": "number"
         },
         {
-            "title": " 单位----",
-            "dataIndex": ""
+            "title": " 单位",
+            "dataIndex": "unit"
         }
     ],
     "DetailPage": [

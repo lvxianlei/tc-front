@@ -16,11 +16,6 @@
             "width": 50
         },
         {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "width": 50
-        },
-        {
             "title": "规格",
             "dataIndex": "structureSpec",
             "width": 70

@@ -62,9 +62,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryReceiveStock/detail/${id}`)
             setSupplierId(result?.supplierId)
-            setCargoData(result?.lists.map((item: any) => ({
+            setCargoData(result?.auxiliaryReceiveStockDetails.map((item: any) => ({
                 ...item,
                 num: item.num ? item.num : 0
             })) || [])
@@ -87,7 +87,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](
-                `/tower-storage/receiveStock`,
+                `/tower-storage/auxiliaryReceiveStock`,
                 type === "new" ? data : ({ ...data, id })
             )
             resole(result)
@@ -188,7 +188,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...baseFormData,
                 supplierId,
                 supplierName: baseFormData.supplierId.value,
-                lists: editData.map((item: any) => {
+                auxiliaryReceiveStockDetails: editData.map((item: any) => {
                     if ([2, "2"].includes(baseFormData.meteringMode)) {
                         return ({ ...item, ponderationWeight: item.balanceTotalWeight })
                     }

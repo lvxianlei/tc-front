@@ -96,7 +96,7 @@ export default function Detail(props: OverViewProps): JSX.Element {
                     render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 },
                 ...goodsDetail
-            ]} dataSource={userData?.lists || []} />
+            ]} dataSource={userData?.auxiliaryReceiveStockDetails || []} />
         </Modal>
     )
 }

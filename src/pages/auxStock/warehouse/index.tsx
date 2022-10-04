@@ -30,7 +30,13 @@ export default function RawMaterialStock(): React.ReactNode {
     }))
 
     const handleDownload = () => {
-        exportDown(`/tower-storage/materialStock/masterplate/export`)
+        exportDown(
+            `/tower-storage/materialStock/auxiliary/masterplate/export`,
+            "POST",
+            {},
+            undefined,
+            "辅材库存模版"
+        )
     }
 
     const handleRadioChange = (event: any) => {
@@ -63,7 +69,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 accept=".xls,.xlsx"
                 action={() => {
                     const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                    return baseUrl + '/tower-storage/materialStock/masterplate/import'
+                    return baseUrl + '/tower-storage/materialStock/auxiliary/masterplate/import'
                 }}
                 headers={
                     {
