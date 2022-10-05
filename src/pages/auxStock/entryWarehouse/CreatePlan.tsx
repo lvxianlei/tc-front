@@ -43,7 +43,7 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList([...materialList, ...newMaterialList.map((item: any, index: number) => {
             return ({
                 ...item,
-                key: `${item.id}-${index}-${Math.random()}-${new Date().getTime()}`
+                key: `${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
         })])
         setVisible(false)
@@ -52,7 +52,7 @@ export default function CreatePlan(props: any): JSX.Element {
     // 移除
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.key !== id))
-        setPopDataList(materialList.filter((item: any) => item.key !== id))
+        setPopDataList(popDataList.filter((item: any) => item.key !== id))
     }
 
     // 复制
@@ -95,17 +95,6 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您选择原材料明细!");
                 return false;
             }
-            // // 添加对长度以及数量的拦截
-            // let flag = false;
-            // for (let i = 0; i < materialList.length; i += 1) {
-            //     if (!(materialList[i].length && materialList[i].planPurchaseNum && materialList[i].width)) {
-            //         flag = true;
-            //     }
-            // }
-            // if (flag) {
-            //     message.error("请您填写长度、宽度、数量！");
-            //     return false;
-            // }
             saveRun({
                 warehousingEntryDetailList: materialList,
                 ...baseInfo,
@@ -140,7 +129,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/warehousingEntry`, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/warehousingEntry/auxiliary`, data)
             message.success("创建成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
@@ -212,7 +201,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button type='primary' key="clear" ghost onClick={() => message.warning("暂无此功能！")}>导入</Button>
             </div>
             <CommonTable
-                rowKey={"id"}
+                rowKey="key"
                 style={{ padding: "0" }}
                 columns={[
                     {
@@ -248,9 +237,7 @@ export default function CreatePlan(props: any): JSX.Element {
             <Modal width={1100} title={`选择到货明细`} destroyOnClose
                 visible={visible}
                 onOk={handleAddModalOk}
-                onCancel={() => {
-                    setVisible(false);
-                }}
+                onCancel={() => setVisible(false)}
             >
                 <PopTableContent
                     data={{
@@ -262,9 +249,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         records: popDataList,
                         value: ""
                     }}
-                    onChange={(fields: any[]) => {
-                        setMaterialList(fields || [])
-                    }}
+                    onChange={(fields: any[]) => setMaterialList(fields || [])}
                 />
             </Modal>
         </Modal>

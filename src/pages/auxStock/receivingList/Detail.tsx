@@ -23,7 +23,7 @@ export default function Detail(props: OverViewProps): JSX.Element {
 
     const { run: getUser, data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryReceiveStock/detail/${id}`);
             setBaseInfomation(result);
             resole(result)
         } catch (error) {
@@ -33,7 +33,7 @@ export default function Detail(props: OverViewProps): JSX.Element {
 
     // 获取详情数据
     useEffect(() => {
-        getUser(props.id)
+        props.id && getUser(props.id)
     }, [props.id])
 
     return (

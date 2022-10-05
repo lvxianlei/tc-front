@@ -12,11 +12,16 @@
                 }
             ],
             "enum": [
-                { "value": "1", "label": "采购入库" },
-                { "value": "2", "label": "盘点入库" }
+                {
+                    "value": "1",
+                    "label": "采购入库"
+                },
+                {
+                    "value": "2",
+                    "label": "盘点入库"
+                }
             ]
         },
-        
         {
             "title": "供应商",
             "dataIndex": "supplierId",
@@ -87,10 +92,6 @@
     ],
     "material": [
         {
-            "title": "收货批次",
-            "dataIndex": "receiveBatchNumber"
-        },
-        {
             "title": "收货日期",
             "dataIndex": "receiveTime"
         },
@@ -99,52 +100,32 @@
             "dataIndex": "materialName"
         },
         {
-            "title": "标准",
-            "dataIndex": "materialStandardName"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture"
-        },
-        {
             "title": "规格",
             "dataIndex": "structureSpec"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length"
-        },
-        {
-            "title": "宽度",
-            "dataIndex": "width"
         },
         {
             "title": "数量",
             "dataIndex": "num"
         },
         {
-            "title": "理算重量（吨）",
-            "dataIndex": "totalWeight"
-        },
-        {
-            "title": "结算重量（吨）",
-            "dataIndex": "balanceTotalWeight"
+            "title": "单位",
+            "dataIndex": "unit"
         },
         {
             "title": "含税单价（元/吨）",
             "dataIndex": "taxPrice"
         },
         {
-            "title": "含税价格（元）",
-            "dataIndex": "totalTaxPrice"
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxAmount"
         },
         {
             "title": "不含税单价（元/吨）",
-            "dataIndex": "unTaxPrice"
+            "dataIndex": "price"
         },
         {
             "title": "不含税金额（元）",
-            "dataIndex": "totalUnTaxPrice"
+            "dataIndex": "totalAmount"
         },
         {
             "title": "库位",
@@ -153,20 +134,12 @@
         {
             "title": "区位",
             "dataIndex": "location"
-        },
-        {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber"
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber"
         }
     ],
     "addMaterial": {
         "title": "原材料",
         "type": "popTable",
-        "path": "/tower-storage/receiveStock/info/inStock",
+        "path": "/tower-storage/auxiliaryReceiveStock/details",
         "width": 1011,
         "selectType": "checkbox",
         "rowKey": "receiveStockDetailId",
@@ -182,8 +155,8 @@
         ],
         "columns": [
             {
-                "title": "收货批次",
-                "dataIndex": "receiveBatchNumber"
+                "title": "收货单号",
+                "dataIndex": "receiveNumber"
             },
             {
                 "title": "收货日期",
@@ -194,36 +167,16 @@
                 "dataIndex": "materialName"
             },
             {
-                "title": "标准",
-                "dataIndex": "materialStandardName"
-            },
-            {
-                "title": "材质",
-                "dataIndex": "structureTexture"
-            },
-            {
                 "title": "规格",
                 "dataIndex": "structureSpec"
-            },
-            {
-                "title": "长度",
-                "dataIndex": "length"
-            },
-            {
-                "title": "宽度",
-                "dataIndex": "width"
             },
             {
                 "title": "数量",
                 "dataIndex": "num"
             },
             {
-                "title": "理算重量",
-                "dataIndex": "totalWeight"
-            },
-            {
-                "title": "结算重量",
-                "dataIndex": "balanceTotalWeight"
+                "title": "单位",
+                "dataIndex": "unit"
             },
             {
                 "title": "含税单价（元/吨）",
@@ -231,23 +184,23 @@
             },
             {
                 "title": "含税金额（元）",
-                "dataIndex": "totalTaxPrice"
+                "dataIndex": "totalTaxAmount"
             },
             {
                 "title": "不含税单价（元/吨）",
-                "dataIndex": "unTaxPrice"
+                "dataIndex": "price"
             },
             {
                 "title": "不含税金额（元）",
-                "dataIndex": "totalUnTaxPrice"
+                "dataIndex": "totalAmount"
             },
             {
                 "title": "不含税运费（元）",
-                "dataIndex": "unTransportTaxPrice"
+                "dataIndex": "totalTransportPrice"
             },
             {
                 "title": "不含税装卸费（元）",
-                "dataIndex": "unUnloadTaxPrice"
+                "dataIndex": "totalUnloadPrice"
             },
             {
                 "title": "库位",
@@ -256,14 +209,6 @@
             {
                 "title": "区位",
                 "dataIndex": "location"
-            },
-            {
-                "title": "炉批号",
-                "dataIndex": "furnaceBatchNumber"
-            },
-            {
-                "title": "质保书号",
-                "dataIndex": "warrantyNumber"
             }
         ]
     }

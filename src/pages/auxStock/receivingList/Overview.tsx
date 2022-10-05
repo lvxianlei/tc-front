@@ -18,7 +18,7 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     const [reservoirId, setReservoirId] = useState<string>()
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${receiveStockId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryReceiveStock/detail/${receiveStockId}`)
             const warehouseData: any[] = type === 1 ? await RequestUtil.get(`/tower-storage/warehouse/tree`, { id: result.warehouseId, type: 1 }) : []
             resole({
                 warehouseName: result.warehouseName,
@@ -40,39 +40,20 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
             reject(error)
         }
     }), { ready: !!reservoirId, refreshDeps: [reservoirId] })
-    //质保单-质检单
-    /** 
-    * const { run: saveRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-    *    try {
-    *        // 对上传数据进行处理
-    *       const fieldIds: any = [],
-    *        source = attachRef.current.getDataSource();
-    *       if (source.length < 1) {
-                 message.error("请您先上传附件！");
-                 return false;
-             }
-             source.map((item: any) => fieldIds.push(item.id));
-             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
-                 attachType: type,
-                 id,
-                 fieldIds
-             })
-             resole(result?.attachInfoDtos || [])
-         } catch (error) {
-             reject(error)
-         }
-     }), { manual: true })
-      */
 
     // 批量收货 / 收货
     const { run } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
             const params = await form.validateFields()
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/batchSaveReceiveStock`, ids.map((item: string) => ({
-                id: item,
-                warehouseId: data.warehouseId,
-                ...params
-            })))
+            const result: { [key: string]: any } = await RequestUtil.put(
+                `/tower-storage/auxiliaryReceiveStock/receive`,
+                {
+                    ...params,
+                    warehouseId: data?.warehouseId,
+                    receiveStockId,
+                    receiveDetailIds: ids
+                }
+            )
             resole(true)
         } catch (error) {
             reject(false)
@@ -84,9 +65,9 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     const { run: refuseRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const params = await form.validateFields()
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/refuse`, {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/auxiliaryReceiveStock/rejection`, {
                 id: ids[0],
-                receiveStatus: 2,
+                receiveStockId,
                 ...params
             })
             resole(result)
@@ -151,11 +132,8 @@ export default function Overview() {
     // 统计数量
     const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
-                receiveStockId: params.id,
-                startStatusUpdateTime: filterValue["startStatusUpdateTime"] || "",
-                endStatusUpdateTime: filterValue["endStatusUpdateTime"] || "",
-                receiveDetailStatus: filterValue["receiveDetailStatus"] || ""
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryReceiveStock/detailList/summary`, {
+                receiveStockId: params.id
             })
             resole(result)
         } catch (error) {
@@ -209,33 +187,19 @@ export default function Overview() {
                 setReceiveStockId("")
                 setVisible(false)
             }}>
-            <ReceiveStrokAttach type={attchType} ids={detailId} receiveStockId={receiveStockId} ref={receiveRef} />
+            <ReceiveStrokAttach
+                type={attchType}
+                ids={detailId}
+                receiveStockId={receiveStockId || params.id}
+                ref={receiveRef} />
         </Modal>
         <Page
-            path="/tower-storage/receiveStock/detail"
-            exportPath={"/tower-storage/receiveStock/detail"}
+            path="/tower-storage/auxiliaryReceiveStock/detailList"
+            exportPath={"/tower-storage/auxiliaryReceiveStock/detailList"}
             exportObject={{ receiveStockId: params.id }}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            searchFormItems={[
-                // {
-                //     name: 'startStatusUpdateTime',
-                //     label: "最新状态变更时间",
-                //     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                // },
-                // {
-                //     name: 'receiveDetailStatus',
-                //     label: '采购状态',
-                //     children: <Form.Item name="receiveDetailStatus">
-                //         <Select defaultValue="全部" style={{ width: 150 }}>
-                //             <Select.Option value="">全部</Select.Option>
-                //             <Select.Option value={0}>待收货</Select.Option>
-                //             <Select.Option value={1}>已收货</Select.Option>
-                //             <Select.Option value={2}>已拒绝</Select.Option>
-                //         </Select>
-                //     </Form.Item>
-                // }
-            ]}
+            searchFormItems={[]}
             extraOperation={<>
                 <Button type="primary"
                     ghost
@@ -246,13 +210,29 @@ export default function Overview() {
                         setVisible(true)
                     }}
                 >批量收货</Button>
-                <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} >申请质检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
-                    已收货：重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}</span>
-                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}</span>
-                    待收货：重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight === -1 ? 0 : userData?.waitWeight}</span>
-                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}</span>
+                    已收货：数量(吨)合计：<span
+                        style={{
+                            color: "#FF8C00",
+                            marginRight: 12
+                        }}>
+                        {userData?.receiveNum === -1 ? 0 : userData?.receiveNum}</span>
+                    含税金额(元)合计：<span
+                        style={{
+                            color: "#FF8C00",
+                            marginRight: 12
+                        }}>{userData?.receiveTotalTaxAmount === -1 ? 0 : userData?.receiveTotalTaxAmount}</span>
+                    待收货：重量(吨)合计：<span
+                        style={{
+                            color: "#FF8C00",
+                            marginRight: 12
+                        }}> {userData?.waitReceiveNum === -1 ? 0 : userData?.waitReceiveNum}</span>
+                    含税金额(元)合计：<span
+                        style={{
+                            color: "#FF8C00",
+                            marginRight: 12
+                        }}>{userData?.waitReceiveTotalTaxAmount === -1 ? 0 : userData?.waitReceiveTotalTaxAmount}</span>
                 </span>
             </>}
             tableProps={{

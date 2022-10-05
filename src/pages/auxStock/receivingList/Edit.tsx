@@ -97,49 +97,24 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }), { manual: true })
 
     const handleModalOk = () => {
-        const meteringMode = form.getFieldValue("meteringMode")
-        const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
-        // 所有明细理算重量总和
-        const allTotalWeight = modalRef.current?.dataSource.reduce((total, item) =>
-            (parseFloat(total) + parseFloat(calcObj.totalWeight({
-                length: item.length,
-                width: item.width,
-                weightAlgorithm: item.weightAlgorithm,
-                proportion: item.proportion,
-                num: item.num
-            }))).toFixed(4), 0)
-
+        console.log(modalRef.current?.dataSource)
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
-            const weight = calcObj.weight({
-                length: item.length,
-                width: item.width,
-                weightAlgorithm: item.weightAlgorithm,
-                proportion: item.proportion
-            })
-
-            // 结算重量
-            const balanceTotalWeight = calcObj.balanceTotalWeight(
-                meteringMode,
-                weight,
-                item.num,
-                totalPonderationWeight,
-                allTotalWeight)
             // 含税金额
-            const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight)
+            const totalTaxAmount = calcObj.totalTaxPrice(item.taxPrice, item.num)
             // 不含税金额
-            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
+            const totalAmount = calcObj.totalTaxPrice(item.price, item.num)
             // 含税运费
-            const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight)
+            const totalTransportTaxPrice = calcObj.totalTaxPrice(item.transportTaxPrice, item.num)
             // 不含税运费
-            const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport)
+            const totalTransportPrice = calcObj.totalTaxPrice(item.transportPrice, item.num)
             // 含税装卸费
-            const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight)
+            const totalUnloadTaxPrice = calcObj.totalTaxPrice(item.unloadTaxPrice, item.num)
             // 不含税装卸费
-            const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
+            const totalUnloadPrice = calcObj.totalTaxPrice(item.unloadPrice, item.num)
 
             const postData = {
                 ...item,
-                materialContractDetailId: item.id,
+                materialContractDetailId: item.materialContractDetailId,
                 materialName: item.materialName,
                 materialStandard: item.materialStandard,
                 // materialStandardName: item.materialStandardName,
@@ -148,24 +123,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 taxPrice: item.taxPrice,
                 /** 不含税单价 */
                 unTaxPrice: item.price,
-                /** 理算重量 */
-                weight: calcObj.weight({
-                    length: item.length,
-                    width: item.width,
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                }),
-                /** 理算总重量 */
-                totalWeight: calcObj.totalWeight({
-                    length: item.length,
-                    width: item.width,
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    num: item.num
-                }),
-                balanceTotalWeight,
-                totalTaxPrice,
-                totalUnTaxPrice,
+                totalTaxAmount,
+                totalAmount,
                 appearance: item.appearance || 1,
                 totalTransportTaxPrice,
                 totalTransportPrice,
@@ -188,12 +147,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...baseFormData,
                 supplierId,
                 supplierName: baseFormData.supplierId.value,
-                auxiliaryReceiveStockDetails: editData.map((item: any) => {
-                    if ([2, "2"].includes(baseFormData.meteringMode)) {
-                        return ({ ...item, ponderationWeight: item.balanceTotalWeight })
-                    }
-                    return item
-                }),
+                auxiliaryReceiveStockDetails: editData,
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
@@ -223,63 +177,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contactsPhone: supplierData.contactManTel
             })
             setCargoData([])
-        }
-        if (fields.meteringMode || fields.totalPonderationWeight) {
-            const meteringMode = form.getFieldValue("meteringMode")
-            const totalPonderationWeight = fields.totalPonderationWeight || form.getFieldValue("totalPonderationWeight") || "0"
-            const editData = editForm.getFieldsValue(true).submit
-            // 所有明细理算重量总和
-            const allTotalWeight = editData?.reduce((total: any, item: any) =>
-                (parseFloat(total) + parseFloat(calcObj.totalWeight({
-                    length: item.length,
-                    width: item.width,
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    num: item.num
-                }))).toFixed(4), 0)
-            const dataSource: any[] = editData?.map((item: any, index: number) => {
-                // 结算重量
-                const balanceTotalWeight = calcObj.balanceTotalWeight(
-                    meteringMode,
-                    calcObj.weight({
-                        length: item.length,
-                        width: item.width,
-                        weightAlgorithm: item.weightAlgorithm,
-                        proportion: item.proportion
-                    }),
-                    item.num,
-                    totalPonderationWeight,
-                    allTotalWeight
-                )
-
-                // 含税金额
-                const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight)
-                // 不含税金额
-                const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
-                // 含税运费
-                const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight)
-                // 不含税运费
-                const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport)
-                // 含税装卸费
-                const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight)
-                // 不含税装卸费
-                const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
-
-                const postData = {
-                    ...item,
-                    ...cargoData[index],
-
-                    totalTaxPrice,
-                    totalUnTaxPrice,
-                    balanceTotalWeight,
-                    totalTransportTaxPrice,
-                    totalTransportPrice,
-                    totalUnloadTaxPrice,
-                    totalUnloadPrice
-                }
-                return postData
-            })
-            setCargoData(dataSource || [])
         }
     }
 
@@ -457,7 +354,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         />
         <Space style={{ color: "red" }}>
             <div><span>数量合计：</span><span>{total.count || "0"}</span></div>
-            <div><span>重量合计(吨)：</span><span>{total.weight || "0"}</span></div>
             <div><span>含税金额合计(元)：</span><span>{total.taxPrice || "0"}</span></div>
             <div><span>不含税金额合计(元)：</span><span>{total.unTaxPrice || "0"}</span></div>
         </Space>

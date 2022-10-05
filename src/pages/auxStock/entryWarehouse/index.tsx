@@ -98,7 +98,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
-                                <Link className='btn-operation-link' to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>明细</Link>
+                                <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
                             </>
                         )
                     }

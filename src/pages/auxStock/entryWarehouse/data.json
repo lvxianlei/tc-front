@@ -2,12 +2,12 @@
     "baseColumn": [
         {
             "title": "入库单号",
-            "dataIndex": "receiveNumber",
+            "dataIndex": "warehousingEntryNumber",
             "width": 150
         },
         {
             "title": "结算方式",
-            "dataIndex": "settlementModeName",
+            "dataIndex": "warehousingTypeName",
             "width": 80
         },
         {
@@ -27,13 +27,16 @@
         },
         {
             "title": "创建日期",
-            "dataIndex": "warehousingTime",
+            "dataIndex": "createTime",
+            "type":"date",
+            "format": "YYYY-MM-DD",
             "width": 80
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
+            "dataIndex": "statusUpdateTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "width": 150
         },
         {
@@ -70,7 +73,7 @@
     "baseDetail": [
         {
             "title": "入库单号",
-            "dataIndex": "receiveNumber",
+            "dataIndex": "warehousingEntryNumber",
             "width": 150
         },
         {
@@ -112,12 +115,12 @@
         },
         {
             "title": "不含税单价（元/吨）",
-            "dataIndex": "unTaxPrice",
+            "dataIndex": "price",
             "width": 160
         },
         {
             "title": "不含税金额（元）",
-            "dataIndex": "totalUnTaxPrice",
+            "dataIndex": "totalPrice",
             "width": 160
         },
         {

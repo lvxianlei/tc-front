@@ -32,17 +32,17 @@
         },
         {
             "title": "辅材含税金额合计（元）",
-            "dataIndex": "price",
+            "dataIndex": "totalTaxAmount",
             "width": 160
         },
         {
             "title": "运费含税金额合计（元）",
-            "dataIndex": "transportPriceCount",
+            "dataIndex": "transportTaxTotalAmount",
             "width": 150
         },
         {
             "title": "装卸费含税金额合计（元）",
-            "dataIndex": "unloadPriceCount",
+            "dataIndex": "unloadTaxTotalAmount",
             "width": 160
         },
         {
@@ -52,8 +52,9 @@
         },
         {
             "title": "最新状态变更时间",
-            "dataIndex": "completionTime",
+            "dataIndex": "statusUpdateTime",
             "type": "date",
+            "format": "YYYY-MM-DD",
             "width": 150
         },
         {
@@ -244,31 +245,9 @@
             "type": "string"
         },
         {
-            "title": "标准",
-            "dataIndex": "materialStandardName",
-            "width": 80
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "width": 80
-        },
-        {
             "title": "规格",
             "dataIndex": "structureSpec",
             "width": 80
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number",
-            "width": 80
-        },
-        {
-            "title": "宽度（mm）",
-            "dataIndex": "width",
-            "type": "number",
-            "width": 100
         },
         {
             "title": "数量",
@@ -277,19 +256,16 @@
             "width": 40
         },
         {
-            "title": "理算重量（吨）",
-            "dataIndex": "totalWeight",
-            "width": 100
+            "title": "单位",
+            "dataIndex": "unit",
+            "width": 40,
+            "disabled": true
         },
         {
-            "title": "过磅重量（吨）",
-            "dataIndex": "ponderationWeight",
-            "width": 100
-        },
-        {
-            "title": "结算重量",
-            "dataIndex": "balanceTotalWeight",
-            "width": 100
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30,
+            "width": 80
         },
         {
             "title": "含税单价（元/吨）",
@@ -298,17 +274,17 @@
         },
         {
             "title": "含税金额（元）",
-            "dataIndex": "totalTaxPrice",
+            "dataIndex": "totalTaxAmount",
             "width": 100
         },
         {
             "title": "不含税单价（元/吨）",
-            "dataIndex": "unTaxPrice",
+            "dataIndex": "price",
             "width": 130
         },
         {
             "title": "不含税金额（元）",
-            "dataIndex": "totalUnTaxPrice",
+            "dataIndex": "totalAmount",
             "width": 120
         },
         {
@@ -330,41 +306,6 @@
             "title": "不含税装卸费（元）",
             "dataIndex": "totalUnloadPrice",
             "width": 140
-        },
-        {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber",
-            "width": 100
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber",
-            "width": 100
-        },
-        {
-            "title": "轧制批号",
-            "dataIndex": "rollingNumber",
-            "width": 100
-        },
-        {
-            "title": "肢宽",
-            "dataIndex": "limbWidth",
-            "width": 50
-        },
-        {
-            "title": "厚度",
-            "dataIndex": "thickness",
-            "width": 50
-        },
-        {
-            "title": "管径",
-            "dataIndex": "caliber",
-            "width": 50
-        },
-        {
-            "title": "外观检验结果",
-            "dataIndex": "appearanceName",
-            "width": 130
         }
     ],
     "editCargoDetails": [
@@ -403,8 +344,8 @@
             "maxLength": 30
         },
         {
-            "title": "税率----",
-            "dataIndex": "",
+            "title": "税率",
+            "dataIndex": "tax",
             "disabled": true
         },
         {
@@ -414,7 +355,7 @@
         },
         {
             "title": "含税金额（元）",
-            "dataIndex": "totalTaxPrice",
+            "dataIndex": "totalTaxAmount",
             "disabled": true
         },
         {
@@ -424,7 +365,7 @@
         },
         {
             "title": "不含税金额（元）",
-            "dataIndex": "totalUnTaxPrice",
+            "dataIndex": "totalAmount",
             "disabled": true
         },
         {

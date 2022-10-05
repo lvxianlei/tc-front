@@ -29,7 +29,7 @@ export default function Invoicing() {
 
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/receiveStock?receiveStockById=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/auxiliaryReceiveStock/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -130,7 +130,7 @@ export default function Invoicing() {
                 width: 200,
                 render: (_: any, record: any) => {
                     return <>
-                        <Link className="btn-operation-link" to={`/stock/receiving/detail/${record.id}`}>明细</Link>
+                        <Link className="btn-operation-link" to={`/auxStock/receiving/detail/${record.id}`}>明细</Link>
                         <Button
                             type="link"
                             className="btn-operation-link"
@@ -140,10 +140,12 @@ export default function Invoicing() {
                                 setType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
-                        <Button type="link" className="btn-operation-link" onClick={() => {
-                            setVisibleSee(true);
-                            setDetailId(record.id);
-                        }}>详情</Button>
+                        <Button type="link"
+                            className="btn-operation-link"
+                            onClick={() => {
+                                setVisibleSee(true);
+                                setDetailId(record.id);
+                            }}>详情</Button>
                         <Popconfirm
                             title="确定删除此收货单信息吗？"
                             onConfirm={async () => {

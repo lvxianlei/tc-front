@@ -28,15 +28,14 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
-                `/tower-storage/auxiliaryReceiveStock/details?supplier=${id}`,
-                { ...params })
-            setSelectList(result?.records?.map((item: any) => ({
+                `/tower-supply/materialAuxiliaryContract/details`,
+                { supplierId: id, ...params })
+            setSelectList(result?.map((item: any) => ({
                 ...item,
                 num: item.surplusNum,
-                id: item.id,
-                materialContractDetailId: item.id
+                id: item.materialContractDetailId
             })).filter((item: any) => item.num))
-            resole(result?.records)
+            resole(result)
         } catch (error) {
             reject(error)
         }
