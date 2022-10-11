@@ -7,7 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil';
 import { unloadModeOptions, settlementModeOptions } from "../../../configuration/DictionaryOptions"
 import { BaseInfo, DetailTitle, CommonTable } from '../../common';
-import { baseInfo, freightInfo, handlingChargesInfo, goodsDetail } from './Detail.json';
+import { baseInfo, goodsDetail } from './Detail.json';
 interface OverViewProps {
     visible?: boolean
     acceptStatus?: number
@@ -71,20 +71,6 @@ export default function Detail(props: OverViewProps): JSX.Element {
                             return item
                     }
                 })}
-            />
-            <DetailTitle title="运费信息" />
-            <BaseInfo
-                form={addCollectionForm}
-                dataSource={baseInfomation}
-                col={3}
-                columns={[...freightInfo]}
-            />
-            <DetailTitle title="装卸费信息" />
-            <BaseInfo
-                form={addCollectionForm}
-                dataSource={baseInfomation}
-                col={3}
-                columns={[...handlingChargesInfo]}
             />
             <DetailTitle title="货物明细" />
             <CommonTable columns={[
