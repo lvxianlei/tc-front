@@ -68,7 +68,7 @@
         },
         {
             "title": "领料仓库",
-            "dataIndex": "wareHouseId",
+            "dataIndex": "warehouseId",
             "type": "select",
             "rules": [
                 {

@@ -288,6 +288,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     const [filterValue, setFilterValue] = useState<any>({
         id: params.id,
+        materialType: 2
     });
 
     // 获取统计的数据
@@ -322,35 +323,35 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }), { manual: true })
 
-    // 用友格式导出
-    const { run: exportRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(
-                `/tower-storage/outStock/export/${params.id}`,
-                {},
-                {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                    'Tenant-Id': AuthUtil.getTenantId(),
-                    'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
-                    isExport: 'true',
-                }
-            )
-            const data = await result.blob()
-            var blob = new Blob([data]);
-            var reader = new FileReader();
-            reader.readAsDataURL(blob);
-            reader.onload = function (e) {
-                var a = document.createElement('a');
-                a.download = `出库明细-${params.id}` + '.xlsx';
-                a.href = URL.createObjectURL(blob);
-                a.click();
-            }
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
+    // // 用友格式导出
+    // const { run: exportRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result: { [key: string]: any } = await RequestUtil.get(
+    //             `/tower-storage/outStock/export/${params.id}`,
+    //             {},
+    //             {
+    //                 'Content-Type': 'application/x-www-form-urlencoded',
+    //                 'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+    //                 'Tenant-Id': AuthUtil.getTenantId(),
+    //                 'Sinzetech-Auth': AuthUtil.getSinzetechAuth(),
+    //                 isExport: 'true',
+    //             }
+    //         )
+    //         const data = await result.blob()
+    //         var blob = new Blob([data]);
+    //         var reader = new FileReader();
+    //         reader.readAsDataURL(blob);
+    //         reader.onload = function (e) {
+    //             var a = document.createElement('a');
+    //             a.download = `出库明细-${params.id}` + '.xlsx';
+    //             a.href = URL.createObjectURL(blob);
+    //             a.click();
+    //         }
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { manual: true })
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
@@ -490,7 +491,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 exportFileName="原材料出库明细"
                 extraOperation={(data: any) => {
                     return <>
-                        <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
+                        {/* <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button> */}
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>
                             总重量： {weightData?.weightCount || "0.00"} 吨
