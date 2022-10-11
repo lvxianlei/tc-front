@@ -169,8 +169,8 @@ const Hbreadcrumb = memo(({ isOpend, onClick }: { isOpend: boolean, onClick: (op
 export default function (): JSX.Element {
     const history = useHistory()
     const location = useLocation()
-    const authorities = useAuthorities()
-    const dictionary = useDictionary()
+    useAuthorities()
+    useDictionary()
     const [isOpend, setIsOpend] = useState<boolean>(false)
 
     const { run: tenantRun } = useRequest<any>((tenantId: string) => new Promise(async (resole, reject) => {
