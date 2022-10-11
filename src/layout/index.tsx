@@ -7,7 +7,7 @@ import ctxConfig from "../app-ctx.config.jsonc"
 import ctxRouter from "../app-router.config.jsonc"
 import apps from "../app-name.config.jsonc"
 import ChooseApplay from "../pages/chooseApply/ChooseApply"
-import { useDictionary, hasAuthority } from "../hooks"
+import { useDictionary, hasAuthority, useAuthorities } from "../hooks"
 import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
@@ -153,8 +153,8 @@ export default function (): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const history = useHistory()
     const location = useLocation()
-    // const authorities = useAuthorities()
-    const authorities = ApplicationContext.get().authorities
+    const authorities = useAuthorities()
+    // const authorities = ApplicationContext.get().authorities
     const dictionary = useDictionary()
     const [isOpend, setIsOpend] = useState<boolean>(false)
     const logOut = () => {
