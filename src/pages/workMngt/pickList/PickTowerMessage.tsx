@@ -47,6 +47,10 @@ export default function Lofting(): React.ReactNode {
     const [detail, setDetail] = useState<any>([]);
     const [detailTop, setDetailTop] = useState<any>({});
     const [form] = Form.useForm();
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [rowChangeList, setRowChangeList] = useState<number[]>([]);
+
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         // const userData: any = await RequestUtil.get(`/tower-system/employee?current=1&size=1000`);
@@ -223,17 +227,6 @@ export default function Lofting(): React.ReactNode {
                 </Form.Item>
             )
         },
-        //             key: 'materialLeaderName',
-        //             title: '提料人',
-        //             width: 100,
-        //             dataIndex: 'materialLeaderName'
-        //         },
-        //         {
-        //             key: 'materialCheckLeaderName',
-        //             title: '校核人',
-        //             width: 100,
-        //             dataIndex: 'materialCheckLeaderName'
-        //         },
         {
             title: '提料人',
             dataIndex: 'materialLeaderName',
@@ -307,16 +300,7 @@ export default function Lofting(): React.ReactNode {
             width: 200,
             dataIndex: 'updateStatusTime'
         },
-
     ];
-    const checkColor = (record: Record<string, any>, dataIndex: string) => {
-        // const red: number = record.indexOf(dataIndex);
-        // if (red !== -1) {
-        //     return 'red';
-        // } else {
-        return 'normal'
-        // }
-    }
 
     const columnsSetting: Column[] = columns.map((col: any) => {
         if (!col.editable) {
@@ -327,41 +311,17 @@ export default function Lofting(): React.ReactNode {
                 ...col,
             }
         } else {
-            if (['basicsPartNum', 'length', 'width', 'basicsTheoryWeight', 'basicsWeight', 'totalWeight'].includes(col.dataIndex as string)) {
-                if (col.dataIndex === 'totalWeight') {
-                    return {
-                        ...col,
-                        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : ''}>{parseFloat(`${(record.basicsWeight && record.basicsWeight !== -1 ? record.basicsWeight : 0) * (record.basicsPartNum && record.basicsPartNum !== -1 ? record.basicsPartNum : 0)}`).toFixed(2)}</p>
-                        )
-                    }
-                } else if (col.dataIndex === 'length') {
-                    return {
-                        ...col,
-                        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : ''}>{_ === -1 ? 0 : _}</p>
-                        )
-                    }
-                } else {
-                    return {
-                        ...col,
-                        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : ''}>{_ === -1 ? 0 : _}</p>
-                        )
-                    }
-                }
-            }
-            else return {
+            return {
                 ...col,
                 render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                    <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : ''}>{_ === -1 ? 0 : _}</p>
+                    <p className={styles.normal}>{_ === -1 ? 0 : _}</p>
                 )
             }
         }
     })
+
     const [tableColumns, setColumns] = useState(columnsSetting);
     const onFilterSubmit = (value: any) => {
-        // return value
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
@@ -379,7 +339,64 @@ export default function Lofting(): React.ReactNode {
         setRowChangeList([...rowChangeList]);
     }
 
-    const [rowChangeList, setRowChangeList] = useState<number[]>([]);
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
+
+    const batchPick = async () => {
+        if (selectedKeys.length > 0) {
+            const tip: boolean[] = []
+            selectedRows.forEach((res: any) => {
+                if (res.status !== 1) {
+                    tip.push(false)
+                } else {
+                    tip.push(true)
+                }
+            })
+            if (tip.findIndex(value => value === false) !== -1) {
+                message.warning('仅提料中状态可进行完成提料！')
+            } else {
+                await RequestUtil.post(``).then(() => {
+                    message.success('完成提料成功！')
+                }).then(() => {
+                    history.go(0);
+                    setSelectedKeys([]);
+                    setSelectedRows([]);
+                })
+            }
+        } else {
+            message.warning('请选择需要完成提料的数据！')
+        }
+    }
+
+    const batchCheck = async () => {
+        if (selectedKeys.length > 0) {
+            const tip: boolean[] = []
+            selectedRows.forEach((res: any) => {
+                if (res.status !== 2) {
+                    tip.push(false)
+                } else {
+                    tip.push(true)
+                }
+            })
+            if (tip.findIndex(value => value === false) !== -1) {
+                message.warning('仅校核中状态可进行完成校核！')
+            } else {
+                await RequestUtil.post(``).then(() => {
+                    message.success('完成校核成功！')
+                }).then(() => {
+                    history.go(0);
+                    setSelectedKeys([]);
+                    setSelectedRows([]);
+                })
+            }
+        } else {
+            message.warning('请选择需要完成校核的数据！')
+        }
+
+    }
+
     return <>
         <Modal title='段模式' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
             {detail ? <Form initialValues={{ detailData: detail }} autoComplete="off" form={form}>
@@ -478,42 +495,13 @@ export default function Lofting(): React.ReactNode {
             className={styles.descripForm}
         >
             <Page
-                // columns={[...tableColumns as any, {
-                //     key: 'operation',
-                //     title: '操作',
-                //     dataIndex: 'operation',
-                //     fixed: 'right' as FixedType,
-                //     width: 100,
-                //     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                //         <div className={styles.operationBtn}>
-                //             <Popconfirm
-                //                 title="确认删除?"
-                //                 onConfirm={async () => await RequestUtil.delete(`/tower-science/drawProductStructure?ids=${record.id}`).then(() => {
-                //                     message.success('删除成功！');
-                //                     setRefresh(!refresh);
-                //                 })}
-                //                 okText="提交"
-                //                 cancelText="取消"
-                //                 disabled={editorLock === '锁定'}
-                //             >
-                //                 <Button type="link" disabled={editorLock === '锁定'}>删除</Button>
-                //             </Popconfirm>
-                //         </div>
-                //     )
-                // }]}
-                // filterValue={filterValue}
-                // refresh={refresh}
-                // pagination={false}
-                // tableProps={{
-                //     rowSelection: {
-                //         selectedRowKeys: selectedKeys,
-                //         onChange: SelectChange
-                //     }
-                // }}
                 path={`/tower-science/drawProductSegment`}
-                // columns={columns}
                 tableProps={{
-                    pagination: false
+                    pagination: false,
+                    rowSelection: {
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange
+                    }
                 }}
                 columns={[...tableColumns as any, {
                     key: 'operation',
@@ -589,12 +577,13 @@ export default function Lofting(): React.ReactNode {
                     )
                 }]}
                 refresh={refresh}
-                // onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 requestData={{ productCategory: params.id }}
                 exportPath="/tower-science/drawProductSegment"
                 extraOperation={
                     <Space>
+                        <Button type='primary' onClick={batchPick} ghost>完成提料</Button>
+                        <Button type='primary' onClick={batchCheck} ghost>完成校核</Button>
                         <Button type="primary" ghost onClick={async () => {
                             if (editorLock === '编辑') {
                                 setColumns(columns);
@@ -638,20 +627,26 @@ export default function Lofting(): React.ReactNode {
                                 () => history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
                             } disabled={params.status === '1'}>提料</Button>
                             : null}
-                        {(materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ? <Popconfirm
-                            title="确认提交?"
-                            onConfirm={async () => {
-                                await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(() => {
-                                    message.success('提交成功！')
-                                }).then(() => {
-                                    history.push('/workMngt/pickList');
-                                })
-                            }}
-                            okText="确认"
-                            cancelText="取消"
-                        >
-                            <Button type="primary" ghost>提交</Button>
-                        </Popconfirm> : null}
+                        {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
+                        {
+                            (materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1)
+                                ?
+                                <Popconfirm
+                                    title="确认提交?"
+                                    onConfirm={async () => {
+                                        await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(() => {
+                                            message.success('提交成功！')
+                                        }).then(() => {
+                                            history.push('/workMngt/pickList');
+                                        })
+                                    }}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button type="primary" ghost>提交</Button>
+                                </Popconfirm>
+                                : null
+                        }
                         {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
                         <span>塔型：{detailTop?.productCategoryName}</span>
