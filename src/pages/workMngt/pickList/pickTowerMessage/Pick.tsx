@@ -449,7 +449,7 @@ export default function Lofting(): React.ReactNode {
         try {
             await editRef.current?.onSubmit();
             message.success('段明细复制成功！');
-            setVisible(false);
+            setCopyVisible(false);
             history.go(0);
             resove(true);
             editRef.current?.resetFields();
@@ -466,7 +466,7 @@ export default function Lofting(): React.ReactNode {
         onOk={handleModalOk}
         className={styles.tryAssemble}
         onCancel={() => {
-            setVisible(false);
+            setCopyVisible(false);
             editRef.current?.resetFields();
         }}>
         <PeriodCopy id={''} ref={editRef} />
