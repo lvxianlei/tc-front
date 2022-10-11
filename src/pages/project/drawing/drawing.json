@@ -97,7 +97,8 @@
                 },
                 {
                     "title": "合同名称",
-                    "dataIndex": "contractName"
+                    "dataIndex": "contractName",
+                    "search": true
                 },
                 {
                     "title": "业主单位",

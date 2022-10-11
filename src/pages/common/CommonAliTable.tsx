@@ -131,6 +131,7 @@ export default function CommonAliTable({ columns, dataSource = [], rowKey, haveI
         checkboxColumn: { width: 40, lock: true, align: "left", ...props?.rowSelection?.checkboxColumn }
     }));
     pipeline.use(features.autoRowSpan());
+    pipeline.use(features.sort({ mode: 'single', highlightColumnWhenActive: true }));
     return <nav className={styles.componentsTable} style={{ paddingBottom: props.code && props.code === 1 ? "0px" : "88px" }}>
         <AliTable
             size="small"
