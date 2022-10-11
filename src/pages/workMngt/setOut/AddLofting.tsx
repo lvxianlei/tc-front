@@ -238,7 +238,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'groove',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "groove"]} initialValue={_}>
-                    <InputNumber min={1} max={1} size="small" />
+                    <InputNumber min={0} max={999999} size="small" />
                 </Form.Item>
             )
         },
@@ -274,7 +274,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'bend',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "bend"]} initialValue={_}>
-                    <InputNumber size="small" min={1} max={1} />
+                    <InputNumber size="small" min={0} max={999999} />
                 </Form.Item>
             )
         },

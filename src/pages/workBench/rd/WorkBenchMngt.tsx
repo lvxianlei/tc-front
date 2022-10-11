@@ -7,7 +7,7 @@ import { CommonTable, DetailTitle } from '../../common';
 import Line from './Line';
 import { CheckCircleOutlined, RightOutlined, SoundOutlined, DoubleRightOutlined } from '@ant-design/icons';
 import useRequest from '@ahooksjs/use-request';
-import { Spin, Table , Image} from 'antd';
+import { Spin, Table, Image } from 'antd';
 import AuthUtil from '../../../utils/AuthUtil';
 import ApplicationContext from '../../../configuration/ApplicationContext';
 import { Link } from 'react-router-dom';
@@ -32,6 +32,7 @@ interface IList {
 	readonly createUserId?: string;
 	readonly authority?: string;
 	readonly weldingUserId?: string;
+	readonly url?: string;
 }
 
 export interface IResponseData {
@@ -46,6 +47,7 @@ export interface IResponseData {
 export default function WorkBenchMngt(): React.ReactNode {
 	const userId = AuthUtil.getUserInfo().user_id();
 	const authorities = ApplicationContext.get().authorities;
+	const host = window.location.hostname?.split('.')[0]?.split('-')[2] === 'gxhd' ? 'uat' : window.location.hostname?.split('.')[0]?.split('-')[2];
 	const workBenchList = [
 		{
 			title: '评估任务',
@@ -57,19 +59,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'assessToBeConfirmed',
 					path: '/taskMngt/assessmentTaskList',
 					state: 1,
-					authority: 'assess_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_assess_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'assessToBeAssigned',
 					path: '/taskMngt/assessmentTaskList',
 					state: 2,
-					authority: 'assess_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_assess_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'assessToBeSubmitted',
 					path: '/taskMngt/assessmentTaskList',
 					state: 4,
-					authority: 'assess_to_be_submitted'
+					authority: 'tc_erp_rd_workbench_work_assess_submitted'
 				}
 			]
 		},
@@ -83,19 +85,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'confirmToBeConfirmed',
 					path: '/taskMngt/ConfirmTaskMngt',
 					state: 1,
-					authority: 'confirm_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_confirm_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'confirmToBeAssigned',
 					path: '/taskMngt/ConfirmTaskMngt',
 					state: 2,
-					authority: 'confirm_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_confirm_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'confirmToBeSubmitted',
 					path: '/taskMngt/ConfirmTaskMngt',
 					state: 4,
-					authority: 'confirm_to_be_submitted'
+					authority: 'tc_erp_rd_workbench_work_confirm_submitted'
 				}
 			]
 		},
@@ -109,19 +111,19 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'loftingToBeConfirmed',
 					path: '/taskMngt/setOutTaskList',
 					state: 1,
-					authority: 'lofting_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_lofting_confirmed'
 				}, {
 					title: '待指派',
 					dataIndex: 'loftingToBeAssigned',
 					path: '/workMngt/scheduleList',
 					state: 2,
-					authority: 'lofting_to_be_confirmed'
+					authority: 'tc_erp_rd_workbench_work_lofting_assigned'
 				}, {
 					title: '待提交',
 					dataIndex: 'loftingToBeSubmitted',
 					path: '/taskMngt/setOutTaskList',
 					state: 4,
-					authority: 'lofting_to_be_submitted'
+					authority: 'tc_erp_rd_workbench_work_lofting_submitted'
 				}
 			]
 		},
@@ -136,7 +138,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/evaluationList',
 					state: 3,
 					userId: userId,
-					authority: 'assess_to_be_complete'
+					authority: 'tc_erp_rd_workbench_work_assess_complete'
 				}
 			]
 		},
@@ -151,7 +153,7 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/confirmList',
 					state: 3,
 					userId: userId,
-					authority: 'confirm_to_be_complete'
+					authority: 'tc_erp_rd_workbench_work_confirm_complete'
 				}
 			]
 		},
@@ -165,27 +167,27 @@ export default function WorkBenchMngt(): React.ReactNode {
 					dataIndex: 'segmentMaterialToBeMaterial',
 					path: '/workMngt/pickList',
 					state: 2,
-					authority: 'segment_material_to_be_material'
+					authority: 'tc_erp_rd_workbench_work_material_material'
 				}, {
 					title: '待校核',
 					dataIndex: 'segmentMaterialToBeCheck',
 					path: '/workMngt/pickList',
 					state: 2,
-					authority: 'segment_material_to_be_check'
+					authority: 'tc_erp_rd_workbench_work_material_check'
 				}, {
 					title: '待指派',
 					dataIndex: 'materialToBeAssigned',
 					path: '/workMngt/pickList',
 					state: 1,
 					userId: userId,
-					authority: 'material_to_be_assigned'
+					authority: 'tc_erp_rd_workbench_work_material_assigned'
 				}, {
 					title: '待配段',
 					dataIndex: 'rodMaterialToBeMatch',
 					path: '/workMngt/pickList',
 					state: 3,
 					userId: userId,
-					authority: 'rod_material_to_be_match'
+					authority: 'tc_erp_rd_workbench_work_rod_material_match'
 				}
 			]
 		},
@@ -200,53 +202,47 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/question/questionMngt',
 					type: 'WTD-TL',
 					createUserId: userId,
-					authority: 'problem_establish'
+					authority: 'tc_erp_rd_workbench_work_material_problem_establish'
 				}, {
 					title: '放样任务', //问题单-我创建的-放样任务-塔
 					dataIndex: 'segmentProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-FY',
 					createUserId: userId,
-					authority: 'segment_problem_establish'
+					authority: 'tc_erp_rd_workbench_work_loft_problem_establish'
 				}, {
 					title: '螺栓',//问题单-我创建的-放样任务-螺栓
 					dataIndex: 'boltProblemEstablish',
 					path: '/question/questionMngt',
 					type: 'WTD-LS',
 					createUserId: userId,
-					authority: 'bolt_problem_establish'
+					authority: 'tc_erp_rd_workbench_work_bolt_problem_establish'
 				}, {
 					title: '待修改',//问题单-待修改
 					dataIndex: 'problemPending',
 					path: '/question/questionMngt',
 					state: 1,
 					userId: userId,
-					authority: 'problem_pending'
+					authority: 'tc_erp_rd_workbench_work_problem_pending'
 				}
 			]
-		},  {
+		},
+		{
 			title: '组焊工作',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%BB%84%E7%84%8A%E5%B7%A5%E4%BD%9C.png',
 			col: 4,
 			child: [
 				{
-					title: '待指派',
-					dataIndex: 'weldingToBeAssigned',
-					path: '/workMngt/assemblyWeldingList',
-					state: 2,
-					userId: userId,
-					authority: 'welding_to_be_assigned'
-				},
-				{
 					title: '待组焊',
 					dataIndex: 'weldingToBeWelding',
 					path: '/workMngt/assemblyWeldingList',
-					state: 3,
+					state: 2,
 					weldingUserId: userId,
-					authority: 'welding_to_be_welding'
+					authority: 'tc_erp_rd_workbench_work_welding_welding'
 				}
 			]
-		}, {
+		},
+		{
 			title: '螺栓列表',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%BC%96%E7%BB%84%2021.png',
 			col: 4,
@@ -255,17 +251,17 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待指派',
 					dataIndex: 'boltToBeAssigned',
 					path: '/workMngt/boltList',
-					state: 2,
-					weldingUserId: userId,
-					authority: 'bolt_to_be_assigned'
+					state: 1,
+					userId: userId,
+					authority: 'tc_erp_rd_workbench_work_bolt_assigned'
 				},
 				{
 					title: '待制作',
 					dataIndex: 'boltToBeMade',
 					path: '/workMngt/boltList',
-					state: 3,
+					state: 2,
 					userId: userId,
-					authority: 'bolt_to_be_made'
+					authority: 'tc_erp_rd_workbench_work_bolt_made'
 				},
 				{
 					title: '待校核',
@@ -273,10 +269,11 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/boltList',
 					state: 4,
 					userId: userId,
-					authority: 'bolt_to_be_check'
+					authority: 'tc_erp_rd_workbench_work_bolt_check'
 				}
 			]
-		}, {
+		},
+		{
 			title: '小样图工作',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E5%B0%8F%E6%A0%B7%E5%9B%BE.png',
 			col: 4,
@@ -285,12 +282,13 @@ export default function WorkBenchMngt(): React.ReactNode {
 					title: '待上传',
 					dataIndex: 'sampleToBeUploaded',
 					path: '/workMngt/sampleDrawList',
-					state: 2,
+					state: 1,
 					userId: userId,
-					authority: 'sample_to_be_uploaded'
+					authority: 'tc_erp_rd_workbench_work_sample_uploaded'
 				}
 			]
-		}, {
+		},
+		{
 			title: '图纸',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E5%9B%BE%E7%BA%B8.png',
 			col: 4,
@@ -301,13 +299,14 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/templateList',
 					state: 1,
 					userId: userId,
-					authority: 'draw_to_upload'
+					authority: 'tc_erp_rd_workbench_work_draw_to_upload'
 				}
 			]
-		},  {
+		},
+		{
 			title: '放样任务',
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%94%BE%E6%A0%B7%E4%BB%BB%E5%8A%A1.png',
-			col:5,
+			col: 5,
 			child: [
 				{
 					title: '待指派',
@@ -315,43 +314,82 @@ export default function WorkBenchMngt(): React.ReactNode {
 					path: '/workMngt/setOutList',
 					state: 1,
 					userId: userId,
-					authority: 'product_to_be_assigned'
-				}, {
+					authority: 'tc_erp_rd_workbench_work_lofting_assigned'
+				},
+				{
 					title: '待出单',
 					dataIndex: 'rodProductToBeIssue',
 					path: '/workMngt/setOutList',
 					state: 4,
-					authority: 'rod_product_to_be_issue'
-				}, {
+					authority: 'tc_erp_rd_workbench_work_loft_rod_match'
+				},
+				{
 					title: '待配段',
 					dataIndex: 'rodProductToBeMatch',
 					path: '/workMngt/setOutList',
 					state: 4,
-					authority: 'rod_product_to_be_match'
-				}, {
+					authority: 'tc_erp_rd_workbench_work_loft_rod_match'
+				},
+				{
 					title: '待校核',
 					dataIndex: 'segmentProductToBeCheck',
 					path: '/workMngt/setOutList',
 					state: 2,
 					userId: userId,
-					authority: 'segment_product_to_be_check'
-				}, {
+					authority: 'tc_erp_rd_workbench_work_loft_product_check'
+				},
+				{
 					title: '待放样',
 					dataIndex: 'segmentProductToBeLofting',
 					path: '/workMngt/setOutList',
 					state: 2,
 					userId: userId,
-					authority: 'segment_product_to_be_lofting'
+					authority: 'tc_erp_rd_workbench_work_loft_product_lofting'
 				}
 			]
 		},
+		{
+			title: '审批',
+			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%94%BE%E6%A0%B7%E4%BB%BB%E5%8A%A1.png',
+			col: 4,
+			child: [
+				{
+					title: '待办事宜',
+					dataIndex: 'todo',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowTodo`,
+					authority: ''
+				},
+				{
+					title: '已办事宜',
+					dataIndex: 'done',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowDone`,
+					authority: ''
+				},
+				{
+					title: '抄送事宜',
+					dataIndex: 'circulate',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowCirculate`,
+					authority: ''
+				},
+				{
+					title: '我发起的',
+					dataIndex: 'launch',
+					url: `http://workflow-${host}.dhwy.cn/#/tower/flowLaunch`,
+					authority: ''
+				}
+			]
+		}
 	]
 
 	const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-		const data = await RequestUtil.get(`/tower-science/workbench`);
+		const data = await RequestUtil.get<any>(`/tower-science/workbench`);
 		const announceData = await RequestUtil.get<IResponseData>(`/tower-system/notice/staff/list?size=10&state=1`);
+		const result = await RequestUtil.get<any>(`/tower-workflow/workflow/Engine/FlowBefore/count`);
 		setAnnounceData(announceData.records)
-		resole(data)
+		resole({
+			...data,
+			...result
+		})
 	}), {})
 	const detailData: any = data;
 	const history = useHistory();
@@ -363,39 +401,52 @@ export default function WorkBenchMngt(): React.ReactNode {
 	}
 
 	const getChildContent = (res: IList, ind: number, data: Record<string, any>) => {
-		return <div key={ind} className={res.col ===4 ? styles.border : styles.border2}>
-			<div style={{padding:'10px',display:'flex'}}>
+		return <div key={ind} className={res.col === 4 ? styles.border : styles.border2}>
+			<div style={{ padding: '10px', display: 'flex' }}>
 				<div>
-					<span style={{marginRight:"10px"}}><img src={res.icon} /></span>
+					<span style={{ marginRight: "10px" }}><img src={res.icon} /></span>
 					<span className={styles.detailTitle}>{res.title}</span>
 				</div>
 			</div>
-			
-			<div style={{backgroundColor:"#fff",}}>{
+			<div style={{ backgroundColor: "#fff", }}>{
 				res?.child && res?.child.map((item: IList, index: number) => {
 					const dataIndex: string | undefined = item.dataIndex;
 					if (authorities?.indexOf(item?.authority || '') === -1) {
-						return null
+						if (res.title === '审批') {
+							return <div className={res.col === 4 ? styles.content : styles.content2}
+								style={res.col && res.col !== 4 ? { width: `${((res?.col) * 10 + 11) / res?.col}%` } : { width: '22%' }}
+								key={ind + '_' + index} onClick={() => {
+									if (item.url) {
+										window.open(item.url)
+									}
+								}}>
+								<div className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</div>
+								<div style={{ textAlign: 'center' }}>
+									{item.title}
+								</div>
+							</div>
+						} else {
+							return null
+						}
 					} else {
 						return <div className={res.col === 4 ? styles.content : styles.content2}
-						style={res.col&&res.col !== 4?{width:`${((res?.col)*10+11)/res?.col}%`}:{width:'22%'}}
-						 key={ind + '_' + index} onClick={() => {
-							if (item.path) {
-								history.push({
-									pathname: item.path,
-									state: {
-										state: item?.state,
-										type: item?.type,
-										userId: item?.userId,
-										createUserId: item?.createUserId,
-										weldingUserId: item?.weldingUserId
-									}
-								})
-							}
-						}}>
-							
+							style={res.col && res.col !== 4 ? { width: `${((res?.col) * 10 + 11) / res?.col}%` } : { width: '22%' }}
+							key={ind + '_' + index} onClick={() => {
+								if (item.path) {
+									history.push({
+										pathname: item.path,
+										state: {
+											state: item?.state,
+											type: item?.type,
+											userId: item?.userId,
+											createUserId: item?.createUserId,
+											weldingUserId: item?.weldingUserId
+										}
+									})
+								}
+							}}>
 							<div className={styles.total}>{data && data[dataIndex || ''] === -1 ? 0 : data && data[dataIndex || ''] || 0}</div>
-							<div style={{textAlign:'center'}}>
+							<div style={{ textAlign: 'center' }}>
 								{item.title}
 							</div>
 							{/* <div className={styles.draw}>
@@ -435,34 +486,34 @@ export default function WorkBenchMngt(): React.ReactNode {
 					<Link to={`/homePage/notice`} className={styles.more}>更多<RightOutlined /></Link>
 				</p>
 				<CommonTable dataSource={announceData} pagination={false} showHeader={false} columns={[
-				{
-					key: 'title',
-					title: '文案',
-					dataIndex: 'title',
-					render: (_: string, record: Record<string, any>): React.ReactNode => (
-						<span onClick={()=>{history.push(`/homePage/notice/detail/${record.id}`)}} className={styles.titleColor}>{_.length>18?_.slice(0,18)+'...':_}</span>
-					)
-				},{
-					key: 'releaseTime',
-					title: '时间',
-					dataIndex: 'releaseTime',
-				}]}/>
+					{
+						key: 'title',
+						title: '文案',
+						dataIndex: 'title',
+						render: (_: string, record: Record<string, any>): React.ReactNode => (
+							<span onClick={() => { history.push(`/homePage/notice/detail/${record.id}`) }} className={styles.titleColor}>{_.length > 18 ? _.slice(0, 18) + '...' : _}</span>
+						)
+					}, {
+						key: 'releaseTime',
+						title: '时间',
+						dataIndex: 'releaseTime',
+					}]} />
 			</div>
 			<div className={styles.notice}>
 				<p> 提醒</p>
 				<Table dataSource={[]} pagination={false} showHeader={false} columns={[
-				{
-					key: 'description',
-					title: '文案',
-					dataIndex: 'description',
-					render: (_: string, record: Record<string, any>): React.ReactNode => (
-						<span>{_.length>18?_.slice(0,18)+'...':_}</span>
-					)
-				},{
-					key: 'time',
-					title: '时间',
-					dataIndex: 'time',
-				}]} />
+					{
+						key: 'description',
+						title: '文案',
+						dataIndex: 'description',
+						render: (_: string, record: Record<string, any>): React.ReactNode => (
+							<span>{_.length > 18 ? _.slice(0, 18) + '...' : _}</span>
+						)
+					}, {
+						key: 'time',
+						title: '时间',
+						dataIndex: 'time',
+					}]} />
 			</div>
 		</div>
 	</div>
