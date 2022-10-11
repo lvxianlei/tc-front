@@ -1,8 +1,3 @@
-/***
- * 新修改的原材料出库详情
- * 原文件地址当前目录：OriginalDocument.tsx
- * 时间：2022/01/11
- */
 import React, { useState } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Table, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
@@ -10,27 +5,13 @@ import { SearchTable as Page, IntgSelect } from '../../../common';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
-import { materialStandardOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
 import { baseColumn } from "./detail.json";
-
 import '../../StockPublicStyle.less';
 import './detail.less';
-import ExportList from '../../../../components/export/list';
 import AuthUtil from '@utils/AuthUtil';
 import { exportDown } from '@utils/Export';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
-    // 标准
-    const standardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
-
-    // 材质 
-    const materialEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({
-        value: item.id,
-        label: item.name
-    }))
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const match = useRouteMatch()
@@ -356,7 +337,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 }
             )
             const data = await result.blob()
-            console.log(data, "----------")
             var blob = new Blob([data]);
             var reader = new FileReader();
             reader.readAsDataURL(blob);
@@ -393,13 +373,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         setOutboundId(record.id);
         setApplyListdata([record]);
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
-            structureTexture: record.structureTexture,//材质
             materialName: record.materialName,//品名
-            materialStandard: record.materialStandard,//标准
-            lengthMin: record.length,//长度最小值
-            lengthMax: record.length,//长度最大值
             structureSpec: record.structureSpec,//规格
-            width: record.width,
             size: 1000
         });
         setOutLibraryListdata(data.records);
@@ -587,32 +562,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'outStockStaffId',
                         label: '出库人',
                         children: <IntgSelect width={200} />
-                    },
-                    {
-                        name: 'structureTexture',
-                        label: '材质',
-                        children: (
-                            <Select placeholder="请选择材质" style={{ width: "140px" }}>
-                                {
-                                    materialEnum && materialEnum.length > 0 && materialEnum.map((item: any, index: number) => {
-                                        return <Select.Option value={item.label} key={index}>{item.label}</Select.Option>
-                                    })
-                                }
-                            </Select>
-                        )
-                    },
-                    {
-                        name: 'materialStandard',
-                        label: '标准',
-                        children: (
-                            <Select placeholder="请选择标准" style={{ width: "140px" }}>
-                                {
-                                    standardEnum && standardEnum.length > 0 && standardEnum.map((item: any, index: number) => {
-                                        return <Select.Option value={item.value} key={index}>{item.label}</Select.Option>
-                                    })
-                                }
-                            </Select>
-                        )
                     },
                     {
                         name: 'fuzzyQuery',

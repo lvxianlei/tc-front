@@ -1,5 +1,5 @@
 /**
- * 创建计划列表
+ * 创建出库单
  */
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button, InputNumber, message, Spin } from 'antd';
@@ -19,7 +19,6 @@ export default function CreatePlan(props: any): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-    let [count, setCount] = useState<number>(1);
     const [warehouseId, setWarehouseId] = useState<string>("");
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
@@ -82,30 +81,15 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList(materialList.filter((item: any) => item.id !== id))
     }
 
-    // 复制
-    const handleCopy = (options: any) => {
-        const result = {
-            ...options,
-            width: "",
-            length: "",
-            planPurchaseNum: "",
-            totalWeight: "",
-            id: count + ""
-        }
-        setCount(count + 1)
-        setMaterialList([
-            ...materialList,
-            result
-        ])
-        setPopDataList([
-            ...popDataList,
-            result
-        ])
-    }
-
-    const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+    const performanceBondChange = (fields: { [key: string]: any }) => {
         if (fields.wareHouseId) {
             setWarehouseId(fields.wareHouseId);
+            return;
+        }
+        if (fields.pickingUserId) {
+            addCollectionForm.setFieldsValue({
+                departmentName: fields.pickingUserId.records[0].deptName
+            })
             return;
         }
     }
@@ -152,6 +136,7 @@ export default function CreatePlan(props: any): JSX.Element {
             const path = props.type === "create" ? `/tower-storage/outStock/save` : '/tower-storage/outStock'
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
                 ...data,
+                materialType: 2,
                 id: props.id
             })
             message.success("创建成功！");
@@ -287,7 +272,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <PopTableContent
                     data={{
                         ...addMaterial as any,
-                        path: `${addMaterial.path}/${warehouseId}`
+                        path: `${addMaterial.path}/${warehouseId}?materialType=1`
                     }}
                     value={{
                         id: "",

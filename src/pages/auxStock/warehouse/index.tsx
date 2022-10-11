@@ -1,10 +1,8 @@
-import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { Input, Select, Modal, message, Spin, Button, Upload, InputNumber, Radio } from 'antd';
-import { FixedType } from 'rc-table/lib/interface';
+import { Input, Select, message, Button, Upload, Radio } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
-import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
-import { Attachment, AttachmentRef, SearchTable as Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import { exportDown } from '../../../utils/Export';
 import AuthUtil from '../../../utils/AuthUtil';
@@ -20,10 +18,10 @@ export default function RawMaterialStock(): React.ReactNode {
         try {
             const [warehouseList, askPrice, classify] = await Promise.all<any>([
                 RequestUtil.get(`/tower-storage/warehouse/tree?type=0`),
-                RequestUtil.get(`/tower-storage/materialStock/getMaterialStockStatics`),
+                RequestUtil.get(`/tower-storage/materialStock/auxiliary/count`),
                 RequestUtil.get(`/tower-system/materialCategory/category`)
             ])
-            resole({ warehouseList, ...askPrice, classify })
+            resole({ warehouseList, num: askPrice, classify })
         } catch (error) {
             reject(error)
         }
@@ -91,11 +89,11 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button type="primary" ghost>导入</Button>
             </Upload>
             <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
-            <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
+            <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span></div>
             <div style={{ width: "2000px" }}>
                 <Radio.Group defaultValue={tabs} onChange={handleRadioChange}>
-                    <Radio.Button value={1}>出库单列表</Radio.Button>
-                    <Radio.Button value={2}>出库明细</Radio.Button>
+                    <Radio.Button value={1}>库存列表</Radio.Button>
+                    <Radio.Button value={2}>详细库存</Radio.Button>
                 </Radio.Group>
             </div>
         </>

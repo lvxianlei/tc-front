@@ -98,6 +98,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         departmentId: "",
         applyStaffId: "",
         outStockItemStatus: 2,
+        materialType: 1,
         ...history.location.state as object
     });
 
