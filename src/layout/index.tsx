@@ -185,7 +185,8 @@ export default function (): JSX.Element {
                     password: AuthUtil.getUserInfo().password
                 },
                 {
-                    'Content-Type': 'application/x-www-form-urlencoded'
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Tenant-Id': tenantId
                 }
             )
             resole(reLogin)
@@ -239,7 +240,7 @@ export default function (): JSX.Element {
         Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
         AuthUtil.setSinzetechAuth(access_token, refresh_token)
         AuthUtil.setTenantId(tenant_id, { expires: 7 })
-        AuthUtil.setTenantName(tenant_name)
+        AuthUtil.setTenantName(tenantInfo.name)
         AuthUtil.setTenants(tenants)
         AuthUtil.setRealName(result.real_name)
         AuthUtil.setAccout(result.account)
