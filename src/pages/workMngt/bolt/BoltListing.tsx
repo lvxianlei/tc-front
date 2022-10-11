@@ -35,7 +35,7 @@ export default function BoltList(): React.ReactNode {
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [url, setUrl] = useState<string>('');
     const [form] = Form.useForm();
-    const userId = AuthUtil.getUserInfo().user_id();
+    const userId = AuthUtil.getUserInfo().user_id;
 
     const columns = [
         {

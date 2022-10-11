@@ -96,7 +96,7 @@ export default function BoltCheck(): React.ReactNode {
             }
         },
     ]
-    const userId = AuthUtil.getUserInfo().user_id();
+    const userId = AuthUtil.getUserInfo().user_id;
     const [id, setId] = useState<string | null>(null);//添加弹框显示
     const [visible, setVisible] = useState<boolean>(false);//添加弹框显示
     const [basicHeight, setbasicHeight] = useState<number | string>('');//呼高

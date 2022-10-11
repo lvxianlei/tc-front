@@ -126,7 +126,7 @@ export default function BoltList(): React.ReactNode {
     ]
 
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
-    const userId = AuthUtil.getUserInfo().user_id();
+    const userId = AuthUtil.getUserInfo().user_id;
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);

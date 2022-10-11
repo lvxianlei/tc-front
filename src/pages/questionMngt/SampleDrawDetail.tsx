@@ -116,7 +116,7 @@ export default function SampleDrawDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={params.status==='1'&&AuthUtil.getUserInfo().user_id()===location.state?[
+            <DetailContent operation={params.status==='1'&&AuthUtil.getUserInfo().user_id===location.state?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')

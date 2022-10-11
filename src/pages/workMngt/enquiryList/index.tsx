@@ -6,7 +6,7 @@ import { baseInfo } from "./enquiryList.json"
 import Edit from "./Edit"
 import AuthUtil from "../../../utils/AuthUtil"
 export default function EnquiryList(): React.ReactNode {
-    const userId = AuthUtil.getUserInfo().user_id()
+    const userId = AuthUtil.getUserInfo().user_id
     const history = useHistory()
     const [filterValue] = useState<any>({
         ...history.location.state as object

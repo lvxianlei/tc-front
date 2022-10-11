@@ -50,8 +50,9 @@ export default function Login(): JSX.Element {
                 },
                 {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Captcha-code': values.code,
-                    'Captcha-key': data!.captcha.key
+                    'Captcha-key': data!.captcha.key,
+                    'Tenant-Id': "null",
+                    'Sinzetech-Auth': "null"
                 }
             )
             resole(result)
@@ -61,7 +62,6 @@ export default function Login(): JSX.Element {
     }), { manual: true })
 
     const onSubmit = async (values: Record<string, any>) => {
-        //values.password = MD5(values.password).toString()
         if (!verify) {
             message.error("请先按住滑块，拖动至最右边完成验证")
             return
@@ -89,12 +89,11 @@ export default function Login(): JSX.Element {
         } else {
             Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
             Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
-            Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserInfo({
                 user_id,
-                password:values.password,
-                username:values.username
+                password: values.password,
+                username: values.username
             })
             AuthUtil.setTenantId(tenant_id, { expires: 7 })
             AuthUtil.setTenantName(tenant_name)
