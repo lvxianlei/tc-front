@@ -55,10 +55,10 @@ export default abstract class RequestUtil {
                 'Authorization': `Basic ${AuthUtil.getAuthorization()}`
             };
             const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
-            if (![undefined, "undefined"].includes(sinzetechAuth)) {
+            if (![undefined, "undefined", ""].includes(sinzetechAuth)) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
-            if (![undefined, "undefined"].includes(AuthUtil.getTenantId())) {
+            if (![undefined, "undefined", ""].includes(AuthUtil.getTenantId())) {
                 headers['Tenant-Id'] = AuthUtil.getTenantId()
             }
             const controller = new AbortController();
