@@ -1,0 +1,172 @@
+{
+    "baseInfo": [
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser"
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone"
+        },
+        {
+            "title": "到货时间",
+            "dataIndex": "receiveTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "车辆牌照",
+            "dataIndex": "carNumber"
+        },
+        {
+            "title": "卸车方式",
+            "dataIndex": "unloadMode",
+            "type": "select"
+        },
+        {
+            "title": "卸车人员",
+            "dataIndex": "unloadUsersName"
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementMode",
+            "type": "select"
+        },
+        {
+            "title": "到货去向",
+            "dataIndex": "warehouseName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
+        }
+    ],
+    "freightInfo": [
+        {
+            "dataIndex": "transportBear",
+            "title": "运输承担",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
+        },
+        {
+            "dataIndex": "transportCompany",
+            "title": "运输公司"
+        },
+        {
+            "dataIndex": "transportPriceCount",
+            "title": "运费价税合计（元）"
+        }
+    ],
+    "handlingChargesInfo": [
+        {
+            "dataIndex": "unloadBear",
+            "title": "卸车承担",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "供方"
+                },
+                {
+                    "value": 2,
+                    "label": "需方"
+                }
+            ]
+        },
+        {
+            "dataIndex": "unloadCompany",
+            "title": "装卸公司"
+        },
+        {
+            "dataIndex": "unloadPriceCount",
+            "title": "装卸费价税合计（元）"
+        }
+    ],
+    "goodsDetail": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer"
+        },
+        {
+            "title": "税率",
+            "dataIndex": "tax"
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxAmount",
+            "disabled": true
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "price",
+            "disabled": true
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalAmount",
+            "disabled": true
+        },
+        {
+            "title": "含税运费（元）",
+            "dataIndex": "totalTransportTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税运费（元）",
+            "dataIndex": "totalTransportPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税装卸费（元）",
+            "dataIndex": "totalUnloadTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "totalUnloadPrice",
+            "disabled": true
+        }
+    ]
+}
