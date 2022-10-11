@@ -1,36 +1,25 @@
 .content {
-    display: flex;
-    width: 100%;
-    padding: 0 16px;
-    flex-wrap: wrap;
-   .apply {
-        width: 18%;
-        background-color: #FBFBFB;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 10px;
-        box-sizing: border-box;
-        cursor: pointer;
-        transition: .1s;
-        &:hover{
-            transform: scale(1.1);
-        }
-        .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding-bottom: 10px;
-        }
-        .title, .description {
-            text-align: center;
-            font-size: 14px;
-            color: #000000;
-        }
-        .description {
-            color: #999999;
-            font-size: 14px;
-            line-height: 1.7;
-            // max-height: 100px;
-        }
-    } 
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  .apply {
+    background-color: #fbfbfb;
+    padding: 20px;
+    margin: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: 0.1s;
+    &:hover {
+      transform: scale(1.1);
+      .title{
+        color: #FF8C00;
+      }
+    }
+    .title,
+    .description {
+      text-align: center;
+      font-size: 14px;
+      color: #000000;
+    }
+  }
 }

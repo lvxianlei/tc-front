@@ -1,0 +1,228 @@
+{
+    "baseInfoColumn": [
+        {
+            "title": "领料人",
+            "dataIndex": "pickingUserId",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "deptName"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "手机号",
+                    "dataIndex": "phone"
+                },
+                {
+                    "title": "角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "工号",
+                    "dataIndex": "number"
+                },
+                {
+                    "title": "邮箱",
+                    "dataIndex": "email"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "账号/手机号/姓名/工号/邮箱"
+                }
+            ]
+        },
+        {
+            "title": "领料仓库",
+            "dataIndex": "wareHouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择领料仓库"
+                }
+            ]
+        },
+        {
+            "title": "领料日期",
+            "dataIndex": "pickingTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择领料日期"
+                }
+            ]
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入工程名称"
+                }
+            ]
+        }
+    ],
+    "material": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "重量（吨）",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "reservoirName"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorName"
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/materialStock/outDetails",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "查询",
+                "type": "string",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "品名/规格"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "receiveBatchNumber"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialStandardName"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "structureTexture"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length"
+            },
+            {
+                "title": "宽度",
+                "dataIndex": "width"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "重量（吨）",
+                "dataIndex": "weight"
+            },
+            {
+                "title": "单价（元/吨）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "不含税单价（元/吨）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
+            },
+            {
+                "title": "炉批号",
+                "dataIndex": "furnaceBatchNumber"
+            },
+            {
+                "title": "质保书号",
+                "dataIndex": "warrantyNumber"
+            }
+        ]
+    }
+}
