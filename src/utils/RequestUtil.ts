@@ -52,14 +52,15 @@ export default abstract class RequestUtil {
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
                 'Content-Type': 'application/json',
-                'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                'Tenant-Id': AuthUtil.getTenantId()
+                'Authorization': `Basic ${AuthUtil.getAuthorization()}`
             };
             const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
-            if (sinzetechAuth) {
+            if (![undefined, "undefined"].includes(sinzetechAuth)) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
-
+            if (![undefined, "undefined"].includes(AuthUtil.getTenantId())) {
+                headers['Tenant-Id'] = AuthUtil.getTenantId()
+            }
             const controller = new AbortController();
             const { signal } = controller;
             cancel && cancel(controller)
