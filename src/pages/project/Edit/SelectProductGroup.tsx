@@ -61,7 +61,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
             <Row gutter={[8, 8]}>
                 <Col style={{ height: 32 }} >
                     <Form.Item
-                        name="contractNumber"
+                        name="internalNumber"
                         label="内部合同编号"
                         style={{ height: 32, fontSize: 12 }}
                     >
