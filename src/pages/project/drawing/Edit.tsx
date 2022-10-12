@@ -62,7 +62,8 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     if (fields.internalNumber) {
       baseForm.setFieldsValue({
         contractName: fields.internalNumber.records?.[0]?.contractName,
-        customerCompany: fields.internalNumber.records?.[0]?.customerCompany
+        customerCompany: fields.internalNumber.records?.[0]?.customerCompany,
+        projectName: fields.internalNumber.records?.[0]?.contractName
       })
     }
   }

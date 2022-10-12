@@ -386,16 +386,32 @@
             "columns": [
                 {
                     "title": "销售订单编号",
-                    "dataIndex": "saleOrderNumber",
-                    "search": true
+                    "dataIndex": "saleOrderNumber"
                 },
                 {
                     "title": "内部合同编号",
-                    "dataIndex": "internalNumber"
+                    "dataIndex": "internalNumber",
+                    "search": true
                 },
                 {
                     "title": "订单工程名称",
                     "dataIndex": "orderProjectName"
+                },
+                {
+                    "title": "产品类型",
+                    "dataIndex": "productTypeName"
+                },
+                {
+                    "title": "电压等级",
+                    "dataIndex": "voltageGradeName"
+                },
+                {
+                    "title": "订单重量",
+                    "dataIndex": "orderWeight"
+                },
+                {
+                    "title": "订单单价",
+                    "dataIndex": "taxPrice"
                 },
                 {
                     "title": "合同签订单位",
