@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Modal } from "antd"
+import { Button, Col, Form, Input, Modal, Row } from "antd"
 import { CommonTable, DetailTitle } from "../../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
@@ -14,11 +14,15 @@ export default function SelectProductGroup(props: any): JSX.Element {
         setProjectSelectRows(projectSelectRows.filter((item: any) => props.select.includes(item.id)))
     }, [JSON.stringify(props.select)])
 
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((params: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-market/contract`,
-                { projectId: props.projectId === "undefined" ? undefined : props.projectId }
+                {
+                    projectId: props.projectId === "undefined" ? undefined : props.projectId,
+                    size: 10000,
+                    ...params
+                }
             )
             resole(result)
         } catch (error) {
@@ -45,6 +49,42 @@ export default function SelectProductGroup(props: any): JSX.Element {
         setProjectSelectRows(selectRows)
     }
     return <Modal title="选择确认明细" width={1011} {...props} destroyOnClose onOk={() => props.onOk && props.onOk(projectSelectRows)} >
+        <Form
+            style={{ marginBottom: 16 }}
+            onFinish={(value) => {
+                run({
+                    ...value,
+                })
+            }}
+            onReset={() => { run({}) }}
+        >
+            <Row gutter={[8, 8]}>
+                <Col style={{ height: 32 }} >
+                    <Form.Item
+                        name="contractNumber"
+                        label="内部合同编号"
+                        style={{ height: 32, fontSize: 12 }}
+                    >
+                        <Input />
+                    </Form.Item>
+                </Col>
+                <Col style={{ height: 32 }}>
+                    <Form.Item
+                        name="contractName"
+                        label="工程名称"
+                        style={{ height: 32, fontSize: 12 }}
+                    >
+                        <Input />
+                    </Form.Item>
+                </Col>
+                <Col style={{ height: 32 }}>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
+                        <Button type="default" htmlType="reset" style={{ marginLeft: 12 }}>重置</Button>
+                    </Form.Item>
+                </Col>
+            </Row>
+        </Form>
         <CommonTable
             loading={loading}
             columns={contract}
