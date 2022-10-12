@@ -28,7 +28,7 @@
             "dataIndex": "contractTotalWeight",
             "type": "number",
             "required": true,
-            "min": 0
+            "min": 0.01
         },
         {
             "title": "合同单价(元/吨)",
