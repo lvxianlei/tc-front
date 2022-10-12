@@ -189,17 +189,17 @@ export default function CreatePlan(props: any): JSX.Element {
             title={`${props.type === "create" ? '创建出库单' : "编辑出库单"}`}
             visible={props.visible}
             onCancel={() => {
-                setMaterialList([]);
-                setPopDataList([]);
-                props?.handleCreate();
+                setMaterialList([])
+                setPopDataList([])
+                props?.handleCreate()
             }}
             maskClosable={false}
             width={1100}
             footer={[
                 <Button key="back" onClick={() => {
-                    setMaterialList([]);
-                    setPopDataList([]);
-                    props?.handleCreate();
+                    setMaterialList([])
+                    setPopDataList([])
+                    props?.handleCreate()
                 }}>
                     取消
                 </Button>,
