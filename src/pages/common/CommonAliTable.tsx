@@ -1,5 +1,5 @@
 import React from "react"
-import { Checkbox, TableColumnProps, Typography } from "antd"
+import { Checkbox, TableColumnProps, Typography, Radio } from "antd"
 import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
 import moment from "moment"
@@ -111,7 +111,7 @@ export default function CommonAliTable({ columns, dataSource = [], rowKey, haveI
             onCell: () => ({ className: styles.tableCell }),
             render: (_: any, _a: any, index: number) => <>{index + 1}</>
         }, ...formatColumns] : formatColumns
-    const pipeline = useTablePipeline({ components: { Checkbox } })
+    const pipeline = useTablePipeline({ components: { Checkbox, Radio } })
         .input({ dataSource, columns: columnsResult as any })
         .primaryKey(rowKey || "id")
         .use(features.columnResize({
@@ -121,15 +121,21 @@ export default function CommonAliTable({ columns, dataSource = [], rowKey, haveI
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc'
         }));
-    props?.rowSelection && pipeline.use(features.multiSelect({
-        value: props?.rowSelection?.selectedRowKeys || [],
-        onChange: (nextValue: string[]) => props?.rowSelection?.onChange(nextValue, dataSource.filter((item: any) => nextValue.includes(typeof rowKey === "function" ? rowKey(item) : item[rowKey || "id"]))),
-        isDisabled: props?.rowSelection?.getCheckboxProps,
-        highlightRowWhenSelected: true,
-        checkboxPlacement: 'start',
-        clickArea: "cell",
-        checkboxColumn: { width: 40, lock: true, align: "left", ...props?.rowSelection?.checkboxColumn }
-    }));
+        
+    props?.rowSelection && pipeline.use(
+        props?.rowSelection.type === "radio" ?
+            features.singleSelect({
+                ...props?.rowSelection,
+                onChange: (selectKey: string) => props?.rowSelection.onChange(selectKey, dataSource.find((item: any) => selectKey === (typeof rowKey === "function" ? rowKey(item) : item[rowKey || "id"])))
+            }) : features.multiSelect({
+                value: props?.rowSelection?.selectedRowKeys || [],
+                onChange: (nextValue: string[]) => props?.rowSelection?.onChange(nextValue, dataSource.filter((item: any) => nextValue.includes(typeof rowKey === "function" ? rowKey(item) : item[rowKey || "id"]))),
+                isDisabled: props?.rowSelection?.getCheckboxProps,
+                highlightRowWhenSelected: true,
+                checkboxPlacement: 'start',
+                clickArea: "cell",
+                checkboxColumn: { width: 40, lock: true, align: "left", ...props?.rowSelection?.checkboxColumn }
+            }));
     pipeline.use(features.autoRowSpan());
     pipeline.use(features.sort({ mode: 'single', highlightColumnWhenActive: true }));
     return <nav className={styles.componentsTable} style={{ paddingBottom: props.code && props.code === 1 ? "0px" : "88px" }}>
