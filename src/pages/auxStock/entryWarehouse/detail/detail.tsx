@@ -4,7 +4,7 @@
  * 时间：2022/01/06
  */
 import React, { useState } from 'react';
-import { Button, message } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../../common';
 import RequestUtil from '../../../../utils/RequestUtil';
@@ -45,6 +45,28 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }))
 
+    // 撤销
+    const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(
+                `/tower-storage/warehousingEntry/auxiliary/detail/repeal/${id}`
+            )
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    // 删除
+    const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/warehousingEntry/auxiliary/detail/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const handleWarehousingClick = async () => {
         if (selectedRowKeys.length < 1) {
             message.error("请选择原材料");
@@ -53,6 +75,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         await saveRun(selectedRowKeys);
         history.go(0);
     }
+
+    const handleRevocation = async (id: string) => {
+        await revocationRun(id)
+        await message.success("撤销成功...")
+        history.go(0)
+    }
+
+    const handleDelete = async (id: string) => {
+        await deleteRun(id)
+        await message.success("成功删除...")
+        history.go(0)
+    }
+
     return (
         <>
             <Page
@@ -71,7 +106,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         title: '操作',
                         dataIndex: 'key',
-                        width: 80,
+                        width: 160,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
@@ -79,6 +114,22 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     await saveRun([record.id]);
                                     history.go(0);
                                 }}>入库</Button>
+                                <Popconfirm
+                                    title="确认撤销?"
+                                    onConfirm={() => handleRevocation(record.id)}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2} type="link">撤销</Button>
+                                </Popconfirm>
+                                <Popconfirm
+                                    title="确认删除?"
+                                    onConfirm={() => handleDelete(record?.id)}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
+                                </Popconfirm>
                             </>
                         )
                     }

@@ -306,7 +306,11 @@ export default function MaterialMngt(): React.ReactNode {
                                 onChange={(e: any) => {
                                     const list = materialType.filter((res: IMaterialType) => res.id === e?.value);
                                     setMaterialList(list[0].children);
-                                    form.setFieldsValue({ materialCategory: '' });
+                                    form.setFieldsValue({
+                                        materialCategory: "",
+                                        directMaterialType: "",
+                                        materialCode: ""
+                                    });
                                     setCode('');
                                 }}>
                                 {materialType && materialType.map((item: any) => {
@@ -332,7 +336,11 @@ export default function MaterialMngt(): React.ReactNode {
                                 onChange={(e: any) => {
                                     const list: any = materialList.filter((res: IMaterialType) => res.id === e?.value);
                                     setDirectMaterialTypeList(list[0]?.children);
-                                    setCode(list[0].code);
+                                    form.setFieldsValue({
+                                        directMaterialType: "",
+                                        materialCode: ""
+                                    });
+                                    setCode('');
                                 }}>
                                 {materialList && materialList.map((item: any) => {
                                     return <Select.Option

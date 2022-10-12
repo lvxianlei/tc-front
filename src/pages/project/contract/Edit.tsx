@@ -166,8 +166,8 @@ export default function Edit() {
   const handleBaseInfoChange = (fields: { [key: string]: any }, allFields: any) => {
     const { contractAmount, contractTotalWeight, customerCompany } = allFields
     if (fields.contractTotalWeight || fields.contractAmount) {
-      const contractPrice = (contractAmount / contractTotalWeight).toFixed(2)
-      form.setFieldsValue({ contractPrice })
+      const contractPrice = ((contractAmount || "0") / (contractTotalWeight || "1")).toFixed(2)
+      form.setFieldsValue({ contractPrice: contractPrice || "0.00" })
       if (fields.contractAmount) {
         const editFormData = editform.getFieldsValue()
         editform.setFieldsValue({
