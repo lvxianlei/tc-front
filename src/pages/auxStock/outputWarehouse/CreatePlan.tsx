@@ -142,7 +142,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 materialType: 2,
                 id: props.id
             })
-            message.success("创建成功！");
+            message.success("操作成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
@@ -186,7 +186,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     return (
         <Modal
-            title={'创建出库单'}
+            title={`${props.type === "create" ? '创建出库单' : "编辑出库单"}`}
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
