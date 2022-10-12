@@ -82,8 +82,8 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }) => {
-        if (fields.wareHouseId) {
-            setWarehouseId(fields.wareHouseId);
+        if (fields.warehouseId) {
+            setWarehouseId(fields.warehouseId);
             return;
         }
         if (fields.pickingUserId) {
@@ -232,7 +232,13 @@ export default function CreatePlan(props: any): JSX.Element {
                 />
                 <DetailTitle title="出库明细" />
                 <div className='btnWrapper'>
-                    <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择</Button>
+                    <Button
+                        type='primary'
+                        key="add"
+                        ghost
+                        style={{ marginRight: 8 }}
+                        disabled={!warehouseId}
+                        onClick={() => setVisible(true)}>选择</Button>
                 </div>
                 <CommonTable
                     style={{ padding: "0" }}

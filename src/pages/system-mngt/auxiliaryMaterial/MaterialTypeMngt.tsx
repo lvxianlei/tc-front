@@ -142,15 +142,15 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                     {record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
                         添加二级类目
                     </Button> : null}
-                    {record.level === 2 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 3)}>
+                    {record.level === 2 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
                         添加三级类目
                     </Button> : null}
                     <Button
                         type="link"
                         onClick={() => this.showModal({
                             ...record,
-                            firstCode: record.code?.substring(0, 2),
-                            code: record.level === 1 ? record.code : record.code?.substring(2, 4)
+                            firstCode: record.code?.substring(0, 4),
+                            code: record.level === 1 ? record.code : record.code?.substring(4, 8)
                         }, record.level === 1 ? 1 : 3)}>
                         编辑
                     </Button>
@@ -324,7 +324,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
             <>
                 {super.render()}
                 {visible && <Modal
-                    title={type === 1 ? '修改' : '新增'}
+                    title={[1, 3].includes(type) ? '修改' : '新增'}
                     visible={visible}
                     footer={null}
                     onCancel={this.closeModal}
@@ -349,10 +349,10 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                         >
                             {this.state.type === 2 || this.state.type === 3 ? <Input
                                 min={0}
-                                maxLength={2}
+                                maxLength={4}
                                 addonBefore={defaultData.firstCode || 0}
                                 style={{ width: "100%" }}
-                            /> : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
+                            /> : <Input maxLength={4} min={0} placeholder="请输入" style={{ width: "100%" }} />}
                         </Form.Item>
                         <Form.Item
                             name="name"
