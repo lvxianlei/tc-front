@@ -62,7 +62,16 @@
         {
             key: 'index',
             title: '螺栓定额条目',
-            dataIndex: 'index'
+            dataIndex: 'index',
+            
+            render: (_: string , record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["data", index,""]}>
+                    <Select size="small">
+<Select.Option value={1} key={1}>套用</Select.Option>
+<Select.Option value={2} key={2}>新放</Select.Option>
+                    </Select>
+                </Form.Item>
+            )
         },
         {
             key: 'index',

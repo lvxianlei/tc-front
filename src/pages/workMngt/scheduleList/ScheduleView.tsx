@@ -1,18 +1,14 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Spin, message } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, Spin, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TextArea from 'antd/lib/input/TextArea';
 import useRequest from '@ahooksjs/use-request';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
-import { TreeNode } from 'antd/lib/tree-select';
-import styles from './scheduleList.module.less';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import SchedulePlan from './SchedulePlan';
-
 
 const tableColumns = [
     { 
@@ -96,8 +92,8 @@ export default function ScheduleView(): React.ReactNode {
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
-        console.log(selectedRows)
     }
+
     const handleModalOk = async () => {
         try {
             await form.validateFields();
@@ -113,17 +109,12 @@ export default function ScheduleView(): React.ReactNode {
             saveData.smallSampleDeliverTime= moment(saveData.smallSampleDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.deliveryDrawDeliverTime= moment(saveData.deliveryDrawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.drawDeliverTime= moment(saveData.drawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-           
-
             if( saveData.loftingUser&&Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0){
                 let user:any = []
                 if(saveData.loftingMutualReview.indexOf('0')>-1){
                     saveData.loftingMutualReview.splice(saveData.loftingMutualReview.indexOf('0'),1)
-                    console.log(saveData.loftingMutualReview)
-                    console.log(saveData.loftingUser)
                     user = saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.concat(saveData.loftingUser):saveData.loftingUser
                     saveData.loftingMutualReview = Array.from(new Set(user))
-                    console.log(Array.from(new Set(user)))
                 }
             }else{
                 saveData.loftingMutualReview='';
@@ -134,7 +125,6 @@ export default function ScheduleView(): React.ReactNode {
                     saveData.weldingUser.splice(saveData.weldingUser.indexOf('0'),1)
                     user = saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.concat(saveData.weldingUser):saveData.weldingUser
                     saveData.weldingUser = Array.from(new Set(user))
-                   
                 }
             }else{
                 saveData.weldingUser='';
@@ -142,22 +132,13 @@ export default function ScheduleView(): React.ReactNode {
             saveData.loftingMutualReview = Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.join(','):''
             saveData.weldingUser=Array.isArray(saveData.weldingUser)&&saveData.weldingUser.length>0?saveData.weldingUser.join(','):''
             saveData.loftingUser= Array.isArray(saveData.loftingUser)&&saveData.loftingUser.length>0?saveData.loftingUser.join(','):'';
-            console.log(saveData.loftingMutualReview)
-           
-            // saveData.loftingMutualReview= Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.join(','):'';
-            // saveData.weldingUser= Array.isArray(saveData.weldingUser)&&saveData.weldingUser.length>0?saveData.weldingUser.join(','):'';
-            
             saveData.ncUser = saveData?.ncUser&&saveData?.ncUser.indexOf('0')===0?saveData?.programmingLeader:saveData?.ncUser;
             saveData.productPartUser = saveData?.productPartUser&&saveData?.productPartUser.indexOf('0')===0?saveData?.ncUser:saveData?.productPartUser;
             saveData.packageUser = saveData?.packageUser&&saveData?.packageUser.indexOf('0')===0?saveData?.productPartUser:saveData?.packageUser;
-           
             saveData.boltPlanCheckUser = saveData?.boltPlanCheckUser&&saveData?.boltPlanCheckUser.indexOf('0')===0?saveData?.boltLeader:saveData?.boltPlanCheckUser;
-            saveData.boltCheckUser = saveData?.boltCheckUser&&saveData?.boltCheckUser.indexOf('0')===0?saveData?.boltPlanCheckUser:saveData?.boltCheckUser;
-            saveData.boltUser = saveData?.boltUser&&saveData?.boltUser.indexOf('0')===0?saveData?.productPartUser:saveData?.boltUser;
-
-            saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader&&saveData?.deliveryDrawLeader.indexOf('0')===0?saveData?.drawLeader:saveData?.deliveryDrawLeader;
-  
-           
+            saveData.boltCheckUser = saveData?.boltCheckUser&&saveData?.boltCheckUser?.join(',');
+            saveData.boltUser = saveData?.boltUser&&saveData?.boltUser?.join(',');
+            saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader&&saveData?.deliveryDrawLeader.indexOf('0')===0?saveData?.drawLeader:saveData?.deliveryDrawLeader;         
             await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
 
                 setVisible(false);
@@ -166,28 +147,22 @@ export default function ScheduleView(): React.ReactNode {
                 form.resetFields([
                     'pattern',
                     'boltCheckUser',
-                    // 'boltDeliverTime',
                     'boltLeader',
                     'boltPlanCheckUser',
                     'boltUser',
-                    // 'deliveryDrawDeliverTime',
                     'deliveryDrawLeader',
-                    // 'drawDeliverTime',
                     'drawLeader',
                     'hangLineBoardCheckUser',
                     'legConfigurationCheckUser',
                     'legConfigurationUser',
                     'legProgrammingUser',
-                    // 'loftingDeliverTime',
                     'loftingLeader',
                     'loftingMutualReview',
                     'loftingUser',
                     'ncUser',
                     'packageUser',
                     'productPartUser',
-                    // 'programmingDeliverTime',
                     'programmingLeader',
-                    // 'smallSampleDeliverTime',
                     'weldingUser',
                     'smallSampleLeader',
                     'description'
@@ -204,7 +179,6 @@ export default function ScheduleView(): React.ReactNode {
             }).then(()=>{
                 setRefresh(!refresh);
             })
-        
         } catch (error) {
             console.log(error)
         }
@@ -241,18 +215,6 @@ export default function ScheduleView(): React.ReactNode {
             width: 100,
             dataIndex: 'priorityName',
         },
-        // {
-        //     key: 'materialLeaderName',
-        //     title: '提料负责人',
-        //     width: 200,
-        //     dataIndex: 'materialLeaderName'
-        // },
-        // {
-        //     key: 'materialPartLeaderName',
-        //     title: '提料配段负责人',
-        //     width: 100,
-        //     dataIndex: 'materialPartLeaderName'
-        // },
         {
             key: 'loftingLeaderName',
             title: '放样负责人',
@@ -295,12 +257,6 @@ export default function ScheduleView(): React.ReactNode {
             width: 100,
             dataIndex: 'programmingLeaderName'
         },
-        // {
-        //     key: 'weldingLeaderName',
-        //     title: '编程负责人',
-        //     width: 100,
-        //     dataIndex: 'weldingLeaderName'
-        // },
         {
             key: 'smallSampleLeaderName',
             title: '小样图上传',
@@ -394,19 +350,11 @@ export default function ScheduleView(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type='link' onClick={async ()=>{
-                        
                         setVisible(true);
                         setLoad(true)
                         setBatch(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
-                  
-                        // // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                        // //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                        // //     let uom = new Date(resData.materialDeliverTime);
-                        // //     let newDate =new Date(uom.setHours(uom.getHours() + day));
-                        // //     resData.materialPartDeliverTime = newDate
-                        // // }
                         if(resData?.assignConfigVO?.weldingCompletionTime 
                             && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
                             && resData?.assignConfigVO.smallSampleCompletionTime 
@@ -414,7 +362,6 @@ export default function ScheduleView(): React.ReactNode {
                             && resData?.assignConfigVO.drawDeliverTime
                             && resData?.assignConfigVO.blotDrawDeliverTime 
                             && resData?.loftingDeliverTime){
-                                
                             const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
                             const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
                             const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
@@ -447,9 +394,9 @@ export default function ScheduleView(): React.ReactNode {
                             ncUser:resData.ncUser?resData.ncUser:'0',
                             packageUser:resData.packageUser?resData.packageUser:'0',
                             productPartUser:resData.productPartUser?resData.productPartUser:'0',
-                            boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
+                            boltCheckUser:resData.boltCheckUser&&resData.boltCheckUse?.split(','),
                             boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
-                            boltUser:resData.boltUser?resData.boltUser:'0',
+                            boltUser:resData.boltUser&&resData.boltUser?.split(','),
                             deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
                            
                             boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
@@ -469,13 +416,6 @@ export default function ScheduleView(): React.ReactNode {
                         setLoad(true)
                         const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
                         setScheduleData(resData);
-                     
-                        // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                        //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                        //     let uom = new Date(resData.materialDeliverTime);
-                        //     let newDate =new Date(uom.setHours(uom.getHours() + day));
-                        //     resData.materialPartDeliverTime = newDate
-                        // }
                         if(resData?.assignConfigVO?.weldingCompletionTime 
                             && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
                             && resData?.assignConfigVO.smallSampleCompletionTime 
@@ -515,9 +455,9 @@ export default function ScheduleView(): React.ReactNode {
                             ncUser:resData.ncUser?resData.ncUser:'0',
                             packageUser:resData.packageUser?resData.packageUser:'0',
                             productPartUser:resData.productPartUser?resData.productPartUser:'0',
-                            boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
+                            boltCheckUser:resData.boltCheckUser&&resData.boltCheckUser?.split(','),
                             boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
-                            boltUser:resData.boltUser?resData.boltUser:'0',
+                            boltUser:resData.boltUser&&resData.boltUser?.split(','),
                             deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
                             
                             boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
@@ -876,8 +816,7 @@ export default function ScheduleView(): React.ReactNode {
                             <Row>
                                 <Col span={18}>
                                     <Form.Item name="boltUser" label="螺栓清单"> 
-                                        <Select disabled={edit||scheduleData?.boltStatus===4} allowClear>
-                                            <Select.Option key={'0'} value={'0'}>同上</Select.Option>
+                                        <Select disabled={edit||scheduleData?.boltStatus===4} mode="multiple" allowClear>
                                             { user && user.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -938,8 +877,7 @@ export default function ScheduleView(): React.ReactNode {
                             <Row>
                                 <Col span={18}>
                                     <Form.Item name="boltCheckUser" label="螺栓清单校核"> 
-                                        <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
-                                            <Select.Option key={'0'} value={'0'}>同上</Select.Option>
+                                        <Select disabled={edit||scheduleData?.smallSampleStatus===2} mode="multiple" allowClear>
                                             { user && user.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -1083,9 +1021,9 @@ export default function ScheduleView(): React.ReactNode {
                                 ncUser:resData.ncUser?resData.ncUser:'0',
                                 packageUser:resData.packageUser?resData.packageUser:'0',
                                 productPartUser:resData.productPartUser?resData.productPartUser:'0',
-                                boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
+                                boltCheckUser:resData.boltCheckUser&&resData.boltCheckUser.split(','),
                                 boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
-                                boltUser:resData.boltUser?resData.boltUser:'0',
+                                boltUser:resData.boltUser&&resData.boltUser.split(','),
                                 deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
                             });
                             setLoad(false)
