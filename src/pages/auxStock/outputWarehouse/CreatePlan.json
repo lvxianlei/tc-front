@@ -8,11 +8,11 @@
             "enum": [
                 {
                     "label": "正常出库",
-                    "value": 1
+                    "value": 0
                 },
                 {
                     "label": "退料回库",
-                    "value": 2
+                    "value": 1
                 }
             ]
         },

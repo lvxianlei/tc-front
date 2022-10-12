@@ -55,19 +55,9 @@ export default function MaterialMngt(): React.ReactNode {
             type: "string"
         },
         {
-            key: 'proportion',
-            title: '比重',
-            width: 200,
-            dataIndex: 'proportion',
-            render: (text: number, record: any, index: any) => {
-                return text == -1 ? <span>-</span> : <span>{text}</span>
-            }
-        },
-        {
-            key: 'weightAlgorithmName',
-            title: '算法',
+            title: '单位',
             width: 150,
-            dataIndex: 'weightAlgorithmName'
+            dataIndex: 'unit'
         },
         {
             key: 'description',
@@ -87,16 +77,27 @@ export default function MaterialMngt(): React.ReactNode {
                         const data = await RequestUtil.get<IMaterial[]>(`/tower-system/material/detail/${record.id}`);
                         setVisible(true);
                         const list = materialType.filter((res: IMaterialType) => res.id === data[0].materialType);
+                        const typeList = list[0]?.children.filter((res: IMaterialType) => res.id === data[0].materialCategory)
                         setMaterialList(list[0]?.children);
+                        setDirectMaterialTypeList(typeList[0]?.children)
                         let newData = {
                             ...data[0],
-                            materialType: data[0].materialType + ',' + data[0].materialTypeName,
-                            materialCategory: data[0].materialCategory + ',' + data[0].materialCategoryName,
-                            materialCode: data[0].materialCode?.substring(4),
-                            proportion: data[0].proportion == -1 ? undefined : data[0].proportion
+                            materialType: {
+                                label: data[0].materialTypeName,
+                                value: data[0].materialType
+                            },
+                            materialCategory: {
+                                value: data[0].materialCategory,
+                                label: data[0].materialCategoryName
+                            },
+                            directMaterialType: {
+                                value: data[0].directMaterialType,
+                                label: data[0].directMaterialTypeName
+                            },
+                            materialCode: data[0].materialCode?.substring(4)
                         }
                         setCode(data[0].materialCode?.substring(0, 4) || '')
-                        setDetailData(newData);
+                        setDetailData(newData as any);
                         form.setFieldsValue({ ...newData });
                         setTitle('编辑');
                     }}>编辑</Button>
@@ -128,34 +129,35 @@ export default function MaterialMngt(): React.ReactNode {
                 let values = form.getFieldsValue(true);
                 values = {
                     ...values,
-                    materialType: values.materialType.split(',')[0],
-                    materialTypeName: values.materialType.split(',')[1],
-                    materialCategory: values.materialCategory.split(',')[0],
-                    materialCategoryName: values.materialCategory.split(',')[1],
-                    materialCode: code + values.materialCode
+                    materialType: values.materialType.value,
+                    materialTypeName: values.materialType.label,
+                    materialCategory: values.materialCategory.value,
+                    materialCategoryName: values.materialCategory.label,
+                    directMaterialType: values.directMaterialType.value,
+                    directMaterialTypeName: values.directMaterialType.label,
+                    materialCode: code + values.materialCode,
+                    materialDataType: 2
                 }
                 if (title === '新增') {
                     RequestUtil.post(
-                        '/tower-system/material',
-                        [values]
+                        '/tower-system/material/auxiliary',
+                        values
                     ).then(res => {
-                        // close();
-                        // setRefresh(!refresh);
                         message.success('保存成功');
                         history.go(0)
                     })
                 } else {
                     RequestUtil.put(
-                        '/tower-system/material',
-                        [{
-                        ...values,
-                        id: detailData.id
-                    }]).then(res => {
-                        close();
-                        setRefresh(!refresh);
-                        message.success('保存成功');
-                        history.go(0)
-                    })
+                        '/tower-system/material/auxiliary',
+                        {
+                            ...values,
+                            id: detailData.id
+                        }).then(res => {
+                            close();
+                            setRefresh(!refresh);
+                            message.success('保存成功');
+                            history.go(0)
+                        })
                 }
             })
         }
@@ -168,15 +170,16 @@ export default function MaterialMngt(): React.ReactNode {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
                 materialCode: code + value,
-                id: detailData.id
+                id: detailData.id,
+                materialDataType: 2
             });
             resolve(resData)
         }).catch(error => {
             Promise.reject(error)
         })
     }
-
     const [materialList, setMaterialList] = useState([]);
+    const [directMaterialTypeList, setDirectMaterialTypeList] = useState([]);
     const [visible, setVisible] = useState(false);
     const [title, setTitle] = useState('新增');
     const [detailData, setDetailData] = useState<IMaterial>({});
@@ -184,9 +187,11 @@ export default function MaterialMngt(): React.ReactNode {
     const [form] = Form.useForm();
     const history = useHistory();
     const [code, setCode] = useState('');
-    const [filterValue, setFilterValue] = useState({});
+    const [filterValue, setFilterValue] = useState({ materialDataType: 2 });
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`);
+        const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`, {
+            materialDataType: 2
+        });
         resole(data);
     }), {})
     const materialType: any = data || [];
@@ -212,10 +217,7 @@ export default function MaterialMngt(): React.ReactNode {
             headTabs={[]}
             refresh={refresh}
             filterValue={filterValue}
-            // exportPath={`/tower-system/material`}
             extraOperation={<Space direction="horizontal" size="small">
-                {/* <Button type="primary" ghost>模板下载</Button>
-                <Button type="primary" ghost>导入</Button> */}
                 <Button type="primary" onClick={() => { setVisible(true); setTitle('新增'); }} ghost>新增</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
@@ -224,10 +226,13 @@ export default function MaterialMngt(): React.ReactNode {
                     name: 'materialType',
                     label: '类别',
                     children: <Form.Item name="materialType" initialValue="">
-                        <Select placeholder="请选择" style={{ width: "150px" }} onChange={(e) => {
-                            const list = materialType.filter((res: IMaterialType) => res.id === e);
-                            setMaterialList(list[0]?.children);
-                        }}>
+                        <Select
+                            placeholder="请选择"
+                            style={{ width: "150px" }}
+                            onChange={(e) => {
+                                const list = materialType.filter((res: IMaterialType) => res.id === e);
+                                setMaterialList(list[0]?.children);
+                            }}>
                             <Select.Option value="" key="6">全部</Select.Option>
                             {materialType && materialType.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
@@ -239,9 +244,28 @@ export default function MaterialMngt(): React.ReactNode {
                     name: 'materialCategory',
                     label: '类型',
                     children: <Form.Item name="materialCategory" initialValue="">
-                        <Select placeholder="请选择" style={{ width: "150px" }}>
+                        <Select
+                            placeholder="请选择"
+                            style={{ width: "150px" }}
+                            onChange={(e) => {
+                                const list: any = materialList.filter((res: IMaterialType) => res.id === e);
+                                setDirectMaterialTypeList(list[0]?.children);
+                            }}
+                        >
                             <Select.Option value="" key="6">全部</Select.Option>
                             {materialList && materialList.map((item: any) => {
+                                return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                },
+                {
+                    name: 'directMaterialType',
+                    label: '大类',
+                    children: <Form.Item name="directMaterialType" initialValue="">
+                        <Select placeholder="请选择" style={{ width: "150px" }}>
+                            <Select.Option value="" key="6">全部</Select.Option>
+                            {directMaterialTypeList && directMaterialTypeList.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                             })}
                         </Select>
@@ -254,55 +278,97 @@ export default function MaterialMngt(): React.ReactNode {
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {
-                setFilterValue(values)
+                setFilterValue({ ...filterValue, ...values })
                 return values;
             }}
         />
-        <Modal title={title} visible={visible} width="40%" okText="保存" onCancel={close} onOk={save}>
+        <Modal
+            title={title}
+            visible={visible}
+            width="40%"
+            okText="保存"
+            onCancel={close}
+            onOk={save}>
             <Form form={form} labelCol={{ span: 6 }}>
                 <Row>
-                    <Col span={11} offset={1}><Form.Item label="类别" name="materialType" rules={[{
-                        required: true,
-                        message: '请选择类别'
-                    }]}>
-                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => {
-                            const list = materialType.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
-                            setMaterialList(list[0].children);
-                            form.setFieldsValue({ materialCategory: '' });
-                            setCode('');
-                        }}>
-                            {materialType && materialType.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
-                            })}
-                        </Select>
-                    </Form.Item></Col>
-                    <Col span={11} offset={1}><Form.Item label="类型" name="materialCategory" rules={[{
-                        required: true,
-                        message: '请选择类型'
-                    }]}>
-                        <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => {
-                            const list: any = materialList.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
-                            setCode(list[0].code);
-                        }}>
-                            {materialList && materialList.map((item: any) => {
-                                return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
-                            })}
-                        </Select>
-                    </Form.Item></Col>
+                    <Col span={11} offset={1}>
+                        <Form.Item
+                            label="类别"
+                            name="materialType"
+                            rules={[{
+                                required: true,
+                                message: '请选择类别'
+                            }]}>
+                            <Select
+                                placeholder="请选择"
+                                style={{ width: "100%" }}
+                                labelInValue
+                                onChange={(e: any) => {
+                                    const list = materialType.filter((res: IMaterialType) => res.id === e?.value);
+                                    setMaterialList(list[0].children);
+                                    form.setFieldsValue({ materialCategory: '' });
+                                    setCode('');
+                                }}>
+                                {materialType && materialType.map((item: any) => {
+                                    return <Select.Option
+                                        key={item.id}
+                                        value={item.id}
+                                    >{item.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item></Col>
+                    <Col span={11} offset={1}>
+                        <Form.Item
+                            label="类型"
+                            name="materialCategory"
+                            rules={[{
+                                required: true,
+                                message: '请选择类型'
+                            }]}>
+                            <Select
+                                placeholder="请选择"
+                                style={{ width: "100%" }}
+                                labelInValue
+                                onChange={(e: any) => {
+                                    const list: any = materialList.filter((res: IMaterialType) => res.id === e?.value);
+                                    setDirectMaterialTypeList(list[0]?.children);
+                                    setCode(list[0].code);
+                                }}>
+                                {materialList && materialList.map((item: any) => {
+                                    return <Select.Option
+                                        key={item.id}
+                                        value={item.id}
+                                    >{item.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </Col>
                 </Row>
                 <Row>
-                    <Col span={11} offset={1}><Form.Item label="品名" name="materialName" rules={[{
-                        required: true,
-                        message: '请输入品名'
-                    }, {
-                        pattern: /^[^\s]*$/,
-                        message: '禁止输入空格',
-                    }]}>
-                        <Input maxLength={20} />
-                    </Form.Item></Col>
+                    <Col span={11} offset={1}>
+                        <Form.Item
+                            label="大类"
+                            name="directMaterialType"
+                            rules={[{
+                                required: true,
+                                message: '请选择大类'
+                            }]}>
+                            <Select
+                                placeholder="请选择"
+                                style={{ width: "100%" }}
+                                labelInValue
+                                onChange={(e: any) => {
+                                    const list: any = directMaterialTypeList.filter((res: IMaterialType) => res.id === e?.value);
+                                    setCode(list[0].code);
+                                }}>
+                                {directMaterialTypeList && directMaterialTypeList.map((item: any) => {
+                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item></Col>
                     <Col span={11} offset={1}><Form.Item label="编号" name="materialCode" rules={[{
                         required: true,
-                        message: '请输入编号'
+                        message: '请输入编码'
                     }, {
                         pattern: /^[^\s]*$/,
                         message: '禁止输入空格',
@@ -324,42 +390,48 @@ export default function MaterialMngt(): React.ReactNode {
                     </Form.Item></Col>
                 </Row>
                 <Row>
-                    <Col span={11} offset={1}><Form.Item label="规格" name="structureSpec" rules={[{
-                        required: true,
-                        message: '请输入编号'
-                    }, {
-                        pattern: /^[^\s]*$/,
-                        message: '禁止输入空格',
-                    }, {
-                        pattern: /^[^\u4e00-\u9fa5]*$/,
-                        message: '仅可输入数字/字母/特殊字符',
-                    }]}>
-                        <Input maxLength={20} />
-                    </Form.Item></Col>
-                    <Col span={11} offset={1}><Form.Item label="比重" name="proportion" rules={[{
-                        required: true,
-                        message: '请输入比重'
-                    }]}>
-                        <InputNumber min={0} step="0.0001" precision={4} max={9999.9999} style={{ width: '100%' }} />
-                    </Form.Item></Col>
+                    <Col span={11} offset={1}>
+                        <Form.Item
+                            label="品名"
+                            name="materialName"
+                            rules={[{
+                                required: true,
+                                message: '请输入品名'
+                            }, {
+                                pattern: /^[^\s]*$/,
+                                message: '禁止输入空格',
+                            }]}>
+                            <Input maxLength={20} />
+                        </Form.Item></Col>
+                    <Col span={11} offset={1}>
+                        <Form.Item
+                            label="规格"
+                            name="structureSpec"
+                            rules={[{
+                                required: true,
+                                message: '请输入规格'
+                            }, {
+                                pattern: /^[^\s]*$/,
+                                message: '禁止输入空格',
+                            }]}>
+                            <Input maxLength={20} />
+                        </Form.Item>
+                    </Col>
                 </Row>
                 <Row>
-                    <Col span={11} offset={1}><Form.Item label="比重算法" name="weightAlgorithm" rules={[{
-                        required: true,
-                        message: '请选择比重算法'
-                    }]}>
-                        <Select style={{ width: '100%' }}>
-                            <Select.Option value={3} id={3}>
-                                比重（法兰类）
-                            </Select.Option>
-                            <Select.Option value={2} id={2}>
-                                比重*面积（钢板类）
-                            </Select.Option>
-                            <Select.Option value={1} id={1}>
-                                比重*长度（角钢类）
-                            </Select.Option>
-                        </Select>
-                    </Form.Item></Col>
+                    <Col span={11} offset={1}>
+                        <Form.Item
+                            label="单位"
+                            name="unit"
+                            rules={[{
+                                required: true,
+                                message: '请输入单位'
+                            }, {
+                                pattern: /^[^\s]*$/,
+                                message: '禁止输入空格',
+                            }]}>
+                            <Input maxLength={20} />
+                        </Form.Item></Col>
                     <Col span={11} offset={1}><Form.Item label="备注" name="description">
                         <Input.TextArea maxLength={300} />
                     </Form.Item></Col>
