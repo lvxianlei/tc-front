@@ -26,6 +26,9 @@ export default function Management(): React.ReactNode {
 
     return <Page
         path="/tower-market/projectInfo"
+        paginationProps={{
+            pageSizeOptions: ["10", "20", "50", "100", "500"]
+        }}
         columns={[
             {
                 title: '序号',
@@ -48,8 +51,10 @@ export default function Management(): React.ReactNode {
                                 }}
                             > {_a}</Typography.Text>
                         </Link>
-
                     })
+                }
+                if (item.dataIndex === "bidBuyEndTime") {
+                    return ({ ...item, features: { sortable: true } })
                 }
                 return item
             }),
