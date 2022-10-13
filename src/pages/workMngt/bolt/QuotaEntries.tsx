@@ -11,6 +11,7 @@
  import useRequest from '@ahooksjs/use-request';
  import styles from './BoltList.module.less';
  import { FixedType } from 'rc-table/lib/interface';
+import { patternTypeOptions } from "../../../configuration/DictionaryOptions";
  
  export interface EditProps {
      onSubmit: () => void
@@ -67,8 +68,15 @@
             render: (_: string , record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={["data", index,""]}>
                     <Select size="small">
-<Select.Option value={1} key={1}>套用</Select.Option>
-<Select.Option value={2} key={2}>新放</Select.Option>
+{/* <Select.Option value={1} key={1}>套用</Select.Option>
+<Select.Option value={2} key={2}>新放</Select.Option> */}
+{
+                                patternTypeOptions?.map((item: any, index: number) =>
+                                    <Select.Option value={item.id} key={index}>
+                                        {item.name}
+                                    </Select.Option>
+                                )
+                            }
                     </Select>
                 </Form.Item>
             )
