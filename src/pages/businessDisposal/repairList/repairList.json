@@ -1,0 +1,255 @@
+{
+    "columns": [
+        {
+            "key": "repairNumber",
+            "title": "返修单编号",
+            "dataIndex": "repairNumber",
+            "width": 100
+        },
+        {
+            "key": "statusName",
+            "title": "返修单状态",
+            "dataIndex": "statusName",
+            "width": 100
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTime",
+            "width": 100
+        },
+        {
+            "key": "repairTime",
+            "title": "返修日期",
+            "dataIndex": "repairTime",
+            "width": 150
+        },
+        {
+            "key": "wasteProductReceiptNumber",
+            "title": "不合格处置单编号",
+            "dataIndex": "wasteProductReceiptNumber",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "productionLink",
+            "title": "生产环节",
+            "dataIndex": "productionLink",
+            "width": 100
+        },
+        {
+            "key": "issuedNumber",
+            "title": "原下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 100
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "actualPenaltyAmount",
+            "title": "实际罚款金额",
+            "dataIndex": "actualPenaltyAmount",
+            "width": 100
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "segmentName",
+            "title": "段号",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "code",
+            "title": "零件号",
+            "dataIndex": "code",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "length",
+            "title": "长度",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "width",
+            "title": "宽度",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单重kg",
+            "dataIndex": "basicsWeight",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "总重kg",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "单段返修数量",
+            "dataIndex": "basicsPartNum",
+            "width": 160
+        },
+        {
+            "key": "segmentCount",
+            "title": "单基段数",
+            "dataIndex": "segmentCount",
+            "width": 100
+        },
+        {
+            "key": "baseNum",
+            "title": "基数",
+            "dataIndex": "baseNum",
+            "width": 100
+        },
+        {
+            "key": "repairTotalNum",
+            "title": "返修总数量",
+            "dataIndex": "repairTotalNum",
+            "width": 100
+        },
+        {
+            "key": "typeDictName",
+            "title": "零件类型",
+            "dataIndex": "typeDictName",
+            "width": 100
+        },
+        {
+            "key": "repairTypeName",
+            "title": "返修类型",
+            "dataIndex": "repairTypeName",
+            "width": 100
+        },
+        {
+            "key": "repairWorkshop",
+            "title": "返修车间",
+            "dataIndex": "repairWorkshop",
+            "width": 100
+        },
+        {
+            "key": "repairWorkProcedure",
+            "title": "返修工序",
+            "dataIndex": "repairWorkProcedure",
+            "width": 100
+        },
+        {
+            "key": "repairLeaderName",
+            "title": "责任人",
+            "dataIndex": "repairLeaderName",
+            "width": 100
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "罚款金额（元）",
+            "dataIndex": "penaltyAmount",
+            "width": 100,
+            "type": "number"
+        },
+        {
+            "key": "actualPenaltyAmount",
+            "title": "实际罚款金额",
+            "dataIndex": "actualPenaltyAmount",
+            "width": 100
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ],
+    "baseColumns": [
+        {
+            "key": "repairNumber",
+            "title": "返修单编号",
+            "dataIndex": "repairNumber",
+            "width": 100
+        },
+        {
+            "key": "status",
+            "title": "返修单状态",
+            "dataIndex": "status",
+            "width": 100
+        },
+        {
+            "key": "repairTime",
+            "title": "返修日期",
+            "dataIndex": "repairTime",
+            "width": 100
+        },
+        {
+            "key": "wasteProductReceiptNumber",
+            "title": "不合格处置单编号",
+            "dataIndex": "wasteProductReceiptNumber",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "productionLink",
+            "title": "生产环节",
+            "dataIndex": "productionLink",
+            "width": 100
+        },
+        {
+            "key": "issuedNumber",
+            "title": "原下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 100
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "actualPenaltyAmount",
+            "title": "实际罚款金额",
+            "dataIndex": "actualPenaltyAmount",
+            "width": 100
+        }
+    ]
+}

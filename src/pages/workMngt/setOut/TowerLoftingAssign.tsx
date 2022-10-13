@@ -12,6 +12,7 @@ import styles from './TowerLoftingAssign.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import moment from 'moment';
+import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 
 export interface TowerLoftingAssignProps { }
 export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<TowerLoftingAssignProps>, WithTranslation {
@@ -111,9 +112,9 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 loftingUser: data?.loftingUser && data?.loftingUser?.split(',')
             }
             this.getForm()?.setFieldsValue
-            ({
-                ...detailData
-            });
+                ({
+                    ...detailData
+                });
         }
     }
 
@@ -140,7 +141,6 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                     programmingDeliverTime: values?.programmingDeliverTime && values?.programmingDeliverTime.format('YYYY-MM-DD HH:mm:ss'),
                     idList: [this.props?.id],
                     productCategoryName: this.state.appointed?.productCategoryName,
-                    pattern: this.state.appointed?.pattern,
                     loftingUser: values?.loftingUser && values?.loftingUser.join(','),
                     loftingMutualReview: values.loftingMutualReview[0] === '0' ? values.loftingUser.join(',') : values.loftingMutualReview.join(','),
                     weldingUser: values.weldingUser[0] === '0' ? values.loftingMutualReview[0] === '0' ? values.loftingUser.join(',') : values.loftingMutualReview.join(',') : values.weldingUser.join(','),
@@ -190,7 +190,19 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 {this.state.appointed?.name}
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                {this.state.appointed?.patternName}
+                                <Form.Item name="pattern"
+                                    rules={[{
+                                        required: true,
+                                        message: '请选择优先级'
+                                    }]} style={{ width: '100%', display: 'inline-block' }}>
+                                    <Select>
+                                        {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                            return <Select.Option key={index} value={id}>
+                                                {name}
+                                            </Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="优先级*">
                                 <Form.Item name="priority"

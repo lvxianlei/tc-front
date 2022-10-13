@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Input, message, Modal, Radio } from "antd";
-import { Link, useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { DetailContent, SearchTable } from "../../common";
 import { TabTypes } from "../Detail";
 import RequestUtil from "../../../utils/RequestUtil";
@@ -122,6 +122,11 @@ export default function Index() {
                     name: 'planNumber',
                     label: '计划号',
                     children: <Input placeholder="计划号" style={{ width: 210 }} />
+                },
+                {
+                    name: 'internalNumber',
+                    label: '内部合同编号',
+                    children: <Input placeholder="内部合同编号" style={{ width: 210 }} />
                 },
                 {
                     name: 'orderProjectName',

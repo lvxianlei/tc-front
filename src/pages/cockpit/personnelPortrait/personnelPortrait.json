@@ -1,0 +1,83 @@
+{
+    "columns": [
+        {
+            "key": "loftingUserName",
+            "title": "姓名",
+            "dataIndex": "loftingUserName"
+        },
+        {
+            "key": "loftingNum",
+            "title": "累计放样件号数",
+            "dataIndex": "loftingNum",
+            "type": "number"
+        },
+        {
+            "key": "loftingErrorNum",
+            "title": "累计错误件号数",
+            "dataIndex": "loftingErrorNum",
+            "type": "number"
+        },
+        {
+            "key": "rate",
+            "title": "正确率%",
+            "dataIndex": "rate"
+        }
+    ],
+    "tableColumns": [
+        {
+            "key": "years",
+            "title": "年份",
+            "dataIndex": "years",
+            "width": 100
+        },
+        {
+            "key": "type",
+            "title": "产品类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
+            "key": "angleSteelTower",
+            "title": "角钢塔",
+            "dataIndex": "angleSteelTower",
+            "width": 100
+        },
+        {
+            "key": "steelPipePole",
+            "title": "钢管杆",
+            "dataIndex": "steelPipePole",
+            "width": 100
+        },
+        {
+            "key": "pipeTower",
+            "title": "三管塔/四管塔放",
+            "dataIndex": "pipeTower",
+            "width": 100
+        },
+        {
+            "key": "framework",
+            "title": "架构",
+            "dataIndex": "framework",
+            "width": 100
+        },
+        {
+            "key": "steelStructure",
+            "title": "钢结构",
+            "dataIndex": "steelStructure",
+            "width": 100
+        },
+        {
+            "key": "basics",
+            "title": "基础",
+            "dataIndex": "basics",
+            "type": "date",
+            "width": 130
+        },
+        {
+            "key": "subtotal",
+            "title": "小计",
+            "dataIndex": "subtotal",
+            "width": 130
+        }
+    ]
+}

@@ -1,0 +1,133 @@
+{
+    "columns": [
+        {
+            "key": "taskNum",
+            "title": "放样任务编号",
+            "width": 100,
+            "dataIndex": "taskNum"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "loftingCompleteTime",
+            "title": "放样完成日期",
+            "dataIndex": "loftingCompleteTime",
+            "width": 80
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 80
+        },
+        {
+            "key": "towerAccuracyName",
+            "title": "塔型准确率",
+            "dataIndex": "towerAccuracyName",
+            "width": 80
+        },
+        {
+            "key": "partNum",
+            "title": "件号数汇总",
+            "dataIndex": "partNum",
+            "width": 80,
+            "type": "number"
+        },
+        {
+            "key": "loftingLeaderName",
+            "title": "放样负责人",
+            "dataIndex": "loftingLeaderName",
+            "width": 80
+        },
+        {
+            "key": "leaderPunishmentAmount",
+            "title": "负责人扣惩",
+            "dataIndex": "leaderPunishmentAmount",
+            "width": 80
+        }
+    ],
+    "performanceColumns": [
+        {
+            "key": "loftingUserName",
+            "title": "放样人员",
+            "width": 50,
+            "dataIndex": "loftingUserName"
+        },
+        {
+            "key": "partNum",
+            "title": "放样件号数（总）",
+            "width": 80,
+            "dataIndex": "partNum",
+            "type": "number"
+        },
+        {
+            "key": "loftingPerformanceAmount",
+            "title": "放样绩效（总）",
+            "width": 80,
+            "dataIndex": "loftingPerformanceAmount"
+        },
+        {
+            "key": "mistakenPartNum",
+            "title": "错误件号数（总）",
+            "width": 80,
+            "dataIndex": "mistakenPartNum",
+            "type": "number"
+        },
+        {
+            "key": "accuracyName",
+            "title": "个人准确率",
+            "width": 50,
+            "dataIndex": "accuracyName"
+        }
+    ],
+    "checkColumns": [
+        {
+            "key": "checkUserName",
+            "title": "校核人员",
+            "width": 50,
+            "dataIndex": "checkUserName"
+        },
+        {
+            "key": "checkPartNum",
+            "title": "审核件号数（总）",
+            "width": 80,
+            "dataIndex": "checkPartNum",
+            "type": "number"
+        },
+        {
+            "key": "mistakenPartNum",
+            "title": "纠错件号数（总）",
+            "width": 80,
+            "dataIndex": "mistakenPartNum",
+            "type": "number"
+        },
+        {
+            "key": "checkPerformanceAmount",
+            "title": "绩效金额",
+            "width": 80,
+            "dataIndex": "checkPerformanceAmount"
+        }
+    ]
+}

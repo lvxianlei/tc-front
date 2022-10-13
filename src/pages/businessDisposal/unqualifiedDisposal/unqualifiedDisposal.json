@@ -1,0 +1,370 @@
+{
+    "columns": [
+        {
+            "key": "wasteProductReceiptNumber",
+            "title": "不合格处置单编号",
+            "dataIndex": "wasteProductReceiptNumber",
+            "width": 100
+        },
+        {
+            "key": "repairReceiptNumber",
+            "title": "返修单编号",
+            "dataIndex": "repairReceiptNumber",
+            "width": 100
+        },
+        {
+            "key": "status",
+            "title": "处理状态",
+            "dataIndex": "status",
+            "width": 100,
+            "type":"select",
+            "enum": [
+                { "value": 1, "label": "待处理" },
+                { "value": 2, "label": "已处理" },
+                { "value": 0, "label": "已拒绝" }
+            ]
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTime",
+            "width": 150
+        },
+        {
+            "key": "issuedNumber",
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 100
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "steelProductShape",
+            "title": "塔型钢印号",
+            "dataIndex": "steelProductShape",
+            "width": 100
+        },
+        {
+            "key": "blameCompany",
+            "title": "责任单位",
+            "dataIndex": "blameCompany",
+            "width": 100
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "productionLink",
+            "title": "生产环节",
+            "dataIndex": "productionLink",
+            "width": 100
+        },
+        {
+            "key": "problemLink",
+            "title": "问题发现环节",
+            "dataIndex": "problemLink",
+            "width": 100
+        },
+        {
+            "key": "wasteProductProject",
+            "title": "不合格项目",
+            "dataIndex": "wasteProductProject",
+            "width": 100
+        },
+        {
+            "key": "problemDescription",
+            "title": "问题描述",
+            "dataIndex": "problemDescription",
+            "width": 100
+        },
+        {
+            "key": "handleProposal",
+            "title": "处理建议",
+            "dataIndex": "handleProposal",
+            "width": 100
+        },
+        {
+            "key": "segmentName",
+            "title": "段号",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "structureCode",
+            "title": "零件号",
+            "dataIndex": "structureCode",
+            "width": 100
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 160
+        },
+        {
+            "key": "length",
+            "title": "长度",
+            "dataIndex": "length",
+            "width": 100
+        },
+        {
+            "key": "productionNum",
+            "title": "生产数量",
+            "dataIndex": "productionNum",
+            "width": 100
+        },
+        {
+            "key": "productionWeight",
+            "title": "生产重量（kg）",
+            "dataIndex": "productionWeight",
+            "width": 100
+        },
+        {
+            "key": "disposeNum",
+            "title": "处理数量",
+            "dataIndex": "disposeNum",
+            "width": 100
+        },
+        {
+            "key": "disposeWeight",
+            "title": "处理重量（kg）",
+            "dataIndex": "disposeWeight",
+            "width": 100
+        },
+        {
+            "key": "responsibleProcedureName",
+            "title": "责任工序",
+            "dataIndex": "responsibleProcedureName",
+            "width": 100
+        },
+        {
+            "key": "responsibleTeam",
+            "title": "责任班组",
+            "dataIndex": "responsibleTeam",
+            "width": 100
+        },
+        {
+            "key": "leaderName",
+            "title": "责任人",
+            "dataIndex": "leaderName",
+            "width": 100
+        },
+        {
+            "key": "typeName",
+            "title": "零件类型",
+            "dataIndex": "typeName",
+            "width": 100
+        },
+        {
+            "key": "repairTypeName",
+            "title": "返修类型",
+            "dataIndex": "repairTypeName",
+            "width": 100
+        },
+        {
+            "key": "repairWorkshop",
+            "title": "返修车间",
+            "dataIndex": "repairWorkshop",
+            "width": 100
+        },
+        {
+            "key": "repairProcess",
+            "title": "返修工序",
+            "dataIndex": "repairProcess",
+            "width": 100
+        },
+        {
+            "key": "assessmentAmount",
+            "title": "罚款金额（元）",
+            "dataIndex": "assessmentAmount",
+            "width": 100
+        },
+        {
+            "key": "realAssessmentAmount",
+            "title": "实际罚款金额（元）",
+            "dataIndex": "realAssessmentAmount",
+            "width": 100
+        }
+    ],
+    "baseColumns": [
+        {
+            "key": "wasteProductReceiptNumber",
+            "title": "不合格处置单编号",
+            "dataIndex": "wasteProductReceiptNumber",
+            "width": 100
+        },
+        {
+            "key": "issuedNumber",
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 100
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "blameCompany",
+            "title": "责任单位",
+            "dataIndex": "blameCompany",
+            "width": 100
+        }
+    ],
+    "unqualifiedColumns": [
+        {
+            "key": "segmentName",
+            "title": "段号",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "structureCode",
+            "title": "零件号",
+            "dataIndex": "structureCode",
+            "width": 100
+        },
+        {
+            "key": "productionNum",
+            "title": "生产数量",
+            "dataIndex": "productionNum",
+            "width": 100
+        },
+        {
+            "key": "productionWeight",
+            "title": "生产重量（kg）",
+            "dataIndex": "productionWeight",
+            "width": 100
+        },
+        {
+            "key": "disposeNum",
+            "title": "处理数量",
+            "dataIndex": "disposeNum",
+            "width": 100
+        },
+        {
+            "key": "disposeWeight",
+            "title": "处理重量（kg）",
+            "dataIndex": "disposeWeight",
+            "width": 100
+        },
+        {
+            "key": "problemLink",
+            "title": "问题发现环节",
+            "dataIndex": "problemLink",
+            "width": 100
+        },
+        {
+            "key": "problemDescription",
+            "title": "问题描述",
+            "dataIndex": "problemDescription",
+            "width": 100
+        },
+        {
+            "key": "handleProposal",
+            "title": "处理建议",
+            "dataIndex": "handleProposal",
+            "width": 100
+        },
+        {
+            "key": "responsibleProcedure",
+            "title": "责任工序",
+            "dataIndex": "responsibleProcedure",
+            "width": 100
+        },
+        {
+            "key": "responsibleTeam",
+            "title": "责任班组",
+            "dataIndex": "responsibleTeam",
+            "width": 100
+        },
+        {
+            "key": "leaderId",
+            "title": "责任人",
+            "dataIndex": "leaderId",
+            "width": 100
+        },
+        {
+            "key": "typeId",
+            "title": "零件类型",
+            "dataIndex": "typeId",
+            "width": 100
+        },
+        {
+            "key": "repairTypeName",
+            "title": "返修类型",
+            "dataIndex": "repairTypeName",
+            "width": 100
+        },
+        {
+            "key": "repairWorkshop",
+            "title": "返修车间",
+            "dataIndex": "repairWorkshop",
+            "width": 100
+        },
+        {
+            "key": "repairProcess",
+            "title": "返修工序",
+            "dataIndex": "repairProcess",
+            "width": 100
+        },
+        {
+            "key": "assessmentAmount",
+            "title": "罚款金额（元）",
+            "dataIndex": "assessmentAmount",
+            "width": 100
+        },
+        {
+            "key": "realAssessmentAmount",
+            "title": "实际罚款金额（元）",
+            "dataIndex": "realAssessmentAmount",
+            "width": 100
+        }
+    ]
+}

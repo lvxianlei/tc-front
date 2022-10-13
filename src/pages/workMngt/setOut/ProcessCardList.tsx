@@ -5,14 +5,15 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Modal, message, Row, Col, Input, Popconfirm } from 'antd';
+import { Space, Button, Modal, message, Row, Col, Input, Popconfirm, Checkbox } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import UploadModal from './UploadModal';
 import { FileProps } from '../../common/Attachment';
+import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 
 export default function ProcessCardList(): React.ReactNode {
     const history = useHistory();
@@ -21,6 +22,8 @@ export default function ProcessCardList(): React.ReactNode {
     const [visible, setVisible] = useState(false);
     const [segmentName, setSegmentName] = useState('');
     const [segmentId, setSegmentId] = useState('');
+    const [checked, setChecked] = useState(false);
+    const [filterValue, setFilterValue] = useState<any>();
 
     const columns = [
         {
@@ -101,8 +104,16 @@ export default function ProcessCardList(): React.ReactNode {
             columns={columns}
             headTabs={[]}
             refresh={refresh}
-            requestData={{ productCategoryId: params.id }}
+            filterValue={filterValue}
+            requestData={{ productCategoryId: params.id, flag: checked ? 1 : 2 }}
             extraOperation={<Space direction="horizontal" size="small">
+                <Checkbox checked={checked} onChange={
+                    (e: CheckboxChangeEvent) => {
+                        setFilterValue({ flag: e.target.checked ? 1 : 2 })
+                        setRefresh(!refresh);
+                        setChecked(e.target.checked);
+                    }
+                }>相同名称显示</Checkbox>
                 <UploadModal id={params.id} path="/tower-science/productSegment/segmentDrawUpload" updateList={() => setRefresh(!refresh)} />
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
