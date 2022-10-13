@@ -13,12 +13,10 @@ import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
 import Cookies from "js-cookie";
 import AppstoreOutlined from "@ant-design/icons/lib/icons/AppstoreOutlined";
-import ApplicationContext from "../configuration/ApplicationContext";
-import useRequest from "@ahooksjs/use-request"
-import RequestUtil from '../utils/RequestUtil'
 import styles from './Layout.module.less';
 import './drawer.less';
-
+import useRequest from "@ahooksjs/use-request";
+import RequestUtil from "@utils/RequestUtil";
 const IconFont = createFromIconfontCN({
     scriptUrl: [
         "//at.alicdn.com/t/font_2771956_r1mkfqj4xwf.js"
@@ -209,7 +207,6 @@ export default function (): JSX.Element {
         }
         return true;
     }
-
     const handleClick = (opend: boolean) => setIsOpend(opend)
 
     const handleUseTenants = async (tenantInfo: any) => {
@@ -276,35 +273,41 @@ export default function (): JSX.Element {
                     }} />
             </div>
             <Hbreadcrumb onClick={handleClick} />
-            {
-                location.pathname !== "/chooseApply" && (
-                    <>
-                        <div className={styles.logout}>
-                            <Row>
-                                <Col>
-                                    <Link to={`/approvalm/management`}>
-                                        <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
-                                    </Link>
-
-                                </Col>
-                                <Col>
-                                    <Link to={`/homePage/notice`}>
-                                        <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
-                                    </Link>
-                                </Col>
-                                <Col>
-                                    <Dropdown overlay={menu} placement="bottomCenter">
-                                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                            <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
-                                            <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
-                                        </a>
-                                    </Dropdown>
-                                </Col>
-                            </Row>
-                        </div>
-                    </>
-                )
-            }
+            <div className={styles.logout}>
+                <Row>
+                    <Col>
+                        <Dropdown overlay={tenants} placement="bottomCenter">
+                            <a className="ant-dropdown-link"
+                                onClick={e => e.preventDefault()}>
+                                <span style={{
+                                    marginLeft: 4,
+                                    fontSize: 14,
+                                    marginRight: 16,
+                                    color: "#fff"
+                                }}>{AuthUtil.getTenantName()}<DownOutlined /></span>
+                            </a>
+                        </Dropdown>
+                    </Col>
+                    <Col>
+                        <Link to={`/approvalm/management`}>
+                            <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
+                        </Link>
+                    </Col>
+                    <Col>
+                        <Link to={`/homePage/notice`}>
+                            <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
+                        </Link>
+                    </Col>
+                    <Col>
+                        <Dropdown overlay={menu} placement="bottomCenter">
+                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
+                                <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
+                            </a>
+                        </Dropdown>
+                    </Col>
+                </Row>
+            </div>
         </Header>
         <Layout
             style={{
@@ -344,7 +347,7 @@ export default function (): JSX.Element {
                                                 herf = res.path
                                         }
                                         if (res.appName === "MC") {
-                                            herf = res.path + AuthUtil.getUserId()
+                                            herf = res.path + AuthUtil.getUserInfo().user_id
                                         }
                                         window.location.href = herf
                                         return
