@@ -119,6 +119,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
                                 <Button
                                     type="link"
+                                    disabled={record?.receiveStatus === 1}
                                     onClick={
                                         () => {
                                             setIsOpenId(true)
@@ -132,7 +133,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button type="link" disabled={record.stockStatus === 2}>删除</Button>
+                                    <Button type="link" 
+                                    disabled={record?.receiveStatus === 1}>删除</Button>
                                 </Popconfirm>
                             </>
                         )

@@ -120,7 +120,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2} type="link">撤销</Button>
+                                    <Button loading={revocating} disabled={record.warehousingEntryStatus !== 1} type="link">撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -128,7 +128,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
+                                    <Button loading={deleting} disabled={record.warehousingEntryStatus !== 0} type="link">删除</Button>
                                 </Popconfirm>
                             </>
                         )
