@@ -254,6 +254,22 @@ export default function (): JSX.Element {
             </Menu.Item>
         </Menu>
     );
+
+    const tenants = (<Menu>
+        {AuthUtil.getTenants().map((item: any) => <Menu.Item key={item.id}>
+            <p
+                style={{
+                    textAlign: "center",
+                    height: "24px",
+                    lineHeight: "24px",
+                    margin: 0
+                }}
+                onClick={() => handleUseTenants(item)}>
+                {item.name}
+            </p>
+        </Menu.Item>)}
+    </Menu>)
+
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
