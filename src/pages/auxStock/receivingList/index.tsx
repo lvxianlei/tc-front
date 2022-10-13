@@ -158,7 +158,6 @@ export default function Invoicing() {
                         >
                             <Button
                                 type="link"
-                                size="small"
                                 className="btn-operation-link"
                                 disabled={record.receiveStatus === 1 || (record.lists && record.lists.length !== 0)}
                             >删除</Button>
