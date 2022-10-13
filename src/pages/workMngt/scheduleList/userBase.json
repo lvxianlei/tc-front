@@ -254,5 +254,198 @@
                 }
             ]
         } 
+    ],
+    "tableColumns": [
+        { 
+            "title": "操作部门", 
+            "dataIndex": "createDeptName", 
+            "key": "createDeptName"
+        },
+        { 
+            "title": "操作人", 
+            "dataIndex": "createUserName", 
+            "key": "createUserName" 
+        },
+        { 
+            "title": "操作时间", 
+            "dataIndex": "createTime", 
+            "key": "createTime" 
+        },
+        { 
+            "title": "操作", 
+            "dataIndex": "status", 
+            "key": "status", 
+            "type": "select",
+            "enum": [
+                { 
+                    "value": 1, 
+                    "label": "指派" 
+                },
+                { 
+                    "value": 2, 
+                    "label": "编辑" 
+                },
+                { 
+                    "value": null, 
+                "label": "-" 
+            }]
+        },
+        { 
+            "title": "备注", 
+            "dataIndex": "description", 
+            "key": "description" 
+        }
+    ],
+    "columns": [
+        {
+            "key": "name",
+            "title": "塔型",
+            "width": 100,
+            "dataIndex": "name"
+        },
+        {
+            "key": "steelProductShape",
+            "title": "塔型钢印号",
+            "width": 100,
+            "dataIndex": "steelProductShape"
+        },
+        {
+            "key": "patternName",
+            "title": "模式",
+            "width": 100,
+            "dataIndex": "patternName"
+        },
+        {
+            "key": "priorityName",
+            "title": "优先级",
+            "width": 100,
+            "dataIndex": "priorityName"
+        },
+        {
+            "key": "loftingLeaderName",
+            "title": "放样负责人",
+            "width": 100,
+            "dataIndex": "loftingLeaderName"
+        },
+        {
+            "key": "loftingUserName",
+            "title": "放样员",
+            "width": 100,
+            "dataIndex": "loftingUserName"
+        },
+        {
+            "key": "legConfigurationUserName",
+            "title": "放样高低腿配置编制",
+            "width": 130,
+            "dataIndex": "legConfigurationUserName"
+        },
+        {
+            "key": "legConfigurationCheckUserName",
+            "title": "放样高低腿配置校核",
+            "width": 130,
+            "dataIndex": "legConfigurationCheckUserName"
+        },
+        {
+            "key": "hangLineBoardCheckUserName",
+            "title": "放样挂线板校核",
+            "width": 100,
+            "dataIndex": "hangLineBoardCheckUserName"
+        },
+        {
+            "key": "loftingMutualReviewName",
+            "title": "审图校卡",
+            "width": 100,
+            "dataIndex": "loftingMutualReviewName"
+        },
+        {
+            "key": "programmingLeaderName",
+            "title": "校核人",
+            "width": 100,
+            "dataIndex": "programmingLeaderName"
+        },
+        {
+            "key": "smallSampleLeaderName",
+            "title": "小样图上传",
+            "width": 100,
+            "dataIndex": "smallSampleLeaderName"
+        },
+        {
+            "key": "boltUserName",
+            "title": "螺栓清单",
+            "width": 100,
+            "dataIndex": "boltUserName"
+        },
+        {
+            "key": "boltCheckUserName",
+            "title": "螺栓清单校核",
+            "width": 100,
+            "dataIndex": "boltCheckUserName"
+        },
+        {
+            "key": "boltLeaderName",
+            "title": "螺栓计划",
+            "width": 100,
+            "dataIndex": "boltLeaderName"
+        },
+        {
+            "key": "boltPlanCheckUserName",
+            "title": "螺栓计划校核",
+            "width": 100,
+            "dataIndex": "boltPlanCheckUserName"
+        },
+        {
+            "key": "weldingUserName",
+            "title": "组焊清单",
+            "width": 100,
+            "dataIndex": "weldingUserName"
+        },
+        {
+            "key": "productPartUserName",
+            "title": "杆塔配段",
+            "width": 100,
+            "dataIndex": "productPartUserName"
+        },
+        {
+            "key": "ncUserName",
+            "title": "NC程序",
+            "width": 100,
+            "dataIndex": "ncUserName"
+        },
+        {
+            "key": "packageUserName",
+            "title": "包装清单",
+            "width": 100,
+            "dataIndex": "packageUserName"
+        },
+        {
+            "key": "deliveryDrawLeaderName",
+            "title": "发货图纸",
+            "width": 100,
+            "dataIndex": "deliveryDrawLeaderName"
+        },
+        {
+            "key": "drawLeaderName",
+            "title": "组装图纸",
+            "width": 100,
+            "dataIndex": "drawLeaderName"
+        },
+        {
+            "key": "legProgrammingUserName",
+            "title": "编程高低腿",
+            "width": 100,
+            "dataIndex": "legProgrammingUserName"
+        },
+        {
+            "key": "programmingLeaderName",
+            "title": "生产下达",
+            "width": 100,
+            "dataIndex": "programmingLeaderName"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 200,
+            "dataIndex": "description"
+        }
     ]
 }
