@@ -4,7 +4,7 @@
  * 时间：2022/01/06
  */
 import React, { useState, useRef } from 'react';
-import { Input, Select, DatePicker, Button, Modal, message, Radio } from 'antd';
+import { Input, Select, DatePicker, Button, Modal, message, Radio, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
@@ -12,6 +12,8 @@ import { baseColumn, baseDetail } from "./data.json";
 // 引入新增纸质单号
 import PaperOrderModal from './PaperOrderModal';
 import CreatePlan from "./CreatePlan";
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '@utils/RequestUtil';
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -23,6 +25,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [tabs, setTabs] = useState<1 | 2>(1)
     const [pagePath, setPagePath] = useState<string>("/tower-storage/warehousingEntry/auxiliary")
     const [id, setId] = useState<string>();
+    const [editId, setEditId] = useState<string>();
+    const [oprationType, setOperationType] = useState<"create" | "edit">("create")
     const addRef = useRef<EditRefProps>();
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<any>({
@@ -31,7 +35,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         startStatusUpdateTime: "",
         endStatusUpdateTime: "",
     });
-
+    // 删除
+    const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/warehousingEntry/auxiliary/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         if (value.startRefundTime) {
@@ -76,6 +88,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }
 
+    const handleDelete = async (id: string) => {
+        await deleteRun(id)
+        await message.success("成功删除...")
+        history.go(0)
+    }
+
     return (
         <>
             <Page
@@ -94,11 +112,30 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         title: '操作',
                         dataIndex: 'key',
-                        width: 80,
+                        width: 160,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
                                 <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
+                                <Button
+                                    type="link"
+                                    disabled={record?.receiveStatus === 1}
+                                    onClick={
+                                        () => {
+                                            setIsOpenId(true)
+                                            setEditId(record.id)
+                                            setOperationType("edit")
+                                        }
+                                    }>编辑</Button>
+                                <Popconfirm
+                                    title="确认删除?"
+                                    onConfirm={() => handleDelete(record?.id)}
+                                    okText="确认"
+                                    cancelText="取消"
+                                >
+                                    <Button type="link" 
+                                    disabled={record?.receiveStatus === 1}>删除</Button>
+                                </Popconfirm>
                             </>
                         )
                     }
@@ -107,7 +144,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 onFilterSubmit={onFilterSubmit}
                 extraOperation={
                     <>
-                        <Button type='primary' ghost onClick={() => setIsOpenId(true)}>创建</Button>
+                        <Button type='primary' ghost onClick={() => {
+                            setIsOpenId(true)
+                            setOperationType("create")
+                        }}>创建</Button>
                         <div style={{ width: "2000px" }}>
                             <Radio.Group defaultValue={tabs} onChange={handleRadioChange}>
                                 <Radio.Button value={1}>入库单列表</Radio.Button>
@@ -177,6 +217,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
             <CreatePlan
                 visible={isOpenId}
+                id={editId}
+                type={oprationType}
                 handleCreate={handleCreate}
             />
         </>

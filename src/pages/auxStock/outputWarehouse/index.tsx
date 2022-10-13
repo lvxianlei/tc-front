@@ -30,7 +30,7 @@ const outStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
+                <Link to={`/auxStock/outputWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
             </>
         )
     }
@@ -60,7 +60,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(`/auxstock/entryWarehouse/detail/${record.id}`)}
+                        onClick={() => history.push(`/auxstock/outputWarehouse/detail/${record.id}`)}
                     >明细</Button>
                     <Button
                         type="link"
@@ -98,6 +98,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         departmentId: "",
         applyStaffId: "",
         outStockItemStatus: 2,
+        materialType: 2,
         ...history.location.state as object
     });
 

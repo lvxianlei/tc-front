@@ -78,7 +78,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.warehouseId) {
-            setWarehouseId(fields.warehouseId);
+            setWarehouseId(fields.warehouseId.value);
             return;
         }
         if (fields.supplierId) {
@@ -90,7 +90,6 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCreateClick = async () => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
-            console.log(baseInfo)
             if (materialList.length < 1) {
                 message.error("请您选择原材料明细!");
                 return false;
@@ -101,7 +100,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 contactsPhone: baseInfo.supplierId?.records[0]?.contactManTel,
                 contactsUser: baseInfo.supplierId?.records[0]?.contactMan,
                 supplierId: baseInfo.supplierId?.records[0]?.id,
-                supplierName: baseInfo.supplierId?.records[0]?.supplierName
+                supplierName: baseInfo.supplierId?.records[0]?.supplierName,
+                warehouseId: baseInfo.warehouseId.value,
+                warehouseName: baseInfo.warehouseId.label
             });
         } catch (error) {
             console.log(error);
@@ -117,6 +118,38 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }, [props.visible])
 
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(
+                `/tower-storage/warehousingEntry/auxiliary/${props.id}`
+            )
+            setPopDataList(result?.warehousingEntryDetailList)
+            setMaterialList(result?.warehousingEntryDetailList)
+            setSupplierId(result?.supplierId)
+            setWarehouseId(result?.warehouseId)
+            resole({
+                ...result,
+                supplierId: {
+                    id: result?.supplierId,
+                    value: result?.supplierName,
+                    records: [{
+                        id: result?.supplierId,
+                        supplierName: result?.supplierName,
+                        contactsPhone: result?.contactsPhone,
+                        contactsUser: result?.contactsUser
+                    }]
+                },
+                warehouseId: {
+                    value: result?.warehouseId,
+                    label: result?.warehouseName
+                },
+                warehousingType: result?.warehousingType || "1"
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
+
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -129,8 +162,15 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/warehousingEntry/auxiliary`, data)
-            message.success("创建成功！");
+            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](`/tower-storage/warehousingEntry/auxiliary`, props.type === "create" ? {
+                ...data,
+                materialType: 2
+            } : {
+                ...data,
+                materialType: 2,
+                id: props.id
+            })
+            message.success("操作成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
@@ -140,7 +180,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     return (
         <Modal
-            title={'新建入库单'}
+            title={`${props.type === "edit" ? "编辑入库单" : '创建入库单'}`}
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
@@ -166,13 +206,15 @@ export default function CreatePlan(props: any): JSX.Element {
             <BaseInfo
                 form={addCollectionForm}
                 edit
-                dataSource={[]}
+                dataSource={{ ...data }}
                 col={2}
                 classStyle="baseInfo"
                 columns={baseInfoColumn.map((item: any) => {
                     if (item.dataIndex === "warehouseId") {
                         return ({
-                            ...item, enum: batchingStrategy?.map((item: any) => ({
+                            ...item,
+                            labelInValue: true,
+                            enum: batchingStrategy?.map((item: any) => ({
                                 value: item.id,
                                 label: item.name
                             }))
