@@ -3103,6 +3103,13 @@
       "module": "./pages/baseSetting/MiscellaneousItems",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-代料
+      "name": "代料",
+      "path": "/businessDisposal/generationOfMaterial",
+      "module": "./pages/businessDisposal/generationOfMaterial/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
