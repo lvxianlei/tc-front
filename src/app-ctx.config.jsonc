@@ -509,6 +509,35 @@
                 ]
             },
             {
+                "label": "辅材采购管理",
+                "icon": "gongying-caigourenwu_caigourenwu",
+                "path": "/buyAuxiliaryMaterial",
+                "appName": "SW",
+                "authority": "tc_erp_sw_purchaseTask",
+                "items": [
+                    {
+                        "label": "辅材采购计划",
+                        "path": "/buyAuxiliaryMaterial/purchasePlan",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    },
+                    {
+                        "label": "辅材采购汇总",
+                        "path": "/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    },
+                    {
+                        "label": "辅材询比价",
+                        "path": "/auxiliaryMaterialEnquiryCompare/enquiryCompare",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    },
+                    {
+                        "label": "辅材合同管理",
+                        "path": "/auxiliaryMaterialContract/ContractList",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    }
+                ]
+            },
+            {
                 "label": "放样过程管理",
                 "icon": "RD_gongzuoguanli-gongzuobaogao",
                 "path": "/workMngt",
