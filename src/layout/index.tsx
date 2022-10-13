@@ -1,21 +1,19 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Avatar, Breadcrumb, Col, Drawer, Dropdown, Layout, Menu, Row } from "antd";
-import { DownOutlined, createFromIconfontCN } from "@ant-design/icons"
+import { Avatar, Breadcrumb, Col, Dropdown, Layout, Menu, Row } from "antd";
+import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined, createFromIconfontCN } from "@ant-design/icons"
 import { Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import AuthUtil from "../utils/AuthUtil";
 import ctxConfig from "../app-ctx.config.jsonc"
 import ctxRouter from "../app-router.config.jsonc"
-import apps from "../app-name.config.jsonc"
 import ChooseApplay from "../pages/chooseApply/ChooseApply"
-import { useDictionary, hasAuthority, useAuthorities } from "../hooks"
+import { useAuthorities, useDictionary, hasAuthority } from "../hooks"
 import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
 import Cookies from "js-cookie";
-import AppstoreOutlined from "@ant-design/icons/lib/icons/AppstoreOutlined";
-import ApplicationContext from "../configuration/ApplicationContext";
 import styles from './Layout.module.less';
-import './drawer.less';
+import useRequest from "@ahooksjs/use-request";
+import RequestUtil from "@utils/RequestUtil";
 
 const IconFont = createFromIconfontCN({
     scriptUrl: [
@@ -104,64 +102,104 @@ const SiderMenu: React.FC<{ isOpend: boolean }> = ({ isOpend }) => {
     </Menu>
 }
 
-const Hbreadcrumb = memo(({ onClick }: { onClick: (opend: boolean) => void }) => {
+const Hbreadcrumb = memo(({ isOpend, onClick }: { isOpend: boolean, onClick: (opend: boolean) => void }) => {
     const location = useLocation()
     const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
     const selectedMenuItem = getMenuItemByPath(ctxConfig.layout.menu, `/${pathSnippets[0]}`)
     return <div className={styles.breadcrumb}>
         {
             location.pathname !== "/chooseApply" && (
-                <Breadcrumb separator="/" className={styles.breadcrumb}>
-                    {
-                        selectedMenuItem
-                            ?
-                            <Breadcrumb.Item key={selectedMenuItem.path}>
-                                {selectedMenuItem.label}
-                            </Breadcrumb.Item>
-                            :
-                            null
-                    }
-                    {
-                        pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
-                            let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-                            const routerItem = getRouterItemByPath(path);
-                            return (
-                                routerItem
-                                    ?
-                                    <Breadcrumb.Item key={path}>
-                                        {
-                                            path === location.pathname
-                                                ?
-                                                routerItem.name
-                                                :
-                                                <Link to={path}>{routerItem.name}</Link>
+                <>
+                    {isOpend ? <MenuUnfoldOutlined
+                        onClick={() => onClick(false)}
+                        style={{
+                            fontSize: "18px",
+                            color: "#fff",
+                            lineHeight: "40px",
+                            verticalAlign: "middle",
+                            padding: "0 10px"
+                        }} /> : <MenuFoldOutlined
+                        style={{
+                            fontSize: "18px",
+                            color: "#fff",
+                            lineHeight: "40px",
+                            verticalAlign: "middle",
+                            padding: "0 10px"
+                        }}
+                        onClick={() => onClick(true)} />}
+                    <Breadcrumb separator="/" className={styles.breadcrumb}>
+                        {
+                            selectedMenuItem
+                                ?
+                                <Breadcrumb.Item key={selectedMenuItem.path}>
+                                    {selectedMenuItem.label}
+                                </Breadcrumb.Item>
+                                :
+                                null
+                        }
+                        {
+                            pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
+                                let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+                                const routerItem = getRouterItemByPath(path);
+                                return (
+                                    routerItem
+                                        ?
+                                        <Breadcrumb.Item key={path}>
+                                            {
+                                                path === location.pathname
+                                                    ?
+                                                    routerItem.name
+                                                    :
+                                                    <Link to={path}>{routerItem.name}</Link>
 
-                                        }
-                                    </Breadcrumb.Item>
-                                    :
-                                    null
-                            );
-                        })
-                    }
-                </Breadcrumb>
+                                            }
+                                        </Breadcrumb.Item>
+                                        :
+                                        null
+                                );
+                            })
+                        }
+                    </Breadcrumb>
+                </>
             )
         }
     </div>
 })
 
 export default function (): JSX.Element {
-    const [visible, setVisible] = useState<boolean>(false)
     const history = useHistory()
     const location = useLocation()
-    const authorities = useAuthorities()
-    // const authorities = ApplicationContext.get().authorities
-    const dictionary = useDictionary()
+    useAuthorities()
+    useDictionary()
     const [isOpend, setIsOpend] = useState<boolean>(false)
+
+    const { run: tenantRun } = useRequest<any>((tenantId: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/sinzetech-user/user/setDefaultTenant?tenantId=${tenantId}`)
+            const reLogin = await RequestUtil.post(
+                '/sinzetech-auth/oauth/token',
+                {
+                    grant_type: "password",
+                    tenant_id: tenantId,
+                    username: AuthUtil.getUserInfo().username,
+                    password: AuthUtil.getUserInfo().password
+                },
+                {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Tenant-Id': tenantId
+                }
+            )
+            resole(reLogin)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
+
     const logOut = () => {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
         AuthUtil.removeRealName();
-        AuthUtil.removeUserId();
+        AuthUtil.removeUserInfo();
         AuthUtil.removeTenantName();
         AuthUtil.removeSinzetechToken();
         Cookies.remove('DHWY_TOKEN', { domain: '.dhwy.cn' })
@@ -184,8 +222,30 @@ export default function (): JSX.Element {
         }
         return true;
     }
+
     const handleClick = (opend: boolean) => setIsOpend(opend)
 
+    const handleUseTenants = async (tenantInfo: any) => {
+        const {
+            access_token,
+            refresh_token,
+            user_id,
+            tenant_id,
+            tenant_name,
+            tenants,
+            ...result
+        } = await tenantRun(tenantInfo.tenantId)
+        Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
+        Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
+        Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
+        AuthUtil.setSinzetechAuth(access_token, refresh_token)
+        AuthUtil.setTenantId(tenant_id, { expires: 7 })
+        AuthUtil.setTenantName(tenantInfo.name)
+        AuthUtil.setTenants(tenants)
+        AuthUtil.setRealName(result.real_name)
+        AuthUtil.setAccout(result.account)
+        history.push(ctxConfig.home || '/')
+    }
 
     useEffect(() => {
         doFiltersAll(history)
@@ -210,6 +270,22 @@ export default function (): JSX.Element {
             </Menu.Item>
         </Menu>
     );
+
+    const tenants = (<Menu>
+        {AuthUtil.getTenants().map((item: any) => <Menu.Item key={item.id}>
+            <p
+                style={{
+                    textAlign: "center",
+                    height: "24px",
+                    lineHeight: "24px",
+                    margin: 0
+                }}
+                onClick={() => handleUseTenants(item)}>
+                {item.name}
+            </p>
+        </Menu.Item>)}
+    </Menu>)
+
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
@@ -218,108 +294,44 @@ export default function (): JSX.Element {
                 onClick={() => history.replace("/chooseApply")}>
                 <img className={styles.logo} src={Logo} />
             </h1>
-            <div style={{ float: "left" }} onClick={() => setVisible(true)}>
-                <AppstoreOutlined style={{
-                    fontSize: "24px",
-                    color: "#fff",
-                    verticalAlign: "middle"
-                }} />
+            <Hbreadcrumb isOpend={isOpend} onClick={handleClick} />
+            <div className={styles.logout}>
+                <Row>
+                    <Col>
+                        <Dropdown overlay={tenants} placement="bottomCenter">
+                            <a className="ant-dropdown-link"
+                                onClick={e => e.preventDefault()}>
+                                <span style={{
+                                    marginLeft: 4,
+                                    fontSize: 14,
+                                    marginRight: 16,
+                                    color: "#fff"
+                                }}>{AuthUtil.getTenantName()}<DownOutlined /></span>
+                            </a>
+                        </Dropdown>
+                    </Col>
+                    <Col>
+                        <Link to={`/approvalm/management`}>
+                            <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
+                        </Link>
+                    </Col>
+                    <Col>
+                        <Link to={`/homePage/notice`}>
+                            <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
+                        </Link>
+                    </Col>
+                    <Col>
+                        <Dropdown overlay={menu} placement="bottomCenter">
+                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
+                                <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
+                            </a>
+                        </Dropdown>
+                    </Col>
+                </Row>
             </div>
-            <Hbreadcrumb onClick={handleClick} />
-            {
-                location.pathname !== "/chooseApply" && (
-                    <>
-                        <div className={styles.logout}>
-                            <Row>
-                                <Col>
-                                    <Link to={`/approvalm/management`}>
-                                        <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
-                                    </Link>
-
-                                </Col>
-                                <Col>
-                                    <Link to={`/homePage/notice`}>
-                                        <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
-                                    </Link>
-                                </Col>
-                                <Col>
-                                    <Dropdown overlay={menu} placement="bottomCenter">
-                                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                            <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
-                                            <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
-                                        </a>
-                                    </Dropdown>
-                                </Col>
-                            </Row>
-                        </div>
-                    </>
-                )
-            }
         </Header>
-        <Layout
-            style={{
-                position: "relative",
-                height: "100%",
-                backgroundColor: "#fff",
-                overflow: "hidden"
-            }}>
-            <Drawer
-                title=""
-                placement="top"
-                closable={false}
-                visible={visible}
-                className="drawer"
-                height={"auto"}
-                getContainer={false}
-                style={{
-                    position: "absolute",
-                }}
-                onClose={() => setVisible(false)}
-            >
-                <div className={styles.drawerContent}>
-                    {
-                        (apps as any[]).filter((itemVos: any) => authorities?.
-                            includes(itemVos.authority)).
-                            map((res: any, index: number) => (
-                                <div className={styles.apply} key={index} onClick={() => {
-                                    AuthUtil.setCurrentAppName(res.appName)
-                                    if (res.corsWeb) {
-                                        let herf = res.path
-                                        switch (process.env.REACT_APP_ENV) {
-                                            case "integration":
-                                                herf = res.path.replace("test", "dev")
-                                                break
-                                            case "uat":
-                                                herf = res.path.replace("test", "uat")
-                                                break
-                                            default:
-                                                herf = res.path
-                                        }
-                                        if (res.appName === "MC") {
-                                            herf = res.path + AuthUtil.getUserId()
-                                        }
-                                        window.location.href = herf
-                                        return
-                                    }
-                                    setVisible(false)
-                                    history.push(res.path)
-                                }}>
-                                    <div className={styles.icon}>
-                                        <span style={{ display: "inline-block", width: 50, height: 50, background: res.color, borderRadius: 8, textAlign: "center", lineHeight: "50px" }}>
-                                            <span className={`iconfont ${res.iconFont}`} style={{
-                                                fontFamily: "font_family",
-                                                fontSize: res.fontSize || 28,
-                                                color: "#fff"
-                                            }}></span>
-                                        </span>
-                                    </div>
-                                    <div className={styles.title}>{res.title}</div>
-                                    <div className={styles.description}>{res.description}</div>
-                                </div>
-                            ))
-                    }
-                </div>
-            </Drawer>
+        <Layout style={{ height: "100%", backgroundColor: "#fff" }}>
             {
                 location.pathname === "/chooseApply" ? <ChooseApplay /> :
                     <>
@@ -328,8 +340,6 @@ export default function (): JSX.Element {
                             theme="light"
                             style={{ backgroundColor: ctxConfig.layout.theme }}
                             collapsed={isOpend}
-                            collapsible
-                            onCollapse={value => setIsOpend(value)}
                         >
                             <SiderMenu isOpend={isOpend} />
                         </Sider>
@@ -358,7 +368,6 @@ export default function (): JSX.Element {
                         </Layout>
                     </>
             }
-
         </Layout>
     </Layout>
 }

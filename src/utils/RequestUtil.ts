@@ -56,10 +56,12 @@ export default abstract class RequestUtil {
                 'Tenant-Id': AuthUtil.getTenantId()
             };
             const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
-            if (sinzetechAuth) {
+            if (![undefined, "undefined", ""].includes(sinzetechAuth)) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }
-
+            if (![undefined, "undefined", ""].includes(AuthUtil.getTenantId())) {
+                headers['Tenant-Id'] = AuthUtil.getTenantId()
+            }
             const controller = new AbortController();
             const { signal } = controller;
             cancel && cancel(controller)
