@@ -1,3 +1,4 @@
+// 原材料----计算
 interface WeightParams {
     width: number | string
     length: number | string
@@ -127,3 +128,4 @@ export const totalUnloadPrice = (totalUnloadTaxPrice: any = 0, taxMode: any = 0)
  * 盈亏重量 = 盘点重量 - 账目重量 
  */
 export const profitAndLossWeight = () => { }
+

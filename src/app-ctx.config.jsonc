@@ -337,7 +337,7 @@
                 ]
             },
             {
-                "label": "库存管理",
+                "label": "原材料库存",
                 "icon": "gongying-kucunguanli_kucunguanli",
                 "path": "/stock",
                 "appName": "SW",
@@ -372,6 +372,35 @@
                         "label": "原材料盘点",
                         "path": "/stock/materials",
                         "authority": "tc_erp_sw_stock_taking"
+                    }
+                ]
+            },
+            {
+                "label": "辅料库存",
+                "icon": "gongying-kucunguanli_kucunguanli",
+                "path": "/auxStock",
+                "appName": "SW",
+                "authority": "tc_erp_sw_stock",
+                "items": [
+                    {
+                        "label": "辅材收货单",
+                        "path": "/auxStock/receiving",
+                        "authority": "tc_erp_sw_stock_material_receive"
+                    },
+                    {
+                        "label": "辅材库存",
+                        "path": "/auxStock/warehouse",
+                        "authority": "tc_erp_sw_stock_material"
+                    },
+                    {
+                        "label": "辅材入库",
+                        "path": "/auxStock/entryWarehouse",
+                        "authority": "tc_erp_sw_stock_material_in"
+                    },
+                    {
+                        "label": "辅材出库",
+                        "path": "/auxStock/outputWarehouse",
+                        "authority": "tc_erp_sw_stock_material_out"
                     }
                 ]
             },
