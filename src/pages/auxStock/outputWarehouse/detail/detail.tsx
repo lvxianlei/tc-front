@@ -396,7 +396,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }
     //获取列表详情数据数据
     const getDetailData = async (id: any) => {
-        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`);
+        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`,{
+            materialType: 2
+        });
         let supplierObj = {
             ...data,
             key: 1,
