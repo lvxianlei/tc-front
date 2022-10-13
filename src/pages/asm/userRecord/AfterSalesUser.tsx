@@ -4,37 +4,41 @@ import { useHistory } from 'react-router-dom';
 import { Page } from '../../common';
 
 
-export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
+export default function AfterSalesUser({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
 
     const [ visible, setVisible ] = useState<boolean>(false);
     const [ form ] = Form.useForm();
     const [filterValue, setFilterValue] = useState<any>({});
     const history = useHistory();
     const [detailData, setDetailData] = useState<any[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey?[selectedKey]:[]);
-    const [selectedRows, setSelectedRows] = useState<any[]>(selectedKey?[{planNumber:selectedKey}]:[]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>(selectedKey);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
-    
     const columns = [
         {
-            key: 'planNumber',
-            title: '计划号',
+            title: '部门',
             width: 150,
-            dataIndex: 'planNumber'
+            dataIndex: 'deptName'
         },
         {
-            key: 'projectName',
-            title: '工程名称',
+            key: 'name',
+            title: '姓名',
             width: 150,
-            dataIndex: 'projectName'
+            dataIndex: 'name'
         },
         {
-            key: 'businessUserName',
-            title: '业务经理',
-            dataIndex: 'businessUserName',
+            key: 'phone',
+            title: '手机号',
+            width: 150,
+            dataIndex: 'phone'
+        },
+        {
+            key: 'stationName',
+            title: '岗位',
+            dataIndex: 'stationName',
             width: 120
         }
     ]
@@ -43,7 +47,7 @@ export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX
     return <>
     <Modal 
         visible={ visible } 
-        title="选择计划" 
+        title="选择员工" 
         onCancel={ () => { 
             setVisible(false); 
             setDetailData([])
@@ -59,45 +63,47 @@ export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX
                 setDetailData([])
             }
             else {
-                message.error('未选择计划！')
+                message.error('未选择员工！')
             }
         }}
         width='60%'
     >
              
         <Page
-            path="/tower-science/productCategory/planNumber/listForSales"
+            path="/tower-system/employee"
             columns={columns}
             headTabs={[]}
-            extraOperation={<span>已选：{selectedRows.length>0?selectedRows[0]?.planNumber:''}</span>}
+            extraOperation={<span>已选：{selectedRows.length>0?selectedRows.map(item=>item?.name)?.join(','):''}</span>}
             // refresh={refresh}
-           
+          
             tableProps={{
-                scroll:{ y: 300 },
-                rowKey:'planNumber',
-                pagination:false,
+                
                 rowSelection: {
-                    type:'radio',
+                    type:'checkbox',
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
                 }
             }}
             searchFormItems={[
                 {
-                    name: 'planNumber',
+                    name: 'fuzzyQuery',
                     label: '模糊查询项',
-                    children: <Input maxLength={50} placeholder="请输入计划号/工程名称进行查询" />
-                }
+                    children: <Input maxLength={50} placeholder="请输入姓名/手机号进行查询" />
+                },
+                // {
+                //     name: 'workOrder',
+                //     label: '未完成工单',
+                //     children: 
+                // }
             ]}
             filterValue={filterValue}
             onFilterSubmit={(values: Record<string, any>) => {
                 setFilterValue(values);
                 return values;
             }}
-            
         />
     </Modal>
-    <Button type='link'  onClick={()=>setVisible(true)}>选择计划</Button>
+    <Button type='primary'  onClick={()=>setVisible(true)}>添加员工</Button>
     </>
 }
 

@@ -30,7 +30,7 @@ export default () => {
         },{
             title: "问题分类",
             width: 150,
-            dataIndex: "issueType"
+            dataIndex: "issueName"
         },{
             title: "塔型",
             width: 150,
@@ -105,7 +105,7 @@ export default () => {
         },
         {
             title: "创建人",
-            dataIndex: "creatUserName",
+            dataIndex: "createUserName",
             width: 150,
         },
         {
@@ -123,12 +123,12 @@ export default () => {
             ]}
             searchFormItems={[
                 {
-                    name: "fuzzyMsg",
+                    name: "fuzzyQuery",
                     label: '模糊查询',
                     children: <Input placeholder="请输入工单编号/计划号/工程名进行查询" style={{ width: 150 }} />
                 },
                 {
-                    name: "issueType",
+                    name: "issueName",
                     label: '问题分类',
                     children: <Input placeholder="请输入"/>
                 },
@@ -151,8 +151,8 @@ export default () => {
             onFilterSubmit={(values: any) => {
                 if (values.date) {
                     const formatDate = values.date.map((item: any) => item.format("YYYY-MM-DD"))
-                    values.planStartTime = formatDate[0] + ' 00:00:00';
-                    values.planEndTime = formatDate[1] + ' 23:59:59';
+                    values.startTime = formatDate[0] + ' 00:00:00';
+                    values.endTime = formatDate[1] + ' 23:59:59';
                     delete values.date
                 }
                 setFilterValue(values)

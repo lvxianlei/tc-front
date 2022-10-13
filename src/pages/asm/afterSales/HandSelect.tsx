@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, message } from 'antd';
+import { Button, Modal, Form, Input, message, Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { CommonTable, Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-
+import styles from './tower.module.less';
 
 export default function HandSelect({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
 
@@ -20,17 +20,22 @@ export default function HandSelect({ onSelect, selectedKey = [], ...props }: any
         setSelectedRows(selectedRows)
     }
     const [dataSource, setDataSource] = useState<any[]>([])
-    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
-            const list: any = await RequestUtil.get(`/tower-as/issue/list`);
-            setDataSource(list)
-            resole({});
-    }), {})
+
+    const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get<any>(`/tower-system/employee`, { current:  1, size: 10000,  ...filterValue });
+        setDataSource(data?.records)
+        resole(data?.records);
+    }))
+    const onFinish = (value: Record<string, any>) => {
+        console.log(value)
+        run(value);
+    }
     const columns = [
         {
-            key: 'name',
+            key: 'deptName',
             title: '责任部门',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'deptName'
         },
         {
             key: 'name',
@@ -39,10 +44,10 @@ export default function HandSelect({ onSelect, selectedKey = [], ...props }: any
             dataIndex: 'name'
         },
         {
-            key: 'name',
+            key: 'stationName',
             title: '责任人岗位',
             width: 150,
-            dataIndex: 'name'
+            dataIndex: 'stationName'
         }
     ]
 
@@ -71,6 +76,24 @@ export default function HandSelect({ onSelect, selectedKey = [], ...props }: any
         }}
         width='60%'
     >
+         <Form form={ form } onFinish={ onFinish } layout="inline" className={ styles.topForm }>
+                <Form.Item name="fuzzyQuery" label="模糊查询项">
+                    <Input placeholder="请输入姓名进行查询"/>
+                </Form.Item>
+                <Form.Item name="deptName" label="部门">
+                    <Input placeholder="请输入部门名称进行查询"/>
+                </Form.Item>
+                <Space direction="horizontal">
+                    <Button type="primary" htmlType="submit">搜索</Button>
+                    <Button type="ghost" onClick={()=>{
+                        form.setFieldsValue({
+                            fuzzyQuery:'',
+                            deptName:''
+                        })
+                        run()
+                    }}>重置</Button>
+                </Space>
+            </Form>
         <span>已选：{selectedRows.length>0?selectedRows.map((item:any)=>{
                 return item.name
             })?.join(','):''}</span>
@@ -81,11 +104,16 @@ export default function HandSelect({ onSelect, selectedKey = [], ...props }: any
                 selectedRowKeys: selectedKeys,
                 onChange: SelectChange
             }}
+            scroll={{y:300}}
             pagination={false}
             dataSource = {[...dataSource]}
         />
     </Modal>
-    <Button type='link'  onClick={()=>setVisible(true)}>手动选择</Button>
+    <Button type='link'  onClick={()=>{
+        setSelectedRows([])
+        setSelectedKeys([])
+        setVisible(true)
+    }}>手动选择</Button>
     </>
 }
 

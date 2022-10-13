@@ -116,7 +116,7 @@ export default () => {
                 ...columns as any,
                 {
                     title: "操作",
-                    dataIndex: "opration",
+                    dataIndex: "operation",
                     fixed: "right",
                     render: (_:any,record: any) => <Space>
                         <Link
@@ -127,13 +127,13 @@ export default () => {
                         <Link
                             to={`/afterSales/afterSale/edit/${record?.id}`}
                         >
-                            <Button type="link" size="small"  disabled={record?.status>3}>编辑</Button>
+                            <Button type="link" size="small"  disabled={record?.status>2}>编辑</Button>
                         </Link>
                         {
                             record?.status<3?<Popconfirm
                             title="删除后不可恢复，确认删除?"
                             onConfirm={async () => {
-                                await RequestUtil.delete(`/tower-as/workOrder`,{id:record?.id})
+                                await RequestUtil.delete(`/tower-as/workOrder?id=${record?.id}`,{id:record?.id})
                                 message.success("删除成功！")
                                 history.go(0)
                                 setRefresh(!refresh)
