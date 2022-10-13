@@ -210,6 +210,8 @@ export default function (): JSX.Element {
             </Menu.Item>
         </Menu>
     );
+    console.log((apps as any[]).filter((itemVos: any) => authorities?.
+    includes(itemVos.authority)))
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
@@ -218,12 +220,15 @@ export default function (): JSX.Element {
                 onClick={() => history.replace("/chooseApply")}>
                 <img className={styles.logo} src={Logo} />
             </h1>
-            <div style={{ float: "left" }} onClick={() => setVisible(true)}>
-                <AppstoreOutlined style={{
-                    fontSize: "24px",
-                    color: "#fff",
-                    verticalAlign: "middle"
-                }} />
+            <div
+                style={{ float: "left" }}
+                onClick={() => setVisible(true)}>
+                <AppstoreOutlined
+                    style={{
+                        fontSize: "24px",
+                        color: "#fff",
+                        verticalAlign: "middle"
+                    }} />
             </div>
             <Hbreadcrumb onClick={handleClick} />
             {
@@ -271,9 +276,7 @@ export default function (): JSX.Element {
                 className="drawer"
                 height={"auto"}
                 getContainer={false}
-                style={{
-                    position: "absolute",
-                }}
+                style={{ position: "absolute" }}
                 onClose={() => setVisible(false)}
             >
                 <div className={styles.drawerContent}>
