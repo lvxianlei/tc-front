@@ -8,7 +8,7 @@ import moment from "moment"
 import {
     deliverywayOptions, materialStandardOptions,
     materialTextureOptions, transportationTypeOptions,
-    settlementModeOptions,supplierTypeOptions
+    settlementModeOptions, supplierTypeOptions
 } from "../../configuration/DictionaryOptions"
 import { contractBaseInfo, material, addMaterial } from "./contract.json"
 
@@ -149,24 +149,24 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     return ({
                         ...item,
                         disabled: false,
-                        search:item.search.map((searchItem:any)=>{
-                            if(searchItem.dataIndex == 'supplierType'){
+                        search: item.search.map((searchItem: any) => {
+                            if (searchItem.dataIndex == 'supplierType') {
                                 console.log(supplierTypeEnum)
                                 return {
                                     ...searchItem,
-                                    enum:supplierTypeEnum
+                                    enum: supplierTypeEnum
                                 }
-                            }else{
+                            } else {
                                 return searchItem
                             }
                         }),
-                        columns:item.columns.map((columnsItem:any)=>{
-                            if(columnsItem.dataIndex == 'supplierType'){
+                        columns: item.columns.map((columnsItem: any) => {
+                            if (columnsItem.dataIndex == 'supplierType') {
                                 return {
                                     ...columnsItem,
-                                    enum:supplierTypeEnum
+                                    enum: supplierTypeEnum
                                 }
-                            }else{
+                            } else {
                                 return columnsItem
                             }
                         })
@@ -192,9 +192,9 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 supplier: { id: result.supplierId, value: result.supplierName },
                 // purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber },
                 // 税率
-                taxRate:result.tax,
+                taxRate: result.tax,
                 // 交货方式
-                deliveryMethod:result.deliveryMethod
+                deliveryMethod: result.deliveryMethod
             })
             // console.log(result.supplierId)
             setSupplierId(result.supplierId)
@@ -243,12 +243,12 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             })
 
             // 辅料列表 -字段对应处理
-            let list:any[] = result?.materialAuxiliaryContractDetails || []
+            let list: any[] = result?.materialAuxiliaryContractDetails || []
             // 检查是否有明细被收货单引用，如果被引用了则禁止编辑
-            let canEdit:boolean = list.every(item=>item.isReceiveStockRef != 2)
+            let canEdit: boolean = list.every(item => item.isReceiveStockRef != 2)
             // 设置基础信息禁止编辑
             setDisabled(canEdit)
-            list.forEach(el=>{
+            list.forEach(el => {
                 // 不含税单价
                 el.offer = el.price
                 // 含税单价
@@ -319,7 +319,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
     const handleAddModalOk = () => {
         // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         const newMaterialList: any[] = [...materialList]
-        newMaterialList.forEach(item=>{
+        newMaterialList.forEach(item => {
             item.comparisonPriceDetailId = item.comparisonPriceDetailId || item.id
             delete item.id
         })
@@ -335,8 +335,8 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields,setCanEditBaseInfo }), [ref, materialList])
-    const setCanEditBaseInfo = ()=>{
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields, setCanEditBaseInfo }), [ref, materialList])
+    const setCanEditBaseInfo = () => {
         setDisabled(false)
     }
     const onSubmit = () => new Promise(async (resove, reject) => {
@@ -349,10 +349,10 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorId: AuthUtil.getUserId(),
+                operatorId: AuthUtil.getUserInfo().user_id,
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
-                tax:baseInfo.taxRate,
+                tax: baseInfo.taxRate,
                 transportBear: {
                     ...freightInfo,
                     transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
@@ -364,15 +364,15 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
                 },
                 materialAuxiliaryContractDetails: materialList.map((item: any) => {
-                    let  obj = {
-                    ...item,
+                    let obj = {
+                        ...item,
                         taxPrice: Number(item.taxOffer).toFixed(6),
                         price: Number(item.offer).toFixed(6),
-                        totalTaxAmount:Number(item.totalTaxAmount).toFixed(6),
-                        totalAmount:Number(item.totalAmount).toFixed(6),
+                        totalTaxAmount: Number(item.totalTaxAmount).toFixed(6),
+                        totalAmount: Number(item.totalAmount).toFixed(6),
                         // taxTotalAmount: item.taxTotalAmount,
                         // totalAmount: item.totalAmount,
-                        comparisonPriceId:item.comparisonPriceId,
+                        comparisonPriceId: item.comparisonPriceId,
                         // comparisonPriceDetailId:item.id,
                         // comparisonPriceNumber:'0123456789'
                     }
@@ -404,42 +404,42 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         }
         // todo 税率变更时，更新所有价格
         if (fields?.taxRate) {
-        updataAllPrice()
+            updataAllPrice()
         }
     }
 
     // 变化重新计算所有价格
-    const updataAllPrice = ()=>{
-        const newMaterialList = materialList.map((item)=>{
+    const updataAllPrice = () => {
+        const newMaterialList = materialList.map((item) => {
             const baseInfo = baseForm.getFieldsValue()
             // 当前税率
             let taxRate = baseInfo.taxRate || 0
             // 数量 保留一位小数
             let num = Number(item.num || 1)
             // 含税单价
-            let taxPrice  = item.taxOffer|| 1
+            let taxPrice = item.taxOffer || 1
             // 不含税单价 含税单价/（1+本次税率）
-            let price:any = taxPrice / ( 1 + (taxRate/100) )
+            let price: any = taxPrice / (1 + (taxRate / 100))
             // console.log(price)
             // console.log(item)
             // console.log(taxRate,num,taxPrice,price)
             return {
                 ...item,
                 taxPrice,
-                price:Number(price).toFixed(6),
-                offer:Number(price).toFixed(6),
+                price: Number(price).toFixed(6),
+                offer: Number(price).toFixed(6),
                 // 含税金额总计 数量*含税单价  保留两位小数
-                totalTaxAmount:(taxPrice * num).toFixed(2),
+                totalTaxAmount: (taxPrice * num).toFixed(2),
                 // 不含税金额总计
-                totalAmount:(price * num).toFixed(2),
+                totalAmount: (price * num).toFixed(2),
             }
         })
         console.log(newMaterialList)
         setMaterialList(newMaterialList)
         setPopDataList(newMaterialList)
     }
-    const handleNumChange = (value: number, materialCode: string, dataIndex: string,id?:string) => {
-        console.log(value,materialCode,dataIndex,id)
+    const handleNumChange = (value: number, materialCode: string, dataIndex: string, id?: string) => {
+        console.log(value, materialCode, dataIndex, id)
         const newData = popDataList.map((item: any) => {
             if (item.id === id) {
                 item[dataIndex] = value
@@ -566,10 +566,10 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
 
     return <Spin spinning={loading && taxLoading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
-               onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
+            onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
                 ...(addMaterial as any),
-                path:addMaterialBy
+                path: addMaterialBy
                 // columns: (addMaterial as any).columns.map((item: any) => {
                 //     if (item.dataIndex === "standard") {
                 //         return ({
@@ -581,38 +581,38 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 //     return item
                 // })
             }}
-                             value={{
-                                 id: "",
-                                 records: popDataList,
-                                 value: ""
-                             }}
-                             onChange={(fields: any[]) => {
-                                 fields.map((element: any, index: number) => {
-                                     if (element.structureSpec) {
-                                         element["spec"] = element.structureSpec;
-                                         element["weight"] = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
-                                         element["totalWeight"] = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
-                                     }
-                                 });
-                                 setMaterialList(fields.map((item: any) => ({
-                                     ...item,
-                                     num: item?.num || 1,
-                                     spec: item.structureSpec,
-                                     source: item.source || 2,
-                                     length: item.length || 1,
-                                     taxPrice: item.taxPrice || 1.00,
-                                     price: item.price || 1.00,
-                                     width: item.width || 0,
-                                     taxTotalAmount: item.taxTotalAmount || 1.00,
-                                     totalAmount: item.totalAmount || 1.00,
-                                     materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
-                                     materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
-                                     structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
-                                     structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
-                                     weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
-                                     totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
-                                 })))
-                             }} />
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => {
+                    fields.map((element: any, index: number) => {
+                        if (element.structureSpec) {
+                            element["spec"] = element.structureSpec;
+                            element["weight"] = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
+                            element["totalWeight"] = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
+                        }
+                    });
+                    setMaterialList(fields.map((item: any) => ({
+                        ...item,
+                        num: item?.num || 1,
+                        spec: item.structureSpec,
+                        source: item.source || 2,
+                        length: item.length || 1,
+                        taxPrice: item.taxPrice || 1.00,
+                        price: item.price || 1.00,
+                        width: item.width || 0,
+                        taxTotalAmount: item.taxTotalAmount || 1.00,
+                        totalAmount: item.totalAmount || 1.00,
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                        structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
+                        totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
+                    })))
+                }} />
         </Modal>
         <DetailTitle title="合同基本信息" key="a" />
         <BaseInfo
@@ -657,7 +657,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     return item
                 })
             }
-            dataSource={{ transportBear: 1 }}  edit={isDisabled} />
+            dataSource={{ transportBear: 1 }} edit={isDisabled} />
         <DetailTitle title="装卸费信息" key="c" />
         <BaseInfo
             form={stevedoringForm}
@@ -675,7 +675,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     return item
                 })
             }
-            dataSource={{ unloadBear: 1 }}  edit={isDisabled} />
+            dataSource={{ unloadBear: 1 }} edit={isDisabled} />
         <DetailTitle title="辅材信息" operation={[
             <Button
                 type="primary"
@@ -700,7 +700,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                             render: (value: number, records: any, key: number) => <InputNumber
                                 min={1} value={value || 1}
                                 disabled={records.isReceiveStockRef === 2}
-                                onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex,records.id)} key={key} />
+                                onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex, records.id)} key={key} />
                         })
                     }
                     // 含税单价
@@ -710,7 +710,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                             render: (value: number, records: any, key: number) => <InputNumber
                                 min={1} value={value || 1}
                                 disabled={records.isReceiveStockRef === 2}
-                                onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex,records.id)} key={key} />
+                                onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex, records.id)} key={key} />
                         })
                     }
                     // 不含税单价
