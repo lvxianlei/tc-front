@@ -1,19 +1,21 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Avatar, Breadcrumb, Col, Dropdown, Layout, Menu, Row } from "antd";
-import { MenuUnfoldOutlined, MenuFoldOutlined, DownOutlined, createFromIconfontCN } from "@ant-design/icons"
+import { Avatar, Breadcrumb, Col, Drawer, Dropdown, Layout, Menu, Row } from "antd";
+import { DownOutlined, createFromIconfontCN } from "@ant-design/icons"
 import { Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import AuthUtil from "../utils/AuthUtil";
 import ctxConfig from "../app-ctx.config.jsonc"
 import ctxRouter from "../app-router.config.jsonc"
+import apps from "../app-name.config.jsonc"
 import ChooseApplay from "../pages/chooseApply/ChooseApply"
-import { useAuthorities, useDictionary, hasAuthority } from "../hooks"
+import { useDictionary, hasAuthority, useAuthorities } from "../hooks"
 import AsyncPanel from "../AsyncPanel";
 import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
 import Cookies from "js-cookie";
+import AppstoreOutlined from "@ant-design/icons/lib/icons/AppstoreOutlined";
+import ApplicationContext from "../configuration/ApplicationContext";
 import styles from './Layout.module.less';
-import useRequest from "@ahooksjs/use-request";
-import RequestUtil from "@utils/RequestUtil";
+import './drawer.less';
 
 const IconFont = createFromIconfontCN({
     scriptUrl: [
@@ -102,75 +104,58 @@ const SiderMenu: React.FC<{ isOpend: boolean }> = ({ isOpend }) => {
     </Menu>
 }
 
-const Hbreadcrumb = memo(({ isOpend, onClick }: { isOpend: boolean, onClick: (opend: boolean) => void }) => {
+const Hbreadcrumb = memo(({ onClick }: { onClick: (opend: boolean) => void }) => {
     const location = useLocation()
     const pathSnippets: string[] = location.pathname.split('/').filter((i: string) => i);
     const selectedMenuItem = getMenuItemByPath(ctxConfig.layout.menu, `/${pathSnippets[0]}`)
     return <div className={styles.breadcrumb}>
         {
             location.pathname !== "/chooseApply" && (
-                <>
-                    {isOpend ? <MenuUnfoldOutlined
-                        onClick={() => onClick(false)}
-                        style={{
-                            fontSize: "18px",
-                            color: "#fff",
-                            lineHeight: "40px",
-                            verticalAlign: "middle",
-                            padding: "0 10px"
-                        }} /> : <MenuFoldOutlined
-                        style={{
-                            fontSize: "18px",
-                            color: "#fff",
-                            lineHeight: "40px",
-                            verticalAlign: "middle",
-                            padding: "0 10px"
-                        }}
-                        onClick={() => onClick(true)} />}
-                    <Breadcrumb separator="/" className={styles.breadcrumb}>
-                        {
-                            selectedMenuItem
-                                ?
-                                <Breadcrumb.Item key={selectedMenuItem.path}>
-                                    {selectedMenuItem.label}
-                                </Breadcrumb.Item>
-                                :
-                                null
-                        }
-                        {
-                            pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
-                                let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
-                                const routerItem = getRouterItemByPath(path);
-                                return (
-                                    routerItem
-                                        ?
-                                        <Breadcrumb.Item key={path}>
-                                            {
-                                                path === location.pathname
-                                                    ?
-                                                    routerItem.name
-                                                    :
-                                                    <Link to={path}>{routerItem.name}</Link>
+                <Breadcrumb separator="/" className={styles.breadcrumb}>
+                    {
+                        selectedMenuItem
+                            ?
+                            <Breadcrumb.Item key={selectedMenuItem.path}>
+                                {selectedMenuItem.label}
+                            </Breadcrumb.Item>
+                            :
+                            null
+                    }
+                    {
+                        pathSnippets.map<React.ReactNode>((item: string, index: number): React.ReactNode => {
+                            let path: string = `/${pathSnippets.slice(0, index + 1).join('/')}`;
+                            const routerItem = getRouterItemByPath(path);
+                            return (
+                                routerItem
+                                    ?
+                                    <Breadcrumb.Item key={path}>
+                                        {
+                                            path === location.pathname
+                                                ?
+                                                routerItem.name
+                                                :
+                                                <Link to={path}>{routerItem.name}</Link>
 
-                                            }
-                                        </Breadcrumb.Item>
-                                        :
-                                        null
-                                );
-                            })
-                        }
-                    </Breadcrumb>
-                </>
+                                        }
+                                    </Breadcrumb.Item>
+                                    :
+                                    null
+                            );
+                        })
+                    }
+                </Breadcrumb>
             )
         }
     </div>
 })
 
 export default function (): JSX.Element {
+    const [visible, setVisible] = useState<boolean>(false)
     const history = useHistory()
     const location = useLocation()
-    useAuthorities()
-    useDictionary()
+    const authorities = useAuthorities()
+    // const authorities = ApplicationContext.get().authorities
+    const dictionary = useDictionary()
     const [isOpend, setIsOpend] = useState<boolean>(false)
 
     const { run: tenantRun } = useRequest<any>((tenantId: string) => new Promise(async (resole, reject) => {
@@ -288,6 +273,36 @@ export default function (): JSX.Element {
                         verticalAlign: "middle"
                     }} />
             </div>
+            <Hbreadcrumb onClick={handleClick} />
+            {
+                location.pathname !== "/chooseApply" && (
+                    <>
+                        <div className={styles.logout}>
+                            <Row>
+                                <Col>
+                                    <Link to={`/approvalm/management`}>
+                                        <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
+                                    </Link>
+
+                                </Col>
+                                <Col>
+                                    <Link to={`/homePage/notice`}>
+                                        <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
+                                    </Link>
+                                </Col>
+                                <Col>
+                                    <Dropdown overlay={menu} placement="bottomCenter">
+                                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                            <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
+                                            <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
+                                        </a>
+                                    </Dropdown>
+                                </Col>
+                            </Row>
+                        </div>
+                    </>
+                )
+            }
         </Header>
         <Layout
             style={{
@@ -359,6 +374,8 @@ export default function (): JSX.Element {
                             theme="light"
                             style={{ backgroundColor: ctxConfig.layout.theme }}
                             collapsed={isOpend}
+                            collapsible
+                            onCollapse={value => setIsOpend(value)}
                         >
                             <SiderMenu isOpend={isOpend} />
                         </Sider>
@@ -387,6 +404,7 @@ export default function (): JSX.Element {
                         </Layout>
                     </>
             }
+
         </Layout>
     </Layout>
 }
