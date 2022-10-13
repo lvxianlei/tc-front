@@ -13,10 +13,8 @@ import Logo from "./logo.png"
 import { getMenuItemByPath, getRouterItemByPath } from "../utils";
 import Cookies from "js-cookie";
 import AppstoreOutlined from "@ant-design/icons/lib/icons/AppstoreOutlined";
-import ApplicationContext from "../configuration/ApplicationContext";
 import styles from './Layout.module.less';
 import './drawer.less';
-
 const IconFont = createFromIconfontCN({
     scriptUrl: [
         "//at.alicdn.com/t/font_2771956_r1mkfqj4xwf.js"
@@ -161,7 +159,7 @@ export default function (): JSX.Element {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
         AuthUtil.removeRealName();
-        AuthUtil.removeUserId();
+        AuthUtil.removeUserInfo();
         AuthUtil.removeTenantName();
         AuthUtil.removeSinzetechToken();
         Cookies.remove('DHWY_TOKEN', { domain: '.dhwy.cn' })
@@ -297,7 +295,7 @@ export default function (): JSX.Element {
                                                 herf = res.path
                                         }
                                         if (res.appName === "MC") {
-                                            herf = res.path + AuthUtil.getUserId()
+                                            herf = res.path + AuthUtil.getUserInfo().user_id
                                         }
                                         window.location.href = herf
                                         return

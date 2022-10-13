@@ -317,7 +317,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorId: AuthUtil.getUserId(),
+                operatorId: AuthUtil.getUserInfo().user_id,
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
                 purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
