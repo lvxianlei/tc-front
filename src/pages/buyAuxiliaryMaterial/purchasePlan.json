@@ -1,0 +1,66 @@
+{
+  "purchasePlan": [
+    {
+      "title": "采购计划编号",
+      "width": 140,
+      "dataIndex": "purchasePlanNumber"
+    },
+    {
+      "title": "汇总采购计划编号",
+      "dataIndex": "collectPurchasePlanNumber",
+      "width": 140
+    },
+    {
+      "title": "汇总状态",
+      "dataIndex": "collectType",
+      "width": 80,
+      "type": "select",
+      "enum": [
+        {
+          "label": "未汇总",
+          "value": 0
+        },
+        {
+          "label": "已汇总",
+          "value": 1
+        }
+      ]
+    },
+    {
+      "title": "计划状态",
+      "dataIndex": "purchasePlanStatus",
+      "width": 80,
+      "type": "select",
+      "enum": [
+        {
+          "label": "待完成",
+          "value": 1
+        },
+        {
+          "label": "已完成",
+          "value": 2
+        },
+        {
+          "label": "已取消",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "title": "购回日期",
+      "dataIndex": "repurchaseTime",
+      "width": 100
+    },
+    {
+      "title": "申请人",
+      "dataIndex": "purchaserName",
+      "width": 100
+    },
+    {
+      "title": "创建日期",
+      "dataIndex": "createTime",
+      "width": 100
+    }
+  ]
+
+}

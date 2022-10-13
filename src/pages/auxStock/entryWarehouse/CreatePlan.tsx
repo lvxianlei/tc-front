@@ -17,13 +17,16 @@ import RequestUtil from '../../../utils/RequestUtil';
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
+    const [planVisible, setPlanVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
+    const [materialPlanList, setMaterialPlanList] = useState<any[]>([])
+    const [popPlanDataList, setPopPlanDataList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string>("");
     const [supplierId, setSupplierId] = useState<any>("");
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
 
-    let [count, setCount] = useState<number>(1);
+    // let [count, setCount] = useState<number>(1);
 
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
@@ -53,27 +56,6 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.key !== id))
         setPopDataList(popDataList.filter((item: any) => item.key !== id))
-    }
-
-    // 复制
-    const handleCopy = (options: any) => {
-        const result = {
-            ...options,
-            width: "",
-            length: "",
-            planPurchaseNum: "",
-            totalWeight: "",
-            id: count + ""
-        }
-        setCount(count + 1)
-        setMaterialList([
-            ...materialList,
-            result
-        ])
-        setPopDataList([
-            ...popDataList,
-            result
-        ])
     }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
@@ -239,8 +221,18 @@ export default function CreatePlan(props: any): JSX.Element {
             />
             <DetailTitle title="入库明细" />
             <div className='btnWrapper'>
-                <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisible(true)}>选择</Button>
-                <Button type='primary' key="clear" ghost onClick={() => message.warning("暂无此功能！")}>导入</Button>
+                <Button type='primary'
+                    key="add"
+                    ghost
+                    style={{ marginRight: 8 }}
+                    disabled={!(warehouseId && supplierId)}
+                    onClick={() => setVisible(true)}>选择到货明细</Button>
+                <Button
+                    type='primary'
+                    key="clear"
+                    ghost
+                    disabled={!(warehouseId && supplierId)}
+                    onClick={() => message.warning("暂无此功能！")}>选择计划明细</Button>
             </div>
             <CommonTable
                 rowKey="key"
@@ -294,6 +286,24 @@ export default function CreatePlan(props: any): JSX.Element {
                     onChange={(fields: any[]) => setMaterialList(fields || [])}
                 />
             </Modal>
+            {/* <Modal width={1100} title={`选择计划明细`} destroyOnClose
+                visible={visible}
+                onOk={handleAddModalOk}
+                onCancel={() => setPlanVisible(false)}
+            >
+                <PopTableContent
+                    data={{
+                        ...addMaterial as any,
+                        path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
+                    }}
+                    value={{
+                        id: "",
+                        records: popDataList,
+                        value: ""
+                    }}
+                    onChange={(fields: any[]) => setMaterialList(fields || [])}
+                />
+            </Modal> */}
         </Modal>
     )
 }
