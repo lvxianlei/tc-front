@@ -5,15 +5,16 @@
  */
 
  import React, { useRef, useState } from 'react';
- import { Space, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select, Input } from 'antd';
+ import { Space, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select, Input, Popconfirm } from 'antd';
  import { CommonTable, Page } from '../../common';
  import { FixedType } from 'rc-table/lib/interface';
- import styles from './EngineeringData.module.less';
+ import styles from './DataArchiving.module.less';
  import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../../utils/RequestUtil';
  import { useHistory, useParams } from 'react-router-dom';
  import { useForm } from 'antd/es/form/Form';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
+import DataArchivingNew from './DataArchivingNew';
  
  export interface ILofting {
      readonly id?: string;
@@ -26,35 +27,49 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
  
  export default function List(): React.ReactNode {
      const columns = [
+        {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            fixed: "left" as FixedType,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+        },
          {
              key: 'productTypeName',
-             title: '合同编号',
+             title: '状态',
              width: 50,
              dataIndex: 'productTypeName'
          },
          {
              key: 'projectEntries',
-             title: '项目名称',
+             title: '资料室',
              dataIndex: 'projectEntries',
              width: 80
          },
          {
              key: 'voltageGradePriceFirst',
-             title: '工程名称',
+             title: '资料类型',
              width: 100,
              dataIndex: 'voltageGradePriceFirst'
          },
          {
              key: 'voltageGradePriceSecond',
-             title: '客户名称',
+             title: '文件类别',
              width: 100,
              dataIndex: 'voltageGradePriceSecond'
          },
          {
              key: 'voltageGradePriceThird',
-             title: '电压等级',
+             title: '柜号',
              width: 80,
              dataIndex: 'voltageGradePriceThird'
+         },
+         {
+             key: 'specialPrice',
+             title: '箱号',
+             width: 80,
+             dataIndex: 'specialPrice'
          },
          {
              key: 'specialPrice',
@@ -70,9 +85,79 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
          },
          {
              key: 'specialPrice',
+             title: '工程名称',
+             width: 80,
+             dataIndex: 'specialPrice'
+         },
+         {
+             key: 'specialPrice',
+             title: '塔型',
+             width: 80,
+             dataIndex: 'specialPrice'
+         },
+         {
+             key: 'specialPrice',
+             title: '电压等级',
+             width: 80,
+             dataIndex: 'specialPrice'
+         },
+         {
+             key: 'specialPrice',
+             title: '客户名称',
+             width: 80,
+             dataIndex: 'specialPrice'
+         },
+         {
+             key: 'specialPrice',
              title: '备注',
              width: 80,
              dataIndex: 'specialPrice'
+         },
+         {
+             key: 'specialPrice',
+             title: '存档时间',
+             width: 80,
+             dataIndex: 'specialPrice'
+         },
+         {
+             key: 'specialPrice',
+             title: '存档人',
+             width: 80,
+             dataIndex: 'specialPrice'
+         },
+         {
+             key: 'operation',
+             title: '操作',
+             dataIndex: 'operation',
+             fixed: 'right' as FixedType,
+             width: 150,
+             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                 <Space direction="horizontal" size="small">
+                 <Button type="link" onClick={() => {
+                     setType('detail');
+                     setVisible(true);
+                     setRowData(record);
+                 }}>查看</Button>
+                     <Button type="link" onClick={() => {
+                         setType('edit');
+                         setVisible(true);
+                         setRowData(record);
+                     }}>编辑</Button>
+                     <Popconfirm
+                         title="确认删除?"
+                         onConfirm={() => {
+                             RequestUtil.delete(``).then(res => {
+                                 message.success('删除成功');
+                                 setRefresh(!refresh);
+                             });
+                         }}
+                         okText="确认"
+                         cancelText="取消"
+                     >
+                         <Button type="link">删除</Button>
+                     </Popconfirm>
+                 </Space>
+             )
          }
      ]
  
@@ -85,17 +170,11 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
      const [status, setStatus] = useState<string>('1');
      const history = useHistory();
      const newRef = useRef<EditRefProps>();
-     const [nowColumns, setNowColumns] = useState<any>(columns);
      const [visible, setVisible] = useState<boolean>(false);
-     const [type, setType] = useState<'edit' | 'new'>('new');
-     const [form] = useForm();
-     const materialRef = useRef<EditRefProps>();
-     const [materialVisible, setMaterialVisible] = useState<boolean>(false);
-     const [materialType, setMaterialType] = useState<'edit' | 'new'>('new');
-     const [materialRowData, setMaterialRowData] = useState<any>();
-     const boltRef = useRef<EditRefProps>();
+     const [type, setType] = useState<'edit' | 'new' | 'detail'>('new');
      const [filterValue, setFilterValue] = useState();
      const [ refresh, setRefresh ] = useState<boolean>(false);
+     const [rowData,setRowData] = useState<any>();
  
      const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig) => new Promise(async (resole, reject) => {
          const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status });
@@ -114,47 +193,25 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
              reject(false)
          }
      })
- 
-     const materialHandleOk = () => new Promise(async (resove, reject) => {
-         try {
-             await materialRef.current?.onSubmit()
-             message.success("保存成功！")
-             setMaterialVisible(false)
-             history.go(0)
-             resove(true)
-         } catch (error) {
-             reject(false)
-         }
-     })
- 
-     const boltHandleOk = () => new Promise(async (resove, reject) => {
-         try {
-             await boltRef.current?.onSubmit()
-             message.success("保存成功！")
-             history.go(0)
-             resove(true)
-         } catch (error) {
-             reject(false)
-         }
-     })
-
 
      return <Spin spinning={loading}>
-         {/* <Modal
+         <Modal
              destroyOnClose
-             key='LoftQuotaNew'
+             key='DataArchivingNew'
              visible={visible}
-             title={type === 'new' ? '新增' : '编辑'}
+             title={type === 'new' ? '上传' : type === 'edit' ?'编辑': '查看'}
              onOk={handleOk}
-             onCancel={() => setVisible(false)}>
-             <LoftQuotaNew type={type} record={rowData} ref={newRef} />
-         </Modal> */}
+             onCancel={() => {
+                setVisible(false);
+                newRef.current?.resetFields();
+                }}>
+             <DataArchivingNew type={type} record={rowData} ref={newRef} />
+         </Modal>
          <Page
             path=""
             filterValue={filterValue}
             columns={columns}
-            extraOperation={<Row>
-                <Col>
+            extraOperation={<Space size="small">
                 <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
                  setStatus(event.target.value);
                  run();
@@ -164,17 +221,17 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
                  <Radio.Button value={'3'} key="3">变更</Radio.Button>
                  <Radio.Button value={'4'} key="4">无效</Radio.Button>
              </Radio.Group>
-                </Col>
-                <Col>
-             <Button type="primary" ghost>上传</Button>
-                </Col>
-            </Row>}
+             <Button type="primary" onClick={() => {
+                setVisible(true);
+                setType('new');
+             }} ghost>上传</Button>
+            </Space>}
             searchFormItems={[
                 {
                     name: "issueName",
                     label: '资料室',
-                    children: 
-                    <Select placeholder="请选择">
+                    children: <Select placeholder="请选择" style={{ width: 200 }} defaultValue={''}>
+                        <Select.Option value="" key={0}>全部</Select.Option>
                         {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
@@ -185,7 +242,8 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
                 {
                     name: "deptId",
                     label: "资料类型",
-                    children:  <Select placeholder="请选择">
+                    children:  <Select placeholder="请选择" style={{ width: 200 }} defaultValue={''}>
+                    <Select.Option value="" key={0}>全部</Select.Option>
                         {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
@@ -196,7 +254,8 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
                 {
                     name: "deptId",
                     label: "产品类型",
-                    children:  <Select placeholder="请选择">
+                    children:  <Select placeholder="请选择" style={{ width: 200 }} defaultValue={''}>
+                    <Select.Option value="" key={0}>全部</Select.Option>
                         {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
@@ -207,7 +266,7 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
                 {
                     name: "fuzzyQuery",
                     label: '模糊查询',
-                    children: <Input placeholder="客户名称/工程名称/计划号/塔型名称" style={{ width: 150 }} />
+                    children: <Input placeholder="客户名称/工程名称/计划号/塔型名称" style={{ width: 300 }} />
                 }
             ]}
             refresh={refresh}
