@@ -1,0 +1,558 @@
+{
+    "baseInfo": [
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "width": 150
+        },
+        {
+            "title": "状态",
+            "dataIndex": "receiveStatusName",
+            "width": 60
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementModeName",
+            "width": 100
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName",
+            "width": 100
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser",
+            "width": 100
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone",
+            "width": 120
+        },
+        {
+            "title": "辅材含税金额合计（元）",
+            "dataIndex": "totalTaxAmount",
+            "width": 160
+        },
+        {
+            "title": "运费含税金额合计（元）",
+            "dataIndex": "transportTaxTotalAmount",
+            "width": 150
+        },
+        {
+            "title": "装卸费含税金额合计（元）",
+            "dataIndex": "unloadTaxTotalAmount",
+            "width": 160
+        },
+        {
+            "title": "制单人",
+            "dataIndex": "createUserName",
+            "width": 100
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "statusUpdateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 150
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "string",
+            "width": 100
+        }
+    ],
+    "BasicInformation": [
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入收货单号"
+                }
+            ]
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierId",
+            "type": "popTable",
+            "path": "/tower-supply/supplier",
+            "width": 1011,
+            "value": "supplierName",
+            "dependencies": true,
+            "readOnly": true,
+            "required": true,
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "编号/名称/联系人/联系人电话"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssurance",
+                    "type": "select",
+                    "placeholder": "请选择"
+                }
+            ],
+            "columns": [
+                {
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
+                },
+                {
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
+                },
+                {
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "contactManTel"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssuranceName"
+                },
+                {
+                    "title": "供货产品",
+                    "dataIndex": "supplyProductsName"
+                }
+            ]
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "到货时间",
+            "dataIndex": "receiveTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "required": true
+        },
+        {
+            "title": "车辆牌照",
+            "dataIndex": "carNumber",
+            "required": true
+        },
+        {
+            "title": "卸车方式",
+            "dataIndex": "unloadMode",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "卸车人员",
+            "dataIndex": "unloadUsersName",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "selectType": "checkbox",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "deptName"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "手机号",
+                    "dataIndex": "phone"
+                },
+                {
+                    "title": "角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "工号",
+                    "dataIndex": "number"
+                },
+                {
+                    "title": "邮箱",
+                    "dataIndex": "email"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "账号/手机号/姓名/工号/邮箱"
+                }
+            ]
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementMode",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "到货去向",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "enum": [],
+            "required": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
+        }
+    ],
+    "CargoDetails": [
+        {
+            "title": "收货状态",
+            "dataIndex": "receiveDetailStatusName",
+            "width": 70
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber",
+            "width": 70
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 80,
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 80
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number",
+            "width": 40
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit",
+            "width": 40,
+            "disabled": true
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30,
+            "width": 80
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxAmount",
+            "width": 100
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "price",
+            "width": 130
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalAmount",
+            "width": 120
+        },
+        {
+            "title": "含税运费（元）",
+            "dataIndex": "totalTransportTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税运费（元）",
+            "dataIndex": "totalTransportPrice",
+            "width": 120
+        },
+        {
+            "title": "含税装卸费（元）",
+            "dataIndex": "totalUnloadTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "totalUnloadPrice",
+            "width": 140
+        }
+    ],
+    "editCargoDetails": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "disabled": true
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit",
+            "disabled": true
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30
+        },
+        {
+            "title": "税率",
+            "dataIndex": "tax",
+            "disabled": true
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxAmount",
+            "disabled": true
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalAmount",
+            "disabled": true
+        },
+        {
+            "title": "含税运费（元）",
+            "dataIndex": "totalTransportTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税运费（元）",
+            "dataIndex": "totalTransportPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税装卸费（元）",
+            "dataIndex": "totalUnloadTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "totalUnloadPrice",
+            "disabled": true
+        }
+    ],
+    "SelectedArea": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "已选数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": " 单位",
+            "dataIndex": "unit"
+        }
+    ],
+    "Selected": [
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "可选数量",
+            "dataIndex": "num",
+            "type": "number"
+        },
+        {
+            "title": " 单位",
+            "dataIndex": "unit"
+        }
+    ],
+    "DetailPage": [
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "integer"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "integer"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "integer"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "integer"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "type": "number"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "integer"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "contractUnitPrice",
+            "type": "number"
+        },
+        {
+            "title": "价税合计（元）",
+            "dataIndex": "price",
+            "type": "number"
+        }
+    ],
+    "freightInfo": [
+        {
+            "title": "运输承担",
+            "dataIndex": "transportBear",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "供方",
+                    "value": 1
+                },
+                {
+                    "label": "需方",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "运输公司",
+            "dataIndex": "transportCompany",
+            "type": "string"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "transportTaxPrice",
+            "type": "string"
+        },
+        {
+            "title": "运费价税合计（元）",
+            "dataIndex": "transportPriceCount",
+            "type": "number"
+        }
+    ],
+    "handlingChargesInfo": [
+        {
+            "title": "卸车承担",
+            "dataIndex": "unloadBear",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "供方",
+                    "value": 1
+                },
+                {
+                    "label": "需方",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "装卸公司",
+            "dataIndex": "unloadCompany",
+            "type": "string"
+        },
+        {
+            "title": "合同单价（元/吨）",
+            "dataIndex": "unloadTaxPrice",
+            "type": "string"
+        },
+        {
+            "title": "装卸费价税合计（元）",
+            "dataIndex": "unloadPriceCount",
+            "type": "number"
+        }
+    ]
+}

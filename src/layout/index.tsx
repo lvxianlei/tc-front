@@ -157,11 +157,34 @@ export default function (): JSX.Element {
     // const authorities = ApplicationContext.get().authorities
     const dictionary = useDictionary()
     const [isOpend, setIsOpend] = useState<boolean>(false)
+
+    const { run: tenantRun } = useRequest<any>((tenantId: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/sinzetech-user/user/setDefaultTenant?tenantId=${tenantId}`)
+            const reLogin = await RequestUtil.post(
+                '/sinzetech-auth/oauth/token',
+                {
+                    grant_type: "password",
+                    tenant_id: tenantId,
+                    username: AuthUtil.getUserInfo().username,
+                    password: AuthUtil.getUserInfo().password
+                },
+                {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Tenant-Id': tenantId
+                }
+            )
+            resole(reLogin)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
+
     const logOut = () => {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
         AuthUtil.removeRealName();
-        AuthUtil.removeUserId();
+        AuthUtil.removeUserInfo();
         AuthUtil.removeTenantName();
         AuthUtil.removeSinzetechToken();
         Cookies.remove('DHWY_TOKEN', { domain: '.dhwy.cn' })
@@ -184,8 +207,30 @@ export default function (): JSX.Element {
         }
         return true;
     }
+
     const handleClick = (opend: boolean) => setIsOpend(opend)
 
+    const handleUseTenants = async (tenantInfo: any) => {
+        const {
+            access_token,
+            refresh_token,
+            user_id,
+            tenant_id,
+            tenant_name,
+            tenants,
+            ...result
+        } = await tenantRun(tenantInfo.tenantId)
+        Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
+        Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
+        Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
+        AuthUtil.setSinzetechAuth(access_token, refresh_token)
+        AuthUtil.setTenantId(tenant_id, { expires: 7 })
+        AuthUtil.setTenantName(tenantInfo.name)
+        AuthUtil.setTenants(tenants)
+        AuthUtil.setRealName(result.real_name)
+        AuthUtil.setAccout(result.account)
+        history.push(ctxConfig.home || '/')
+    }
 
     useEffect(() => {
         doFiltersAll(history)
