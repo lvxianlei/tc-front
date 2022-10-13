@@ -211,5 +211,65 @@
                 "dataIndex": "location"
             }
         ]
+    },
+    "addPlanMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/auxiliaryReceiveStock/details",
+        "width": 1011,
+        "selectType": "checkbox",
+        "rowKey": "receiveStockDetailId",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "查询",
+                "type": "string",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "收货批次/品名/规格"
+            }
+        ],
+        "columns": [
+            {
+                "title": "汇总采购计划编号",
+                "dataIndex": "collectPurchasePlanNumber"
+            },
+            {
+                "title": "类型",
+                "dataIndex": "purchaseType"
+            },
+            {
+                "title": "品名",
+                "dataIndex": ""
+            },
+            {
+                "title": "规格",
+                "dataIndex": ""
+            },
+            {
+                "title": "数量",
+                "dataIndex": ""
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "申请人",
+                "dataIndex": ""
+            },
+            {
+                "title": "申请部门",
+                "dataIndex": ""
+            },
+            {
+                "title": "创建日期",
+                "dataIndex": ""
+            },
+            {
+                "title": "备注",
+                "dataIndex": ""
+            }
+        ]
     }
 }

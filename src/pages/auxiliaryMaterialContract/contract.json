@@ -1,0 +1,571 @@
+{
+  "contract": [
+    {
+      "title": "合同编号",
+      "dataIndex": "contractNumber",
+      "width": 200
+    },
+    {
+      "title": "合同状态",
+      "dataIndex": "contractStatusName"
+    },
+    {
+      "title": "供应商",
+      "dataIndex": "supplierName"
+    },
+    {
+      "title": "签订时间",
+      "dataIndex": "signingTime"
+    },
+    {
+      "title": "交货时间",
+      "dataIndex": "arrivalTime"
+    },
+    {
+      "title": "经办人",
+      "dataIndex": "operatorIdName"
+    },
+    {
+      "title": "含税金额（元）合计",
+      "dataIndex": "totalTaxAmount"
+    },
+    {
+      "title": "不含税金额（元）合计",
+      "dataIndex": "totalAmount"
+    },
+    {
+      "title": "备注",
+      "dataIndex": "description",
+      "width": 200
+    }
+  ],
+  "material": [
+    {
+      "title": "品名",
+      "dataIndex": "materialName"
+    },
+    {
+      "title": "规格",
+      "dataIndex": "structureSpec"
+    },
+    {
+      "title": "数量",
+      "dataIndex": "num"
+    },
+    {
+      "title": "单位",
+      "dataIndex": "unit"
+    },
+    {
+      "title": "生产厂家",
+      "dataIndex": "manufacturer"
+    },
+    {
+      "title": "含税单价(元)",
+      "dataIndex": "taxOffer"
+    },
+    {
+      "title": "含税金额合计(元)",
+      "dataIndex": "totalTaxAmount"
+    },
+    {
+      "title": "不含税单价(元)",
+      "dataIndex": "offer"
+    },
+    {
+      "title": "不含税金额合计(元)",
+      "dataIndex": "totalAmount"
+    }
+  ],
+  "materialOverview": [
+    {
+      "title": "品名",
+      "dataIndex": "materialName"
+    },
+    {
+      "title": "规格",
+      "dataIndex": "structureSpec"
+    },
+    {
+      "title": "数量",
+      "dataIndex": "num"
+    },
+    {
+      "title": "单位",
+      "dataIndex": "unit"
+    },
+    {
+      "title": "生产厂家",
+      "dataIndex": "manufacturer"
+    },
+    {
+      "title": "含税单价(元)",
+      "dataIndex": "taxOffer"
+    },
+    {
+      "title": "含税金额合计(元)",
+      "dataIndex": "taxTotalAmount"
+    },
+    {
+      "title": "不含税单价(元)",
+      "dataIndex": "price"
+    },
+    {
+      "title": "不含税金额合计(元)",
+      "dataIndex": "totalAmount"
+    }
+  ],
+  "contractBaseInfo": [
+    {
+      "title": "合同编号",
+      "dataIndex": "contractNumber",
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入合同编号"
+        }
+      ]
+    },
+
+    {
+      "title": "供应商",
+      "dataIndex": "supplier",
+      "type": "popTable",
+      "path": "/tower-supply/supplier",
+      "width": 1011,
+      "value": "supplierName",
+      "dependencies": true,
+      "readOnly": true,
+      "disabled": false,
+      "search": [
+        {
+          "title": "供应商类型",
+          "dataIndex": "supplierType",
+          "placeholder": "供应商类型",
+          "type": "select",
+          "enum": [
+            {
+              "label": "全部",
+              "value": ""
+            }
+          ]
+        },
+        {
+          "title": "查询",
+          "dataIndex": "fuzzyQuery",
+          "placeholder": "编号/名称/联系人/联系人电话"
+        }
+
+      ],
+      "columns": [
+        {
+          "title": "供应商编号",
+          "dataIndex": "supplierCode"
+        },
+        {
+          "title": "供应商名称",
+          "dataIndex": "supplierName"
+        },
+        {
+          "title": "供应商类型",
+          "dataIndex": "supplierType",
+          "type": "select",
+          "enum": []
+        },
+        {
+          "title": "联系人",
+          "dataIndex": "contactMan"
+        },
+        {
+          "title": "联系电话",
+          "dataIndex": "contactManTel"
+        },
+        {
+          "title": "供货产品",
+          "dataIndex": "supplyProductsName"
+        }
+      ],
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择供应商..."
+        }
+      ]
+    },
+    {
+      "title": "经办人",
+      "dataIndex": "operatorName",
+      "required": true,
+      "disabled": true
+    },
+    {
+      "title": "交货方式",
+      "dataIndex": "deliveryMethod",
+      "type": "select",
+      "required": true
+    },
+    {
+      "title": "签订时间",
+      "dataIndex": "signingTime",
+      "type": "date",
+      "format": "YYYY-MM-DD",
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择签订时间..."
+        }
+      ]
+    },
+    {
+      "title": "运输方式",
+      "dataIndex": "transportMethod",
+      "type": "select"
+    },
+    {
+      "title": "交货时间",
+      "dataIndex": "arrivalTime",
+      "type": "date",
+      "format": "YYYY-MM-DD",
+      "required": true
+    },
+    {
+      "title": "结算方式",
+      "dataIndex": "settlementMode",
+      "type": "select",
+      "required": true
+    },
+    {
+      "title": "开票性质",
+      "dataIndex": "invoiceCharacter",
+      "type": "select",
+      "enum": [
+        {
+          "label": "一票制",
+          "value": 1
+        },
+        {
+          "label": "二票制",
+          "value": 2
+        },
+        {
+          "label": "三票制",
+          "value": 3
+        }
+      ],
+      "required": true
+    },
+    {
+      "title": "本次税率",
+      "dataIndex": "taxRate",
+      "type": "number",
+      "precision": 2,
+      "min": 0,
+      "max": 100,
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入税率"
+        }
+      ]
+    },
+    {
+      "title": "备注",
+      "dataIndex": "description",
+      "type": "textarea"
+    }
+  ],
+  "freight": [
+    {
+      "title": "运输公司",
+      "dataIndex": "transportCompanyId",
+      "type": "string",
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择运输公司..."
+        }
+      ]
+    },
+    {
+      "title": "含税价格（元/吨）",
+      "dataIndex": "transportTaxPrice",
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入含税价格"
+        }
+      ]
+    },
+    {
+      "title": "不含税价格（元/吨）",
+      "dataIndex": "transportPrice"
+    }
+  ],
+  "stevedoring": [
+    {
+      "title": "装卸公司",
+      "dataIndex": "unloadCompanyId",
+      "type": "string",
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择装卸公司"
+        }
+      ]
+    },
+    {
+      "title": "含税价格（元/吨）",
+      "dataIndex": "unloadTaxPrice",
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入含税价格"
+        }
+      ]
+    },
+    {
+      "title": "不含税价格（元/吨）",
+      "dataIndex": "unloadPrice"
+    }
+  ],
+  "contractOverview": [
+    {
+      "title": "合同编号",
+      "dataIndex": "contractNumber",
+      "disabled": true
+    },
+    {
+      "title": "供应商",
+      "dataIndex": "supplierName"
+    },
+    {
+      "title": "经办人",
+      "dataIndex": "operatorName"
+    },
+    {
+      "title": "交货方式",
+      "dataIndex": "deliveryMethod",
+      "type": "select"
+    },
+    {
+      "title": "签订时间",
+      "dataIndex": "signingTime",
+      "type": "date"
+    },
+    {
+      "title": "运输方式",
+      "dataIndex": "transportMethod",
+      "type": "select"
+    },
+    {
+      "title": "交货时间",
+      "dataIndex": "arrivalTime",
+      "type": "date"
+    },
+    {
+      "title": "结算方式",
+      "dataIndex": "settlementMode",
+      "type": "select",
+      "required": true
+    },
+    {
+      "title": "开票性质",
+      "dataIndex": "invoiceCharacter",
+      "type": "select",
+      "enum": [
+        {
+          "label": "一票制",
+          "value": 1
+        },
+        {
+          "label": "二票制",
+          "value": 2
+        },
+        {
+          "label": "三票制",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "title": "本次税率",
+      "dataIndex": "tax"
+    },
+    {
+      "title": "备注",
+      "dataIndex": "description",
+      "type": "textarea"
+    }
+  ],
+  "freightOverview": [
+    {
+      "title": "运输承担",
+      "dataIndex": "transportBear",
+      "type": "select",
+      "enum": [
+        {
+          "value": 1,
+          "label": "供方"
+        },
+        {
+          "value": 2,
+          "label": "需方"
+        }
+      ]
+    },
+    {
+      "title": "运输公司",
+      "dataIndex": "transportCompany",
+      "type": "string"
+    },
+    {
+      "title": "含税价格（元/吨）",
+      "dataIndex": "transportTaxPrice",
+      "type": "string"
+    },
+    {
+      "title": "不含税价格（元/吨）",
+      "dataIndex": "transportPrice",
+      "type": "string"
+    }
+  ],
+  "stevedoringOverview": [
+    {
+      "title": "卸车承担",
+      "dataIndex": "unloadBear",
+      "type": "select",
+      "enum": [
+        {
+          "value": 1,
+          "label": "供方"
+        },
+        {
+          "value": 2,
+          "label": "需方"
+        }
+      ]
+    },
+    {
+      "title": "装卸公司",
+      "dataIndex": "unloadCompany",
+      "type": "string"
+    },
+    {
+      "title": "含税价格（元/吨）",
+      "dataIndex": "unloadTaxPrice",
+      "type": "string"
+    },
+    {
+      "title": "不含税价格（元/吨）",
+      "dataIndex": "unloadPrice",
+      "type": "string"
+    }
+  ],
+  "comparison": [
+    {
+      "title": "询比价信息",
+      "dataIndex": "comparisonPrice",
+      "type": "popTable",
+      "path": "/tower-supply/comparisonPrice",
+      "width": 1011,
+      "value": "comparisonPriceNumber",
+      "dependencies": true,
+      "readOnly": true,
+      "columns": [
+        {
+          "title": "询比价编号",
+          "dataIndex": "comparisonPriceNumber"
+        },
+        {
+          "title": "用途",
+          "dataIndex": "purpose"
+        },
+        {
+          "title": "询比价状态",
+          "dataIndex": "comparisonStatus",
+          "type": "select",
+          "enum": [
+            {
+              "label": "询价中",
+              "value": 1
+            },
+            {
+              "label": "已询价",
+              "value": 2
+            },
+            {
+              "label": "取消",
+              "value": 3
+            }
+          ]
+        },
+        {
+          "title": "最新状态变更时间",
+          "dataIndex": "updateTime"
+        },
+        {
+          "title": "询价人",
+          "dataIndex": "comparisonPersonName"
+        }
+      ],
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择询比价信息..."
+        }
+      ]
+    }
+  ],
+  "addMaterial": {
+    "title": "比价结果",
+    "type": "popTable",
+    "path": "/tower-supply/auxiliaryComparisonPrice/getComparisonPriceDetailById",
+    "width": 1011,
+    "selectType": "checkbox",
+    "dependencies": true,
+    "readOnly": true,
+    "columns": [
+      {
+        "title": "询比价编号",
+        "dataIndex": "comparisonPriceNumber",
+        "search": true
+      },
+      {
+        "title": "品名",
+        "dataIndex": "materialName"
+      },
+      {
+        "title": "规格",
+        "dataIndex": "structureSpec"
+      },
+      {
+        "title": "数量",
+        "dataIndex": "num"
+      },
+      {
+        "title": "单位",
+        "dataIndex": "unit"
+      },
+      {
+        "title": "申请部门",
+        "dataIndex": "applyUserDeptName"
+      },
+      {
+        "title": "申请人",
+        "dataIndex": "applyUserName"
+      },
+      {
+        "title": "备注",
+        "dataIndex": "description"
+      },
+      {
+        "title": "报价",
+        "dataIndex": "offer"
+      },
+      {
+        "title": "生产厂家",
+        "dataIndex": "manufacturer"
+      }
+    ]
+  }
+}

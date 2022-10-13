@@ -1,0 +1,44 @@
+{
+  "materialDetails": [
+    {
+      "title": "类型",
+      "dataIndex": "type",
+      "type": "string",
+      "edit": false
+    },
+    {
+      "title": "品名",
+      "dataIndex": "materialName",
+      "type": "string",
+      "edit": false
+    },
+    {
+      "title": "规格",
+      "dataIndex": "structureSpec",
+      "type": "string",
+      "edit": false
+    },
+    {
+      "title": "单位",
+      "dataIndex": "unit",
+      "type": "select",
+      "edit": false
+    },
+    {
+      "title": "计划采购量",
+      "dataIndex": "planPurchaseNum",
+      "type": "number",
+      "edit": true
+    },
+
+    {
+      "title": "备注",
+      "dataIndex": "remark",
+      "edit": false
+    },
+    {
+      "title": "部门",
+      "dataIndex": "deptName"
+    }
+  ]
+}
