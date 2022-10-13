@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useState, useEffect } from "react"
 let catchDic: { authorities: string[], dictionary: any[] } = {
     authorities: [],
     dictionary: []
@@ -14,6 +14,10 @@ export function useDictionary() {
 
 export function useAuthorities() {
     const [state, setState] = useState(catchDic)
+
+    useEffect(() => {
+        setState(catchDic)
+    }, [catchDic])
 
     useAuthorities.prototype.setState = setState
 
