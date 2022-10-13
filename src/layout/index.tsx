@@ -15,6 +15,8 @@ import Cookies from "js-cookie";
 import AppstoreOutlined from "@ant-design/icons/lib/icons/AppstoreOutlined";
 import styles from './Layout.module.less';
 import './drawer.less';
+import useRequest from "@ahooksjs/use-request";
+import RequestUtil from "@utils/RequestUtil";
 const IconFont = createFromIconfontCN({
     scriptUrl: [
         "//at.alicdn.com/t/font_2771956_r1mkfqj4xwf.js"
@@ -155,6 +157,29 @@ export default function (): JSX.Element {
     // const authorities = ApplicationContext.get().authorities
     const dictionary = useDictionary()
     const [isOpend, setIsOpend] = useState<boolean>(false)
+
+    const { run: tenantRun } = useRequest<any>((tenantId: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/sinzetech-user/user/setDefaultTenant?tenantId=${tenantId}`)
+            const reLogin = await RequestUtil.post(
+                '/sinzetech-auth/oauth/token',
+                {
+                    grant_type: "password",
+                    tenant_id: tenantId,
+                    username: AuthUtil.getUserInfo().username,
+                    password: AuthUtil.getUserInfo().password
+                },
+                {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Tenant-Id': tenantId
+                }
+            )
+            resole(reLogin)
+        } catch (error) {
+            reject(false)
+        }
+    }), { manual: true })
+
     const logOut = () => {
         AuthUtil.removeTenantId();
         AuthUtil.removeSinzetechAuth();
@@ -184,6 +209,27 @@ export default function (): JSX.Element {
     }
     const handleClick = (opend: boolean) => setIsOpend(opend)
 
+    const handleUseTenants = async (tenantInfo: any) => {
+        const {
+            access_token,
+            refresh_token,
+            user_id,
+            tenant_id,
+            tenant_name,
+            tenants,
+            ...result
+        } = await tenantRun(tenantInfo.tenantId)
+        Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
+        Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
+        Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
+        AuthUtil.setSinzetechAuth(access_token, refresh_token)
+        AuthUtil.setTenantId(tenant_id, { expires: 7 })
+        AuthUtil.setTenantName(tenantInfo.name)
+        AuthUtil.setTenants(tenants)
+        AuthUtil.setRealName(result.real_name)
+        AuthUtil.setAccout(result.account)
+        history.push(ctxConfig.home || '/')
+    }
 
     useEffect(() => {
         doFiltersAll(history)
@@ -208,6 +254,22 @@ export default function (): JSX.Element {
             </Menu.Item>
         </Menu>
     );
+
+    const tenants = (<Menu>
+        {AuthUtil.getTenants().map((item: any) => <Menu.Item key={item.id}>
+            <p
+                style={{
+                    textAlign: "center",
+                    height: "24px",
+                    lineHeight: "24px",
+                    margin: 0
+                }}
+                onClick={() => handleUseTenants(item)}>
+                {item.name}
+            </p>
+        </Menu.Item>)}
+    </Menu>)
+
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
@@ -227,35 +289,41 @@ export default function (): JSX.Element {
                     }} />
             </div>
             <Hbreadcrumb onClick={handleClick} />
-            {
-                location.pathname !== "/chooseApply" && (
-                    <>
-                        <div className={styles.logout}>
-                            <Row>
-                                <Col>
-                                    <Link to={`/approvalm/management`}>
-                                        <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
-                                    </Link>
-
-                                </Col>
-                                <Col>
-                                    <Link to={`/homePage/notice`}>
-                                        <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
-                                    </Link>
-                                </Col>
-                                <Col>
-                                    <Dropdown overlay={menu} placement="bottomCenter">
-                                        <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                            <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
-                                            <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
-                                        </a>
-                                    </Dropdown>
-                                </Col>
-                            </Row>
-                        </div>
-                    </>
-                )
-            }
+            <div className={styles.logout}>
+                <Row>
+                    <Col>
+                        <Dropdown overlay={tenants} placement="bottomCenter">
+                            <a className="ant-dropdown-link"
+                                onClick={e => e.preventDefault()}>
+                                <span style={{
+                                    marginLeft: 4,
+                                    fontSize: 14,
+                                    marginRight: 16,
+                                    color: "#fff"
+                                }}>{AuthUtil.getTenantName()}<DownOutlined /></span>
+                            </a>
+                        </Dropdown>
+                    </Col>
+                    <Col>
+                        <Link to={`/approvalm/management`}>
+                            <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
+                        </Link>
+                    </Col>
+                    <Col>
+                        <Link to={`/homePage/notice`}>
+                            <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
+                        </Link>
+                    </Col>
+                    <Col>
+                        <Dropdown overlay={menu} placement="bottomCenter">
+                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
+                                <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
+                            </a>
+                        </Dropdown>
+                    </Col>
+                </Row>
+            </div>
         </Header>
         <Layout
             style={{
