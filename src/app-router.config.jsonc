@@ -3096,6 +3096,13 @@
       "module": "./pages/dataMngt/dataArchiving/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-系统设置-杂项条目配置
+      "name": "杂项条目配置",
+      "path": "/baseSetting/miscellaneousItems",
+      "module": "./pages/baseSetting/MiscellaneousItems",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
