@@ -270,22 +270,6 @@ export default function (): JSX.Element {
             </Menu.Item>
         </Menu>
     );
-
-    const tenants = (<Menu>
-        {AuthUtil.getTenants().map((item: any) => <Menu.Item key={item.id}>
-            <p
-                style={{
-                    textAlign: "center",
-                    height: "24px",
-                    lineHeight: "24px",
-                    margin: 0
-                }}
-                onClick={() => handleUseTenants(item)}>
-                {item.name}
-            </p>
-        </Menu.Item>)}
-    </Menu>)
-
     return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
@@ -294,44 +278,79 @@ export default function (): JSX.Element {
                 onClick={() => history.replace("/chooseApply")}>
                 <img className={styles.logo} src={Logo} />
             </h1>
-            <Hbreadcrumb isOpend={isOpend} onClick={handleClick} />
-            <div className={styles.logout}>
-                <Row>
-                    <Col>
-                        <Dropdown overlay={tenants} placement="bottomCenter">
-                            <a className="ant-dropdown-link"
-                                onClick={e => e.preventDefault()}>
-                                <span style={{
-                                    marginLeft: 4,
-                                    fontSize: 14,
-                                    marginRight: 16,
-                                    color: "#fff"
-                                }}>{AuthUtil.getTenantName()}<DownOutlined /></span>
-                            </a>
-                        </Dropdown>
-                    </Col>
-                    <Col>
-                        <Link to={`/approvalm/management`}>
-                            <span className={`iconfont icon-wodeshenpi ${styles.approval}`}></span>
-                        </Link>
-                    </Col>
-                    <Col>
-                        <Link to={`/homePage/notice`}>
-                            <span className={`iconfont icon-wodexiaoxi ${styles.approval}`} style={{ marginRight: 16 }}></span>
-                        </Link>
-                    </Col>
-                    <Col>
-                        <Dropdown overlay={menu} placement="bottomCenter">
-                            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                                <Avatar size={20} style={{ backgroundColor: "#FF8C00", verticalAlign: 'middle', fontSize: 12, position: "relative", top: -1 }} gap={4}>{AuthUtil.getAccount() ? AuthUtil.getAccount().split("")[0].toLocaleUpperCase() : ""}</Avatar>
-                                <span style={{ marginLeft: 4, fontSize: 14, marginRight: 16, color: "#fff" }}>{AuthUtil.getAccount()}<DownOutlined /></span>
-                            </a>
-                        </Dropdown>
-                    </Col>
-                </Row>
+            <div
+                style={{ float: "left" }}
+                onClick={() => setVisible(true)}>
+                <AppstoreOutlined
+                    style={{
+                        fontSize: "24px",
+                        color: "#fff",
+                        verticalAlign: "middle"
+                    }} />
             </div>
         </Header>
-        <Layout style={{ height: "100%", backgroundColor: "#fff" }}>
+        <Layout
+            style={{
+                position: "relative",
+                height: "100%",
+                backgroundColor: "#fff",
+                overflow: "hidden"
+            }}>
+            <Drawer
+                title=""
+                placement="top"
+                closable={false}
+                visible={visible}
+                className="drawer"
+                height={"auto"}
+                getContainer={false}
+                style={{ position: "absolute" }}
+                onClose={() => setVisible(false)}
+            >
+                <div className={styles.drawerContent}>
+                    {
+                        (apps as any[]).filter((itemVos: any) => authorities?.
+                            includes(itemVos.authority)).
+                            map((res: any, index: number) => (
+                                <div className={styles.apply} key={index} onClick={() => {
+                                    AuthUtil.setCurrentAppName(res.appName)
+                                    if (res.corsWeb) {
+                                        let herf = res.path
+                                        switch (process.env.REACT_APP_ENV) {
+                                            case "integration":
+                                                herf = res.path.replace("test", "dev")
+                                                break
+                                            case "uat":
+                                                herf = res.path.replace("test", "uat")
+                                                break
+                                            default:
+                                                herf = res.path
+                                        }
+                                        if (res.appName === "MC") {
+                                            herf = res.path + AuthUtil.getUserId()
+                                        }
+                                        window.location.href = herf
+                                        return
+                                    }
+                                    setVisible(false)
+                                    history.push(res.path)
+                                }}>
+                                    <div className={styles.icon}>
+                                        <span style={{ display: "inline-block", width: 50, height: 50, background: res.color, borderRadius: 8, textAlign: "center", lineHeight: "50px" }}>
+                                            <span className={`iconfont ${res.iconFont}`} style={{
+                                                fontFamily: "font_family",
+                                                fontSize: res.fontSize || 28,
+                                                color: "#fff"
+                                            }}></span>
+                                        </span>
+                                    </div>
+                                    <div className={styles.title}>{res.title}</div>
+                                    <div className={styles.description}>{res.description}</div>
+                                </div>
+                            ))
+                    }
+                </div>
+            </Drawer>
             {
                 location.pathname === "/chooseApply" ? <ChooseApplay /> :
                     <>
