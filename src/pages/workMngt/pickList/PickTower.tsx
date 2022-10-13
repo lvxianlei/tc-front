@@ -37,7 +37,7 @@ export default function PickTower(): React.ReactNode {
     // const [status, setStatus] = useState('');
     const [withSectionVisible, setWithSectionVisible] = useState<boolean>(false);
     const editRef = useRef<EditRefProps>();
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
     // const [batchNo, setBatchNo] = useState<any>();
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {

@@ -53,6 +53,7 @@ export default function SearchTable({
     filterValue = {},
     tableProps,
     pagination,
+    paginationProps,
     pageSize = 10,
     modal = false,
     exportPath,
@@ -164,6 +165,7 @@ export default function SearchTable({
                     showTotal={(total: number) => `共${total}条记录`}
                     showSizeChanger
                     onChange={paginationChange}
+                    {...paginationProps}
                 />
             </footer>
         }

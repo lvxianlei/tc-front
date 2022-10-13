@@ -3145,6 +3145,13 @@
       "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 流程设计
+      "name": "流程设计",
+      "path": "/journal/workflow",
+      "module": "./pages/system-mngt/workflow/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
