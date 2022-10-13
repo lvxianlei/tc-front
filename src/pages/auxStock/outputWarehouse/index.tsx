@@ -30,7 +30,7 @@ const outStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
+                <Link to={`/auxStock/outputWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
             </>
         )
     }
