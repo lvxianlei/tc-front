@@ -1,0 +1,40 @@
+{
+  "purchasePlan": [
+    {
+      "title": "汇总采购计划编号",
+      "dataIndex": "collectPurchasePlanNumber",
+      "width": 140
+    },
+    {
+      "title": "计划状态",
+      "dataIndex": "purchasePlanStatus",
+      "width": 80,
+      "type": "select",
+      "enum": [
+        {
+          "label": "待完成",
+          "value": 1
+        },
+        {
+          "label": "已完成",
+          "value": 2
+        },
+        {
+          "label": "已取消",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "title": "制单人",
+      "dataIndex": "purchaserName",
+      "width": 100
+    },
+    {
+      "title": "创建日期",
+      "dataIndex": "createTime",
+      "width": 100
+    }
+  ]
+
+}
