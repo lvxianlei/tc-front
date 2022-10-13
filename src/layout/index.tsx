@@ -14,6 +14,8 @@ import { getMenuItemByPath, getRouterItemByPath } from "../utils";
 import Cookies from "js-cookie";
 import AppstoreOutlined from "@ant-design/icons/lib/icons/AppstoreOutlined";
 import ApplicationContext from "../configuration/ApplicationContext";
+import useRequest from "@ahooksjs/use-request"
+import RequestUtil from '../utils/RequestUtil'
 import styles from './Layout.module.less';
 import './drawer.less';
 
