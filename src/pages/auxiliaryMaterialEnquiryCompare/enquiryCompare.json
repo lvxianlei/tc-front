@@ -1,0 +1,332 @@
+{
+  "comparison": [
+    {
+      "title": "询比价编号",
+      "dataIndex": "comparisonPriceNumber",
+      "width": 200
+    },
+    {
+      "title": "创建日期",
+      "dataIndex": "createTime",
+      "type": "date",
+      "format": "YYYY-MM-DD",
+      "width": 200
+    },
+    {
+      "title": "询比价状态",
+      "dataIndex": "comparisonStatus",
+      "width": 100,
+      "type":"select",
+      "enum": [
+        {
+          "label": "询价中",
+          "value": 1
+        },
+        {
+          "label": "已询价",
+          "value": 2
+        },
+        {
+          "label": "已取消",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "title": "询价人",
+      "dataIndex": "comparisonPersonName",
+      "width": 150
+    }
+  ],
+  "editBaseInfo": [
+    {
+      "title": "询比价供应商",
+      "dataIndex": "supplyIdList",
+      "type": "popTable",
+      "path": "/tower-supply/supplier",
+      "width": 1011,
+      "value": "supplyIdList",
+      "selectType": "checkbox",
+      "dependencies": true,
+      "readOnly": true,
+      "search": [
+
+        {
+          "title": "查询",
+          "dataIndex": "fuzzyQuery",
+          "placeholder": "编号/名称/联系人/联系人电话"
+        }
+      ],
+      "columns": [
+        {
+          "title": "供应商编号",
+          "dataIndex": "supplierCode"
+        },
+        {
+          "title": "供应商名称",
+          "dataIndex": "supplierName"
+        },
+        {
+          "title": "供应商类型",
+          "dataIndex": "supplierType",
+          "type": "select",
+          "enum": []
+        },
+        {
+          "title": "联系人",
+          "dataIndex": "contactMan"
+        },
+        {
+          "title": "联系电话",
+          "dataIndex": "contactManTel"
+        },
+        {
+          "title": "供货产品",
+          "dataIndex": "supplyProductsName"
+        }
+      ],
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择询比价供应商"
+        }
+      ]
+    }
+  ],
+  "materialColumns": [
+    {
+      "title": "序号",
+      "dataIndex": "materialSeq",
+      "width": 40
+    },
+    {
+      "title": "物料编码",
+      "dataIndex": "materialCode",
+      "width": 70
+    },
+    {
+      "title": "品名",
+      "dataIndex": "materialName",
+      "width": 50
+    },
+    {
+      "title": "规格",
+      "dataIndex": "structureSpec",
+      "width": 50
+    },
+    {
+      "title": "数量",
+      "dataIndex": "num",
+      "type": "number",
+      "width": 80
+    },
+    {
+      "title": "单位",
+      "dataIndex": "unit",
+      "width": 80
+    },
+    {
+      "title": "申请人",
+      "dataIndex": "applyUserName"
+    },
+    {
+      "title": "申请部门",
+      "dataIndex": "applyDeptName"
+    },
+    {
+      "title": "备注",
+      "dataIndex": "description"
+    }
+  ],
+  "materialColumnsSaveOrUpdate": [
+    {
+      "title": "物料编码",
+      "dataIndex": "materialCode"
+    },
+    {
+      "title": "品名",
+      "dataIndex": "materialName"
+    },
+    {
+      "title": "规格",
+      "dataIndex": "structureSpec"
+    },
+    {
+      "title": "数量",
+      "dataIndex": "planPurchaseNum",
+      "type": "number"
+    },
+    {
+      "title": "单位",
+      "dataIndex": "unit"
+    },
+    {
+      "title": "申请人",
+      "dataIndex": "applyUserName"
+    },
+    {
+      "title": "申请部门",
+      "dataIndex": "deptName"
+    },
+    {
+      "title": "备注",
+      "dataIndex": "remark"
+    }
+  ],
+  "addPriceHead": [
+    {
+      "title": "物料编码",
+      "dataIndex": "materialCode"
+    },
+    {
+      "title": "品名",
+      "dataIndex": "materialName"
+    },
+    {
+      "title": "标准",
+      "dataIndex": "materialStandardName"
+    },
+    {
+      "title": "规格",
+      "dataIndex": "structureSpec"
+    },
+    {
+      "title": "大类",
+      "dataIndex": "materialDiversity"
+    },
+    {
+      "title": "数量",
+      "dataIndex": "num",
+      "type": "number"
+    },
+    {
+      "title": "单位",
+      "dataIndex": "unit"
+    },
+    {
+      "title": "含税报价（单价）",
+      "dataIndex": "taxOffer"
+    }
+  ],
+  "choosePlanList": [
+    {
+      "title": "汇总采购计划编号",
+      "dataIndex": "collectPurchasePlanNumber",
+      "width": 150,
+      "type": "string"
+    },
+    {
+      "title": "申请人",
+      "dataIndex": "purchaserName"
+    },
+    {
+      "title": "计划状态",
+      "dataIndex": "purchasePlanStatusName"
+    },
+    {
+      "title": "创建日期",
+      "dataIndex": "createTime"
+    }
+  ],
+  "addMaterial": {
+    "title": "原材料",
+    "type": "popTable",
+    "path": "/tower-system/material",
+    "width": 1011,
+    "selectType": "checkbox",
+    "dependencies": true,
+    "readOnly": true,
+    "search": [
+      {
+        "title": "查询",
+        "dataIndex": "fuzzyQuery",
+        "placeholder": "输入品名/规格进行查询"
+      }
+    ],
+    "columns": [
+      {
+        "title": "物料编码",
+        "dataIndex": "materialCode"
+      },
+      {
+        "title": "品名",
+        "dataIndex": "materialCategoryName"
+      },
+      {
+        "title": "标准",
+        "dataIndex": "materialStandardName"
+      },
+      {
+        "title": "材质",
+        "dataIndex": "structureTexture"
+      },
+      {
+        "title": "规格",
+        "dataIndex": "structureSpec"
+      },
+      {
+        "title": "长度",
+        "dataIndex": "length"
+      },
+      {
+        "title": "宽度",
+        "dataIndex": "width"
+      }
+    ]
+  },
+  "operation": [
+    {
+      "title": "操作部门",
+      "dataIndex": "deptName"
+    },
+    {
+      "title": "操作人",
+      "dataIndex": "optUserName"
+    },
+    {
+      "title": "操作时间",
+      "dataIndex": "optTime",
+      "type": "date"
+    },
+    {
+      "title": "操作类型",
+      "dataIndex": "optName"
+    }
+  ],
+  "supplier": [
+    {
+      "title": "供应商",
+      "dataIndex": "supplier",
+      "type": "select",
+      "enum": [],
+      "labelInValue": true,
+      "required": true
+    },
+    {
+      "title": "生产厂家",
+      "dataIndex": "manufacturer"
+    }
+  ],
+  "batchSupplier": [
+    {
+      "title": "供应商",
+      "dataIndex": "supplier",
+      "type": "select",
+      "enum": [],
+      "labelInValue": true,
+      "required": true
+    },
+    {
+      "title": "生产厂家",
+      "dataIndex": "manufacturer"
+    },
+    {
+      "title": "报价(元)",
+      "dataIndex": "taxOffer",
+      "type": "number",
+      "min": 1,
+      "max": 999999.99,
+      "step": 0.01
+    }
+  ]
+}
