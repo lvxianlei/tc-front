@@ -122,7 +122,7 @@
     },
     {
       "title": "申请人",
-      "dataIndex": "applyUserName"
+      "dataIndex": "createUserName"
     },
     {
       "title": "申请部门",
@@ -157,7 +157,7 @@
     },
     {
       "title": "申请人",
-      "dataIndex": "applyUserName"
+      "dataIndex": "createUserName"
     },
     {
       "title": "申请部门",
@@ -212,7 +212,7 @@
     },
     {
       "title": "申请人",
-      "dataIndex": "purchaserName"
+      "dataIndex": "createUserName"
     },
     {
       "title": "计划状态",
