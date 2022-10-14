@@ -120,16 +120,16 @@
             "dataIndex": "totalTaxAmount"
         },
         {
+            "title": "税率",
+            "dataIndex": "tax"
+        },
+        {
             "title": "不含税单价（元/吨）",
             "dataIndex": "price"
         },
         {
             "title": "不含税金额（元）",
             "dataIndex": "totalAmount"
-        },
-        {
-            "title": "库位",
-            "dataIndex": "reservoirArea"
         },
         {
             "title": "区位",
@@ -215,10 +215,10 @@
     "addPlanMaterial": {
         "title": "原材料",
         "type": "popTable",
-        "path": "/tower-storage/auxiliaryReceiveStock/details",
+        "path": "/tower-supply/auxiliaryMaterialPurchasePlan/list",
         "width": 1011,
         "selectType": "checkbox",
-        "rowKey": "receiveStockDetailId",
+        "rowKey": "id",
         "dependencies": true,
         "readOnly": true,
         "search": [
@@ -232,23 +232,23 @@
         "columns": [
             {
                 "title": "汇总采购计划编号",
-                "dataIndex": "collectPurchasePlanNumber"
+                "dataIndex": "purchasePlanNumber"
             },
             {
                 "title": "类型",
-                "dataIndex": "purchaseType"
+                "dataIndex": "materialCategoryName"
             },
             {
                 "title": "品名",
-                "dataIndex": ""
+                "dataIndex": "materialName"
             },
             {
                 "title": "规格",
-                "dataIndex": ""
+                "dataIndex": "structureSpec"
             },
             {
                 "title": "数量",
-                "dataIndex": ""
+                "dataIndex": "planPurchaseNum"
             },
             {
                 "title": "单位",
@@ -256,19 +256,19 @@
             },
             {
                 "title": "申请人",
-                "dataIndex": ""
+                "dataIndex": "createUserName"
             },
             {
                 "title": "申请部门",
-                "dataIndex": ""
+                "dataIndex": "deptName"
             },
             {
                 "title": "创建日期",
-                "dataIndex": ""
+                "dataIndex": "createTime"
             },
             {
                 "title": "备注",
-                "dataIndex": ""
+                "dataIndex": "remark"
             }
         ]
     }
