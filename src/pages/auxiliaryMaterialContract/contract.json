@@ -340,7 +340,7 @@
     },
     {
       "title": "经办人",
-      "dataIndex": "operatorName"
+      "dataIndex": "operatorIdName"
     },
     {
       "title": "交货方式",
