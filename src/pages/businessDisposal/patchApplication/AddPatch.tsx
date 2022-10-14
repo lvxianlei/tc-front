@@ -32,7 +32,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                 return {
                     ...res,
                     productCategoryId: record.productCategoryId,
-                    productCategory: record.productCategoryName,
+                    productCategoryName: record.productCategoryName,
                     basicsPartNum: 0,
                     totalWeight: 0,
                     structureId: res.id

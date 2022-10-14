@@ -32,7 +32,7 @@ export default function List(): React.ReactNode {
     const [user, setUser] = useState<any[] | undefined>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>();
-    const [type, setType] = useState<'new' | 'detail'>('new');
+    const [type, setType] = useState<'new' | 'detail' | 'edit'>('new');
     const [rowId, setRowId] = useState<string>();
     const { data: departmentData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/department`);
@@ -94,15 +94,15 @@ export default function List(): React.ReactNode {
             destroyOnClose
             key='ApplyTrial'
             visible={visible}
-            title={type === 'new' ? '试装/免试装申请' : '详情'}
+            title={type === 'new' ? '试装/免试装申请' : type === 'edit' ? '编辑' : '详情'}
             footer={<Space direction="horizontal" size="small">
-                {type === 'new' ?
+                {type === 'detail' ?
+                    null
+                    :
                     <>
                         <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
                         <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
                     </>
-                    :
-                    null
                     // <>
                     //     <Button>拒绝</Button>
                     //     <Button>通过</Button>
@@ -140,6 +140,11 @@ export default function List(): React.ReactNode {
                     width: 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
+                            <Button type='link' onClick={() => {
+                                setRowId(record?.id);
+                                setVisible(true);
+                                setType('edit');
+                            }}>编辑</Button>
                             <Button type='link' onClick={() => {
                                 setRowId(record?.id);
                                 setVisible(true);
