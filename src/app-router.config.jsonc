@@ -255,13 +255,6 @@
       "exact": true,
       "authority": "tc_erp_sw_config_list_type"
     },
-    { // 辅材类型管理
-      "name": "辅材类型管理",
-      "path": "/config/configList/auxiliaryMaterialType",
-      "module": "./pages/system-mngt/material/AuxiliaryMaterialTypeMngt",
-      "exact": true,
-      "authority": "tc_erp_sw_config_list_type"
-    },
     { // 原材料管理
       "name": "原材料管理",
       "path": "/config/configList/material",
@@ -903,10 +896,10 @@
     },
     { // 库存管理-辅材出库-明细
       "name": "辅材出库明细",
-      "path": "/auxStock/outputWarehouse/detail/:id",
+      "path": "/auxStock/outputMaterialWarehouse/detail/:id",
       "module": "./pages/auxStock/outputWarehouse/detail/detail",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_out_info"
+      "authority": "tc_erp_sw_stock_material_out_list"
     },
     { // 库存管理-余料入库
       "name": "余料入库",

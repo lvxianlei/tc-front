@@ -8,7 +8,6 @@ import RequestUtil from '../../../../utils/RequestUtil';
 import { baseColumn } from "./detail.json";
 import '../../StockPublicStyle.less';
 import './detail.less';
-import AuthUtil from '@utils/AuthUtil';
 import { exportDown } from '@utils/Export';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
