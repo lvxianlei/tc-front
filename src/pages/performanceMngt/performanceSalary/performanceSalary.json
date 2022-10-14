@@ -1,0 +1,196 @@
+{
+    "columns": [
+        {
+            "key": "planNumber",
+            "title": "年份",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "loftingTaskNumber",
+            "title": "月份",
+            "width": 120,
+            "dataIndex": "loftingTaskNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "小组",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
+            "key": "productTypeName",
+            "title": "姓名",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "结算方式",
+            "dataIndex": "wasteStructureNum",
+            "width": 120
+        },
+        {
+            "key": "wasteNum",
+            "title": "出勤（天）",
+            "dataIndex": "wasteNum",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "加班（时）",
+            "dataIndex": "penaltyAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "出勤总计（时）",
+            "dataIndex": "rejectWeight",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "底薪",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "计件工资",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "杂项绩效",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "计件合计",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "质量考核",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "违纪考核",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "实发工资",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "确认人",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "确认日期",
+            "dataIndex": "rejectAmount",
+            "width": 120,
+            "type": "number"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "wasteEntryName",
+            "title": "工程名称",
+            "width": 100,
+            "dataIndex": "wasteEntryName"
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "计划号",
+            "width": 100,
+            "dataIndex": "wasteStructureNum",
+            "type": "number"
+        },
+        {
+            "key": "wasteNum",
+            "title": "产品类型",
+            "width": 100,
+            "dataIndex": "wasteNum",
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "电压等级",
+            "width": 100,
+            "dataIndex": "penaltyAmount",
+            "type": "number"
+        },
+        {
+            "key": "rejectAmount",
+            "title": "塔型名称",
+            "width": 100,
+            "dataIndex": "rejectAmount",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "计件/杂项",
+            "width": 100,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "定额类别",
+            "width": 100,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "定额条目/派工事项",
+            "width": 100,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "单价",
+            "width": 100,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "数量/工时",
+            "width": 100,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "工资",
+            "width": 100,
+            "dataIndex": "rejectWeight",
+            "type": "number"
+        }
+    ]
+}
