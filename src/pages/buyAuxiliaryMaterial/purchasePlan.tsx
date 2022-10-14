@@ -145,9 +145,9 @@ export default function PurchasePlan() {
                 </>}
                 searchFormItems={[
                     {
-                        name: 'purchasePlanStatus',
+                        name: 'planStatus',
                         label: '计划状态',
-                        children: <Select style={{ width: 100 }} defaultValue="">
+                        children: <Select style={{ width: 100 }}>
                             <Select.Option value="" key="">全部</Select.Option>
                             <Select.Option value={1} key={1}>待完成</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
@@ -162,7 +162,7 @@ export default function PurchasePlan() {
                     {
                         name: 'collectType',
                         label: '汇总状态',
-                        children: <Select style={{ width: 100 }} defaultValue="">
+                        children: <Select style={{ width: 100 }}>
                             <Select.Option value="" key="">全部</Select.Option>
                             <Select.Option value={0} key={0}>未汇总</Select.Option>
                             <Select.Option value={1} key={1}>已汇总</Select.Option>
