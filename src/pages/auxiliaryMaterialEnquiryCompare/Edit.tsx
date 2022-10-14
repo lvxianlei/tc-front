@@ -109,7 +109,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                     value: result.supplierVOS?.map((item: any) => item.supplierName).join(","),
                     records: result.supplierVOS?.map((item: any) => ({
                         id: item.id,
-                        supplierName: item.supplierName
+                        supplierName: item.supplierName,
                     })) || []
                 },
             })
@@ -121,6 +121,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                     structureTextureId: res.structureTextureId,
                     materialStandardName: res.materialStandardName,
                     materialStandard: res.materialStandard,
+                    planPurchaseNum:res.num
                 }
             })
             setMaterialList(comparisonPriceDetailVos || [])
@@ -167,7 +168,8 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
-                        purchaseListId:item.id
+                        purchaseListId:item.id,
+                        num: item.planPurchaseNum,
                         // id: '',
                         // structureTexture: item.structureTexture,
                         // structureTextureId: item.structureTextureId,
