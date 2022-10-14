@@ -6,7 +6,7 @@
 
  import React, { useState } from 'react';
  import { Space, Input, DatePicker, Button, Form, TablePaginationConfig } from 'antd';
- import styles from './UnqualifiedDisposal.module.less';
+ import styles from './PerformanceSalary.module.less';
  import { IResponseData } from '../../common/Page';
  import RequestUtil from '../../../utils/RequestUtil';
  import { columns, detailColumns } from "./performanceSalary.json"
@@ -65,7 +65,7 @@
  
      return <>
          <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-             <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
+             <Form form={form} layout="inline" onFinish={onSearch}>
                  <Form.Item label='日期' name="updateStatusTime">
                      <DatePicker.RangePicker />
                  </Form.Item>
@@ -76,7 +76,6 @@
                      <Space direction="horizontal">
                          <Button type="primary" htmlType="submit">搜索</Button>
                          <Button htmlType="reset">重置</Button>
- 
                      </Space>
                  </Form.Item>
              </Form>
