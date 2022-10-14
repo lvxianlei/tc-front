@@ -3110,6 +3110,13 @@
       "module": "./pages/businessDisposal/generationOfMaterial/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-过磅异常
+      "name": "过磅异常",
+      "path": "/businessDisposal/weighingAbnormal",
+      "module": "./pages/businessDisposal/weighingAbnormal/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
