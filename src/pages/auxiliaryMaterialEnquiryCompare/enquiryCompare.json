@@ -95,11 +95,6 @@
   ],
   "materialColumns": [
     {
-      "title": "序号",
-      "dataIndex": "materialSeq",
-      "width": 40
-    },
-    {
       "title": "物料编码",
       "dataIndex": "materialCode",
       "width": 70
@@ -131,11 +126,11 @@
     },
     {
       "title": "申请部门",
-      "dataIndex": "applyDeptName"
+      "dataIndex": "deptName"
     },
     {
       "title": "备注",
-      "dataIndex": "description"
+      "dataIndex": "remark"
     }
   ],
   "materialColumnsSaveOrUpdate": [

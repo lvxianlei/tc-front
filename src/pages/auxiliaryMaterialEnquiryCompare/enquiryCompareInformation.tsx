@@ -276,6 +276,14 @@ export default function Overview(): JSX.Element {
             <DetailTitle title="询价产品信息" style={{ marginTop: "24px" }} />
             <CommonAliTable
                 columns={[
+                    {
+                        title: "序号",
+                        dataIndex: "index",
+                        width: 50,
+                        fixed: "left",
+                        edit: false,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
                     ...materialColumns,
                     ...(data?.headerColumnVos.map((item: any) => ({
                         ...item,
