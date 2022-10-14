@@ -15,6 +15,7 @@
  import useRequest from '@ahooksjs/use-request';
  import { TreeNode } from 'antd/lib/tree-select';
  import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import GenerationOfMaterialApply from './GenerationOfMaterialApply';
  
  interface EditRefProps {
      onSubmit: () => void;
@@ -58,24 +59,52 @@
              reject(false)
          }
      })
+     
+     const handlePass = () => new Promise(async (resove, reject) => {
+        try {
+            await addRef.current?.onPass()
+            message.success("通过成功！")
+            setVisible(false)
+            addRef.current?.resetFields();
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    
+    const handleReject = () => new Promise(async (resove, reject) => {
+        try {
+            await addRef.current?.onReject()
+            message.success("拒绝成功！")
+            setVisible(false)
+            addRef.current?.resetFields();
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+
      return <>
-         {/* <Modal
+         <Modal
              destroyOnClose
              key='ApplyTrial'
              visible={visible}
              title={type === 'new' ? '试装/免试装申请' : '详情'}
              footer={<Space direction="horizontal" size="small">
-                 {type === 'new' ?
+                 {type === 'detail' ?
+                 <>
+                 
+                 <Button onClick={handlePass} type="primary" ghost>通过</Button>
+                         <Button onClick={handleReject} type="primary" ghost>拒绝</Button>
+                 </>
+                     :
                      <>
                          <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
                          <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
                      </>
-                     :
-                     null
-                     // <>
-                     //     <Button>拒绝</Button>
-                     //     <Button>通过</Button>
-                     // </>
                  }
                  <Button onClick={() => {
                      setVisible(false);
@@ -88,7 +117,7 @@
                  addRef.current?.resetFields();
              }}>
              <GenerationOfMaterialApply type={type} id={rowId} ref={addRef} />
-         </Modal> */}
+         </Modal>
          <Page
              path="/tower-science/trialAssembly"
              columns={[
