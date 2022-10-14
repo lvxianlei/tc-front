@@ -560,7 +560,7 @@
       },
       {
         "title": "报价",
-        "dataIndex": "offer"
+        "dataIndex": "taxOffer"
       },
       {
         "title": "生产厂家",
