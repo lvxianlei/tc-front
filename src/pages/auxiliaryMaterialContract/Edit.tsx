@@ -114,7 +114,16 @@ export const calcFun = {
         return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
     }
 }
-
+const  retain = (num:string,decimal:number)=>{
+    num = num.toString();
+    let index = num.indexOf('.');
+    if(index !== -1){
+        num = num.substring(0,decimal + index + 1)
+    }else{
+        num = num.substring(0)
+    }
+    return parseFloat(num).toFixed(decimal)
+}
 export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [isDisabled, setDisabled] = useState<boolean>(true)
@@ -426,8 +435,8 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             return {
                 ...item,
                 taxPrice,
-                price:Number(price).toFixed(2),
-                offer:Number(price).toFixed(2),
+                price:Number(price).toFixed(6),
+                offer:Number(price).toFixed(6),
                 // 含税金额总计 数量*含税单价  保留两位小数
                 totalTaxAmount:(taxPrice * num).toFixed(2),
                 // 不含税金额总计
@@ -697,31 +706,34 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     if (item.dataIndex === "num") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber
+                            render: (value: number, records: any, key: number) =>
+                                <InputNumber
                                 min={1} value={value || 1}
                                 disabled={records.isReceiveStockRef === 2}
                                 onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex,records.id)} key={key} />
                         })
                     }
-                    // 含税单价
-                    // if (item.dataIndex === "taxOffer") {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => <InputNumber
-                    //             min={1} value={value || 1}
-                    //             disabled={records.isReceiveStockRef === 2}
-                    //             onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex,records.id)} key={key} />
-                    //     })
-                    // }
+                    // 含税单价 展示格式化 仅展示两位小数
+                    if (item.dataIndex === "taxOffer") {
+                        return ({
+                            ...item,
+                            render: (value: number, records: any, key: number)  => (<span  key={key}>{retain(records.taxOffer,2)}</span>)
+                                // <InputNumber
+                                // min={1} value={value || 1}
+                                // disabled={records.isReceiveStockRef === 2}
+                                // onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex,records.id)} key={key} />
+                        })
+                    }
                     // 不含税单价
-                    // if (item.dataIndex === "offer") {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => <InputNumber
-                    //             min={1} value={value || 1}
-                    //             onChange={(value: number) => handleNumChange(value, records.offer, item.dataIndex,records.id)} key={key} />
-                    //     })
-                    // }
+                    if (item.dataIndex === "offer") {
+                        return ({
+                            ...item,
+                            render:  (value: number, records: any, key: number)  => (<span  key={key}>{retain(records.offer,2)}</span>)
+                                // (value: number, records: any, key: number) => <InputNumber
+                                // min={1} value={value || 1}
+                                // onChange={(value: number) => handleNumChange(value, records.offer, item.dataIndex,records.id)} key={key} />
+                        })
+                    }
                     return item
                 }),
                 {
