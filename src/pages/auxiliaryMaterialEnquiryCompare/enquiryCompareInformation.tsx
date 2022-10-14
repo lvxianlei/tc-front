@@ -347,12 +347,13 @@ export default function Overview(): JSX.Element {
                                     padding: 0,
                                     marginRight: 12
                                 }}
-                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                                disabled={data?.isRelate !== 0} type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
                             <Button
+                                disabled={data?.isRelate !== 0}
                                 style={{
                                     padding: 0,
                                     marginRight: 12
@@ -365,7 +366,7 @@ export default function Overview(): JSX.Element {
                                 style={{
                                     padding: 0
                                 }}
-                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                                disabled={data?.isRelate !== 0} type="link" onClick={() => {
                                 Modal.confirm({
                                     title: "删除",
                                     content: "确定删除吗？",
