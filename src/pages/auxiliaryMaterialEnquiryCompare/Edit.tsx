@@ -448,6 +448,18 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                             enum:supplierTypeEnum
                         },
                         ...item.search
+                    ],
+                    columns:[
+                    ...item.columns.map(item=>{
+                            if(item.dataIndex == "supplierType"){
+                                return {
+                                    ...item,
+                                    enum:supplierTypeEnum
+                                }
+                            }else{
+                                return item
+                            }
+                        })
                     ]
                 }
                 }else{
