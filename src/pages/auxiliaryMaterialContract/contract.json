@@ -548,15 +548,15 @@
       },
       {
         "title": "申请部门",
-        "dataIndex": "applyUserDeptName"
+        "dataIndex": "deptName"
       },
       {
         "title": "申请人",
-        "dataIndex": "applyUserName"
+        "dataIndex": "createUserName"
       },
       {
         "title": "备注",
-        "dataIndex": "description"
+        "dataIndex": "remark"
       },
       {
         "title": "报价",
