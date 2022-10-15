@@ -1,6 +1,6 @@
-import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
-import { Button, Modal, Spin, Form, InputNumber, message, Select } from "antd"
-import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent } from "../common"
+import React, {forwardRef, useImperativeHandle, useState, useRef} from "react"
+import {Button, Modal, Spin, Form, InputNumber, message, Select} from "antd"
+import {BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent} from "../common"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import AuthUtil from "../../utils/AuthUtil"
@@ -8,16 +8,18 @@ import moment from "moment"
 import {
     deliverywayOptions, materialStandardOptions,
     materialTextureOptions, transportationTypeOptions,
-    settlementModeOptions,supplierTypeOptions
+    settlementModeOptions, supplierTypeOptions
 } from "../../configuration/DictionaryOptions"
-import { contractBaseInfo, material, addMaterial } from "./contract.json"
+import {contractBaseInfo, material, addMaterial} from "./contract.json"
 
 // 新加运费信息
-import { freightInformation, HandlingChargesInformation } from "./Edit.json";
+import {freightInformation, HandlingChargesInformation} from "./Edit.json";
+
 interface EditProps {
     id: string
     type: "new" | "edit",
 }
+
 interface WeightParams {
     width: number | string
     length: number | string
@@ -71,11 +73,26 @@ const oneStevedoring = [{
         }
     ]
 }]
-const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
-const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
-const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
-const settlementModeEnum = settlementModeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
-const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string | number }) => ({ value: item.id, label: item.name }))
+const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
+const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
+const transportMethodEnum = transportationTypeOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
+const settlementModeEnum = settlementModeOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
+const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
 export const calcFun = {
     /**
      *  运费-不含税价格
@@ -92,7 +109,7 @@ export const calcFun = {
     /**
      * 理重
      */
-    weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
+    weight: ({length, width, weightAlgorithm, proportion}: WeightParams) => {
         if (weightAlgorithm === 1) {
             return ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
         }
@@ -104,7 +121,7 @@ export const calcFun = {
     /**
      * 总重量
      */
-    totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
+    totalWeight: ({length, width, weightAlgorithm, proportion, num}: TotalWeightParmas) => {
         if (weightAlgorithm === 1) {
             return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
         }
@@ -114,17 +131,17 @@ export const calcFun = {
         return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
     }
 }
-const  retain = (num:string,decimal:number)=>{
+const retain = (num: string, decimal: number) => {
     num = num.toString();
     let index = num.indexOf('.');
-    if(index !== -1){
-        num = num.substring(0,decimal + index + 1)
-    }else{
+    if (index !== -1) {
+        num = num.substring(0, decimal + index + 1)
+    } else {
         num = num.substring(0)
     }
     return parseFloat(num).toFixed(decimal)
 }
-export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element {
+export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [isDisabled, setDisabled] = useState<boolean>(true)
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -133,7 +150,11 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
-    const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
+    const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({
+        getDataSource: () => [],
+        resetFields: () => {
+        }
+    })
 
     const [colunmnBase, setColunmnBase] = useState<any[]>(contractBaseInfo);
     const [addMaterialBy, setAddMaterialBy] = useState<string>(addMaterial.path);
@@ -142,7 +163,10 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
     // 装卸费
     const [newHandlingChargesInformation, setNewHandlingChargesInformation] = useState<any>(oneStevedoring); // 装卸费信息
 
-    const { loading: taxLoading, data: taxData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+    const {
+        loading: taxLoading,
+        data: taxData
+    } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const materialTax: any = await RequestUtil.get(`/tower-storage/tax/taxMode/material`)
             const freightTax: any = await RequestUtil.get(`/tower-storage/tax/taxMode/freight`)
@@ -158,24 +182,24 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     return ({
                         ...item,
                         disabled: false,
-                        search:item.search.map((searchItem:any)=>{
-                            if(searchItem.dataIndex == 'supplierType'){
+                        search: item.search.map((searchItem: any) => {
+                            if (searchItem.dataIndex == 'supplierType') {
                                 console.log(supplierTypeEnum)
                                 return {
                                     ...searchItem,
-                                    enum:supplierTypeEnum
+                                    enum: supplierTypeEnum
                                 }
-                            }else{
+                            } else {
                                 return searchItem
                             }
                         }),
-                        columns:item.columns.map((columnsItem:any)=>{
-                            if(columnsItem.dataIndex == 'supplierType'){
+                        columns: item.columns.map((columnsItem: any) => {
+                            if (columnsItem.dataIndex == 'supplierType') {
                                 return {
                                     ...columnsItem,
-                                    enum:supplierTypeEnum
+                                    enum: supplierTypeEnum
                                 }
-                            }else{
+                            } else {
                                 return columnsItem
                             }
                         })
@@ -190,20 +214,20 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         }
     }))
 
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
+    const {loading, data} = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialAuxiliaryContract/${id}`)
             const taxNum = await RequestUtil.get(`/tower-storage/tax`)
 
             baseForm.setFieldsValue({
                 ...result,
-                operator: { id: result.operatorId, value: result.operatorName },
-                supplier: { id: result.supplierId, value: result.supplierName },
+                operator: {id: result.operatorId, value: result.operatorName},
+                supplier: {id: result.supplierId, value: result.supplierName},
                 // purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber },
                 // 税率
-                taxRate:result.tax,
+                taxRate: result.tax,
                 // 交货方式
-                deliveryMethod:result.deliveryMethod
+                deliveryMethod: result.deliveryMethod
             })
             // console.log(result.supplierId)
             setSupplierId(result.supplierId)
@@ -252,12 +276,12 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             })
 
             // 辅料列表 -字段对应处理
-            let list:any[] = result?.materialAuxiliaryContractDetails || []
+            let list: any[] = result?.materialAuxiliaryContractDetails || []
             // 检查是否有明细被收货单引用，如果被引用了则禁止编辑
-            let canEdit:boolean = list.every(item=>item.isReceiveStockRef != 2)
+            let canEdit: boolean = list.every(item => item.isReceiveStockRef != 2)
             // 设置基础信息禁止编辑
             setDisabled(canEdit)
-            list.forEach(el=>{
+            list.forEach(el => {
                 // 不含税单价
                 el.offer = el.price
                 // 含税单价
@@ -267,13 +291,13 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             })
             setMaterialList(list)
             setPopDataList(list)
-            resove({ ...result, tax: taxNum })
+            resove({...result, tax: taxNum})
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new", refreshDeps: [id] })
+    }), {manual: type === "new", refreshDeps: [id]})
 
-    const { data: stevedoreCompanyList } = useRequest<any>(() => new Promise(async (resove, reject) => {
+    const {data: stevedoreCompanyList} = useRequest<any>(() => new Promise(async (resove, reject) => {
         try {
             const data: any = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
             const list = data?.records?.map((item: { stevedoreCompanyName: string, id: string }) => {
@@ -290,7 +314,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         }
     }))
 
-    const { data: companyList } = useRequest<any>(() => new Promise(async (resove, reject) => {
+    const {data: companyList} = useRequest<any>(() => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
             const list = result?.records?.map((item: { companyName: string, id: string }) => {
@@ -307,28 +331,31 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         }
     }))
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const {run: saveRun} = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/materialAuxiliaryContract`, type === "new" ? data : ({ ...data, id }))
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/materialAuxiliaryContract`, type === "new" ? data : ({
+                ...data,
+                id
+            }))
             resove(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }), {manual: true})
 
-    const { run: getComparisonPrice } = useRequest<any[]>((supplierId: string) => new Promise(async (resove, reject) => {
+    const {run: getComparisonPrice} = useRequest<any[]>((supplierId: string) => new Promise(async (resove, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-supply/auxiliaryComparisonPrice/getComparisonPriceDetailById?supplierId=${supplierId}&comparisonStatus=2`)
             resove(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }), {manual: true})
 
     const handleAddModalOk = () => {
         // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         const newMaterialList: any[] = [...materialList]
-        newMaterialList.forEach(item=>{
+        newMaterialList.forEach(item => {
             item.comparisonPriceDetailId = item.comparisonPriceDetailId || item.id
             delete item.id
         })
@@ -344,8 +371,8 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields,setCanEditBaseInfo }), [ref, materialList])
-    const setCanEditBaseInfo = ()=>{
+    useImperativeHandle(ref, () => ({onSubmit, resetFields, setCanEditBaseInfo}), [ref, materialList])
+    const setCanEditBaseInfo = () => {
         setDisabled(false)
     }
     const onSubmit = () => new Promise(async (resove, reject) => {
@@ -361,7 +388,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 operatorId: AuthUtil.getUserId(),
                 supplierId: baseInfo.supplier.id,
                 supplierName: baseInfo.supplier.value,
-                tax:baseInfo.taxRate,
+                tax: baseInfo.taxRate,
                 transportBear: {
                     ...freightInfo,
                     transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
@@ -373,15 +400,15 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
                 },
                 materialAuxiliaryContractDetails: materialList.map((item: any) => {
-                    let  obj = {
-                    ...item,
+                    let obj = {
+                        ...item,
                         taxPrice: Number(item.taxOffer).toFixed(6),
                         price: Number(item.offer).toFixed(6),
-                        totalTaxAmount:Number(item.totalTaxAmount).toFixed(6),
-                        totalAmount:Number(item.totalAmount).toFixed(6),
+                        totalTaxAmount: Number(item.totalTaxAmount).toFixed(6),
+                        totalAmount: Number(item.totalAmount).toFixed(6),
                         // taxTotalAmount: item.taxTotalAmount,
                         // totalAmount: item.totalAmount,
-                        comparisonPriceId:item.comparisonPriceId,
+                        comparisonPriceId: item.comparisonPriceId,
                         // comparisonPriceDetailId:item.id,
                         // comparisonPriceNumber:'0123456789'
                     }
@@ -413,42 +440,42 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         }
         // todo 税率变更时，更新所有价格
         if (fields?.taxRate) {
-        updataAllPrice()
+            updataAllPrice()
         }
     }
 
     // 变化重新计算所有价格
-    const updataAllPrice = ()=>{
-        const newMaterialList = materialList.map((item)=>{
+    const updataAllPrice = () => {
+        const newMaterialList = materialList.map((item) => {
             const baseInfo = baseForm.getFieldsValue()
             // 当前税率
             let taxRate = baseInfo.taxRate || 0
             // 数量 保留一位小数
             let num = Number(item.num || 1)
             // 含税单价
-            let taxPrice  = item.taxOffer|| 1
+            let taxPrice = item.taxOffer || 1
             // 不含税单价 含税单价/（1+本次税率）
-            let price:any = taxPrice / ( 1 + (taxRate/100) )
+            let price: any = taxPrice / (1 + (taxRate / 100))
             // console.log(price)
             // console.log(item)
             // console.log(taxRate,num,taxPrice,price)
             return {
                 ...item,
                 taxPrice,
-                price:Number(price).toFixed(6),
-                offer:Number(price).toFixed(6),
+                price: Number(price).toFixed(6),
+                offer: Number(price).toFixed(6),
                 // 含税金额总计 数量*含税单价  保留两位小数
-                totalTaxAmount:(taxPrice * num).toFixed(2),
+                totalTaxAmount: (taxPrice * num).toFixed(2),
                 // 不含税金额总计
-                totalAmount:(price * num).toFixed(2),
+                totalAmount: (price * num).toFixed(2),
             }
         })
         console.log(newMaterialList)
         setMaterialList(newMaterialList)
         setPopDataList(newMaterialList)
     }
-    const handleNumChange = (value: number, materialCode: string, dataIndex: string,id?:string) => {
-        console.log(value,materialCode,dataIndex,id)
+    const handleNumChange = (value: number, materialCode: string, dataIndex: string, id?: string) => {
+        console.log(value, materialCode, dataIndex, id)
         const newData = popDataList.map((item: any) => {
             if (item.id === id) {
                 item[dataIndex] = value
@@ -500,7 +527,23 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         updataAllPrice()
     }
 
-
+    // 抽离防止diff算法 导致失焦
+    const numInputDoneRender = (value: number, records: any, key: number, item: any) => {
+        console.log(value, records, key, item)
+        return < InputNumber
+            min={1}
+            value={value || 1
+            }
+            disabled={records.isReceiveStockRef === 2}
+            onChange={(value
+                           :
+                           number
+            ) =>
+                handleNumChange(value, records.num, item.dataIndex, records.id)
+            }
+            key={key}
+        />
+    }
     // 运费信息
     const handleBaseInfoChangeFreight = (changeFiled: any) => {
         if (changeFiled.transportBear) {
@@ -578,7 +621,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
             <PopTableContent data={{
                 ...(addMaterial as any),
-                path:addMaterialBy
+                path: addMaterialBy
                 // columns: (addMaterial as any).columns.map((item: any) => {
                 //     if (item.dataIndex === "standard") {
                 //         return ({
@@ -621,9 +664,9 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                                      weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
                                      totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
                                  })))
-                             }} />
+                             }}/>
         </Modal>
-        <DetailTitle title="合同基本信息" key="a" />
+        <DetailTitle title="合同基本信息" key="a"/>
         <BaseInfo
             form={baseForm}
             col={2}
@@ -632,11 +675,11 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             columns={colunmnBase.map((item: any) => {
                 switch (item.dataIndex) {
                     case "deliveryMethod":
-                        return ({ ...item, enum: deliveryMethodEnum })
+                        return ({...item, enum: deliveryMethodEnum})
                     case "transportMethod":
-                        return ({ ...item, enum: transportMethodEnum })
+                        return ({...item, enum: transportMethodEnum})
                     case "settlementMode":
-                        return ({ ...item, enum: settlementModeEnum })
+                        return ({...item, enum: settlementModeEnum})
                     default:
                         return item
                 }
@@ -648,8 +691,8 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 meteringMode: 2,
                 // deliveryMethod: deliveryMethodEnum?.[0]?.value,
                 settlementMode: settlementModeEnum?.[0]?.value
-            }} edit={isDisabled} />
-        <DetailTitle title="运费信息" key="b" />
+            }} edit={isDisabled}/>
+        <DetailTitle title="运费信息" key="b"/>
         <BaseInfo
             form={freightForm}
             col={2}
@@ -666,8 +709,8 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     return item
                 })
             }
-            dataSource={{ transportBear: 1 }}  edit={isDisabled} />
-        <DetailTitle title="装卸费信息" key="c" />
+            dataSource={{transportBear: 1}} edit={isDisabled}/>
+        <DetailTitle title="装卸费信息" key="c"/>
         <BaseInfo
             form={stevedoringForm}
             col={2}
@@ -684,7 +727,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     return item
                 })
             }
-            dataSource={{ unloadBear: 1 }}  edit={isDisabled} />
+            dataSource={{unloadBear: 1}} edit={isDisabled}/>
         <DetailTitle title="辅材信息" operation={[
             <Button
                 type="primary"
@@ -697,41 +740,39 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     }
                     setVisible(true)
                 }}>选择比价结果</Button>,
-        ]} />
+        ]}/>
         <CommonTable
-            style={{ padding: "0" }}
+            style={{padding: "0"}}
             rowKey="key"
             columns={[
                 ...material.map((item: any) => {
                     if (item.dataIndex === "num") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) =>
-                                <InputNumber
-                                min={1} value={value || 1}
-                                disabled={records.isReceiveStockRef === 2}
-                                onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex,records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => numInputDoneRender(value, records, key, item)
                         })
                     }
                     // 含税单价 展示格式化 仅展示两位小数
                     if (item.dataIndex === "taxOffer") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number)  => (<span  key={key}>{retain(records.taxOffer,2)}</span>)
-                                // <InputNumber
-                                // min={1} value={value || 1}
-                                // disabled={records.isReceiveStockRef === 2}
-                                // onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex,records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => (
+                                <span key={key}>{retain(records.taxOffer, 2)}</span>)
+                            // <InputNumber
+                            // min={1} value={value || 1}
+                            // disabled={records.isReceiveStockRef === 2}
+                            // onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex,records.id)} key={key} />
                         })
                     }
                     // 不含税单价
                     if (item.dataIndex === "offer") {
                         return ({
                             ...item,
-                            render:  (value: number, records: any, key: number)  => (<span  key={key}>{retain(records.offer,2)}</span>)
-                                // (value: number, records: any, key: number) => <InputNumber
-                                // min={1} value={value || 1}
-                                // onChange={(value: number) => handleNumChange(value, records.offer, item.dataIndex,records.id)} key={key} />
+                            render: (value: number, records: any, key: number) => (
+                                <span key={key}>{retain(records.offer, 2)}</span>)
+                            // (value: number, records: any, key: number) => <InputNumber
+                            // min={1} value={value || 1}
+                            // onChange={(value: number) => handleNumChange(value, records.offer, item.dataIndex,records.id)} key={key} />
                         })
                     }
                     return item
@@ -740,13 +781,14 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     title: "操作",
                     fixed: "right",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <Button type="link" disabled={records.isReceiveStockRef === 2} onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                    render: (_: any, records: any) => <Button type="link" disabled={records.isReceiveStockRef === 2}
+                                                              onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
             dataSource={popDataList.map((item: any) => ({
                 ...item,
                 key: item.id || Math.random() + new Date().getTime()
-            }))} />
-        <Attachment dataSource={data?.attachInfoList || []} edit ref={attchsRef} />
+            }))}/>
+        <Attachment dataSource={data?.attachInfoList || []} edit ref={attchsRef}/>
     </Spin>
 })
