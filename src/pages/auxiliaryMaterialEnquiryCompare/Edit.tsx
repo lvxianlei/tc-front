@@ -65,7 +65,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                 </Form.Item></Col>
             </Row>
         </Form>
-        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || [{}]}
+        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
                      rowSelection={{
                          type: "radio",
                          onChange: (_: any, selectedRows: any[]) => {
