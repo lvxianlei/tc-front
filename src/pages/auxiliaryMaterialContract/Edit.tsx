@@ -747,6 +747,6 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 ...item,
                 key: item.id || Math.random() + new Date().getTime()
             }))} />
-        <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
+        <Attachment dataSource={data?.attachInfoList || []} edit ref={attchsRef} />
     </Spin>
 })
