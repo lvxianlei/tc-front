@@ -2,7 +2,7 @@
  * 创建计划列表
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, message, InputNumber, Select, TreeSelect } from 'antd';
+import { Modal, Form, Button, message, InputNumber, TreeSelect } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
@@ -15,7 +15,6 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { totalTaxPrice, totalUnTaxPrice, unTaxPrice } from '@utils/calcUtil';
 import "./CreatePlan.less";
-const { TreeNode } = TreeSelect;
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
@@ -23,10 +22,9 @@ export default function CreatePlan(props: any): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialPlanList, setMaterialPlanList] = useState<any[]>([])
-    const [warehouseId, setWarehouseId] = useState<string>("");
+    const [warehouseId, setWarehouseId] = useState<string | undefined>();
     const [supplierId, setSupplierId] = useState<any>("");
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    // /warehouse/tree/{warehouseId}
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
@@ -57,20 +55,30 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
-
+    }), {
+        ready: props.type === "edit" && props.id,
+        refreshDeps: [props.type, props.id]
+    })
+    console.log(warehouseId)
     //库区库位
     const { data: locatorData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree/${warehouseId}`)
-            resole(result.map((item: any) => ({
+            resole(result?.map((item: any) => ({
                 label: item.name,
-                value: item.id
-            })))
+                value: item.id,
+                key: item.id,
+                disabled: true,
+                children: item.children?.map((cItem: any) => ({
+                    label: cItem.name,
+                    value: `${item.id}-${cItem.id}`,
+                    key: `${item.id}-${cItem.id}`
+                }) || [])
+            })) || [])
         } catch (error) {
             reject(error)
         }
-    }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
+    }), { ready: props.visible && !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
@@ -104,14 +112,15 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...item,
                 materialName: item.materialName,
                 structureSpec: item.structureSpec,
+                receiveTime: item.createTime,
                 num: item.planPurchaseNum || 1,
                 unit: item.unit,
                 purchasePlanId: item.id,
                 taxPrice: 1,
                 tax: 0,
-                totalTaxAmount: totalTaxPrice(1, item.planPurchaseNum || 1),
+                totalTaxPrice: totalTaxPrice(1, item.planPurchaseNum || 1),
                 price: unTaxPrice(1, 0),
-                totalAmount: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 0),
+                totalPrice: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 0),
                 purchasePlanNumber: item.purchasePlanNumber,
                 key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
@@ -139,12 +148,19 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCreateClick = async () => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
-            if (popDataList.length < 1) {
+            let warehousingEntryDetailList = [...popDataList]
+            if (warehousingEntryDetailList.length < 1) {
                 message.error("请添加入库明细!");
                 return false;
             }
-            saveRun({
-                warehousingEntryDetailList: popDataList,
+            if (props.type === "create") {
+                warehousingEntryDetailList.forEach((item: any) => {
+                    delete item.id
+                    delete item.key
+                })
+            }
+            await saveRun({
+                warehousingEntryDetailList,
                 ...baseInfo,
                 contactsPhone: baseInfo.supplierId?.records[0]?.contactManTel,
                 contactsUser: baseInfo.supplierId?.records[0]?.contactMan,
@@ -153,6 +169,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 warehouseId: baseInfo.warehouseId.value,
                 warehouseName: baseInfo.warehouseId.label
             });
+            setWarehouseId(undefined)
         } catch (error) {
             console.log(error);
         }
@@ -176,27 +193,35 @@ export default function CreatePlan(props: any): JSX.Element {
                             ...item,
                             num: value,
                             taxPrice: item.taxPrice,
-                            totalTaxAmount: totalTaxPrice(item.taxPrice, value),
+                            totalTaxPrice: totalTaxPrice(item.taxPrice, value),
                             price: unTaxPrice(item.taxPrice, item.tax),
-                            totalAmount: totalUnTaxPrice(totalTaxPrice(item.taxPrice, value), item.tax),
+                            totalPrice: totalUnTaxPrice(totalTaxPrice(item.taxPrice, value), item.tax),
                         })
                     case "tax":
                         return ({
                             ...item,
                             tax: value,
                             taxPrice: item.taxPrice,
-                            totalTaxAmount: totalTaxPrice(item.taxPrice, item.num),
+                            totalTaxPrice: totalTaxPrice(item.taxPrice, item.num),
                             price: unTaxPrice(item.taxPrice, value),
-                            totalAmount: totalUnTaxPrice(totalTaxPrice(item.taxPrice, item.num), value),
+                            totalPrice: totalUnTaxPrice(totalTaxPrice(item.taxPrice, item.num), value),
                         })
                     case "taxPrice":
                         return ({
                             ...item,
                             taxPrice: value,
-                            totalTaxAmount: totalTaxPrice(value, item.num),
+                            totalTaxPrice: totalTaxPrice(value, item.num),
                             price: unTaxPrice(value, item.tax),
-                            totalAmount: totalUnTaxPrice(totalTaxPrice(value, item.num), item.tax),
-
+                            totalPrice: totalUnTaxPrice(totalTaxPrice(value, item.num), item.tax)
+                        })
+                    case "locatorId":
+                        const valueIds = value.value.split("-")
+                        return ({
+                            ...item,
+                            locatorId: valueIds[1],
+                            location: value.label,
+                            reservoirId: valueIds[0],
+                            reservoirArea: locatorData.find((item: any) => item.value === valueIds[0]).label
                         })
                 }
             }
@@ -233,26 +258,27 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }), { manual: true })
 
-    return (
+    return (<>
         <Modal
             title={`${props.type === "edit" ? "编辑入库单" : '创建入库单'}`}
             visible={props.visible}
             onCancel={() => {
-                setMaterialList([]);
-                setPopDataList([]);
                 props?.handleCreate();
             }}
             maskClosable={false}
             width={1100}
             footer={[
-                <Button key="back" onClick={() => {
-                    setMaterialList([]);
-                    setPopDataList([]);
-                    props?.handleCreate();
-                }}>
+                <Button
+                    key="back"
+                    onClick={() => {
+                        props?.handleCreate();
+                    }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button
+                    key="create"
+                    type="primary"
+                    onClick={() => handleCreateClick()}>
                     确定
                 </Button>
             ]}
@@ -367,32 +393,28 @@ export default function CreatePlan(props: any): JSX.Element {
                                         return value
                                     }
                                 })
-                            case "location":
+                            case "locatorId":
                                 return ({
                                     ...item,
                                     render: (value: any, records: any, key: number) => {
                                         if (records?.purchasePlanId) {
                                             return <TreeSelect
-                                                style={{ width: '100%' }}
-                                                value={value}
+                                                style={{ width: 130 }}
+                                                value={{
+                                                    label: records.location,
+                                                    value: `${records.reservoirId}-${value}`
+                                                }}
                                                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                                                placeholder="Please select"
+                                                placeholder="请选择"
                                                 allowClear
+                                                labelInValue
+                                                showCheckedStrategy="SHOW_ALL"
                                                 treeDefaultExpandAll
-                                                onChange={(value:any)=>handleMaterailChange(value, key, "location")}
-                                            >
-                                                <TreeNode value="parent 1" title="parent 1">
-                                                    <TreeNode value="parent 1-0" title="parent 1-0">
-                                                        <TreeNode value="leaf1" title="leaf1" />
-                                                        <TreeNode value="leaf2" title="leaf2" />
-                                                    </TreeNode>
-                                                    <TreeNode value="parent 1-1" title="parent 1-1">
-                                                        <TreeNode value="leaf3" title={<b style={{ color: '#08c' }}>leaf3</b>} />
-                                                    </TreeNode>
-                                                </TreeNode>
-                                            </TreeSelect>
+                                                treeData={locatorData}
+                                                onChange={(value: any) => handleMaterailChange(value, key, "locatorId")}
+                                            />
                                         }
-                                        return value
+                                        return records.location
                                     }
                                 })
                             default:
@@ -413,41 +435,42 @@ export default function CreatePlan(props: any): JSX.Element {
                     }]}
                 pagination={false}
                 dataSource={popDataList} />
-            <Modal width={1100} title={`选择到货明细`} destroyOnClose
-                visible={visible}
-                onOk={handleAddModalOk}
-                onCancel={() => setVisible(false)}
-            >
-                <PopTableContent
-                    data={{
-                        ...addMaterial as any,
-                        path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
-                    }}
-                    value={{
-                        id: "",
-                        records: popDataList,
-                        value: ""
-                    }}
-                    onChange={(fields: any[]) => setMaterialList(fields || [])}
-                />
-            </Modal>
-            <Modal width={1100} title={`选择计划明细`} destroyOnClose
-                visible={planVisible}
-                onOk={handleAddPlanModalOk}
-                onCancel={() => setPlanVisible(false)}
-            >
-                <PopTableContent
-                    data={{
-                        ...addPlanMaterial as any,
-                    }}
-                    value={{
-                        id: "",
-                        records: popDataList,
-                        value: ""
-                    }}
-                    onChange={(fields: any[]) => setMaterialPlanList(fields || [])}
-                />
-            </Modal>
         </Modal>
+        <Modal width={1100} title={`选择到货明细`} destroyOnClose
+            visible={visible}
+            onOk={handleAddModalOk}
+            onCancel={() => setVisible(false)}
+        >
+            <PopTableContent
+                data={{
+                    ...addMaterial as any,
+                    path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => setMaterialList(fields || [])}
+            />
+        </Modal>
+        <Modal width={1100} title={`选择计划明细`} destroyOnClose
+            visible={planVisible}
+            onOk={handleAddPlanModalOk}
+            onCancel={() => setPlanVisible(false)}
+        >
+            <PopTableContent
+                data={{
+                    ...addPlanMaterial as any,
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => setMaterialPlanList(fields || [])}
+            />
+        </Modal>
+    </>
     )
 }

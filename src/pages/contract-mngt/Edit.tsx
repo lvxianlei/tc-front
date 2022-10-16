@@ -93,11 +93,11 @@ export const calcFun = {
      * 理重
      */
     weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
-        if (weightAlgorithm === 1) {
-            return ((Number(proportion || 1) * Number(length || 1)) / 1000 / 1000).toFixed(3)
+        if ([1, "1"].includes(weightAlgorithm)) {
+            return ((Number(proportion || 1) * Number(length || 1)) * 0.000001).toFixed(3)
         }
-        if (weightAlgorithm === 2) {
-            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) / 1000 / 1000 / 1000).toFixed(3)
+        if ([2, "2"].includes(weightAlgorithm)) {
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * 0.000000001).toFixed(3)
         }
         return (Number(proportion || 1) / 1000).toFixed(3)
     },
@@ -105,10 +105,10 @@ export const calcFun = {
      * 总重量
      */
     totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
-        if (weightAlgorithm === 1) {
+        if ([1, "1"].includes(weightAlgorithm)) {
             return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
         }
-        if (weightAlgorithm === 2) {
+        if ([2, "2"].includes(weightAlgorithm)) {
             return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
         }
         return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
@@ -194,8 +194,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 ...result.unloadBearVo,
                 unloadCompanyId: result.unloadBearVo.unloadCompanyId + ',' + result.unloadBearVo.unloadCompany
             })
-            setMaterialList(result?.materialContractDetailVos || [])
-            setPopDataList(result?.materialContractDetailVos || [])
+            const materialContractDetailVos = result?.materialContractDetailVos.map((item: any) => ({ ...item, key: item.id })) || []
+            setMaterialList(materialContractDetailVos)
+            setPopDataList(materialContractDetailVos)
             resove({ ...result, tax: taxNum })
         } catch (error) {
             reject(error)
@@ -257,7 +258,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleAddModalOk = () => {
         // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         const newMaterialList: any[] = []
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+        setMaterialList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat(item.offer || "1.00")
@@ -278,7 +279,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 totalAmount: (num * price).toFixed(2)
             })
         })])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
+        setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat(item.offer || "1.00")
@@ -449,9 +450,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
     }
 
-    const handleNumChange = (value: number, materialCode: string, dataIndex: string) => {
-        const newData = popDataList.map((item: any) => {
-            if (item.materialCode === materialCode) {
+    const handleNumChange = (value: number, index: number, dataIndex: string) => {
+        const newData = popDataList.map((item: any, itemIndex: number) => {
+            if (itemIndex === index) {
                 const allData: any = {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
@@ -494,9 +495,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList(newData.slice(0))
     }
 
-    const lengthChange = (value: number, id: string, type: "length" | "width") => {
-        const list = materialList.map((item: any) => {
-            if (item.id === id) {
+    const lengthChange = (value: number, id: number, type: "length" | "width") => {
+        const list = materialList.map((item: any, index: number) => {
+            if (index === id) {
                 return ({
                     ...item,
                     [type]: value,
@@ -728,27 +729,27 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     if (item.dataIndex === "num") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber
+                            render: (value: number, _records: any, key: number) => <InputNumber
                                 min={1} value={value || 1}
-                                onChange={(value: number) => handleNumChange(value, records.materialCode, item.dataIndex)} key={key} />
+                                onChange={(value: number) => handleNumChange(value, key, item.dataIndex)} key={key} />
                         })
                     }
                     if (item.dataIndex === "length") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber
+                            render: (value: number, _records: any, key: number) => <InputNumber
                                 min={1}
                                 value={value || 100}
-                                onChange={(value: number) => lengthChange(value, records.id, "length")} key={key} />
+                                onChange={(value: number) => lengthChange(value, key, "length")} key={key} />
                         })
                     }
                     if (item.dataIndex === "width") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber
+                            render: (value: number, _records: any, key: number) => <InputNumber
                                 min={1}
                                 value={value || 100}
-                                onChange={(value: number) => lengthChange(value, records.id, "width")} key={key} />
+                                onChange={(value: number) => lengthChange(value, key, "width")} key={key} />
                         })
                     }
                     if (item.dataIndex === "materialStandard") {
@@ -814,10 +815,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={popDataList.map((item: any) => ({
-                ...item,
-                key: item.id || Math.random() + new Date().getTime()
-            }))} />
+            dataSource={popDataList} />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })

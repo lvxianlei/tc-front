@@ -131,6 +131,7 @@ export default function CreatePlan(props: any): JSX.Element {
             saveRun({
                 outStockDetailDTOList: materialList,
                 ...baseInfo,
+                materialType: 1,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
         } catch (error) {
@@ -164,7 +165,9 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`, {
+                materialType: 1
+            })
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
             resole({

@@ -117,7 +117,7 @@
         },
         {
             "title": "含税金额（元）",
-            "dataIndex": "totalTaxAmount"
+            "dataIndex": "totalTaxPrice"
         },
         {
             "title": "税率",
@@ -129,11 +129,11 @@
         },
         {
             "title": "不含税金额（元）",
-            "dataIndex": "totalAmount"
+            "dataIndex": "totalPrice"
         },
         {
             "title": "区位",
-            "dataIndex": "location"
+            "dataIndex": "locatorId"
         }
     ],
     "addMaterial": {
