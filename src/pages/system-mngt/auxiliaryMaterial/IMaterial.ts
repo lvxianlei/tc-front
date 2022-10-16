@@ -43,6 +43,7 @@ export interface IMaterialType {
     readonly unit?: string;
     readonly firstCode?: string;
     readonly sonName?: string;
+    readonly threeName?: string;
 }
 
 

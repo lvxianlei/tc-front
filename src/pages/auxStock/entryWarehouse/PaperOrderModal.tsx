@@ -1,19 +1,19 @@
 /**
  * 新增纸质单号
  */
- import React, { useState, useRef, forwardRef, useImperativeHandle } from 'react';
- import { Form, Spin } from 'antd';
- import { BaseInfo,  Attachment, AttachmentRef } from '../../common';
- import useRequest from '@ahooksjs/use-request'
- import RequestUtil from '../../../utils/RequestUtil';
+import React, { forwardRef, useImperativeHandle } from 'react';
+import { Form, Spin } from 'antd';
+import { BaseInfo } from '../../common';
+import useRequest from '@ahooksjs/use-request'
+import RequestUtil from '../../../utils/RequestUtil';
 
- interface EditProps {
+interface EditProps {
     id?: string
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
     requiredReturnTime?: string
 }
- 
- export default forwardRef(function PaperOrderModal({id}: EditProps, ref) {
+
+export default forwardRef(function PaperOrderModal({ id }: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();
 
     // 表单
@@ -26,7 +26,7 @@
             rules: [{
                 required: true,
                 message: "请输入纸质单号"
-            },{
+            }, {
                 pattern: new RegExp(/^[a-zA-Z0-9]*$/g, 'g'),
                 message: '请输入正确的纸质单号',
             }]
@@ -49,7 +49,7 @@
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await addCollectionForm.validateFields();
-            await run({path: "/tower-storage/receiveStock/updatePaperNumber", data: { ...baseData, id}})
+            await run({ path: "/tower-storage/receiveStock/updatePaperNumber", data: { ...baseData, id } })
             resolve(true)
         } catch (error) {
             reject(false)
@@ -61,11 +61,11 @@
             <BaseInfo
                 classStyle={"overall-form-class-padding0 height34"}
                 form={addCollectionForm}
-                dataSource={{content: 1}}
-                col={ 1 }
+                dataSource={{ content: 1 }}
+                col={1}
                 edit
-                columns={ colunm}
-             />
+                columns={colunm}
+            />
         </Spin>
     )
- })
+})

@@ -2,18 +2,19 @@
  * 创建计划列表
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, message } from 'antd';
+import { Modal, Form, Button, message, InputNumber, TreeSelect } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
     baseInfoColumn,
-    addMaterial
+    addMaterial,
+    addPlanMaterial
 } from "./CreatePlan.json";
 import { qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
-import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-
+import { totalTaxPrice, totalUnTaxPrice, unTaxPrice } from '@utils/calcUtil';
+import "./CreatePlan.less";
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
@@ -21,85 +22,9 @@ export default function CreatePlan(props: any): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialPlanList, setMaterialPlanList] = useState<any[]>([])
-    const [popPlanDataList, setPopPlanDataList] = useState<any[]>([])
-    const [warehouseId, setWarehouseId] = useState<string>("");
+    const [warehouseId, setWarehouseId] = useState<string | undefined>();
     const [supplierId, setSupplierId] = useState<any>("");
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-
-    // let [count, setCount] = useState<number>(1);
-
-    const handleAddModalOk = () => {
-        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        for (let i = 0; i < popDataList.length; i += 1) {
-            for (let p = 0; p < materialList.length; p += 1) {
-                if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].structureTexture = popDataList[i].structureTexture;
-                    materialList[p].materialTexture = popDataList[i].materialTexture;
-                }
-            }
-        }
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
-            return ({
-                ...item,
-            })
-        })])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any, index: number) => {
-            return ({
-                ...item,
-                key: `${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
-            })
-        })])
-        setVisible(false)
-    }
-
-    // 移除
-    const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.key !== id))
-        setPopDataList(popDataList.filter((item: any) => item.key !== id))
-    }
-
-    const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.warehouseId) {
-            setWarehouseId(fields.warehouseId.value);
-            return;
-        }
-        if (fields.supplierId) {
-            setSupplierId(fields.supplierId?.id);
-            return;
-        }
-    }
-
-    const handleCreateClick = async () => {
-        try {
-            const baseInfo = await addCollectionForm.validateFields();
-            if (materialList.length < 1) {
-                message.error("请您选择原材料明细!");
-                return false;
-            }
-            saveRun({
-                warehousingEntryDetailList: materialList,
-                ...baseInfo,
-                contactsPhone: baseInfo.supplierId?.records[0]?.contactManTel,
-                contactsUser: baseInfo.supplierId?.records[0]?.contactMan,
-                supplierId: baseInfo.supplierId?.records[0]?.id,
-                supplierName: baseInfo.supplierId?.records[0]?.supplierName,
-                warehouseId: baseInfo.warehouseId.value,
-                warehouseName: baseInfo.warehouseId.label
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    useEffect(() => {
-        if (props.visible) {
-            getBatchingStrategy();
-            addCollectionForm.setFieldsValue({
-                warehousingType: "1"
-            })
-        }
-    }, [props.visible])
-
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
@@ -130,7 +55,180 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
+    }), {
+        ready: props.type === "edit" && props.id,
+        refreshDeps: [props.type, props.id]
+    })
+    console.log(warehouseId)
+    //库区库位
+    const { data: locatorData } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree/${warehouseId}`)
+            resole(result?.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+                key: item.id,
+                disabled: true,
+                children: item.children?.map((cItem: any) => ({
+                    label: cItem.name,
+                    value: `${item.id}-${cItem.id}`,
+                    key: `${item.id}-${cItem.id}`
+                }) || [])
+            })) || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: props.visible && !!warehouseId, refreshDeps: [warehouseId] })
+
+    const handleAddModalOk = () => {
+        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        for (let i = 0; i < popDataList.length; i += 1) {
+            for (let p = 0; p < materialList.length; p += 1) {
+                if (popDataList[i].id === materialList[p].id) {
+                    materialList[p].structureTexture = popDataList[i].structureTexture;
+                    materialList[p].materialTexture = popDataList[i].materialTexture;
+                }
+            }
+        }
+        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+            return ({
+                ...item,
+            })
+        })])
+        setPopDataList([...materialList, ...newMaterialList].map((item: any, index: number) => {
+            return ({
+                ...item,
+                key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
+            })
+        }))
+        setVisible(false)
+    }
+
+    const handleAddPlanModalOk = () => {
+        const newMaterialList = materialPlanList.filter((item: any) => !materialPlanList.find((maItem: any) => item.id === maItem.id))
+        setMaterialPlanList([...materialPlanList, ...newMaterialList])
+        setPopDataList(materialPlanList.map((item: any, index: number) => {
+            return ({
+                ...item,
+                materialName: item.materialName,
+                structureSpec: item.structureSpec,
+                receiveTime: item.createTime,
+                num: item.planPurchaseNum || 1,
+                unit: item.unit,
+                purchasePlanId: item.id,
+                taxPrice: 1,
+                tax: 0,
+                totalTaxPrice: totalTaxPrice(1, item.planPurchaseNum || 1),
+                price: unTaxPrice(1, 0),
+                totalPrice: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 0),
+                purchasePlanNumber: item.purchasePlanNumber,
+                key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
+            })
+        }))
+        setPlanVisible(false)
+    }
+
+    // 移除
+    const handleRemove = (id: string) => {
+        setMaterialList(materialList.filter((item: any) => item.key !== id))
+        setPopDataList(popDataList.filter((item: any) => item.key !== id))
+    }
+
+    const performanceBondChange = (fields: { [key: string]: any }) => {
+        if (fields.warehouseId) {
+            setWarehouseId(fields.warehouseId.value);
+            return;
+        }
+        if (fields.supplierId) {
+            setSupplierId(fields.supplierId?.id);
+            return;
+        }
+    }
+
+    const handleCreateClick = async () => {
+        try {
+            const baseInfo = await addCollectionForm.validateFields();
+            let warehousingEntryDetailList = [...popDataList]
+            if (warehousingEntryDetailList.length < 1) {
+                message.error("请添加入库明细!");
+                return false;
+            }
+            if (props.type === "create") {
+                warehousingEntryDetailList.forEach((item: any) => {
+                    delete item.id
+                    delete item.key
+                })
+            }
+            await saveRun({
+                warehousingEntryDetailList,
+                ...baseInfo,
+                contactsPhone: baseInfo.supplierId?.records[0]?.contactManTel,
+                contactsUser: baseInfo.supplierId?.records[0]?.contactMan,
+                supplierId: baseInfo.supplierId?.records[0]?.id,
+                supplierName: baseInfo.supplierId?.records[0]?.supplierName,
+                warehouseId: baseInfo.warehouseId.value,
+                warehouseName: baseInfo.warehouseId.label
+            });
+            setWarehouseId(undefined)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    useEffect(() => {
+        if (props.visible) {
+            getBatchingStrategy();
+            addCollectionForm.setFieldsValue({
+                warehousingType: "1"
+            })
+        }
+    }, [props.visible])
+
+    const handleMaterailChange = (value: any, index: number, dataIndex: string) => {
+        const newData = popDataList.map((item: any, pIndex: number) => {
+            if (index === pIndex) {
+                switch (dataIndex) {
+                    case "num":
+                        return ({
+                            ...item,
+                            num: value,
+                            taxPrice: item.taxPrice,
+                            totalTaxPrice: totalTaxPrice(item.taxPrice, value),
+                            price: unTaxPrice(item.taxPrice, item.tax),
+                            totalPrice: totalUnTaxPrice(totalTaxPrice(item.taxPrice, value), item.tax),
+                        })
+                    case "tax":
+                        return ({
+                            ...item,
+                            tax: value,
+                            taxPrice: item.taxPrice,
+                            totalTaxPrice: totalTaxPrice(item.taxPrice, item.num),
+                            price: unTaxPrice(item.taxPrice, value),
+                            totalPrice: totalUnTaxPrice(totalTaxPrice(item.taxPrice, item.num), value),
+                        })
+                    case "taxPrice":
+                        return ({
+                            ...item,
+                            taxPrice: value,
+                            totalTaxPrice: totalTaxPrice(value, item.num),
+                            price: unTaxPrice(value, item.tax),
+                            totalPrice: totalUnTaxPrice(totalTaxPrice(value, item.num), item.tax)
+                        })
+                    case "locatorId":
+                        const valueIds = value.value.split("-")
+                        return ({
+                            ...item,
+                            locatorId: valueIds[1],
+                            location: value.label,
+                            reservoirId: valueIds[0],
+                            reservoirArea: locatorData.find((item: any) => item.value === valueIds[0]).label
+                        })
+                }
+            }
+            return item;
+        })
+        setPopDataList(newData)
+    }
 
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -160,26 +258,27 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }), { manual: true })
 
-    return (
+    return (<>
         <Modal
             title={`${props.type === "edit" ? "编辑入库单" : '创建入库单'}`}
             visible={props.visible}
             onCancel={() => {
-                setMaterialList([]);
-                setPopDataList([]);
                 props?.handleCreate();
             }}
             maskClosable={false}
             width={1100}
             footer={[
-                <Button key="back" onClick={() => {
-                    setMaterialList([]);
-                    setPopDataList([]);
-                    props?.handleCreate();
-                }}>
+                <Button
+                    key="back"
+                    onClick={() => {
+                        props?.handleCreate();
+                    }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button
+                    key="create"
+                    type="primary"
+                    onClick={() => handleCreateClick()}>
                     确定
                 </Button>
             ]}
@@ -232,7 +331,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     key="clear"
                     ghost
                     disabled={!(warehouseId && supplierId)}
-                    onClick={() => message.warning("暂无此功能！")}>选择计划明细</Button>
+                    onClick={() => setPlanVisible(true)}>选择计划明细</Button>
             </div>
             <CommonTable
                 rowKey="key"
@@ -252,13 +351,81 @@ export default function CreatePlan(props: any): JSX.Element {
                             )
                         }
                     },
-                    ...material,
+                    ...material.map((item: any) => {
+                        switch (item.dataIndex) {
+                            case "num":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                        if (records?.purchasePlanId) {
+                                            return <InputNumber
+                                                min={1}
+                                                value={value || 1}
+                                                onChange={(value: number) => handleMaterailChange(value, key, "num")}
+                                                key={key} />
+                                        }
+                                        return value
+                                    }
+                                })
+                            case "taxPrice":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                        if (records?.purchasePlanId) {
+                                            return <InputNumber
+                                                value={value || 1}
+                                                onChange={(value: number) => handleMaterailChange(value, key, "taxPrice")}
+                                            />
+                                        }
+                                        return value
+                                    }
+                                })
+                            case "tax":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                        if (records?.purchasePlanId) {
+                                            return <InputNumber
+                                                value={value || 0}
+                                                onChange={(value: number) => handleMaterailChange(value, key, "tax")}
+                                            />
+                                        }
+                                        return value
+                                    }
+                                })
+                            case "locatorId":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                        if (records?.purchasePlanId) {
+                                            return <TreeSelect
+                                                style={{ width: 130 }}
+                                                value={{
+                                                    label: records.location,
+                                                    value: `${records.reservoirId}-${value}`
+                                                }}
+                                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                                placeholder="请选择"
+                                                allowClear
+                                                labelInValue
+                                                showCheckedStrategy="SHOW_ALL"
+                                                treeDefaultExpandAll
+                                                treeData={locatorData}
+                                                onChange={(value: any) => handleMaterailChange(value, key, "locatorId")}
+                                            />
+                                        }
+                                        return records.location
+                                    }
+                                })
+                            default:
+                                return item
+                        }
+                    }),
                     {
                         title: "操作",
                         fixed: "right",
                         dataIndex: "opration",
                         render: (_: any, records: any) => <>
-                            {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
                             <Button
                                 type="link"
                                 disabled={records.source === 1}
@@ -268,42 +435,42 @@ export default function CreatePlan(props: any): JSX.Element {
                     }]}
                 pagination={false}
                 dataSource={popDataList} />
-            <Modal width={1100} title={`选择到货明细`} destroyOnClose
-                visible={visible}
-                onOk={handleAddModalOk}
-                onCancel={() => setVisible(false)}
-            >
-                <PopTableContent
-                    data={{
-                        ...addMaterial as any,
-                        path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
-                    }}
-                    value={{
-                        id: "",
-                        records: popDataList,
-                        value: ""
-                    }}
-                    onChange={(fields: any[]) => setMaterialList(fields || [])}
-                />
-            </Modal>
-            {/* <Modal width={1100} title={`选择计划明细`} destroyOnClose
-                visible={visible}
-                onOk={handleAddModalOk}
-                onCancel={() => setPlanVisible(false)}
-            >
-                <PopTableContent
-                    data={{
-                        ...addMaterial as any,
-                        path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
-                    }}
-                    value={{
-                        id: "",
-                        records: popDataList,
-                        value: ""
-                    }}
-                    onChange={(fields: any[]) => setMaterialList(fields || [])}
-                />
-            </Modal> */}
         </Modal>
+        <Modal width={1100} title={`选择到货明细`} destroyOnClose
+            visible={visible}
+            onOk={handleAddModalOk}
+            onCancel={() => setVisible(false)}
+        >
+            <PopTableContent
+                data={{
+                    ...addMaterial as any,
+                    path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => setMaterialList(fields || [])}
+            />
+        </Modal>
+        <Modal width={1100} title={`选择计划明细`} destroyOnClose
+            visible={planVisible}
+            onOk={handleAddPlanModalOk}
+            onCancel={() => setPlanVisible(false)}
+        >
+            <PopTableContent
+                data={{
+                    ...addPlanMaterial as any,
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => setMaterialPlanList(fields || [])}
+            />
+        </Modal>
+    </>
     )
 }

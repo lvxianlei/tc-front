@@ -146,6 +146,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     <>
                         <Button type='primary' ghost onClick={() => {
                             setIsOpenId(true)
+                            setEditId("")
                             setOperationType("create")
                         }}>创建</Button>
                         <div style={{ width: "2000px" }}>

@@ -32,15 +32,6 @@ export default function Login(): JSX.Element {
     const verifyRef = useRef<any>()
     const [verify, setVerify] = useState<boolean>(false)
     const [loginForm] = Form.useForm();
-    const { data, run: updateRun } = useRequest<ILoginState>(() => new Promise(async (resole, reject) => {
-        try {
-            const captcha: ICaptcha = await RequestUtil.get(`/sinzetech-auth/oauth/captcha`)
-            resole({ captcha })
-        } catch (error) {
-            reject(false)
-        }
-    }))
-
     const { loading: saveLoading, run } = useRequest<any>((values: { [key: string]: any }) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(
@@ -50,7 +41,6 @@ export default function Login(): JSX.Element {
                 },
                 {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Captcha-key': data!.captcha.key,
                     'Tenant-Id': "null",
                     'Sinzetech-Auth': "null"
                 }
@@ -79,12 +69,6 @@ export default function Login(): JSX.Element {
             // 错误提示
             notification.error({
                 message: result.error_description
-            })
-            // 获取验证码
-            await updateRun();
-            // 清空验证码
-            loginForm.setFieldsValue({
-                code: undefined
             })
         } else {
             Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })

@@ -149,8 +149,8 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                         type="link"
                         onClick={() => this.showModal({
                             ...record,
-                            firstCode: record.code?.substring(0, 4),
-                            code: record.level === 1 ? record.code : record.code?.substring(4, 8)
+                            firstCode: record.code?.slice(0, -2),
+                            code: record.level === 1 ? record.code : (record.level === 2 ? record.code?.substring(2, 4) : record.code?.substring(4, 6))
                         }, record.level === 1 ? 1 : 3)}>
                         编辑
                     </Button>
@@ -349,10 +349,10 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                         >
                             {this.state.type === 2 || this.state.type === 3 ? <Input
                                 min={0}
-                                maxLength={4}
+                                maxLength={2}
                                 addonBefore={defaultData.firstCode || 0}
                                 style={{ width: "100%" }}
-                            /> : <Input maxLength={4} min={0} placeholder="请输入" style={{ width: "100%" }} />}
+                            /> : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
                         </Form.Item>
                         <Form.Item
                             name="name"
@@ -365,7 +365,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                                 pattern: /^[^\s]*$/,
                                 message: '禁止输入空格',
                             }]}
-                            initialValue={this.state.type === 2 || this.state.type === 3 ? defaultData?.sonName : defaultData?.name}
+                            initialValue={this.state.type === 2 || this.state.type === 3 ? (defaultData?.sonName || defaultData?.threeName) : defaultData?.name}
                         >
                             <Input placeholder="请输入名称" maxLength={20} />
                         </Form.Item>
