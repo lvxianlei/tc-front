@@ -14,23 +14,8 @@
     },
     {
       "title": "询比价状态",
-      "dataIndex": "comparisonStatus",
-      "width": 100,
-      "type":"select",
-      "enum": [
-        {
-          "label": "询价中",
-          "value": 1
-        },
-        {
-          "label": "已询价",
-          "value": 2
-        },
-        {
-          "label": "已取消",
-          "value": 3
-        }
-      ]
+      "dataIndex": "comparisonStatusName",
+      "width": 100
     },
     {
       "title": "询价人",
