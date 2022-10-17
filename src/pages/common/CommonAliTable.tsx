@@ -121,7 +121,7 @@ export default function CommonAliTable({ columns, dataSource = [], rowKey, haveI
             handleHoverBackground: '#ccc',
             handleActiveBackground: '#ccc'
         }));
-        
+
     props?.rowSelection && pipeline.use(
         props?.rowSelection.type === "radio" ?
             features.singleSelect({
@@ -137,7 +137,7 @@ export default function CommonAliTable({ columns, dataSource = [], rowKey, haveI
                 checkboxColumn: { width: 40, lock: true, align: "left", ...props?.rowSelection?.checkboxColumn }
             }));
     pipeline.use(features.autoRowSpan());
-    pipeline.use(features.sort({ mode: 'single', highlightColumnWhenActive: true }));
+    formatColumns.some((item: any) => item.features?.sortable) && pipeline.use(features.sort({ mode: 'single', highlightColumnWhenActive: true }));
     return <nav className={styles.componentsTable} style={{ paddingBottom: props.code && props.code === 1 ? "0px" : "88px" }}>
         <AliTable
             size="small"
