@@ -493,19 +493,19 @@
                     },
                     {
                         "label": "辅材采购汇总",
-                        "path": "/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
+                        "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
                         "authority": "tc_erp_sw_purchaseTask_material"
                     },
                     {
                         "label": "辅材询比价",
-                        "path": "/auxiliaryMaterialEnquiryCompare/enquiryCompare",
+                        "path": "/buyAuxiliaryMaterial/enquiryCompare",
                         "authority": "tc_erp_sw_purchaseTask_material"
                     },
                     {
                         "label": "辅材合同管理",
-                        "path": "/auxiliaryMaterialContract/ContractList",
+                        "path": "/buyAuxiliaryMaterial/ContractList",
                         "authority": "tc_erp_sw_purchaseTask_material"
-                    }
+                    } 
                 ]
             },
             {
