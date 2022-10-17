@@ -352,17 +352,40 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
     }), { manual: true })
 
     const handleAddModalOk = () => {
-        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        const newMaterialList: any[] = [...materialList]
-        newMaterialList.forEach(item => {
-            item.comparisonPriceDetailId = item.comparisonPriceDetailId || item.id
-            delete item.id
+        const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        // const newMaterialList: any[] = [...materialList]
+        // newMaterialList.forEach(item => {
+        //     item.comparisonPriceDetailId = item.comparisonPriceDetailId || item.id
+        //     console.log(item.comparisonPriceDetailId)
+        //     delete item.id
+        // })
+
+        let  list = [...materialList.map(
+            (item)=>{
+                let obj = {
+                    ...item,
+                    comparisonPriceDetailId:item.comparisonPriceDetailId || item.id
+                }
+                delete obj.id
+                return obj
+            }
+        ),...newMaterialList]
+        // 去重操作 无法添加相同物料名称的辅料
+        const  arrs:any[] = []
+        list.forEach((item:any)=>{
+            console.log(item)
+            let flag = arrs.every((el:any)=>el.materialCode !== item.materialCode)
+            if(flag||arrs.length == 0){
+                arrs.push(item)
+            }
         })
         console.log(popDataList, materialList)
         setMaterialList([...newMaterialList])
         setPopDataList([...newMaterialList])
         // 更新价格
-        updataAllPrice()
+        const resultList = updataAllPrice(arrs)
+        setMaterialList(resultList)
+        setPopDataList(resultList)
         setVisible(false)
     }
 
@@ -381,6 +404,10 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             const baseInfo = await baseForm.validateFields()
             const freightInfo = await freightForm.validateFields()
             const stevedoringInfo = await stevedoringForm.validateFields()
+            // 再次更新计算价格
+            let list = updataAllPrice(popDataList)
+            setMaterialList(list)
+            setPopDataList(list)
             const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
@@ -398,7 +425,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                     unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
                     unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
                 },
-                materialAuxiliaryContractDetails: materialList.map((item: any) => {
+                materialAuxiliaryContractDetails: list.map((item: any) => {
                     let obj = {
                         ...item,
                         taxPrice: Number(item.taxOffer).toFixed(6),
@@ -436,16 +463,21 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             // 供应商选择后，更新询比价查询参数
             setAddMaterialBy(`/tower-supply/auxiliaryComparisonPrice/getComparisonPriceDetailById?supplierId=${fields.supplier.id}&comparisonStatus=2`)
             // const meterialList: any[] = await getComparisonPrice(fields.supplier.id)
+            // 重新选择供应商后，清空已选择的比价结果
+            setMaterialList([])
+            setPopDataList([])
         }
         // todo 税率变更时，更新所有价格
         if (fields?.taxRate) {
-            updataAllPrice()
+            let list = updataAllPrice(popDataList)
+            setMaterialList(list)
+            setPopDataList(list)
         }
     }
 
     // 变化重新计算所有价格
-    const updataAllPrice = () => {
-        const newMaterialList = materialList.map((item) => {
+    const updataAllPrice = (list:any) => {
+        const newMaterialList = list.map((item:any) => {
             const baseInfo = baseForm.getFieldsValue()
             // 当前税率
             let taxRate = baseInfo.taxRate || 0
@@ -470,13 +502,14 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             }
         })
         console.log(newMaterialList)
-        setMaterialList(newMaterialList)
-        setPopDataList(newMaterialList)
+        return newMaterialList
+        // setMaterialList(newMaterialList)
+        // setPopDataList(newMaterialList)
     }
     const handleNumChange = (value: number, materialCode: string, dataIndex: string, id?: string) => {
         console.log(value, materialCode, dataIndex, id)
         const newData = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.materialCode === id) {
                 item[dataIndex] = value
             }
             return item;
@@ -521,9 +554,12 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
         //     }
         //     return item
         // })
-        setMaterialList(newData.slice(0));
-        setPopDataList(newData.slice(0))
-        updataAllPrice()
+
+        let resultList = updataAllPrice(newData.slice(0));
+        setMaterialList(resultList);
+        setPopDataList(resultList)
+
+
     }
 
     // 抽离防止diff算法重新渲染 导致失焦
@@ -532,7 +568,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             min={1}
             value={value || 1}
             disabled={records.isReceiveStockRef === 2}
-            onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex, records.id)}
+            onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex, records.materialCode)}
             key={key}
         />
     }

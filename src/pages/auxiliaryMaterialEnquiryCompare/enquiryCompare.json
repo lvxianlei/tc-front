@@ -14,23 +14,8 @@
     },
     {
       "title": "询比价状态",
-      "dataIndex": "comparisonStatus",
-      "width": 100,
-      "type":"select",
-      "enum": [
-        {
-          "label": "询价中",
-          "value": 1
-        },
-        {
-          "label": "已询价",
-          "value": 2
-        },
-        {
-          "label": "已取消",
-          "value": 3
-        }
-      ]
+      "dataIndex": "comparisonStatusName",
+      "width": 100
     },
     {
       "title": "询价人",
@@ -156,14 +141,6 @@
       "dataIndex": "unit"
     },
     {
-      "title": "申请人",
-      "dataIndex": "createUserName"
-    },
-    {
-      "title": "申请部门",
-      "dataIndex": "deptName"
-    },
-    {
       "title": "备注",
       "dataIndex": "remark"
     }
@@ -178,16 +155,8 @@
       "dataIndex": "materialName"
     },
     {
-      "title": "标准",
-      "dataIndex": "materialStandardName"
-    },
-    {
       "title": "规格",
       "dataIndex": "structureSpec"
-    },
-    {
-      "title": "大类",
-      "dataIndex": "materialDiversity"
     },
     {
       "title": "数量",
@@ -212,6 +181,10 @@
     },
     {
       "title": "申请人",
+      "dataIndex": "purchaserName"
+    },
+    {
+      "title": "申请部门",
       "dataIndex": "createUserName"
     },
     {

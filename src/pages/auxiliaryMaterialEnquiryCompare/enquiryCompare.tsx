@@ -119,7 +119,7 @@ export default function EnquiryCompare() {
                         fixed: "right",
                         width: 270,
                         render: (_: any, records: any) => <>
-                            <Link className="btn-operation-link" to={`/auxiliaryMaterialEnquiryCompare/enquiryCompare/${records.id}`}>询价信息</Link>
+                            <Link className="btn-operation-link" to={`/buyAuxiliaryMaterial/enquiryCompare/${records.id}`}>询价信息</Link>
                             <Button disabled={(records.comparisonStatus !== 1) || records.isRelate !== 0} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
