@@ -527,8 +527,7 @@
     "columns": [
       {
         "title": "询比价编号",
-        "dataIndex": "comparisonPriceNumber",
-        "search": true
+        "dataIndex": "comparisonPriceNumber"
       },
       {
         "title": "品名",
@@ -565,6 +564,13 @@
       {
         "title": "生产厂家",
         "dataIndex": "manufacturer"
+      }
+    ],
+    "search": [
+      {
+        "title": "查询",
+        "dataIndex": "fuzzyQuery",
+        "placeholder": "询比价编号"
       }
     ]
   }
