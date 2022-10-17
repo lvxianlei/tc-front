@@ -79,7 +79,8 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                 supplierName: formData.supplier?.label || data?.supplierName,
                 inquiryQuotationOfferDtos: materials.map((item: any) => ({
                     ...item,
-                    comparisonPriceDetailId: item.comparisonPriceDetailId
+                    comparisonPriceDetailId: item.comparisonPriceDetailId,
+                    purchaseListId:item.purchaseListId
                 })),
                 comparisonPriceId: params.id,
                 fileIds: attachRef.current?.getDataSource().map(item => item.id)

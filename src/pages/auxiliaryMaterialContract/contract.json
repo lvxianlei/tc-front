@@ -546,14 +546,6 @@
         "dataIndex": "unit"
       },
       {
-        "title": "申请部门",
-        "dataIndex": "deptName"
-      },
-      {
-        "title": "申请人",
-        "dataIndex": "createUserName"
-      },
-      {
         "title": "备注",
         "dataIndex": "remark"
       },
