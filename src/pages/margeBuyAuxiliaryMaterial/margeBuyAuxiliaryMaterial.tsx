@@ -24,11 +24,11 @@ export default function MargePurchasePlan() {
 
 
     const onFilterSubmit = (value: any) => {
-        if (value.createdTime) {
-            const formatDate = value.createdTime.map((item: any) => item.format("YYYY-MM-DD"))
-            delete value.createdTime
-            value.createdTime = formatDate[0] + ' 00:00:00';
-            value.createdTime = formatDate[1] + ' 23:59:59';
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            delete value.createTime
+            value.createTime = formatDate[0] + ' 00:00:00';
+            value.createTime = formatDate[1] + ' 23:59:59';
         }
         setFilterValue({...filterValue,...value})
         return value
@@ -107,15 +107,6 @@ export default function MargePurchasePlan() {
                         name: 'createTime',
                         label: '创建日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
-                    {
-                        name: 'collectType',
-                        label: '汇总状态',
-                        children: <Select style={{ width: 100 }} >
-                            <Select.Option value="" key={""}>全部</Select.Option>
-                            <Select.Option value={0} key={0}>未汇总</Select.Option>
-                            <Select.Option value={1} key={1}>已汇总</Select.Option>
-                        </Select>
                     },
                     {
                         name: 'purchaserName',
