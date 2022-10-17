@@ -37,6 +37,7 @@ export default function MargePurchasePlan() {
         <>
             <Page
                 path="/tower-supply/auxiliaryMaterialPurchasePlan/collect"
+                exportPath="/tower-supply/auxiliaryMaterialPurchasePlan/collect"
                 columns={[
                     {
                         title: "序号",
@@ -65,33 +66,6 @@ export default function MargePurchasePlan() {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
-                extraOperation={<>
-                    <Button
-                        type="primary"
-                        ghost
-                        key="export"
-                        style={{ marginRight: 16 }}
-                        onClick={() => {
-                            setIsExportStoreList(true)
-                        }}
-                    >导出</Button>
-                    {isExport?<ExportList
-                        history={history}
-                        location={location}
-                        match={match}
-                        columnsKey={() => {
-                            let keys = [...purchasePlan]
-                            keys.pop()
-                            return keys
-                        }}
-                        current={1}
-                        size={10}
-                        total={1000}
-                        url={`/tower-supply/auxiliaryMaterialPurchasePlan/collect`}
-                        serchObj={{}}
-                        closeExportList={() => { setIsExportStoreList(false) }}
-                    />:null}
-                </>}
                 searchFormItems={[
                     {
                         name: 'planStatus',
