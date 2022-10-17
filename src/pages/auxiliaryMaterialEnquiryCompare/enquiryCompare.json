@@ -163,16 +163,8 @@
       "dataIndex": "materialName"
     },
     {
-      "title": "标准",
-      "dataIndex": "materialStandardName"
-    },
-    {
       "title": "规格",
       "dataIndex": "structureSpec"
-    },
-    {
-      "title": "大类",
-      "dataIndex": "materialDiversity"
     },
     {
       "title": "数量",
