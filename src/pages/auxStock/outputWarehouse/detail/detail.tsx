@@ -10,7 +10,7 @@ import '../../StockPublicStyle.less';
 import './detail.less';
 import { exportDown } from '@utils/Export';
 
-export default function RawMaterialWarehousing(): React.ReactNode {
+export default function Index(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const match = useRouteMatch()

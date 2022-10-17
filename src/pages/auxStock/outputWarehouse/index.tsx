@@ -60,7 +60,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(`/auxstock/outputWarehouse/detail/${record.id}`)}
+                        onClick={() => history.push(`/auxStock/outputWarehouse/detail/${record.id}`)}
                     >明细</Button>
                     <Button
                         type="link"

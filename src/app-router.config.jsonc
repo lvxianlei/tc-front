@@ -896,7 +896,7 @@
     },
     { // 库存管理-辅材出库-明细
       "name": "辅材出库明细",
-      "path": "/auxStock/outputMaterialWarehouse/detail/:id",
+      "path": "/auxStock/outputWarehouse/detail/:id",
       "module": "./pages/auxStock/outputWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_list"
