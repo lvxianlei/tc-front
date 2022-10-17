@@ -64,6 +64,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     >明细</Button>
                     <Button
                         type="link"
+                        disabled={record.outStockStatus === 1}
                         onClick={
                             () => {
                                 setIsOpenId(true)
@@ -98,8 +99,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         departmentId: "",
         applyStaffId: "",
         outStockItemStatus: 2,
+        materialType: 1,
         ...history.location.state as object
-    });
+    })
 
     // 删除
     const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {

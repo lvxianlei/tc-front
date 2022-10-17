@@ -255,13 +255,6 @@
       "exact": true,
       "authority": "tc_erp_sw_config_list_type"
     },
-    { // 辅材类型管理
-      "name": "辅材类型管理",
-      "path": "/config/configList/auxiliaryMaterialType",
-      "module": "./pages/system-mngt/material/AuxiliaryMaterialTypeMngt",
-      "exact": true,
-      "authority": "tc_erp_sw_config_list_type"
-    },
     { // 原材料管理
       "name": "原材料管理",
       "path": "/config/configList/material",
@@ -283,10 +276,17 @@
       "exact": true,
       "authority": "material_management"
     },
+    { // 辅材类型管理
+      "name": "辅材类型管理",
+      "path": "/config/configList/auxiliaryMaterialType",
+      "module": "./pages/system-mngt/auxiliaryMaterial/MaterialTypeMngt",
+      "exact": true,
+      "authority": "tc_erp_sw_config_list_type"
+    },
     { // 辅材管理
       "name": "辅材管理",
       "path": "/config/configList/auxiliaryMaterial",
-      "module": "./pages/system-mngt/material/AuxiliaryMaterialMngt",
+      "module": "./pages/system-mngt/materialMngt/auxMaterialMngt",
       "exact": true,
       "authority": "tc_erp_sw_config_list_materials"
     },
@@ -866,6 +866,41 @@
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     },
+    { // 库存管理-辅材库存
+      "name": "辅材库存",
+      "path": "/auxStock/warehouse",
+      "module": "./pages/auxStock/warehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_list"
+    },
+    { // 库存管理-辅材入库
+      "name": "辅材入库",
+      "path": "/auxStock/entryWarehouse",
+      "module": "./pages/auxStock/entryWarehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_list"
+    },
+    { // 库存管理-辅材入库-详情
+      "name": "辅材入库明细",
+      "path": "/auxStock/entryWarehouse/detail/:id",
+      "module": "./pages/auxStock/entryWarehouse/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_info"
+    },
+    { // 库存管理-辅材出库
+      "name": "辅材出库",
+      "path": "/auxStock/outputWarehouse",
+      "module": "./pages/auxStock/outputWarehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_list"
+    },
+    { // 库存管理-辅材出库-明细
+      "name": "辅材出库明细",
+      "path": "/auxStock/outputWarehouse/detail/:id",
+      "module": "./pages/auxStock/outputWarehouse/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_list"
+    },
     { // 库存管理-余料入库
       "name": "余料入库",
       "path": "/stock/surplusMaterialWarehousing",
@@ -1139,6 +1174,27 @@
       "exact": true,
       "authority": "tc_erp_sw_stock_material_receive_edit"
     },
+    { // 工作管理-收货列表
+      "name": "辅材收货单",
+      "path": "/auxStock/receiving",
+      "module": "./pages/auxStock/receivingList/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_receive_list"
+    },
+    { // 工作管理-收获列表-详情
+      "name": "收货列表明细",
+      "path": "/auxStock/receiving/detail/:id",
+      "module": "./pages/auxStock/receivingList/Overview",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_receive_info"
+    },
+    { // 工作管理-收获列表-编辑
+      "name": "收货列表编辑",
+      "path": "/auxStock/receiving/edit/:id",
+      "module": "./pages/auxStock/receivingList/Edit",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_receive_edit"
+    },
     { // 库存管理-原材料盘点
       "name": "原材料盘点",
       "path": "/stock/materials",
@@ -1238,11 +1294,11 @@
       "authority": "tc_erp_sw_purchaseTask_material_list"
     },
     { //辅材采购管理-辅材采购计划-采购清单
-       "name": "辅材采购清单",
-       "path": "/buyAuxiliaryMaterial/purchasePlan/:id",
-       "module": "./pages/buyAuxiliaryMaterialList/buyAuxiliaryMaterialList",
-       "exact": true,
-       "authority": "tc_erp_sw_purchaseTask_material_list"
+      "name": "辅材采购清单",
+      "path": "/buyAuxiliaryMaterial/purchasePlan/:id",
+      "module": "./pages/buyAuxiliaryMaterialList/buyAuxiliaryMaterialList",
+      "exact": true,
+      "authority": "tc_erp_sw_purchaseTask_material_list"
     },
     { //辅材采购管理-辅材采购汇总
       "name": "辅材采购计划",
@@ -3021,12 +3077,12 @@
       "authority": "tc_erp_sc_workbench"
     },
     { // 售后-日历管理-工作日历管理-新增
-    "name": "新增",
-    "path": "/calendar/calendar/add",
-    "module": "./pages/asm/calendar/Add",
-    "exact": true,
-    "authority": "tc_erp_sc_workbench"
-  },
+      "name": "新增",
+      "path": "/calendar/calendar/add",
+      "module": "./pages/asm/calendar/Add",
+      "exact": true,
+      "authority": "tc_erp_sc_workbench"
+    },
     { // 售后-打卡管理-打卡记录
       "name": "打卡记录",
       "path": "/clock/clockRecord",
@@ -3136,6 +3192,13 @@
       "name": "详情",
       "path": "/businessDisposal/unqualifiedDisposal/detail/:id",
       "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 流程设计
+      "name": "流程设计",
+      "path": "/journal/workflow",
+      "module": "./pages/system-mngt/workflow/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     }

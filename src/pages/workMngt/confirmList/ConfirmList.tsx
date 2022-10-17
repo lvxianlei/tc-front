@@ -8,9 +8,8 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './confirm.module.less';
-import AuthUtil from '../../../utils/AuthUtil';
 
-export default function ConfirmList(): React.ReactNode {
+export default function ConfirmList() {
     const [department, setDepartment] = useState<any | undefined>([]);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();

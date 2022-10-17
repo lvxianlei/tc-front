@@ -148,7 +148,7 @@ export default function PoleInformation(): React.ReactNode {
     }), {})
     const departmentData: any = data || [];
     const [materialUser, setMaterialUser] = useState([]);
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
     const [allotVisible, setAllotVisible] = useState<boolean>(false);
     const editRef = useRef<allotModalProps>();
     const [productId, setProductId] = useState<string>('');
