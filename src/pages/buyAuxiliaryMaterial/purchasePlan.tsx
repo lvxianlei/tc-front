@@ -114,7 +114,7 @@ export default function PurchasePlan() {
                             }>
                                 <Link className="btn-operation-link" to={{
                                     pathname: `/buyAuxiliaryMaterial/purchasePlan/${records.id}`,
-                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus}`
+                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus},${records.collectPurchasePlanNumber?1:0}`
                                 }}>采购清单</Link>
                             </Button>
                         </>

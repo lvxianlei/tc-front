@@ -531,12 +531,13 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                     // }
                     return item
                 }),
-                {
-                    title: "操作",
-                    dataIndex: "opration",
-                    render: (_: any, records: any) => <Button disabled={records.source === 1} type="link"
-                                                              onClick={() => handleRemove(records.materialCode)}>移除</Button>
-                }]}
+                // {
+                //     title: "操作",
+                //     dataIndex: "opration",
+                //     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link"
+                //                                               onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                // }
+                ]}
             dataSource={popDataList?.map((item: any, index: number) => ({
                 ...item,
                 key: `${item.materialCode}-${index}`
