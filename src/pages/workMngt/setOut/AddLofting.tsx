@@ -186,8 +186,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'apertureNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "apertureNumber"]} initialValue={_} rules={[{
-                    pattern: /^[0-9*,]*$/,
-                    message: '仅可输入数字/,/*',
+                    pattern: /^[0-9*,.]*$/,
+                    message: '仅可输入数字/,/*/.',
                 }]}>
                     <Input size="small" maxLength={50} onBlur={(e) => {
                         let list = e.target.value.split(',');

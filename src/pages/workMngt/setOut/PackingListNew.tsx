@@ -701,25 +701,28 @@ export default function PackingListNew(): React.ReactNode {
             </Form>
             <Row gutter={12}>
                 <Col span={12}>
-                    <p className={styles.titleContent}>
-                        <span className={styles.title}>待选区</span>
-                        <span className={styles.description}>未包装数量：
+                    <Row className={styles.titleContent} justify="space-between">
+                        <Col className={styles.title}>待选区</Col>
+                        <Col>未包装数量：
                             <span className={styles.content}>{showParts ? stayDistrict?.length : dataShowParts(stayDistrict).length}</span>
-                        </span>
-                        <span className={styles.description}>已选择：件数：
+                        </Col>
+                        <Col>已选择：件数：
                             <span className={styles.content}>{dataShowParts(selectedRow).length}</span>
-                        </span>
-                        <span className={styles.description}>重量：
+                        </Col>
+                        <Col>重量：
                             <span className={styles.content}>{selectWeight}kg</span>
-                        </span>
-                        <span className={styles.description}>电焊件：
+                        </Col>
+                        <Col>电焊件：
                             <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isMainPart === 1).length}</span>
-                        </span>
-                        <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
+                        </Col>
+                        <Col>
                             <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
-                        </p>
-                        <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
-                    </p>
+                        </Col>
+                        <Col>
+                            <Button type="primary" onClick={addTopack} ghost>添加</Button>
+                        </Col>
+
+                    </Row>
                     <CommonAliTable
                         haveIndex
                         rowKey='businessId'
@@ -794,19 +797,21 @@ export default function PackingListNew(): React.ReactNode {
                     />
                 </Col>
                 <Col span={12}>
-                    <p className={styles.titleContent}>
-                        <span className={styles.title}>包装区</span>
-                        <span className={styles.description}>包重量（kg）：
+                    <Row className={styles.titleContent} justify="space-between">
+                        <Col span={4} className={styles.title}>包装区</Col>
+                        <Col span={4}>包重量（kg）：
                             <span className={styles.content}>{packageWeight}</span>
-                        </span>
-                        <span className={styles.description}> 包件数：
+                        </Col>
+                        <Col span={4}> 包件数：
                             <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
-                        </span>
-                        <span className={styles.description}>电焊件：
+                        </Col>
+                        <Col span={4}>电焊件：
                             <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span>
-                        </span>
-                        <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
-                    </p>
+                        </Col>
+                        <Col span={8}>
+                            <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
+                        </Col>
+                    </Row>
                     <CommonAliTable
                         haveIndex
                         columns={[
