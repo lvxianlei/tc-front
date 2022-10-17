@@ -2,7 +2,7 @@
   "materialDetails": [
     {
       "title": "类型",
-      "dataIndex": "type",
+      "dataIndex": "materialCategoryName",
       "type": "string",
       "edit": false
     },
