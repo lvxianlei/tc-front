@@ -686,7 +686,15 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                 // deliveryMethod: deliveryMethodEnum?.[0]?.value,
                 settlementMode: settlementModeEnum?.[0]?.value,
             }} edit/>
-        <DetailTitle title="运费信息" key="b"/>
+        {/*<DetailTitle title="运费信息" key="b"/>*/}
+        <p style={{ fontSize: '16px', color: '#181818', marginBottom: '30px', fontWeight: '700', margin: 0 }}>
+            运费信息&nbsp;&nbsp;&nbsp;
+            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0,display:"inline-block" }}>
+                <span style={{ fontWeight: 400 }}>运费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{freightForm.getFieldsValue()?.transportTaxPrice || 0}</span>
+                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{freightForm.getFieldsValue()?.transportPrice || 0}</span>
+                </span>
+            </p>
+        </p>
         <BaseInfo
             form={freightForm}
             col={2}
@@ -705,7 +713,15 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                 })
             }
             dataSource={{transportBear: 1}} edit/>
-        <DetailTitle title="装卸费信息" key="c"/>
+        {/*<DetailTitle title="装卸费信息" key="c"/>*/}
+        <p style={{ fontSize: '16px', color: '#181818', marginBottom: '30px', fontWeight: '700', margin: 0 }}>
+            装卸费信息&nbsp;&nbsp;&nbsp;
+            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0,display:"inline-block" }}>
+                <span style={{ fontWeight: 400 }}>运费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{stevedoringForm.getFieldsValue()?.unloadTaxPrice || 0}</span>
+                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{stevedoringForm.getFieldsValue()?.unloadPrice || 0}</span>
+                </span>
+            </p>
+        </p>
         <BaseInfo
             form={stevedoringForm}
             col={2}
