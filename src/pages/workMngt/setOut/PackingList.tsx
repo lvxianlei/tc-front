@@ -28,7 +28,7 @@ export default function PackingList(): React.ReactNode {
     const [loading1, setLoading1] = useState(false);
     const editRef = useRef<EditProps>();
     const [visible, setVisible] = useState<boolean>(false);
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
 
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {

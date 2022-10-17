@@ -131,7 +131,7 @@
         },
         {
             "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber"
+            "dataIndex": "furnaceBatch"
         },
         {
             "title": "质保书号",

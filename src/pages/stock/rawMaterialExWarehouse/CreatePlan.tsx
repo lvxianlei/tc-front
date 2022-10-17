@@ -23,28 +23,19 @@ export default function CreatePlan(props: any): JSX.Element {
     const [warehouseId, setWarehouseId] = useState<string>("");
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        for (let i = 0; i < popDataList.length; i += 1) {
-            for (let p = 0; p < materialList.length; p += 1) {
-                if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].structureTexture = popDataList[i].structureTexture;
-                    materialList[p].materialTexture = popDataList[i].materialTexture;
-                }
-            }
-        }
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+        // for (let i = 0; i < popDataList.length; i += 1) {
+        //     for (let p = 0; p < materialList.length; p += 1) {
+        //         if (popDataList[i].id === materialList[p].id) {
+        //             materialList[p].structureTexture = popDataList[i].structureTexture;
+        //             materialList[p].materialTexture = popDataList[i].materialTexture;
+        //         }
+        //     }
+        // }
+        setMaterialList([...materialList, ...newMaterialList])
+        setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
-            })
-        })])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
-            return ({
-                ...item,
+                furnaceBatch: item.furnaceBatchNumber,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                         : (Number(item?.proportion || 1) / 1000).toFixed(3),
@@ -113,14 +104,14 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCreateClick = async () => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
-            if (materialList.length < 1) {
+            if (popDataList.length < 1) {
                 message.error("请您选择出库明细!");
                 return false;
             }
             // 添加对长度以及数量的拦截
             let flag = false;
-            for (let i = 0; i < materialList.length; i += 1) {
-                if (!(materialList[i].num)) {
+            for (let i = 0; i < popDataList.length; i += 1) {
+                if (!(popDataList[i].num)) {
                     flag = true;
                 }
             }
@@ -129,8 +120,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 return false;
             }
             saveRun({
-                outStockDetailDTOList: materialList,
+                outStockDetailDTOList: popDataList,
                 ...baseInfo,
+                materialType: 1,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
         } catch (error) {
@@ -164,7 +156,9 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`, {
+                materialType: 1
+            })
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
             resole({
