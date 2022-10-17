@@ -124,7 +124,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 auxiliaryPurchasePlanId:params.id,
                 auxiliaryPurchasePlanListDTOS:cargoData,
                 purchasePlanNumber:search[0],
-                repurchaseTime:search[1]
+                repurchaseTime:search[1],
             });
             resole(result)
         } catch (error) {
@@ -205,7 +205,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <Modal
             width={1011}
             visible={visible}
-            title="选择辅财明细666"
+            title="选择辅财明细"
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)
@@ -233,8 +233,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         serchObj={{}}
                         closeExportList={() => { setIsExportStoreList(false) }}
                     />:null}</span>,
-                !isEdit && <Button key="edit" type="primary" style={{ margin: "0px 8px" }}  onClick={() => setIsEdit(true)}>编辑</Button>,
-                isEdit && <Button key="add" type="primary" style={{ margin: "0px 8px" }} onClick={() => setVisible(true)}>添加</Button>,
+                !isEdit && <Button key="edit" type="primary" style={{ margin: "0px 8px" }}  onClick={() => setIsEdit(true)} disabled={
+                    location.search.substr(1).split(',')[3]=="0"?false:true
+                }>编辑</Button>,
+                isEdit && <Button key="add" type="primary" style={{ margin: "0px 8px" }} onClick={() => setVisible(true)}
+                    disabled={location.search.substr(1).split(',')[3]=="0"?false:true}
+                >添加</Button>,
                 isEdit && <Button key="save" type="primary" style={{ margin: "0px 8px" }} disabled={!cargoData.length} onClick={() =>  saveMaterialList()}>保存</Button>,
                 <Button
                     type="primary"

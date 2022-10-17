@@ -57,8 +57,8 @@ export default function MargePurchasePlan() {
                         render: (_: any, records: any) => <>
                             <Button type="link" className="btn-operation-link">
                                 <Link className="btn-operation-link" to={{
-                                    pathname: `/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial/${records.id}`,
-                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus}`
+                                    pathname: `/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial/${records.id}`,
+                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus},${1}`
                                 }}>采购清单</Link>
                             </Button>
                         </>
