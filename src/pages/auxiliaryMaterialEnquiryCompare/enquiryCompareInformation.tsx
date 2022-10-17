@@ -398,7 +398,7 @@ export default function Overview(): JSX.Element {
             current={1}
             size={materialLists.length}
             total={materialLists.length}
-            url={`/tower-supply/auxiliaryComparisonPrice/${params.id}`}
+            url={`/tower-supply/auxiliaryComparisonPrice/exportComparisonPriceDetails`}
             serchObj={{ comparisonPriceId: params.id }}
             closeExportList={() => { setIsExportStoreList(false) }}
         /> : null}
