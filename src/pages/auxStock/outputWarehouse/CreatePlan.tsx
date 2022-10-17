@@ -148,6 +148,7 @@ export default function CreatePlan(props: any): JSX.Element {
             )
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
+            setWarehouseId(result?.warehouseId)
             resole({
                 ...result,
                 pickingUserId: {
@@ -159,7 +160,10 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
+    }), {
+        ready: props.type === "edit" && props.visible,
+        refreshDeps: [props.type, props.visible]
+    })
 
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
