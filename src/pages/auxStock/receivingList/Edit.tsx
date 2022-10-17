@@ -4,7 +4,10 @@ import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
+import {
+    unloadModeOptions, settlementModeOptions, materialTextureOptions,
+    materialStandardOptions, supplierTypeOptions
+} from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails } from "./receivingListData.json"
 import * as calcObj from '@utils/calcUtil'
 /**
@@ -25,6 +28,11 @@ interface TotalState {
     taxPrice?: string
     unTaxPrice?: string
 }
+
+const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
 
 export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Element {
     const modalRef = useRef<ModalRef>({ dataSource: [], resetFields: () => { } })
@@ -97,7 +105,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }), { manual: true })
 
     const handleModalOk = () => {
-        console.log(modalRef.current?.dataSource)
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             // 含税金额
             const totalTaxAmount = calcObj.totalTaxPrice(item.taxPrice, item.num)
@@ -122,7 +129,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 contractUnitPrice: item.taxPrice,
                 taxPrice: item.taxPrice,
                 /** 不含税单价 */
-                unTaxPrice: item.price,
+                price: item.price,
                 totalTaxAmount,
                 totalAmount,
                 appearance: item.appearance || 1,
@@ -142,7 +149,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const baseFormData = await form.validateFields()
             await editForm.validateFields()
-            const editData = editForm.getFieldsValue(true).submit
+            let editData = editForm.getFieldsValue(true).submit
+            if (type === "new") {
+                editData = editData.forEach((item: any) => {
+                    delete item.id
+                    delete item.key
+                })
+            }
             const result = {
                 ...baseFormData,
                 supplierId,
@@ -309,7 +322,17 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     case "supplierId":
                         return ({
                             ...item,
-                            disabled: type === "edit"
+                            disabled: type === "edit",
+                            search: item.search?.map((searchItem: any) => {
+                                if (searchItem.dataIndex == 'supplierType') {
+                                    return {
+                                        ...searchItem,
+                                        enum: supplierTypeEnum
+                                    }
+                                } else {
+                                    return searchItem
+                                }
+                            }) || []
                         })
                     case "unloadMode":
                         return ({
@@ -352,11 +375,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 >选择</Button>
             ]}
         />
-        <Space style={{ color: "red" }}>
+        {/* <Space style={{ color: "red" }}>
             <div><span>数量合计：</span><span>{total.count || "0"}</span></div>
             <div><span>含税金额合计(元)：</span><span>{total.taxPrice || "0"}</span></div>
             <div><span>不含税金额合计(元)：</span><span>{total.unTaxPrice || "0"}</span></div>
-        </Space>
+        </Space> */}
         <EditableTable
             haveIndex={false}
             form={editForm}
@@ -391,14 +414,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...item,
                 key: item.id || `item-${index}`
             })) || []}
-            rowSelection={{
-                selectedRowKeys: select,
-                type: "checkbox",
-                onChange: onSelectChange,
-                // onSelect: onSelectChange,
-                // onSelectAll,
-                getCheckboxProps: data?.getCheckboxProps
-            }}
+        // rowSelection={{
+        //     selectedRowKeys: select,
+        //     type: "checkbox",
+        //     onChange: onSelectChange,
+        //     // onSelect: onSelectChange,
+        //     // onSelectAll,
+        //     getCheckboxProps: data?.getCheckboxProps
+        // }}
         />
     </Spin>
 })

@@ -22,26 +22,16 @@ export default function CreatePlan(props: any): JSX.Element {
     const [warehouseId, setWarehouseId] = useState<string>("");
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        for (let i = 0; i < popDataList.length; i += 1) {
-            for (let p = 0; p < materialList.length; p += 1) {
-                if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].structureTexture = popDataList[i].structureTexture;
-                    materialList[p].materialTexture = popDataList[i].materialTexture;
-                }
-            }
-        }
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
-            return ({
-                ...item,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
-            })
-        })])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any) => {
+        // for (let i = 0; i < popDataList.length; i += 1) {
+        //     for (let p = 0; p < materialList.length; p += 1) {
+        //         if (popDataList[i].id === materialList[p].id) {
+        //             materialList[p].structureTexture = popDataList[i].structureTexture;
+        //             materialList[p].materialTexture = popDataList[i].materialTexture;
+        //         }
+        //     }
+        // }
+        setMaterialList([...materialList, ...newMaterialList])
+        setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)

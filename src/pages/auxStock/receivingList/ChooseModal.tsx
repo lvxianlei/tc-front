@@ -106,16 +106,21 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             }}>
             <Form form={form}>
                 <Row>
-                    <Col span={24}><Form.Item
-                        rules={[
-                            {
-                                required: true,
-                                message: "请输入数量..."
-                            }
-                        ]}
-                        style={{ width: "100%" }}
-                        name="num"
-                        label="输入数量"><InputNumber min={1} step={1} /></Form.Item></Col>
+                    <Col span={24}>
+                        <Form.Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "请输入数量..."
+                                }
+                            ]}
+                            style={{ width: "100%" }}
+                            name="num"
+                            label="输入数量"><InputNumber
+                                min={1} step={1}
+                                precision={0}
+                            /></Form.Item>
+                    </Col>
                 </Row>
             </Form>
         </Modal>
