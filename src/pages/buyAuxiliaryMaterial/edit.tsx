@@ -40,6 +40,15 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
             reject(error)
         }
     }))
+    // 获取辅材第一层分类选项
+    const { data: materialTypeNameEnum } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get("/tower-system/materialCategory")
+            resole(result?.map((item: any) => ({ value: item.id, label: item.name })))
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -174,6 +183,14 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
                         //     })
                         // }
                         return item
+                    }),
+                    search:(addMaterial as any).search.map((el:any)=>{
+                        if(el.dataIndex == "materialTypeName"){
+                            el.enum = [
+                                ...(materialTypeNameEnum || [])
+                            ]
+                        }
+                        return el
                     })
                 }}
                 value={{

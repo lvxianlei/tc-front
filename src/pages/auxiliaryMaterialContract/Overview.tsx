@@ -70,7 +70,10 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
             // 不含税单价
             offer:item.price,
             // 含税单价
-            taxOffer:item.taxPrice
+            taxOffer:item.taxPrice,
+            // 含税金额合计
+            taxTotalAmount:item.totalTaxAmount
+
         })) || []} />
         <Attachment style={{ margin: 0 }} dataSource={data?.attachInfoList || []} />
     </Spin>

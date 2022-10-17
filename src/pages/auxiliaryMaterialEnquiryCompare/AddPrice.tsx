@@ -122,7 +122,7 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                 } : undefined,
                 manufacturer: data?.manufacturer
             }} edit />
-        <DetailTitle title="询价原材料" />
+        <DetailTitle title="询价辅材" />
         <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
                 return ({

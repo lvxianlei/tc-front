@@ -29,7 +29,6 @@
       "dataIndex": "weight"
     }
   ],
-
   "addMaterial": {
     "title": "辅材",
     "type": "popTable",
@@ -40,9 +39,8 @@
     "readOnly": true,
     "columns": [
       {
-        "title": "编号",
-        "dataIndex": "materialCode",
-        "search": true
+        "title": "物料编码",
+        "dataIndex": "materialCode"
       },
       {
         "title": "类别",
@@ -51,10 +49,6 @@
       {
         "title": "类型",
         "dataIndex": "materialCategoryName"
-      },
-      {
-        "title": "大类",
-        "dataIndex": "materialDiversity"
       },
       {
         "title": "品名",
@@ -67,6 +61,21 @@
       {
         "title": "单位",
         "dataIndex": "unit"
+      }
+    ],
+    "search": [
+      {
+        "title": "类别",
+        "dataIndex": "materialTypeName",
+        "width": 200,
+        "type":"select",
+        "enum":[]
+      },
+      {
+        "title": "查询",
+        "dataIndex": "fuzzyQuery",
+        "width": 200,
+        "placeholder": "物料编码/品名"
       }
     ]
   },

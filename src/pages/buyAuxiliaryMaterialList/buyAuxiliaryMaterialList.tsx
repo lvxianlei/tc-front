@@ -225,7 +225,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         current={1}
                         size={cargoData.length}
                         total={cargoData.length}
-                        url={`/tower-supply/materialPurchaseTask`}
+                        url={`/tower-supply/auxiliaryMaterialPurchasePlan/list/${params.id}`}
                         serchObj={{}}
                         closeExportList={() => { setIsExportStoreList(false) }}
                     />:null}</span>,

@@ -340,7 +340,7 @@
     },
     {
       "title": "经办人",
-      "dataIndex": "operatorName"
+      "dataIndex": "operatorIdName"
     },
     {
       "title": "交货方式",
@@ -548,19 +548,19 @@
       },
       {
         "title": "申请部门",
-        "dataIndex": "applyUserDeptName"
+        "dataIndex": "deptName"
       },
       {
         "title": "申请人",
-        "dataIndex": "applyUserName"
+        "dataIndex": "createUserName"
       },
       {
         "title": "备注",
-        "dataIndex": "description"
+        "dataIndex": "remark"
       },
       {
         "title": "报价",
-        "dataIndex": "offer"
+        "dataIndex": "taxOffer"
       },
       {
         "title": "生产厂家",
