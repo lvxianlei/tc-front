@@ -180,15 +180,15 @@
             },
             {
                 "title": "含税金额（元）",
-                "dataIndex": "totalTaxAmount"
+                "dataIndex": "totalTaxPrice"
             },
             {
                 "title": "不含税单价（元/吨）",
-                "dataIndex": "price"
+                "dataIndex": "unTaxPrice"
             },
             {
                 "title": "不含税金额（元）",
-                "dataIndex": "totalAmount"
+                "dataIndex": "totalUnTaxPrice"
             },
             {
                 "title": "库位",

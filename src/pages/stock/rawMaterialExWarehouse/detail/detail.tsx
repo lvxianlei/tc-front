@@ -15,7 +15,6 @@ import { baseColumn } from "./detail.json";
 
 import '../../StockPublicStyle.less';
 import './detail.less';
-import ExportList from '../../../../components/export/list';
 import AuthUtil from '@utils/AuthUtil';
 import { exportDown } from '@utils/Export';
 

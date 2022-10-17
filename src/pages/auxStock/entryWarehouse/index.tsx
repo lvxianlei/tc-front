@@ -114,30 +114,38 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         dataIndex: 'key',
                         width: 160,
                         fixed: 'right' as FixedType,
-                        render: (_: undefined, record: any): React.ReactNode => (
-                            <>
-                                <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
-                                <Button
-                                    type="link"
-                                    disabled={record?.receiveStatus === 1}
-                                    onClick={
-                                        () => {
-                                            setIsOpenId(true)
-                                            setEditId(record.id)
-                                            setOperationType("edit")
-                                        }
-                                    }>编辑</Button>
-                                <Popconfirm
-                                    title="确认删除?"
-                                    onConfirm={() => handleDelete(record?.id)}
-                                    okText="确认"
-                                    cancelText="取消"
-                                >
-                                    <Button type="link" 
-                                    disabled={record?.receiveStatus === 1}>删除</Button>
-                                </Popconfirm>
-                            </>
-                        )
+                        render: (_: undefined, record: any): React.ReactNode => {
+                            if (tabs === 1) {
+                                return (
+                                    <>
+                                        <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
+                                        <Button
+                                            type="link"
+                                            disabled={record?.receiveStatus === 1}
+                                            onClick={
+                                                () => {
+                                                    setIsOpenId(true)
+                                                    setEditId(record.id)
+                                                    setOperationType("edit")
+                                                }
+                                            }>编辑</Button>
+                                        <Popconfirm
+                                            title="确认删除?"
+                                            onConfirm={() => handleDelete(record?.id)}
+                                            okText="确认"
+                                            cancelText="取消"
+                                        >
+                                            <Button type="link"
+                                                disabled={record?.receiveStatus === 1}>删除</Button>
+                                        </Popconfirm>
+                                    </>
+                                )
+                            }
+                            return <Button
+                                type="link"
+                                onClick={() => history.push(`/auxStock/entryWarehouse/detail/${record.warehousingEntryId}`)}
+                            >所在单据</Button>
+                        }
                     }
                 ]}
                 filterValue={filterValue}

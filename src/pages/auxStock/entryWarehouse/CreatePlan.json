@@ -187,6 +187,10 @@
                 "dataIndex": "totalTaxAmount"
             },
             {
+                "title": "税率",
+                "dataIndex": "tax"
+            },
+            {
                 "title": "不含税单价（元/吨）",
                 "dataIndex": "price"
             },

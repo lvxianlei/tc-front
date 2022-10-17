@@ -59,7 +59,6 @@ export default function CreatePlan(props: any): JSX.Element {
         ready: props.type === "edit" && props.id,
         refreshDeps: [props.type, props.id]
     })
-    console.log(warehouseId)
     //库区库位
     const { data: locatorData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -82,22 +81,12 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        for (let i = 0; i < popDataList.length; i += 1) {
-            for (let p = 0; p < materialList.length; p += 1) {
-                if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].structureTexture = popDataList[i].structureTexture;
-                    materialList[p].materialTexture = popDataList[i].materialTexture;
-                }
-            }
-        }
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+        setMaterialList([...materialList, ...newMaterialList])
+        setPopDataList(materialList.map((item: any, index: number) => {
             return ({
                 ...item,
-            })
-        })])
-        setPopDataList([...materialList, ...newMaterialList].map((item: any, index: number) => {
-            return ({
-                ...item,
+                totalTaxPrice: item.totalTaxAmount,
+                totalPrice: item.totalAmount,
                 key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
         }))
@@ -110,11 +99,8 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList(materialPlanList.map((item: any, index: number) => {
             return ({
                 ...item,
-                materialName: item.materialName,
-                structureSpec: item.structureSpec,
                 receiveTime: item.createTime,
                 num: item.planPurchaseNum || 1,
-                unit: item.unit,
                 purchasePlanId: item.id,
                 taxPrice: 1,
                 tax: 0,

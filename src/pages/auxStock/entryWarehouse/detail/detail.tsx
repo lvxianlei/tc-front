@@ -117,6 +117,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Popconfirm
                                     title="确认撤销?"
                                     onConfirm={() => handleRevocation(record.id)}
+                                    disabled={record.warehousingEntryStatus !== 1}
                                     okText="确认"
                                     cancelText="取消"
                                 >
@@ -126,6 +127,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     title="确认删除?"
                                     onConfirm={() => handleDelete(record?.id)}
                                     okText="确认"
+                                    disabled={record.warehousingEntryStatus !== 0}
                                     cancelText="取消"
                                 >
                                     <Button loading={deleting} disabled={record.warehousingEntryStatus !== 0} type="link">删除</Button>
