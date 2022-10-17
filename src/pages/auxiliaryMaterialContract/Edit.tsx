@@ -511,7 +511,7 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
     const handleNumChange = (value: number, materialCode: string, dataIndex: string, id?: string) => {
         console.log(value, materialCode, dataIndex, id)
         const newData = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.materialCode === id) {
                 item[dataIndex] = value
             }
             return item;
@@ -570,7 +570,7 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
             min={1}
             value={value || 1}
             disabled={records.isReceiveStockRef === 2}
-            onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex, records.id)}
+            onChange={(value: number) => handleNumChange(value, records.num, item.dataIndex, records.materialCode)}
             key={key}
         />
     }
