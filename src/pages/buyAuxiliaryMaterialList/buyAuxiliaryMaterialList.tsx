@@ -96,10 +96,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }
     const  saveMaterialList = () => {
         // 所有新添加的辅材，部门、数量 字段都要全部填充完毕后才能保存
-        let flag:boolean = cargoData.every(item=>item.deptName && item.planPurchaseNum)
+        // 默认数量添加为一
+        setCargoData(cargoData.map((item:any)=>({...item,planPurchaseNum:item.planPurchaseNum || 1})))
+        let flag:boolean = cargoData.every(item=>item.deptName)
         if(!flag){
             return message.warn('请将数据补充完整')
         }
+        // todo 相同物料编码和使用部门的辅材 合并一条数据
+
         return new Promise(async (resove, reject) => {
             try {
                 await saveRequset()
@@ -373,7 +377,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         //     })
                         // }
                         return item
-                    })
+                    }),
+                    search:[{
+                        title: "查询",
+                        dataIndex: "fuzzyQuery",
+                        width: 200,
+                        placeholder: "物料编码/品名"
+                    }]
                 }}
                 value={{
                     id: "",
