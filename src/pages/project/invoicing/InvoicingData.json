@@ -227,6 +227,11 @@
                     "dataIndex": "contractName"
                 },
                 {
+                    "title": "合同名称编号",
+                    "dataIndex": "internalNumber",
+                    "search": true
+                },
+                {
                     "title": "业主单位",
                     "dataIndex": "customerCompany",
                     "search": true
