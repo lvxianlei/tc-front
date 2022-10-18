@@ -54,6 +54,15 @@ export default function StaffMngt(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { loading: deleting, run: deleteRun } = useRequest((ids: string[]) => new Promise(async (resove, reject) => {
+        try {
+            const data: any = await RequestUtil.delete(`/tower-system/employee`, ids)
+            resove(data)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const columns = [
         {
             title: '账号',
@@ -202,6 +211,17 @@ export default function StaffMngt(): React.ReactNode {
             }}>下载导入模板</Button>
             <Link to={{ pathname: `/dept/staffMngt/new`, state: { type: 'new' } }}><Button type="primary" ghost>新增</Button></Link>
             {selectedRows.length > 0 ? <Link to={{ pathname: `/dept/staffMngt/setting`, state: { type: 'edit', data: [...selectedRows] } }}><Button type="primary" ghost>编辑</Button></Link> : <Button type="primary" disabled ghost>编辑</Button>}
+            <Button
+                type="primary"
+                ghost
+                disabled={selectedKeys.length <= 0}
+                loading={deleting}
+                onClick={async () => {
+                    console.log(selectedKeys)
+                    await deleteRun(selectedKeys as any)
+                    await message.success("删除成功")
+                    history.go(0)
+                }}>删除</Button>
         </Space>}
         refresh={refresh}
         tableProps={{
