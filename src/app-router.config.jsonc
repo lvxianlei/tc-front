@@ -3075,6 +3075,13 @@
       "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-模板类型
+      "name": "模板类型",
+      "path": "/worksheetSetting/templateType",
+      "module": "./pages/worksheetSetting/templateType/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }

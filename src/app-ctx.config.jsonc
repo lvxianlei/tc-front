@@ -1432,6 +1432,54 @@
                         "authority": "tc_erp_sc_workbench_list"
                     }
                 ]
+            },
+            {  
+                "label": "工单管理",
+                "icon": "customer",
+                "path": "/worksheetMngt",
+                "appName": "WO",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "工单视图",
+                        "path": "/worksheetMngt/view",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "工单管理",
+                        "path": "/worksheetMngt/management",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "工单设置",
+                "icon": "customer",
+                "path": "/worksheetSetting",
+                "appName": "WO",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "工单模板管理",
+                        "path": "/worksheetSetting/worksheetTemplateMngt",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "模板类型",
+                        "path": "/worksheetSetting/templateType",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "工单同步",
+                        "path": "/worksheetSetting/worksheetSynchronous",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "字段同步",
+                        "path": "/worksheetSetting/fieldSynchronous",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
             }
         ]
     },
