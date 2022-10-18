@@ -165,40 +165,20 @@ export default function Index(): React.ReactNode {
             dataIndex: 'materialCode',
             width: 100,
         }, {
-            title: '分类',
+            title: '类别',
             dataIndex: 'materialCategoryName',
-            width: 100,
-        }, {
-            title: '标准',
-            dataIndex: 'materialStandardName',
             width: 100,
         }, {
             title: '品名',
             dataIndex: 'materialName',
             width: 100,
         }, {
-            title: '材质',
-            dataIndex: 'structureTexture',
-            width: 100,
-        }, {
             title: '规格',
             dataIndex: 'structureSpec',
             width: 100,
         }, {
-            title: '长度（mm）',
-            dataIndex: 'length',
-            width: 100,
-        }, {
-            title: '宽度（mm）',
-            dataIndex: 'width',
-            width: 100,
-        }, {
             title: '数量',
             dataIndex: 'num',
-            width: 100,
-        }, {
-            title: '重量（吨）',
-            dataIndex: 'weight',
             width: 100,
         }, {
             title: '库存数量',
