@@ -180,14 +180,6 @@
       "type": "string"
     },
     {
-      "title": "申请人",
-      "dataIndex": "purchaserName"
-    },
-    {
-      "title": "申请部门",
-      "dataIndex": "createUserName"
-    },
-    {
       "title": "计划状态",
       "dataIndex": "purchasePlanStatusName"
     },

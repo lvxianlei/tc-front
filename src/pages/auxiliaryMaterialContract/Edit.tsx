@@ -288,6 +288,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 // 详情ID
                 // el.comparisonPriceDetailId = el.id
             })
+            console.log(list)
             setMaterialList(list)
             setPopDataList(list)
             console.log(list)
@@ -406,9 +407,13 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             const freightInfo = await freightForm.validateFields()
             const stevedoringInfo = await stevedoringForm.validateFields()
             // 再次更新计算价格
-            let list = updataAllPrice(popDataList)
+            // console.log(popDataList)
+            // console.log(materialList)
+            // debugger
+            let list = updataAllPrice(materialList)
             setMaterialList(list)
             setPopDataList(list)
+            // console.log(list)
             const values = {
                 ...baseInfo,
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
