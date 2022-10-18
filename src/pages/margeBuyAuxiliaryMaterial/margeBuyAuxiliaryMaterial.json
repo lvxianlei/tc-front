@@ -7,7 +7,7 @@
     },
     {
       "title": "计划状态",
-      "dataIndex": "collectTypeName",
+      "dataIndex": "purchasePlanStatusName",
       "width": 80
     },
     {
