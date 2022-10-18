@@ -276,13 +276,14 @@ export default function Edit() {
         })]}
         form={form}
         dataSource={{
-          ...data,
           bidBatch: projectData?.bidBatch,
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-          country: projectData?.country || ""
+          country: projectData?.country || "",
+          ...data
         } || {
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-          country: projectData?.country || ""
+          country: projectData?.country || "",
+          ...data
         }}
         edit />
       <DetailTitle title="回款计划" />
