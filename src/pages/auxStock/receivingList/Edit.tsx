@@ -151,7 +151,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             await editForm.validateFields()
             let editData = editForm.getFieldsValue(true).submit
             if (type === "new") {
-                editData = editData.forEach((item: any) => {
+                editData.forEach((item: any) => {
                     delete item.id
                     delete item.key
                 })
