@@ -112,7 +112,7 @@
             "dataIndex": "unit"
         },
         {
-            "title": "含税单价（元/吨）",
+            "title": "含税单价（元）",
             "dataIndex": "taxPrice"
         },
         {
@@ -124,7 +124,7 @@
             "dataIndex": "tax"
         },
         {
-            "title": "不含税单价（元/吨）",
+            "title": "不含税单价（元）",
             "dataIndex": "price"
         },
         {
@@ -230,7 +230,7 @@
                 "title": "查询",
                 "type": "string",
                 "dataIndex": "fuzzyQuery",
-                "placeholder": "收货批次/品名/规格"
+                "placeholder": "汇总采购计划编号/申请人"
             }
         ],
         "columns": [

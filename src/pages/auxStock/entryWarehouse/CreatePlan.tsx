@@ -115,9 +115,9 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     // 移除
-    const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.key !== id))
-        setPopDataList(popDataList.filter((item: any) => item.key !== id))
+    const handleRemove = (key: number) => {
+        setMaterialList(materialList.filter((_item: any, index: number) => index !== key))
+        setPopDataList(popDataList.filter((_item: any, index: number) => index !== key))
     }
 
     const performanceBondChange = (fields: { [key: string]: any }) => {
@@ -411,11 +411,11 @@ export default function CreatePlan(props: any): JSX.Element {
                         title: "操作",
                         fixed: "right",
                         dataIndex: "opration",
-                        render: (_: any, records: any) => <>
+                        render: (_: any, records: any, index: number) => <>
                             <Button
                                 type="link"
                                 disabled={records.source === 1}
-                                onClick={() => handleRemove(records.key)}
+                                onClick={() => handleRemove(index)}
                             >移除</Button>
                         </>
                     }]}

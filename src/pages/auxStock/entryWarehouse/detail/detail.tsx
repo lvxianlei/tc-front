@@ -167,7 +167,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 tableProps={{
                     rowSelection: {
                         type: "checkbox",
-                        // selectedRowKeys: generateIds,
+                        selectedRowKeys: selectedRowKeys,
                         onChange: (selectedRowKeys: any[]) => {
                             setSelectedRowKeys(selectedRowKeys);
                         },

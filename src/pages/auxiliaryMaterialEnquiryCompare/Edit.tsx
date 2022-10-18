@@ -168,7 +168,8 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
-                        // purchaseListId:item.id,
+                        // 新创建的使用 使用id  编辑后台返回的 使用purchaseListId
+                        purchaseListId: item.source ==2 ?item.id:item.purchaseListId,
                         num: item.planPurchaseNum,
                         // id: '',
                         // structureTexture: item.structureTexture,
