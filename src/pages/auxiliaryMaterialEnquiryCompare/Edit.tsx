@@ -168,7 +168,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
-                        purchaseListId:item.id,
+                        // purchaseListId:item.id,
                         num: item.planPurchaseNum,
                         // id: '',
                         // structureTexture: item.structureTexture,

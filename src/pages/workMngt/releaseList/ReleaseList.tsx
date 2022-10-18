@@ -485,16 +485,17 @@ export default function ReleaseList(): React.ReactNode {
                 exportPath="/tower-science/loftingBatch/batchResult"
                 sourceKey='loftingBatchResultVOS.records'
                 extraOperation={(data: any) =>
-                    <Space>
-                        总件号数：<span style={{ color: '#FF8C00' }}>{data?.totalPieceNumber}</span>
-                        总件数：<span style={{ color: '#FF8C00' }}>{data?.totalNumber}</span>
-                        总重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.totalWeight}</span>
-                        角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.angleTotalWeight}</span>
-                        角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.apertureWeight}</span>
-                        角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.perforateWeight}</span>
-                        剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{data?.cutPlateWeight}</span>
-                        火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{data?.firePlateWeight}</span>
-                    </Space>
+                    <><Row gutter={12}>
+                        <Col>总件号数：<span style={{ color: '#FF8C00' }}>{data?.totalPieceNumber}</span></Col>
+                        <Col>总件数：<span style={{ color: '#FF8C00' }}>{data?.totalNumber}</span></Col>
+                        <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.totalWeight}</span></Col>
+                        <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.angleTotalWeight}</span></Col>
+                        <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.apertureWeight}</span></Col>
+                        <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.perforateWeight}</span></Col>
+                        <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{data?.cutPlateWeight}</span></Col>
+                        <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{data?.firePlateWeight}</span></Col>
+                    </Row>
+                    </>
                 }
                 tableProps={{
                     pagination: {
