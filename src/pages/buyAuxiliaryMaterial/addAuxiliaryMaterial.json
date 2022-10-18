@@ -66,7 +66,7 @@
     "search": [
       {
         "title": "类别",
-        "dataIndex": "materialTypeName",
+        "dataIndex": "materialType",
         "width": 200,
         "type":"select",
         "enum":[]

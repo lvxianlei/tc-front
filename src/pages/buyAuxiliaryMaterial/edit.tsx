@@ -43,7 +43,9 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
     // 获取辅材第一层分类选项
     const { data: materialTypeNameEnum } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get("/tower-system/materialCategory")
+            const result: any = await RequestUtil.get("/tower-system/materialCategory?materialDataType=2")
+            // console.log(result)
+            console.log(result?.map((item: any) => ({ value: item.id, label: item.name })))
             resole(result?.map((item: any) => ({ value: item.id, label: item.name })))
         } catch (error) {
             reject(error)
@@ -185,7 +187,7 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
                         return item
                     }),
                     search:(addMaterial as any).search.map((el:any)=>{
-                        if(el.dataIndex == "materialTypeName"){
+                        if(el.dataIndex == "materialType"){
                             el.enum = [
                                 ...(materialTypeNameEnum || [])
                             ]

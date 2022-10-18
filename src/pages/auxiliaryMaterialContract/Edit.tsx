@@ -290,6 +290,7 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
             })
             setMaterialList(list)
             setPopDataList(list)
+            console.log(list)
             resove({ ...result, tax: taxNum })
         } catch (error) {
             reject(error)
@@ -721,7 +722,14 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 // deliveryMethod: deliveryMethodEnum?.[0]?.value,
                 settlementMode: settlementModeEnum?.[0]?.value,
             }} edit />
-        <DetailTitle title="运费信息" key="b" />
+        {/*<DetailTitle title="运费信息" key="b" />*/}
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>运费信息
+            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
+                <span style={{ fontWeight: 400 }}>运费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{freightForm.getFieldValue('transportTaxPrice') || 0}</span>
+                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{freightForm.getFieldValue('transportPrice') || 0}</span>
+                </span>
+            </p>
+        </p>
         <BaseInfo
             form={freightForm}
             col={2}
@@ -740,7 +748,14 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 })
             }
             dataSource={{ transportBear: 1 }} edit />
-        <DetailTitle title="装卸费信息" key="c" />
+        {/*<DetailTitle title="装卸费信息" key="c" />*/}
+        <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>装卸费信息
+            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
+                <span style={{ fontWeight: 400 }}>装卸费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{stevedoringForm.getFieldValue('unloadTaxPrice') || 0}</span>
+                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{stevedoringForm.getFieldValue('unloadPrice') || 0}</span>
+                </span>
+            </p>
+        </p>
         <BaseInfo
             form={stevedoringForm}
             col={2}
