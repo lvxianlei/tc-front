@@ -368,7 +368,10 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                     ...item,
                     comparisonPriceDetailId: item.comparisonPriceDetailId || item.id
                 }
-                // delete obj.id
+                // 如果辅材信息是选择比价结果的，那么删除id
+                if(item.source == 2){
+                    delete obj.id
+                }
                 return obj
             }
         ), ...newMaterialList]
