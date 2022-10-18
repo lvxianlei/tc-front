@@ -219,22 +219,19 @@
             "columns": [
                 {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber",
-                    "search": true
+                    "dataIndex": "contractNumber"
                 },
                 {
                     "title": "合同名称",
                     "dataIndex": "contractName"
                 },
                 {
-                    "title": "合同名称编号",
-                    "dataIndex": "internalNumber",
-                    "search": true
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber"
                 },
                 {
                     "title": "业主单位",
-                    "dataIndex": "customerCompany",
-                    "search": true
+                    "dataIndex": "customerCompany"
                 },
                 {
                     "title": "合同签订单位",
@@ -245,6 +242,29 @@
                     "dataIndex": "signContractTime",
                     "type": "date",
                     "format": "YYYY-MM-DD"
+                }
+            ],
+            "search": [
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName",
+                    "width": 100
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber",
+                    "width": 100
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "width": 100
+                },
+                {
+                    "title": "模糊搜索",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 100,
+                    "placeholder": "合同名称/合同名称编号"
                 }
             ]
         },
