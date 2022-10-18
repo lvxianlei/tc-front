@@ -180,22 +180,37 @@ export default function Index(): React.ReactNode {
             title: '数量',
             dataIndex: 'num',
             width: 100,
-        }, {
+        },
+        {
             title: '库存数量',
             dataIndex: 'num',
             width: 100,
-        }, {
+        },
+        {
             title: '出库数量',
             dataIndex: 'standard',
             width: 100,
-            fixed: 'right' as FixedType,
             render: (text: any, item: any, index: any) => {
                 return (
                     <Input
                         placeholder="请输入"
                         value={item.outboundQuantity}
                         onChange={(e) => { inputChange(e, item, index, 'OutLibrary') }}
-                    ></Input>
+                    />
+                )
+            }
+        },
+        {
+            title: '备注',
+            dataIndex: 'remark',
+            width: 200,
+            render: (text: any, item: any, index: any) => {
+                return (
+                    <Input.TextArea
+                        placeholder="请输入"
+                        value={item.remark}
+                        rows={1}
+                        onChange={(e) => { inputChange(e, item, index, 'remark') }} />
                 )
             }
         },
@@ -363,11 +378,15 @@ export default function Index(): React.ReactNode {
     }
     // 出库弹框列表输入框
     const inputChange = (e: any, item: any, index: any, type: string) => {
-        let ary = []
+        let ary = [...OutLibraryListdata]
         if (type == 'OutLibrary') {
-            ary = JSON.parse(JSON.stringify(OutLibraryListdata))
             ary[index].outboundQuantity = e.target.value.replace(/[^0-9]/g, '')
             setOutLibraryListdata(ary)
+            return
+        } else if (type === "remark") {
+            ary[index].remark = e.target.value
+            setOutLibraryListdata(ary)
+            return
         } else {
             ary = JSON.parse(JSON.stringify(ApplyListdata))
             ary[index].shortageNum = e.target.value.replace(/[^0-9]/g, '')
@@ -413,6 +432,7 @@ export default function Index(): React.ReactNode {
                 let obj: any = {};
                 obj.num = item.outboundQuantity
                 obj.id = item.id
+                obj.remark = item.remark
                 count += parseFloat(item.outboundQuantity || 0)
                 ary.push(obj)
             }
@@ -422,7 +442,7 @@ export default function Index(): React.ReactNode {
             return
         }
         if (ary.length == 0) return message.error('所有数据无出库数量')
-        const data: any = await RequestUtil.post(`/tower-storage/outStock`, {
+        const data: any = await RequestUtil.post(`/tower-storage/outStock/auxiliaryOutStock`, {
             id: OutboundId,
             materialStockList: ary
         });
@@ -476,10 +496,7 @@ export default function Index(): React.ReactNode {
                         {/* <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button> */}
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>
-                            总重量： {weightData?.weightCount || "0.00"} 吨
-                        </span>
-                        <span style={{ marginLeft: "10px" }}>
-                            缺料总重量：{weightData?.excessWeight || "0.00"} 吨
+                            总数量： {weightData?.totalNum || "0.00"}
                         </span>
                     </>
                 }}

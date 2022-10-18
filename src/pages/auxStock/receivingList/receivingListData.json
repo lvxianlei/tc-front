@@ -281,7 +281,7 @@
             "width": 80
         },
         {
-            "title": "含税单价（元/吨）",
+            "title": "含税单价（元）",
             "dataIndex": "taxPrice",
             "width": 120
         },
@@ -291,7 +291,7 @@
             "width": 100
         },
         {
-            "title": "不含税单价（元/吨）",
+            "title": "不含税单价（元）",
             "dataIndex": "price",
             "width": 130
         },
@@ -322,6 +322,12 @@
         }
     ],
     "editCargoDetails": [
+        {
+            "title": "单价",
+            "dataIndex": "price",
+            "type": "string",
+            "hidden": true
+        },
         {
             "title": "合同编号",
             "dataIndex": "materialContractNumber",

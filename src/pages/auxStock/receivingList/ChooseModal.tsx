@@ -14,8 +14,6 @@ interface ChooseModalProps {
 export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({
         ...item,
-        price: item.unTaxPrice,
-        id: item.materialContractDetailId,
         key: `${item.id}-${Math.random()}-${new Date().getTime()}`
     })))
     const [selectList, setSelectList] = useState<any[]>([])
@@ -32,8 +30,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                 { supplierId: id, ...params })
             setSelectList(result?.map((item: any) => ({
                 ...item,
-                num: item.surplusNum,
-                id: item.materialContractDetailId
+                num: item.surplusNum
             })).filter((item: any) => item.num))
             resole(result)
         } catch (error) {
@@ -45,14 +42,11 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         setCurrentId("")
         setChooseList(initChooseList.map((item: any) => ({
             ...item,
-            price: item.unTaxPrice,
-            id: item.materialContractDetailId,
             key: `${item.id}-${Math.random()}-${new Date().getTime()}`
         })))
         setSelectList(data?.map((item: any) => ({
             ...item,
-            num: item.surplusNum,
-            id: item.id
+            num: item.surplusNum
         })).filter((item: any) => item.num))
     }
 
@@ -95,7 +89,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         const params = serarchForm.getFieldsValue()
         run(params)
     }
-
+    console.log(chooseList)
     return <Spin spinning={loading}>
         <Modal title="选定数量"
             visible={visible}
