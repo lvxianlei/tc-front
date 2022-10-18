@@ -372,11 +372,11 @@ export default forwardRef(function ({ id, type, }: EditProps, ref): JSX.Element 
                 return obj
             }
         ),...newMaterialList]
-        // 去重操作 无法添加相同物料名称的辅料
+        // 去重操作 提交的时候不能出现两个以及以上一样的 无法添加相同物料名称的辅料 comparisonPriceDetailId
         const  arrs:any[] = []
         list.forEach((item:any)=>{
             console.log(item)
-            let flag = arrs.every((el:any)=>el.materialCode !== item.materialCode)
+            let flag = arrs.every((el:any)=>el.comparisonPriceDetailId !== item.comparisonPriceDetailId)
             if(flag||arrs.length == 0){
                 arrs.push(item)
             }

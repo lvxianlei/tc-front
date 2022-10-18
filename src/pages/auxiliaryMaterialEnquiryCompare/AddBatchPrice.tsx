@@ -70,7 +70,6 @@ export default forwardRef(function ({ id, type, materialLists, comparisonPriceId
                     return ({
                         ...item,
                         comparisonPriceDetailId: item.comparisonPriceDetailId || item.id,
-                        purchaseListId: item.purchaseListId,
                         // comparisonPriceDetailId: item.id,
                         taxOffer: formData.taxOffer,
                         offer: calcObj.unTaxPrice(formData.taxOffer, materialData?.taxVal)
