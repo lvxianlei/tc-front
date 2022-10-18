@@ -305,7 +305,7 @@ export default function Index(): React.ReactNode {
     // 撤销
     const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/detail/revocation/${id}`,)
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/detail/revocation/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -375,6 +375,7 @@ export default function Index(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             materialName: record.materialName,//品名
             structureSpec: record.structureSpec,//规格
+            materialType: 2,
             size: 1000
         });
         setOutLibraryListdata(data.records);
@@ -395,7 +396,7 @@ export default function Index(): React.ReactNode {
     }
     //获取列表详情数据数据
     const getDetailData = async (id: any) => {
-        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`,{
+        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`, {
             materialType: 2
         });
         let supplierObj = {
