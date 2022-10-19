@@ -42,7 +42,7 @@ export default function ChooseApply(): JSX.Element {
                                     herf = res.path
                             }
                             if (res.appName === "MC") {
-                                herf = res.path + AuthUtil.getUserId()
+                                herf = res.path + AuthUtil.getUserId()+"&tenantid="+AuthUtil.getTenantId()
                             }
                             window.location.href = herf
                             return
