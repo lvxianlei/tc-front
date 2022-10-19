@@ -71,6 +71,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setSupplierId(result?.supplierId)
             setCargoData(result?.auxiliaryReceiveStockDetails.map((item: any) => ({
                 ...item,
+                uuId: item.id,
                 num: item.num ? item.num : 0
             })) || [])
             resole({
@@ -155,7 +156,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...baseFormData,
                 supplierId,
                 supplierName: baseFormData.supplierId.value,
-                auxiliaryReceiveStockDetails: editData,
+                auxiliaryReceiveStockDetails: editData.map((item: any) => ({
+                    ...item,
+                    id: item.uuId || null
+                })),
                 num: baseFormData.num,
                 unloadUsersName: baseFormData.unloadUsersName.value,
                 unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
