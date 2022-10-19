@@ -14,6 +14,7 @@
  import useRequest from '@ahooksjs/use-request';
  import RequestUtil from '../../../utils/RequestUtil';
 import WorkOrderTemplateNew from './WorkOrderTemplateNew';
+import { rowDetail } from 'ali-react-table/dist/pipeline/features';
  
 export interface EditRefProps {
     onSubmit: () => void
@@ -86,8 +87,16 @@ export interface EditRefProps {
              fixed: 'right' as FixedType,
              render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                  <Space size='small'>
-                     <Button type="link">详情</Button>
-                     <Button type="link">编辑</Button>
+                     <Button type="link" onClick={()=> {
+                        setType('detail');
+                        setVisible(true)
+                        setRowId(record?.id)
+                     }}>详情</Button>
+                     <Button type="link" onClick={()=> {
+                        setType('edit');
+                        setVisible(true)
+                        setRowId(record?.id)
+                     }}>编辑</Button>
                                         <Popconfirm
                                             title="确认删除?"
                                             onConfirm={() => {
@@ -111,6 +120,7 @@ export interface EditRefProps {
      const [type, setType] = useState<'new' | 'edit' | 'detail'>('new');
      const [visible, setVisible] = useState<boolean>(false);
      const ref = useRef<EditRefProps>();
+     const [rowId, setRowId] = useState<string>('false');
      const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
          const data: any = await RequestUtil.get(``);
          resole(data || []);
@@ -134,17 +144,20 @@ export interface EditRefProps {
             key='workOrderTemplateNew'
             visible={visible}
             width="80%"
+            footer={<Space>
+                {type === 'detail'?null : <Button type='primary' onClick={handleOk} ghost>完成</Button>}
+                <Button onClick={() => { setVisible(false); ref.current?.resetFields(); }}>关闭</Button>
+            </Space>}
             title={type === 'new' ? '新建工单模板' : type === 'edit' ? "编辑工单模板" : "详情"}
-            onOk={handleOk}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
-            <WorkOrderTemplateNew type={type} ref={ref} />
+            <WorkOrderTemplateNew rowId={rowId} type={type} ref={ref} />
         </Modal>
      <Page
          path="/tower-science/loftingList"
          columns={columns}
          filterValue={filterValue}
          extraOperation={
-            <Button type='primary' onClick={() => setVisible(true)} ghost>新建模板</Button>
+            <Button type='primary' onClick={() => {setVisible(true); setType('new')}} ghost>新建模板</Button>
          }
          searchFormItems={[
              {

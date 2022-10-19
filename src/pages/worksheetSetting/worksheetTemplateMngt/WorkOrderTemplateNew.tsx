@@ -17,9 +17,10 @@ import { StoreValue } from "antd/lib/form/interface";
  
  interface modalProps {
     type: 'new' | 'edit' | 'detail';
+    rowId: string;
  }
 
- export default forwardRef(function WorkOrderTemplateNew({ type }: modalProps, ref) {
+ export default forwardRef(function WorkOrderTemplateNew({ type,rowId }: modalProps, ref) {
     const [form] = Form.useForm();
     const [customForm] = Form.useForm();
     const [upstreamNodes, setUpstreamNode] = useState<any[]>([]);
@@ -43,7 +44,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请选择模式'
                 }]}>
-                    <Select size="small" placeholder={'请选择模式'}>
+                    <Select size="small" disabled={type === 'detail'} placeholder={'请选择模式'}>
                         <Select.Option value={'FS'} key={0}>FS</Select.Option>
                         <Select.Option value={'FF'} key={1}>FF</Select.Option>
                         <Select.Option value={'SF'} key={2}>SF</Select.Option>
@@ -65,7 +66,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     {index === 0 ? 
                     <Input size="small" defaultValue="任务开始" disabled/>
             :
-                    <Select size="small" placeholder={'请选择上游节点'}>
+                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择上游节点'}>
                         {
                         upstreamNodes?.map((res: any, ind: number) => {
                             return <Select.Option disabled={ind >= index} value={res?.hierarchy} key={ind}>{res?.hierarchy}</Select.Option>
@@ -86,7 +87,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请选择时效类型'
                 }]}>
-                    <Select size="small" placeholder={'请选择时效类型'}>
+                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择时效类型'}>
                         <Select.Option value={'小时'} key={0}>小时</Select.Option>
                         <Select.Option value={'工作日'} key={1}>工作日</Select.Option>
                         <Select.Option value={'自然日'} key={2}>自然日</Select.Option>
@@ -105,7 +106,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请输入时效要求'
                 }]}>
-                    <InputNumber size="small" placeholder="请输入时效要求" style={{width: '100%'}} min={1} max={99} precision={0}/>
+                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入时效要求" style={{width: '100%'}} min={1} max={99} precision={0}/>
                 </Form.Item>
             )
         },
@@ -119,7 +120,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请输入处理名称'
                 }]}>
-                    <Input size="small" placeholder="请输入处理名称" maxLength={30}/>
+                    <Input disabled={type === 'detail'} size="small" placeholder="请输入处理名称" maxLength={30}/>
                 </Form.Item>
             )
         },
@@ -133,7 +134,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请选择岗位'
                 }]}>
-                    <Input size="small" placeholder="请选择岗位" maxLength={30}/>
+                    <Input disabled={type === 'detail'} size="small" placeholder="请选择岗位" maxLength={30}/>
                 </Form.Item>
             )
         },
@@ -147,7 +148,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请选择颜色'
                 }]}>
-                    <SelectColor defaultColor={record?.color} onChange={(color: string) => {
+                    <SelectColor  disabled={type === 'detail'} defaultColor={record?.color} onChange={(color: string) => {
                         console.log(color)
                     }}/>
                 </Form.Item>
@@ -179,7 +180,7 @@ import { StoreValue } from "antd/lib/form/interface";
                         }
                     }
                 }]}>
-                    <InputNumber size="small" placeholder="请输入排序" max={999} min={1} precision={0}/>
+                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入排序" max={999} min={1} precision={0}/>
                 </Form.Item>
             )
         },
@@ -206,7 +207,7 @@ import { StoreValue } from "antd/lib/form/interface";
                         }
                     }
                 }]}>
-                    <Input size="small" placeholder="请输入字段名称" maxLength={20}/>
+                    <Input disabled={type === 'detail'} size="small" placeholder="请输入字段名称" maxLength={20}/>
                 </Form.Item>
             )
         },
@@ -219,7 +220,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请选择是否必填'
                 }]}>
-                    <Select size="small" placeholder={'请选择是否必填'}>
+                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择是否必填'}>
                         <Select.Option value={'0'} key={0}>是</Select.Option>
                         <Select.Option value={'1'} key={1}>否</Select.Option>
                     </Select>
@@ -235,7 +236,7 @@ import { StoreValue } from "antd/lib/form/interface";
                     required: true,
                     message: '请选择所属节点'
                 }]}>
-                    <Select size="small" placeholder={'请选择所属节点'}>
+                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择所属节点'}>
                     {
                         upstreamNodes?.map((res: any, ind: number) => {
                             return <Select.Option value={res?.hierarchy} key={ind}>{res?.hierarchy}</Select.Option>
@@ -252,7 +253,7 @@ import { StoreValue } from "antd/lib/form/interface";
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Space size='small'>
-                    <Button type="link"  onClick={() => delRow(index)}>删除</Button>
+                    <Button type="link" disabled={type === 'detail'} onClick={() => delRow(index)}>删除</Button>
                 </Space>
             )
         }
@@ -260,9 +261,10 @@ import { StoreValue } from "antd/lib/form/interface";
  
      const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
          const result: any = await RequestUtil.get<any>(`/tower-science/performance/config`);
-         form.setFieldsValue({ ...result });
+         form.setFieldsValue({ ...result, node: [{color:'#FFFFFF'}] });
+         setDealList([{id: 111,color:'#FFFFFF'}])
          resole(result);
-     }), {manual: type === 'new'})
+     }), {manual: type === 'new',refreshDeps:[rowId,type]})
  
      const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         nodeNumberBlur('1');
@@ -270,7 +272,7 @@ import { StoreValue } from "antd/lib/form/interface";
             nodeNumber: 1
         })
         resole(true);
-    }), {})
+    }),  {manual: type !== 'new',refreshDeps:[rowId,type]})
      
      const { data: templateTypes } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(``);
@@ -361,7 +363,7 @@ setUpstreamNode(nodeList.reverse())
                          message: `请输入工单模板名称`
                      }
                  ]}>
-                    <Input maxLength={20}/>
+                    <Input disabled={type === 'detail'} maxLength={20}/>
              </Form.Item>
                 
                 </Col>
@@ -375,7 +377,8 @@ setUpstreamNode(nodeList.reverse())
                          message: `请选择模板类型`
                      }
                  ]}>
-                    <TreeSelect
+                    <TreeSelect 
+                    disabled={type === 'detail'}
                  style={{ width: '400px' }}
                  dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                  treeData={templateTypes}
@@ -389,7 +392,7 @@ setUpstreamNode(nodeList.reverse())
          <Form.Item
                  name={'userPenaltyRatio'}
                  label={'备注'}>
-                    <Input.TextArea maxLength={800}/>
+                    <Input.TextArea disabled={type === 'detail'} maxLength={800}/>
              </Form.Item>
                 
                 </Col>
@@ -406,7 +409,7 @@ setUpstreamNode(nodeList.reverse())
                          message: `请输入节点数量`
                      }
                  ]}>
-                    <InputNumber min={1} max={99} onBlur={(e) => nodeNumberBlur(e.target.value)} precision={0}/>
+                    <InputNumber disabled={type === 'detail'} min={1} max={99} onBlur={(e) => nodeNumberBlur(e.target.value)} precision={0}/>
              </Form.Item>
                     </Row>
                  </Col>
@@ -424,7 +427,7 @@ setUpstreamNode(nodeList.reverse())
             </Row>
             
          </Form>
-             <DetailTitle title="自定义项" operation={[<Button type="primary" onClick={() => {
+             <DetailTitle title="自定义项" operation={[<Button type="primary" disabled={type === 'detail'} onClick={() => {
 setCustomList([
     ...customList,
     {

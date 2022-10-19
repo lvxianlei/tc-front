@@ -12,6 +12,7 @@ import styles from './SelectColor.module.less'
 interface SelectColorProps {
   defaultColor?: string;
   onChange: (color: string) => void;
+  disabled: boolean;
 }
 
 export interface IColorObj {
@@ -23,7 +24,8 @@ export interface IColorObj {
 
 export default function SelectColor({
   defaultColor = '#FF8C00',
-  onChange
+  onChange,
+  disabled= false
 }: SelectColorProps): JSX.Element {
   const [color, setColor] = useState(defaultColor);
   const [subtitleColor, setSubtitleColor] = useState(defaultColor);
@@ -47,7 +49,14 @@ export default function SelectColor({
   };
 
   return <>
-    <Popover
+  {
+    disabled ? 
+    <Space>
+    <div className={styles.color_set_show} style={{ backgroundColor: color }}></div>
+    <div>{subtitleColor}</div>
+  </Space>
+    :
+       <Popover
       content={<ChromePicker
         color={color}
         onChangeComplete={(color: any) => colorChange(color)}
@@ -59,6 +68,8 @@ export default function SelectColor({
         <div>{subtitleColor}</div>
       </Space>
     </Popover>
+  }
+ 
 
   </>
 }
