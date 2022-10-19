@@ -45,12 +45,12 @@
         "appName": "QMS"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_prod",
         "title": "生产中心",
         "description": "生产过程管理相关功能",
         "iconFont": "icon-shengchanzhongxin3", // iconfont
         "color": "#FF8C00", // iconfont的颜色
-        "path": "http://120.48.143.153:9020?saasid=",
+        "path": "http://120.48.143.153:9020/othersystem?saasid=",
         "corsWeb": true,
         "appName": "MC"
     },
