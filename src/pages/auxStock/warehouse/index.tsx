@@ -16,12 +16,20 @@ export default function RawMaterialStock(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({})
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const [warehouseList, askPrice, classify] = await Promise.all<any>([
+            const [warehouseList, classify] = await Promise.all<any>([
                 RequestUtil.get(`/tower-storage/warehouse/tree?type=0`),
-                RequestUtil.get(`/tower-storage/materialStock/auxiliary/count`),
                 RequestUtil.get(`/tower-system/materialCategory/category`)
             ])
-            resole({ warehouseList, num: askPrice, classify })
+            resole({ warehouseList, classify })
+        } catch (error) {
+            reject(error)
+        }
+    }))
+
+    const { run, data: count } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const askPrice = await RequestUtil.get(`/tower-storage/materialStock/auxiliary/count`, { ...filterValue })
+            resole({ num: askPrice })
         } catch (error) {
             reject(error)
         }
@@ -89,7 +97,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button type="primary" ghost>导入</Button>
             </Upload>
             <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
-            <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span></div>
+            <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{count?.num}</span></div>
             <div style={{ width: "2000px" }}>
                 <Radio.Group defaultValue={tabs} onChange={handleRadioChange}>
                     <Radio.Button value={1}>库存列表</Radio.Button>
@@ -105,6 +113,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 value.lengthMax = value.length.lengthMax
             }
             setFilterValue(value)
+            run(value)
             return value
         }}
         searchFormItems={[
@@ -126,16 +135,9 @@ export default function RawMaterialStock(): React.ReactNode {
                 children: <Input width={100} maxLength={200} placeholder="请输入品名" />
             },
             {
-                name: 'classifyId',
-                label: '分类',
-                children: <Select style={{ width: "100px" }} defaultValue={""}>
-                    <Select.Option value='' key={'aa'}>全部</Select.Option>
-                    {
-                        data?.classify?.map((item: { materialCategoryId: string, materialCategoryName: string }) => <Select.Option
-                            value={item.materialCategoryId}
-                            key={item.materialCategoryId}>{item.materialCategoryName}</Select.Option>)
-                    }
-                </Select>
+                name: 'structureSpec',
+                label: '规格',
+                children: <Input width={100} maxLength={200} placeholder="请输入规格" />
             },
             {
                 name: 'fuzzyQuery',
