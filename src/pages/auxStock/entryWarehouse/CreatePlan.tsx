@@ -80,37 +80,39 @@ export default function CreatePlan(props: any): JSX.Element {
     }), { ready: props.visible && !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
+        const materials = [...materialList]
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        setMaterialList([...materialList, ...newMaterialList])
-        setPopDataList(materialList.map((item: any, index: number) => {
+        setMaterialList([...materials, ...newMaterialList])
+        setPopDataList([...materials, newMaterialList.map((item: any, index: number) => {
             return ({
                 ...item,
                 totalTaxPrice: item.totalTaxAmount,
                 totalPrice: item.totalAmount,
                 key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
-        }))
+        })])
         setVisible(false)
     }
 
     const handleAddPlanModalOk = () => {
+        const materials = [...materialPlanList]
         const newMaterialList = materialPlanList.filter((item: any) => !materialPlanList.find((maItem: any) => item.id === maItem.id))
-        setMaterialPlanList([...materialPlanList, ...newMaterialList])
-        setPopDataList(materialPlanList.map((item: any, index: number) => {
+        setMaterialPlanList([...materials, ...newMaterialList])
+        setPopDataList([...materials, ...newMaterialList.map((item: any, index: number) => {
             return ({
                 ...item,
                 receiveTime: item.createTime,
                 num: item.planPurchaseNum || 1,
                 purchasePlanId: item.id,
                 taxPrice: 1,
-                tax: 0,
+                tax: 13,
                 totalTaxPrice: totalTaxPrice(1, item.planPurchaseNum || 1),
-                price: unTaxPrice(1, 0),
-                totalPrice: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 0),
+                price: unTaxPrice(1, 13),
+                totalPrice: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 13),
                 purchasePlanNumber: item.purchasePlanNumber,
                 key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
-        }))
+        })])
         setPlanVisible(false)
     }
 
