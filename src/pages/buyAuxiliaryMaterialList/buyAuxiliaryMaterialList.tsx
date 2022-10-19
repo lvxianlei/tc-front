@@ -87,7 +87,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         choose.forEach(el=>{
             let flag = arr.every(item=>item.id != el.id)
             if(flag){
-                arr.push(el)
+                arr.push({
+                    ...el,
+                    planPurchaseNum:el.planPurchaseNum || 1
+                })
             }
         })
         // console.log(arr)
