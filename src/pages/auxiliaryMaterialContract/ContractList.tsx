@@ -128,7 +128,7 @@ export default function ContractMngt(): JSX.Element {
                             }}>详情</Button>
                             <Popconfirm
                                 title="确定删除此合同吗？"
-                                disabled={records.contractStatus !== 1}
+                                disabled={records.isReceiptRef !== 0}
                                 onConfirm={async () => {
                                     await deleteRun(records?.id)
                                     message.success("删除成功...")
