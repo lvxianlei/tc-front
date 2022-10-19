@@ -728,6 +728,8 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                         return ({...item, enum: transportMethodEnum, disabled: !isDisabled})
                     case "settlementMode":
                         return ({...item, enum: settlementModeEnum, disabled: !isDisabled})
+                    case "operatorName":
+                        return ({...item, enum: settlementModeEnum, disabled: true})
                     default:
                         return {...item, disabled: !isDisabled}
                 }
@@ -765,6 +767,12 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                             disabled: !isDisabled
                         })
                     }
+                    if (item.dataIndex === "transportPrice") {
+                        return ({
+                            ...item,
+                            disabled: true
+                        })
+                    }
                     return {...item, disabled: !isDisabled}
                 })
             }
@@ -793,6 +801,12 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                             ...item,
                             enum: stevedoreCompanyList,
                             disabled: !isDisabled
+                        })
+                    }
+                    if (item.dataIndex === "unloadPrice") {
+                        return ({
+                            ...item,
+                            disabled: true
                         })
                     }
                     return {...item, disabled: !isDisabled}
