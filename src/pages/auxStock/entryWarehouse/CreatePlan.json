@@ -236,7 +236,7 @@
         "columns": [
             {
                 "title": "汇总采购计划编号",
-                "dataIndex": "purchasePlanNumber"
+                "dataIndex": "collectPurchasePlanNumber"
             },
             {
                 "title": "类型",
