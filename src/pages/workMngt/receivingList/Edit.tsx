@@ -268,7 +268,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 const postData = {
                     ...item,
                     ...cargoData[index],
-
                     totalTaxPrice,
                     totalUnTaxPrice,
                     balanceTotalWeight,
