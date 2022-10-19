@@ -45,7 +45,7 @@
         "appName": "QMS"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_prod",
         "title": "生产中心",
         "description": "生产过程管理相关功能",
         "iconFont": "icon-shengchanzhongxin3", // iconfont
