@@ -240,6 +240,7 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
             // 运输费
             if (result?.transportBear?.transportBear == 1) {
                 setNewfreightInformation(oneFreight.slice(0))
+                //  todo 清空运输费金额
             } else {
                 // 需方
                 setNewfreightInformation(
@@ -426,11 +427,15 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                 tax: baseInfo.taxRate,
                 transportBear: {
                     ...freightInfo,
+                    transportTaxPrice:freightInfo.transportBear == 2 ? freightInfo.transportTaxPrice:0,
+                    transportPrice:freightInfo.transportBear == 2 ? freightInfo.transportPrice:0,
                     transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
                     transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
                 },
                 unloadBear: {
                     ...stevedoringInfo,
+                    unloadTaxPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadTaxPrice:0,
+                    unloadPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadPrice:0,
                     unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
                     unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
                 },

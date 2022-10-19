@@ -29,9 +29,14 @@ export default function MargePurchasePlan() {
             delete value.createTime
             value.startCreateTime = formatDate[0] + ' 00:00:00';
             value.endCreateTime = formatDate[1] + ' 23:59:59';
+        }else{
+            value.startCreateTime = null
+            value.endCreateTime = null
         }
         if (value.purchaserName) {
             value.purchaserId = value.purchaserName.value
+        }else{
+            value.purchaserId = null
         }
         setFilterValue({...filterValue,...value})
         return value
