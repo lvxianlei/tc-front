@@ -289,7 +289,7 @@ export default function Overview(): JSX.Element {
                         ...item,
                         width: 100,
                         render: (_value: any, records: any) => <div
-                            style={records?.inquiryQuotationOfferData?.minTaxOffer === records?.inquiryQuotationOfferData?.[item.dataIndex] ? {
+                            style={records?.inquiryQuotationOfferData?.minTaxOffer && (records?.inquiryQuotationOfferData?.minTaxOffer === records?.inquiryQuotationOfferData?.[item.dataIndex]) ? {
                                 background: "green",
                                 color: "#fff",
                                 fontWeight: 600,
