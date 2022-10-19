@@ -72,7 +72,7 @@ export const weight = ({ length = 0, width = 0, weightAlgorithm, proportion = 1 
     if ([1, "1"].includes(weightAlgorithm)) {
         return (Number(proportion) * cLenght * 0.001).toFixed(3)
     }
-    if ([2, "2"].includes(weightAlgorithm)) {
+    if ([1, "1"].includes(weightAlgorithm)) {
         return (Number(proportion) * cLenght * cWidth * 0.001).toFixed(3)
     }
     return (Number(proportion) * 0.001).toFixed(3)
@@ -105,6 +105,7 @@ export const totalTransportTaxPrice = (price: any = 0, weight: any = 0) => {
 export const totalTransportPrice = (totalTransportTaxPrice: any = 0, taxMode: any = 0) => {
     return (totalTransportTaxPrice / (1 + taxMode / 100)).toFixed(2)
 }
+
 
 /**
 * 含税装卸费
