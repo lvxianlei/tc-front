@@ -77,11 +77,15 @@ export default function PurchasePlan() {
     ]
 
     const onFilterSubmit = (value: any) => {
-        if (value.createdTime) {
-            const formatDate = value.createdTime.map((item: any) => item.format("YYYY-MM-DD"))
-            delete value.createdTime
-            value.createdTime = formatDate[0] + ' 00:00:00';
-            value.createdTime = formatDate[1] + ' 23:59:59';
+        console.log(value)
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            delete value.createTime
+            value.startCreateTime = formatDate[0] + ' 00:00:00';
+            value.endCreateTime = formatDate[1] + ' 23:59:59';
+        }
+        if (value.applyName) {
+            value.purchaserId = value.applyName.value
         }
         setFilterValue({...filterValue,...value})
         return value
