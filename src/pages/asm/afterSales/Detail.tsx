@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Spin, Form, Button, Modal, message, Row, Radio, Popconfirm, Steps, Space, Input, InputNumber, Select, DatePicker, Upload } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailTitle, BaseInfo, DetailContent, CommonTable, Attachment, Page } from '../../common'
-import { baseInfoData, afterSaleInfo,  pageInfo, pageInfoCount } from './detail.json'
+import { baseInfoData,  pageInfo, pageInfoCount } from './detail.json'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import Dispatch from './Dispatch'
@@ -32,6 +32,7 @@ export default function InformationDetail(): React.ReactNode {
     const attachCostRef = useRef<AttachmentRef>()
     const [detailData, setDetailData] = useState<any>({});
     const [detailCostData, setDetailCostData] = useState<any>({});
+    const [detailQuestionData, setDetailQuestionData] = useState<any>({});
     const [detailAssessData, setDetailAssessData] = useState<any[]>([]);
     const [assessDataSource, setAssessDataSource] = useState<any[]>([]);
     const [pieceCode, setPieceCode] = useState<any[]>([]);
@@ -50,7 +51,9 @@ export default function InformationDetail(): React.ReactNode {
             const detailData: any = await RequestUtil.get(`/tower-as/workOrder/${params.id}`);
             setDetailData(detailData)
             const typeList: any = await RequestUtil.get(`/tower-as/issue/list`);
-            setTypeName(typeList)
+            setTypeName(typeList.filter((item:any)=>{
+                return item?.status!==2
+            }))
             const data: any = await RequestUtil.get(`/tower-as/cost`)
             setCostType(data)
             resole(data)
@@ -66,7 +69,45 @@ export default function InformationDetail(): React.ReactNode {
             <div style={{ width: '100%', height: '300px' }}></div>
         </Spin>
     }
-
+    const afterSaleInfo = [
+        {
+            title: "售后人员",
+            dataIndex: "afterSaleUser",
+            width:50
+        },
+        {
+            title: "售后开始日期",
+            width: 120,
+            dataIndex: "startTime"
+        },
+        {
+            title: "售后开始打卡",
+            width: 120,
+            dataIndex: "goodsType",
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>{record?.startTime? '已打卡':'-'}</>
+            ) 
+        },
+        {
+            title: "售后完成日期",
+            dataIndex: "endTime",
+            width : 120,
+        },
+        {
+            title: "售后完成打卡",
+            width: 120,
+            dataIndex: "goodsExplain",
+            render:  (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>{record?.endTime? '已打卡':'-'}</>
+            ) 
+        },
+        {
+            title: "售后周期",
+            width: 120,
+            dataIndex: "cycle",
+            type:"number"
+        }
+    ]
     const tableColumns = [
         {
             key: 'issueName',
@@ -224,7 +265,14 @@ export default function InformationDetail(): React.ReactNode {
             {
                 key: 'type',
                 title: '考核方式',
-                dataIndex: 'type'
+                dataIndex: 'type',
+                type: "select",
+                enum: [
+                    {
+                        "value": 1,
+                        "label": "扣款"
+                    }
+                ]
             },
             {
                 key: 'money',
@@ -322,7 +370,7 @@ export default function InformationDetail(): React.ReactNode {
                                     history.go(0)
                                 }
                             })
-                        }}>编辑</Button>
+                        }}  disabled={detailData?.status===5}>编辑</Button>
                         <Popconfirm
                             title="确认删除?"
                             onConfirm={ async () => {
@@ -332,8 +380,9 @@ export default function InformationDetail(): React.ReactNode {
                             } }
                             okText="确认"
                             cancelText="取消"
+                            disabled={detailData?.status===5}
                         >
-                            <Button type="link">删除</Button>
+                            <Button type="link"  disabled={detailData?.status===5}>删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -475,7 +524,9 @@ export default function InformationDetail(): React.ReactNode {
                     ]}>
                         <Select style={{width:'100%'}} onChange={async (value:any)=>{
                             const result: any = await RequestUtil.get(`/tower-as/issue/issue/${value.split(',')[0]}`);
-                            setName(result)
+                            setName(result.filter((item:any)=>{
+                                return item?.status!==2
+                            }))
                         }}>
                             { typeName && typeName.map((item:any)=>{
                                     return <Select.Option key={item.id} value={item.id+','+item.typeName}>{item.typeName}</Select.Option>
@@ -567,13 +618,13 @@ export default function InformationDetail(): React.ReactNode {
                     </Form.Item>
                     <Attachment 
                         ref={attachRef} 
-                        dataSource={detailData.attachInfoVos} 
+                        dataSource={detailQuestionData.attachInfoVos} 
                         edit 
                         accept="image/png,image/jpeg,mp4" 
                         multiple 
                         maxCount={5}
                         onDoneChange={(dataInfo: FileProps[]) => {
-                            setDetailData({attachInfoVos: [...dataInfo]})
+                            setDetailQuestionData({attachInfoVos: [...dataInfo]})
                         }}
                     />
                 </Form>
@@ -709,7 +760,7 @@ export default function InformationDetail(): React.ReactNode {
                     await RequestUtil.post(`/tower-as/workOrder/dispatch?workOrderId=${params?.id}&userId=${selectRows[0]?.userId}`)
                     message.success("派工成功！")
                     history.go(0)
-                }} selectedKey={detailData?.workOrderUserVO}/>]:[]}/>
+                }} selectedKey={detailData?.workOrderUserVO} disabled={detailData?.workOrderUserVO!==null?true:false}/>]:[]}/>
             <CommonTable columns={[...afterSaleInfo as any,
                 {
                     title: "操作",
@@ -753,7 +804,7 @@ export default function InformationDetail(): React.ReactNode {
                     columns={[...pageInfo as any,
                         {
                             title: "操作",
-                            dataIndex: "opration",
+                            dataIndex: "operation",
                             fixed: "right",
                             width: 150,
                             render: (_:any,record: any) => <Space>
@@ -762,7 +813,7 @@ export default function InformationDetail(): React.ReactNode {
                                     setDetailAssessData([{...record}])
                                     setAssessTitle('添加');
                                     setAssessVisible(true); 
-                                } }>添加考核</Button>
+                                } }  disabled={detailData?.status===5}>添加考核</Button>
                                 <Button type="link" onClick={ async () => {
                                     const result: any = await RequestUtil.get(`/tower-as/issue/issue/${record?.issueTypeId}`);
                                     const value:any[] = await RequestUtil.get(`/tower-science/productStructure/listByProductForSales?current=1&pageSize=10000&productId=${record?.productId}`)
@@ -774,10 +825,10 @@ export default function InformationDetail(): React.ReactNode {
                                         issue: record?.issueId&&record?.issueName?record?.issueId+','+record?.issueName:"",
                                         pieceCode: record?.pieceCode?record?.pieceCode.split(','):''
                                     });
-                                   
+                                    setDetailQuestionData({attachInfoVos: record?.attachVos})
                                     setQuestionTitle('编辑');
                                     setVisible(true); 
-                                } }>编辑</Button>
+                                } }  disabled={detailData?.status===5}>编辑</Button>
                                 <Popconfirm
                                     title="确认删除?"
                                     onConfirm={ async () => {
@@ -788,8 +839,9 @@ export default function InformationDetail(): React.ReactNode {
                                     } }
                                     okText="确认"
                                     cancelText="取消"
+                                    disabled={detailData?.status===5}
                                 >
-                                    <Button type="link">删除</Button>
+                                    <Button type="link"  disabled={detailData?.status===5}>删除</Button>
                                 </Popconfirm>
                                 </Space>
                         }
@@ -830,22 +882,23 @@ export default function InformationDetail(): React.ReactNode {
                             ...pageInfoCount as any,
                             {
                                 title: "操作",
-                                dataIndex: "opration",
+                                dataIndex: "operation",
                                 fixed: "right",
                                 width: 100,
                                 render: (_:any,record: any) => <Space>
                                     <Button type="link" onClick={ async () => {
                                         setTitle('编辑');
                                         setIsAdd(true); 
-                                        const value = await RequestUtil.get(`/tower-as/workCost/${record?.id}`)
-                                        setDetailData(value)
+                                        const value:any = await RequestUtil.get(`/tower-as/workCost/${record?.id}`)
+                                        // setDetailData(value)
+                                        setDetailCostData({ ...value, attachInfoVos: value?.attachVos})
                                         formRef.setFieldsValue({ 
                                             ...record,
                                             date: record?.date?moment(record?.date):'',
                                             cost: record?.type&&record?.typeName?record?.type+','+record?.typeName:'',
                                             workOrderNumber: record?.workOrderNumber
                                         });
-                                    } }>编辑</Button>
+                                    } } disabled={detailData?.status===5}>编辑</Button>
                                     <Popconfirm
                                         title="删除后不可恢复，确认删除?"
                                         onConfirm={async () => {
@@ -855,8 +908,9 @@ export default function InformationDetail(): React.ReactNode {
                                         }}
                                         okText="确认"
                                         cancelText="取消"
+                                        disabled={detailData?.status===5}
                                     >
-                                        <Button type="link" >删除</Button>
+                                        <Button type="link"  disabled={detailData?.status===5}>删除</Button>
                                     </Popconfirm>
                                 </Space>
                             }

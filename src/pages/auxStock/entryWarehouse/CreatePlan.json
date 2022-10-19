@@ -1,0 +1,279 @@
+{
+    "baseInfoColumn": [
+        {
+            "title": "入库类型",
+            "dataIndex": "warehousingType",
+            "width": 100,
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择入库类型"
+                }
+            ],
+            "enum": [
+                {
+                    "value": "1",
+                    "label": "采购入库"
+                },
+                {
+                    "value": "2",
+                    "label": "盘点入库"
+                }
+            ]
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierId",
+            "type": "popTable",
+            "path": "/tower-supply/supplier",
+            "width": 1011,
+            "value": "supplierName",
+            "dependencies": true,
+            "readOnly": true,
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "编号/名称/联系人/联系人电话"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssurance",
+                    "type": "select",
+                    "placeholder": "请选择"
+                }
+            ],
+            "columns": [
+                {
+                    "title": "供应商编号",
+                    "dataIndex": "supplierCode"
+                },
+                {
+                    "title": "供应商名称",
+                    "dataIndex": "supplierName"
+                },
+                {
+                    "title": "联系人",
+                    "dataIndex": "contactMan"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "contactManTel"
+                },
+                {
+                    "title": "质量保证体系",
+                    "dataIndex": "qualityAssuranceName"
+                },
+                {
+                    "title": "供货产品",
+                    "dataIndex": "supplyProductsName"
+                }
+            ],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择供应商..."
+                }
+            ]
+        },
+        {
+            "title": "到货仓库",
+            "dataIndex": "warehouseId",
+            "width": 100,
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择到货仓库"
+                }
+            ]
+        }
+    ],
+    "material": [
+        {
+            "title": "收货日期",
+            "dataIndex": "receiveTime"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "含税单价（元）",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice"
+        },
+        {
+            "title": "税率",
+            "dataIndex": "tax"
+        },
+        {
+            "title": "不含税单价（元）",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalPrice"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorId"
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/auxiliaryReceiveStock/details",
+        "width": 1011,
+        "selectType": "checkbox",
+        "rowKey": "receiveStockDetailId",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "查询",
+                "type": "string",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "收货批次/品名/规格"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货单号",
+                "dataIndex": "receiveNumber"
+            },
+            {
+                "title": "收货日期",
+                "dataIndex": "receiveTime"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "含税单价（元/吨）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxAmount"
+            },
+            {
+                "title": "税率",
+                "dataIndex": "tax"
+            },
+            {
+                "title": "不含税单价（元/吨）",
+                "dataIndex": "price"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalAmount"
+            },
+            {
+                "title": "不含税运费（元）",
+                "dataIndex": "totalTransportPrice"
+            },
+            {
+                "title": "不含税装卸费（元）",
+                "dataIndex": "totalUnloadPrice"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirArea"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "location"
+            }
+        ]
+    },
+    "addPlanMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-supply/auxiliaryMaterialPurchasePlan/list",
+        "width": 1011,
+        "selectType": "checkbox",
+        "rowKey": "id",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "查询",
+                "type": "string",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "汇总采购计划编号/申请人"
+            }
+        ],
+        "columns": [
+            {
+                "title": "汇总采购计划编号",
+                "dataIndex": "collectPurchasePlanNumber"
+            },
+            {
+                "title": "类型",
+                "dataIndex": "materialCategoryName"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "planPurchaseNum"
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "申请人",
+                "dataIndex": "createUserName"
+            },
+            {
+                "title": "申请部门",
+                "dataIndex": "deptName"
+            },
+            {
+                "title": "创建日期",
+                "dataIndex": "createTime"
+            },
+            {
+                "title": "备注",
+                "dataIndex": "remark"
+            }
+        ]
+    }
+}

@@ -53,9 +53,10 @@ export default function Lofting(): React.ReactNode {
         {
             key: 'segmentName',
             title: '段名',
-            width: 150,
+            width: 120,
             editable: true,
             dataIndex: 'segmentName',
+            fixed: 'left' as FixedType,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "segmentName"]} initialValue={_}>
             //         <Input size="small" onChange={() => rowChange(index)} disabled />
@@ -67,6 +68,7 @@ export default function Lofting(): React.ReactNode {
             title: '构件编号',
             dataIndex: 'code',
             width: 120,
+            fixed: 'left' as FixedType,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "code"]} initialValue={_}>
@@ -171,6 +173,7 @@ export default function Lofting(): React.ReactNode {
             title: '各孔径孔数',
             width: 80,
             dataIndex: 'apertureNumber',
+            sorter: (a: any, b: any) => a.apertureNumber.substring(0,1) - b.apertureNumber.substring(0,1),
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "apertureNumber"]} initialValue={_} rules={[{
@@ -198,6 +201,7 @@ export default function Lofting(): React.ReactNode {
             title: '电焊',
             width: 80,
             dataIndex: 'electricWelding',
+            sorter: (a: any, b: any) => a.electricWelding - b.electricWelding,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "electricWelding"]} initialValue={_} rules={[{
@@ -213,6 +217,7 @@ export default function Lofting(): React.ReactNode {
             title: '坡口',
             width: 80,
             dataIndex: 'groove',
+            sorter: (a: any, b: any) => a.groove - b.groove,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "groove"]} initialValue={_}>
@@ -225,6 +230,7 @@ export default function Lofting(): React.ReactNode {
             title: '切角',
             width: 80,
             dataIndex: 'chamfer',
+            sorter: (a: any, b: any) => a.chamfer - b.chamfer,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "chamfer"]} initialValue={_} rules={[{
@@ -240,6 +246,7 @@ export default function Lofting(): React.ReactNode {
             title: '开合角',
             width: 80,
             dataIndex: 'openCloseAngle',
+            sorter: (a: any, b: any) => a.openCloseAngle - b.openCloseAngle,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "openCloseAngle"]} initialValue={_} rules={[{
@@ -255,6 +262,7 @@ export default function Lofting(): React.ReactNode {
             title: '火曲',
             width: 80,
             dataIndex: 'bend',
+            sorter: (a: any, b: any) => a.bend - b.bend,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "bend"]} initialValue={_} rules={[{
@@ -270,6 +278,7 @@ export default function Lofting(): React.ReactNode {
             title: '铲背',
             width: 80,
             dataIndex: 'shovelBack',
+            sorter: (a: any, b: any) => a.shovelBack - b.shovelBack,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "shovelBack"]} initialValue={_} rules={[{
@@ -285,6 +294,7 @@ export default function Lofting(): React.ReactNode {
             title: '清根',
             width: 80,
             dataIndex: 'rootClear',
+            sorter: (a: any, b: any) => a.rootClear - b.rootClear,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "rootClear"]} initialValue={_} rules={[{
@@ -300,6 +310,7 @@ export default function Lofting(): React.ReactNode {
             title: '打扁',
             width: 80,
             dataIndex: 'squash',
+            sorter: (a: any, b: any) => a.squash - b.squash,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "squash"]} initialValue={_} rules={[{
@@ -315,6 +326,7 @@ export default function Lofting(): React.ReactNode {
             title: '特殊件号',
             width: 80,
             dataIndex: 'specialCode',
+            sorter: (a: any, b: any) => a.specialCode - b.specialCode,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "specialCode"]} initialValue={_} rules={[{
@@ -330,6 +342,7 @@ export default function Lofting(): React.ReactNode {
             title: '压制',
             width: 80,
             dataIndex: 'suppress',
+            sorter: (a: any, b: any) => a.suppress - b.suppress,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "suppress"]} initialValue={_} rules={[{
@@ -345,6 +358,7 @@ export default function Lofting(): React.ReactNode {
             title: '坡口米数（米）',
             width: 120,
             dataIndex: 'grooveMeters',
+            sorter: (a: any, b: any) => a.grooveMeters - b.grooveMeters,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "grooveMeters"]} initialValue={_}>
@@ -357,6 +371,7 @@ export default function Lofting(): React.ReactNode {
             title: '拼数',
             width: 80,
             dataIndex: 'spellNumber',
+            sorter: (a: any, b: any) => a.spellNumber - b.spellNumber,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "spellNumber"]} initialValue={_}>
@@ -369,6 +384,7 @@ export default function Lofting(): React.ReactNode {
             title: '开槽形式',
             width: 80,
             dataIndex: 'slottedForm',
+            sorter: (a: any, b: any) => a.slottedForm - b.slottedForm,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "slottedForm"]} initialValue={_} rules={[{
@@ -384,6 +400,7 @@ export default function Lofting(): React.ReactNode {
             title: '割相贯线',
             width: 80,
             dataIndex: 'intersectingLine',
+            sorter: (a: any, b: any) => a.intersectingLine - b.intersectingLine,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "intersectingLine"]} initialValue={_} rules={[{
@@ -399,6 +416,7 @@ export default function Lofting(): React.ReactNode {
             title: '零件类型',
             width: 80,
             dataIndex: 'type',
+            sorter: (a: any, b: any) => Number(a.typeDictId) - Number(b.typeDictId),
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "type"]} initialValue={_}>
@@ -423,6 +441,7 @@ export default function Lofting(): React.ReactNode {
             title: '含弧',
             width: 80,
             dataIndex: 'arcContaining',
+            sorter: (a: any, b: any) => a.arcContaining - b.arcContaining,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "arcContaining"]} initialValue={_} rules={[{
@@ -438,6 +457,7 @@ export default function Lofting(): React.ReactNode {
             title: '钻孔',
             width: 80,
             dataIndex: 'perforate',
+            sorter: (a: any, b: any) => a.perforate - b.perforate,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "perforate"]} initialValue={_} rules={[{
@@ -453,6 +473,7 @@ export default function Lofting(): React.ReactNode {
             title: '钻孔孔径孔数',
             width: 120,
             dataIndex: 'perforateNumber',
+            sorter: (a: any, b: any) => a.perforateNumber - b.perforateNumber,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
@@ -465,6 +486,7 @@ export default function Lofting(): React.ReactNode {
             title: '扩孔',
             width: 80,
             dataIndex: 'withReaming',
+            sorter: (a: any, b: any) => a.withReaming - b.withReaming,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "withReaming"]} initialValue={_} rules={[{
@@ -480,6 +502,7 @@ export default function Lofting(): React.ReactNode {
             title: '扩孔孔径孔数',
             width: 120,
             dataIndex: 'reamingNumber',
+            sorter: (a: any, b: any) => a.reamingNumber - b.reamingNumber,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "reamingNumber"]} initialValue={_} rules={[{
@@ -495,6 +518,7 @@ export default function Lofting(): React.ReactNode {
             title: '气割孔（0/1）',
             width: 120,
             dataIndex: 'gasCutting',
+            sorter: (a: any, b: any) => a.gasCutting - b.gasCutting,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "gasCutting"]} initialValue={_} rules={[{
@@ -510,6 +534,7 @@ export default function Lofting(): React.ReactNode {
             title: '气割孔孔径孔数',
             width: 120,
             dataIndex: 'gasCuttingNumber',
+            sorter: (a: any, b: any) => a.gasCuttingNumber - b.gasCuttingNumber,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "gasCuttingNumber"]} initialValue={_} rules={[{
@@ -569,6 +594,7 @@ export default function Lofting(): React.ReactNode {
             title: '边数',
             width: 80,
             dataIndex: 'sides',
+            sorter: (a: any, b: any) => a.sides - b.sides,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "sides"]} initialValue={_ === -1 ? undefined : _}>
@@ -581,6 +607,7 @@ export default function Lofting(): React.ReactNode {
             title: '周长',
             width: 80,
             dataIndex: 'perimeter',
+            sorter: (a: any, b: any) => a.perimeter - b.perimeter,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "perimeter"]} initialValue={_ === -1 ? undefined : _}>
@@ -593,6 +620,7 @@ export default function Lofting(): React.ReactNode {
             title: '表面积（m2）',
             width: 120,
             dataIndex: 'surfaceArea',
+            sorter: (a: any, b: any) => a.surfaceArea - b.surfaceArea,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "surfaceArea"]} initialValue={_ === -1 ? undefined : _}>
@@ -605,6 +633,7 @@ export default function Lofting(): React.ReactNode {
             title: '焊接边（mm）',
             width: 120,
             dataIndex: 'weldingEdge',
+            sorter: (a: any, b: any) => a.weldingEdge - b.weldingEdge,
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "weldingEdge"]} initialValue={_ === -1 ? undefined : _}>
@@ -784,7 +813,7 @@ export default function Lofting(): React.ReactNode {
     const [addVisible, setAddVisible] = useState<boolean>(false);
     const [type, setType] = useState<'new' | 'edit'>('new');
     const [rowData, setRowData] = useState<any>([])
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
 
     const { data: segmentNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {

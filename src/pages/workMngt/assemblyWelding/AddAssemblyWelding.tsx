@@ -31,7 +31,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const [leftSelectedRows, setLeftSelectedRows] = useState<any[]>([]);
     const [rightSelectedRowKeys, setRightSelectedRowKeys] = useState<string[]>([]);
     const [rightSelectedRows, setRightSelectedRows] = useState<any[]>([]);
-    const type = window.location.pathname.split('/')[6];
+    const type = window.location.pathname.split('/')[7];
 
     const { loading, data } = useRequest<ISegmentNameList[]>(() => new Promise(async (resole, reject) => {
         const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);
@@ -825,6 +825,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         haveIndex
                         columns={componentColumns}
                         dataSource={componentList}
+                        style={{ height: 600, overflow: 'auto' }}
                         pagination={false}
                         code={1}
                         rowSelection={{
@@ -843,6 +844,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         rowKey="structureId"
                         dataSource={[...(weldingDetailedStructureList || [])]}
                         pagination={false}
+                        style={{ height: 600, overflow: 'auto' }}
                         rowSelection={{
                             selectedRowKeys: rightSelectedRowKeys,
                             onChange: (selectedRowKeys: string[], selectRows: any[]) => {

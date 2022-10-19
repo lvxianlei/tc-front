@@ -116,7 +116,7 @@ export default () => {
                 ...columns as any,
                 {
                     title: "操作",
-                    dataIndex: "opration",
+                    dataIndex: "operation",
                     fixed: "right",
                     render: (_:any,record: any) => <Space>
                         <Link
@@ -157,12 +157,12 @@ export default () => {
                     children: <Input placeholder="请输入工单编号/订单编号/计划号/工程名进行查询" style={{ width: 150 }} />
                 },
                 {
-                    name: "afterSaleUserId",
+                    name: "afterSaleUser",
                     label: '售后人员',
-                    children: <Select placeholder="请选择"  style={{ width: "150px" }}>
+                    children: <Select placeholder="请选择"  style={{ width: "150px" }} showSearch>
                         {/* <Select.Option value='' key="">全部</Select.Option> */}
                         {cyclePlanType && cyclePlanType.map(({ userId, name }, index) => {
-                            return <Select.Option key={index} value={userId}>
+                            return <Select.Option key={index} value={name}>
                                 {name}
                             </Select.Option>
                         })}

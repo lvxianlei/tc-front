@@ -1,0 +1,123 @@
+{
+    "columns": [
+        {
+            "key": "trialAssembleName",
+            "title": "单据类型",
+            "dataIndex": "trialAssembleName",
+            "width": 100
+        },
+        {
+            "key": "statusName",
+            "title": "审批状态",
+            "dataIndex": "statusName",
+            "width": 100
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTime",
+            "width": 100
+        },
+        {
+            "key": "trialNumber",
+            "title": "单号",
+            "dataIndex": "trialNumber",
+            "width": 150
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "loftingUserName",
+            "title": "放样人",
+            "dataIndex": "loftingUserName",
+            "width": 100
+        },
+        {
+            "key": "description",
+            "title": "说明",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ],
+    "applyColumns": [
+        {
+            "key": "trialAssembleName",
+            "title": "申请类型",
+            "dataIndex": "trialAssembleName"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "key": "segmentName",
+            "title": "段落",
+            "dataIndex": "segmentName"
+        },
+        {
+            "key": "loftingUserName",
+            "title": "放样人",
+            "dataIndex": "loftingUserName"
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "key": "description",
+            "title": "申请原因",
+            "dataIndex": "description"
+        }
+    ]
+}

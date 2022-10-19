@@ -699,143 +699,154 @@ export default function PackingListNew(): React.ReactNode {
                     <Button type="ghost" htmlType="reset">重置</Button>
                 </Space>
             </Form>
-            <p className={styles.titleContent}>
-                <span className={styles.title}>待选区</span>
-                <span className={styles.description}>未包装数量：
-                    <span className={styles.content}>{showParts ? stayDistrict?.length : dataShowParts(stayDistrict).length}</span>
-                </span>
-                <span className={styles.description}>已选择：件数：
-                    <span className={styles.content}>{dataShowParts(selectedRow).length}</span>
-                </span>
-                <span className={styles.description}>重量：
-                    <span className={styles.content}>{selectWeight}kg</span>
-                </span>
-                <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isMainPart === 1).length}</span>
-                </span>
-                <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
-                    <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
-                </p>
-                <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
-            </p>
-            <CommonAliTable
-                haveIndex
-                rowKey='businessId'
-                style={{ overflow: "auto", maxHeight: 400 }}
-                columns={[
-                    ...chooseColumns.map((item: any) => {
-                        if (item.dataIndex === 'code') {
-                            if (!showParts) {
-                                return ({
-                                    ...item,
-                                    sorter: (a: any, b: any) => a.code.replace(/[^0-9]/ig, '') - b.code.replace(/[^0-9]/ig, ''),
-                                    render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
-                                })
-                            } else {
-                                return ({
-                                    ...item,
-                                    render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
-                                })
-                            }
+            <Row gutter={12}>
+                <Col span={12}>
+                    <Row className={styles.titleContent} justify="space-between">
+                        <Col className={styles.title}>待选区</Col>
+                        <Col>未包装数量：
+                            <span className={styles.content}>{showParts ? stayDistrict?.length : dataShowParts(stayDistrict).length}</span>
+                        </Col>
+                        <Col>已选择：件数：
+                            <span className={styles.content}>{dataShowParts(selectedRow).length}</span>
+                        </Col>
+                        <Col>重量：
+                            <span className={styles.content}>{selectWeight}kg</span>
+                        </Col>
+                        <Col>电焊件：
+                            <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isMainPart === 1).length}</span>
+                        </Col>
+                        <Col>
+                            <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
+                        </Col>
+                        <Col>
+                            <Button type="primary" onClick={addTopack} ghost>添加</Button>
+                        </Col>
 
-                        }
-                        if (item.dataIndex === 'segmentName' && !showParts) {
-                            return ({
-                                ...item,
-                                sorter: (a: any, b: any) => a.segmentName - b.segmentName
-                            })
-                        }
-                        if (item.dataIndex === 'totalWeight' && !showParts) {
-                            return ({
-                                ...item,
-                                sorter: (a: any, b: any) => a.totalWeight - b.totalWeight
-                            })
-                        }
-                        if (item.dataIndex === 'length' && !showParts) {
-                            return ({
-                                ...item,
-                                sorter: (a: any, b: any) => a.length - b.length
-                            })
-                        }
-                        if (item.dataIndex === 'structureSpec' && !showParts) {
-                            return ({
-                                ...item,
-                                sorter: (a: any, b: any) => (a.structureSpec.split('*')[0].replace(/[^0-9]/ig, '') - b.structureSpec.split('*')[0].replace(/[^0-9]/ig, ''))
-                            })
-                        }
-                        if (item.dataIndex === 'structureSpec' && !showParts) {
-                            return ({
-                                ...item,
-                                sorter: (a: any, b: any) => a.structureSpec.length - b.structureSpec.length
-                            })
-                        }
-                        return item
-                    }),
-                    {
-                        key: 'operation',
-                        title: '操作',
-                        dataIndex: 'operation',
-                        fixed: 'right',
-                        width: 100,
-                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Button type="link" disabled={record.isChild} onClick={() => packaging(record, index)}>添加</Button>
-                        )
-                    }
-                ]}
-                pagination={false}
-                dataSource={[...stayDistrict]}
-                rowSelection={{
-                    selectedRowKeys: selectedRowKeys,
-                    onChange: onSelectChange,
-                    getCheckboxProps: (record: Record<string, any>) => !!record.isChild,
-                }}
-            />
-            <p className={styles.titleContent}>
-                <span className={styles.title}>包装区</span>
-                <span className={styles.description}>包重量（kg）：
-                    <span className={styles.content}>{packageWeight}</span>
-                </span>
-                <span className={styles.description}> 包件数：
-                    <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
-                </span>
-                <span className={styles.description}>电焊件：
-                    <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span>
-                </span>
-                <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
-            </p>
-            <CommonAliTable
-                haveIndex
-                columns={[
-                    ...packingColumns.map((item: any) => {
-                        if (item.dataIndex === 'pieceCode') {
-                            return ({
-                                ...item,
-                                render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
-                            })
-                        }
-                        return item
-                    }),
-                    {
-                        key: 'operation',
-                        title: '操作',
-                        dataIndex: 'operation',
-                        fixed: 'right',
-                        width: 100,
-                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                            <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum || 1)); setMaxNum(Number(record.structureCount) / Number(record.singleNum || 1)); }}>移除</Button>
-                        )
-                    }
-                ] as any}
-                pagination={false}
-                dataSource={packagingData}
-                style={{ overflow: "auto", maxHeight: 400 }}
-                rowKey="businessId"
-                rowSelection={{
-                    selectedRowKeys: removeRowKeys,
-                    onChange: onRemoveSelectChange,
-                    getCheckboxProps: (record: Record<string, any>) => !!record.isChild,
-                }}
-            />
+                    </Row>
+                    <CommonAliTable
+                        haveIndex
+                        rowKey='businessId'
+                        style={{ overflow: "auto", maxHeight: 400 }}
+                        columns={[
+                            ...chooseColumns.map((item: any) => {
+                                if (item.dataIndex === 'code') {
+                                    if (!showParts) {
+                                        return ({
+                                            ...item,
+                                            sorter: (a: any, b: any) => a.code.replace(/[^0-9]/ig, '') - b.code.replace(/[^0-9]/ig, ''),
+                                            render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                        })
+                                    } else {
+                                        return ({
+                                            ...item,
+                                            render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                        })
+                                    }
+
+                                }
+                                if (item.dataIndex === 'segmentName' && !showParts) {
+                                    return ({
+                                        ...item,
+                                        sorter: (a: any, b: any) => a.segmentName - b.segmentName
+                                    })
+                                }
+                                if (item.dataIndex === 'totalWeight' && !showParts) {
+                                    return ({
+                                        ...item,
+                                        sorter: (a: any, b: any) => a.totalWeight - b.totalWeight
+                                    })
+                                }
+                                if (item.dataIndex === 'length' && !showParts) {
+                                    return ({
+                                        ...item,
+                                        sorter: (a: any, b: any) => a.length - b.length
+                                    })
+                                }
+                                if (item.dataIndex === 'structureSpec' && !showParts) {
+                                    return ({
+                                        ...item,
+                                        sorter: (a: any, b: any) => (a.structureSpec.split('*')[0].replace(/[^0-9]/ig, '') - b.structureSpec.split('*')[0].replace(/[^0-9]/ig, ''))
+                                    })
+                                }
+                                if (item.dataIndex === 'structureSpec' && !showParts) {
+                                    return ({
+                                        ...item,
+                                        sorter: (a: any, b: any) => a.structureSpec.length - b.structureSpec.length
+                                    })
+                                }
+                                return item
+                            }),
+                            {
+                                key: 'operation',
+                                title: '操作',
+                                dataIndex: 'operation',
+                                fixed: 'right',
+                                width: 100,
+                                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                    <Button type="link" disabled={record.isChild} onClick={() => packaging(record, index)}>添加</Button>
+                                )
+                            }
+                        ]}
+                        pagination={false}
+                        dataSource={[...stayDistrict]}
+                        rowSelection={{
+                            selectedRowKeys: selectedRowKeys,
+                            onChange: onSelectChange,
+                            getCheckboxProps: (record: Record<string, any>) => !!record.isChild,
+                        }}
+                    />
+                </Col>
+                <Col span={12}>
+                    <Row className={styles.titleContent} justify="space-between">
+                        <Col span={4} className={styles.title}>包装区</Col>
+                        <Col span={4}>包重量（kg）：
+                            <span className={styles.content}>{packageWeight}</span>
+                        </Col>
+                        <Col span={4}> 包件数：
+                            <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
+                        </Col>
+                        <Col span={4}>电焊件：
+                            <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span>
+                        </Col>
+                        <Col span={8}>
+                            <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
+                        </Col>
+                    </Row>
+                    <CommonAliTable
+                        haveIndex
+                        columns={[
+                            ...packingColumns.map((item: any) => {
+                                if (item.dataIndex === 'pieceCode') {
+                                    return ({
+                                        ...item,
+                                        render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                                    })
+                                }
+                                return item
+                            }),
+                            {
+                                key: 'operation',
+                                title: '操作',
+                                dataIndex: 'operation',
+                                fixed: 'right',
+                                width: 100,
+                                render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                                    <Button type='link' disabled={record.isChild} onClick={() => { setRemoveVisible(true); setRemoveList(record); setRemoveIndex(index); setRemoveNum(Number(record.structureCount) / Number(record.singleNum || 1)); setMaxNum(Number(record.structureCount) / Number(record.singleNum || 1)); }}>移除</Button>
+                                )
+                            }
+                        ] as any}
+                        pagination={false}
+                        dataSource={packagingData}
+                        style={{ overflow: "auto", maxHeight: 400 }}
+                        rowKey="businessId"
+                        rowSelection={{
+                            selectedRowKeys: removeRowKeys,
+                            onChange: onRemoveSelectChange,
+                            getCheckboxProps: (record: Record<string, any>) => !!record.isChild,
+                        }}
+                    />
+                </Col>
+            </Row>
         </DetailContent>
     </>
 }

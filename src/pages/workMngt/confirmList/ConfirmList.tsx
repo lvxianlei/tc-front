@@ -8,9 +8,8 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './confirm.module.less';
-import AuthUtil from '../../../utils/AuthUtil';
 
-export default function ConfirmList(): React.ReactNode {
+export default function ConfirmList() {
     const [department, setDepartment] = useState<any | undefined>([]);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
@@ -72,8 +71,8 @@ export default function ConfirmList(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmMessage/${record.id}`) }} disabled={AuthUtil.getUserId() !== record.confirmId}>确认信息</Button>
-                    <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmDetail/${record.id}/${record.status}`) }} disabled={record.status < 3 || AuthUtil.getUserId() !== record.confirmId}>确认明细</Button>
+                    <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmMessage/${record.id}`) }}>确认信息</Button>
+                    <Button type='link' onClick={() => { history.push(`/workMngt/confirmList/confirmDetail/${record.id}/${record.status}/${record.confirmId}`) }}>确认明细</Button>
                 </Space>
             )
         }

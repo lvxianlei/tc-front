@@ -166,8 +166,8 @@ export default function Edit() {
   const handleBaseInfoChange = (fields: { [key: string]: any }, allFields: any) => {
     const { contractAmount, contractTotalWeight, customerCompany } = allFields
     if (fields.contractTotalWeight || fields.contractAmount) {
-      const contractPrice = (contractAmount / contractTotalWeight).toFixed(2)
-      form.setFieldsValue({ contractPrice })
+      const contractPrice = ((contractAmount || "0") / (contractTotalWeight || "1")).toFixed(2)
+      form.setFieldsValue({ contractPrice: contractPrice || "0.00" })
       if (fields.contractAmount) {
         const editFormData = editform.getFieldsValue()
         editform.setFieldsValue({
@@ -276,13 +276,14 @@ export default function Edit() {
         })]}
         form={form}
         dataSource={{
-          ...data,
           bidBatch: projectData?.bidBatch,
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-          country: projectData?.country || ""
+          country: projectData?.country || "",
+          ...data
         } || {
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-          country: projectData?.country || ""
+          country: projectData?.country || "",
+          ...data
         }}
         edit />
       <DetailTitle title="回款计划" />

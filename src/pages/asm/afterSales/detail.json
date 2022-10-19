@@ -82,40 +82,7 @@
         }
     ],
 
-    "afterSaleInfo": [
-        {
-            "title": "售后人员",
-            "dataIndex": "afterSaleUser",
-            "maxLength": 50
-        },
-        {
-            "title": "售后开始日期",
-            "width": 120,
-            "dataIndex": "startTime"
-        },
-        {
-            "title": "售后开始打卡",
-            "width": 120,
-            "dataIndex": "goodsType"
-        },
-        {
-            "title": "售后完成日期",
-            "dataIndex": "endTime",
-            "type": "date",
-            "width": 120,
-            "format": "YYYY-MM-DD"
-        },
-        {
-            "title": "售后完成打卡",
-            "width": 120,
-            "dataIndex": "goodsExplain"
-        },
-        {
-            "title": "售后周期",
-            "width": 120,
-            "dataIndex": "cycle"
-        }
-    ],
+    
     "pageInfo": [
         {
             "title": "问题分类",

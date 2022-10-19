@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig, Tooltip } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
 import { Link, useHistory } from 'react-router-dom';
@@ -123,7 +123,22 @@ export default function List(): React.ReactNode {
         <CommonTable
             haveIndex
             columns={[
-                ...columns,
+                ...columns.map(res => {
+                    if (res.dataIndex === 'description') {
+                        return {
+                            ...res,
+                            ellipsis: {
+                                showTitle: false,
+                            },
+                            render: (_: string) => (
+                                <Tooltip placement="topLeft" title={_}>
+                                    {_ ? _?.substring(0, 5) + '...' : '-'}
+                                </Tooltip>
+                            ),
+                        }
+                    }
+                    return res
+                }),
                 {
                     key: 'operation',
                     title: '操作',
@@ -143,10 +158,11 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link">发起</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>发起</Button>
                             </Popconfirm>
-                            <Popconfirm
+                            {/* <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
                                     RequestUtil.post(`/tower-science/supplyEntry/cancel/${record.id}`).then(res => {
@@ -156,9 +172,11 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={record.status === 2}
                             >
-                                <Button type="link">撤回</Button>
-                            </Popconfirm>
+                                <Button type="link" disabled={record.status === 2}>撤回</Button>
+                            </Popconfirm> */}
+                            {/* 张运刚说撤回功能青岛没有提供接口，并没有实现，先隐藏 */}
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
@@ -169,8 +187,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link">删除</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>删除</Button>
                             </Popconfirm>
                         </Space>
                     )
@@ -206,7 +225,7 @@ export default function List(): React.ReactNode {
                 <CommonTable
                     haveIndex
                     columns={partsColumns}
-                    dataSource={partsData||[]}
+                    dataSource={partsData || []}
                     pagination={false} />
 
             </Col>

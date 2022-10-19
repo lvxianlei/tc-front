@@ -78,11 +78,16 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                         })}
                         okText="删除"
                         cancelText="取消"
+                        disabled={params.weldingLeader.split(',').indexOf(userId) === -1}
                     >
-                        <Button type="link">删除</Button>
+                        <Button type="link" disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>删除</Button>
                     </Popconfirm>
-                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/edit/${record.id}`}>编辑</Link>
-                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/apply/${record.id}`}>套用</Link>
+                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/edit/${record.id}`}>
+                        <Button type='link' disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>编辑</Button>
+                    </Link>
+                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/apply/${record.id}`}>
+                        <Button type='link' disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>套用</Button>
+                    </Link>
                     {/* <Button type="link" onClick={() => { setVisible(true); setName('编辑'); setRecord(record) }}>编辑</Button> */}
                 </Space>
             )
@@ -154,12 +159,13 @@ export default function AssemblyWeldingListing(): React.ReactNode {
         pageSize: 10
     };
     const [detailData, setDetailData] = useState<IResponseData | undefined>(undefined);
-    const params = useParams<{ id: string, productCategoryId: string }>();
+    const params = useParams<{ id: string, productCategoryId: string, weldingLeader: string }>();
     const [paragraphData, setParagraphData] = useState([] as undefined | any);
     // const [record, setRecord] = useState<IBaseData>({});
     const [url, setUrl] = useState<string>('');
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const location = useLocation<{ status?: number }>();
+    const userId = AuthUtil.getUserInfo().user_id;
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
@@ -182,11 +188,12 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                     <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button>
                     <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板')} ghost>模板下载</Button>
-                    <Button type="primary" disabled={location.state?.status === 3} onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
+                    <Button type="primary" disabled={location.state?.status === 3 || params.weldingLeader.split(',').indexOf(userId) === -1} onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
+                        message.success('完成组焊清单成功！')
                         history.goBack();
                     })} >完成组焊清单</Button>
-                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/new`}>
-                        <Button type="primary" >添加组焊</Button>
+                    <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/new`}>
+                        <Button type="primary" disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>添加组焊</Button>
                     </Link>
                     <Upload
                         action={() => {
@@ -217,7 +224,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                             }
                         }}
                     >
-                        <Button type="primary" ghost>导入</Button>
+                        <Button type="primary" disabled={params.weldingLeader.split(',').indexOf(userId) === -1} ghost>导入</Button>
                     </Upload>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>

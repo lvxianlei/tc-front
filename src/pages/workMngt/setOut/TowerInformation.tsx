@@ -5,15 +5,13 @@
 */
 
 import React, { useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm, message, Row, Col, Form, TreeSelect, Modal, Input, InputNumber } from 'antd';
+import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import TowerLoftingAssign from './TowerLoftingAssign';
 import RequestUtil from '../../../utils/RequestUtil';
-import { TreeNode } from 'antd/lib/tree-select';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import { towerStructureOptions } from '../../../configuration/DictionaryOptions';
@@ -129,6 +127,28 @@ export default function TowerInformation(): React.ReactNode {
                                 </Select.Option>
                             )
                         }
+                    </Select>
+                </Form.Item>
+            )
+        },
+        {
+            key: 'patternName',
+            title: '段模式',
+            width: 80,
+            dataIndex: 'patternName',
+            editable: false
+        },
+        {
+            key: 'trialAssembleName',
+            title: '试装',
+            width: 50,
+            dataIndex: 'trialAssembleName',
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "trialAssemble"]} initialValue={record?.trialAssemble}>
+                    <Select style={{ width: '120px' }} placeholder="请选择试装" onChange={() => rowChange(index)} allowClear>
+                        <Select.Option value={1} key={1}>是</Select.Option>
+                        <Select.Option value={0} key={0}>否</Select.Option>
                     </Select>
                 </Form.Item>
             )
@@ -463,7 +483,7 @@ export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
     const [visible, setVisible] = useState(false);
     const [editForm] = useForm();
     const [loading1, setLoading1] = useState(false);
