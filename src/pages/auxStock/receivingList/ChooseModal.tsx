@@ -18,7 +18,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     })))
     const [selectList, setSelectList] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
-    const [currentId, setCurrentId] = useState<number | undefined>()
+    const [currentId, setCurrentId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"select" | "remove">("select")
     const [form] = Form.useForm();
     const [serarchForm] = Form.useForm();
@@ -28,18 +28,23 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-supply/materialAuxiliaryContract/details`,
                 { supplierId: id, ...params })
-            setSelectList(result?.map((item: any) => ({
+            setSelectList(result?.map((item: any, index: number) => ({
                 ...item,
-                num: item.surplusNum
+                num: item.surplusNum,
+                key: `${item.materialContractDetailId}-${index}`
             })).filter((item: any) => item.num))
-            resole(result)
+            resole(result?.map((item: any, index: number) => ({
+                ...item,
+                num: item.surplusNum,
+                key: `${item.materialContractDetailId}-${index}`
+            })).filter((item: any) => item.num))
         } catch (error) {
             reject(error)
         }
     }), { refreshDeps: [id] })
 
     const resetFields = () => {
-        setCurrentId(undefined)
+        setCurrentId("")
         setChooseList(initChooseList.map((item: any) => ({
             ...item,
             key: `${item.id}-${Math.random()}-${new Date().getTime()}`
@@ -50,31 +55,31 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         })).filter((item: any) => item.num))
     }
 
-    const handleRemove = async (id: any) => {
+    const handleRemove = async (id: string) => {
         const formData = await form.validateFields()
-        const currentData = chooseList.find((_item: any, index: number) => index === id)
+        const currentData = chooseList.find((item: any) => item.key === id)
         if ((currentData.num - formData.num) === 0) {
-            setChooseList(chooseList.filter((item: any, index: number) => index !== id))
+            setChooseList(chooseList.filter((item: any) => item.key !== id))
         } else if ((currentData.num - formData.num) < 0) {
             message.error("移除数量不能大于已选数量...")
             return
         } else {
-            setChooseList(chooseList.map((item: any, index: number) => index === id ? ({ ...item, num: item.num - formData.num }) : item))
+            setChooseList(chooseList.map((item: any) => item.key === id ? ({ ...item, num: item.num - formData.num }) : item))
         }
         setVisible(false)
         form.resetFields()
     }
 
-    const handleSelect = async (id: any) => {
+    const handleSelect = async (id: string) => {
         const formData = await form.validateFields()
-        const currentData = selectList.find((item: any, index: number) => index === id)
+        const currentData = selectList.find((item: any) => item.key === id)
         setChooseList([
             ...chooseList,
             {
                 ...currentData,
                 receiveDetailStatus: 0,
                 num: formData.num,
-                key: `${currentData.id}-${Math.random()}-${new Date().getTime()}`
+                key: `${currentData.key}-${Math.random()}-${new Date().getTime()}`
             }])
         setVisible(false)
         form.resetFields()
@@ -125,12 +130,12 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                 ...SelectedArea, {
                     title: "操作",
                     dataIndex: "opration",
-                    render: (_: any, records: any, index: number) => <Button
+                    render: (_: any, records: any) => <Button
                         size="small"
                         type="link"
                         disabled={records.receiveDetailStatus !== 0}
                         onClick={() => {
-                            setCurrentId(index)
+                            setCurrentId(records.key)
                             setOprationType("remove")
                             setVisible(true)
                         }}>移除</Button>
@@ -169,12 +174,12 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             {
                 title: "操作",
                 dataIndex: "opration",
-                render: (_: any, records: any, index: number) => <Button
+                render: (_: any, records: any) => <Button
                     type="link"
                     size="small"
                     disabled={records.receiveDetailStatus === 1}
                     onClick={() => {
-                        setCurrentId(index)
+                        setCurrentId(records.key)
                         setOprationType("select")
                         setVisible(true)
                     }}>选择</Button>
