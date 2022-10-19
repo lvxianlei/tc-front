@@ -253,7 +253,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
     const {run: getDatailList} = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
-                `/tower-supply/auxiliaryMaterialPurchasePlan/list/${data}`
+                `/tower-supply/auxiliaryMaterialPurchasePlan/list/${data}?size=1000`
             )
             resole(result)
         } catch (error) {
@@ -474,7 +474,11 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
         <DetailTitle title="询比价辅材明细 *" operation={[
             <Button type="primary" ghost key="choose" onClick={() => setChooseVisible(true)}>选择计划</Button>
         ]}/>
+
         <CommonTable
+            pagination={
+                false
+            }
             haveIndex
             style={{padding: "0"}}
             rowKey="key"

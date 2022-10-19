@@ -13,6 +13,7 @@ import {
 } from "./CreatePlan.json";
 import moment from 'moment';
 import "./CreatePlan.less";
+import { totalTaxPrice, totalUnTaxPrice, unTaxPrice } from '@utils/calcUtil';
 
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
@@ -34,12 +35,7 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+                warehouseItemId: item.locatorId
             })
         })])
         setVisible(false)
@@ -51,12 +47,10 @@ export default function CreatePlan(props: any): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * value / 1000).toFixed(3)
+                    // 含税金额
+                    totalTaxPrice: totalTaxPrice(item.taxPrice, item.num),
+                    // 不含税金额
+                    totalUnTaxPrice: totalTaxPrice(item.unTaxPrice, item.num)
                 })
             }
             return item
@@ -290,15 +284,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         value: ""
                     }}
                     onChange={(fields: any[]) => {
-                        setMaterialList(fields.map((item: any) => ({
-                            ...item,
-                            weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                            totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
-                        })) || [])
+                        setMaterialList(fields || [])
                     }}
                 />
             </Modal>

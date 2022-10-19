@@ -80,10 +80,10 @@ export default function CreatePlan(props: any): JSX.Element {
     }), { ready: props.visible && !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
-        const materials = [...materialList]
-        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        setMaterialList([...materials, ...newMaterialList])
-        setPopDataList([...materials, newMaterialList.map((item: any, index: number) => {
+        // const materials = [...materialList]
+        // const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        // setMaterialList([...materials, ...newMaterialList])
+        setPopDataList([...materialList.map((item: any, index: number) => {
             return ({
                 ...item,
                 totalTaxPrice: item.totalTaxAmount,

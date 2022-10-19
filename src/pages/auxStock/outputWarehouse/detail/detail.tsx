@@ -442,16 +442,15 @@ export default function Index(): React.ReactNode {
             return
         }
         if (ary.length == 0) return message.error('所有数据无出库数量')
-        const data: any = await RequestUtil.post(`/tower-storage/outStock/auxiliaryOutStock`, {
+        await RequestUtil.post(`/tower-storage/outStock/auxiliaryOutStock`, {
             id: OutboundId,
             materialStockList: ary
         });
-        if (data) {
-            message.success('操作成功')
-            setIsOutLibraryModal(false)
-            // 刷新列表
-            history.go(0);
-        }
+        message.success('操作成功')
+        setIsOutLibraryModal(false)
+        // 刷新列表
+        history.go(0);
+
     }
     // 缺料申请
     const shortage = async () => {
