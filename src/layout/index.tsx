@@ -229,7 +229,7 @@ export default function (): JSX.Element {
         AuthUtil.setTenants(tenants)
         AuthUtil.setRealName(result.real_name)
         AuthUtil.setAccout(result.account)
-        history.push(ctxConfig.home || '/')
+        window.location.assign(window.location.origin + ctxConfig.home || '/')
     }
 
     useEffect(() => {
