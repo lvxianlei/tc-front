@@ -105,6 +105,13 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
             message.warning("请先选择辅材...")
             return
         }
+        let flag:boolean = cargoData.every(item=>{
+            console.log(item.deptName,item.deptId)
+            return item.deptName && item.deptId
+        })
+        if(!flag){
+            return message.warn('请将数据补充完整')
+        }
         try {
             const baseFormData = await form.validateFields()
             console.log(baseFormData)

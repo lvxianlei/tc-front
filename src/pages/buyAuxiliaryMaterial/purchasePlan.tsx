@@ -145,7 +145,7 @@ export default function PurchasePlan() {
                                 history.go(0)
                             }
                         })
-                    }}>创建计划汇总</Button>
+                    }}>采购计划汇总</Button>
                 </>}
                 searchFormItems={[
                     {
