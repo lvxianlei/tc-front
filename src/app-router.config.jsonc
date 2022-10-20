@@ -871,21 +871,21 @@
       "path": "/auxStock/warehouse",
       "module": "./pages/auxStock/warehouse/index",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_list"
+      "authority": "tc_erp_sw_stock_auxiliary_material_list"
     },
     { // 库存管理-辅材入库
       "name": "辅材入库",
       "path": "/auxStock/entryWarehouse",
       "module": "./pages/auxStock/entryWarehouse/index",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_in_list"
+      "authority": "tc_erp_sw_stock_auxiliary_material_in_list"
     },
     { // 库存管理-辅材入库-详情
       "name": "辅材入库明细",
       "path": "/auxStock/entryWarehouse/detail/:id",
       "module": "./pages/auxStock/entryWarehouse/detail/detail",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_in_info"
+      "authority": "tc_erp_sw_stock_auxiliary_material_in_detailList"
     },
     { // 库存管理-辅材出库
       "name": "辅材出库",
@@ -899,7 +899,7 @@
       "path": "/auxStock/outputWarehouse/detail/:id",
       "module": "./pages/auxStock/outputWarehouse/detail/detail",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_out_list"
+      "authority": "tc_erp_sw_stock_material_out_info"
     },
     { // 库存管理-余料入库
       "name": "余料入库",
@@ -1179,21 +1179,21 @@
       "path": "/auxStock/receiving",
       "module": "./pages/auxStock/receivingList/index",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_receive_list"
+      "authority": "tc_erp_sw_stock_material_auxiliary_receive_list"
     },
     { // 工作管理-收获列表-详情
       "name": "收货列表明细",
       "path": "/auxStock/receiving/detail/:id",
       "module": "./pages/auxStock/receivingList/Overview",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_receive_info"
+      "authority": "tc_erp_sw_stock_material_auxiliary_receive_info"
     },
     { // 工作管理-收获列表-编辑
       "name": "收货列表编辑",
       "path": "/auxStock/receiving/edit/:id",
       "module": "./pages/auxStock/receivingList/Edit",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_receive_edit"
+      "authority": "tc_erp_sw_stock_material_auxiliary_receive_edit"
     },
     { // 库存管理-原材料盘点
       "name": "原材料盘点",
