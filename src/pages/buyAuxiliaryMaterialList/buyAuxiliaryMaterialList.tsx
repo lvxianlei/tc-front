@@ -101,7 +101,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         // 所有新添加的辅材，部门、数量 字段都要全部填充完毕后才能保存
         // 默认数量添加为一
         setCargoData(cargoData.map((item:any)=>({...item,planPurchaseNum:item.planPurchaseNum || 1})))
-        let flag:boolean = cargoData.every(item=>item.deptName)
+        console.log(cargoData)
+        let flag:boolean = cargoData.every(item=>{
+            console.log(item.deptName,item.deptId)
+            return item.deptName && item.deptId
+        })
         if(!flag){
             return message.warn('请将数据补充完整')
         }
