@@ -1,7 +1,7 @@
 /**
  * 创建出库单
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import { Modal, Form, Button, InputNumber, message, Spin } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -13,9 +13,9 @@ import {
 } from "./CreatePlan.json";
 import moment from 'moment';
 import "./CreatePlan.less";
-import { totalTaxPrice, totalUnTaxPrice, unTaxPrice } from '@utils/calcUtil';
+import { totalTaxPrice } from '@utils/calcUtil';
 
-export default function CreatePlan(props: any): JSX.Element {
+export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
@@ -48,9 +48,9 @@ export default function CreatePlan(props: any): JSX.Element {
                     ...item,
                     num: value,
                     // 含税金额
-                    totalTaxPrice: totalTaxPrice(item.taxPrice, item.num),
+                    totalTaxPrice: totalTaxPrice(item.taxPrice, value),
                     // 不含税金额
-                    totalUnTaxPrice: totalTaxPrice(item.unTaxPrice, item.num)
+                    totalUnTaxPrice: totalTaxPrice(item.unTaxPrice, value)
                 })
             }
             return item
@@ -78,7 +78,7 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }
 
-    const handleCreateClick = async () => {
+    const handleCreateClick = () => new Promise(async (resove, reject) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
             if (materialList.length < 1) {
@@ -96,15 +96,17 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写数量！");
                 return false;
             }
-            saveRun({
+            await saveRun({
                 outStockDetailDTOList: materialList,
                 ...baseInfo,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
+            resove(true)
         } catch (error) {
             console.log(error);
+            reject(false)
         }
-    }
+    })
 
     useEffect(() => {
         if (props.visible) {
@@ -126,8 +128,6 @@ export default function CreatePlan(props: any): JSX.Element {
                 materialType: 2,
                 id: props.id
             })
-            message.success("操作成功！");
-            props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
             reject(error)
@@ -172,122 +172,109 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }), { manual: true })
 
-    return (
-        <Modal
-            title={`${props.type === "create" ? '创建出库单' : "编辑出库单"}`}
-            visible={props.visible}
-            onCancel={() => {
-                setMaterialList([])
-                setPopDataList([])
-                props?.handleCreate()
-            }}
-            maskClosable={false}
-            width={1100}
-            footer={[
-                <Button key="back" onClick={() => {
-                    setMaterialList([])
-                    setPopDataList([])
-                    props?.handleCreate()
-                }}>
-                    取消
-                </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
-                    确定
-                </Button>
-            ]}
-        >
-            <Spin spinning={loading}>
-                <DetailTitle title="基本信息" />
-                <BaseInfo
-                    form={addCollectionForm}
-                    edit
-                    dataSource={data || {}}
-                    col={2}
-                    classStyle="baseInfo"
-                    columns={baseInfoColumn.map((item: any) => {
-                        if (item.dataIndex === "warehouseId") {
+    const resetFields = () => {
+        setMaterialList([])
+        setPopDataList([])
+    }
+
+    useImperativeHandle(ref, () => ({
+        onSubmit: handleCreateClick,
+        resetFields
+    }), [ref, handleCreateClick, resetFields])
+
+    return (<>
+        <Spin spinning={loading}>
+            <DetailTitle title="基本信息" />
+            <BaseInfo
+                form={addCollectionForm}
+                edit
+                dataSource={data || {}}
+                col={2}
+                classStyle="baseInfo"
+                columns={baseInfoColumn.map((item: any) => {
+                    if (item.dataIndex === "warehouseId") {
+                        return ({
+                            ...item,
+                            enum: batchingStrategy?.map((item: any) => ({
+                                value: item.id,
+                                label: item.name
+                            }))
+                        })
+                    }
+                    return item
+                })}
+                onChange={performanceBondChange}
+            />
+            <DetailTitle title="出库明细" />
+            <div className='btnWrapper'>
+                <Button
+                    type='primary'
+                    key="add"
+                    ghost
+                    style={{ marginRight: 8 }}
+                    disabled={!warehouseId}
+                    onClick={() => setVisible(true)}>选择</Button>
+            </div>
+            <CommonTable
+                style={{ padding: "0" }}
+                columns={[
+                    {
+                        key: 'index',
+                        title: '序号',
+                        dataIndex: 'index',
+                        fixed: "left",
+                        width: 50,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => {
+                            return (
+                                <span>
+                                    {index + 1}
+                                </span>
+                            )
+                        }
+                    },
+                    ...material.map((item: any) => {
+                        if (["num"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
-                                enum: batchingStrategy?.map((item: any) => ({
-                                    value: item.id,
-                                    label: item.name
-                                }))
+                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                             })
                         }
-                        return item
-                    })}
-                    onChange={performanceBondChange}
-                />
-                <DetailTitle title="出库明细" />
-                <div className='btnWrapper'>
-                    <Button
-                        type='primary'
-                        key="add"
-                        ghost
-                        style={{ marginRight: 8 }}
-                        disabled={!warehouseId}
-                        onClick={() => setVisible(true)}>选择</Button>
-                </div>
-                <CommonTable
-                    style={{ padding: "0" }}
-                    columns={[
-                        {
-                            key: 'index',
-                            title: '序号',
-                            dataIndex: 'index',
-                            fixed: "left",
-                            width: 50,
-                            render: (_a: any, _b: any, index: number): React.ReactNode => {
-                                return (
-                                    <span>
-                                        {index + 1}
-                                    </span>
-                                )
-                            }
-                        },
-                        ...material.map((item: any) => {
-                            if (["num"].includes(item.dataIndex)) {
-                                return ({
-                                    ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
-                                })
-                            }
-                            return item;
-                        }),
-                        {
-                            title: "操作",
-                            fixed: "right",
-                            dataIndex: "opration",
-                            render: (_: any, records: any) => <>
-                                {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
-                                <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
-                            </>
-                        }]}
-                    pagination={false}
-                    dataSource={popDataList} />
-            </Spin>
-            <Modal width={1100} title={`选择库存`} destroyOnClose
-                visible={visible}
-                onOk={handleAddModalOk}
-                onCancel={() => {
-                    setVisible(false);
+                        return item;
+                    }),
+                    {
+                        title: "操作",
+                        fixed: "right",
+                        dataIndex: "opration",
+                        render: (_: any, records: any) => <>
+                            {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
+                            <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
+                        </>
+                    }]}
+                pagination={false}
+                dataSource={popDataList} />
+        </Spin>
+        <Modal width={1100} title={`选择库存`} destroyOnClose
+            visible={visible}
+            onOk={handleAddModalOk}
+            onCancel={() => {
+                setVisible(false);
+            }}
+        >
+            <PopTableContent
+                data={{
+                    ...addMaterial as any,
+                    path: `${addMaterial.path}/${warehouseId}?materialType=2`
                 }}
-            >
-                <PopTableContent
-                    data={{
-                        ...addMaterial as any,
-                        path: `${addMaterial.path}/${warehouseId}?materialType=2`
-                    }}
-                    value={{
-                        id: "",
-                        records: popDataList,
-                        value: ""
-                    }}
-                    onChange={(fields: any[]) => {
-                        setMaterialList(fields || [])
-                    }}
-                />
-            </Modal>
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => {
+                    setMaterialList(fields || [])
+                }}
+            />
         </Modal>
+    </>
     )
-}
+})

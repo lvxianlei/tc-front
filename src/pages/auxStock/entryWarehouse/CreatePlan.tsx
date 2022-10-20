@@ -77,7 +77,7 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: props.visible && !!warehouseId, refreshDeps: [warehouseId] })
+    }), { manual: !warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
         // const materials = [...materialList]
@@ -98,7 +98,7 @@ export default function CreatePlan(props: any): JSX.Element {
         const materials = [...materialPlanList]
         const newMaterialList = materialPlanList.filter((item: any) => !materialPlanList.find((maItem: any) => item.id === maItem.id))
         setMaterialPlanList([...materials, ...newMaterialList])
-        setPopDataList([...materials, ...newMaterialList.map((item: any, index: number) => {
+        setPopDataList([...materials.map((item: any, index: number) => {
             return ({
                 ...item,
                 receiveTime: item.createTime,
@@ -251,6 +251,7 @@ export default function CreatePlan(props: any): JSX.Element {
             title={`${props.type === "edit" ? "编辑入库单" : '创建入库单'}`}
             visible={props.visible}
             onCancel={() => {
+                setWarehouseId(undefined)
                 props?.handleCreate();
             }}
             maskClosable={false}
@@ -374,7 +375,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                     render: (value: any, records: any, key: number) => {
                                         if (records?.purchasePlanId) {
                                             return <InputNumber
-                                                value={value || 0}
+                                                value={value || 13}
                                                 onChange={(value: number) => handleMaterailChange(value, key, "tax")}
                                             />
                                         }

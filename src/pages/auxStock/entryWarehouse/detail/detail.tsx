@@ -140,23 +140,31 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     <>
                         <Button type="primary" ghost onClick={() => handleWarehousingClick()} >批量入库</Button>
                         <Button type="ghost" onClick={() => history.go(-1)}>返回</Button>
-                        <div>已收货：数量合计：<span
-                            style={{
-                                marginRight: 12,
-                                color: "#FF8C00"
-                            }}>{statisticsData?.receiveWeight}</span>已收货：价税合计(元)合计：<span
+                        <div>已入库：数量合计：
+                            <span
                                 style={{
                                     marginRight: 12,
                                     color: "#FF8C00"
-                                }}>{statisticsData?.receivePrice}</span> 待收货：数量(吨)合计：<span
-                                    style={{
-                                        marginRight: 12,
-                                        color: "#FF8C00"
-                                    }}>{statisticsData?.waitWeight}</span>待收货：价税合计(元)合计：<span
-                                        style={{
-                                            marginRight: 12,
-                                            color: "#FF8C00"
-                                        }}>{statisticsData?.waitPrice}</span>
+                                }}>{statisticsData?.entryNum}</span>
+                            已入库：价税合计(元)合计：
+                            <span
+                                style={{
+                                    marginRight: 12,
+                                    color: "#FF8C00"
+                                }}
+                            >{statisticsData?.receivePrice}</span>
+                            待入库：数量(吨)合计：
+                            <span
+                                style={{
+                                    marginRight: 12,
+                                    color: "#FF8C00"
+                                }}>{statisticsData?.waitEntryNum}</span>
+                            待入库：价税合计(元)合计：
+                            <span
+                                style={{
+                                    marginRight: 12,
+                                    color: "#FF8C00"
+                                }}>{statisticsData?.waitPrice}</span>
                         </div>
                     </>
                 }
