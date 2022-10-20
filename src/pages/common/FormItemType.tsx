@@ -110,8 +110,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 setSelectRows(currentSelectRows)
             } else {
                 setSelect(currentSelect.filter(item => item !== recordItemKey))
-                setSelectRows(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
-                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
+                setSelectRows(currentSelectRows.filter((item: any) => typeof data.rowKey === "function" ? data.rowKey(item) : item[data.rowKey || "id"] !== recordItemKey))
+                onChange && onChange(currentSelectRows.filter((item: any) => typeof data.rowKey === "function" ? data.rowKey(item) : item[data.rowKey || "id"] !== recordItemKey))
             }
         } else {
             onChange && onChange(selectAllRows)
