@@ -53,6 +53,7 @@ export default function SearchTable({
     filterValue = {},
     tableProps,
     pagination,
+    paginationProps,
     pageSize = 10,
     modal = false,
     exportPath,
@@ -128,10 +129,16 @@ export default function SearchTable({
                 </Col>
             </Row>
         </Form>}
-        <Space style={{
-            marginBottom: 0,
-            paddingLeft: 12,
-        }} size={12} wrap>
+        <Space
+            style={{
+                width: "100%",
+                marginBottom: 0,
+                paddingLeft: 12,
+                overflow: "hidden"
+            }}
+            size={12}
+            wrap
+        >
             {
                 exportPath && exportPath && <Button type="primary" ghost onClick={() => {
                     setIsExport(true)
@@ -158,6 +165,7 @@ export default function SearchTable({
                     showTotal={(total: number) => `共${total}条记录`}
                     showSizeChanger
                     onChange={paginationChange}
+                    {...paginationProps}
                 />
             </footer>
         }

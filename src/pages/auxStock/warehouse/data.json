@@ -1,0 +1,136 @@
+{
+    "stock": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "width": 80
+        },
+        {
+            "title": "类型",
+            "dataIndex": "materialCategoryName",
+            "width": 60
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 50
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 70
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 50
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit",
+            "width": 50
+        },
+        {
+            "title": "含税单价(元/吨)",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额(元)",
+            "dataIndex": "totalTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税单价(元/吨)",
+            "dataIndex": "price",
+            "width": 120
+        },
+        {
+            "title": "不含税金额(元)",
+            "dataIndex": "totalPrice",
+            "width": 120
+        }
+    ],
+    "stockDetail": [
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "width": 140
+        },
+        {
+            "title": "所在仓库",
+            "dataIndex": "warehouseName",
+            "width": 80
+        },
+        {
+            "title": "库位",
+            "dataIndex": "reservoirName",
+            "width": 60
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorName",
+            "width": 60
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName",
+            "width": 100
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "width": 80
+        },
+        {
+            "title": "类型",
+            "dataIndex": "materialCategoryName",
+            "width": 60
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 50
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 70
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 50
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit",
+            "width": 50
+        },
+        {
+            "title": "含税单价(元/吨)",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额(元)",
+            "dataIndex": "totalTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税单价(元/吨)",
+            "dataIndex": "unTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税金额(元)",
+            "dataIndex": "totalUnTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "库龄(天)",
+            "dataIndex": "storageAge",
+            "width": 120
+        }
+    ]
+}

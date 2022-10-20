@@ -28,6 +28,8 @@ import { StringMap } from "i18next";
     readonly material?: string;
     readonly materialType?: string;
     readonly materialTypeName?: string;
+    readonly directMaterialType?: string;
+    readonly directMaterialTypeName?: string;
 }
 
 

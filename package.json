@@ -33,6 +33,7 @@
     "hard-source-webpack-plugin": "^0.13.1",
     "i18next": "^20.2.2",
     "i18next-http-backend": "^1.2.2",
+    "js-base64": "^3.7.2",
     "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
     "pascalcase": "^0.1.1",

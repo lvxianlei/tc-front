@@ -101,9 +101,9 @@ export default function SampleDrawList(): React.ReactNode {
                         record?.smallSampleStatus !== 1&& <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}}>小样图</Button>
                     }
                     {
-                        record?.smallSampleStatus !== 2&& <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}} disabled={AuthUtil.getUserId()!==record.loftingLeader}>小样图</Button>
+                        record?.smallSampleStatus !== 2&& <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}} disabled={AuthUtil.getUserInfo().user_id!==record.loftingLeader}>小样图</Button>
                     } */}
-                    {/* <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}/${record.smallSampleStatus}`)}}  disabled={record.smallSampleStatus!==3||AuthUtil.getUserId()!==record.loftingLeader}>校核</Button>
+                    {/* <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawCheck/${record.id}/${record.smallSampleStatus}`)}}  disabled={record.smallSampleStatus!==3||AuthUtil.getUserInfo().user_id!==record.loftingLeader}>校核</Button>
                     <Popconfirm
                         title="确认提交?"
                         onConfirm={ async () => {
@@ -115,9 +115,9 @@ export default function SampleDrawList(): React.ReactNode {
                         } }
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.smallSampleStatus!==4||AuthUtil.getUserId()!==record.loftingLeader}
+                        disabled={record.smallSampleStatus!==4||AuthUtil.getUserInfo().user_id!==record.loftingLeader}
                     >   
-                        <Button type="link" disabled={record.smallSampleStatus!==4||AuthUtil.getUserId()!==record.loftingLeader}>提交</Button>
+                        <Button type="link" disabled={record.smallSampleStatus!==4||AuthUtil.getUserInfo().user_id!==record.loftingLeader}>提交</Button>
                     </Popconfirm> */}
                 </Space>
             )

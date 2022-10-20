@@ -218,7 +218,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const [url, setUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const params = useParams<{ id: string, status: string, confirmId: string }>()
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
     const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         setTableDataSource(data?.drawProductDetailList.map((item: any, index: number) => {
