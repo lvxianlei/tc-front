@@ -73,6 +73,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             history.go(0);
         }
         setIsOpenId(false);
+        setEditId("")
+        setOperationType("create")
     }
 
     const handleRadioChange = (event: any) => {

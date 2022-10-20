@@ -3,8 +3,8 @@
  * 原文件地址当前目录：OriginalDocument.tsx
  * 时间：2022/01/11
  */
-import React, { useState } from 'react';
-import { Input, Select, DatePicker, Button, Radio, message, Popconfirm } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, Modal } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
@@ -67,7 +67,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         disabled={record.outStockStatus === 1}
                         onClick={
                             () => {
-                                setIsOpenId(true)
+                                setVisible(true)
                                 setEditId(record.id)
                                 setOperationType("edit")
                             }
@@ -87,10 +87,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     ]
     const history = useHistory()
     const [editId, setEditId] = useState<string>();
+    const [visible, setVisible] = useState<boolean>(false)
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [oprationType, setOperationType] = useState<"create" | "edit">("create")
     const [pagePath, setPagePath] = useState<string>("/tower-storage/outStock")
     const [columns, setColumns] = useState<any[]>(outStockList)
-    const [isOpenId, setIsOpenId] = useState<boolean>(false);
+    const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const [filterValue, setFilterValue] = useState<any>({
         selectName: "",
         status: "",
@@ -128,12 +130,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         return value
     }
 
-    const handleCreate = (options: any) => {
-        if (options?.code === 1) {
-            history.go(0);
-        }
-        setIsOpenId(false);
-    }
     const handleRadioChange = (event: any) => {
         if (event.target.value === "b") {
             setPagePath("/tower-storage/outStock/detail")
@@ -153,6 +149,22 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         history.go(0)
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        setConfirmLoading(true)
+        try {
+            const isClose = await editRef.current?.onSubmit()
+            if (isClose) {
+                await message.success("操作成功...");
+                setVisible(false)
+                setConfirmLoading(false)
+                history.go(0)
+            }
+        } catch (error) {
+            setConfirmLoading(false)
+            reject(false)
+        }
+    })
+
     return (
         <>
             <Page
@@ -164,7 +176,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 extraOperation={
                     <>
                         <Button type='primary' ghost onClick={() => {
-                            setIsOpenId(true)
+                            setVisible(true)
                             setOperationType("create")
                             setEditId("")
                         }}>创建</Button>
@@ -224,12 +236,23 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     }
                 ]}
             />
-            <CreatePlan
-                visible={isOpenId}
-                id={editId}
-                type={oprationType}
-                handleCreate={handleCreate}
-            />
+            <Modal
+                destroyOnClose
+                visible={visible}
+                width={1011}
+                confirmLoading={confirmLoading}
+                title={oprationType === "create" ? '创建出库单' : "编辑出库单"}
+                onOk={handleModalOk}
+                onCancel={() => {
+                    setVisible(false)
+                    editRef.current?.resetFields()
+                }}>
+                <CreatePlan
+                    ref={editRef}
+                    id={editId}
+                    type={oprationType}
+                />
+            </Modal>
         </>
     )
 }

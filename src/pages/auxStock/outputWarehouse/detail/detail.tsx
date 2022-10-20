@@ -52,29 +52,21 @@ export default function Index(): React.ReactNode {
     ];//详情-供应商列表表头
     const WarehousingColumns = [
         {
-            title: '材质名称',
+            title: '品名',
             dataIndex: 'materialName',
             width: 120,
         },
         {
-            title: '标准',
-            dataIndex: 'materialStandardName',
-            width: 120,
-        }, {
             title: '规格',
             dataIndex: 'structureSpec',
             width: 120,
         }, {
-            title: '材质',
-            dataIndex: 'structureTexture',
+            title: '数量',
+            dataIndex: 'num',
             width: 160,
         }, {
-            title: '长度',
-            dataIndex: 'length',
-            width: 120,
-        }, {
-            title: '宽度',
-            dataIndex: 'width',
+            title: '单位',
+            dataIndex: 'unit',
             width: 120,
         }, {
             title: '入库人',
@@ -85,20 +77,16 @@ export default function Index(): React.ReactNode {
             dataIndex: 'receiveStockTime',
             width: 160,
         }, {
-            title: '炉批号',
-            dataIndex: 'furnaceBatch',
-            width: 120,
-        }, {
             title: '仓库',
             dataIndex: 'warehouseName',
             width: 120,
         }, {
-            title: '库位',
-            dataIndex: 'locatorName',
-            width: 120,
-        }, {
             title: '库区',
             dataIndex: 'reservoirName',
+            width: 120,
+        }, {
+            title: '库位',
+            dataIndex: 'locatorName',
             width: 120,
         }, {
             title: '备注',
@@ -108,30 +96,36 @@ export default function Index(): React.ReactNode {
     ];//详情-入库表头
     const ExWarehousingColumns = [
         {
-            title: '领料编号',
-            dataIndex: 'pickingNumber',
-            width: 120,
+            title: '出库编号',
+            dataIndex: 'pickingNumber'
         },
         {
-            title: '任务编号',
-            dataIndex: 'taskNumber',
-            width: 120,
+            title: '品名',
+            dataIndex: 'materialName'
         }, {
-            title: '生产批次',
-            dataIndex: 'productionBatchNumber',
-            width: 120,
+            title: '规格',
+            dataIndex: 'structureSpec'
+        }, {
+            title: '数量',
+            dataIndex: 'num'
+        }, {
+            title: '单位',
+            dataIndex: 'unit'
         }, {
             title: '申请人',
             dataIndex: 'applyStaffName',
-            width: 160,
-        }, {
-            title: '出库人',
-            dataIndex: 'outStockUserName',
-            width: 120,
         }, {
             title: '出库时间',
             dataIndex: 'outStockTime',
-            width: 120,
+        }, {
+            title: '仓库',
+            dataIndex: 'warehouseName',
+        }, {
+            title: '库区',
+            dataIndex: 'reservoirName',
+        }, {
+            title: '库位',
+            dataIndex: 'locatorName',
         },
     ];//详情-出库表头
     const OutLibraryColumns = [
@@ -558,14 +552,14 @@ export default function Index(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'outStockStaffId',
+                        name: 'applyStaffId',
                         label: '出库人',
                         children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',
                         label: "模糊查询",
-                        children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="输入品名/规格查询" style={{ width: 300 }} />
                     }
                 ]}
             />
