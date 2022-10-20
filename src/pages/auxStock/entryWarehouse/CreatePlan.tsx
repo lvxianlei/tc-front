@@ -107,7 +107,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 ...item,
                 receiveTime: item.receiveTime || item.createTime,
                 num: item.planPurchaseNum || item.num || 1,
-                purchasePlanId: item.id,
+                purchasePlanId: item.purchasePlanId || item.id,
                 taxPrice: item.taxPrice || 1,
                 tax: item.tax || 13,
                 totalTaxPrice: item.totalTaxPrice || totalTaxPrice(1, item.planPurchaseNum || 1),
@@ -118,9 +118,10 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         })])
         setPopDataList([...materials.map((item: any, index: number) => {
             return ({
+                ...item,
                 receiveTime: item.receiveTime || item.createTime,
-                num: item.num || item.planPurchaseNum || 1,
-                purchasePlanId: item.id,
+                num: item.planPurchaseNum || item.num || 1,
+                purchasePlanId: item.purchasePlanId || item.id,
                 taxPrice: item.taxPrice || 1,
                 tax: item.tax || 13,
                 totalTaxPrice: item.totalTaxPrice || totalTaxPrice(1, item.planPurchaseNum || 1),
