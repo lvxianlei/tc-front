@@ -5,7 +5,10 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Select, Button, Form, Modal, Spin, Row, Col, InputNumber, Popconfirm, message, Upload } from 'antd';
+import {
+    Space, Input, Select, Button,
+    Form, Modal, Spin, Row, Col, Popconfirm, message, Upload
+} from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';

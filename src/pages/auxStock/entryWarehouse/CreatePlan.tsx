@@ -1,8 +1,8 @@
 /**
  * 创建计划列表
  */
-import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, message, InputNumber, TreeSelect } from 'antd';
+import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { Modal, Form, Button, message, InputNumber, TreeSelect, Spin } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
@@ -15,7 +15,7 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { totalTaxPrice, totalUnTaxPrice, unTaxPrice } from '@utils/calcUtil';
 import "./CreatePlan.less";
-export default function CreatePlan(props: any): JSX.Element {
+export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [planVisible, setPlanVisible] = useState<boolean>(false)
@@ -77,12 +77,12 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { manual: !warehouseId, refreshDeps: [warehouseId] })
+    }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
-        // const materials = [...materialList]
-        // const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        // setMaterialList([...materials, ...newMaterialList])
+        const materials = [...materialList]
+        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.key === maItem.key))
+        setMaterialPlanList([...materials, ...newMaterialList])
         setPopDataList([...materialList.map((item: any, index: number) => {
             return ({
                 ...item,
@@ -133,7 +133,7 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }
 
-    const handleCreateClick = async () => {
+    const handleCreateClick = () => new Promise(async (resove, reject) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
             let warehousingEntryDetailList = [...popDataList]
@@ -157,20 +157,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 warehouseId: baseInfo.warehouseId.value,
                 warehouseName: baseInfo.warehouseId.label
             });
-            setWarehouseId(undefined)
+            resove(true)
         } catch (error) {
             console.log(error);
+            reject(false)
         }
-    }
-
-    useEffect(() => {
-        if (props.visible) {
-            getBatchingStrategy();
-            addCollectionForm.setFieldsValue({
-                warehousingType: "1"
-            })
-        }
-    }, [props.visible])
+    })
 
     const handleMaterailChange = (value: any, index: number, dataIndex: string) => {
         const newData = popDataList.map((item: any, pIndex: number) => {
@@ -219,14 +211,14 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     // 获取所有的仓库
-    const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/getWarehouses`);
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }))
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
@@ -238,45 +230,29 @@ export default function CreatePlan(props: any): JSX.Element {
                 materialType: 2,
                 id: props.id
             })
-            message.success("操作成功！");
-            props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
+    const resetFields = () => {
+        setMaterialList([])
+        setPopDataList([])
+    }
+
+    useImperativeHandle(ref, () => ({
+        onSubmit: handleCreateClick,
+        resetFields
+    }), [ref, handleCreateClick, resetFields])
+
     return (<>
-        <Modal
-            title={`${props.type === "edit" ? "编辑入库单" : '创建入库单'}`}
-            visible={props.visible}
-            onCancel={() => {
-                setWarehouseId(undefined)
-                props?.handleCreate();
-            }}
-            maskClosable={false}
-            width={1100}
-            footer={[
-                <Button
-                    key="back"
-                    onClick={() => {
-                        props?.handleCreate();
-                    }}>
-                    取消
-                </Button>,
-                <Button
-                    key="create"
-                    type="primary"
-                    onClick={() => handleCreateClick()}>
-                    确定
-                </Button>
-            ]}
-        >
+        <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo
                 form={addCollectionForm}
                 edit
-                dataSource={{ ...data }}
+                dataSource={{ warehousingType: "1", ...data }}
                 col={2}
                 classStyle="baseInfo"
                 columns={baseInfoColumn.map((item: any) => {
@@ -395,7 +371,6 @@ export default function CreatePlan(props: any): JSX.Element {
                                                 }}
                                                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
                                                 placeholder="请选择"
-                                                allowClear
                                                 labelInValue
                                                 showCheckedStrategy="SHOW_ALL"
                                                 treeDefaultExpandAll
@@ -424,7 +399,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     }]}
                 pagination={false}
                 dataSource={popDataList} />
-        </Modal>
+        </Spin>
         <Modal width={1100} title={`选择到货明细`} destroyOnClose
             visible={visible}
             onOk={handleAddModalOk}
@@ -462,4 +437,4 @@ export default function CreatePlan(props: any): JSX.Element {
         </Modal>
     </>
     )
-}
+})

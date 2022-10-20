@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { Input, Select, message, Button, Upload, Radio } from 'antd';
+import { Input, Select, message, Button, Upload, Radio, TreeSelect } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import { SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -12,15 +12,28 @@ import '../StockPublicStyle.less';
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory()
     const [tabs, setTabs] = useState<1 | 2>(1)
+    const [warehouseId, setWarehouseId] = useState<string | undefined>()
     const [pagePath, setPagePath] = useState<string>("/tower-storage/materialStock/auxiliary")
     const [filterValue, setFilterValue] = useState({})
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const [warehouseList, classify] = await Promise.all<any>([
                 RequestUtil.get(`/tower-storage/warehouse/tree?type=0`),
-                RequestUtil.get(`/tower-system/materialCategory/category`)
+                RequestUtil.get(`/tower-system/materialCategory`, {
+                    materialDataType: 2
+                })
             ])
-            resole({ warehouseList, classify })
+            resole({
+                warehouseList,
+                classify: classify.map((item: any) => ({
+                    value: item.name,
+                    label: item.name,
+                    children: item.children.map((cItem: any) => ({
+                        value: cItem.name,
+                        label: cItem.name
+                    }))
+                }))
+            })
         } catch (error) {
             reject(error)
         }
@@ -34,6 +47,26 @@ export default function RawMaterialStock(): React.ReactNode {
             reject(error)
         }
     }))
+
+    //库区库位
+    const { data: locatorData } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree/${warehouseId}`)
+            resole(result?.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+                key: item.id,
+                disabled: true,
+                children: item.children?.map((cItem: any) => ({
+                    label: cItem.name,
+                    value: `${item.id}-${cItem.id}`,
+                    key: `${item.id}-${cItem.id}`
+                }) || [])
+            })) || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleDownload = () => {
         exportDown(
@@ -112,6 +145,11 @@ export default function RawMaterialStock(): React.ReactNode {
                 value.lengthMin = value.length.lengthMin
                 value.lengthMax = value.length.lengthMax
             }
+            if (value.locatorId) {
+                const locator = value.locatorId.split("-")
+                value.reservoirId = locator[0]
+                value.locatorId = locator[1]
+            }
             setFilterValue(value)
             run(value)
             return value
@@ -120,7 +158,14 @@ export default function RawMaterialStock(): React.ReactNode {
             {
                 name: 'warehouseId',
                 label: '仓库',
-                children: <Select style={{ width: "100px" }} defaultValue={""}>
+                children: <Select
+                    style={{ width: 100 }}
+                    defaultValue={""}
+                    onChange={(value: any) => {
+                        console.log(value)
+                        setWarehouseId(value)
+                    }}
+                >
                     <Select.Option value='' key={'aa'}>全部</Select.Option>
                     {
                         data?.warehouseList?.map((item: { id: string, name: string }) => <Select.Option
@@ -133,6 +178,26 @@ export default function RawMaterialStock(): React.ReactNode {
                 name: 'materialName',
                 label: '品名',
                 children: <Input width={100} maxLength={200} placeholder="请输入品名" />
+            },
+            {
+                name: 'materialCategoryName',
+                label: '类型',
+                children: <TreeSelect
+                    style={{ width: 180 }}
+                    treeData={data?.classify || []}
+                />
+            },
+            {
+                name: "locatorId",
+                label: "库位/区位",
+                children: <TreeSelect
+                    style={{ width: 130 }}
+                    dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                    placeholder="请选择"
+                    showCheckedStrategy="SHOW_ALL"
+                    treeDefaultExpandAll
+                    treeData={locatorData}
+                />
             },
             {
                 name: 'structureSpec',

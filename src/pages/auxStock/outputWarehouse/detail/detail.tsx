@@ -54,44 +54,44 @@ export default function Index(): React.ReactNode {
         {
             title: '品名',
             dataIndex: 'materialName',
-            width: 120,
+            width: 100,
         },
         {
             title: '规格',
             dataIndex: 'structureSpec',
-            width: 120,
+            width: 100,
         }, {
             title: '数量',
             dataIndex: 'num',
-            width: 160,
+            width: 40,
         }, {
             title: '单位',
             dataIndex: 'unit',
-            width: 120,
+            width: 40,
         }, {
             title: '入库人',
-            dataIndex: 'receiveStockUser',
-            width: 120,
+            dataIndex: 'receiveCreateUserName',
+            width: 70,
         }, {
             title: '入库时间',
-            dataIndex: 'receiveStockTime',
-            width: 160,
+            dataIndex: 'receiveCreateTime',
+            width: 140,
         }, {
             title: '仓库',
             dataIndex: 'warehouseName',
-            width: 120,
+            width: 60,
         }, {
             title: '库区',
             dataIndex: 'reservoirName',
-            width: 120,
+            width: 80,
         }, {
             title: '库位',
             dataIndex: 'locatorName',
-            width: 120,
+            width: 80,
         }, {
             title: '备注',
             dataIndex: 'remark',
-            width: 120,
+            width: 100,
         }
     ];//详情-入库表头
     const ExWarehousingColumns = [
@@ -572,9 +572,7 @@ export default function Index(): React.ReactNode {
                 maskClosable={false}
                 onCancel={() => setIsDetailModal(false)}
                 footer={
-                    <>
-                        <Button onClick={() => setIsDetailModal(false)}>关闭</Button>
-                    </>
+                    <Button onClick={() => setIsDetailModal(false)}>关闭</Button>
                 }
             >
                 <div className="supplier_info">
