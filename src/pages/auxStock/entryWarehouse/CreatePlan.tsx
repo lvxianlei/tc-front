@@ -105,30 +105,27 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         setMaterialPlanList([...materials.map((item: any, index: number) => {
             return ({
                 ...item,
-                receiveTime: item.createTime,
-                num: item.planPurchaseNum || 1,
+                receiveTime: item.receiveTime || item.createTime,
+                num: item.planPurchaseNum || item.num || 1,
                 purchasePlanId: item.id,
-                taxPrice: 1,
-                tax: 13,
-                totalTaxPrice: totalTaxPrice(1, item.planPurchaseNum || 1),
-                price: unTaxPrice(1, 13),
-                totalPrice: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 13),
-                purchasePlanNumber: item.purchasePlanNumber,
+                taxPrice: item.taxPrice || 1,
+                tax: item.tax || 13,
+                totalTaxPrice: item.totalTaxPrice || totalTaxPrice(1, item.planPurchaseNum || 1),
+                price: item.price || unTaxPrice(1, 13),
+                totalPrice: item.totalPrice || totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 13),
                 key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
         })])
         setPopDataList([...materials.map((item: any, index: number) => {
             return ({
-                ...item,
-                receiveTime: item.createTime,
-                num: item.planPurchaseNum || 1,
+                receiveTime: item.receiveTime || item.createTime,
+                num: item.num || item.planPurchaseNum || 1,
                 purchasePlanId: item.id,
-                taxPrice: 1,
-                tax: 13,
-                totalTaxPrice: totalTaxPrice(1, item.planPurchaseNum || 1),
-                price: unTaxPrice(1, 13),
-                totalPrice: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 13),
-                purchasePlanNumber: item.purchasePlanNumber,
+                taxPrice: item.taxPrice || 1,
+                tax: item.tax || 13,
+                totalTaxPrice: item.totalTaxPrice || totalTaxPrice(1, item.planPurchaseNum || 1),
+                price: item.price || unTaxPrice(1, 13),
+                totalPrice: item.totalPrice || totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 13),
                 key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
         })])
