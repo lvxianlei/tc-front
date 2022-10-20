@@ -483,7 +483,7 @@ export default function TowerInformation(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
     const [visible, setVisible] = useState(false);
     const [editForm] = useForm();
     const [loading1, setLoading1] = useState(false);

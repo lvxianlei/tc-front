@@ -494,7 +494,7 @@ export default function OtherDetail(): React.ReactNode {
     }), {})
     const detailData: any = data;
     console.log(location.state)
-    console.log(AuthUtil.getUserId())
+    console.log(AuthUtil.getUserInfo().user_id)
     const handleModalOk = async () => {
         try {
             const refuseData = await form.validateFields();
@@ -533,7 +533,7 @@ export default function OtherDetail(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <DetailContent operation={params.status==='1'&&AuthUtil.getUserId()===location.state.recipient && AuthUtil.getUserId()===location.state.createUser?[
+            <DetailContent operation={params.status==='1'&&AuthUtil.getUserInfo().user_id===location.state.recipient && AuthUtil.getUserInfo().user_id===location.state.createUser?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')
@@ -555,7 +555,7 @@ export default function OtherDetail(): React.ReactNode {
                     })
                 }}>删除</Button>,
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-            ]:params.status==='1'&&AuthUtil.getUserId()===location.state.recipient ?[
+            ]:params.status==='1'&&AuthUtil.getUserInfo().user_id===location.state.recipient ?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.post(`/tower-science/issue/verify`,{id:params.id}).then(()=>{
                         message.success('修改成功！')
@@ -571,7 +571,7 @@ export default function OtherDetail(): React.ReactNode {
                 // }}>跳转页面</Button>,
                 
                 <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-            ]:params.status==='1'&&AuthUtil.getUserId()===location.state.createUser?[
+            ]:params.status==='1'&&AuthUtil.getUserInfo().user_id===location.state.createUser?[
                 <Button key="edit" style={{ marginRight: '10px' }} type="primary" onClick={async () => {
                     await RequestUtil.delete(`/tower-science/issue?id=${params.id}`).then(()=>{
                         message.success('删除成功！')
