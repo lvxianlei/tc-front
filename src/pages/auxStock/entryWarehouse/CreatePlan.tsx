@@ -80,14 +80,19 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
-        const materials = [...materialList]
-        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.key === maItem.key))
-        setMaterialPlanList([...materials, ...newMaterialList])
+        setMaterialPlanList([...materialList.map((item: any, index: number) => {
+            return ({
+                ...item,
+                totalTaxPrice: item.totalTaxPrice || item.totalTaxAmount,
+                totalPrice: item.totalPrice || item.totalAmount,
+                key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
+            })
+        })])
         setPopDataList([...materialList.map((item: any, index: number) => {
             return ({
                 ...item,
-                totalTaxPrice: item.totalTaxAmount,
-                totalPrice: item.totalAmount,
+                totalTaxPrice: item.totalTaxPrice || item.totalTaxAmount,
+                totalPrice: item.totalPrice || item.totalAmount,
                 key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
             })
         })])
@@ -96,8 +101,22 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
 
     const handleAddPlanModalOk = () => {
         const materials = [...materialPlanList]
-        const newMaterialList = materialPlanList.filter((item: any) => !materialPlanList.find((maItem: any) => item.id === maItem.id))
-        setMaterialPlanList([...materials, ...newMaterialList])
+        // const newMaterialList = materialPlanList.filter((item: any) => !materialPlanList.find((maItem: any) => item.id === maItem.id))
+        setMaterialPlanList([...materials.map((item: any, index: number) => {
+            return ({
+                ...item,
+                receiveTime: item.createTime,
+                num: item.planPurchaseNum || 1,
+                purchasePlanId: item.id,
+                taxPrice: 1,
+                tax: 13,
+                totalTaxPrice: totalTaxPrice(1, item.planPurchaseNum || 1),
+                price: unTaxPrice(1, 13),
+                totalPrice: totalUnTaxPrice(totalTaxPrice(1, item.planPurchaseNum || 1), 13),
+                purchasePlanNumber: item.purchasePlanNumber,
+                key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
+            })
+        })])
         setPopDataList([...materials.map((item: any, index: number) => {
             return ({
                 ...item,
