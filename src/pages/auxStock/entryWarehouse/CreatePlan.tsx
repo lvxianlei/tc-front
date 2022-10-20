@@ -80,9 +80,9 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
-        // const materials = [...materialList]
-        // const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        // setMaterialList([...materials, ...newMaterialList])
+        const materials = [...materialList]
+        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.key === maItem.key))
+        setMaterialPlanList([...materials, ...newMaterialList])
         setPopDataList([...materialList.map((item: any, index: number) => {
             return ({
                 ...item,
