@@ -120,7 +120,7 @@ export interface EditRefProps {
      const [type, setType] = useState<'new' | 'edit' | 'detail'>('new');
      const [visible, setVisible] = useState<boolean>(false);
      const ref = useRef<EditRefProps>();
-     const [rowId, setRowId] = useState<string>('false');
+     const [rowId, setRowId] = useState<string>('');
      const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
          const data: any = await RequestUtil.get(``);
          resole(data || []);

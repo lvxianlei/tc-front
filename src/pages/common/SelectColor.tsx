@@ -25,7 +25,7 @@ export interface IColorObj {
 export default function SelectColor({
   defaultColor = '#FF8C00',
   onChange,
-  disabled= false
+  disabled = false
 }: SelectColorProps): JSX.Element {
   const [color, setColor] = useState(defaultColor);
   const [subtitleColor, setSubtitleColor] = useState(defaultColor);
@@ -49,27 +49,27 @@ export default function SelectColor({
   };
 
   return <>
-  {
-    disabled ? 
-    <Space>
-    <div className={styles.color_set_show} style={{ backgroundColor: color }}></div>
-    <div>{subtitleColor}</div>
-  </Space>
-    :
-       <Popover
-      content={<ChromePicker
-        color={color}
-        onChangeComplete={(color: any) => colorChange(color)}
-      />}
-      trigger="click"
-    >
-      <Space>
-        <div className={styles.color_set_show} style={{ backgroundColor: color }}></div>
-        <div>{subtitleColor}</div>
-      </Space>
-    </Popover>
-  }
- 
+    {
+      disabled ?
+        <Space>
+          <div className={styles.color_set_show} style={{ backgroundColor: color }}></div>
+          <div>{subtitleColor}</div>
+        </Space>
+        :
+        <Popover
+          content={<ChromePicker
+            color={color}
+            onChangeComplete={(color: any) => colorChange(color)}
+          />}
+          trigger="click"
+        >
+          <Space>
+            <div className={styles.color_set_show} style={{ backgroundColor: color }}></div>
+            <div>{subtitleColor}</div>
+          </Space>
+        </Popover>
+    }
+
 
   </>
 }
