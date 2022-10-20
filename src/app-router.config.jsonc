@@ -3096,6 +3096,13 @@
       "module": "./pages/worksheetMngt/management/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单管理-工单管理
+      "name": "工单管理",
+      "path": "/worksheetMngt/management",
+      "module": "./pages/worksheetMngt/management/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }

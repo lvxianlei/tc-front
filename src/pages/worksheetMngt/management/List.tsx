@@ -8,14 +8,13 @@
  import { Input, DatePicker, Button, message, Space, Select, Dropdown, Menu, Radio, Modal, TreeSelect, Form, Row, Col, Popconfirm } from 'antd';
  import { Page } from '../../common';
  import { FixedType } from 'rc-table/lib/interface';
- import styles from '../PackingPlan.module.less';
+ import styles from '../Management.module.less';
  import RequestUtil from '../../../utils/RequestUtil';
  import useRequest from '@ahooksjs/use-request';
  import { Link, useHistory } from 'react-router-dom';
- import { DownOutlined } from '@ant-design/icons';
- import { packageTypeOptions } from '../../../configuration/DictionaryOptions';
 import SelectUser from '../../common/SelectUser';
 import WorkOrderNew from './WorkOrderNew';
+import WorkOrderDetail from './WorkOrderDetail';
  
 export interface EditRefProps {
     onSubmit: () => void
@@ -31,6 +30,7 @@ export interface EditRefProps {
      const ref = useRef<EditRefProps>();
      const [rowId, setRowId] = useState<string>('');
      const history = useHistory();
+     const [detailVisible,setDetailVisible] = useState<boolean>(false);
  
      const { data: galvanizedTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
          try {
@@ -145,7 +145,10 @@ export interface EditRefProps {
              "width": 150,
              render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                  <Space>
-                     <Link to={`/packingPlan/baleList/detail/${record.id}`}>详情</Link>
+                 <Button type='link' onClick={() =>{
+                setDetailVisible(true);
+                setRowId(record.id);
+             }} >详情</Button>
                      <Button type='link'>派工</Button>
                      <Button type='link'>处理</Button>
                      <Button type='link' onClick={() =>{
@@ -252,6 +255,20 @@ export interface EditRefProps {
      return <>
      <Modal
             destroyOnClose
+            key='WorkOrderDetail'
+            visible={detailVisible}
+            width="95%"
+            footer={
+                <Button onClick={() => {
+                    setDetailVisible(false);
+                }}>关闭</Button>
+            }
+            title="详情"
+            onCancel={() => setDetailVisible(false)}>
+            <WorkOrderDetail rowId={rowId} />
+        </Modal>
+     <Modal
+            destroyOnClose
             key='WorkOrderNew'
             visible={visible}
             width="40%"
@@ -262,7 +279,7 @@ export interface EditRefProps {
             <WorkOrderNew rowId={rowId} type={type} ref={ref} />
         </Modal>
         <Page
-         path={`tower-production/package`}
+         path={`/tower-science/loftingList`}
          columns={columns}
          headTabs={[]}
          requestData={{ packageStatus: confirmStatus }}
