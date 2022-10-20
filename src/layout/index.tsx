@@ -171,7 +171,8 @@ export default function (): JSX.Element {
                 },
                 {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Tenant-Id': tenantId
+                    'Tenant-Id': tenantId,
+                    'Sinzetech-Auth': ""
                 }
             )
             resole(reLogin)
