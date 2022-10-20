@@ -108,15 +108,6 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
     })
 
-    useEffect(() => {
-        if (props.visible) {
-            getBatchingStrategy();
-            addCollectionForm.setFieldsValue({
-                pickingTime: moment(new Date()).format("YYYY-MM-DD")
-            })
-        }
-    }, [props.visible])
-
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = props.type === "create" ? `/tower-storage/outStock/save` : '/tower-storage/outStock'
@@ -160,7 +151,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     })
 
     // 获取所有的仓库
-    const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-storage/warehouse/getWarehouses`, {
@@ -170,7 +161,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { manual: true })
+    }))
 
     const resetFields = () => {
         setMaterialList([])
@@ -188,7 +179,9 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             <BaseInfo
                 form={addCollectionForm}
                 edit
-                dataSource={data || {}}
+                dataSource={data || {
+                    pickingTime: moment(new Date()).format("YYYY-MM-DD")
+                }}
                 col={2}
                 classStyle="baseInfo"
                 columns={baseInfoColumn.map((item: any) => {
