@@ -7,23 +7,8 @@
     },
     {
       "title": "计划状态",
-      "dataIndex": "purchasePlanStatus",
-      "width": 80,
-      "type": "select",
-      "enum": [
-        {
-          "label": "待完成",
-          "value": 1
-        },
-        {
-          "label": "已完成",
-          "value": 2
-        },
-        {
-          "label": "已取消",
-          "value": 3
-        }
-      ]
+      "dataIndex": "purchasePlanStatusName",
+      "width": 80
     },
     {
       "title": "制单人",

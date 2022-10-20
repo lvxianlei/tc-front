@@ -5,7 +5,10 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Select, Button, Form, Modal, Spin, Row, Col, InputNumber, Popconfirm, message } from 'antd';
+import {
+    Space, Input, Select, Button,
+    Form, Modal, Spin, Row, Col, Popconfirm, message, Upload
+} from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';
@@ -13,6 +16,8 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { IMaterial, IMaterialType } from '../material/IMaterial';
 import { RuleObject } from 'rc-field-form/lib/interface';
+import AuthUtil from '@utils/AuthUtil';
+import { exportDown } from '@utils/Export';
 
 export default function MaterialMngt(): React.ReactNode {
     const columns = [
@@ -40,6 +45,12 @@ export default function MaterialMngt(): React.ReactNode {
             title: '类型',
             width: 150,
             dataIndex: 'materialCategoryName'
+        },
+        {
+            key: 'directMaterialTypeName',
+            title: '大类',
+            width: 150,
+            dataIndex: 'directMaterialTypeName'
         },
         {
             key: 'materialName',
@@ -196,6 +207,16 @@ export default function MaterialMngt(): React.ReactNode {
     }), {})
     const materialType: any = data || [];
 
+    const handleDownload = () => {
+        exportDown(
+            `/tower-system/tower-system/material/auxiliary/export`,
+            "POST",
+            {},
+            undefined,
+            "辅材信息模版"
+        )
+    }
+
     return <Spin spinning={loading}>
         <Page
             path="/tower-system/material"
@@ -218,6 +239,32 @@ export default function MaterialMngt(): React.ReactNode {
             refresh={refresh}
             filterValue={filterValue}
             extraOperation={<Space direction="horizontal" size="small">
+                <Upload
+                    action={() => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl + '/tower-system/material/auxiliary/import'
+                    }}
+                    headers={
+                        {
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={false}
+                    onChange={(info) => {
+                        if (info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        }
+                        if (info.file.response && info.file.response?.success) {
+                            message.success('导入成功！');
+                            setRefresh(!refresh);
+                        }
+                    }}
+                >
+                    <Button type="primary" ghost >导入</Button>
+                </Upload>
+                <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
                 <Button type="primary" onClick={() => { setVisible(true); setTitle('新增'); }} ghost>新增</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}

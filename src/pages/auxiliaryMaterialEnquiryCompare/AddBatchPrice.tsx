@@ -37,6 +37,7 @@ export default forwardRef(function ({ id, type, materialLists, comparisonPriceId
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryInquiryQuotation/${id}`)
+            console.log(result)
             resole(result)
         } catch (error) {
             reject(error)
@@ -68,7 +69,8 @@ export default forwardRef(function ({ id, type, materialLists, comparisonPriceId
                 inquiryQuotationOfferDtos: materialLists.map((item: any) => {
                     return ({
                         ...item,
-                        comparisonPriceDetailId: item.id,
+                        comparisonPriceDetailId: item.comparisonPriceDetailId || item.id,
+                        // comparisonPriceDetailId: item.id,
                         taxOffer: formData.taxOffer,
                         offer: calcObj.unTaxPrice(formData.taxOffer, materialData?.taxVal)
                     })

@@ -24,11 +24,19 @@ export default function MargePurchasePlan() {
 
 
     const onFilterSubmit = (value: any) => {
-        if (value.createdTime) {
-            const formatDate = value.createdTime.map((item: any) => item.format("YYYY-MM-DD"))
-            delete value.createdTime
-            value.createdTime = formatDate[0] + ' 00:00:00';
-            value.createdTime = formatDate[1] + ' 23:59:59';
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            delete value.createTime
+            value.startCreateTime = formatDate[0] + ' 00:00:00';
+            value.endCreateTime = formatDate[1] + ' 23:59:59';
+        }else{
+            value.startCreateTime = null
+            value.endCreateTime = null
+        }
+        if (value.purchaserName) {
+            value.purchaserId = value.purchaserName.value
+        }else{
+            value.purchaserId = null
         }
         setFilterValue({...filterValue,...value})
         return value
@@ -37,6 +45,7 @@ export default function MargePurchasePlan() {
         <>
             <Page
                 path="/tower-supply/auxiliaryMaterialPurchasePlan/collect"
+                exportPath="/tower-supply/auxiliaryMaterialPurchasePlan/collect"
                 columns={[
                     {
                         title: "序号",
@@ -56,8 +65,8 @@ export default function MargePurchasePlan() {
                         render: (_: any, records: any) => <>
                             <Button type="link" className="btn-operation-link">
                                 <Link className="btn-operation-link" to={{
-                                    pathname: `/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial/${records.id}`,
-                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus}`
+                                    pathname: `/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial/${records.id}`,
+                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus},${1}`
                                 }}>采购清单</Link>
                             </Button>
                         </>
@@ -65,38 +74,11 @@ export default function MargePurchasePlan() {
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={onFilterSubmit}
-                extraOperation={<>
-                    <Button
-                        type="primary"
-                        ghost
-                        key="export"
-                        style={{ marginRight: 16 }}
-                        onClick={() => {
-                            setIsExportStoreList(true)
-                        }}
-                    >导出</Button>
-                    {isExport?<ExportList
-                        history={history}
-                        location={location}
-                        match={match}
-                        columnsKey={() => {
-                            let keys = [...purchasePlan]
-                            keys.pop()
-                            return keys
-                        }}
-                        current={1}
-                        size={10}
-                        total={1000}
-                        url={`/tower-supply/auxiliaryMaterialPurchasePlan/collect`}
-                        serchObj={{}}
-                        closeExportList={() => { setIsExportStoreList(false) }}
-                    />:null}
-                </>}
                 searchFormItems={[
                     {
                         name: 'planStatus',
                         label: '计划状态',
-                        children: <Select style={{ width: 100 }} defaultValue="">
+                        children: <Select style={{ width: 100 }} >
                             <Select.Option value="" key="">全部</Select.Option>
                             <Select.Option value={1} key={1}>待完成</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
@@ -107,15 +89,6 @@ export default function MargePurchasePlan() {
                         name: 'createTime',
                         label: '创建日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
-                    {
-                        name: 'collectType',
-                        label: '汇总状态',
-                        children: <Select style={{ width: 100 }} defaultValue="">
-                            <Select.Option value="" key={""}>全部</Select.Option>
-                            <Select.Option value={0} key={0}>未汇总</Select.Option>
-                            <Select.Option value={1} key={1}>已汇总</Select.Option>
-                        </Select>
                     },
                     {
                         name: 'purchaserName',

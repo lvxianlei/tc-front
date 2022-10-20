@@ -86,7 +86,8 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
 
     return <Spin spinning={loading}>
         <BaseInfo
-            edit col={1}
+            edit 
+            col={1}
             form={form}
             onChange={handleBaseInfoChange}
             columns={type === 1 ? [
@@ -212,7 +213,7 @@ export default function Overview() {
                 >批量收货</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
-                    已收货：数量(吨)合计：<span
+                    已收货：数量合计：<span
                         style={{
                             color: "#FF8C00",
                             marginRight: 12
@@ -223,7 +224,7 @@ export default function Overview() {
                             color: "#FF8C00",
                             marginRight: 12
                         }}>{userData?.receiveTotalTaxAmount === -1 ? 0 : userData?.receiveTotalTaxAmount}</span>
-                    待收货：重量(吨)合计：<span
+                    待收货：数量合计：<span
                         style={{
                             color: "#FF8C00",
                             marginRight: 12

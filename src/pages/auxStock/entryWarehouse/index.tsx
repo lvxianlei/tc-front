@@ -9,8 +9,6 @@ import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
 import { baseColumn, baseDetail } from "./data.json";
-// 引入新增纸质单号
-import PaperOrderModal from './PaperOrderModal';
 import CreatePlan from "./CreatePlan";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '@utils/RequestUtil';
@@ -19,16 +17,17 @@ interface EditRefProps {
     onSubmit: () => void
     resetFields: () => void
 }
+
 export default function RawMaterialWarehousing(): React.ReactNode {
     const history = useHistory();
     const [visible, setVisible] = useState<boolean>(false);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [tabs, setTabs] = useState<1 | 2>(1)
     const [pagePath, setPagePath] = useState<string>("/tower-storage/warehousingEntry/auxiliary")
-    const [id, setId] = useState<string>();
     const [editId, setEditId] = useState<string>();
     const [oprationType, setOperationType] = useState<"create" | "edit">("create")
     const addRef = useRef<EditRefProps>();
-    const [isOpenId, setIsOpenId] = useState<boolean>(false);
+    const editRef = useRef<EditRefProps>();
     const [filterValue, setFilterValue] = useState<any>({
         fuzzyQuery: "",
         receiveStatus: "",
@@ -68,13 +67,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     })
 
-    const handleCreate = (options: any) => {
-        if (options?.code === 1) {
-            history.go(0);
-        }
-        setIsOpenId(false);
-    }
-
     const handleRadioChange = (event: any) => {
         if (event.target.value === 1) {
             setTabs(1)
@@ -93,6 +85,22 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         await message.success("成功删除...")
         history.go(0)
     }
+
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        setConfirmLoading(true)
+        try {
+            const isClose = await editRef.current?.onSubmit()
+            if (isClose) {
+                await message.success("操作成功...");
+                setVisible(false)
+                setConfirmLoading(false)
+                history.go(0)
+            }
+        } catch (error) {
+            setConfirmLoading(false)
+            reject(false)
+        }
+    })
 
     return (
         <>
@@ -114,30 +122,38 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         dataIndex: 'key',
                         width: 160,
                         fixed: 'right' as FixedType,
-                        render: (_: undefined, record: any): React.ReactNode => (
-                            <>
-                                <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
-                                <Button
-                                    type="link"
-                                    disabled={record?.receiveStatus === 1}
-                                    onClick={
-                                        () => {
-                                            setIsOpenId(true)
-                                            setEditId(record.id)
-                                            setOperationType("edit")
-                                        }
-                                    }>编辑</Button>
-                                <Popconfirm
-                                    title="确认删除?"
-                                    onConfirm={() => handleDelete(record?.id)}
-                                    okText="确认"
-                                    cancelText="取消"
-                                >
-                                    <Button type="link" 
-                                    disabled={record?.receiveStatus === 1}>删除</Button>
-                                </Popconfirm>
-                            </>
-                        )
+                        render: (_: undefined, record: any): React.ReactNode => {
+                            if (tabs === 1) {
+                                return (
+                                    <>
+                                        <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
+                                        <Button
+                                            type="link"
+                                            disabled={record?.receiveStatus === 1}
+                                            onClick={
+                                                () => {
+                                                    setVisible(true)
+                                                    setEditId(record.id)
+                                                    setOperationType("edit")
+                                                }
+                                            }>编辑</Button>
+                                        <Popconfirm
+                                            title="确认删除?"
+                                            onConfirm={() => handleDelete(record?.id)}
+                                            okText="确认"
+                                            cancelText="取消"
+                                        >
+                                            <Button type="link"
+                                                disabled={record?.receiveStatus === 1}>删除</Button>
+                                        </Popconfirm>
+                                    </>
+                                )
+                            }
+                            return <Button
+                                type="link"
+                                onClick={() => history.push(`/auxStock/entryWarehouse/detail/${record.warehousingEntryId}`)}
+                            >所在单据</Button>
+                        }
                     }
                 ]}
                 filterValue={filterValue}
@@ -145,7 +161,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 extraOperation={
                     <>
                         <Button type='primary' ghost onClick={() => {
-                            setIsOpenId(true)
+                            setVisible(true)
+                            setEditId("")
                             setOperationType("create")
                         }}>创建</Button>
                         <div style={{ width: "2000px" }}>
@@ -191,36 +208,20 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     }
                 ]}
             />
-            <Modal
-                title={'输入'}
-                visible={visible}
-                width={500}
-                maskClosable={false}
-                onCancel={() => {
-                    addRef.current?.resetFields();
-                    setVisible(false);
-                }}
-                footer={[
-                    <Button key="submit" type="primary" onClick={() => handleOk()}>
-                        提交
-                    </Button>,
-                    <Button key="back" onClick={() => {
-                        addRef.current?.resetFields();
-                        setVisible(false);
-                    }}>
-                        取消
-                    </Button>
-                ]}
-            >
-                <PaperOrderModal ref={addRef} id={id} />
-            </Modal>
 
-            <CreatePlan
-                visible={isOpenId}
-                id={editId}
-                type={oprationType}
-                handleCreate={handleCreate}
-            />
+            <Modal
+                destroyOnClose
+                visible={visible}
+                width={1011}
+                confirmLoading={confirmLoading}
+                title={oprationType === "create" ? '创建出库单' : "编辑出库单"}
+                onOk={handleModalOk}
+                onCancel={() => {
+                    setVisible(false)
+                    editRef.current?.resetFields()
+                }}>
+                <CreatePlan ref={editRef} id={editId} type={oprationType} />
+            </Modal>
         </>
     )
 }

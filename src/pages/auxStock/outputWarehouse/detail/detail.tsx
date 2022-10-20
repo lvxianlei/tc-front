@@ -8,10 +8,9 @@ import RequestUtil from '../../../../utils/RequestUtil';
 import { baseColumn } from "./detail.json";
 import '../../StockPublicStyle.less';
 import './detail.less';
-import AuthUtil from '@utils/AuthUtil';
 import { exportDown } from '@utils/Export';
 
-export default function RawMaterialWarehousing(): React.ReactNode {
+export default function Index(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const match = useRouteMatch()
@@ -53,86 +52,80 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     ];//详情-供应商列表表头
     const WarehousingColumns = [
         {
-            title: '材质名称',
+            title: '品名',
             dataIndex: 'materialName',
-            width: 120,
+            width: 100,
         },
         {
-            title: '标准',
-            dataIndex: 'materialStandardName',
-            width: 120,
-        }, {
             title: '规格',
             dataIndex: 'structureSpec',
-            width: 120,
+            width: 100,
         }, {
-            title: '材质',
-            dataIndex: 'structureTexture',
-            width: 160,
+            title: '数量',
+            dataIndex: 'num',
+            width: 40,
         }, {
-            title: '长度',
-            dataIndex: 'length',
-            width: 120,
-        }, {
-            title: '宽度',
-            dataIndex: 'width',
-            width: 120,
+            title: '单位',
+            dataIndex: 'unit',
+            width: 40,
         }, {
             title: '入库人',
-            dataIndex: 'receiveStockUser',
-            width: 120,
+            dataIndex: 'receiveCreateUserName',
+            width: 70,
         }, {
             title: '入库时间',
-            dataIndex: 'receiveStockTime',
-            width: 160,
-        }, {
-            title: '炉批号',
-            dataIndex: 'furnaceBatch',
-            width: 120,
+            dataIndex: 'receiveCreateTime',
+            width: 140,
         }, {
             title: '仓库',
             dataIndex: 'warehouseName',
-            width: 120,
-        }, {
-            title: '库位',
-            dataIndex: 'locatorName',
-            width: 120,
+            width: 60,
         }, {
             title: '库区',
             dataIndex: 'reservoirName',
-            width: 120,
+            width: 80,
+        }, {
+            title: '库位',
+            dataIndex: 'locatorName',
+            width: 80,
         }, {
             title: '备注',
             dataIndex: 'remark',
-            width: 120,
+            width: 100,
         }
     ];//详情-入库表头
     const ExWarehousingColumns = [
         {
-            title: '领料编号',
-            dataIndex: 'pickingNumber',
-            width: 120,
+            title: '出库编号',
+            dataIndex: 'pickingNumber'
         },
         {
-            title: '任务编号',
-            dataIndex: 'taskNumber',
-            width: 120,
+            title: '品名',
+            dataIndex: 'materialName'
         }, {
-            title: '生产批次',
-            dataIndex: 'productionBatchNumber',
-            width: 120,
+            title: '规格',
+            dataIndex: 'structureSpec'
+        }, {
+            title: '数量',
+            dataIndex: 'num'
+        }, {
+            title: '单位',
+            dataIndex: 'unit'
         }, {
             title: '申请人',
             dataIndex: 'applyStaffName',
-            width: 160,
-        }, {
-            title: '出库人',
-            dataIndex: 'outStockUserName',
-            width: 120,
         }, {
             title: '出库时间',
             dataIndex: 'outStockTime',
-            width: 120,
+        }, {
+            title: '仓库',
+            dataIndex: 'warehouseName',
+        }, {
+            title: '库区',
+            dataIndex: 'reservoirName',
+        }, {
+            title: '库位',
+            dataIndex: 'locatorName',
         },
     ];//详情-出库表头
     const OutLibraryColumns = [
@@ -166,57 +159,52 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             dataIndex: 'materialCode',
             width: 100,
         }, {
-            title: '分类',
+            title: '类别',
             dataIndex: 'materialCategoryName',
-            width: 100,
-        }, {
-            title: '标准',
-            dataIndex: 'materialStandardName',
             width: 100,
         }, {
             title: '品名',
             dataIndex: 'materialName',
             width: 100,
         }, {
-            title: '材质',
-            dataIndex: 'structureTexture',
-            width: 100,
-        }, {
             title: '规格',
             dataIndex: 'structureSpec',
-            width: 100,
-        }, {
-            title: '长度（mm）',
-            dataIndex: 'length',
-            width: 100,
-        }, {
-            title: '宽度（mm）',
-            dataIndex: 'width',
             width: 100,
         }, {
             title: '数量',
             dataIndex: 'num',
             width: 100,
-        }, {
-            title: '重量（吨）',
-            dataIndex: 'weight',
-            width: 100,
-        }, {
+        },
+        {
             title: '库存数量',
             dataIndex: 'num',
             width: 100,
-        }, {
+        },
+        {
             title: '出库数量',
             dataIndex: 'standard',
             width: 100,
-            fixed: 'right' as FixedType,
             render: (text: any, item: any, index: any) => {
                 return (
                     <Input
                         placeholder="请输入"
                         value={item.outboundQuantity}
                         onChange={(e) => { inputChange(e, item, index, 'OutLibrary') }}
-                    ></Input>
+                    />
+                )
+            }
+        },
+        {
+            title: '备注',
+            dataIndex: 'remark',
+            width: 200,
+            render: (text: any, item: any, index: any) => {
+                return (
+                    <Input.TextArea
+                        placeholder="请输入"
+                        value={item.remark}
+                        rows={1}
+                        onChange={(e) => { inputChange(e, item, index, 'remark') }} />
                 )
             }
         },
@@ -306,7 +294,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     // 撤销
     const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/detail/revocation/${id}`,)
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/detail/revocation/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -376,6 +364,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-storage/materialStock`, {
             materialName: record.materialName,//品名
             structureSpec: record.structureSpec,//规格
+            materialType: 2,
             size: 1000
         });
         setOutLibraryListdata(data.records);
@@ -383,11 +372,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }
     // 出库弹框列表输入框
     const inputChange = (e: any, item: any, index: any, type: string) => {
-        let ary = []
+        let ary = [...OutLibraryListdata]
         if (type == 'OutLibrary') {
-            ary = JSON.parse(JSON.stringify(OutLibraryListdata))
             ary[index].outboundQuantity = e.target.value.replace(/[^0-9]/g, '')
             setOutLibraryListdata(ary)
+            return
+        } else if (type === "remark") {
+            ary[index].remark = e.target.value
+            setOutLibraryListdata(ary)
+            return
         } else {
             ary = JSON.parse(JSON.stringify(ApplyListdata))
             ary[index].shortageNum = e.target.value.replace(/[^0-9]/g, '')
@@ -396,7 +389,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }
     //获取列表详情数据数据
     const getDetailData = async (id: any) => {
-        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`,{
+        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`, {
             materialType: 2
         });
         let supplierObj = {
@@ -433,6 +426,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 let obj: any = {};
                 obj.num = item.outboundQuantity
                 obj.id = item.id
+                obj.remark = item.remark
                 count += parseFloat(item.outboundQuantity || 0)
                 ary.push(obj)
             }
@@ -442,16 +436,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             return
         }
         if (ary.length == 0) return message.error('所有数据无出库数量')
-        const data: any = await RequestUtil.post(`/tower-storage/outStock`, {
+        await RequestUtil.post(`/tower-storage/outStock/auxiliaryOutStock`, {
             id: OutboundId,
             materialStockList: ary
         });
-        if (data) {
-            message.success('操作成功')
-            setIsOutLibraryModal(false)
-            // 刷新列表
-            history.go(0);
-        }
+        message.success('操作成功')
+        setIsOutLibraryModal(false)
+        // 刷新列表
+        history.go(0);
+
     }
     // 缺料申请
     const shortage = async () => {
@@ -496,10 +489,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         {/* <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button> */}
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>
-                            总重量： {weightData?.weightCount || "0.00"} 吨
-                        </span>
-                        <span style={{ marginLeft: "10px" }}>
-                            缺料总重量：{weightData?.excessWeight || "0.00"} 吨
+                            总数量： {weightData?.totalNum || "0.00"}
                         </span>
                     </>
                 }}
@@ -562,14 +552,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'outStockStaffId',
+                        name: 'applyStaffId',
                         label: '出库人',
                         children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',
                         label: "模糊查询",
-                        children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="输入品名/规格查询" style={{ width: 300 }} />
                     }
                 ]}
             />
@@ -582,9 +572,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 maskClosable={false}
                 onCancel={() => setIsDetailModal(false)}
                 footer={
-                    <>
-                        <Button onClick={() => setIsDetailModal(false)}>关闭</Button>
-                    </>
+                    <Button onClick={() => setIsDetailModal(false)}>关闭</Button>
                 }
             >
                 <div className="supplier_info">

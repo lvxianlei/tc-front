@@ -276,12 +276,20 @@ export default function Overview(): JSX.Element {
             <DetailTitle title="询价产品信息" style={{ marginTop: "24px" }} />
             <CommonAliTable
                 columns={[
+                    {
+                        title: "序号",
+                        dataIndex: "index",
+                        width: 50,
+                        fixed: "left",
+                        edit: false,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
                     ...materialColumns,
                     ...(data?.headerColumnVos.map((item: any) => ({
                         ...item,
                         width: 100,
                         render: (_value: any, records: any) => <div
-                            style={records?.inquiryQuotationOfferData?.minTaxOffer === records?.inquiryQuotationOfferData?.[item.dataIndex] ? {
+                            style={records?.inquiryQuotationOfferData?.minTaxOffer && (records?.inquiryQuotationOfferData?.minTaxOffer === records?.inquiryQuotationOfferData?.[item.dataIndex]) ? {
                                 background: "green",
                                 color: "#fff",
                                 fontWeight: 600,
@@ -339,12 +347,13 @@ export default function Overview(): JSX.Element {
                                     padding: 0,
                                     marginRight: 12
                                 }}
-                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                                disabled={data?.isRelate !== 0} type="link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
                             <Button
+                                disabled={data?.isRelate !== 0}
                                 style={{
                                     padding: 0,
                                     marginRight: 12
@@ -357,7 +366,7 @@ export default function Overview(): JSX.Element {
                                 style={{
                                     padding: 0
                                 }}
-                                disabled={data?.comparisonStatus !== 1} type="link" onClick={() => {
+                                disabled={data?.isRelate !== 0} type="link" onClick={() => {
                                 Modal.confirm({
                                     title: "删除",
                                     content: "确定删除吗？",
@@ -389,7 +398,7 @@ export default function Overview(): JSX.Element {
             current={1}
             size={materialLists.length}
             total={materialLists.length}
-            url={`/tower-supply/auxiliaryComparisonPrice/${params.id}`}
+            url={`/tower-supply/auxiliaryComparisonPrice/exportComparisonPriceDetails`}
             serchObj={{ comparisonPriceId: params.id }}
             closeExportList={() => { setIsExportStoreList(false) }}
         /> : null}

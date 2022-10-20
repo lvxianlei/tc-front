@@ -65,7 +65,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                 </Form.Item></Col>
             </Row>
         </Form>
-        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || [{}]}
+        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
                      rowSelection={{
                          type: "radio",
                          onChange: (_: any, selectedRows: any[]) => {
@@ -109,7 +109,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                     value: result.supplierVOS?.map((item: any) => item.supplierName).join(","),
                     records: result.supplierVOS?.map((item: any) => ({
                         id: item.id,
-                        supplierName: item.supplierName
+                        supplierName: item.supplierName,
                     })) || []
                 },
             })
@@ -121,6 +121,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                     structureTextureId: res.structureTextureId,
                     materialStandardName: res.materialStandardName,
                     materialStandard: res.materialStandard,
+                    planPurchaseNum:res.num
                 }
             })
             setMaterialList(comparisonPriceDetailVos || [])
@@ -167,7 +168,9 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
-                        purchaseListId:item.id
+                        // 新创建的使用 使用id  编辑后台返回的 使用purchaseListId
+                        purchaseListId: item.source ==2 ?item.id:item.purchaseListId,
+                        num: item.planPurchaseNum  || 1,
                         // id: '',
                         // structureTexture: item.structureTexture,
                         // structureTextureId: item.structureTextureId,
@@ -250,7 +253,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
     const {run: getDatailList} = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
-                `/tower-supply/auxiliaryMaterialPurchasePlan/list/${data}`
+                `/tower-supply/auxiliaryMaterialPurchasePlan/list/${data}?size=1000`
             )
             resole(result)
         } catch (error) {
@@ -448,6 +451,18 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                             enum:supplierTypeEnum
                         },
                         ...item.search
+                    ],
+                    columns:[
+                    ...item.columns.map(item=>{
+                            if(item.dataIndex == "supplierType"){
+                                return {
+                                    ...item,
+                                    enum:supplierTypeEnum
+                                }
+                            }else{
+                                return item
+                            }
+                        })
                     ]
                 }
                 }else{
@@ -459,7 +474,11 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
         <DetailTitle title="询比价辅材明细 *" operation={[
             <Button type="primary" ghost key="choose" onClick={() => setChooseVisible(true)}>选择计划</Button>
         ]}/>
+
         <CommonTable
+            pagination={
+                false
+            }
             haveIndex
             style={{padding: "0"}}
             rowKey="key"
@@ -517,12 +536,13 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                     // }
                     return item
                 }),
-                {
-                    title: "操作",
-                    dataIndex: "opration",
-                    render: (_: any, records: any) => <Button disabled={records.source === 1} type="link"
-                                                              onClick={() => handleRemove(records.materialCode)}>移除</Button>
-                }]}
+                // {
+                //     title: "操作",
+                //     dataIndex: "opration",
+                //     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link"
+                //                                               onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                // }
+                ]}
             dataSource={popDataList?.map((item: any, index: number) => ({
                 ...item,
                 key: `${item.materialCode}-${index}`

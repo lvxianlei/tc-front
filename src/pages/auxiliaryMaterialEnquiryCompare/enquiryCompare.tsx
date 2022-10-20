@@ -119,8 +119,8 @@ export default function EnquiryCompare() {
                         fixed: "right",
                         width: 270,
                         render: (_: any, records: any) => <>
-                            <Link className="btn-operation-link" to={`/auxiliaryMaterialEnquiryCompare/enquiryCompare/${records.id}`}>询价信息</Link>
-                            <Button disabled={records.comparisonStatus !== 1 && records.isRelate != 1} type="link" className="btn-operation-link" onClick={() => {
+                            <Link className="btn-operation-link" to={`/buyAuxiliaryMaterial/enquiryCompare/${records.id}`}>询价信息</Link>
+                            <Button disabled={(records.comparisonStatus !== 1) || records.isRelate !== 0} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
                             }}>取消</Button>
@@ -139,10 +139,10 @@ export default function EnquiryCompare() {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
-                                    disabled={records.comparisonStatus !== 1 && records.isRelate != 1}
+                                    disabled={records.comparisonStatus !== 1 || records.isRelate !== 0}
                                 >删除</Button>
                             </Popconfirm>
-                            <Button disabled={records.comparisonStatus !== 1 && records.isRelate != 1} type="link" className="btn-operation-link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1 || records.isRelate !== 0} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)

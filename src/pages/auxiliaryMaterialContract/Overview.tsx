@@ -42,35 +42,38 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
             dataSource={data || {}} />
         <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>运费信息
             <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
-                <span style={{ fontWeight: 400 }}>运费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.transportBear?.transportTaxTotalAmount}</span>
-                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.transportBear?.transportTotalAmount}</span>
+                <span style={{ fontWeight: 400 }}>运费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.transportBear?.transportTaxPrice}</span>
+                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.transportBear?.transportPrice}</span>
                 </span>
             </p>
         </p>
         <BaseInfo col={2} columns={freightOverview} dataSource={data?.transportBear || {}} />
         <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>装卸费信息
             <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
-                <span style={{ fontWeight: 400 }}>装卸费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.unloadBear.unloadTaxTotalAmount}</span>
-                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.unloadBear.unloadTotalAmount}</span>
+                <span style={{ fontWeight: 400 }}>装卸费：含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.unloadBear.unloadTaxPrice}</span>
+                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.unloadBear.unloadPrice}</span>
                 </span>
             </p>
         </p>
         <BaseInfo col={2} columns={stevedoringOverview} dataSource={data?.unloadBear || {}} />
         <p style={{ fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0 }}>原材料信息
-            <p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>
-                <span style={{ fontWeight: 400 }}>
-                    {/*重量合计（吨）：<span style={{ color: '#FF8C00' }}>{data?.totalWeight}</span>*/}
-                    含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.totalTaxAmount}</span>
-                    不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.totalAmount}</span>
-                </span>
-            </p>
+            {/*<p style={{ fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0 }}>*/}
+            {/*    <span style={{ fontWeight: 400 }}>*/}
+            {/*        /!*重量合计（吨）：<span style={{ color: '#FF8C00' }}>{data?.totalWeight}</span>*!/*/}
+            {/*        含税金额合计（元）：<span style={{ color: '#FF8C00', marginRight: 12 }}>{data?.totalTaxAmount}</span>*/}
+            {/*        不含税金额合计（元）<span style={{ color: '#FF8C00' }}>{data?.totalAmount}</span>*/}
+            {/*    </span>*/}
+            {/*</p>*/}
         </p>
         <CommonTable style={{ paddingBottom: 0 }} columns={materialOverview} dataSource={data?.materialAuxiliaryContractDetails?.map((item:any)=>({
             ...item,
             // 不含税单价
             offer:item.price,
             // 含税单价
-            taxOffer:item.taxPrice
+            taxOffer:item.taxPrice,
+            // 含税金额合计
+            taxTotalAmount:item.totalTaxAmount
+
         })) || []} />
         <Attachment style={{ margin: 0 }} dataSource={data?.attachInfoList || []} />
     </Spin>

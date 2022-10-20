@@ -14,8 +14,6 @@ interface ChooseModalProps {
 export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
     const [chooseList, setChooseList] = useState<any[]>(initChooseList.map((item: any) => ({
         ...item,
-        price: item.unTaxPrice,
-        id: item.materialContractDetailId,
         key: `${item.id}-${Math.random()}-${new Date().getTime()}`
     })))
     const [selectList, setSelectList] = useState<any[]>([])
@@ -30,12 +28,16 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-supply/materialAuxiliaryContract/details`,
                 { supplierId: id, ...params })
-            setSelectList(result?.map((item: any) => ({
+            setSelectList(result?.map((item: any, index: number) => ({
                 ...item,
                 num: item.surplusNum,
-                id: item.materialContractDetailId
+                key: `${item.materialContractDetailId}-${index}`
             })).filter((item: any) => item.num))
-            resole(result)
+            resole(result?.map((item: any, index: number) => ({
+                ...item,
+                num: item.surplusNum,
+                key: `${item.materialContractDetailId}-${index}`
+            })).filter((item: any) => item.num))
         } catch (error) {
             reject(error)
         }
@@ -45,14 +47,11 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         setCurrentId("")
         setChooseList(initChooseList.map((item: any) => ({
             ...item,
-            price: item.unTaxPrice,
-            id: item.materialContractDetailId,
             key: `${item.id}-${Math.random()}-${new Date().getTime()}`
         })))
         setSelectList(data?.map((item: any) => ({
             ...item,
-            num: item.surplusNum,
-            id: item.id
+            num: item.surplusNum
         })).filter((item: any) => item.num))
     }
 
@@ -73,14 +72,14 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
 
     const handleSelect = async (id: string) => {
         const formData = await form.validateFields()
-        const currentData = selectList.find((item: any) => item.id === id)
+        const currentData = selectList.find((item: any) => item.key === id)
         setChooseList([
             ...chooseList,
             {
                 ...currentData,
                 receiveDetailStatus: 0,
                 num: formData.num,
-                key: `${currentData.id}-${Math.random()}-${new Date().getTime()}`
+                key: `${currentData.key}-${Math.random()}-${new Date().getTime()}`
             }])
         setVisible(false)
         form.resetFields()
@@ -106,16 +105,21 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
             }}>
             <Form form={form}>
                 <Row>
-                    <Col span={24}><Form.Item
-                        rules={[
-                            {
-                                required: true,
-                                message: "请输入数量..."
-                            }
-                        ]}
-                        style={{ width: "100%" }}
-                        name="num"
-                        label="输入数量"><InputNumber min={1} step={1} /></Form.Item></Col>
+                    <Col span={24}>
+                        <Form.Item
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "请输入数量..."
+                                }
+                            ]}
+                            style={{ width: "100%" }}
+                            name="num"
+                            label="输入数量"><InputNumber
+                                min={1} step={1}
+                                precision={0}
+                            /></Form.Item>
+                    </Col>
                 </Row>
             </Form>
         </Modal>
@@ -175,7 +179,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                     size="small"
                     disabled={records.receiveDetailStatus === 1}
                     onClick={() => {
-                        setCurrentId(records.id)
+                        setCurrentId(records.key)
                         setOprationType("select")
                         setVisible(true)
                     }}>选择</Button>

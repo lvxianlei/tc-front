@@ -46,6 +46,7 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                 taxOffer: [-1, "-1"].includes(item.taxOffer) ? 1 : item.taxOffer,
                 offer: [-1, "-1"].includes(item.offer) ? 1 : item.offer
             })))
+            console.log(result)
             resole(result)
         } catch (error) {
             reject(error)
@@ -79,7 +80,7 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                 supplierName: formData.supplier?.label || data?.supplierName,
                 inquiryQuotationOfferDtos: materials.map((item: any) => ({
                     ...item,
-                    comparisonPriceDetailId: item.id
+                    comparisonPriceDetailId: item.comparisonPriceDetailId || item.id,
                 })),
                 comparisonPriceId: params.id,
                 fileIds: attachRef.current?.getDataSource().map(item => item.id)
@@ -122,7 +123,7 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                 } : undefined,
                 manufacturer: data?.manufacturer
             }} edit />
-        <DetailTitle title="询价原材料" />
+        <DetailTitle title="询价辅材" />
         <CommonTable columns={addPriceHead.map((item: any) => {
             if (item.dataIndex === "taxOffer") {
                 return ({

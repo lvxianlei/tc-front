@@ -116,7 +116,7 @@ export default function ContractMngt(): JSX.Element {
                         dataIndex: "opration",
                         fixed: "right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" className="btn-operation-link" disabled={!(records.contractStatus !== 1 || records.contractStatus !== 2)}
+                            <Button type="link" className="btn-operation-link" disabled={records.contractStatus === 3 || records.contractStatus === 4 || records.contractStatus === 5}
                                     onClick={() => {
                                         setOprationType("edit")
                                         setDetailId(records.id)
@@ -128,7 +128,7 @@ export default function ContractMngt(): JSX.Element {
                             }}>详情</Button>
                             <Popconfirm
                                 title="确定删除此合同吗？"
-                                disabled={records.contractStatus !== 1}
+                                disabled={records.isReceiptRef !== 0}
                                 onConfirm={async () => {
                                     await deleteRun(records?.id)
                                     message.success("删除成功...")

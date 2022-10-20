@@ -77,11 +77,20 @@ export default function PurchasePlan() {
     ]
 
     const onFilterSubmit = (value: any) => {
-        if (value.createdTime) {
-            const formatDate = value.createdTime.map((item: any) => item.format("YYYY-MM-DD"))
-            delete value.createdTime
-            value.createdTime = formatDate[0] + ' 00:00:00';
-            value.createdTime = formatDate[1] + ' 23:59:59';
+        console.log(value)
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            delete value.createTime
+            value.startCreateTime = formatDate[0] + ' 00:00:00';
+            value.endCreateTime = formatDate[1] + ' 23:59:59';
+        }else{
+            value.startCreateTime = null
+            value.endCreateTime = null
+        }
+        if (value.applyName) {
+            value.purchaserId = value.applyName.value
+        }else{
+            value.purchaserId = null
         }
         setFilterValue({...filterValue,...value})
         return value
@@ -114,7 +123,7 @@ export default function PurchasePlan() {
                             }>
                                 <Link className="btn-operation-link" to={{
                                     pathname: `/buyAuxiliaryMaterial/purchasePlan/${records.id}`,
-                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus}`
+                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus},${records.collectPurchasePlanNumber?1:0}`
                                 }}>采购清单</Link>
                             </Button>
                         </>
@@ -141,13 +150,13 @@ export default function PurchasePlan() {
                                 history.go(0)
                             }
                         })
-                    }}>创建计划汇总</Button>
+                    }}>采购计划汇总</Button>
                 </>}
                 searchFormItems={[
                     {
-                        name: 'purchasePlanStatus',
+                        name: 'planStatus',
                         label: '计划状态',
-                        children: <Select style={{ width: 100 }} defaultValue="">
+                        children: <Select style={{ width: 100 }}>
                             <Select.Option value="" key="">全部</Select.Option>
                             <Select.Option value={1} key={1}>待完成</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
@@ -162,7 +171,7 @@ export default function PurchasePlan() {
                     {
                         name: 'collectType',
                         label: '汇总状态',
-                        children: <Select style={{ width: 100 }} defaultValue="">
+                        children: <Select style={{ width: 100 }}>
                             <Select.Option value="" key="">全部</Select.Option>
                             <Select.Option value={0} key={0}>未汇总</Select.Option>
                             <Select.Option value={1} key={1}>已汇总</Select.Option>

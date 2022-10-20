@@ -87,7 +87,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         choose.forEach(el=>{
             let flag = arr.every(item=>item.id != el.id)
             if(flag){
-                arr.push(el)
+                arr.push({
+                    ...el,
+                    planPurchaseNum:el.planPurchaseNum || 1
+                })
             }
         })
         // console.log(arr)
@@ -96,10 +99,21 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     }
     const  saveMaterialList = () => {
         // 所有新添加的辅材，部门、数量 字段都要全部填充完毕后才能保存
-        let flag:boolean = cargoData.every(item=>item.deptName && item.planPurchaseNum)
+        // 默认数量添加为一
+        setCargoData(cargoData.map((item:any)=>({...item,
+            planPurchaseNum:item.planPurchaseNum || 1,
+            purchasePlanId:item.purchasePlanId || params.id
+        })))
+        console.log(cargoData)
+        let flag:boolean = cargoData.every(item=>{
+            console.log(item.deptName,item.deptId)
+            return item.deptName && item.deptId
+        })
         if(!flag){
             return message.warn('请将数据补充完整')
         }
+        // todo 相同物料编码和使用部门的辅材 合并一条数据
+
         return new Promise(async (resove, reject) => {
             try {
                 await saveRequset()
@@ -120,7 +134,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 auxiliaryPurchasePlanId:params.id,
                 auxiliaryPurchasePlanListDTOS:cargoData,
                 purchasePlanNumber:search[0],
-                repurchaseTime:search[1]
+                repurchaseTime:search[1],
             });
             resole(result)
         } catch (error) {
@@ -153,7 +167,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 lists: cargoData.map((item: any) => {
                     return {
                         ...item,
-                        planPurchaseNum:item.planPurchaseNum || 1
+                        planPurchaseNum:item.planPurchaseNum || 1,
+                        purchasePlanId:item.purchasePlanId || params.id
                     }
                 })
             }
@@ -191,9 +206,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
 
 
     const handleEditableChange = (data: any) => {
-        const changeIndex = data.submit.length - 1
-        const changeFiled = data.submit[changeIndex]
-        console.log(changeFiled)
+        // const changeIndex = data.submit.length - 1
+        // const changeFiled = data.submit[changeIndex]
+        // console.log(changeFiled)
     }
 
 
@@ -201,7 +216,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <Modal
             width={1011}
             visible={visible}
-            title="选择辅财明细666"
+            title="选择辅财明细"
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)
@@ -225,12 +240,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         current={1}
                         size={cargoData.length}
                         total={cargoData.length}
-                        url={`/tower-supply/materialPurchaseTask`}
+                        url={`/tower-supply/auxiliaryMaterialPurchasePlan/list/${params.id}`}
                         serchObj={{}}
                         closeExportList={() => { setIsExportStoreList(false) }}
                     />:null}</span>,
-                !isEdit && <Button key="edit" type="primary" style={{ margin: "0px 8px" }}  onClick={() => setIsEdit(true)}>编辑</Button>,
-                isEdit && <Button key="add" type="primary" style={{ margin: "0px 8px" }} onClick={() => setVisible(true)}>添加</Button>,
+                !isEdit && <Button key="edit" type="primary" style={{ margin: "0px 8px" }}  onClick={() => setIsEdit(true)} disabled={
+                    location.search.substr(1).split(',')[3]=="0"?false:true
+                }>编辑</Button>,
+                isEdit && <Button key="add" type="primary" style={{ margin: "0px 8px" }} onClick={() => setVisible(true)}
+                    disabled={location.search.substr(1).split(',')[3]=="0"?false:true}
+                >添加</Button>,
                 isEdit && <Button key="save" type="primary" style={{ margin: "0px 8px" }} disabled={!cargoData.length} onClick={() =>  saveMaterialList()}>保存</Button>,
                 <Button
                     type="primary"
@@ -373,7 +392,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         //     })
                         // }
                         return item
-                    })
+                    }),
+                    search:[{
+                        title: "查询",
+                        dataIndex: "fuzzyQuery",
+                        width: 200,
+                        placeholder: "物料编码/品名"
+                    }]
                 }}
                 value={{
                     id: "",

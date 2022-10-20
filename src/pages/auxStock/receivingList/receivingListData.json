@@ -87,21 +87,34 @@
             "required": true,
             "search": [
                 {
-                    "title": "查询",
-                    "dataIndex": "fuzzyQuery",
-                    "placeholder": "编号/名称/联系人/联系人电话"
+                    "title": "供应商类型",
+                    "dataIndex": "supplierType",
+                    "placeholder": "供应商类型",
+                    "type": "select",
+                    "style": {
+                        "width": 160
+                    },
+                    "enum": [
+                        {
+                            "label": "全部",
+                            "value": ""
+                        }
+                    ]
                 },
                 {
-                    "title": "质量保证体系",
-                    "dataIndex": "qualityAssurance",
-                    "type": "select",
-                    "placeholder": "请选择"
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "placeholder": "供应商编号/供应商名称"
                 }
             ],
             "columns": [
                 {
                     "title": "供应商编号",
                     "dataIndex": "supplierCode"
+                },
+                {
+                    "title": "供应商类型",
+                    "dataIndex": "supplierTypeName"
                 },
                 {
                     "title": "供应商名称",
@@ -268,7 +281,7 @@
             "width": 80
         },
         {
-            "title": "含税单价（元/吨）",
+            "title": "含税单价（元）",
             "dataIndex": "taxPrice",
             "width": 120
         },
@@ -278,7 +291,7 @@
             "width": 100
         },
         {
-            "title": "不含税单价（元/吨）",
+            "title": "不含税单价（元）",
             "dataIndex": "price",
             "width": 130
         },
@@ -310,6 +323,12 @@
     ],
     "editCargoDetails": [
         {
+            "title": "单价",
+            "dataIndex": "price",
+            "type": "string",
+            "hidden": true
+        },
+        {
             "title": "合同编号",
             "dataIndex": "materialContractNumber",
             "type": "string",
@@ -330,8 +349,7 @@
         {
             "title": "数量",
             "dataIndex": "num",
-            "type": "number",
-            "disabled": true
+            "type": "number"
         },
         {
             "title": "单位",
@@ -360,7 +378,7 @@
         },
         {
             "title": "不含税单价（元/吨）",
-            "dataIndex": "unTaxPrice",
+            "dataIndex": "price",
             "disabled": true
         },
         {

@@ -40,6 +40,17 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
             reject(error)
         }
     }))
+    // 获取辅材第一层分类选项
+    const { data: materialTypeNameEnum } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get("/tower-system/materialCategory?materialDataType=2")
+            // console.log(result)
+            console.log(result?.map((item: any) => ({ value: item.id, label: item.name })))
+            resole(result?.map((item: any) => ({ value: item.id, label: item.name })))
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -93,6 +104,13 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
         if (!cargoData.length) {
             message.warning("请先选择辅材...")
             return
+        }
+        let flag:boolean = cargoData.every(item=>{
+            console.log(item.deptName,item.deptId)
+            return item.deptName && item.deptId
+        })
+        if(!flag){
+            return message.warn('请将数据补充完整')
         }
         try {
             const baseFormData = await form.validateFields()
@@ -174,6 +192,14 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
                         //     })
                         // }
                         return item
+                    }),
+                    search:(addMaterial as any).search.map((el:any)=>{
+                        if(el.dataIndex == "materialType"){
+                            el.enum = [
+                                ...(materialTypeNameEnum || [])
+                            ]
+                        }
+                        return el
                     })
                 }}
                 value={{

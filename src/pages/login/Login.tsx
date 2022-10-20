@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Button, Form, Input, Layout, notification, Carousel, message } from 'antd'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import ReactSimpleVerify from 'react-simple-verify'
 import ctxConfig from "../../app-ctx.config.jsonc"
 import AuthUtil from '../../utils/AuthUtil'
@@ -9,6 +9,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import Cookies from 'js-cookie'
 import MD5 from 'crypto-js/md5'
+import { Base64 } from 'js-base64'
 import 'react-simple-verify/dist/react-simple-verify.css'
 import layoutStyles from '../../layout/Layout.module.less'
 import style from './Login.module.less'
@@ -28,19 +29,11 @@ interface ILoginState {
 }
 
 export default function Login(): JSX.Element {
+    const location = useLocation()
     const history = useHistory()
     const verifyRef = useRef<any>()
     const [verify, setVerify] = useState<boolean>(false)
     const [loginForm] = Form.useForm();
-    const { data, run: updateRun } = useRequest<ILoginState>(() => new Promise(async (resole, reject) => {
-        try {
-            const captcha: ICaptcha = await RequestUtil.get(`/sinzetech-auth/oauth/captcha`)
-            resole({ captcha })
-        } catch (error) {
-            reject(false)
-        }
-    }))
-
     const { loading: saveLoading, run } = useRequest<any>((values: { [key: string]: any }) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.post(
@@ -50,7 +43,6 @@ export default function Login(): JSX.Element {
                 },
                 {
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'Captcha-key': data!.captcha.key,
                     'Tenant-Id': "null",
                     'Sinzetech-Auth': "null"
                 }
@@ -80,15 +72,10 @@ export default function Login(): JSX.Element {
             notification.error({
                 message: result.error_description
             })
-            // 获取验证码
-            await updateRun();
-            // 清空验证码
-            loginForm.setFieldsValue({
-                code: undefined
-            })
         } else {
+            const redirectURL = Base64.decode(location.hash)
             Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
-            Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
+            Cookies.set('ACCOUNT', result.account, { domain: 'localhost' })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserInfo({
                 user_id,
@@ -100,7 +87,11 @@ export default function Login(): JSX.Element {
             AuthUtil.setTenants(tenants)
             AuthUtil.setRealName(result.real_name)
             AuthUtil.setAccout(result.account)
-            history.push(ctxConfig.home || '/')
+            if (redirectURL) {
+                window.location.assign(redirectURL)
+            } else {
+                history.push(ctxConfig.home || '/')
+            }
         }
     }
 

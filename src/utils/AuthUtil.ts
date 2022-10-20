@@ -149,7 +149,7 @@ export default abstract class AuthUtil {
      * @returns sinzetech auth 
      */
     public static getSinzetechAuth(): string {
-        return sessionStorage.getItem(TOKEN_KEY) || ''
+        return Cookies.get(TOKEN_KEY) || ''
     }
 
     /**
