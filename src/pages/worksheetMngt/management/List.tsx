@@ -16,6 +16,7 @@ import SelectUser from '../../common/SelectUser';
 import WorkOrderNew from './WorkOrderNew';
 import WorkOrderDetail from './WorkOrderDetail';
 import EngineeringInformation from './EngineeringInformation';
+import Dispatching from './Dispatching';
  
 export interface EditRefProps {
     onSubmit: () => void
@@ -35,6 +36,8 @@ export interface EditRefProps {
      const [detailVisible,setDetailVisible] = useState<boolean>(false);
      const [dealVisible, setDealVisible] = useState<boolean>(false);
      const dealRef = useRef<EditRefProps>();
+     const [dispatchVisible,setDispatchVisible] = useState<boolean>(true);
+     const dispatchRef = useRef<EditRefProps>();
  
      const { data: galvanizedTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
          try {
@@ -153,7 +156,10 @@ export interface EditRefProps {
                 setDetailVisible(true);
                 setRowId(record.id);
              }} >详情</Button>
-                     <Button type='link'>派工</Button>
+                     <Button type='link' onClick={() =>{
+                    setDispatchVisible(true);
+                    setRowId(record.id);
+                 }} >派工</Button>
                      <Button type='link'onClick={() => {
                         setDealVisible(true);
                         setRowId(record.id);
@@ -282,7 +288,31 @@ export interface EditRefProps {
            reject(false)
        }
    })
+
+   const handleDispatchOk = () => new Promise(async (resove, reject) => {
+      try {
+          await dealRef.current?.onBack()
+          message.success("派工成功！")
+          setDealVisible(false)
+          // history.go(0)
+          resove(true)
+      } catch (error) {
+          reject(false)
+      }
+  })
+
      return <>
+     <Modal
+            destroyOnClose
+            key='Dispatching'
+            visible={dispatchVisible}
+            width="80%"
+            onOk={handleDispatchOk}
+            okText="完成"
+            title={"派工"}
+            onCancel={() => { setDispatchVisible(false); dispatchRef.current?.resetFields(); }}>
+            <Dispatching rowId={rowId} ref={dispatchRef} />
+        </Modal>
      <Modal
             destroyOnClose
             key='EngineeringInformation'
