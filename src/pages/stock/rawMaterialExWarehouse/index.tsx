@@ -64,6 +64,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     >明细</Button>
                     <Button
                         type="link"
+                        disabled={record.outStockStatus === 1}
                         onClick={
                             () => {
                                 setIsOpenId(true)
@@ -99,6 +100,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         departmentId: "",
         applyStaffId: "",
         outStockItemStatus: 2,
+        materialType: 1,
         ...history.location.state as object
     });
     //统计
