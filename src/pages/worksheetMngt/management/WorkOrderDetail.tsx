@@ -129,7 +129,29 @@
  
      const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
          const result: any = await RequestUtil.get<any>(`/tower-science/performance/config`);
-         resole(result);
+        const list = {
+            vo: [
+                {
+                    name: '一级处理',
+                    userList: [
+                        {
+                            name: '张三',
+                            fields: [
+                                {
+                                    key: '创建时间',
+                                    value: '2022'
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: '二级处理',
+
+                }
+            ]
+        }
+         resole(list);
      }), { refreshDeps: [rowId] })
  
      return <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>

@@ -15,10 +15,12 @@
 import SelectUser from '../../common/SelectUser';
 import WorkOrderNew from './WorkOrderNew';
 import WorkOrderDetail from './WorkOrderDetail';
+import EngineeringInformation from './EngineeringInformation';
  
 export interface EditRefProps {
     onSubmit: () => void
     resetFields: () => void
+    onBack: () => void
 }
  export default function List(): React.ReactNode {
      const [refresh, setRefresh] = useState<boolean>(false);
@@ -31,6 +33,8 @@ export interface EditRefProps {
      const [rowId, setRowId] = useState<string>('');
      const history = useHistory();
      const [detailVisible,setDetailVisible] = useState<boolean>(false);
+     const [dealVisible, setDealVisible] = useState<boolean>(false);
+     const dealRef = useRef<EditRefProps>();
  
      const { data: galvanizedTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
          try {
@@ -150,7 +154,10 @@ export interface EditRefProps {
                 setRowId(record.id);
              }} >详情</Button>
                      <Button type='link'>派工</Button>
-                     <Button type='link'>处理</Button>
+                     <Button type='link'onClick={() => {
+                        setDealVisible(true);
+                        setRowId(record.id);
+                     }}>处理</Button>
                      <Button type='link' onClick={() =>{
                     setVisible(true);
                     setType('edit');
@@ -251,8 +258,49 @@ export interface EditRefProps {
             reject(false)
         }
     })
+  
+    const handleDealOk = () => new Promise(async (resove, reject) => {
+        try {
+            await dealRef.current?.onSubmit()
+            message.success("处理完成！")
+            setDealVisible(false)
+            // history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    }) 
 
+    const handleBack = () => new Promise(async (resove, reject) => {
+       try {
+           await dealRef.current?.onBack()
+           message.success("退回成功！")
+           setDealVisible(false)
+           // history.go(0)
+           resove(true)
+       } catch (error) {
+           reject(false)
+       }
+   })
      return <>
+     <Modal
+            destroyOnClose
+            key='EngineeringInformation'
+            visible={dealVisible}
+            width="95%"
+            footer={
+                <Space>
+                <Button type="primary" onClick={handleDealOk} ghost>完成</Button>
+                <Button type="primary" onClick={handleBack} ghost>退回</Button>
+                <Button onClick={() => {
+                    setDealVisible(false);
+                }}>关闭</Button>
+                </Space>
+            }
+            title="报工信息"
+            onCancel={() => setDealVisible(false)}>
+            <EngineeringInformation rowId={rowId} ref={dealRef} />
+        </Modal>
      <Modal
             destroyOnClose
             key='WorkOrderDetail'

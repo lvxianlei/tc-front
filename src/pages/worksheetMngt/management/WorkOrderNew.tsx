@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2022 
- * @description WO-工单管理-工单管理-人工创建工单/编辑
+ * @description WO-工单管理-工单管理-处理
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
@@ -169,18 +169,6 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
 
     return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
         <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
-            <Form.Item
-                name={'userPenaltyRatio'}
-                label={'工单标题'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请输入工单标题`
-                    }
-                ]}>
-                <Input maxLength={20} />
-            </Form.Item>
-
             <Form.Item
                 name={'userPenaltyRatio'}
                 label={'工单模板'}
