@@ -90,6 +90,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [pagePath, setPagePath] = useState<string>("/tower-storage/outStock")
     const [columns, setColumns] = useState<any[]>(outStockList)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
+    const [num, setNum] = useState<any>({});
     const [filterValue, setFilterValue] = useState<any>({
         selectName: "",
         status: "",
@@ -100,7 +101,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         outStockItemStatus: 2,
         ...history.location.state as object
     });
-
+    //统计
+    const { loading, data, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<any>(`/tower-storage/outStock/detail/statistics`, { ...filterValue })
+        setNum(data)
+        resole(data)
+    }))
     // 删除
     const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -119,10 +125,17 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.createTimeEnd = `${formatDate[1]} 23:59:59`
             delete value.createTime
         }
+        if (value.openTime) {
+            const formatDate = value.openTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.updateTimeStart = `${formatDate[0]} 00:00:00`
+            value.updateTimeEnd = `${formatDate[1]} 23:59:59`
+            delete value.openTime
+        }
         if (value.batcherId) {
             value.applyStaffId = value.batcherId.value
         }
         setFilterValue({ ...filterValue, ...value })
+        run({...filterValue, ...value})
         return value
     }
 
@@ -172,6 +185,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Radio.Button value="b">出库明细</Radio.Button>
                             </Radio.Group>
                         </div>
+                        <span>
+                            <span >数量合计：<span >{num?.totalNum}</span>吨</span>
+                            <span > 重量合计（吨）：<span >{num?.weightCount}</span>吨</span>
+                            <span > 含税金额合计（元）：<span >{num?.totalTaxPrice}</span>吨</span>
+                            <span > 不含税金额合计（元）：<span >{num?.totalUnTaxPrice}</span>吨</span>
+                        </span>
                     </>
                 }
                 searchFormItems={[
@@ -206,6 +225,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <IntgSelect width={200} />
                     },
                     {
+                        name: 'openTime',
+                        label: '出库时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
                         name: 'materialName',
                         label: '品名',
                         children: <Input placeholder="请输入品名" style={{ width: 150 }} />
@@ -217,8 +241,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     },
                     {
                         name: 'fuzzyQuery',
-                        label: "关键字",
-                        children: <Input placeholder="领料编号/生产批次" style={{ width: 200 }} />
+                        label: "模糊查询",
+                        children: <Input placeholder="请输入炉批号/质保书号/下达单号/计划号/工程名称/内部合同号/塔型进行查询" style={{ width: 200 }} />
                     }
                 ]}
             />

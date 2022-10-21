@@ -104,6 +104,17 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        if (fields.issuedNumber) {
+            const result = fields.issuedNumber.records[0];
+            addCollectionForm.setFieldsValue({
+                productCategoryName: result.productCategoryName, // 塔型
+                contractNumber: result.contractNumber,// 内部合同号
+                planNumber: result.planNumber,// 计划号
+                projectName: result.projectName, // 工程名称
+                issuedNumber: result.issuedNumber, // 下达单号
+            })
+            return;
+        }
         if (fields.wareHouseId) {
             setWarehouseId(fields.wareHouseId);
             return;

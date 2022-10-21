@@ -47,8 +47,13 @@
             "width": 120
         },
         {
-            "title": "重量(吨)",
+            "title": "单重(吨)",
             "dataIndex": "weight",
+            "width": 120
+        },
+        {
+            "title": "总重量(吨)",
+            "dataIndex": "totalWeight",
             "width": 120
         },
         {
@@ -69,6 +74,21 @@
         {
             "title": "轧制批号",
             "dataIndex": "rollingNumber",
+            "width": 120
+        },
+        {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 120
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "plamNumber",
+            "width": 120
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
             "width": 120
         },
         {
