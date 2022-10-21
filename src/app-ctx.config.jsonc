@@ -409,22 +409,22 @@
                 "icon": "gongying-kucunguanli_kucunguanli",
                 "path": "/auxStock",
                 "appName": "SW",
-                "authority": "tc_erp_sw_stock",
+                "authority": "tc_erp_sw_auxiliary_stock",
                 "items": [
                     {
                         "label": "辅材收货单",
                         "path": "/auxStock/receiving",
-                        "authority": "tc_erp_sw_stock_material_receive"
+                        "authority": "tc_erp_sw_stock_material_auxiliary_receive"
                     },
                     {
                         "label": "辅材库存",
                         "path": "/auxStock/warehouse",
-                        "authority": "tc_erp_sw_stock_material"
+                        "authority": "tc_erp_sw_stock_auxiliary_material"
                     },
                     {
                         "label": "辅材入库",
                         "path": "/auxStock/entryWarehouse",
-                        "authority": "tc_erp_sw_stock_material_in"
+                        "authority": "tc_erp_sw_stock_auxiliary_material"
                     },
                     {
                         "label": "辅材出库",

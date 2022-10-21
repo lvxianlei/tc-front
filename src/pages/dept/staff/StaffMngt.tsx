@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Input, Button, Popconfirm, message, Upload, Select, Form } from 'antd';
+import { Space, Input, Button, Popconfirm, message, Upload, Select, Form, Modal } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -217,10 +217,15 @@ export default function StaffMngt(): React.ReactNode {
                 disabled={selectedKeys.length <= 0}
                 loading={deleting}
                 onClick={async () => {
-                    console.log(selectedKeys)
-                    await deleteRun(selectedKeys as any)
-                    await message.success("删除成功")
-                    history.go(0)
+                    Modal.confirm({
+                        title: "删除员工！",
+                        content: "确定要删除选中的员工吗？",
+                        onOk: async () => {
+                            await deleteRun(selectedKeys as any)
+                            await message.success("删除成功")
+                            history.go(0)
+                        }
+                    })
                 }}>删除</Button>
         </Space>}
         refresh={refresh}

@@ -4,7 +4,7 @@
  * 时间：2022/01/06
  */
 import React, { useState } from 'react';
-import { Button, message } from 'antd';
+import { Button, message, Popconfirm, Space } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../../common';
 import RequestUtil from '../../../../utils/RequestUtil';
@@ -42,7 +42,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     // 统计信息接口
     const { data: statisticsData, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehousingEntry/statisticsWarehousingEntry/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehousingEntry/statisticsWarehousingEntry`,{warehousingEntryId: params.id})
             resole(result)
         } catch (error) {
             reject(error)
@@ -54,22 +54,22 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             message.error("请选择原材料");
             return false;
         }
-        const result: any = [];
-        for (let i = 0; i < selectedRowKeys.length; i += 1) {
-            const v = {
-                id: selectedRowKeys[i],
-                warehousingEntryType: 1
-            }
-            result.push(v)
-        }
-        await saveRun(result);
+        // const result: any = [];
+        // for (let i = 0; i < selectedRowKeys.length; i += 1) {
+        //     const v = {
+        //         id: selectedRowKeys[i],  
+        //         warehousingEntryType: 1
+        //     }
+        //     result.push(v)
+        // }
+        await saveRun(selectedRowKeys);
         history.go(0);
     }
     return (
         <>
             <Page
-                path={`/tower-storage/warehousingEntry/getWarehousingEntryDetail/${params.id}`}
-                exportPath={`/tower-storage/warehousingEntry/getWarehousingEntryDetail/${params.id}`}
+                path={`/tower-storage/warehousingEntry/warehousingEntryDetail?warehousingEntryId=${params.id}`}
+                exportPath={`/tower-storage/warehousingEntry/warehousingEntryDetail?warehousingEntryId=${params.id}`}
                 columns={[
                     {
                         key: 'index',
@@ -83,7 +83,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         title: '操作',
                         dataIndex: 'key',
-                        width: 80,
+                        width: 100,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
@@ -97,6 +97,34 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     await saveRun(result);
                                     history.go(0);
                                 }}>入库</Button>
+                                <Popconfirm
+                                    title="确认撤销?"
+                                    onConfirm={() => {
+                                        RequestUtil.put(`/tower-storage/warehousingEntry/detail/repeal/${record.id}`).then(res => {
+                                            message.success("成功撤销...")
+                                            history.go(0)
+                                        });
+                                    }}
+                                    okText="确认"
+                                    cancelText="取消"
+                                    disabled={record.state === 1}
+                                >
+                                    <Button type="link" disabled={record.state === 1}>撤销</Button>
+                                </Popconfirm>
+                                <Popconfirm
+                                    title="确认删除?"
+                                    onConfirm={() => {
+                                        RequestUtil.delete(`/tower-storage/warehousingEntry/detail/${record.id}`).then(res => {
+                                            message.success("成功删除...")
+                                            history.go(0)
+                                        });
+                                    }}
+                                    okText="确认"
+                                    cancelText="取消"
+                                    disabled={record.state === 1}
+                                >
+                                    <Button type="link" disabled={record.state === 1}>删除</Button>
+                                </Popconfirm>
                             </>
                         )
                     }
