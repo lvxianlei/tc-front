@@ -186,10 +186,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             </Radio.Group>
                         </div>
                         <span>
-                            <span >数量合计：<span >{num?.totalNum}</span>吨</span>
-                            <span > 重量合计（吨）：<span >{num?.weightCount}</span>吨</span>
-                            <span > 含税金额合计（元）：<span >{num?.totalTaxPrice}</span>吨</span>
-                            <span > 不含税金额合计（元）：<span >{num?.totalUnTaxPrice}</span>吨</span>
+                            <span >数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalNum||0}</span></span>
+                            <span >重量合计（吨）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.weightCount||0}</span></span>
+                            <span >含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalTaxPrice||0}</span></span>
+                            <span >不含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalUnTaxPrice||0}</span></span>
                         </span>
                     </>
                 }

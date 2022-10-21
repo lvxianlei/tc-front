@@ -153,7 +153,12 @@ export default function CreatePlan(props: any): JSX.Element {
         if (props.visible) {
             getBatchingStrategy();
             addCollectionForm.setFieldsValue({
-                pickingTime: moment(new Date()).format("YYYY-MM-DD")
+                pickingTime: moment(new Date()).format("YYYY-MM-DD"),
+                issuedNumber:'',
+                projectName:'',
+                planNumber:'',
+                contractNumber:'',
+                productCategoryName:'',
             })
         }
     }, [props.visible])
@@ -178,6 +183,7 @@ export default function CreatePlan(props: any): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`)
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
+            result?.warehouseId && result?.warehouseId!==null && setWarehouseId(result?.warehouseId)
             resole({
                 ...result,
                 pickingUserId: {
