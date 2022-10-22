@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2022 
- * @description 绩效管理-放样计件-绩效配置
+ * @description 工单设置-工单模板管理-新建模板
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
@@ -30,12 +30,14 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
 
     const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${rowId}`);
-        form.setFieldsValue({ ...result, nodeNumber: result?.templateNodeVOList?.length + 1, node: result?.templateNodeVOList.map((res: any) => {
-            return {
-                ...res,
-                post: res?.post?.split(',')
-            }
-        }) || [], items: result?.templateCustomVOList || [] });
+        form.setFieldsValue({
+            ...result, nodeNumber: result?.templateNodeVOList?.length + 1, node: result?.templateNodeVOList.map((res: any) => {
+                return {
+                    ...res,
+                    post: res?.post?.split(',')
+                }
+            }) || [], items: result?.templateCustomVOList || []
+        });
         setDealList(result?.templateNodeVOList?.map((res: any) => {
             return {
                 ...res,
@@ -81,7 +83,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     required: true,
                     message: '请选择模式'
                 }]}>
-                    <Select size="small" disabled={type === 'detail'} placeholder={'请选择模式'}>
+                    <Select disabled={type === 'detail'} placeholder={'请选择模式'}>
                         <Select.Option value={'FS'} key={0}>FS</Select.Option>
                         <Select.Option value={'FF'} key={1}>FF</Select.Option>
                         <Select.Option value={'SF'} key={2}>SF</Select.Option>
@@ -99,14 +101,14 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                 <>
                     {index === 0 ?
                         <Form.Item name={['node', index, 'upstreamNode']}>
-                            <Input size="small" defaultValue="任务开始" disabled />
+                            <Input defaultValue="任务开始" disabled />
                         </Form.Item>
                         :
                         <Form.Item name={['node', index, 'upstreamNode']} rules={[{
                             required: true,
                             message: '请选择上游节点'
                         }]}>
-                            <Select disabled={type === 'detail'} size="small" placeholder={'请选择上游节点'}>
+                            <Select disabled={type === 'detail'} placeholder={'请选择上游节点'}>
                                 {
                                     upstreamNodes?.map((res: any, ind: number) => {
                                         return <Select.Option disabled={ind >= index} value={res?.name} key={ind}>{res?.name}</Select.Option>
@@ -128,7 +130,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     required: true,
                     message: '请选择时效类型'
                 }]}>
-                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择时效类型'}>
+                    <Select disabled={type === 'detail'} placeholder={'请选择时效类型'}>
                         <Select.Option value={'小时'} key={0}>小时</Select.Option>
                         <Select.Option value={'工作日'} key={1}>工作日</Select.Option>
                         <Select.Option value={'自然日'} key={2}>自然日</Select.Option>
@@ -147,7 +149,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     required: true,
                     message: '请输入时效要求'
                 }]}>
-                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入时效要求" style={{ width: '100%' }} min={1} max={99} precision={0} />
+                    <InputNumber disabled={type === 'detail'} placeholder="请输入时效要求" style={{ width: '100%' }} min={1} max={99} precision={0} />
                 </Form.Item>
             )
         },
@@ -161,7 +163,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     required: true,
                     message: '请输入处理名称'
                 }]}>
-                    <Input disabled={type === 'detail'} size="small" placeholder="请输入处理名称" maxLength={30} />
+                    <Input disabled={type === 'detail'} placeholder="请输入处理名称" maxLength={30} />
                 </Form.Item>
             )
         },
@@ -175,7 +177,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     required: true,
                     message: '请选择岗位'
                 }]}>
-                    <Select disabled={type === 'detail'} mode="multiple" size="small" placeholder={'请选择岗位'}>
+                    <Select disabled={type === 'detail'} mode="multiple" placeholder={'请选择岗位'}>
                         {
                             stations && stations?.map((res: any, ind: number) => {
                                 return <Select.Option value={res?.id} key={ind}>{res?.stationName}</Select.Option>
@@ -227,7 +229,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                         }
                     }
                 }]}>
-                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入排序" max={999} min={1} precision={0} />
+                    <InputNumber disabled={type === 'detail'} placeholder="请输入排序" max={999} min={1} precision={0} />
                 </Form.Item>
             )
         },
@@ -254,7 +256,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                         }
                     }
                 }]}>
-                    <Input disabled={type === 'detail'} size="small" placeholder="请输入字段名称" maxLength={20} />
+                    <Input disabled={type === 'detail'} placeholder="请输入字段名称" maxLength={20} />
                 </Form.Item>
             )
         },
@@ -267,7 +269,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     required: true,
                     message: '请选择是否必填'
                 }]} initialValue={0}>
-                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择是否必填'}>
+                    <Select disabled={type === 'detail'} placeholder={'请选择是否必填'}>
                         <Select.Option value={1} key={0}>是</Select.Option>
                         <Select.Option value={0} key={1}>否</Select.Option>
                     </Select>
@@ -283,7 +285,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     required: true,
                     message: '请选择所属节点'
                 }]}>
-                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择所属节点'}>
+                    <Select disabled={type === 'detail'} placeholder={'请选择所属节点'}>
                         {
                             upstreamNodes?.map((res: any, ind: number) => {
                                 return <Select.Option value={res?.name} key={ind}>{res?.name}</Select.Option>
@@ -318,26 +320,26 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(res => {
-                if(customList.length > 0) {
+                if (customList.length > 0) {
                     customForm.validateFields().then(async res => {
-                    const value = form.getFieldsValue(true);
-                    const customValue = customForm.getFieldsValue(true);
-                    console.log(value, customValue)
-                    await saveRun({
-                        ...value,
-                        value:value?.node?.map((res: any) => {
-                            return {
-                            ...res,
-                            post: res?.post?.join(',')
-                        }
-                    })
-                    })
-                    resolve(true);
+                        const value = form.getFieldsValue(true);
+                        const customValue = customForm.getFieldsValue(true);
+                        console.log(value, customValue)
+                        await saveRun({
+                            ...value,
+                            value: value?.node?.map((res: any) => {
+                                return {
+                                    ...res,
+                                    post: res?.post?.join(',')
+                                }
+                            })
+                        })
+                        resolve(true);
 
-                })
+                    })
                 } else {
                     message.warning('请增加自定义项！')
-                }       
+                }
             })
         } catch (error) {
             reject(false)
@@ -359,7 +361,8 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
         do {
             nodeList.push({
                 name: numTOnum(num) + '级处理',
-                colour: '#FF8C00'
+                colour: '#FF8C00',
+                level: num
             })
             num++;
         }
