@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2022 
- * @description 工单设置-工单模板管理-新建模板
+ * @description 工单设置-工单模板管理
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
@@ -68,9 +68,9 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
 
     const columns = [
         {
-            key: 'name',
+            key: 'processingName',
             title: '层级',
-            dataIndex: 'name',
+            dataIndex: 'processingName',
             width: 100
         },
         {
@@ -234,18 +234,18 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
             )
         },
         {
-            key: 'fieldName',
+            key: 'fieldKey',
             title: '字段名称',
-            dataIndex: 'fieldName',
+            dataIndex: 'fieldKey',
             editable: true,
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['items', index, 'fieldName']} rules={[{
+                <Form.Item name={['items', index, 'fieldKey']} rules={[{
                     required: true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
                         if (value) {
                             const values: any[] = JSON.parse(JSON.stringify(customForm.getFieldsValue(true).items));
                             values.splice(index, 1);
-                            var same = values.some((item: any) => item.fieldName === value);
+                            var same = values.some((item: any) => item.fieldKey === value);
                             if (same) {
                                 callback('字段名称重复')
                             } else {
@@ -261,11 +261,11 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
             )
         },
         {
-            key: 'isRequired',
+            key: 'required',
             title: '是否必填',
-            dataIndex: 'isRequired',
+            dataIndex: 'required',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['items', index, 'isRequired']} rules={[{
+                <Form.Item name={['items', index, 'required']} rules={[{
                     required: true,
                     message: '请选择是否必填'
                 }]} initialValue={0}>
@@ -277,11 +277,11 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
             )
         },
         {
-            key: 'node',
+            key: 'workOrderNode',
             title: '所属节点',
-            dataIndex: 'node',
+            dataIndex: 'workOrderNode',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['items', index, 'node']} rules={[{
+                <Form.Item name={['items', index, 'workOrderNode']} rules={[{
                     required: true,
                     message: '请选择所属节点'
                 }]}>
@@ -417,10 +417,10 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                         name={'templateType'}
                         label={'模板类型'}
                         rules={[
-                            // {
-                            //     required: true,
-                            //     message: `请选择模板类型`
-                            // }
+                            {
+                                required: true,
+                                message: `请选择模板类型`
+                            }
                         ]}>
                         <TreeSelect
                             disabled={type === 'detail'}

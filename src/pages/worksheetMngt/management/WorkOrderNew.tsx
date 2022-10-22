@@ -1,7 +1,7 @@
 /**
  * @author zyc
  * @copyright © 2022 
- * @description WO-工单管理-工单管理-处理
+ * @description WO-工单管理-工单管理-人工创建工单/编辑
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
@@ -23,9 +23,20 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     const [dealList, setDealList] = useState<any[]>([]);
     const [customList, setCustomList] = useState<any[]>([]);
 
+    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/${rowId}`);
+        form.setFieldsValue({
+            workOrderTypeId: result?.workOrderTypeId + ',' + result?.workTemplateName,
+            node: data?.workOrderNodeVOList
+        })
+        setDealList(data?.workOrderNodeVOList);
+        setCustomList(result?.workOrderCustomDetailsVOList)
+        resole(result);
+    }), { manual: type === 'new', refreshDeps: [rowId, type] })
+
     const { data: templateList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(``);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/template?size=1000`);
             resole(result?.records)
         } catch (error) {
             reject(error)
@@ -34,15 +45,15 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
 
     const columns = [
         {
-            key: 'hierarchy',
+            key: 'processingName',
             title: '层级',
-            dataIndex: 'hierarchy',
+            dataIndex: 'processingName',
             width: 100
         },
         {
-            key: 'model',
+            key: 'pattern',
             title: '模式',
-            dataIndex: 'model',
+            dataIndex: 'pattern',
             width: 100
         },
         {
@@ -58,12 +69,12 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
             width: 100
         },
         {
-            key: 'aging',
+            key: 'agingSize',
             title: '时效',
-            dataIndex: 'aging',
+            dataIndex: 'agingSize',
             width: 100,
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['node', index, '']} rules={[{
+                <Form.Item name={['node', index, 'agingSize']} rules={[{
                     required: true,
                     message: '请输入时效要求'
                 }]}>
@@ -72,21 +83,21 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
             )
         },
         {
-            key: 'handleName',
+            key: 'processingName',
             title: '处理名称',
-            dataIndex: 'handleName',
+            dataIndex: 'processingName',
             width: 100
         },
         {
-            key: 'jobs',
+            key: 'post',
             title: '岗位',
-            dataIndex: 'jobs',
+            dataIndex: 'post',
             width: 100
         },
         {
-            key: 'color',
+            key: 'colour',
             title: '颜色',
-            dataIndex: 'color',
+            dataIndex: 'colour',
             width: 100,
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
                 <Space>
@@ -99,37 +110,30 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
 
     const customColumns = [
         {
-            key: 'index',
+            key: 'sort',
             title: '排序',
-            dataIndex: 'index'
+            dataIndex: 'sort'
         },
         {
-            key: 'name',
+            key: 'fieldKey',
             title: '字段名称',
-            dataIndex: 'name'
+            dataIndex: 'fieldKey'
         },
         {
-            key: 'is',
+            key: 'required',
             title: '是否必填',
-            dataIndex: 'is'
+            dataIndex: 'required'
         },
         {
-            key: 'node',
+            key: 'workOrderNode',
             title: '所属节点',
-            dataIndex: 'node'
+            dataIndex: 'workOrderNode'
         }
     ]
 
-    const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-science/performance/config`);
-        form.setFieldsValue({ ...result, node: [{ color: '#FFFFFF' }] });
-        setDealList([{ id: 111, color: '#FFFFFF' }])
-        resole(result);
-    }), { manual: type === 'new', refreshDeps: [rowId, type] })
-
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/performance/config`, data)
+            const result: { [key: string]: any } = await RequestUtil.post(type === 'new' ? `/tower-work/workOrder/createWorkOrderArtificial` : `/tower-work/workOrder/saveWorkOrder`, data)
             resove(result)
         } catch (error) {
             reject(error)
@@ -139,13 +143,13 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(res => {
-                customForm.validateFields().then(res => {
-                    const value = form.getFieldsValue(true);
-                    const customValue = customForm.getFieldsValue(true);
-                    console.log(value, customValue)
-                    //  await saveRun(value)
-                    resolve(true);
-
+                const value = form.getFieldsValue(true);
+                console.log(value)
+                saveRun({
+                    id: data?.id,
+                    workTemplateId: value?.workTemplateId.split(',')[1],
+                    workTemplateName: value?.workTemplateId.split(',')[0],
+                    workOrderNodeDTOList: value?.node
                 })
             })
         } catch (error) {
@@ -154,11 +158,10 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     })
 
     const templateChange = async (e: any) => {
-        console.log(e)
-        const result: any = await RequestUtil.get<any>(`/tower-science/performance/config`);
-        setCustomList([]);
-        setDealList([]);
-        
+        const result: any = await RequestUtil.get<any>(`/tower-work/template/${rowId}`);
+        setCustomList(result?.templateCustomVOList);
+        setDealList(result?.templateNodeVOList);
+
     }
 
     const resetFields = () => {
@@ -170,7 +173,7 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
         <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
             <Form.Item
-                name={'userPenaltyRatio'}
+                name={'workOrderTypeId'}
                 label={'工单模板'}
                 rules={[
                     {
@@ -181,7 +184,7 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
                 <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e)}>
                     {
                         templateList?.map((res: any, ind: number) => {
-                            return <Select.Option value={res?.hierarchy} key={ind}>{res?.hierarchy}</Select.Option>
+                            return <Select.Option value={res?.templateName + ',' + res?.id} key={ind}>{res?.templateName}</Select.Option>
                         })
                     }
                 </Select>
@@ -200,7 +203,7 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
         <DetailTitle title="自定义项" key={0} />
         <CommonTable
             columns={customColumns}
-            dataSource={customList}
+            dataSource={customList || []}
             pagination={false}
         />
     </DetailContent>
