@@ -4,43 +4,80 @@
  * @description 绩效管理-放样计件-绩效配置
  */
 
- import React, { useImperativeHandle, forwardRef, useState } from "react";
- import { Button, Col, Form, Input, InputNumber, Row, Select, Space, TreeSelect } from 'antd';
- import { CommonTable, DetailContent, DetailTitle } from '../../common';
- import RequestUtil from '../../../utils/RequestUtil';
- import useRequest from '@ahooksjs/use-request';
- import { FixedType } from 'rc-table/lib/interface';
- import styles from './WorksheetTemplateMngt.module.less'
+import React, { useImperativeHandle, forwardRef, useState } from "react";
+import { Button, Col, Form, Input, InputNumber, message, Row, Select, Space, TreeSelect } from 'antd';
+import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
+import { FixedType } from 'rc-table/lib/interface';
+import styles from './WorksheetTemplateMngt.module.less'
 import SelectColor from "../../common/SelectColor";
 import { RuleObject } from "antd/lib/form";
 import { StoreValue } from "antd/lib/form/interface";
- 
- interface modalProps {
+
+interface modalProps {
     type: 'new' | 'edit' | 'detail';
     rowId: string;
- }
+}
 
- export default forwardRef(function WorkOrderTemplateNew({ type,rowId }: modalProps, ref) {
+export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalProps, ref) {
     const [form] = Form.useForm();
     const [customForm] = Form.useForm();
     const [upstreamNodes, setUpstreamNode] = useState<any[]>([]);
     const [dealList, setDealList] = useState<any[]>([]);
     const [customList, setCustomList] = useState<any[]>([]);
-    
+
+
+    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get<any>(`/tower-work/template/${rowId}`);
+        form.setFieldsValue({ ...result, nodeNumber: result?.templateNodeVOList?.length + 1, node: result?.templateNodeVOList.map((res: any) => {
+            return {
+                ...res,
+                post: res?.post?.split(',')
+            }
+        }) || [], items: result?.templateCustomVOList || [] });
+        setDealList(result?.templateNodeVOList?.map((res: any) => {
+            return {
+                ...res,
+                post: res?.post?.split(',')
+            }
+        }) || [])
+        setCustomList(result?.templateCustomVOList || [])
+        resole(result);
+    }), { manual: type === 'new', refreshDeps: [rowId, type] })
+
+    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        nodeNumberBlur('1');
+        form.setFieldsValue({
+            nodeNumber: 1
+        })
+        resole(true);
+    }), { manual: type !== 'new', refreshDeps: [rowId, type] })
+
+    const { data: stations } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get<any>(`/tower-system/station?size=1000`);
+        resole(result?.records || []);
+    }), {})
+
+    const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
+        resole(result || []);
+    }), {})
+
     const columns = [
         {
-            key: 'hierarchy',
+            key: 'name',
             title: '层级',
-            dataIndex: 'hierarchy',
+            dataIndex: 'name',
             width: 100
         },
         {
-            key: 'model',
+            key: 'pattern',
             title: '模式',
-            dataIndex: 'model',
+            dataIndex: 'pattern',
             width: 100,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['node', index, '']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['node', index, 'pattern']} rules={[{
                     required: true,
                     message: '请选择模式'
                 }]}>
@@ -58,23 +95,27 @@ import { StoreValue } from "antd/lib/form/interface";
             title: '上游节点',
             dataIndex: 'upstreamNode',
             width: 100,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['node', index, '']} rules={[{
-                    required: true,
-                    message: '请选择上游节点'
-                }]}>
-                    {index === 0 ? 
-                    <Input size="small" defaultValue="任务开始" disabled/>
-            :
-                    <Select disabled={type === 'detail'} size="small" placeholder={'请选择上游节点'}>
-                        {
-                        upstreamNodes?.map((res: any, ind: number) => {
-                            return <Select.Option disabled={ind >= index} value={res?.hierarchy} key={ind}>{res?.hierarchy}</Select.Option>
-                        })
-                        }
-                    </Select>
-            }
-                </Form.Item>
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    {index === 0 ?
+                        <Form.Item name={['node', index, 'upstreamNode']}>
+                            <Input size="small" defaultValue="任务开始" disabled />
+                        </Form.Item>
+                        :
+                        <Form.Item name={['node', index, 'upstreamNode']} rules={[{
+                            required: true,
+                            message: '请选择上游节点'
+                        }]}>
+                            <Select disabled={type === 'detail'} size="small" placeholder={'请选择上游节点'}>
+                                {
+                                    upstreamNodes?.map((res: any, ind: number) => {
+                                        return <Select.Option disabled={ind >= index} value={res?.name} key={ind}>{res?.name}</Select.Option>
+                                    })
+                                }
+                            </Select>
+                        </Form.Item>
+                    }
+                </>
             )
         },
         {
@@ -82,8 +123,8 @@ import { StoreValue } from "antd/lib/form/interface";
             title: '时效类型',
             dataIndex: 'agingType',
             width: 100,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['node', index, '']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['node', index, 'agingType']} rules={[{
                     required: true,
                     message: '请选择时效类型'
                 }]}>
@@ -97,132 +138,138 @@ import { StoreValue } from "antd/lib/form/interface";
             )
         },
         {
-            key: 'aging',
+            key: 'agingSize',
             title: '时效',
-            dataIndex: 'aging',
+            dataIndex: 'agingSize',
             width: 100,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['node', index, '']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['node', index, 'agingSize']} rules={[{
                     required: true,
                     message: '请输入时效要求'
                 }]}>
-                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入时效要求" style={{width: '100%'}} min={1} max={99} precision={0}/>
+                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入时效要求" style={{ width: '100%' }} min={1} max={99} precision={0} />
                 </Form.Item>
             )
         },
         {
-            key: 'handleName',
+            key: 'processingName',
             title: '处理名称',
-            dataIndex: 'handleName',
+            dataIndex: 'processingName',
             width: 100,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['node', index, '']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['node', index, 'processingName']} rules={[{
                     required: true,
                     message: '请输入处理名称'
                 }]}>
-                    <Input disabled={type === 'detail'} size="small" placeholder="请输入处理名称" maxLength={30}/>
+                    <Input disabled={type === 'detail'} size="small" placeholder="请输入处理名称" maxLength={30} />
                 </Form.Item>
             )
         },
         {
-            key: 'jobs',
+            key: 'post',
             title: '岗位',
-            dataIndex: 'jobs',
+            dataIndex: 'post',
             width: 100,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['node', index, '']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['node', index, 'post']} rules={[{
                     required: true,
                     message: '请选择岗位'
                 }]}>
-                    <Input disabled={type === 'detail'} size="small" placeholder="请选择岗位" maxLength={30}/>
+                    <Select disabled={type === 'detail'} mode="multiple" size="small" placeholder={'请选择岗位'}>
+                        {
+                            stations && stations?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.id} key={ind}>{res?.stationName}</Select.Option>
+                            })
+                        }
+                    </Select>
                 </Form.Item>
             )
         },
         {
-            key: 'color',
+            key: 'colour',
             title: '颜色',
-            dataIndex: 'color',
+            dataIndex: 'colour',
             width: 100,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['node', index, 'color']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['node', index, 'colour']} rules={[{
                     required: true,
                     message: '请选择颜色'
                 }]}>
-                    <SelectColor  disabled={type === 'detail'} defaultColor={record?.color} onChange={(color: string) => {
+                    <SelectColor disabled={type === 'detail'} defaultColor={record?.colour} onChange={(color: string) => {
                         console.log(color)
-                    }}/>
+                    }} />
                 </Form.Item>
             )
         }
     ]
 
-    const customColumns= [
+    const customColumns = [
         {
-            key: 'index',
+            key: 'sort',
             title: '排序',
-            dataIndex: 'index',
+            dataIndex: 'sort',
             editable: true,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['items', index, 'index']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['items', index, 'sort']} rules={[{
                     required: true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
                         if (value) {
-                                const values: any[] = JSON.parse(JSON.stringify(customForm.getFieldsValue(true).items));
-                                values.splice(index, 1);
-                                var same = values.some((item: any) => item.index === value);
-                                if (same) {
-                                    callback('排序重复')
-                                } else {
-                                    callback()
-                                }
+                            const values: any[] = JSON.parse(JSON.stringify(customForm.getFieldsValue(true).items));
+                            values.splice(index, 1);
+                            var same = values.some((item: any) => item.sort === value);
+                            if (same) {
+                                callback('排序重复')
+                            } else {
+                                callback()
+                            }
                         } else {
                             callback('请输入排序')
                         }
                     }
                 }]}>
-                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入排序" max={999} min={1} precision={0}/>
+                    <InputNumber disabled={type === 'detail'} size="small" placeholder="请输入排序" max={999} min={1} precision={0} />
                 </Form.Item>
             )
         },
         {
-            key: 'name',
+            key: 'fieldName',
             title: '字段名称',
-            dataIndex: 'name',
+            dataIndex: 'fieldName',
             editable: true,
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['items', index, '']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['items', index, 'fieldName']} rules={[{
                     required: true,
                     validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
                         if (value) {
-                                const values: any[] = JSON.parse(JSON.stringify(customForm.getFieldsValue(true).items));
-                                values.splice(index, 1);
-                                var same = values.some((item: any) => item.name === value);
-                                if (same) {
-                                    callback('字段名称重复')
-                                } else {
-                                    callback()
-                                }
+                            const values: any[] = JSON.parse(JSON.stringify(customForm.getFieldsValue(true).items));
+                            values.splice(index, 1);
+                            var same = values.some((item: any) => item.fieldName === value);
+                            if (same) {
+                                callback('字段名称重复')
+                            } else {
+                                callback()
+                            }
                         } else {
                             callback('请输入字段名称')
                         }
                     }
                 }]}>
-                    <Input disabled={type === 'detail'} size="small" placeholder="请输入字段名称" maxLength={20}/>
+                    <Input disabled={type === 'detail'} size="small" placeholder="请输入字段名称" maxLength={20} />
                 </Form.Item>
             )
         },
         {
-            key: 'is',
+            key: 'isRequired',
             title: '是否必填',
-            dataIndex: 'is',
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['items', index, '']} rules={[{
+            dataIndex: 'isRequired',
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['items', index, 'isRequired']} rules={[{
                     required: true,
                     message: '请选择是否必填'
-                }]}>
+                }]} initialValue={0}>
                     <Select disabled={type === 'detail'} size="small" placeholder={'请选择是否必填'}>
-                        <Select.Option value={'0'} key={0}>是</Select.Option>
-                        <Select.Option value={'1'} key={1}>否</Select.Option>
+                        <Select.Option value={1} key={0}>是</Select.Option>
+                        <Select.Option value={0} key={1}>否</Select.Option>
                     </Select>
                 </Form.Item>
             )
@@ -231,16 +278,16 @@ import { StoreValue } from "antd/lib/form/interface";
             key: 'node',
             title: '所属节点',
             dataIndex: 'node',
-            render: (_: string, record: Record<string, any> , index: number): React.ReactNode => (
-                <Form.Item name={['items', index, '']} rules={[{
+            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['items', index, 'node']} rules={[{
                     required: true,
                     message: '请选择所属节点'
                 }]}>
                     <Select disabled={type === 'detail'} size="small" placeholder={'请选择所属节点'}>
-                    {
-                        upstreamNodes?.map((res: any, ind: number) => {
-                            return <Select.Option value={res?.hierarchy} key={ind}>{res?.hierarchy}</Select.Option>
-                        })
+                        {
+                            upstreamNodes?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.name} key={ind}>{res?.name}</Select.Option>
+                            })
                         }
                     </Select>
                 </Form.Item>
@@ -258,79 +305,74 @@ import { StoreValue } from "antd/lib/form/interface";
             )
         }
     ]
- 
-     const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-         const result: any = await RequestUtil.get<any>(`/tower-science/performance/config`);
-         form.setFieldsValue({ ...result, node: [{color:'#FFFFFF'}] });
-         setDealList([{id: 111,color:'#FFFFFF'}])
-         resole(result);
-     }), {manual: type === 'new',refreshDeps:[rowId,type]})
- 
-     const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        nodeNumberBlur('1');
-        form.setFieldsValue({
-            nodeNumber: 1
-        })
-        resole(true);
-    }),  {manual: type !== 'new',refreshDeps:[rowId,type]})
-     
-     const { data: templateTypes } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(``);
-        resole([]);
-    }), {})
- 
-     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
-         try {
-             const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/performance/config`, data)
-             resove(result)
-         } catch (error) {
-             reject(error)
-         }
-     }), { manual: true })
- 
-     const onSubmit = () => new Promise(async (resolve, reject) => {
-         try {
-            form.validateFields().then(res=> {
-                customForm.validateFields().then(res=> {
-             const value = form.getFieldsValue(true);
-             const customValue = customForm.getFieldsValue(true);
-             console.log(value,customValue)
-            //  await saveRun(value)
-             resolve(true);
-                
-                })
-            })
-         } catch (error) {
-             reject(false)
-         }
-     })
- 
-     const resetFields = () => {
-         form.resetFields()
-     }
 
-    const delRow = (index: number) =>{
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/template`, data)
+            resove(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const onSubmit = () => new Promise(async (resolve, reject) => {
+        try {
+            form.validateFields().then(res => {
+                if(customList.length > 0) {
+                    customForm.validateFields().then(async res => {
+                    const value = form.getFieldsValue(true);
+                    const customValue = customForm.getFieldsValue(true);
+                    console.log(value, customValue)
+                    await saveRun({
+                        ...value,
+                        value:value?.node?.map((res: any) => {
+                            return {
+                            ...res,
+                            post: res?.post?.join(',')
+                        }
+                    })
+                    })
+                    resolve(true);
+
+                })
+                } else {
+                    message.warning('请增加自定义项！')
+                }       
+            })
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const resetFields = () => {
+        form.resetFields()
+    }
+
+    const delRow = (index: number) => {
         customList.splice(index, 1);
         setCustomList([...customList])
     }
 
-    const nodeNumberBlur =(e: string)=> {
-        let num: number = Number(e);
+    const nodeNumberBlur = (e: string) => {
+        let num: number = 1;
         const nodeList: any[] = []
-do {
-    nodeList.push({
-        hierarchy: numTOnum(num) + '级处理',
-        color: '#FF8C00'
-    })
-    num--;
-}
-while (num > 0)
-setUpstreamNode(nodeList.reverse())
-     console.log(nodeList.reverse())
-     setDealList(nodeList.reverse())
-     form.setFieldsValue({
-        node: nodeList.reverse()
-     })
+        do {
+            nodeList.push({
+                name: numTOnum(num) + '级处理',
+                colour: '#FF8C00'
+            })
+            num++;
+        }
+        while (num <= Number(e))
+        setUpstreamNode(nodeList)
+        setDealList(nodeList)
+        form.setFieldsValue({
+            node: nodeList
+        })
+        customForm.setFieldsValue({
+            items: []
+        })
+        setCustomList([])
     }
 
     const numTOnum = (num: number) => {
@@ -340,120 +382,118 @@ setUpstreamNode(nodeList.reverse())
         }
         const cnNumArr = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
         const cnArr = ['', '', '十', '百', '千', '万', '十', '百', '千', '亿', '十', '百', '千', '万'];
-            let arr: any[] = (num + '').split('');
-            let str = ''
-            for (let i = 0; i < arr.length; i++) {
-                str += cnNumArr[arr[i]] + cnArr[arr.length - i]
-            }
+        let arr: any[] = (num + '').split('');
+        let str = ''
+        for (let i = 0; i < arr.length; i++) {
+            str += cnNumArr[arr[i]] + cnArr[arr.length - i]
+        }
         return str;
     }
 
-     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
- 
-     return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
-         <Form form={form} layout="horizontal" labelCol={{span: 4}} labelAlign="right">
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
+
+    return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
+        <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
             <Row justify="start" gutter={24}>
                 <Col span={12}>
-         <Form.Item
-                 name={'userPenaltyRatio'}
-                 label={'工单模板名称'}
-                 rules={[
-                     {
-                         required: true,
-                         message: `请输入工单模板名称`
-                     }
-                 ]}>
-                    <Input disabled={type === 'detail'} maxLength={20}/>
-             </Form.Item>
-                
+                    <Form.Item
+                        name={'templateName'}
+                        label={'工单模板名称'}
+                        rules={[
+                            {
+                                required: true,
+                                message: `请输入工单模板名称`
+                            }
+                        ]}>
+                        <Input disabled={type === 'detail'} maxLength={20} />
+                    </Form.Item>
+
                 </Col>
                 <Col span={12}>
-         <Form.Item
-                 name={'userPenaltyRatio'}
-                 label={'模板类型'}
-                 rules={[
-                     {
-                         required: true,
-                         message: `请选择模板类型`
-                     }
-                 ]}>
-                    <TreeSelect 
-                    disabled={type === 'detail'}
-                 style={{ width: '400px' }}
-                 dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                 treeData={templateTypes}
-                 placeholder="请选择"
-                 treeDefaultExpandAll
-               />
-             </Form.Item>
-                
+                    <Form.Item
+                        name={'templateType'}
+                        label={'模板类型'}
+                        rules={[
+                            // {
+                            //     required: true,
+                            //     message: `请选择模板类型`
+                            // }
+                        ]}>
+                        <TreeSelect
+                            disabled={type === 'detail'}
+                            style={{ width: '400px' }}
+                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                            treeData={templateTypes}
+                            placeholder="请选择"
+                            treeDefaultExpandAll
+                        />
+                    </Form.Item>
+
                 </Col>
                 <Col span={12}>
-         <Form.Item
-                 name={'userPenaltyRatio'}
-                 label={'备注'}>
-                    <Input.TextArea disabled={type === 'detail'} maxLength={800}/>
-             </Form.Item>
-                
+                    <Form.Item
+                        name={'description'}
+                        label={'备注'}>
+                        <Input.TextArea disabled={type === 'detail'} maxLength={800} />
+                    </Form.Item>
                 </Col>
             </Row>
             <Row gutter={4} justify="start">
-                 <Col span={4}>
+                <Col span={4}>
                     <Row>
-                    <span>节点数量：</span>
-                 <Form.Item
-                 name={'nodeNumber'}
-                 rules={[
-                     {
-                         required: true,
-                         message: `请输入节点数量`
-                     }
-                 ]}>
-                    <InputNumber disabled={type === 'detail'} min={1} max={99} onBlur={(e) => nodeNumberBlur(e.target.value)} precision={0}/>
-             </Form.Item>
+                        <span>节点数量：</span>
+                        <Form.Item
+                            name={'nodeNumber'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `请输入节点数量`
+                                }
+                            ]}>
+                            <InputNumber disabled={type === 'detail'} min={1} max={99} onBlur={(e) => nodeNumberBlur(e.target.value)} precision={0} />
+                        </Form.Item>
                     </Row>
-                 </Col>
-                 <Col span={20}>
+                </Col>
+                <Col span={20}>
                     <CommonTable
-                     className={styles.table}
-                    bordered={false}
-                    showHeader={false}
+                        className={styles.table}
+                        bordered={false}
+                        showHeader={false}
                         columns={columns}
                         dataSource={dealList || []}
                         scroll={{ x: 800 }}
                         pagination={false}
                     />
-                 </Col>
+                </Col>
             </Row>
-            
-         </Form>
-             <DetailTitle title="自定义项" operation={[<Button type="primary" disabled={type === 'detail'} onClick={() => {
-setCustomList([
-    ...customList,
-    {
-        index: Number(customList.length) + 1,
-        id: customList.length
-    }
-])
-customForm.setFieldsValue({
-    items: [
-        ...customForm.getFieldsValue(true).items || [],
-    {
-        index: Number(customList.length) + 1,
-        id: customList.length
-    }
-    ]
+
+        </Form>
+        <DetailTitle title="自定义项" operation={[<Button type="primary" disabled={type === 'detail'} onClick={() => {
+            setCustomList([
+                ...customList,
+                {
+                    index: Number(customList.length) + 1,
+                    id: customList.length
+                }
+            ])
+            customForm.setFieldsValue({
+                items: [
+                    ...customForm.getFieldsValue(true).items || [],
+                    {
+                        index: Number(customList.length) + 1,
+                        id: customList.length
+                    }
+                ]
+            })
+        }} ghost>新增</Button>]} key={0} />
+        <Form form={customForm} className={styles.customForm}>
+            <CommonTable
+                columns={customColumns}
+                dataSource={customList}
+                scroll={{ x: 800 }}
+                pagination={false}
+            />
+        </Form>
+    </DetailContent>
 })
-             }} ghost>新增</Button>]} key={0} />
-             <Form form={customForm}>  
-             <CommonTable
-                        columns={customColumns}
-                        dataSource={customList}
-                        scroll={{ x: 800 }}
-                        pagination={false}
-                    />
-             </Form>
-     </DetailContent>
- })
- 
- 
+

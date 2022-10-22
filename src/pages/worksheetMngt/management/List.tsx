@@ -36,7 +36,7 @@ export interface EditRefProps {
      const [detailVisible,setDetailVisible] = useState<boolean>(false);
      const [dealVisible, setDealVisible] = useState<boolean>(false);
      const dealRef = useRef<EditRefProps>();
-     const [dispatchVisible,setDispatchVisible] = useState<boolean>(true);
+     const [dispatchVisible,setDispatchVisible] = useState<boolean>(false);
      const dispatchRef = useRef<EditRefProps>();
  
      const { data: galvanizedTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -291,7 +291,7 @@ export interface EditRefProps {
 
    const handleDispatchOk = () => new Promise(async (resove, reject) => {
       try {
-          await dealRef.current?.onBack()
+          await dispatchRef.current?.onSubmit()
           message.success("派工成功！")
           setDealVisible(false)
           // history.go(0)
