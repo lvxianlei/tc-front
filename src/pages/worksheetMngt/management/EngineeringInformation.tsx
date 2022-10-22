@@ -158,54 +158,17 @@ import { AnyMxRecord } from "dns";
                     key: '放样任务编号',
                     value: '1234564',
                     api: '111111',
-                    list:  [
-                                {
-                                    key: '创建时间',
-                                    value: '2022'
-                                }, {
-                                    key: '操作状态变更时间',
-                                    value: '2022'
-                                }, {
-                                    key: '实际完成时间',
-                                    value: '2022'
-                                }
-
-                            ]
                 },
                 {
-                    key: '放样任务编号',
-                    value: '1234564',
-                    api: '111111',
-                    list:  [
-                                {
-                                    key: '创建时间',
-                                    value: '2022'
-                                }, {
-                                    key: '操作状态变更时间',
-                                    value: '2022'
-                                }, {
-                                    key: '实际完成时间',
-                                    value: '2022'
-                                }, {
-                                    key: '实际完成时间',
-                                    value: '2022'
-                                }
-                                , {
-                                    key: '实际完成时间',
-                                    value: '2022'
-                                }
-                                , {
-                                    key: '实际完成时间',
-                                    value: '2022'
-                                }
-                                , {
-                                    key: '实际完成时间',
-                                    value: '2022'
-                                }
-
-
-                            ]
-                },
+                    key: '创建时间',
+                    value: '2022'
+                }, {
+                    key: '操作状态变更时间',
+                    value: '2022'
+                }, {
+                    key: '实际完成时间',
+                    value: '2022'
+                }
             ]
         }
         setFields(list?.vos)
@@ -279,23 +242,23 @@ import { AnyMxRecord } from "dns";
                 return arr
             })
             const entriesData: any = Object.fromEntries(newData)
-            console.log(entriesData)
-            const values  = form.getFieldsValue(true).data;
-            values[index] = {...values[index], ...entriesData}
-            form.setFieldsValue({
-                data :[...values]
-            })
+            const values  = form.getFieldsValue(true);
+        form.setFieldsValue({
+            ...entriesData
+        })
             let newFields: any[] =[]
             data.forEach((element: any) => {
-                newFields = fields[index]?.list?.map((res: any) => {
+                newFields = fields?.map((res: any) => {
                     if(element?.key === res?.key) {
                     return {
+                        ...res,
                         key: res?.key,
                         value: element?.value
                     }
 
                     } else {
                         return {
+                            ...res,
                             key: res?.key,
                             value: res?.value
                         }
@@ -304,9 +267,8 @@ import { AnyMxRecord } from "dns";
                 })
             });     
             setFields([
-                ...fields || [],
+                ...newFields || [],
             ])
-            console.log(fields,newFields)
         } else {
             message.warning('当前无可同步字段')
         }
@@ -322,15 +284,16 @@ import { AnyMxRecord } from "dns";
         <Row gutter={12}>
             <Col span={19}>
                 <Form form={form} labelCol={{span: 8}}>
-                    <Row gutter={12}>
+                    <Row gutter={24}>
                         {
-                            fields?.map((res: any, index: number)=> {
-                                return <Col span={8} key={index}>
+                            [...fields]?.map((res: any, index: number)=> {
+                                return res?.api ?
+                                <Col span={8} key={index}>
                             <Card bordered={false}>
                                     <Form.Item label={res?.key} >
                                         <Row gutter={12}>
                                             <Col span={ 18}>
-                                    <Form.Item name={['data', index, res?.key]} initialValue={res?.value}>
+                                    <Form.Item name={res?.key} initialValue={res?.value}>
                                         
                                         <Input/>
                                     </Form.Item>
@@ -341,19 +304,15 @@ import { AnyMxRecord } from "dns";
                                             </Col>
                                         </Row>
                                     </Form.Item>
-                                {
-                                    res?.list?.map((item: any, ind: number) => {
-                                        return <Form.Item label={item?.key} key={ind} name={['data', index, item?.key]} initialValue={item?.value}>
-                                        <Input/>
-                                    </Form.Item>
-                                    })
-                                }
                             
                             </Card>
                         </Col>
+                                :
+                                <Form.Item label={res?.key} key={index} name={res?.key} initialValue={res?.value}>
+                                <Input/>
+                            </Form.Item>
                             })
-                        }
-                        
+                        }                        
                     </Row>
                     <Form.Item label="完成/退回说明" name="description" labelCol={{span: 3}}>
                         <Input.TextArea maxLength={800}/>
