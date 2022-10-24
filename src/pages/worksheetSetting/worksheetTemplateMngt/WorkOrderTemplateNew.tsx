@@ -68,9 +68,9 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
 
     const columns = [
         {
-            key: 'processingName',
+            key: 'node',
             title: '层级',
-            dataIndex: 'processingName',
+            dataIndex: 'node',
             width: 100
         },
         {

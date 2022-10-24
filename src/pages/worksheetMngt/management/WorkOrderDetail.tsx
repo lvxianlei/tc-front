@@ -4,131 +4,124 @@
  * @description WO-工单管理-工单管理-详情
  */
 
- import React, { forwardRef } from "react";
- import { Card, Col, Form, Row } from 'antd';
- import { BaseInfo, CommonTable, DetailContent, DetailTitle, OperationRecord } from '../../common';
- import RequestUtil from '../../../utils/RequestUtil';
- import useRequest from '@ahooksjs/use-request';
- import styles from './Management.module.less'
- 
- interface modalProps {
-     rowId: string;
- }
- 
- export default forwardRef(function WorkOrderDetail({ rowId }: modalProps, ref) {
-     const [form] = Form.useForm();
+import React, { forwardRef } from "react";
+import { Card, Col, Form, Row } from 'antd';
+import { BaseInfo, CommonTable, DetailContent, DetailTitle, OperationRecord } from '../../common';
+import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
+import styles from './Management.module.less'
 
-     const baseColumns = [
+interface modalProps {
+    rowId: string;
+}
+
+export default forwardRef(function WorkOrderDetail({ rowId }: modalProps, ref) {
+    const [form] = Form.useForm();
+
+    const baseColumns = [
         {
-            key: 'hierarchy',
+            key: 'workOrderNumber',
             title: '工单编号',
-            dataIndex: 'hierarchy',
+            dataIndex: 'workOrderNumber',
             width: 100
         },
         {
-            key: 'hierarchy',
+            key: 'buildChannel',
             title: '产生途径',
-            dataIndex: 'hierarchy',
+            dataIndex: 'buildChannel',
             width: 100
         },
         {
-            key: 'hierarchy',
+            key: 'workOrderTitle',
             title: '工单标题',
-            dataIndex: 'hierarchy',
+            dataIndex: 'workOrderTitle',
             width: 100
         },
         {
-            key: 'hierarchy',
+            key: 'workOrderType',
             title: '工单类型',
-            dataIndex: 'hierarchy',
+            dataIndex: 'workOrderType',
             width: 100
         },
         {
-            key: 'hierarchy',
+            key: 'statusName',
             title: '工单状态',
-            dataIndex: 'hierarchy',
+            dataIndex: 'statusName',
             width: 100
         },
         {
-            key: 'hierarchy',
+            key: 'createTime',
             title: '产生时间',
-            dataIndex: 'hierarchy',
+            dataIndex: 'createTime',
             width: 100
         },
         {
-            key: 'hierarchy',
+            key: 'planEndTime',
             title: '预计完成时间',
-            dataIndex: 'hierarchy',
+            dataIndex: 'planEndTime',
             width: 100
         },
         {
-            key: 'hierarchy',
+            key: 'actualEndTime',
             title: '实际完成时间 ',
-            dataIndex: 'hierarchy',
+            dataIndex: 'actualEndTime',
+            width: 100
+        }
+    ]
+
+    const columns = [
+        {
+            key: 'node',
+            title: '处理环节',
+            dataIndex: 'node',
             width: 100
         },
+        {
+            key: 'processingName',
+            title: '处理标题',
+            dataIndex: 'processingName',
+            width: 100
+        },
+        {
+            key: 'pattern',
+            title: '处理模式',
+            dataIndex: 'pattern',
+            width: 100
+        },
+        {
+            key: 'recipientUserName',
+            title: '处理人',
+            dataIndex: 'recipientUserName',
+            width: 100
+        },
+        {
+            key: 'statusName',
+            title: '处理状态',
+            dataIndex: 'statusName',
+            width: 100
+        },
+        {
+            key: 'actualStartTime',
+            title: '接收时间',
+            dataIndex: 'actualStartTime',
+            width: 100
+        },
+        {
+            key: 'planEndTime',
+            title: '预计完成时间',
+            dataIndex: 'planEndTime',
+            width: 100
+        },
+        {
+            key: 'actualEndTime',
+            title: '实际完成时间',
+            dataIndex: 'actualEndTime',
+            width: 100
+        }
+    ]
 
-     ]
- 
-     const columns = [
-         {
-             key: 'hierarchy',
-             title: '处理环节',
-             dataIndex: 'hierarchy',
-             width: 100
-         },
-         {
-             key: 'hierarchy',
-             title: '处理标题',
-             dataIndex: 'hierarchy',
-             width: 100
-         },
-         {
-             key: 'model',
-             title: '处理模式',
-             dataIndex: 'model',
-             width: 100
-         },
-         {
-             key: 'upstreamNode',
-             title: '处理人',
-             dataIndex: 'upstreamNode',
-             width: 100
-         },
-         {
-             key: 'agingType',
-             title: '部门',
-             dataIndex: 'agingType',
-             width: 100
-         },
-         {
-             key: 'aging',
-             title: '处理状态',
-             dataIndex: 'aging',
-             width: 100
-         },
-         {
-             key: 'handleName',
-             title: '接收时间',
-             dataIndex: 'handleName',
-             width: 100
-         },
-         {
-             key: 'jobs',
-             title: '预计完成时间',
-             dataIndex: 'jobs',
-             width: 100
-         },
-         {
-             key: 'color',
-             title: '实际完成时间',
-             dataIndex: 'color',
-             width: 100
-         }
-     ]
- 
-     const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-         const result: any = await RequestUtil.get<any>(`/tower-science/performance/config`);
+    const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/${rowId}`);
         const list = {
             vo: [
                 {
@@ -151,57 +144,56 @@
                 }
             ]
         }
-         resole(list);
-     }), { refreshDeps: [rowId] })
- 
-     return <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
+        resole(result);
+    }), { refreshDeps: [rowId] })
+
+    return <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
         <Row gutter={12}>
             <Col span={19}>
-         <DetailTitle title="工单基本信息" key={0} />
-         <BaseInfo layout="vertical" col={8} columns={baseColumns} dataSource={{}}/>
-         <DetailTitle title="工单处理环节信息" key={0} />
-             <CommonTable
-                 className={styles.table}
-                 bordered={false}
-                 columns={columns}
-                 dataSource={data || []}
-                 scroll={{ x: 800 }}
-                 pagination={false}
-             />
-             <OperationRecord title="操作信息" serviceId={rowId} serviceName="tower-wo" />
+                <DetailTitle title="工单基本信息" key={0} />
+                <BaseInfo layout="vertical" col={8} columns={baseColumns} dataSource={{}} />
+                <DetailTitle title="工单处理环节信息" key={0} />
+                <CommonTable
+                    className={styles.table}
+                    bordered={false}
+                    columns={columns}
+                    dataSource={data || []}
+                    scroll={{ x: 800 }}
+                    pagination={false}
+                />
+                <OperationRecord title="操作信息" serviceId={rowId} serviceName="tower-wo" />
             </Col>
             <Col span={5}>
-         <DetailTitle title="工单信息" key={0} />
-         {
-            data?.vo?.map((res: any, index: number) => {
-return <Card title={res?.name} key={index}>
-    {
-        res?.userList?.map((item: any, ind: number) => {
-            return <Card title={item?.name} key={ind}>
+                <DetailTitle title="工单信息" key={0} />
                 {
-                    item?.fields?.map((field: any, i: number) => {
-                        return <Row gutter={12} key={i} justify="space-around">
-        <Col span={8}>
-     {field?.key}
-        </Col>
-        <Col span={16}>
-     {field?.value}
-        </Col>
-      </Row>
+                    data?.workOrderNodeVOList?.map((res: any, index: number) => {
+                        return <Card title={res?.node} key={index}>
+                            {
+                                res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
+                                    return <Card title={item?.recipientUserName} key={ind}>
+                                        {
+                                            item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
+                                                return <Row gutter={12} key={i} justify="space-around">
+                                                    <Col span={8}>
+                                                        {field?.fieldKey}
+                                                    </Col>
+                                                    <Col span={16}>
+                                                        {field?.fieldValue}
+                                                    </Col>
+                                                </Row>
+                                            })
+                                        }
+
+                                    </Card>
+                                })
+                            }
+
+                        </Card>
                     })
                 }
-      
-    </Card>
-        })
-    }
-    
-  </Card>
-            })
-         }
-         
+
             </Col>
         </Row>
-     </DetailContent>
- })
- 
- 
+    </DetailContent>
+})
+

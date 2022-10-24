@@ -17,6 +17,7 @@ import WorkOrderNew from './WorkOrderNew';
 import WorkOrderDetail from './WorkOrderDetail';
 import EngineeringInformation from './EngineeringInformation';
 import Dispatching from './Dispatching';
+import { useForm } from 'antd/lib/form/Form';
 
 export interface EditRefProps {
     onSubmit: () => void
@@ -39,15 +40,8 @@ export default function List(): React.ReactNode {
     const [dispatchVisible, setDispatchVisible] = useState<boolean>(false);
     const dispatchRef = useRef<EditRefProps>();
     const [selectedRowsName, setSelectedRowsName] = useState<string>('');
-
-    const { data: galvanizedTeamList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-production/workshopTeam?size=1000`);
-            resole(result?.records)
-        } catch (error) {
-            reject(error)
-        }
-    }))
+    const [form] = useForm();
+    const [workTemplateTypeId, setWorkTemplateTypeId] = useState<string>('');
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
@@ -167,25 +161,31 @@ export default function List(): React.ReactNode {
                     <Button type='link' onClick={() => {
                         setDealVisible(true);
                         setRowId(record.id);
+                        setWorkTemplateTypeId(record?.workTemplateTypeId)
                     }}>处理</Button>
                     <Button type='link' onClick={() => {
                         setVisible(true);
                         setType('edit');
                         setRowId(record.id);
                     }} >编辑</Button>
-                    <Popconfirm
-                        title="确认取消?"
-                        onConfirm={() => {
-                            RequestUtil.delete(``).then(res => {
-                                message.success('取消成功');
-                                history.go(0);
-                            });
-                        }}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="link">取消</Button>
-                    </Popconfirm>
+                    <Button type='link' onClick={() => {
+                        Modal.confirm({
+                            title: "取消",
+                            okText: '确定',
+                            cancelText: '取消',
+                            content: <Form form={form}>
+                                <Form.Item name="description" label="取消原因" rules={[{ required: true, message: "请输入取消原因" }]}>
+                                    <Input.TextArea maxLength={300} />
+                                </Form.Item>
+                            </Form>,
+                            onOk: () => {
+                                RequestUtil.post(`/tower-work/workOrder/cancelWorkOrder/${record?.id}/${form.getFieldsValue(true)?.description}`).then(res => {
+                                    message.success("取消成功")
+                                    history.go(0)
+                                })
+                            }
+                        })
+                    }}>取消</Button>
                 </Space>
             )
         }
@@ -337,7 +337,7 @@ export default function List(): React.ReactNode {
             }
             title="报工信息"
             onCancel={() => setDealVisible(false)}>
-            <EngineeringInformation rowId={rowId} ref={dealRef} />
+            <EngineeringInformation rowId={rowId} workTemplateTypeId={workTemplateTypeId} ref={dealRef} />
         </Modal>
         <Modal
             destroyOnClose
