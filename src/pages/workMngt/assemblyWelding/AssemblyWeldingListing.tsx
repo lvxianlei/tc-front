@@ -165,7 +165,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [url, setUrl] = useState<string>('');
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const location = useLocation<{ status?: number }>();
-    const userId = AuthUtil.getUserId();
+    const userId = AuthUtil.getUserInfo().user_id;
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });

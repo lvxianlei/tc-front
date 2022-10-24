@@ -10,8 +10,9 @@ import RequestUtil from './RequestUtil'
 const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
 const REFRENSH_TOKEN: string = 'SINZETECH_REFRENSH_TOKEN'
-const USER_ID: string = 'USER_ID'
+const USER_INFO: string = 'USER_INFO'
 const TENANT_NAME: string = 'SINZETECH_TENANT_NAME'
+const TENANT_LISTS: string = 'SINZETECH_TENANTS'
 const REAL_NAME: string = 'REAL_NAME';
 const APP_Name: string = 'CURRENT_APP_NAME';
 const ACCOUNT: string = "ACCOUNT";
@@ -102,6 +103,33 @@ export default abstract class AuthUtil {
     public static removeTenantName(): void {
         Cookies.remove(TENANT_NAME)
     }
+    /**
+     * @static
+     * @description Sets tenant name
+     * @param tenantName
+     * @param [options] 
+     */
+    public static setTenants(tenants: any[]): void {
+        sessionStorage.setItem(TENANT_LISTS, JSON.stringify(tenants))
+    }
+    /**
+     * @static
+     * @description Gets tenant name
+     * @returns tenant name 
+     */
+    public static getTenants(): any[] {
+        const tenants = sessionStorage.getItem(TENANT_LISTS)
+        return tenants ? JSON.parse(tenants) : []
+    }
+
+    /**
+     * @static
+     * @description remove tenant name
+     * @returns tenant name 
+     */
+    public static removeTenants(): void {
+        sessionStorage.removeItem(TENANT_LISTS)
+    }
 
     /**
      * @static
@@ -121,7 +149,7 @@ export default abstract class AuthUtil {
      * @returns sinzetech auth 
      */
     public static getSinzetechAuth(): string {
-        return sessionStorage.getItem(TOKEN_KEY) || ''
+        return Cookies.get(TOKEN_KEY) || ''
     }
 
     /**
@@ -194,16 +222,17 @@ export default abstract class AuthUtil {
         Cookies.remove(REAL_NAME);
     }
 
-    public static setUserId(userId: string): void {
-        sessionStorage.setItem(USER_ID, userId)
+    public static setUserInfo(userInfo: any): void {
+        sessionStorage.setItem(USER_INFO, JSON.stringify(userInfo))
     }
 
-    public static getUserId(): any {
-        return sessionStorage.getItem(USER_ID) || '';
+    public static getUserInfo(): any {
+        const userInfo = sessionStorage.getItem(USER_INFO)
+        return userInfo ? JSON.parse(userInfo) : {};
     }
 
-    public static removeUserId(): void {
-        sessionStorage.removeItem(USER_ID);
+    public static removeUserInfo(): void {
+        sessionStorage.removeItem(USER_INFO);
     }
 
     /**
@@ -223,7 +252,7 @@ export default abstract class AuthUtil {
      */
     public static async refrenshToken(token: string): Promise<void> {
         try {
-            const { access_token, refresh_token } :any = await RequestUtil.post('/sinzetech-auth/oauth/token', {
+            const { access_token, refresh_token }: any = await RequestUtil.post('/sinzetech-auth/oauth/token', {
                 grant_type: "refresh_token",
                 scope: "all",
                 refresh_token: token
@@ -232,7 +261,6 @@ export default abstract class AuthUtil {
                 'Authorization': `Basic ${this.getAuthorization()}`,
                 'Tenant-Id': this.getTenantId()
             })
-            console.log("refrensh--")
             this.setSinzetechAuth(access_token, refresh_token)
         } catch (error) {
             console.log("ERROR: refrenshToken", error)

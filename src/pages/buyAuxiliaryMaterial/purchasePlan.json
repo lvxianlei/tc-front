@@ -1,0 +1,40 @@
+{
+  "purchasePlan": [
+    {
+      "title": "采购计划编号",
+      "width": 140,
+      "dataIndex": "purchasePlanNumber"
+    },
+    {
+      "title": "汇总采购计划编号",
+      "dataIndex": "collectPurchasePlanNumber",
+      "width": 140
+    },
+    {
+      "title": "汇总状态",
+      "dataIndex": "collectTypeName",
+      "width": 80
+    },
+    {
+      "title": "计划状态",
+      "dataIndex": "purchasePlanStatusName",
+      "width": 80
+    },
+    {
+      "title": "购回日期",
+      "dataIndex": "repurchaseTime",
+      "width": 100
+    },
+    {
+      "title": "申请人",
+      "dataIndex": "purchaserName",
+      "width": 100
+    },
+    {
+      "title": "创建日期",
+      "dataIndex": "createTime",
+      "width": 100
+    }
+  ]
+
+}

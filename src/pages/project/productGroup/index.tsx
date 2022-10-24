@@ -92,6 +92,7 @@ export default function Index() {
                     title: "操作",
                     dataIndex: "opration",
                     ellipsis: false,
+                    fixed: "right",
                     width: 250,
                     render: (_: any, record: any) => <>
                         <Button type="link" style={{ marginRight: 12 }} size="small" onClick={() => handleProductGroupClick(record.id)}>详情</Button>

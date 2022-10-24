@@ -216,21 +216,22 @@
             "width": 1011,
             "value": "contractNumber",
             "dependencies": true,
-            "readOnly": true,
             "columns": [
                 {
                     "title": "合同编号",
-                    "dataIndex": "contractNumber",
-                    "search": true
+                    "dataIndex": "contractNumber"
                 },
                 {
                     "title": "合同名称",
                     "dataIndex": "contractName"
                 },
                 {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber"
+                },
+                {
                     "title": "业主单位",
-                    "dataIndex": "customerCompany",
-                    "search": true
+                    "dataIndex": "customerCompany"
                 },
                 {
                     "title": "合同签订单位",
@@ -243,10 +244,27 @@
                     "format": "YYYY-MM-DD"
                 }
             ],
-            "rules": [
+            "search": [
                 {
-                    "required": true,
-                    "message": "请选择内部合同编号"
+                    "title": "合同名称",
+                    "dataIndex": "contractName",
+                    "width": 100
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber",
+                    "width": 100
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "width": 100
+                },
+                {
+                    "title": "模糊搜索",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 100,
+                    "placeholder": "合同名称/合同名称编号"
                 }
             ]
         },
@@ -262,24 +280,12 @@
         },
         {
             "title": "合同/工程名称",
-            "dataIndex": "contractName",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入合同/工程名称..."
-                }
-            ]
+            "dataIndex": "contractName"
         },
         {
             "title": "产品类型",
             "dataIndex": "productTypeId",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择产品类型..."
-                }
-            ]
+            "type": "select"
         },
         {
             "title": "电压等级",
@@ -292,13 +298,7 @@
             "dataIndex": "contractSignTime",
             "disabled": true,
             "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择合同签订日期..."
-                }
-            ]
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "开票合计重量(吨)",
@@ -331,8 +331,7 @@
         },
         {
             "title": "计划号",
-            "dataIndex": "planCode",
-            "disabled": true
+            "dataIndex": "planCode"
         },
         {
             "title": "是否已全开",
@@ -347,12 +346,6 @@
                     "value": 3,
                     "label": "发票已开全"
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择是否已全开..."
-                }
             ]
         },
         {
@@ -361,18 +354,12 @@
             "type": "select",
             "enum": [
                 {
-                    "value": 1,
-                    "label": "增值税普通发票"
+                    "value": 2,
+                    "label": "增值税专用发票"
                 },
                 {
-                    "value": 2,
-                    "label": "增值税专项发票"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择发票类型..."
+                    "value": 1,
+                    "label": "增值税普通发票"
                 }
             ]
         },
@@ -388,12 +375,6 @@
                 {
                     "value": 2,
                     "label": "按基数开"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择开票方式..."
                 }
             ]
         },
@@ -422,12 +403,6 @@
                     "value": 5,
                     "label": "计划重量"
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择开票金额依据..."
-                }
             ]
         },
         {
@@ -435,13 +410,7 @@
             "dataIndex": "contractType",
             "type": "select",
             "disabled": true,
-            "enum": [],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择开票时合同状态..."
-                }
-            ]
+            "enum": []
         },
         {
             "title": "理重",
