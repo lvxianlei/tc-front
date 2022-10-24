@@ -70,6 +70,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'scTaskNum'
         },
         {
+            key: 'planNumber',
+            title: '计划号',
+            width: 100,
+            dataIndex: 'planNumber'
+        },
+        {
             key: 'statusName',
             title: '任务状态',
             width: 100,
