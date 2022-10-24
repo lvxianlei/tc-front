@@ -42,7 +42,7 @@ export default function ItemRepair(): React.ReactNode {
             //         }]
             //     }
             // ]
-            const newData = await traversalTree(resData?.records, [])
+            const newData = await traversalTree(resData, [])
             console.log(newData)
             resole(newData);
         } catch (error) {
@@ -106,8 +106,12 @@ export default function ItemRepair(): React.ReactNode {
             form.validateFields().then(res => {
                 const data = form.getFieldsValue(true);
                 console.log(data)
-                // RequestUtil.post(`/tower-work/template/type`, data)
+                RequestUtil.post(`/tower-work/template/type`, data).then(res=> {
+                    setVisible(false);
+                    message.success('保存成功！')
+                    history.go(0)
                 resove(true)
+                })
             })
         } catch (error) {
             reject(false)
@@ -164,7 +168,7 @@ export default function ItemRepair(): React.ReactNode {
                                 setType('new');
                                 setVisible(true);
                                 form.setFieldsValue({
-                                    id: record?.id
+                                    parentId: record?.id
                                 })
                             }}>添加子分类</Button>
                             <Popconfirm

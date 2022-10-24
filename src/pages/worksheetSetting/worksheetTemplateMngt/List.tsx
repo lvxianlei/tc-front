@@ -21,7 +21,7 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-export default function SetOutList(): React.ReactNode {
+export default function List(): React.ReactNode {
     const columns = [
         {
             key: 'index',
@@ -58,7 +58,7 @@ export default function SetOutList(): React.ReactNode {
             render: (_: number, record: Record<string, any>): React.ReactNode => (
                 <Switch checkedChildren="启用" unCheckedChildren="关闭" onChange={(checked: boolean) => {
                     console.log(checked)
-                    RequestUtil.post(`/tower-work/template/status/${record?.id}/${checked}`).then(res => {
+                    RequestUtil.post(`/tower-work/template/status/${record?.id}/${checked ? 1 : 0}`).then(res => {
                         message.success('状态变更成功');
                         history.go(0);
                     });
@@ -121,17 +121,30 @@ export default function SetOutList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
     const [rowId, setRowId] = useState<string>('');
+
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-work/template/type`);
-        resole(data || []);
+        let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
+        resole(treeNode(result))
     }), {})
+
+    const treeNode = (nodes: any) => {
+        nodes?.forEach((res: any) => {
+            res.title = res?.name;
+            res.value = res?.id;
+            res.children = res?.children;
+            if (res?.children?.length > 0) {
+                treeNode(res?.children)
+            }
+        })
+        return nodes
+    }
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await ref.current?.onSubmit()
-            message.success("上传成功！")
+            message.success("保存成功！")
             setVisible(false)
-            // history.go(0)
+            history.go(0)
             resove(true)
         } catch (error) {
             reject(false)

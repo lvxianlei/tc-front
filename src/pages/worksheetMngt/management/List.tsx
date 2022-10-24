@@ -29,6 +29,7 @@ export default function List(): React.ReactNode {
     const [filterValue, setFilterValue] = useState<any>({});
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
     const [type, setType] = useState<'new' | 'edit'>('new');
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
@@ -44,10 +45,22 @@ export default function List(): React.ReactNode {
     const [workTemplateTypeId, setWorkTemplateTypeId] = useState<string>('');
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
-        resole(result || []);
+        let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
+        resole(treeNode(result))
     }), {})
 
+
+    const treeNode = (nodes: any) => {
+        nodes?.forEach((res: any) => {
+            res.title = res?.name;
+            res.value = res?.id;
+            res.children = res?.children;
+            if (res?.children?.length > 0) {
+                treeNode(res?.children)
+            }
+        })
+        return nodes
+    }
 
     useEffect(() => {
         if (selectedRowsName) {
@@ -382,7 +395,10 @@ export default function List(): React.ReactNode {
                             setVisible(true);
                             setType('new')
                         }} ghost>人工创建工单</Button>
-                        <Button type='primary' ghost>批量派工</Button>
+                        <Button type='primary' disabled={selectedKeys.length === 0} onClick={() => {
+                            const tip = selectedRows.some((cur: any, idx, arr) => arr.slice(idx + 1).find((item: any) => cur?.workTemplateType == item?.workTemplateType))
+                            console.log(tip)
+                        }} ghost>批量派工</Button>
                     </Space>
                 </Space>
             }
@@ -402,8 +418,9 @@ export default function List(): React.ReactNode {
             tableProps={{
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
-                    onChange: (selectedRowKeys: React.Key[]): void => {
+                    onChange: (selectedRowKeys: React.Key[], selectedRows: any): void => {
                         setSelectedKeys(selectedRowKeys);
+                        setSelectedRows(selectedRows)
                     }
                 }
             }}

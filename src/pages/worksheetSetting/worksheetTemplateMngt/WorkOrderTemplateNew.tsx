@@ -31,13 +31,18 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
     const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${rowId}`);
         form.setFieldsValue({
-            ...result, nodeNumber: result?.templateNodeVOList?.length + 1, node: result?.templateNodeVOList.map((res: any) => {
+            ...result, 
+            nodeNumber: result?.templateNodeVOList?.length, 
+            node: result?.templateNodeVOList.map((res: any) => {
                 return {
                     ...res,
                     post: res?.post?.split(',')
                 }
-            }) || [], items: result?.templateCustomVOList || []
+            }) || []
         });
+        customForm.setFieldsValue({
+            items: result?.templateCustomVOList || []
+        })
         setDealList(result?.templateNodeVOList?.map((res: any) => {
             return {
                 ...res,
@@ -62,9 +67,21 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
     }), {})
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
-        resole(result || []);
+        let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
+        resole(treeNode(result))
     }), {})
+
+    const treeNode = (nodes: any) => {
+        nodes?.forEach((res: any) => {
+            res.title = res?.name;
+            res.value = res?.id;
+            res.children = res?.children;
+            if (res?.children?.length > 0) {
+                treeNode(res?.children)
+            }
+        })
+        return nodes
+    }
 
     const columns = [
         {
@@ -100,8 +117,8 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
                 <>
                     {index === 0 ?
-                        <Form.Item name={['node', index, 'upstreamNode']}>
-                            <Input defaultValue="任务开始" disabled />
+                        <Form.Item name={['node', index, 'upstreamNode']} initialValue={"任务开始"}>
+                            <Input disabled />
                         </Form.Item>
                         :
                         <Form.Item name={['node', index, 'upstreamNode']} rules={[{
@@ -111,7 +128,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                             <Select disabled={type === 'detail'} placeholder={'请选择上游节点'}>
                                 {
                                     upstreamNodes?.map((res: any, ind: number) => {
-                                        return <Select.Option disabled={ind >= index} value={res?.name} key={ind}>{res?.name}</Select.Option>
+                                        return <Select.Option disabled={ind >= index} value={res?.node} key={ind}>{res?.node}</Select.Option>
                                     })
                                 }
                             </Select>
@@ -288,7 +305,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     <Select disabled={type === 'detail'} placeholder={'请选择所属节点'}>
                         {
                             upstreamNodes?.map((res: any, ind: number) => {
-                                return <Select.Option value={res?.name} key={ind}>{res?.name}</Select.Option>
+                                return <Select.Option value={res?.node} key={ind}>{res?.node}</Select.Option>
                             })
                         }
                     </Select>
@@ -326,13 +343,16 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                         const customValue = customForm.getFieldsValue(true);
                         console.log(value, customValue)
                         await saveRun({
-                            ...value,
-                            value: value?.node?.map((res: any) => {
+                            id: data?.id,
+                            templateName: value?.templateName,
+                            templateTypeId: value?.templateTypeId,
+                            templateNodeSaveDTOList: value?.node?.map((res: any) => {
                                 return {
                                     ...res,
                                     post: res?.post?.join(',')
                                 }
-                            })
+                            }),
+                            templateCustomSaveDTOList: customValue?.items
                         })
                         resolve(true);
 
@@ -360,7 +380,8 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
         const nodeList: any[] = []
         do {
             nodeList.push({
-                name: numTOnum(num) + '级处理',
+                node: numTOnum(num) + '级处理',
+                upstreamNode: num === 1 ? '任务开始' : '',
                 colour: '#FF8C00',
                 level: num
             })
@@ -414,7 +435,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                 </Col>
                 <Col span={12}>
                     <Form.Item
-                        name={'templateType'}
+                        name={'templateTypeId'}
                         label={'模板类型'}
                         rules={[
                             {
@@ -475,16 +496,14 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
             setCustomList([
                 ...customList,
                 {
-                    index: Number(customList.length) + 1,
-                    id: customList.length
+                    sort: Number(customList.length) + 1
                 }
             ])
             customForm.setFieldsValue({
                 items: [
                     ...customForm.getFieldsValue(true).items || [],
                     {
-                        index: Number(customList.length) + 1,
-                        id: customList.length
+                        sort: Number(customList.length) + 1,
                     }
                 ]
             })
