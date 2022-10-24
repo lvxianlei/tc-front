@@ -569,7 +569,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'perimeter',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perimeter"]} initialValue={_}>
-                    <InputNumber size="small" min={0} max={9999.99} />
+                    <InputNumber size="small" min={0} max={999999.99} />
                 </Form.Item>
             )
         },
