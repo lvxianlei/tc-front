@@ -98,8 +98,8 @@ const columns = [
         dataIndex: 'apertureNumber',
         rules: [
             {
-                pattern: /^[0-9*,]*$/,
-                message: '仅可输入数字/,/*',
+                pattern: /^[0-9*,.]*$/,
+                message: '仅可输入数字/,/*/.',
             }
         ]
     },
