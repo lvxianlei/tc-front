@@ -27,7 +27,7 @@ export interface EditRefProps {
 export default function List(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<any>({});
-    const [confirmStatus, setConfirmStatus] = useState<number>(1);
+    const [confirmStatus, setConfirmStatus] = useState<string>('');
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<React.Key[]>([]);
     const [type, setType] = useState<'new' | 'edit'>('new');
@@ -114,10 +114,10 @@ export default function List(): React.ReactNode {
             "dataIndex": "dispatchStatusName"
         },
         {
-            "key": "workOrderNode",
+            "key": "workOrderName",
             "title": "当前处理节点",
             "width": 150,
-            "dataIndex": "workOrderNode"
+            "dataIndex": "workOrderName"
         },
         {
             "key": "recipientUserName",
@@ -167,21 +167,21 @@ export default function List(): React.ReactNode {
                         setDetailVisible(true);
                         setRowId(record.id);
                     }} >详情</Button>
-                    <Button type='link' onClick={() => {
+                    <Button type='link' disabled={record?.status === 3} onClick={() => {
                         setDispatchVisible(true);
                         setRowId(record.id);
                     }} >派工</Button>
-                    <Button type='link' onClick={() => {
+                    <Button type='link' disabled={record?.status === 3} onClick={() => {
                         setDealVisible(true);
                         setRowId(record.id);
                         setWorkTemplateTypeId(record?.workTemplateTypeId)
                     }}>处理</Button>
-                    <Button type='link' onClick={() => {
+                    <Button type='link' disabled={record?.status === 3 || record?.dispatchStatus === 2} onClick={() => {
                         setVisible(true);
                         setType('edit');
                         setRowId(record.id);
                     }} >编辑</Button>
-                    <Button type='link' onClick={() => {
+                    <Button type='link' disabled={record?.status === 3} onClick={() => {
                         Modal.confirm({
                             title: "取消",
                             okText: '确定',
@@ -270,16 +270,16 @@ export default function List(): React.ReactNode {
     ]
 
     const operationChange = (event: any) => {
-        setConfirmStatus(parseFloat(`${event.target.value}`));
+        setConfirmStatus(event.target.value);
         setRefresh(!refresh);
     }
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await ref.current?.onSubmit()
-            message.success("上传成功！")
+            message.success("保存成功！")
             setVisible(false)
-            // history.go(0)
+            history.go(0)
             resove(true)
         } catch (error) {
             reject(false)
@@ -291,7 +291,7 @@ export default function List(): React.ReactNode {
             await dealRef.current?.onSubmit()
             message.success("处理完成！")
             setDealVisible(false)
-            // history.go(0)
+            history.go(0)
             resove(true)
         } catch (error) {
             reject(false)
@@ -303,7 +303,7 @@ export default function List(): React.ReactNode {
             await dealRef.current?.onBack()
             message.success("退回成功！")
             setDealVisible(false)
-            // history.go(0)
+            history.go(0)
             resove(true)
         } catch (error) {
             reject(false)
@@ -314,8 +314,8 @@ export default function List(): React.ReactNode {
         try {
             await dispatchRef.current?.onSubmit()
             message.success("派工成功！")
-            setDealVisible(false)
-            // history.go(0)
+            setDispatchVisible(false)
+            history.go(0)
             resove(true)
         } catch (error) {
             reject(false)
@@ -381,14 +381,14 @@ export default function List(): React.ReactNode {
             path={`/tower-work/workOrder`}
             columns={columns}
             headTabs={[]}
-            requestData={{ packageStatus: confirmStatus }}
+            requestData={{ status: confirmStatus }}
             extraOperation={
                 <Space style={{ width: '100%' }}>
                     <Radio.Group defaultValue={confirmStatus} onChange={operationChange}>
                         <Radio.Button value={''}>全部</Radio.Button>
                         <Radio.Button value={1}>待关闭</Radio.Button>
                         <Radio.Button value={2}>已关闭</Radio.Button>
-                        <Radio.Button value={2}>已取消</Radio.Button>
+                        <Radio.Button value={3}>已取消</Radio.Button>
                     </Radio.Group>
                     <Space size='small' style={{ position: 'absolute', right: '16px', top: 0 }}>
                         <Button type='primary' onClick={() => {

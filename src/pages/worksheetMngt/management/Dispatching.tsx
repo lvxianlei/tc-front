@@ -23,7 +23,16 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
     const [isOk, setIsOk] = useState<boolean>(true);
 
     const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/workOrderNode/${rowId}`);
+        let result: any = await RequestUtil.get<any>(`/tower-work/workOrder/workOrderNode/${rowId}`);
+        result = result.map((res: any) => {
+            return {
+                ...res,
+                planStartTime: moment(res?.planStartTime),
+                planEndTime: moment(res?.planEndTime),
+                recipientUser: res?.recipientUser && res?.recipientUser?.split(','),
+            }
+        })
+        console.log(result)
         setNodeData(result || [])
         form.setFieldsValue({
             data: [...result || []]
@@ -55,14 +64,22 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                     console.log(isOk)
                     if (isOk) {
                         console.log(value)
-                        await saveRun({
-                            ...value?.data
-                        })
+                        await saveRun([
+                            ...value?.data.map((res: any) => {
+                                return {
+                                    ...res,
+                                    recipientUser: res?.recipientUser?.join(','),
+                                    planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
+                                    planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
+                                    workOrderId: rowId
+                                }
+                            })
+                        ])
+                        // resolve(true)
                     } else {
                         reject(false)
                     }
                 })
-
             })
         } catch (error) {
             reject(false)
@@ -222,16 +239,33 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
     return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
         <Form form={form} layout="horizontal" labelCol={{ span: 6 }} labelAlign="right">
             {
-                data?.map((res: any, index: number) => {
+                nodeData && nodeData?.map((res: any, index: number) => {
                     return <Row gutter={12}>
                         <Col span={2}>
                             {res?.node}
                         </Col>
                         <Col span={6}>
-                            <Form.Item name={['data', index, 'person']}>
+                            <Form.Item name={['data', index, 'recipientUserName']} initialValue={res?.recipientUserName}>
                                 <Input disabled suffix={
-                                    <SelectUserByStations key={index} selectType="checkbox" station={res?.post} onSelect={(selectedRows: Record<string, any>) => {
+                                    <SelectUserByStations disabled={res?.status === 3} key={index} selectedKey={res?.recipientUser} selectType="checkbox" station={res?.post} onSelect={(selectedRows: Record<string, any>) => {
                                         console.log(selectedRows)
+                                        const value = form.getFieldsValue(true)?.data;
+                                        value[index] = {
+                                            ...value[index] || [],
+                                            recipientUser: selectedRows.map((res: { userId: any; }) => {
+                                                return res?.userId
+                                            }),
+                                            recipientUserName: selectedRows.map((res: any) => {
+                                                return res?.name
+                                            })?.join(',')
+                                        }
+                                        form.setFieldsValue({
+                                            data: [...value]
+                                        })
+                                        setNodeData([
+                                            ...value
+                                        ])
+                                        console.log(form.getFieldsValue(true)?.data)
                                     }} />
                                 } />
                             </Form.Item>
@@ -239,6 +273,7 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                         <Col span={8}>
                             <Form.Item label="预计开始时间" name={['data', index, 'planStartTime']} initialValue={res?.planStartTime}>
                                 <DatePicker
+                                    disabled={res?.status === 3}
                                     onChange={(e) => startTimeChange(e, res)}
                                     style={{ width: '100%' }}
                                     format="YYYY-MM-DD HH:mm:ss"
@@ -249,6 +284,7 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                         <Col span={8}>
                             <Form.Item label="预计结束时间" name={['data', index, 'planEndTime']} initialValue={res?.planEndTime}>
                                 <DatePicker
+                                    disabled={res?.status === 3}
                                     disabledDate={(current: any) => {
                                         return current && current < form.getFieldsValue(true).data[index]?.planStartTime
                                     }}

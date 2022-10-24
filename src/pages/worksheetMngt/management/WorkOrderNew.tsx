@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Form, Input, InputNumber, Select, Space } from 'antd';
+import { Form, Input, InputNumber, Select, Space, Spin } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -18,18 +18,16 @@ interface modalProps {
 
 export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref) {
     const [form] = Form.useForm();
-    const [customForm] = Form.useForm();
-    const [upstreamNodes, setUpstreamNode] = useState<any[]>([]);
     const [dealList, setDealList] = useState<any[]>([]);
     const [customList, setCustomList] = useState<any[]>([]);
 
-    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { loading,data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/${rowId}`);
         form.setFieldsValue({
-            workOrderTypeId: result?.workOrderTypeId + ',' + result?.workTemplateName,
-            node: data?.workOrderNodeVOList
+            workTemplateId: result?.workTemplateName + ',' + result?.workTemplateId,
+            node: [...result?.workOrderNodeVOList || []]
         })
-        setDealList(data?.workOrderNodeVOList);
+        setDealList(result?.workOrderNodeVOList);
         setCustomList(result?.workOrderCustomDetailsVOList)
         resole(result);
     }), { manual: type === 'new', refreshDeps: [rowId, type] })
@@ -77,8 +75,16 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
                 <Form.Item name={['node', index, 'agingSize']} rules={[{
                     required: true,
                     message: '请输入时效要求'
-                }]}>
-                    <InputNumber size="small" placeholder="请输入时效要求" style={{ width: '100%' }} min={1} max={99} precision={0} />
+                }]} initialValue={_}>
+                    <InputNumber size="small" onChange={
+                        (e) => {
+                            dealList[index]= {
+                                ...dealList[index],
+                                agingSize: e
+                            }
+                            setDealList([...dealList])
+                        }
+                    } placeholder="请输入时效要求" style={{ width: '100%' }} min={1} max={99} precision={0} />
                 </Form.Item>
             )
         },
@@ -89,9 +95,9 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
             width: 100
         },
         {
-            key: 'post',
+            key: 'postName',
             title: '岗位',
-            dataIndex: 'post',
+            dataIndex: 'postName',
             width: 100
         },
         {
@@ -122,7 +128,18 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
         {
             key: 'required',
             title: '是否必填',
-            dataIndex: 'required'
+            dataIndex: 'required',
+            type: "select",
+            enum: [
+                {
+                    value: 0,
+                    label: "否"
+                },
+                {
+                    value: 1,
+                    label: "是"
+                }
+            ]
         },
         {
             key: 'workOrderNode',
@@ -144,13 +161,14 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
         try {
             form.validateFields().then(res => {
                 const value = form.getFieldsValue(true);
-                console.log(value)
+                console.log(value,dealList)
                 saveRun({
                     id: data?.id,
                     workTemplateId: value?.workTemplateId.split(',')[1],
                     workTemplateName: value?.workTemplateId.split(',')[0],
-                    workOrderNodeDTOList: value?.node
+                    workOrderNodeDTOList: dealList
                 })
+                resolve(true);
             })
         } catch (error) {
             reject(false)
@@ -158,10 +176,9 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     })
 
     const templateChange = async (e: any) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/template/${rowId}`);
+        const result: any = await RequestUtil.get<any>(`/tower-work/template/${e?.split(',')[1]}`);
         setCustomList(result?.templateCustomVOList);
         setDealList(result?.templateNodeVOList);
-
     }
 
     const resetFields = () => {
@@ -170,10 +187,11 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
-    return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
+    return <Spin spinning={loading}>
+        <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
         <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
             <Form.Item
-                name={'workOrderTypeId'}
+                name={'workTemplateId'}
                 label={'工单模板'}
                 rules={[
                     {
@@ -207,5 +225,6 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
             pagination={false}
         />
     </DetailContent>
+    </Spin>
 })
 

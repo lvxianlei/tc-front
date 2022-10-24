@@ -47,9 +47,9 @@ export default function List(): React.ReactNode {
             dataIndex: 'templateType'
         },
         {
-            key: 'post',
+            key: 'postName',
             title: '岗位',
-            dataIndex: 'post'
+            dataIndex: 'postName'
         },
         {
             key: 'status',

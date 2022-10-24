@@ -21,7 +21,7 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
     const [fields, setFields] = useState<any[]>([]);
 
     const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/getWorkOrderNode/${rowId}/${workTemplateTypeId}`);
+        const result: any = await RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${rowId}/${workTemplateTypeId}`);
         setFields(result?.workOrderCustomVOList)
         resole(result);
     }), { refreshDeps: [rowId, workTemplateTypeId] })

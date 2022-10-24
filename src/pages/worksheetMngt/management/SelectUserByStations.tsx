@@ -26,6 +26,7 @@ export default function SelectUserByStations({
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
+        console.log(selectedRowKeys)
     }
     const columns = [
         {
@@ -59,7 +60,7 @@ export default function SelectUserByStations({
             dataIndex: 'statusName'
         }
     ]
-
+    
     return <>
         <Button disabled={disabled} type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
         <Modal
@@ -82,14 +83,15 @@ export default function SelectUserByStations({
                 columns={columns}
                 headTabs={[]}
                 requestData={{
-                    station: station?.split(',')
+                    stationIds: station
                 }}
                 tableProps={{
                     rowSelection: {
                         type: selectType,
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange
-                    }
+                    },
+                    rowKey: "userId"
                 }}
                 searchFormItems={[
                     {
