@@ -373,8 +373,12 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
     }
 
     const delRow = (index: number) => {
-        customList.splice(index, 1);
-        setCustomList([...customList])
+        const value = customForm?.getFieldsValue(true)?.items;
+        value.splice(index, 1);
+        setCustomList([...value]);
+        customForm?.setFieldsValue({
+            items: [...value]
+        })
     }
 
     const nodeNumberBlur = (e: string) => {
