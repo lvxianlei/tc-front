@@ -226,9 +226,12 @@ export default function CreatePlan(props: any): JSX.Element {
                     col={2}
                     classStyle="baseInfo"
                     columns={baseInfoColumn.map((item: any) => {
+                        
                         if (item.dataIndex === "warehouseId") {
                             return ({
-                                ...item, enum: batchingStrategy?.map((item: any) => ({
+                                ...item, 
+                                disabled:props.type === "edit"&&data?.warehousingEntryDetailList.filter((item:any)=>{return item.warehousingEntryStatus===1}).length>0,
+                                enum: batchingStrategy?.map((item: any) => ({
                                     value: item.id,
                                     label: item.name
                                 }))
@@ -236,7 +239,9 @@ export default function CreatePlan(props: any): JSX.Element {
                         }
                         if (item.dataIndex === "supplierId") {
                             return ({
-                                ...item, search: item.search.map((res: any) => {
+                                ...item, 
+                                disabled:props.type === "edit"&&data?.warehousingEntryDetailList.filter((item:any)=>{return item.warehousingEntryStatus===1}).length>0,
+                                search: item.search.map((res: any) => {
                                     if (res.dataIndex === 'qualityAssurance') {
                                         return ({
                                             ...res,
@@ -247,7 +252,11 @@ export default function CreatePlan(props: any): JSX.Element {
                                 })
                             })
                         }
-                        return item
+                        
+                        return{ 
+                            ...item,
+                            disabled:props.type === "edit"&&data?.warehousingEntryDetailList.filter((item:any)=>{return item.warehousingEntryStatus===1}).length>0,
+                        }
                     })}
                     onChange={performanceBondChange}
                 />
@@ -283,7 +292,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
                                 <Button
                                     type="link"
-                                    disabled={records.source === 1}
+                                    disabled={records.warehousingEntryStatus === 1}
                                     onClick={() => handleRemove(records.key)}
                                 >移除</Button>
                             </>
