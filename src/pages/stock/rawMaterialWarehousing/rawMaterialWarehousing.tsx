@@ -138,7 +138,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (value.inTime) {
             const formatDate = value.inTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startEntryTime = `${formatDate[0]} 00:00:00`
-            value.startEntryTime = `${formatDate[1]} 23:59:59`
+            value.endEntryTime = `${formatDate[1]} 23:59:59`
             delete value.inTime
         }
         setFilterValue({ ...value })
