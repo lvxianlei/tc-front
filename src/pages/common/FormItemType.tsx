@@ -296,7 +296,13 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             {...componentProps}
         />,
         select: <SelfSelect {...props} data={data as SelectData} />,
-        tree: <TreeSelect  treeData={data?.treeData as any} style={{ width: "100px",  ...props.style }}/>,
+        tree: <TreeSelect 
+            {...props} 
+            treeData={data?.treeData as any} 
+            disabled={data.disabled}
+            style={{ width: "100px",  ...props.style }} 
+            {...componentProps}
+        />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
             onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}
