@@ -37,7 +37,7 @@
         },
         {
             "title": "创建日期",
-            "dataIndex": "warehousingTime",
+            "dataIndex": "createTime",
             "width": 80
         },
         {
@@ -78,7 +78,7 @@
         },
         {
             "title": "价税合计(元)",
-            "dataIndex": "price",
+            "dataIndex": "taxPrice",
             "width": 100
         },
         {

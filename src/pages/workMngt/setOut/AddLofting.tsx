@@ -166,7 +166,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     required: true,
                     message: '请输入单段件数'
                 }]}>
-                    <InputNumber min={0} max={999} size="small" onChange={(e) => {
+                    <InputNumber min={0} max={9999} size="small" onChange={(e) => {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],

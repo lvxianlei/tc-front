@@ -22,11 +22,11 @@
                 },
                 {
                     "title": "工程名称",
-                    "dataIndex": "projectName"
+                    "dataIndex": "orderProjectName"
                 },
                 {
                     "title": "内部合同号",
-                    "dataIndex": "contractNumber"
+                    "dataIndex": "internalNumber"
                 },
                 {
                     "title": "塔型",
