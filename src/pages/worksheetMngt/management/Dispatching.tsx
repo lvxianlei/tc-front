@@ -60,7 +60,7 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
         try {
             form.validateFields().then(async res => {
                 const value = form.getFieldsValue(true);
-                checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始')).then(async (data) => {
+                checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始')).then(async () => {
                     console.log(isOk)
                     if (isOk) {
                         console.log(value)

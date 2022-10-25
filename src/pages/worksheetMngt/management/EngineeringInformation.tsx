@@ -80,14 +80,12 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
         try {
             let value = form.getFieldsValue(true)
             if (value.description) {
-                form.validateFields().then(async res => {
-                    await backRun({
-                        workOrderId: data?.workOrderCustomVOList[0]?.workOrderId,
-                        description: value?.description,
-                        workOrderNode: data?.workOrderCustomVOList[0]?.workOrderNode
-                    })
-                    resolve(true)
+                await backRun({
+                    workOrderId: data?.workOrderCustomVOList[0]?.workOrderId,
+                    description: value?.description,
+                    workOrderNode: data?.workOrderCustomVOList[0]?.workOrderNode
                 })
+                resolve(true)
             } else {
                 message.warning("请输入退回说明");
                 reject(false)
