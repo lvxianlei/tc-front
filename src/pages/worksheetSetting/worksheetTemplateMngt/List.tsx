@@ -180,7 +180,7 @@ export default function List(): React.ReactNode {
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
                             <Select.Option value={1} key="1">启用</Select.Option>
-                            <Select.Option value={2} key="2">关闭</Select.Option>
+                            <Select.Option value={0} key="2">关闭</Select.Option>
                         </Select>
                     </Form.Item>
                 },
