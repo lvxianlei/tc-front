@@ -347,6 +347,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                             id: data?.id,
                             templateName: value?.templateName,
                             templateTypeId: value?.templateTypeId,
+                            description: value?.description,
                             templateNodeSaveDTOList: value?.node?.map((res: any) => {
                                 return {
                                     ...res,
