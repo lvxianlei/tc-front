@@ -11,6 +11,31 @@
             "width": 80
         },
         {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 80
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 80
+        },
+        {
+            "title": "内部合同号",
+            "dataIndex": "contractNumber",
+            "width": 80
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
             "title": "总重量(吨)/出库重量(吨)",
             "dataIndex": "totalWeight",
             "width": 180
@@ -23,11 +48,6 @@
             "width": 120
         },
         {
-            "title": "工程名称",
-            "dataIndex": "projectName",
-            "width": 80
-        },
-        {
             "title": "申请人",
             "dataIndex": "applyStaffName",
             "width": 80
@@ -36,12 +56,6 @@
             "title": "出库类型",
             "dataIndex": "outStockTypeName",
             "width": 80
-        },
-        {
-            "title": "创建日期",
-            "dataIndex": "createTime",
-            "type": "date",
-            "width": 100
         }
     ],
     "outStockDetail": [
@@ -53,6 +67,13 @@
         {
             "title": "创建日期",
             "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "出库日期",
+            "dataIndex": "outStockTime",
             "type": "date",
             "format": "YYYY-MM-DD",
             "width": 100
@@ -130,6 +151,31 @@
         {
             "title": "库位",
             "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 120
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 120
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 120
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 120
+        },
+        {
+            "title": "内部合同号",
+            "dataIndex": "contractNumber",
             "width": 120
         },
         {
