@@ -5,7 +5,7 @@
  */
 
 import React, { forwardRef, useImperativeHandle, useState } from "react";
-import { Button, Card, Col, Form, Input, message, Row } from 'antd';
+import { Button, Card, Col, Form, Input, message, Row, Spin } from 'antd';
 import { DetailContent, DetailTitle, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -20,7 +20,7 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
 
-    const { data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${rowId}/${workTemplateTypeId}`);
         setFields(result?.workOrderCustomVOList)
         resole(result);
@@ -154,77 +154,79 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
 
     useImperativeHandle(ref, () => ({ onSubmit, onBack, resetFields }), [ref, onSubmit, onBack, resetFields]);
 
-    return <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
-        <Row gutter={12}>
-            <Col span={19}>
-                <Form form={form} labelCol={{ span: 8 }}>
-                    <Row gutter={24}>
-                        {
-                            [...fields]?.map((res: any, index: number) => {
-                                return res?.triggerField === 1 ?
-                                    <Col span={6} key={index}>
-                                        <Form.Item label={res?.fieldKey} >
-                                            <Row gutter={12}>
-                                                <Col span={18}>
-                                                    <Form.Item name={['data', index, res?.fieldKey]} rules={res?.required === 1 ? [{
-                                                        required: true,
-                                                        message: `请输入${res?.fieldKey}`
-                                                    }] : []} initialValue={res?.fieldValue}>
-                                                        <Input />
-                                                    </Form.Item>
-                                                </Col>
-                                                <Col span={6}>
-                                                    <Button type="primary" onClick={() => getValueByApi(res?.api, index)} ghost>获取</Button>
-                                                </Col>
-                                            </Row>
-                                        </Form.Item>
-                                    </Col>
-                                    :
-                                    <Col span={6} key={index}>
-                                        <Form.Item label={res?.fieldKey} key={index} rules={res?.required === 1 ? [{
-                                            required: true,
-                                            message: `请输入${res?.fieldKey}`
-                                        }] : []} name={['data', index, res?.fieldKey]} initialValue={res?.fieldValue}>
-                                            <Input />
-                                        </Form.Item>
-                                    </Col>
-                            })
-                        }
-                    </Row>
-                    <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 3 }}>
-                        <Input.TextArea maxLength={800} />
-                    </Form.Item>
-                </Form>
-                <OperationRecord title="操作信息" serviceId={rowId} serviceName="tower-wo" />
-            </Col>
-            <Col span={5}>
-                <DetailTitle title="工单信息" key={0} />
-                {
-                    data?.workOrderNodeVOList?.map((res: any, index: number) => {
-                        return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
+    return <Spin spinning={loading}>
+        <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
+            <Row gutter={12}>
+                <Col span={19}>
+                    <Form form={form} labelCol={{ span: 8 }}>
+                        <Row gutter={24}>
                             {
-                                res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
-                                    return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>
-                                        {
-                                            item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
-                                                return <Row gutter={12} key={i} style={{ marginBottom: '6px' }} justify="space-around">
-                                                    <Col span={8}>
-                                                        {field?.fieldKey}
+                                [...fields]?.map((res: any, index: number) => {
+                                    return res?.triggerField === 1 ?
+                                        <Col span={6} key={index}>
+                                            <Form.Item label={res?.fieldKey} >
+                                                <Row gutter={12}>
+                                                    <Col span={18}>
+                                                        <Form.Item name={['data', index, res?.fieldKey]} rules={res?.required === 1 ? [{
+                                                            required: true,
+                                                            message: `请输入${res?.fieldKey}`
+                                                        }] : []} initialValue={res?.fieldValue}>
+                                                            <Input />
+                                                        </Form.Item>
                                                     </Col>
-                                                    <Col span={16}>
-                                                        {field?.fieldValue || '-'}
+                                                    <Col span={6}>
+                                                        <Button type="primary" onClick={() => getValueByApi(res?.api, index)} ghost>获取</Button>
                                                     </Col>
                                                 </Row>
-                                            })
-                                        }
-                                    </Card>
+                                            </Form.Item>
+                                        </Col>
+                                        :
+                                        <Col span={6} key={index}>
+                                            <Form.Item label={res?.fieldKey} key={index} rules={res?.required === 1 ? [{
+                                                required: true,
+                                                message: `请输入${res?.fieldKey}`
+                                            }] : []} name={['data', index, res?.fieldKey]} initialValue={res?.fieldValue}>
+                                                <Input />
+                                            </Form.Item>
+                                        </Col>
                                 })
                             }
-                        </Card>
-                    })
-                }
-            </Col>
-        </Row>
-    </DetailContent>
+                        </Row>
+                        <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 3 }}>
+                            <Input.TextArea maxLength={800} />
+                        </Form.Item>
+                    </Form>
+                    <OperationRecord title="操作信息" serviceId={rowId} serviceName="tower-work" />
+                </Col>
+                <Col span={5}>
+                    <DetailTitle title="工单信息" key={0} />
+                    {
+                        data?.workOrderNodeVOList?.map((res: any, index: number) => {
+                            return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
+                                {
+                                    res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
+                                        return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>
+                                            {
+                                                item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
+                                                    return <Row gutter={12} key={i} style={{ marginBottom: '6px' }} justify="space-around">
+                                                        <Col span={8}>
+                                                            {field?.fieldKey}
+                                                        </Col>
+                                                        <Col span={16}>
+                                                            {field?.fieldValue || '-'}
+                                                        </Col>
+                                                    </Row>
+                                                })
+                                            }
+                                        </Card>
+                                    })
+                                }
+                            </Card>
+                        })
+                    }
+                </Col>
+            </Row>
+        </DetailContent>
+    </Spin>
 })
 
