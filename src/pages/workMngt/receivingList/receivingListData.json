@@ -31,6 +31,11 @@
             "width": 100
         },
         {
+            "title": "创建时间",
+            "dataIndex": "createTime",
+            "width": 100
+        },
+        {
             "title": "到货时间",
             "dataIndex": "receiveTime",
             "width": 100
@@ -424,7 +429,10 @@
             "title": "合同编号",
             "dataIndex": "materialContractNumber",
             "type": "string",
-            "disabled": true
+            "fixed":true,
+            "disabled": true,
+            "width":150
+            
         },
         {
             "title": "理算单重",
@@ -435,46 +443,59 @@
             "title": "品名",
             "dataIndex": "materialName",
             "type": "string",
-            "disabled": true
+            "disabled": true,
+            "fixed":true,
+            "width":100
         },
         {
             "title": "标准",
             "dataIndex": "materialStandard",
-            "type": "select"
+            "type": "select",
+            "fixed":true,
+            "width":120
         },
         {
             "title": "材质",
             "dataIndex": "structureTexture",
-            "type": "select"
+            "type": "select",
+            "fixed":true,
+            "width":100
         },
         {
             "title": "规格",
             "dataIndex": "structureSpec",
             "type": "string",
-            "disabled": true
+            "disabled": true,
+            "fixed":true,
+            "width":100
         },
         {
-            "title": "长度（mm）",
+            "title": "长度(mm)",
             "dataIndex": "length",
-            "type": "number"
+            "type": "number",
+            "width":80
         },
         {
-            "title": "宽度（mm）",
+            "title": "宽度(mm)",
             "dataIndex": "width",
-            "type": "number"
+            "type": "number",
+            "width":80
         },
         {
             "title": "数量",
             "dataIndex": "num",
             "type": "number",
-            "disabled": true
+            "disabled": true,
+            "width":100
         },
+        
         {
             "title": "理算重量（吨）",
             "dataIndex": "totalWeight",
             "type": "number",
             "precision": 4,
-            "disabled": true
+            "disabled": true,
+            "width":100
         },
         {
             "title": "结算重量（吨）",
@@ -482,7 +503,31 @@
             "type": "number",
             "precision": 3,
             "max": 99999.999,
+            "required": true,
+            "width":120
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "maxLength": 30,
             "required": true
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "required": true,
+            "maxLength": 30
+        },
+        {
+            "title": "轧制批号",
+            "dataIndex": "rollingNumber",
+            "maxLength": 30
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringModeName",
+            "disabled": true,
+            "width":100
         },
         {
             "title": "含税单价（元/吨）",
@@ -523,23 +568,6 @@
             "title": "不含税装卸费（元）",
             "dataIndex": "totalUnloadPrice",
             "disabled": true
-        },
-        {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber",
-            "maxLength": 30,
-            "required": true
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber",
-            "required": true,
-            "maxLength": 30
-        },
-        {
-            "title": "轧制批号",
-            "dataIndex": "rollingNumber",
-            "maxLength": 30
         },
         {
             "title": "生产厂家",
