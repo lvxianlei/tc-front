@@ -38,11 +38,15 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
             return ({
                 ...item,
+                price: item?.unTaxPrice,
+                totalPrice: item?.totalUnTaxPrice
             })
         })])
         setPopDataList([...materialList, ...newMaterialList.map((item: any, index: number) => {
             return ({
                 ...item,
+                price: item?.unTaxPrice,
+                totalPrice: item?.totalUnTaxPrice,
                 key: `${item.id}-${index}-${Math.random()}-${new Date().getTime()}`
             })
         })])
@@ -50,9 +54,10 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     // 移除
-    const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.key !== id))
-        setPopDataList(materialList.filter((item: any) => item.key !== id))
+    const handleRemove = (index: number) => {
+        materialList.splice(index,1)
+        setMaterialList([...materialList])
+        setPopDataList([...materialList])
     }
 
     // 复制
@@ -288,17 +293,17 @@ export default function CreatePlan(props: any): JSX.Element {
                             title: "操作",
                             fixed: "right",
                             dataIndex: "opration",
-                            render: (_: any, records: any) => <>
+                            render: (_: any, records: any,index) => <>
                                 {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
                                 <Button
                                     type="link"
                                     disabled={records.warehousingEntryStatus === 1}
-                                    onClick={() => handleRemove(records.key)}
+                                    onClick={() => handleRemove(index)}
                                 >移除</Button>
                             </>
                         }]}
                     pagination={false}
-                    dataSource={popDataList} />
+                    dataSource={[...popDataList]} />
                 <Modal width={1100} title={`选择到货明细`} destroyOnClose
                     visible={visible}
                     onOk={handleAddModalOk}
@@ -317,7 +322,14 @@ export default function CreatePlan(props: any): JSX.Element {
                             value: ""
                         }}
                         onChange={(fields: any[]) => {
-                            setMaterialList(fields || [])
+                            console.log(fields)
+                            setMaterialList(fields.map((item: any, index: number) => {
+                                return ({
+                                    ...item,
+                                    price: item?.price?item?.price:item?.unTaxPrice,
+                                    totalPrice: item?.totalPrice?item?.totalPrice:item?.totalUnTaxPrice,
+                                })
+                            }) || [])
                         }}
                     />
                 </Modal>
