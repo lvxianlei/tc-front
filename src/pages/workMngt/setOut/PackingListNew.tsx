@@ -67,6 +67,16 @@ export default function PackingListNew(): React.ReactNode {
 
     const detailData: IPackingList = data || {};
 
+    const { data: materialNameLists } = useRequest<string[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get<[]>(`/tower-science/packageStructure/materialNameList?productId=${params.productId}`);
+        resole(data);
+    }))
+
+    const { data: structureSpecLists, run } = useRequest<string[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get<[]>(`/tower-science/packageStructure/structureSpecList?productId=${params.productId}&materialName=${searchForm.getFieldsValue(true)?.materialSpec || ''}`);
+        resole(data);
+    }))
+
     // 添加
     const packaging = (record: IBundle, index: number) => {
         const data: IBundle = {
@@ -418,6 +428,15 @@ export default function PackingListNew(): React.ReactNode {
         if (value.isCommonSegment?.indexOf('isCommonSegment') >= 0) {
             value.isCommonSegment = 1
         }
+        if (value.structureSpecs) {
+            value.structureSpecStr = value.structureSpecs.join(',')
+        }
+        if (value.segmentId) {
+            value.segmentIdStr = value.segmentId.join(',')
+        }
+        if (value.type) {
+            value.typeDictIdStr = value.type.join(',')
+        }
         let list = await RequestUtil.get<IBundle[]>(`/tower-science/packageStructure/structureList`, { productId: params.productId, ...value, packageStructureId: params.packId });
         list = list.map(res => {
             const packagingRow = packagingData.filter(item => item.businessId === res.businessId);
@@ -664,19 +683,34 @@ export default function PackingListNew(): React.ReactNode {
                     </Checkbox.Group>
                 </Form.Item>
                 <Form.Item name="materialSpec" label="材料名称" className={styles.rightPadding5}>
-                    <Input placeholder="请输入" maxLength={20} style={{ width: '100%' }} />
+                    <Select placeholder="请选择" style={{ width: '150px' }} onChange={(e) => run(e)}>
+                        {
+                            materialNameLists && materialNameLists?.map((item: any) => {
+                                return <Select.Option key={item} value={item}>{item}</Select.Option>
+                            })
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item name="structureSpecs" label="规格" className={styles.rightPadding5}>
+                    <Select placeholder="请选择" style={{ width: '150px' }} mode="multiple">
+                        {
+                            structureSpecLists && structureSpecLists?.map((item: any) => {
+                                return <Select.Option key={item} value={item}>{item}</Select.Option>
+                            })
+                        }
+                    </Select>
                 </Form.Item>
                 <Form.Item name="segmentId" label="段名">
-                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                    <Select placeholder="请选择" style={{ width: '150px' }} mode="multiple">
                         {userList && userList.map((item: any) => {
                             return <Select.Option key={item.id} value={item.segmentId}>{item.segmentName}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>
                 <Form.Item name="type" label="零件类型">
-                    <Select placeholder="请选择">
+                    <Select placeholder="请选择" style={{ width: '150px' }} mode="multiple">
                         {componentTypeOptions?.map((item: any, index: number) =>
-                            <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>
+                            <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
                         )}
                     </Select>
                 </Form.Item>
@@ -701,25 +735,28 @@ export default function PackingListNew(): React.ReactNode {
             </Form>
             <Row gutter={12}>
                 <Col span={12}>
-                    <p className={styles.titleContent}>
-                        <span className={styles.title}>待选区</span>
-                        <span className={styles.description}>未包装数量：
+                    <Row className={styles.titleContent} justify="space-between">
+                        <Col className={styles.title}>待选区</Col>
+                        <Col>未包装数量：
                             <span className={styles.content}>{showParts ? stayDistrict?.length : dataShowParts(stayDistrict).length}</span>
-                        </span>
-                        <span className={styles.description}>已选择：件数：
+                        </Col>
+                        <Col>已选择：件数：
                             <span className={styles.content}>{dataShowParts(selectedRow).length}</span>
-                        </span>
-                        <span className={styles.description}>重量：
+                        </Col>
+                        <Col>重量：
                             <span className={styles.content}>{selectWeight}kg</span>
-                        </span>
-                        <span className={styles.description}>电焊件：
+                        </Col>
+                        <Col>电焊件：
                             <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isMainPart === 1).length}</span>
-                        </span>
-                        <p style={{ width: '100%', display: 'inline', paddingLeft: '20px' }}>
+                        </Col>
+                        <Col>
                             <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
-                        </p>
-                        <Button className={styles.fastBtn} type="primary" onClick={addTopack} ghost>添加</Button>
-                    </p>
+                        </Col>
+                        <Col>
+                            <Button type="primary" onClick={addTopack} ghost>添加</Button>
+                        </Col>
+
+                    </Row>
                     <CommonAliTable
                         haveIndex
                         rowKey='businessId'
@@ -794,19 +831,21 @@ export default function PackingListNew(): React.ReactNode {
                     />
                 </Col>
                 <Col span={12}>
-                    <p className={styles.titleContent}>
-                        <span className={styles.title}>包装区</span>
-                        <span className={styles.description}>包重量（kg）：
+                    <Row className={styles.titleContent} justify="space-between">
+                        <Col span={4} className={styles.title}>包装区</Col>
+                        <Col span={4}>包重量（kg）：
                             <span className={styles.content}>{packageWeight}</span>
-                        </span>
-                        <span className={styles.description}> 包件数：
+                        </Col>
+                        <Col span={4}> 包件数：
                             <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
-                        </span>
-                        <span className={styles.description}>电焊件：
+                        </Col>
+                        <Col span={4}>电焊件：
                             <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span>
-                        </span>
-                        <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
-                    </p>
+                        </Col>
+                        <Col span={8}>
+                            <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
+                        </Col>
+                    </Row>
                     <CommonAliTable
                         haveIndex
                         columns={[

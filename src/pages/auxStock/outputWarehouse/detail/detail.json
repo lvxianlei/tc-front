@@ -1,0 +1,69 @@
+{
+    "baseColumn": [
+        {
+            "title": "状态",
+            "dataIndex": "outStockItemStatusName",
+            "width": 120
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 120
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 120
+        },
+        {
+            "title": "已出库数量",
+            "dataIndex": "num",
+            "width": 120
+        },
+        {
+            "title": "出库人",
+            "dataIndex": "outStockUserName",
+            "width": 120
+        },
+        {
+            "title": "出库时间",
+            "dataIndex": "outStockTime",
+            "width": 120
+        },
+        {
+            "title": "仓库",
+            "dataIndex": "warehouseName",
+            "width": 120
+        },
+        {
+            "title": "库区",
+            "dataIndex": "reservoirName",
+            "width": 120
+        },
+        {
+            "title": "库位",
+            "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "含税单价（元）",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税单价（元）",
+            "dataIndex": "unTaxPrice",
+            "width": 140
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice",
+            "width": 120
+        }
+    ]
+}

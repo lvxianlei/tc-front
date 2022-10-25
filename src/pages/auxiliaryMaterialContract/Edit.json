@@ -1,0 +1,113 @@
+{
+  "freightInformation": [
+    {
+      "title": "运输承担",
+      "dataIndex": "transportBear",
+      "type": "select",
+      "enum": [
+        {
+          "value": 1,
+          "label": "供方"
+        },
+        {
+          "value": 2,
+          "label": "需方"
+        }
+      ],
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择运输承担..."
+        }
+      ]
+    },
+    {
+      "title": "运输公司",
+      "dataIndex": "transportCompanyId",
+      "placeholder": "请选择运输承担",
+      "type": "select",
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择运输公司..."
+        }
+      ]
+    },
+    {
+      "title": "含税价格（元）",
+      "dataIndex": "transportTaxPrice",
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入含税价格"
+        }
+      ]
+    },
+    {
+      "title": "不含税价格（元）",
+      "dataIndex": "transportPrice",
+      "disabled": true,
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入不含税价格"
+        }
+      ]
+    }
+  ],
+  "HandlingChargesInformation": [
+    {
+      "title": "卸车承担",
+      "dataIndex": "unloadBear",
+      "type": "select",
+      "enum": [
+        {
+          "value": 1,
+          "label": "供方"
+        },
+        {
+          "value": 2,
+          "label": "需方"
+        }
+      ],
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择卸车承担..."
+        }
+      ]
+    },
+    {
+      "title": "装卸公司",
+      "dataIndex": "unloadCompanyId",
+      "type": "select",
+      "rules": [
+        {
+          "required": true,
+          "message": "请选择装卸公司"
+        }
+      ]
+    },
+    {
+      "title": "含税价格（元）",
+      "dataIndex": "unloadTaxPrice",
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入含税价格"
+        }
+      ]
+    },
+    {
+      "title": "不含税价格（元）",
+      "dataIndex": "unloadPrice",
+      "disabled": true,
+      "rules": [
+        {
+          "required": true,
+          "message": "请输入不含税价格"
+        }
+      ]
+    }
+  ]
+}

@@ -132,7 +132,8 @@ export default function MaterialMngt(): React.ReactNode {
                     materialTypeName: values.materialType.split(',')[1],
                     materialCategory: values.materialCategory.split(',')[0],
                     materialCategoryName: values.materialCategory.split(',')[1],
-                    materialCode: code + values.materialCode
+                    materialCode: code + values.materialCode,
+                    materialDataType: 2
                 }
                 if (title === '新增') {
                     RequestUtil.post(
@@ -148,14 +149,14 @@ export default function MaterialMngt(): React.ReactNode {
                     RequestUtil.put(
                         '/tower-system/material',
                         [{
-                        ...values,
-                        id: detailData.id
-                    }]).then(res => {
-                        close();
-                        setRefresh(!refresh);
-                        message.success('保存成功');
-                        history.go(0)
-                    })
+                            ...values,
+                            id: detailData.id
+                        }]).then(res => {
+                            close();
+                            setRefresh(!refresh);
+                            message.success('保存成功');
+                            history.go(0)
+                        })
                 }
             })
         }
@@ -168,6 +169,7 @@ export default function MaterialMngt(): React.ReactNode {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
                 materialCode: code + value,
+                materialDataType: 2,
                 id: detailData.id
             });
             resolve(resData)
