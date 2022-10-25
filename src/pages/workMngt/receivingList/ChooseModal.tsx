@@ -193,7 +193,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                     </Col>
                     <Col span={6}>
                         <Form.Item
-                            name="structureSpec"
+                            name="materialStandard"
                             label="标准">
                             <Select style={{ width: '100%' }} >
                                 {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
