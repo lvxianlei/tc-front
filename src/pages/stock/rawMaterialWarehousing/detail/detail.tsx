@@ -31,7 +31,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     // 入库以及批量入库  待联调
     const { data: statisticsDatas, run: saveRun } = useRequest<any[]>((data) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.post(`/tower-storage/warehousingEntry/batchSaveWarehousingEntry`, data)
+            const result: any = await RequestUtil.put(`/tower-storage/warehousingEntry/batchSaveWarehousingEntry`, data)
             message.success("入库成功！");
             resole(result)
         } catch (error) {

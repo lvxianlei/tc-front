@@ -36,7 +36,7 @@ const inStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                <Link to={`/stock/rawMaterialWarehousing/detail/${record.id}`}>所在单据</Link>
+                <Link to={`/stock/rawMaterialWarehousing/detail/${record.warehousingEntryId}`}>所在单据</Link>
             </>
         )
     }
