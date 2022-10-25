@@ -111,14 +111,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 setEditId(record.id)
                                 setOperationType("edit")
                             }
-                        }>编辑</Button>
+                        } disabled={record?.receiveStatus === 1}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => handleDelete(record?.id)}
                         okText="确认"
                         cancelText="取消"
+                        disabled={record?.receiveStatus === 1}
                     >
-                        <Button type="link" disabled={record.stockStatus === 2}>删除</Button>
+                        <Button type="link" disabled={record?.receiveStatus===1}>删除</Button>
                     </Popconfirm>
 
                 </>

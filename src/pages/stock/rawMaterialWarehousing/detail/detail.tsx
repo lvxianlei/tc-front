@@ -102,9 +102,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     }}
                                     okText="确认"
                                     cancelText="取消"
-                                    disabled={record.state === 1}
+                                    disabled={record.warehousingEntryStatus === 0}
                                 >
-                                    <Button type="link" disabled={record.state === 1}>撤销</Button>
+                                    <Button type="link" disabled={record.warehousingEntryStatus === 0}>撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -116,9 +116,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     }}
                                     okText="确认"
                                     cancelText="取消"
-                                    disabled={record.state === 1}
+                                    disabled={record.warehousingEntryStatus === 1}
                                 >
-                                    <Button type="link" disabled={record.state === 1}>删除</Button>
+                                    <Button type="link" disabled={record.warehousingEntryStatus === 1}>删除</Button>
                                 </Popconfirm>
                             </>
                         )
