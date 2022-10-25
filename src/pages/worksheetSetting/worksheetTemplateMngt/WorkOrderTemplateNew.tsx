@@ -378,6 +378,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
     }
 
     const nodeNumberBlur = (e: string) => {
+        const nodeNumber = Number(e) > 99 ? 99 : e
         let num: number = 1;
         const nodeList: any[] = []
         do {
@@ -389,7 +390,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
             })
             num++;
         }
-        while (num <= Number(e))
+        while (num <= Number(nodeNumber))
         setUpstreamNode(nodeList)
         setDealList(nodeList)
         form.setFieldsValue({
@@ -477,7 +478,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                                         message: `请输入节点数量`
                                     }
                                 ]}>
-                                <InputNumber disabled={type === 'detail'} min={1} max={99} onBlur={(e) => nodeNumberBlur(e.target.value)} precision={0} />
+                                <InputNumber disabled={type === 'detail'} min={1} max={99} onBlur={(e) => nodeNumberBlur(e?.target.value)} precision={0} />
                             </Form.Item>
                         </Row>
                     </Col>
