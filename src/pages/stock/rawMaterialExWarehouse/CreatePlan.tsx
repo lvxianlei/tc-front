@@ -299,7 +299,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                     }
                                     return res
                         }),
-                        path: `${addMaterial.path}/${warehouseId}`
+                        path: `${addMaterial.path}`
                     }}
                     value={{
                         id: "",
