@@ -3195,6 +3195,34 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // WO-工单设置-模板类型
+      "name": "模板类型",
+      "path": "/worksheetSetting/templateType",
+      "module": "./pages/worksheetSetting/templateType/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-工单模板管理
+      "name": "工单模板管理",
+      "path": "/worksheetSetting/worksheetTemplateMngt",
+      "module": "./pages/worksheetSetting/worksheetTemplateMngt/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单管理-工单管理
+      "name": "工单管理",
+      "path": "/worksheetMngt/management",
+      "module": "./pages/worksheetMngt/management/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单管理-工单管理
+      "name": "工单管理",
+      "path": "/worksheetMngt/management",
+      "module": "./pages/worksheetMngt/management/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // 流程设计
       "name": "流程设计",
       "path": "/journal/workflow",
