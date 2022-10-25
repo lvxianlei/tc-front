@@ -23,6 +23,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         startStatusUpdateTime: "",
         endStatusUpdateTime: "",
         receiveStockId: params.id,
+        warehousingEntryId: params.id,
     });
 
     // 批量入库
@@ -68,8 +69,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     return (
         <>
             <Page
-                path={`/tower-storage/warehousingEntry/warehousingEntryDetail?warehousingEntryId=${params.id}`}
-                exportPath={`/tower-storage/warehousingEntry/warehousingEntryDetail?warehousingEntryId=${params.id}`}
+                path={`/tower-storage/warehousingEntry/warehousingEntryDetail`}
+                exportPath={`/tower-storage/warehousingEntry/warehousingEntryDetail`}
+                
                 columns={[
                     {
                         key: 'index',
