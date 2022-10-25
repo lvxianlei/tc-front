@@ -5,13 +5,13 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, DatePicker, Button, message, Space, Select, Radio, Modal, TreeSelect, Form, Popconfirm } from 'antd';
+import { Input, DatePicker, Button, message, Space, Select, Radio, Modal, TreeSelect, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from '../Management.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import SelectUser from '../../common/SelectUser';
 import WorkOrderNew from './WorkOrderNew';
 import WorkOrderDetail from './WorkOrderDetail';
@@ -114,10 +114,10 @@ export default function List(): React.ReactNode {
             "dataIndex": "dispatchStatusName"
         },
         {
-            "key": "workOrderName",
+            "key": "workOrderNode",
             "title": "当前处理节点",
             "width": 150,
-            "dataIndex": "workOrderName"
+            "dataIndex": "workOrderNode"
         },
         {
             "key": "recipientUserName",
@@ -398,6 +398,12 @@ export default function List(): React.ReactNode {
                         <Button type='primary' disabled={selectedKeys.length === 0} onClick={() => {
                             const tip = selectedRows.some((cur: any, idx, arr) => arr.slice(idx + 1).find((item: any) => cur?.workTemplateType == item?.workTemplateType))
                             console.log(tip)
+                            if(tip) {
+                                // setRowId(selectedKeys?.join(','));
+                                // setDispatchVisible(true);
+                            } else {
+                                message.warning('仅相同工单类型允许批量派工！')
+                            }
                         }} ghost>批量派工</Button>
                     </Space>
                 </Space>

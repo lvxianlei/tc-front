@@ -47,26 +47,28 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async res => {
-                let value = form.getFieldsValue(true)
-                value = value?.data?.map((res: any) => {
+                let value = form.getFieldsValue(true)?.data
+
+                console.log(form.getFieldsValue(true))
+                value = value?.map((res: any) => {
                     const newRes = Object.entries(res)
+                    console.log(newRes)
                     return newRes.map((item: any) => {
                         return {
                             fieldKey: item[0],
                             fieldValue: item[1]
                         }
-                    })
+                    })[0]
                 })
                 console.log(value)
                 await saveRun({
                     workOrderId: data?.workOrderCustomVOList[0]?.workOrderId,
-                    description: value?.description,
+                    description: form.getFieldsValue(true)?.description,
                     workOrderNode: data?.workOrderCustomVOList[0]?.workOrderNode,
-                    workOrderNodeUserCustomDTOList: [
-                        ...value
-                    ]
-                })
+                    workOrderNodeUserCustomDTOList: value
 
+                })
+                resolve(true)
             })
         } catch (error) {
             console.log(error)
@@ -79,25 +81,12 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
             let value = form.getFieldsValue(true)
             if (value.description) {
                 form.validateFields().then(async res => {
-                    value = value?.data?.map((res: any) => {
-                        const newRes = Object.entries(res)
-                        return newRes.map((item: any) => {
-                            return {
-                                fieldKey: item[0],
-                                fieldValue: item[1]
-                            }
-                        })
-                    })
-                    console.log(value)
                     await backRun({
                         workOrderId: data?.workOrderCustomVOList[0]?.workOrderId,
                         description: value?.description,
-                        workOrderNode: data?.workOrderCustomVOList[0]?.workOrderNode,
-                        workOrderNodeUserCustomDTOList: [
-                            ...value
-                        ]
+                        workOrderNode: data?.workOrderCustomVOList[0]?.workOrderNode
                     })
-    
+                    resolve(true)
                 })
             } else {
                 message.warning("请输入退回说明");
@@ -123,9 +112,9 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                     value: '7777'
                 }
             ]
-            const newData = data?.map((res: { key: never, value: never }) => {
+            const newData = data?.map((res: { fieldKey: never, fieldValue: never }) => {
                 let arr = []
-                arr = [res?.key, res?.value]
+                arr = [res?.fieldKey, res?.fieldValue]
                 return arr
             })
             const entriesData: any = Object.fromEntries(newData)
@@ -136,18 +125,18 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
             let newFields: any[] = []
             data.forEach((element: any) => {
                 newFields = fields?.map((res: any) => {
-                    if (element?.key === res?.key) {
+                    if (element?.fieldKey === res?.fieldKey) {
                         return {
                             ...res,
-                            key: res?.key,
-                            value: element?.value
+                            fieldKey: res?.fieldKey,
+                            fieldValue: element?.fieldValue
                         }
 
                     } else {
                         return {
                             ...res,
-                            key: res?.key,
-                            value: res?.value
+                            fieldKey: res?.fieldKey,
+                            fieldValue: res?.fieldValue
                         }
 
                     }
@@ -174,28 +163,33 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                     <Row gutter={24}>
                         {
                             [...fields]?.map((res: any, index: number) => {
-                                return res?.api ?
-                                    <Col span={8} key={index}>
-                                        <Card bordered={false}>
-                                            <Form.Item label={res?.key} >
-                                                <Row gutter={12}>
-                                                    <Col span={18}>
-                                                        <Form.Item name={res?.key} initialValue={res?.value}>
-                                                            <Input />
-                                                        </Form.Item>
-                                                    </Col>
-                                                    <Col span={6}>
-                                                        <Button type="primary" onClick={() => getValueByApi(res?.api, index)} ghost>获取</Button>
-                                                    </Col>
-                                                </Row>
-                                            </Form.Item>
-
-                                        </Card>
+                                return res?.triggerField === 1 ?
+                                    <Col span={6} key={index}>
+                                        <Form.Item label={res?.fieldKey} >
+                                            <Row gutter={12}>
+                                                <Col span={18}>
+                                                    <Form.Item name={['data', index, res?.fieldKey]} rules={res?.required === 1 ? [{
+                                                        required: true,
+                                                        message: `请输入${res?.fieldKey}`
+                                                    }] : []} initialValue={res?.fieldValue}>
+                                                        <Input />
+                                                    </Form.Item>
+                                                </Col>
+                                                <Col span={6}>
+                                                    <Button type="primary" onClick={() => getValueByApi(res?.api, index)} ghost>获取</Button>
+                                                </Col>
+                                            </Row>
+                                        </Form.Item>
                                     </Col>
                                     :
-                                    <Form.Item label={res?.key} key={index} name={res?.key} initialValue={res?.value}>
-                                        <Input />
-                                    </Form.Item>
+                                    <Col span={6} key={index}>
+                                        <Form.Item label={res?.fieldKey} key={index} rules={res?.required === 1 ? [{
+                                            required: true,
+                                            message: `请输入${res?.fieldKey}`
+                                        }] : []} name={['data', index, res?.fieldKey]} initialValue={res?.fieldValue}>
+                                            <Input />
+                                        </Form.Item>
+                                    </Col>
                             })
                         }
                     </Row>
@@ -209,23 +203,22 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                 <DetailTitle title="工单信息" key={0} />
                 {
                     data?.workOrderNodeVOList?.map((res: any, index: number) => {
-                        return <Card title={res?.node} key={index}>
+                        return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
                             {
                                 res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
-                                    return <Card title={item?.recipientUserName} key={ind}>
+                                    return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>
                                         {
                                             item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
-                                                return <Row gutter={12} key={i} justify="space-around">
+                                                return <Row gutter={12} key={i} style={{ marginBottom: '6px' }} justify="space-around">
                                                     <Col span={8}>
                                                         {field?.fieldKey}
                                                     </Col>
                                                     <Col span={16}>
-                                                        {field?.fieldValue}
+                                                        {field?.fieldValue || '-'}
                                                     </Col>
                                                 </Row>
                                             })
                                         }
-
                                     </Card>
                                 })
                             }

@@ -27,8 +27,8 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
         result = result.map((res: any) => {
             return {
                 ...res,
-                planStartTime: moment(res?.planStartTime),
-                planEndTime: moment(res?.planEndTime),
+                planStartTime: res?.planStartTime && moment(res?.planStartTime),
+                planEndTime: res?.planEndTime && moment(res?.planEndTime),
                 recipientUser: res?.recipientUser && res?.recipientUser?.split(','),
             }
         })
@@ -75,7 +75,7 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                                 }
                             })
                         ])
-                        // resolve(true)
+                        resolve(true)
                     } else {
                         reject(false)
                     }

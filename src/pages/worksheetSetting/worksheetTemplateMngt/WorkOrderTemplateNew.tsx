@@ -51,6 +51,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
         }) || [])
         setCustomList(result?.templateCustomVOList || [])
         resole(result);
+        setUpstreamNode(result?.templateNodeVOList)
     }), { manual: type === 'new', refreshDeps: [rowId, type] })
 
     const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
