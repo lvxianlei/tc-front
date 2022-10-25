@@ -52,6 +52,12 @@ export default function Invoicing() {
             value.startCompleteTime = formatDate[0] + " 00:00:00"
             value.endCompleteTime = formatDate[1] + " 23:59:59"
         }
+        if (value.time) {
+            const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCreateTime = formatDate[0] + " 00:00:00"
+            value.endCreateTime = formatDate[1] + " 23:59:59"
+            delete value.time
+        }
         if (value.createUserId) {
             value.createUserId = value.createUserId.value
         }
@@ -95,7 +101,7 @@ export default function Invoicing() {
         <Modal
             destroyOnClose
             visible={visible}
-            width={1011}
+            width={'90%'}
             confirmLoading={confirmLoading}
             title={type === "new" ? "创建" : "编辑"}
             onOk={handleModalOk}
@@ -180,6 +186,11 @@ export default function Invoicing() {
                     children: <Select style={{ width: 200 }}>
                         {data?.map((item: any) => <Select.Option key={item.id} value={item.id}>{item.supplierName}</Select.Option>)}
                     </Select>
+                },
+                {
+                    name: 'time',
+                    label: '创建时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'startReceiveTime',

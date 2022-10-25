@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, InputNumber, Select, DatePicker, Modal, Form, Row, Col, Button } from 'antd'
+import { Input, InputNumber, Select, DatePicker, Modal, Form, Row, Col, Button, TreeSelect } from 'antd'
 import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
@@ -296,6 +296,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             {...componentProps}
         />,
         select: <SelfSelect {...props} data={data as SelectData} />,
+        tree: <TreeSelect  treeData={data?.treeData as any} style={{ width: "100px",  ...props.style }}/>,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
             onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}

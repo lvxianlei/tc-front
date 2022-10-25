@@ -78,6 +78,25 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             reject(error)
         }
     }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
+    //库区库位
+    const { data: locator } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree/${warehouseId}`)
+            resole(result?.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+                key: item.id,
+                disabled: true,
+                children: item.children?.map((cItem: any) => ({
+                    label: cItem.name,
+                    value: cItem.id,
+                    key: cItem.id
+                }) || [])
+            })) || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
 
     const handleAddModalOk = () => {
         setMaterialPlanList([...materialList.map((item: any, index: number) => {
@@ -236,7 +255,6 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             reject(error)
         }
     }))
-
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](`/tower-storage/warehousingEntry/auxiliary`, props.type === "create" ? {
@@ -425,6 +443,15 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             <PopTableContent
                 data={{
                     ...addMaterial as any,
+                    search: (addMaterial as any).search.map((item: any) => {
+                        if (item.dataIndex === "locatorId") {
+                            return ({
+                                ...item,
+                                treeData: locator
+                            })
+                        }
+                        return item
+                    }),
                     path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
                 }}
                 value={{
