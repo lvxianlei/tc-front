@@ -65,17 +65,22 @@
     ],
     "search": [
       {
-        "title": "类别",
-        "dataIndex": "materialType",
+        "title": "类型",
+        "dataIndex": "materialCategory",
         "width": 200,
-        "type":"select",
-        "enum":[]
+        "type":"select"
       },
       {
-        "title": "查询",
-        "dataIndex": "fuzzyQuery",
+        "title": "品名",
+        "dataIndex": "materialName",
         "width": 200,
-        "placeholder": "物料编码/品名"
+        "placeholder": "请输入品名"
+      },
+      {
+        "title": "规格",
+        "dataIndex": "structureSpec",
+        "width": 200,
+        "placeholder": "请输入规格"
       }
     ]
   },
