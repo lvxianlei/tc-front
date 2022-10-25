@@ -143,30 +143,32 @@ export default forwardRef(function WorkOrderDetail({ rowId }: modalProps, ref) {
                 </Col>
                 <Col span={5}>
                     <DetailTitle title="工单信息" key={2} />
-                    {
-                        data?.workOrderNodeVOList?.map((res: any, index: number) => {
-                            return <Card title={res?.node} style={{marginBottom: '6px'}} key={index}>
-                                {
-                                    res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
-                                        return <Card title={item?.recipientUserName} style={{marginBottom: '6px'}} key={ind}>
-                                            {
-                                                item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
-                                                    return <Row gutter={12} key={i} style={{marginBottom: '6px'}} justify="space-around">
-                                                        <Col span={8}>
-                                                            {field?.fieldKey}
-                                                        </Col>
-                                                        <Col span={16}>
-                                                            {field?.fieldValue || '-'}
-                                                        </Col>
-                                                    </Row>
-                                                })
-                                            }
-                                        </Card>
-                                    })
-                                }
-                            </Card>
-                        })
-                    }
+                    <div className={styles.scroll}>
+                        {
+                            data?.workOrderNodeVOList?.map((res: any, index: number) => {
+                                return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
+                                    {
+                                        res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
+                                            return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>
+                                                {
+                                                    item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
+                                                        return <Row gutter={12} key={i} style={{ marginBottom: '6px' }} justify="space-around">
+                                                            <Col span={8}>
+                                                                {field?.fieldKey}
+                                                            </Col>
+                                                            <Col span={16}>
+                                                                {field?.fieldValue || '-'}
+                                                            </Col>
+                                                        </Row>
+                                                    })
+                                                }
+                                            </Card>
+                                        })
+                                    }
+                                </Card>
+                            })
+                        }
+                    </div>
                 </Col>
             </Row>
         </DetailContent>
