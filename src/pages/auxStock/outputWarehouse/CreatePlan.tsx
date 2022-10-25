@@ -284,7 +284,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                         }
                         return item
                     }),
-                    path: `${addMaterial.path}/${warehouseId}?materialType=2`
+                    path: `${addMaterial.path}?materialType=2`
                 }}
                 value={{
                     id: "",
