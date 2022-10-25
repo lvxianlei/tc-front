@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Button, Col, Form, Input, InputNumber, message, Row, Select, Space, TreeSelect } from 'antd';
+import { Button, Col, Form, Input, InputNumber, message, Row, Select, Space, Spin, TreeSelect } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -28,11 +28,11 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
     const [customList, setCustomList] = useState<any[]>([]);
 
 
-    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${rowId}`);
         form.setFieldsValue({
-            ...result, 
-            nodeNumber: result?.templateNodeVOList?.length, 
+            ...result,
+            nodeNumber: result?.templateNodeVOList?.length,
             node: result?.templateNodeVOList.map((res: any) => {
                 return {
                     ...res,
@@ -54,7 +54,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
         setUpstreamNode(result?.templateNodeVOList)
     }), { manual: type === 'new', refreshDeps: [rowId, type] })
 
-    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { run } = useRequest<any>(() => new Promise(async (resole, reject) => {
         nodeNumberBlur('1');
         form.setFieldsValue({
             nodeNumber: 1
@@ -417,106 +417,108 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
-    return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
-        <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
-            <Row justify="start" gutter={24}>
-                <Col span={12}>
-                    <Form.Item
-                        name={'templateName'}
-                        label={'工单模板名称'}
-                        rules={[
-                            {
-                                required: true,
-                                message: `请输入工单模板名称`
-                            }
-                        ]}>
-                        <Input disabled={type === 'detail'} maxLength={20} />
-                    </Form.Item>
-
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        name={'templateTypeId'}
-                        label={'模板类型'}
-                        rules={[
-                            {
-                                required: true,
-                                message: `请选择模板类型`
-                            }
-                        ]}>
-                        <TreeSelect
-                            disabled={type === 'detail'}
-                            style={{ width: '400px' }}
-                            dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                            treeData={templateTypes}
-                            placeholder="请选择"
-                            treeDefaultExpandAll
-                        />
-                    </Form.Item>
-
-                </Col>
-                <Col span={12}>
-                    <Form.Item
-                        name={'description'}
-                        label={'备注'}>
-                        <Input.TextArea disabled={type === 'detail'} maxLength={800} />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Row gutter={4} justify="start">
-                <Col span={4}>
-                    <Row>
-                        <span>节点数量：</span>
+    return <Spin spinning={loading}>
+        <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
+            <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
+                <Row justify="start" gutter={24}>
+                    <Col span={12}>
                         <Form.Item
-                            name={'nodeNumber'}
+                            name={'templateName'}
+                            label={'工单模板名称'}
                             rules={[
                                 {
                                     required: true,
-                                    message: `请输入节点数量`
+                                    message: `请输入工单模板名称`
                                 }
                             ]}>
-                            <InputNumber disabled={type === 'detail'} min={1} max={99} onBlur={(e) => nodeNumberBlur(e.target.value)} precision={0} />
+                            <Input disabled={type === 'detail'} maxLength={20} />
                         </Form.Item>
-                    </Row>
-                </Col>
-                <Col span={20}>
-                    <CommonTable
-                        className={styles.table}
-                        bordered={false}
-                        showHeader={false}
-                        columns={columns}
-                        dataSource={dealList || []}
-                        scroll={{ x: 800 }}
-                        pagination={false}
-                    />
-                </Col>
-            </Row>
 
-        </Form>
-        <DetailTitle title="自定义项" operation={[<Button type="primary" disabled={type === 'detail'} onClick={() => {
-            setCustomList([
-                ...customList,
-                {
-                    sort: Number(customList.length) + 1
-                }
-            ])
-            customForm.setFieldsValue({
-                items: [
-                    ...customForm.getFieldsValue(true).items || [],
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name={'templateTypeId'}
+                            label={'模板类型'}
+                            rules={[
+                                {
+                                    required: true,
+                                    message: `请选择模板类型`
+                                }
+                            ]}>
+                            <TreeSelect
+                                disabled={type === 'detail'}
+                                style={{ width: '400px' }}
+                                dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
+                                treeData={templateTypes}
+                                placeholder="请选择"
+                                treeDefaultExpandAll
+                            />
+                        </Form.Item>
+
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            name={'description'}
+                            label={'备注'}>
+                            <Input.TextArea disabled={type === 'detail'} maxLength={800} />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={4} justify="start">
+                    <Col span={4}>
+                        <Row>
+                            <span>节点数量：</span>
+                            <Form.Item
+                                name={'nodeNumber'}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: `请输入节点数量`
+                                    }
+                                ]}>
+                                <InputNumber disabled={type === 'detail'} min={1} max={99} onBlur={(e) => nodeNumberBlur(e.target.value)} precision={0} />
+                            </Form.Item>
+                        </Row>
+                    </Col>
+                    <Col span={20}>
+                        <CommonTable
+                            className={styles.table}
+                            bordered={false}
+                            showHeader={false}
+                            columns={columns}
+                            dataSource={dealList || []}
+                            scroll={{ x: 800 }}
+                            pagination={false}
+                        />
+                    </Col>
+                </Row>
+
+            </Form>
+            <DetailTitle title="自定义项" operation={[<Button type="primary" disabled={type === 'detail'} onClick={() => {
+                setCustomList([
+                    ...customList,
                     {
-                        sort: Number(customList.length) + 1,
+                        sort: Number(customList.length) + 1
                     }
-                ]
-            })
-        }} ghost>新增</Button>]} key={0} />
-        <Form form={customForm} className={styles.customForm}>
-            <CommonTable
-                columns={customColumns}
-                dataSource={customList}
-                scroll={{ x: 800 }}
-                pagination={false}
-            />
-        </Form>
-    </DetailContent>
+                ])
+                customForm.setFieldsValue({
+                    items: [
+                        ...customForm.getFieldsValue(true).items || [],
+                        {
+                            sort: Number(customList.length) + 1,
+                        }
+                    ]
+                })
+            }} ghost>新增</Button>]} key={0} />
+            <Form form={customForm} className={styles.customForm}>
+                <CommonTable
+                    columns={customColumns}
+                    dataSource={customList}
+                    scroll={{ x: 800 }}
+                    pagination={false}
+                />
+            </Form>
+        </DetailContent>
+    </Spin>
 })
 
