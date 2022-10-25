@@ -88,12 +88,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
                                 <Button className='btn-operation-link' type='link' disabled={record.warehousingEntryStatus === 1} onClick={async () => {
-                                    const result = [
-                                        {
-                                            id: record.id,
-                                            warehousingEntryType: 1
-                                        }
-                                    ]
+                                    const result = [ record.id ]
                                     await saveRun(result);
                                     history.go(0);
                                 }}>入库</Button>

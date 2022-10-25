@@ -144,7 +144,15 @@ export default function CreatePlan(props: any): JSX.Element {
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
                     supplierId: {
                         id: result?.supplierId,
-                        value: result?.supplierName
+                        value: result?.supplierName,
+                        records:[{
+                            id: result?.supplierId,
+                            value: result?.supplierName,
+                            contactManTel:result?.contactsPhone,
+                            contactMan:result?.contactsUser,
+                            supplierName:result?.supplierName,
+                        }]
+                        
                     }
                 })
             }
