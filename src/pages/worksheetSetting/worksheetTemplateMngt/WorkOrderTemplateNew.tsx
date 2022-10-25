@@ -6,7 +6,7 @@
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
 import { Button, Col, Form, Input, InputNumber, message, Row, Select, Space, Spin, TreeSelect } from 'antd';
-import { CommonTable, DetailContent, DetailTitle } from '../../common';
+import { CommonTable, DetailContent, DetailTitle, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { FixedType } from 'rc-table/lib/interface';
@@ -524,6 +524,12 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     pagination={false}
                 />
             </Form>
+            {
+                type === 'detail' ?
+                    <OperationRecord title="操作信息" serviceId={rowId} serviceName="tower-work" />
+                    :
+                    null
+            }
         </DetailContent>
     </Spin>
 })

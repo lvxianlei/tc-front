@@ -200,6 +200,8 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                 </Col>
                 <Col span={5}>
                     <DetailTitle title="工单信息" key={0} />
+                    <div className={styles.scroll}>
+
                     {
                         data?.workOrderNodeVOList?.map((res: any, index: number) => {
                             return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
@@ -224,6 +226,8 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                             </Card>
                         })
                     }
+            
+            </div>
                 </Col>
             </Row>
         </DetailContent>

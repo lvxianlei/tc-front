@@ -40,8 +40,9 @@ export default function List(): React.ReactNode {
     const dealRef = useRef<EditRefProps>();
     const [dispatchVisible, setDispatchVisible] = useState<boolean>(false);
     const dispatchRef = useRef<EditRefProps>();
-    const [selectedRowsName, setSelectedRowsName] = useState<string>('');
+    const [selectedRowsName, setSelectedRowsName] = useState<any>({});
     const [form] = useForm();
+    const [searchForm] = useForm();
     const [workTemplateTypeId, setWorkTemplateTypeId] = useState<string>('');
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -181,7 +182,7 @@ export default function List(): React.ReactNode {
                         setType('edit');
                         setRowId(record.id);
                     }} >编辑</Button>
-                    <Button type='link' disabled={record?.status === 3} onClick={() => {
+                    <Button type='link' disabled={record?.status !== 1} onClick={() => {
                         Modal.confirm({
                             title: "取消",
                             okText: '确定',
@@ -207,7 +208,7 @@ export default function List(): React.ReactNode {
     const searchItems = [
         {
             name: 'time',
-            children: <Form.Item name="timeType" initialValue={1}>
+            children: <Form.Item name="time" initialValue={1}>
                 <Select placeholder="请选择" style={{ width: '120px' }}>
                     <Select.Option key={1} value={1}>预计开始时间</Select.Option>
                     <Select.Option key={2} value={2}>预计完成时间</Select.Option>
@@ -250,17 +251,16 @@ export default function List(): React.ReactNode {
             </Select>
         },
         {
-            name: 'recipientUser',
+            name: 'recipientUserName',
             label: '接收人',
-            children: <Form.Item name='recipientUser'>
-                <Input disabled size="small" suffix={
-                    <SelectUser onSelect={(selectedRows: Record<string, any>) => {
-                        console.log(selectedRows)
-                        setSelectedRowsName(selectedRows[0]?.name)
-                        console.log(selectedRowsName)
-                    }} />
-                } />
-            </Form.Item>
+            children: <Input style={{ width: '80%' }} disabled suffix={[
+                <SelectUser requests={{ deptName: '' }} onSelect={(selectedRows: Record<string, any>) => {
+                    searchForm?.setFieldsValue({
+                        recipientUser: selectedRows[0]?.userId,
+                        recipientUserName: selectedRows[0]?.name
+                    })
+                }} />
+            ]} />
         },
         {
             name: 'fuzzyMsg',
@@ -314,7 +314,7 @@ export default function List(): React.ReactNode {
         try {
             await dispatchRef.current?.onSubmit()
             message.success("派工成功！")
-            setDispatchVisible(false)
+            setDispatchVisible(true)
             history.go(0)
             resove(true)
         } catch (error) {
@@ -322,6 +322,15 @@ export default function List(): React.ReactNode {
         }
     })
 
+    const onFilterSubmit = (values: Record<string, any>) => {
+        if (values?.selectTime) {
+            const formatDate = values?.selectTime?.map((item: any) => item.format("YYYY-MM-DD"));
+            values.startTime = formatDate[0] + ' 00:00:00';
+            values.endTime = formatDate[1] + ' 23:59:59';
+        }
+        console.log(values)
+        setFilterValue(values);
+    }
     return <>
         <Modal
             destroyOnClose
@@ -377,6 +386,23 @@ export default function List(): React.ReactNode {
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
             <WorkOrderNew rowId={rowId} type={type} ref={ref} />
         </Modal>
+        <Form form={searchForm} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
+            {
+                searchItems?.map((res: any) => {
+                    return <Form.Item name={res?.name} label={res?.label}>
+                        {res?.children}
+                    </Form.Item>
+                })
+            }
+            <Form.Item>
+                <Button type="primary" htmlType="submit">查询</Button>
+            </Form.Item>
+            <Form.Item>
+                <Button onClick={async () => {
+                    searchForm?.resetFields();
+                }}>重置</Button>
+            </Form.Item>
+        </Form>
         <Page
             path={`/tower-work/workOrder`}
             columns={columns}
@@ -398,7 +424,7 @@ export default function List(): React.ReactNode {
                         <Button type='primary' disabled={selectedKeys.length === 0} onClick={() => {
                             const tip = selectedRows.some((cur: any, idx, arr) => arr.slice(idx + 1).find((item: any) => cur?.workTemplateType == item?.workTemplateType))
                             console.log(tip)
-                            if(tip) {
+                            if (tip) {
                                 // setRowId(selectedKeys?.join(','));
                                 // setDispatchVisible(true);
                             } else {
@@ -409,18 +435,8 @@ export default function List(): React.ReactNode {
                 </Space>
             }
             refresh={refresh}
-            searchFormItems={searchItems}
+            searchFormItems={[]}
             filterValue={filterValue}
-            onFilterSubmit={(values: Record<string, any>) => {
-                if (values?.selectTime) {
-                    const formatDate = values?.time?.map((item: any) => item.format("YYYY-MM-DD"));
-                    values.startTime = formatDate[0] + ' 00:00:00';
-                    values.endTime = formatDate[1] + ' 23:59:59';
-                }
-                console.log(values)
-                setFilterValue(values);
-                return values;
-            }}
             tableProps={{
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
