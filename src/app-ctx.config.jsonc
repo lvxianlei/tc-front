@@ -1512,11 +1512,11 @@
                 "appName": "WO",
                 "authority": "tc_erp_sc_workbench",
                 "items": [
-                    {
-                        "label": "工单视图",
-                        "path": "/worksheetMngt/view",
-                        "authority": "tc_erp_sc_workbench_list"
-                    },
+                    // {
+                    //     "label": "工单视图",
+                    //     "path": "/worksheetMngt/view",
+                    //     "authority": "tc_erp_sc_workbench_list"
+                    // },
                     {
                         "label": "工单管理",
                         "path": "/worksheetMngt/management",
