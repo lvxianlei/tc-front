@@ -13,6 +13,7 @@ import {
 } from "./CreatePlan.json";
 import moment from 'moment';
 import "./CreatePlan.less";
+import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
@@ -21,6 +22,8 @@ export default function CreatePlan(props: any): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     let [count, setCount] = useState<number>(1);
     const [warehouseId, setWarehouseId] = useState<string>("");
+    const structureTextureEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
@@ -298,7 +301,22 @@ export default function CreatePlan(props: any): JSX.Element {
                 <PopTableContent
                     data={{
                         ...addMaterial as any,
-                        path: `${addMaterial.path}/${warehouseId}`
+                        search: addMaterial.search.map((res: any) => {
+                                    if (res.dataIndex === 'materialStandard') {
+                                        return ({
+                                            ...res,
+                                            enum: materialStandardEnum
+                                        })
+                                    }
+                                    if (res.dataIndex === 'structureTexture') {
+                                        return ({
+                                            ...res,
+                                            enum: structureTextureEnum
+                                        })
+                                    }
+                                    return res
+                        }),
+                        path: `${addMaterial.path}?warehouseId=${warehouseId}`
                     }}
                     value={{
                         id: "",

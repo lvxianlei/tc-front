@@ -209,6 +209,21 @@
                 "type": "string",
                 "dataIndex": "fuzzyQuery",
                 "placeholder": "品名/规格"
+            },
+            {
+                "title": "标准",
+                "type": "select",
+                "dataIndex": "materialStandard"
+            },
+            {
+                "title": "材质",
+                "type": "select",
+                "dataIndex": "structureTexture"
+            },
+            {
+                "title": "长度",
+                "type": "number",
+                "dataIndex": "length"
             }
         ],
         "columns": [

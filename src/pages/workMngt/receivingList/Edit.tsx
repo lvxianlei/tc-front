@@ -184,21 +184,27 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const baseFormData = await form.validateFields()
             await editForm.validateFields()
             const editData = editForm.getFieldsValue(true).submit
-            const result = {
-                ...baseFormData,
-                supplierId,
-                supplierName: baseFormData.supplierId.value,
-                lists: editData.map((item: any) => {
-                    if ([2, "2"].includes(baseFormData.meteringMode)) {
-                        return ({ ...item, ponderationWeight: item.balanceTotalWeight })
-                    }
-                    return item
-                }),
-                num: baseFormData.num,
-                unloadUsersName: baseFormData.unloadUsersName.value,
-                unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
+            if(editData.filter((item:any)=>{return item?.meteringMode!==baseFormData?.meteringMode}).length>0){
+                message.error('明细与基本信息中的计量方式不一致，不可确定！')
+                throw 'error'
+            }else{
+                const result = {
+                    ...baseFormData,
+                    supplierId,
+                    supplierName: baseFormData.supplierId.value,
+                    lists: editData.map((item: any) => {
+                        if ([2, "2"].includes(baseFormData.meteringMode)) {
+                            return ({ ...item, ponderationWeight: item.balanceTotalWeight })
+                        }
+                        return item
+                    }),
+                    num: baseFormData.num,
+                    unloadUsersName: baseFormData.unloadUsersName.value,
+                    unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
+                }
+                await saveRun(result)
             }
-            await saveRun(result)
+            
             resole(true)
         } catch (error) {
             console.log(error)
@@ -450,7 +456,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
             })}
             dataSource={{
-                meteringMode: 1,
+                meteringMode: 2,
                 settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
             }} />
