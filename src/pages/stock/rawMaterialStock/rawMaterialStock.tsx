@@ -61,6 +61,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState({})
+    const [num, setNum] = useState<any>({});
     const receiveRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -74,7 +75,12 @@ export default function RawMaterialStock(): React.ReactNode {
             reject(error)
         }
     }))
-
+    //统计
+    const { data: totalNum, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get<any>(`/tower-storage/materialStock/getMaterialStockStatics`, { ...filterValue })
+        setNum(data)
+        resole(data)
+    }))
     const handleAttachOk = async () => {
         setSaveLoading(true)
         const res = await receiveRef.current.onSubmit()
@@ -165,7 +171,12 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Button type="primary" ghost>导入</Button>
                     </Upload>
                     <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
-                    <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
+                    <span>
+                        <span >数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.num||0}</span></span>
+                        <span >重量合计（吨）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.weight||0}</span></span>
+                        <span >含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalTaxPrice||0}</span></span>
+                        <span >不含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalUnTaxPrice||0}</span></span>
+                    </span>
                 </>
                 }
                 filterValue={filterValue}
@@ -175,6 +186,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         value.lengthMax = value.length.lengthMax
                     }
                     setFilterValue(value)
+                    run(value)
                     return value
                 }}
                 searchFormItems={[
