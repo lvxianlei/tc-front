@@ -44,6 +44,7 @@ export default function List(): React.ReactNode {
     const [form] = useForm();
     const [searchForm] = useForm();
     const [workTemplateTypeId, setWorkTemplateTypeId] = useState<string>('');
+    const [dispatchingType, setDispatchingType] = useState<'batch' | 'single'>('single');
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
@@ -168,11 +169,12 @@ export default function List(): React.ReactNode {
                         setDetailVisible(true);
                         setRowId(record.id);
                     }} >详情</Button>
-                    <Button type='link' disabled={record?.status === 3} onClick={() => {
+                    <Button type='link' disabled={record?.status !== 1} onClick={() => {
                         setDispatchVisible(true);
                         setRowId(record.id);
+                        setDispatchingType('single')
                     }} >派工</Button>
-                    <Button type='link' disabled={record?.status === 3} onClick={() => {
+                    <Button type='link' disabled={record?.status !== 1} onClick={() => {
                         setDealVisible(true);
                         setRowId(record.id);
                         setWorkTemplateTypeId(record?.workTemplateTypeId)
@@ -328,20 +330,38 @@ export default function List(): React.ReactNode {
             values.startTime = formatDate[0] + ' 00:00:00';
             values.endTime = formatDate[1] + ' 23:59:59';
         }
-        console.log(values)
+        values.recipientUser = searchForm?.getFieldsValue(true)?.recipientUser
         setFilterValue(values);
     }
+
+    const isAllEqual = (array:any[]) => {
+        if (array.length > 0) {
+            return !array.some((value, index) => {
+                return value !== array[0];
+            });
+        } else {
+            return true;
+        }
+    }
+
     return <>
         <Modal
             destroyOnClose
             key='Dispatching'
             visible={dispatchVisible}
             width="80%"
-            onOk={handleDispatchOk}
-            okText="完成"
+            footer={
+                <Space>
+                    <Button type="primary" onClick={handleDispatchOk} ghost>完成</Button>
+                    <Button onClick={() => {
+                        setDispatchVisible(false); 
+                        dispatchRef.current?.resetFields();
+                    }}>关闭</Button>
+                </Space>
+            }
             title={"派工"}
             onCancel={() => { setDispatchVisible(false); dispatchRef.current?.resetFields(); }}>
-            <Dispatching rowId={rowId} ref={dispatchRef} />
+            <Dispatching type={dispatchingType} rowId={rowId} ref={dispatchRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -422,11 +442,12 @@ export default function List(): React.ReactNode {
                             setType('new')
                         }} ghost>人工创建工单</Button>
                         <Button type='primary' disabled={selectedKeys.length === 0} onClick={() => {
-                            const tip = selectedRows.some((cur: any, idx, arr) => arr.slice(idx + 1).find((item: any) => cur?.workTemplateType == item?.workTemplateType))
-                            console.log(tip)
+                            const tip = isAllEqual(selectedRows.map((res: any) => res?.workTemplateId))
+                                                        console.log(tip)
                             if (tip) {
-                                // setRowId(selectedKeys?.join(','));
-                                // setDispatchVisible(true);
+                                setRowId(selectedKeys?.join(','));
+                                setDispatchVisible(true);
+                                    setDispatchingType('batch')
                             } else {
                                 message.warning('仅相同工单类型允许批量派工！')
                             }

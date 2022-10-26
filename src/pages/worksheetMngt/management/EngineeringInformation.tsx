@@ -96,32 +96,21 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
         }
     })
 
-    const getValueByApi = async (api: string, index: number) => {
-        if (api) {
-            // const result: { [key: string]: any } = await RequestUtil.get(api)
-            // console.log(api,result)
-            const data: any = [
-                {
-                    key: '放样任务编号',
-                    value: '12345'
-                },
-                {
-                    key: '创建时间',
-                    value: '7777'
-                }
-            ]
-            const newData = data?.map((res: { fieldKey: never, fieldValue: never }) => {
+    const getValueByApi = async (res: Record<string,any>, index: number) => {
+        const fieldValue= form?.getFieldsValue(true)?.data[index].res.fieldKey
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/workOrder/trigger/${rowId}/${res.fieldKey}/${fieldValue}`)
+            console.log(fieldValue)
+            const newData = result?.map((res: { fieldKey: never, fieldValue: never }) => {
                 let arr = []
                 arr = [res?.fieldKey, res?.fieldValue]
                 return arr
             })
             const entriesData: any = Object.fromEntries(newData)
-            const values = form.getFieldsValue(true);
             form.setFieldsValue({
                 ...entriesData
             })
             let newFields: any[] = []
-            data.forEach((element: any) => {
+            result.forEach((element: any) => {
                 newFields = fields?.map((res: any) => {
                     if (element?.fieldKey === res?.fieldKey) {
                         return {
@@ -143,9 +132,6 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
             setFields([
                 ...newFields || [],
             ])
-        } else {
-            message.warning('当前无可同步字段')
-        }
     }
 
     const resetFields = () => {
@@ -161,7 +147,7 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                     <Form form={form} labelCol={{ span: 8 }}>
                         <Row gutter={24}>
                             {
-                                [...fields]?.map((res: any, index: number) => {
+                                [...fields || []]?.map((res: any, index: number) => {
                                     return res?.triggerField === 1 ?
                                         <Col span={6} key={index}>
                                             <Form.Item label={res?.fieldKey} >
@@ -175,7 +161,7 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                                                         </Form.Item>
                                                     </Col>
                                                     <Col span={6}>
-                                                        <Button type="primary" onClick={() => getValueByApi(res?.api, index)} ghost>获取</Button>
+                                                        <Button type="primary" onClick={() => getValueByApi(res, index)} ghost>获取</Button>
                                                     </Col>
                                                 </Row>
                                             </Form.Item>

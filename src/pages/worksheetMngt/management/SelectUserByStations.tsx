@@ -89,6 +89,7 @@ export default function SelectUserByStations({
                     rowSelection: {
                         type: selectType,
                         selectedRowKeys: selectedKeys,
+                        preserveSelectedRowKeys: true,
                         onChange: SelectChange
                     },
                     rowKey: "userId"

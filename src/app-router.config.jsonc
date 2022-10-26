@@ -3209,6 +3209,20 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // WO-工单设置-工单同步
+      "name": "工单同步",
+      "path": "/worksheetSetting/worksheetSynchronous",
+      "module": "./pages/worksheetSetting/worksheetSynchronous/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-字段同步
+      "name": "字段同步",
+      "path": "/worksheetSetting/fieldSynchronous",
+      "module": "./pages/worksheetSetting/fieldSynchronous/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // WO-工单管理-工单管理
       "name": "工单管理",
       "path": "/worksheetMngt/management",
