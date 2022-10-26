@@ -27,7 +27,7 @@
         },
         {
             "title": "内部合同号",
-            "dataIndex": "contractNumber",
+            "dataIndex": "internalNumber",
             "width": 80
         },
         {
