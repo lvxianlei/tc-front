@@ -10,6 +10,8 @@ import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './FieldSynchronous.module.less';
+import { RuleObject } from "antd/lib/form";
+import { StoreValue } from "antd/lib/form/interface";
 
 interface modalProps {
     type: 'new' | 'edit';
@@ -22,8 +24,9 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
     const [checkFields, setCheckFields] = useState<any[]>([]);
 
     const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/template/${rowId}`);
-        templateChange(result)
+        const result: any = await RequestUtil.get<any>(`/tower-work/fieldSynchro/${rowId}`);
+        templateChange(result?.templateId, 'automatic')
+        setCheckFields(result?.syncWorkFieldDetailVOList || [{id:44}])
         form.setFieldsValue({
             ...result
         });
@@ -42,20 +45,23 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
     }))
 
 
-    const templateChange = async (e: any) => {
+    const templateChange = async (e: any, type: 'manual' | 'automatic') => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${e}`);
         setFields(result?.templateCustomVOList);
-        setCheckFields(result?.templateCustomVOList?.map((res: any) => {
-            return {
-                ...res,
-                checked: false
-            }
-        }))
+        console.log(checkFields)
+        if (type === 'manual') {
+            setCheckFields(result?.templateCustomVOList?.map((res: any) => {
+                return {
+                    ...res,
+                    status: 0
+                }
+            }))
+        }
     }
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/template`, data)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/fieldSynchro`, data)
             resove(result)
         } catch (error) {
             reject(error)
@@ -66,11 +72,10 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
         try {
             form.validateFields().then(async res => {
                 const value = form.getFieldsValue(true);
-                const checkedData = checkFields?.filter(res=> res?.checked)
-                console.log(checkedData)
                 await saveRun({
                     id: data?.id,
-                    ...value
+                    ...value,
+                    syncWorkFieldDetailDTOList: checkFields
                 })
                 resolve(true);
 
@@ -89,7 +94,7 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
     return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
         <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
             <Form.Item
-                name={'templateName'}
+                name={'name'}
                 label={'任务名称'}
                 rules={[
                     {
@@ -99,9 +104,8 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                 ]}>
                 <Input maxLength={100} />
             </Form.Item>
-
             <Form.Item
-                name={'templateTypeId'}
+                name={'templateId'}
                 label={'工单模板'}
                 rules={[
                     {
@@ -110,7 +114,7 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                     }
                 ]}>
 
-                <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e)}>
+                <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e, 'manual')}>
                     {
                         templateList?.map((res: any, ind: number) => {
                             return <Select.Option value={res?.id} key={ind}>{res?.templateName}</Select.Option>
@@ -119,7 +123,7 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                 </Select>
             </Form.Item>
             <Form.Item
-                name={'templateTypeId'}
+                name={'triggerField'}
                 label={'触发字段'}
                 rules={[
                     {
@@ -127,7 +131,6 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                         message: `请选择触发字段`
                     }
                 ]}>
-
                 <Select placeholder={'请选择触发字段'}>
                     {
                         fields?.map((res: any, ind: number) => {
@@ -137,28 +140,33 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                 </Select>
             </Form.Item>
             <Form.Item
-                name={'templateTypeId'}
+                name={'checkFields'}
                 label={'同步字段'}
                 rules={[
                     {
                         required: true,
-                        message: `请选择同步字段`
+                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                            if (checkFields.filter(res => res?.status === 1).length>0) {
+                                    callback()
+                            } else {
+                                callback('请选择同步字段')
+                            }
+                        }
                     }
                 ]}>
                 <Card>
                     <Row gutter={12}>
-                    {
-                        checkFields?.map((res: any, ind: number) => {
-                            return <Col style={{marginBottom: '6px'}} span={8}><Button key={ind} type={res?.checked ? "primary" : undefined} onClick={() => {
-                                checkFields[ind] = {
-                                    ...fields[ind],
-                                    checked: fields[ind]?.checked ? false : true
-                                }
-                                console.log(checkFields)
-                                setCheckFields([...checkFields])
-                            }} ghost={res?.checked ? true : false}>{res?.fieldKey}</Button></Col>
-                        })
-                    }
+                        {
+                            checkFields && checkFields?.map((res: any, ind: number) => {
+                                return <Col style={{ marginBottom: '6px' }} span={8}><Button key={ind} type={res?.status === 1 ? "primary" : undefined} onClick={() => {
+                                    checkFields[ind] = {
+                                        ...res,
+                                        status: res?.status === 1 ? 0 : 1
+                                    }
+                                    setCheckFields([...checkFields])
+                                }} ghost={res?.status === 1 ? true : false}>{res?.fieldKey}</Button></Col>
+                            })
+                        }
                     </Row>
                 </Card>
             </Form.Item>
@@ -168,7 +176,7 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                 <Input.TextArea maxLength={800} />
             </Form.Item>
             <Form.Item
-                name={'description'}
+                name={'apiUrl'}
                 label={'拉取API'}
                 rules={[
                     {

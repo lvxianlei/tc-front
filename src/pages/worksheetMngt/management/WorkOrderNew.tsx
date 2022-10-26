@@ -162,12 +162,12 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
         try {
             form.validateFields().then(res => {
                 const value = form.getFieldsValue(true);
-                console.log(value, dealList)
                 saveRun({
                     id: data?.id,
                     workTemplateId: value?.workTemplateId.split(',')[1],
                     workTemplateName: value?.workTemplateId.split(',')[0],
-                    workOrderNodeDTOList: dealList
+                    workOrderNodeDTOList: dealList,
+                    workOrderCustomDTOList: customList
                 })
                 resolve(true);
             })
@@ -179,7 +179,12 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     const templateChange = async (e: any) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${e?.split(',')[1]}`);
         setCustomList(result?.templateCustomVOList);
-        setDealList(result?.templateNodeVOList);
+        setDealList(result?.templateNodeVOList?.map((res:any) => {
+            return {
+                ...res,
+                agingSizeTemplate: res?.agingSize
+            }
+        }));
     }
 
     const resetFields = () => {

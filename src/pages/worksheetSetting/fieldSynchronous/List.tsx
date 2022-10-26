@@ -29,33 +29,32 @@ import FieldSynchronousNew from './FieldSynchronousNew';
              render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
          },
          {
-             key: 'templateNumber',
+             key: 'name',
              title: '任务名称',
-             dataIndex: 'templateNumber'
+             dataIndex: 'name'
          },
          {
              key: 'templateName',
              title: '工单模板',
              dataIndex: 'templateName'
          },
-        //  {
-        //      key: 'templateType',
-        //      title: '同步字段',
-        //      dataIndex: 'templateType'
-        //  },
-        //  {
-        //      key: 'post',
-        //      title: '拉取API',
-        //      dataIndex: 'post'
-        //  },
+         {
+             key: 'syncField',
+             title: '同步字段',
+             dataIndex: 'syncField'
+         },
+         {
+             key: 'apiUrl',
+             title: '拉取API',
+             dataIndex: 'apiUrl'
+         },
          {
              key: 'status',
              title: '状态',
              dataIndex: 'status',
              render: (_: number, record: Record<string, any>): React.ReactNode => (
                  <Switch checkedChildren="启用" unCheckedChildren="关闭" onChange={(checked: boolean) => {
-                     console.log(checked)
-                     RequestUtil.post(`/tower-work/template/status/${record?.id}/${checked}`).then(res => {
+                     RequestUtil.post(`/tower-work/fieldSynchro/updateStatus/${record?.id}`).then(res => {
                          message.success('状态变更成功');
                          history.go(0);
                      });
@@ -82,7 +81,7 @@ import FieldSynchronousNew from './FieldSynchronousNew';
                      <Popconfirm
                          title="确认删除?"
                          onConfirm={() => {
-                             RequestUtil.delete(`/tower-work/template/${record?.id}`).then(res => {
+                             RequestUtil.delete(`/tower-work/fieldSynchro/${record?.id}`).then(res => {
                                  message.success('删除成功');
                                  history.go(0);
                              });
@@ -130,7 +129,7 @@ import FieldSynchronousNew from './FieldSynchronousNew';
              <FieldSynchronousNew rowId={rowId} type={type} ref={ref} />
          </Modal>
          <Page
-             path="/tower-work/template"
+             path="/tower-work/fieldSynchro"
              columns={columns}
              filterValue={filterValue}
              extraOperation={
