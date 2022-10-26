@@ -14,10 +14,11 @@ import moment from "moment";
 import SelectUserByStations from "./SelectUserByStations";
 
 interface modalProps {
+    type: 'batch' | 'single'
     rowId: string;
 }
 
-export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
+export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref) {
     const [form] = Form.useForm();
     const [nodeData, setNodeData] = useState<any>([]);
     const [isOk, setIsOk] = useState<boolean>(true);
@@ -32,14 +33,29 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                 recipientUser: res?.recipientUser && res?.recipientUser?.split(','),
             }
         })
-        console.log(result)
         setNodeData(result || [])
         form.setFieldsValue({
             data: [...result || []]
         })
         resole(result);
-    }), { refreshDeps: [rowId] })
+    }), { manual: type === 'batch', refreshDeps: [rowId, type] })
 
+    const { run } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        let result: any = await RequestUtil.post<any>(`/tower-work/workOrder/getDispatchList`, rowId?.split(',').map(res => {
+            return { id: res }
+        }));
+        result = result.map((res: any) => {
+            return {
+                ...res,
+                recipientUser: [],
+            }
+        })
+        setNodeData(result || [])
+        form.setFieldsValue({
+            data: [...result || []]
+        })
+        resole(result);
+    }), { manual: type === 'single', refreshDeps: [rowId, type] })
 
     useEffect(() => {
         if (isOk) {
@@ -56,30 +72,68 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
         }
     }), { manual: true })
 
+    const { run: batchRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
+        try {
+            RequestUtil.post(`/tower-work/workOrder/saveDispatchList`, data).then(res => {
+            resove(true)
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async res => {
                 const value = form.getFieldsValue(true);
-                checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始')).then(async (data) => {
-                    console.log(isOk)
-                    if (isOk) {
-                        console.log(value)
-                        await saveRun([
-                            ...value?.data.map((res: any) => {
-                                return {
-                                    ...res,
-                                    recipientUser: res?.recipientUser?.join(','),
-                                    planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
-                                    planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
-                                    workOrderId: rowId
-                                }
-                            })
-                        ])
-                        resolve(true)
-                    } else {
-                        reject(false)
-                    }
-                })
+                if (value?.data?.filter((res: any) => res.upstreamNode === '任务开始')) {
+                    checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始')).then(async () => {
+                        if (isOk) {
+                            type === 'single' ?
+                                await saveRun([
+                                    ...value?.data.map((res: any) => {
+                                        return {
+                                            ...res,
+                                            recipientUser: res?.recipientUser?.join(','),
+                                            planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
+                                            planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
+                                            workOrderId: rowId
+                                        }
+                                    })
+                                ])
+                                :
+                                await batchRun({
+                                    workOrderIds: rowId?.split(','),
+                                    workOrderNodeDTOList: [
+                                        ...value?.data.map((res: any) => {
+                                            return {
+                                                ...res,
+                                                recipientUser: res?.recipientUser?.join(','),
+                                                planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
+                                                planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
+                                            }
+                                        })
+                                    ]
+                                })
+                            resolve(true)
+                        } else {
+                            reject(false)
+                        }
+                    })
+                } else {
+                    await saveRun([
+                        ...value?.data.map((res: any) => {
+                            return {
+                                ...res,
+                                recipientUser: res?.recipientUser?.join(','),
+                                planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
+                                planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
+                                workOrderId: rowId
+                            }
+                        })
+                    ])
+                }
+
             })
         } catch (error) {
             reject(false)
@@ -125,12 +179,12 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                 if (nextList.length > 0) {
                     checkModel(nextList, item)
                     resole(true)
-
+                } else {
+                    resole(true)
                 }
             } else {
                 reject(tip)
             }
-
         })
     })
 
@@ -193,13 +247,12 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
             })?.filter(Boolean)
             const index = nodeData?.findIndex((res: any) => res.node === item?.node)
             const time = item.agingType === '小时' ?
-                timeIncrease(planStartTime, item?.agingSize)
+                timeIncrease(planStartTime, type === 'single' ? item?.agingSize : item?.agingSizeTemplate)
                 : item.agingType === '自然日' ?
-                    naturalDayIncrease(planStartTime, item?.agingSize)
+                    naturalDayIncrease(planStartTime, type === 'single' ? item?.agingSize : item?.agingSizeTemplate)
                     : item.agingType === '周' ?
-                        weekIncrease(planStartTime, item?.agingSize)
-                        : workDayIncrease(planStartTime, item?.agingSize)
-            console.log(time, '---------当前节点结束时间及下一节点开始时间有------')
+                        weekIncrease(planStartTime, type === 'single' ? item?.agingSize : item?.agingSizeTemplate)
+                        : workDayIncrease(planStartTime, type === 'single' ? item?.agingSize : item?.agingSizeTemplate)
             const values = form.getFieldsValue(true).data;
             values[index] = {
                 ...values[index],
@@ -245,10 +298,12 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                             {res?.node}
                         </Col>
                         <Col span={6}>
-                            <Form.Item name={['data', index, 'recipientUserName']} initialValue={res?.recipientUserName}>
+                            <Form.Item name={['data', index, 'recipientUserName']} initialValue={res?.recipientUserName} rules={[{
+                                required: true,
+                                message: '请选择人员'
+                            }]}>
                                 <Input disabled suffix={
                                     <SelectUserByStations disabled={res?.status === 3} key={index} selectedKey={res?.recipientUser} selectType="checkbox" station={res?.post} onSelect={(selectedRows: Record<string, any>) => {
-                                        console.log(selectedRows)
                                         const value = form.getFieldsValue(true)?.data;
                                         value[index] = {
                                             ...value[index] || [],
@@ -265,13 +320,15 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                                         setNodeData([
                                             ...value
                                         ])
-                                        console.log(form.getFieldsValue(true)?.data)
                                     }} />
                                 } />
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item label="预计开始时间" name={['data', index, 'planStartTime']} initialValue={res?.planStartTime}>
+                            <Form.Item label="预计开始时间" name={['data', index, 'planStartTime']} initialValue={res?.planStartTime} rules={[{
+                                required: true,
+                                message: '请选择预计开始时间'
+                            }]}>
                                 <DatePicker
                                     disabled={res?.status === 3}
                                     onChange={(e) => startTimeChange(e, res)}
@@ -282,7 +339,10 @@ export default forwardRef(function Dispatching({ rowId }: modalProps, ref) {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item label="预计结束时间" name={['data', index, 'planEndTime']} initialValue={res?.planEndTime}>
+                            <Form.Item label="预计结束时间" name={['data', index, 'planEndTime']} initialValue={res?.planEndTime} rules={[{
+                                required: true,
+                                message: '请选择预计结束时间'
+                            }]}>
                                 <DatePicker
                                     disabled={res?.status === 3}
                                     disabledDate={(current: any) => {

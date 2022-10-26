@@ -21,7 +21,7 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     const [dealList, setDealList] = useState<any[]>([]);
     const [customList, setCustomList] = useState<any[]>([]);
 
-    const { loading,data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/${rowId}`);
         form.setFieldsValue({
             workTemplateId: result?.workTemplateName + ',' + result?.workTemplateId,
@@ -35,7 +35,8 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     const { data: templateList } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/template?size=1000`);
-            resole(result?.records)
+            const newData = result?.records?.filter((res: any) => res?.status === 1)
+            resole(newData)
         } catch (error) {
             reject(error)
         }
@@ -78,7 +79,7 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
                 }]} initialValue={_}>
                     <InputNumber size="small" onChange={
                         (e) => {
-                            dealList[index]= {
+                            dealList[index] = {
                                 ...dealList[index],
                                 agingSize: e
                             }
@@ -161,12 +162,12 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
         try {
             form.validateFields().then(res => {
                 const value = form.getFieldsValue(true);
-                console.log(value,dealList)
                 saveRun({
                     id: data?.id,
                     workTemplateId: value?.workTemplateId.split(',')[1],
                     workTemplateName: value?.workTemplateId.split(',')[0],
-                    workOrderNodeDTOList: dealList
+                    workOrderNodeDTOList: dealList,
+                    workOrderCustomDTOList: customList
                 })
                 resolve(true);
             })
@@ -178,7 +179,12 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     const templateChange = async (e: any) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${e?.split(',')[1]}`);
         setCustomList(result?.templateCustomVOList);
-        setDealList(result?.templateNodeVOList);
+        setDealList(result?.templateNodeVOList?.map((res:any) => {
+            return {
+                ...res,
+                agingSizeTemplate: res?.agingSize
+            }
+        }));
     }
 
     const resetFields = () => {
@@ -189,42 +195,42 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
 
     return <Spin spinning={loading}>
         <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
-        <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
-            <Form.Item
-                name={'workTemplateId'}
-                label={'工单模板'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请选择工单模板`
-                    }
-                ]}>
-                <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e)}>
-                    {
-                        templateList?.map((res: any, ind: number) => {
-                            return <Select.Option value={res?.templateName + ',' + res?.id} key={ind}>{res?.templateName}</Select.Option>
-                        })
-                    }
-                </Select>
-            </Form.Item>
+            <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
+                <Form.Item
+                    name={'workTemplateId'}
+                    label={'工单模板'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请选择工单模板`
+                        }
+                    ]}>
+                    <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e)}>
+                        {
+                            templateList?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.templateName + ',' + res?.id} key={ind}>{res?.templateName}</Select.Option>
+                            })
+                        }
+                    </Select>
+                </Form.Item>
+                <CommonTable
+                    className={styles.table}
+                    bordered={false}
+                    showHeader={false}
+                    columns={columns}
+                    dataSource={dealList || []}
+                    scroll={{ x: 800 }}
+                    pagination={false}
+                />
+
+            </Form>
+            <DetailTitle title="自定义项" key={0} />
             <CommonTable
-                className={styles.table}
-                bordered={false}
-                showHeader={false}
-                columns={columns}
-                dataSource={dealList || []}
-                scroll={{ x: 800 }}
+                columns={customColumns}
+                dataSource={customList || []}
                 pagination={false}
             />
-
-        </Form>
-        <DetailTitle title="自定义项" key={0} />
-        <CommonTable
-            columns={customColumns}
-            dataSource={customList || []}
-            pagination={false}
-        />
-    </DetailContent>
+        </DetailContent>
     </Spin>
 })
 
