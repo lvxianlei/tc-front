@@ -4,7 +4,7 @@
  * 时间：2022/01/06
  */
 import React, { useState, useRef } from 'react';
-import { Input, Select, DatePicker, Button, Modal, message, Radio, Popconfirm } from 'antd';
+import { Input, Select, DatePicker, Button, Modal, message, Radio, Popconfirm, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
@@ -14,6 +14,7 @@ import PaperOrderModal from './PaperOrderModal';
 import CreatePlan from "./CreatePlan";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '@utils/RequestUtil';
+import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -243,6 +244,40 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'structureSpec',
                         label: '规格',
                         children: <Input style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'structureTexture',
+                        label: '材质',
+                        children: <Select style={{ width: "140px" }} defaultValue={""}>
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                materialTextureOptions?.map((item: { id: string, name: string }) => <Select.Option
+                                    value={item.name}
+                                    key={item.id}>{item.name}</Select.Option>)
+                            }
+                        </Select>
+                    },
+                    {
+                        name: 'materialStandard',
+                        label: '标准',
+                        children: <Select style={{ width: "140px" }} defaultValue={""}>
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                materialStandardOptions?.map((item: { id: string, name: string }) => <Select.Option
+                                    value={item.id}
+                                    key={item.id}>{item.name}</Select.Option>)
+                            }
+                        </Select>
+                    },
+                    {
+                        name: 'length',
+                        label: '长度',
+                        children: <InputNumber style={{ width: 150 }} />
+                    },
+                    {
+                        name: 'width',
+                        label: '宽度',
+                        children: <InputNumber style={{ width: 150 }} />
                     },
                     {
                         name: 'inTime',
