@@ -1,6 +1,68 @@
 {
     "baseInfoColumn": [
         {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "issuedNumber",
+            "path": "/tower-supply/task/issuedList",
+            "rowKey": "id",
+            "columns": [
+                {
+                    "title": "下达单号",
+                    "dataIndex": "issuedNumber"
+                },
+                {
+                    "title": "计划号",
+                    "dataIndex": "planNumber"
+                },
+                {
+                    "title": "工程名称",
+                    "dataIndex": "orderProjectName"
+                },
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "塔型",
+                    "dataIndex": "productCategoryName"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "查询下达单号/计划号/工程名称/内部合同号/塔型进行查询"
+                }
+            ]
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "disabled": true
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "disabled": true
+        },
+        {
+            "title": "内部合同号",
+            "dataIndex": "contractNumber",
+            "disabled": true
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "disabled": true
+        },
+        {
             "title": "领料人",
             "dataIndex": "pickingUserId",
             "required": true,
@@ -72,17 +134,8 @@
                     "message": "请选择领料日期"
                 }
             ]
-        },
-        {
-            "title": "工程名称",
-            "dataIndex": "projectName",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入工程名称"
-                }
-            ]
         }
+       
     ],
     "material": [
         {
@@ -116,6 +169,10 @@
         {
             "title": "数量",
             "dataIndex": "num"
+        },
+        {
+            "title": "单重（吨）",
+            "dataIndex": "weight"
         },
         {
             "title": "重量（吨）",
@@ -221,6 +278,10 @@
             {
                 "title": "不含税金额（元）",
                 "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "所在仓库",
+                "dataIndex": "warehouseName"
             },
             {
                 "title": "库位",
