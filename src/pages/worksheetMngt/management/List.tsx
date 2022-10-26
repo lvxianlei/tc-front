@@ -169,12 +169,12 @@ export default function List(): React.ReactNode {
                         setDetailVisible(true);
                         setRowId(record.id);
                     }} >详情</Button>
-                    <Button type='link' disabled={record?.status === 3} onClick={() => {
+                    <Button type='link' disabled={record?.status !== 1} onClick={() => {
                         setDispatchVisible(true);
                         setRowId(record.id);
                         setDispatchingType('single')
                     }} >派工</Button>
-                    <Button type='link' disabled={record?.status === 3} onClick={() => {
+                    <Button type='link' disabled={record?.status !== 1} onClick={() => {
                         setDealVisible(true);
                         setRowId(record.id);
                         setWorkTemplateTypeId(record?.workTemplateTypeId)
