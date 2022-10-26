@@ -38,7 +38,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     // 统计信息接口
     const { data: statisticsData, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehousingEntry/statisticsWarehousingEntry`,{warehousingEntryId: params.id})
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehousingEntry/statisticsWarehousingEntry`,{warehousingEntryId: params.id, materialType: 2})
             resole(result)
         } catch (error) {
             reject(error)
