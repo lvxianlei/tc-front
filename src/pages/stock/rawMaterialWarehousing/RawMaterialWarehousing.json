@@ -107,19 +107,22 @@
             "title": "创建日期",
             "dataIndex": "createTime",
             "type": "date",
-            "width": 80
+            "format":"YYYY-MM-DD",
+            "width": 100
         },
         {
             "title": "入库日期",
             "dataIndex": "entryTime",
             "type": "date",
-            "width": 80
+            "format":"YYYY-MM-DD",
+            "width": 100
         },
         {
             "title": "到货日期",
             "dataIndex": "receiveTime",
             "type": "date",
-            "width": 80
+            "format":"YYYY-MM-DD",
+            "width": 100
         },
         {
             "title": "品名",
