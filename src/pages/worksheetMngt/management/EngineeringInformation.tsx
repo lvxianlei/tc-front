@@ -147,7 +147,7 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                     <Form form={form} labelCol={{ span: 8 }}>
                         <Row gutter={24}>
                             {
-                                [...fields]?.map((res: any, index: number) => {
+                                [...fields || []]?.map((res: any, index: number) => {
                                     return res?.triggerField === 1 ?
                                         <Col span={6} key={index}>
                                             <Form.Item label={res?.fieldKey} >

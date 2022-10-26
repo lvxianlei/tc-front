@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Form, Input, Select } from 'antd';
+import { Form, Input, Select, Spin } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -20,8 +20,7 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
 
-
-    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { data, loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/workOrderSync/${rowId}`);
         templateChange(result?.templateId)
         form.setFieldsValue({
@@ -79,7 +78,8 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
-    return <DetailContent key='WorksheetSynchronousNew' className={styles.WorksheetSynchronousNew}>
+    return <Spin spinning={loading}>
+        <DetailContent key='WorksheetSynchronousNew' className={styles.WorksheetSynchronousNew}>
         <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
             <Form.Item
                 name={'name'}
@@ -148,5 +148,6 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
 
         </Form>
     </DetailContent>
+        </Spin>
 })
 

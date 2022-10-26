@@ -74,7 +74,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
 
     const { run: batchRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            RequestUtil.post(`/tower-work/workOrder/saveWorkOrderNode`, data).then(res => {
+            RequestUtil.post(`/tower-work/workOrder/saveDispatchList`, data).then(res => {
             resove(true)
             })
         } catch (error) {

@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Button, Card, Col, Form, Input, Row, Select, Space } from 'antd';
+import { Button, Card, Col, Form, Input, Row, Select, Spin } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -23,12 +23,13 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
     const [fields, setFields] = useState<any[]>([]);
     const [checkFields, setCheckFields] = useState<any[]>([]);
 
-    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { data, loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/fieldSynchro/${rowId}`);
         templateChange(result?.templateId, 'automatic')
-        setCheckFields(result?.syncWorkFieldDetailVOList || [{id:44}])
+        setCheckFields(result?.syncWorkFieldDetailVOList || [])
         form.setFieldsValue({
-            ...result
+            ...result,
+            templateId: result?.templateId + ',' + result?.templateName
         });
 
         resole(result);
@@ -44,11 +45,9 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
         }
     }))
 
-
     const templateChange = async (e: any, type: 'manual' | 'automatic') => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${e}`);
         setFields(result?.templateCustomVOList);
-        console.log(checkFields)
         if (type === 'manual') {
             setCheckFields(result?.templateCustomVOList?.map((res: any) => {
                 return {
@@ -75,7 +74,9 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                 await saveRun({
                     id: data?.id,
                     ...value,
-                    syncWorkFieldDetailDTOList: checkFields
+                    syncWorkFieldDetailDTOList: checkFields,
+                    templateId: value?.templateId && value?.templateId.split(',')[0],
+                    templateName: value?.templateId && value?.templateId.split(',')[1]
                 })
                 resolve(true);
 
@@ -91,103 +92,103 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
-    return <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
-        <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
-            <Form.Item
-                name={'name'}
-                label={'任务名称'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请输入任务名称`
-                    }
-                ]}>
-                <Input maxLength={100} />
-            </Form.Item>
-            <Form.Item
-                name={'templateId'}
-                label={'工单模板'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请选择工单模板`
-                    }
-                ]}>
-
-                <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e, 'manual')}>
-                    {
-                        templateList?.map((res: any, ind: number) => {
-                            return <Select.Option value={res?.id} key={ind}>{res?.templateName}</Select.Option>
-                        })
-                    }
-                </Select>
-            </Form.Item>
-            <Form.Item
-                name={'triggerField'}
-                label={'触发字段'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请选择触发字段`
-                    }
-                ]}>
-                <Select placeholder={'请选择触发字段'}>
-                    {
-                        fields?.map((res: any, ind: number) => {
-                            return <Select.Option value={res?.id} key={ind}>{res?.fieldKey}</Select.Option>
-                        })
-                    }
-                </Select>
-            </Form.Item>
-            <Form.Item
-                name={'checkFields'}
-                label={'同步字段'}
-                rules={[
-                    {
-                        required: true,
-                        validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
-                            if (checkFields.filter(res => res?.status === 1).length>0) {
-                                    callback()
-                            } else {
-                                callback('请选择同步字段')
-                            }
-                        }
-                    }
-                ]}>
-                <Card>
-                    <Row gutter={12}>
+    return <Spin spinning={loading}>
+        <DetailContent key='WorkOrderTemplateNew' className={styles.workOrderTemplateNew}>
+            <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
+                <Form.Item
+                    name={'name'}
+                    label={'任务名称'}
+                    rules={[
                         {
-                            checkFields && checkFields?.map((res: any, ind: number) => {
-                                return <Col style={{ marginBottom: '6px' }} span={8}><Button key={ind} type={res?.status === 1 ? "primary" : undefined} onClick={() => {
-                                    checkFields[ind] = {
-                                        ...res,
-                                        status: res?.status === 1 ? 0 : 1
-                                    }
-                                    setCheckFields([...checkFields])
-                                }} ghost={res?.status === 1 ? true : false}>{res?.fieldKey}</Button></Col>
+                            required: true,
+                            message: `请输入任务名称`
+                        }
+                    ]}>
+                    <Input maxLength={100} />
+                </Form.Item>
+                <Form.Item
+                    name={'templateId'}
+                    label={'工单模板'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请选择工单模板`
+                        }
+                    ]}>
+                    <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e?.split(',')[0], 'manual')}>
+                        {
+                            templateList?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.id + ',' + res?.templateName} key={ind}>{res?.templateName}</Select.Option>
                             })
                         }
-                    </Row>
-                </Card>
-            </Form.Item>
-            <Form.Item
-                name={'description'}
-                label={'备注'}>
-                <Input.TextArea maxLength={800} />
-            </Form.Item>
-            <Form.Item
-                name={'apiUrl'}
-                label={'拉取API'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请输入拉取API`
-                    }
-                ]}>
-                <Input.TextArea maxLength={800} />
-            </Form.Item>
-
-        </Form>
-    </DetailContent>
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name={'triggerField'}
+                    label={'触发字段'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请选择触发字段`
+                        }
+                    ]}>
+                    <Select placeholder={'请选择触发字段'}>
+                        {
+                            fields?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.id} key={ind}>{res?.fieldKey}</Select.Option>
+                            })
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name={'checkFields'}
+                    label={'同步字段'}
+                    rules={[
+                        {
+                            required: true,
+                            validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
+                                if (checkFields.filter(res => res?.status === 1).length > 0) {
+                                    callback()
+                                } else {
+                                    callback('请选择同步字段')
+                                }
+                            }
+                        }
+                    ]}>
+                    <Card>
+                        <Row gutter={12}>
+                            {
+                                checkFields && checkFields?.map((res: any, ind: number) => {
+                                    return <Col style={{ marginBottom: '6px' }} span={8}><Button key={ind} type={res?.status === 1 ? "primary" : undefined} onClick={() => {
+                                        checkFields[ind] = {
+                                            ...res,
+                                            status: res?.status === 1 ? 0 : 1
+                                        }
+                                        setCheckFields([...checkFields])
+                                    }} ghost={res?.status === 1 ? true : false}>{res?.fieldKey}</Button></Col>
+                                })
+                            }
+                        </Row>
+                    </Card>
+                </Form.Item>
+                <Form.Item
+                    name={'description'}
+                    label={'备注'}>
+                    <Input.TextArea maxLength={800} />
+                </Form.Item>
+                <Form.Item
+                    name={'apiUrl'}
+                    label={'拉取API'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请输入拉取API`
+                        }
+                    ]}>
+                    <Input.TextArea maxLength={800} />
+                </Form.Item>
+            </Form>
+        </DetailContent>
+    </Spin>
 })
 
