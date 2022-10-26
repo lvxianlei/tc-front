@@ -54,7 +54,7 @@ export default function List(): React.ReactNode {
             dataIndex: 'status',
             render: (_: number, record: Record<string, any>): React.ReactNode => (
                 <Switch checkedChildren="启用" unCheckedChildren="关闭" onChange={(checked: boolean) => {
-                    RequestUtil.post(`/tower-work/workOrderSync/status/${record?.id}/${checked ? 1 : 0}`).then(res => {
+                    RequestUtil.put(`/tower-work/workOrderSync/status/${record?.id}/${checked ? 1 : 0}`).then(res => {
                         message.success('状态变更成功');
                         history.go(0);
                     });
@@ -106,9 +106,9 @@ export default function List(): React.ReactNode {
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await ref.current?.onSubmit()
-            message.success("上传成功！")
+            message.success("保存成功！")
             setVisible(false)
-            // history.go(0)
+            history.go(0)
             resove(true)
         } catch (error) {
             reject(false)

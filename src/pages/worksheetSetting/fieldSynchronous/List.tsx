@@ -107,9 +107,9 @@ import FieldSynchronousNew from './FieldSynchronousNew';
      const handleOk = () => new Promise(async (resove, reject) => {
          try {
              await ref.current?.onSubmit()
-             message.success("上传成功！")
+             message.success("保存成功！")
              setVisible(false)
-             // history.go(0)
+             history.go(0)
              resove(true)
          } catch (error) {
              reject(false)
