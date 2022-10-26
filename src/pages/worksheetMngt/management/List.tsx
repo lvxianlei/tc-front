@@ -328,7 +328,7 @@ export default function List(): React.ReactNode {
             values.startTime = formatDate[0] + ' 00:00:00';
             values.endTime = formatDate[1] + ' 23:59:59';
         }
-        console.log(values)
+        values.recipientUser = searchForm?.getFieldsValue(true)?.recipientUser
         setFilterValue(values);
     }
     return <>
