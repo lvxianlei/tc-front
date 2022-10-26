@@ -22,7 +22,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     let [count, setCount] = useState<number>(1);
     const [warehouseId, setWarehouseId] = useState<string>("");
-    const structureTextureEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const structureTextureEnum = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
