@@ -456,7 +456,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
             })}
             dataSource={{
-                meteringMode: 1,
+                meteringMode: 2,
                 settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
             }} />
