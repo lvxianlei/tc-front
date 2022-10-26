@@ -580,7 +580,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 <PopTableContent
                     data={{
                         ...addMaterial as any,
-                        path: `${addMaterial.path}`
+                        path: `${addMaterial.path}?warehouseId=${warehouseId}`
                     }}
                     value={{
                         id: "",
