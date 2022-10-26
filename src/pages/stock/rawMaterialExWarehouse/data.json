@@ -114,8 +114,13 @@
             "width": 100
         },
         {
-            "title": "重量（吨）",
+            "title": "单重（吨）",
             "dataIndex": "weight",
+            "width": 100
+        },
+        {
+            "title": "总单（吨）",
+            "dataIndex": "totalWeight",
             "width": 100
         },
         {
