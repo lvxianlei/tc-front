@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails } from "./receivingListData.json"
 import * as calcObj from '@utils/calcUtil'
+import moment from "moment"
 /**
  * 纸质单号，原材料税款合计，车辆牌照
  */
@@ -457,6 +458,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             })}
             dataSource={{
                 meteringMode: 2,
+                receiveTime: moment(),
                 settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
             }} />

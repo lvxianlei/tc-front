@@ -180,6 +180,7 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                             name="structureTexture"
                             label="材质">
                             <Select style={{ width: '100%' }} >
+                                <Select.Option value={'全部'} key={''}>全部</Select.Option>
                                 {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
                         </Form.Item>
