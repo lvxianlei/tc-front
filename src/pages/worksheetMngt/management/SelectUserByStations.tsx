@@ -90,7 +90,10 @@ export default function SelectUserByStations({
                         type: selectType,
                         selectedRowKeys: selectedKeys,
                         preserveSelectedRowKeys: true,
-                        onChange: SelectChange
+                        onChange: SelectChange,
+                        getCheckboxProps: (record: Record<string, any>) => ({
+                          disabled: record?.status  === 0
+                        })
                     },
                     rowKey: "userId"
                 }}
