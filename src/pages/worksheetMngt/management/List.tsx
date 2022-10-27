@@ -183,10 +183,10 @@ export default function List(): React.ReactNode {
                         setDispatchingType('single')
                     }} >派工</Button>
                     <Button type='link' disabled={record?.status !== 1} onClick={async () => {
-                        RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${record.id}/${record?.workTemplateTypeId}`).then(res => {
-                        setDealVisible(true);
-                        setRowData(record);
-                        setDetailData(res);
+                        RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${record.id}/${record?.workTemplateId}`).then(res => {
+                            setDealVisible(true);
+                            setRowData(record);
+                            setDetailData(res);
                         })
                     }}>处理</Button>
                     <Button type='link' disabled={record?.status === 3 || record?.dispatchStatus === 2} onClick={() => {
@@ -204,11 +204,20 @@ export default function List(): React.ReactNode {
                                     <Input.TextArea maxLength={300} />
                                 </Form.Item>
                             </Form>,
-                            onOk: () => {
-                                RequestUtil.post(`/tower-work/workOrder/cancelWorkOrder/${record?.id}/${form.getFieldsValue(true)?.description}`).then(res => {
-                                    message.success("取消成功")
-                                    history.go(0)
-                                })
+                            onOk: () => new Promise(async (resove, reject) => {
+                                try {
+                                    const value = await form.validateFields();
+                                        await RequestUtil.post(`/tower-work/workOrder/cancelWorkOrder/${record?.id}/${value?.description}`).then(res => {
+                                            message.success("取消成功")
+                                            history.go(0)
+                                        })
+                                        resove(true)
+                                } catch (error) {
+                                    reject(false)
+                                }
+                            }),
+                            onCancel: () => {
+                                form?.resetFields();
                             }
                         })
                     }}>取消</Button>

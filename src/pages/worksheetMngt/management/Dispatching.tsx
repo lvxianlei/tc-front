@@ -87,14 +87,39 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
             form.validateFields().then(async res => {
                 const value = form.getFieldsValue(true);
                 if (value?.data?.filter((res: any) => res.upstreamNode === '任务开始')) {
-                    Promise.resolve().then(() => {
-                        checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始'))
-                        console.log('promise1');
-                      }).then(() =>  {
-                        console.log('promise2');
-                        
-                      });
-                    
+                    checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始')).then(async () => {
+                        if (isOk) {
+                            type === 'single' ?
+                                await saveRun([
+                                    ...value?.data.map((res: any) => {
+                                        return {
+                                            ...res,
+                                            recipientUser: res?.recipientUser?.join(','),
+                                            planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
+                                            planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
+                                            workOrderId: rowId
+                                        }
+                                    })
+                                ])
+                                :
+                                await batchRun({
+                                    workOrderIds: rowId?.split(','),
+                                    workOrderNodeDTOList: [
+                                        ...value?.data.map((res: any) => {
+                                            return {
+                                                ...res,
+                                                recipientUser: res?.recipientUser?.join(','),
+                                                planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
+                                                planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
+                                            }
+                                        })
+                                    ]
+                                })
+                            resolve(true)
+                        } else {
+                            reject(false)
+                        }
+                    })
                 } else {
                     await saveRun([
                         ...value?.data.map((res: any) => {
@@ -158,7 +183,6 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                     resole(true)
                 }
             } else {
-                setIsOk(false)
                 reject(tip)
             }
         })

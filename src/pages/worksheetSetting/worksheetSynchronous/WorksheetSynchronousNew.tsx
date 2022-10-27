@@ -102,7 +102,12 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
                         }
                     ]}>
 
-                    <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e)}>
+                    <Select placeholder={'请选择工单模板'} onChange={(e: any) => {
+                        templateChange(e);
+                        form?.setFieldsValue({
+                            triggerField: ''
+                        })
+                    }}>
                         {
                             templateList?.map((res: any, ind: number) => {
                                 return <Select.Option value={res?.id} key={ind}>{res?.templateName}</Select.Option>
@@ -122,7 +127,7 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
                     <Select placeholder={'请选择触发字段'}>
                         {
                             fields?.map((res: any, ind: number) => {
-                                return <Select.Option value={res?.id} key={ind}>{res?.fieldKey}</Select.Option>
+                                return <Select.Option value={res?.fieldKey} key={ind}>{res?.fieldKey}</Select.Option>
                             })
                         }
                     </Select>
