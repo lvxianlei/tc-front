@@ -65,13 +65,6 @@
             "width": 100
         },
         {
-            "title": "创建日期",
-            "dataIndex": "createTime",
-            "type": "date",
-            "format": "YYYY-MM-DD",
-            "width": 100
-        },
-        {
             "title": "出库日期",
             "dataIndex": "outStockTime",
             "type": "date",
@@ -124,26 +117,6 @@
             "width": 100
         },
         {
-            "title": "含税单价（元/吨）",
-            "dataIndex": "taxPrice",
-            "width": 120
-        },
-        {
-            "title": "含税金额（元）",
-            "dataIndex": "totalTaxPrice",
-            "width": 120
-        },
-        {
-            "title": "不含税单价（元/吨）",
-            "dataIndex": "unTaxPrice",
-            "width": 120
-        },
-        {
-            "title": "不含税金额（元）",
-            "dataIndex": "totalUnTaxPrice",
-            "width": 120
-        },
-        {
             "title": "仓库",
             "dataIndex": "warehouseName",
             "width": 120
@@ -181,6 +154,33 @@
         {
             "title": "内部合同号",
             "dataIndex": "contractNumber",
+            "width": 120
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice",
             "width": 120
         },
         {
