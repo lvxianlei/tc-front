@@ -483,7 +483,10 @@ export default function List(): React.ReactNode {
                     onChange: (selectedRowKeys: React.Key[], selectedRows: any): void => {
                         setSelectedKeys(selectedRowKeys);
                         setSelectedRows(selectedRows)
-                    }
+                    },
+                    getCheckboxProps: (record: Record<string, any>) => ({
+                      disabled: record?.status !== 1
+                    }),
                 }
             }}
         />
