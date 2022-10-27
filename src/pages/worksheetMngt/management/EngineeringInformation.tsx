@@ -13,19 +13,18 @@ import styles from './Management.module.less'
 
 interface modalProps {
     rowId: string;
-    workTemplateTypeId: string;
     rowData: Record<string, any>;
+    detailData: Record<string, any>;
 }
 
-export default forwardRef(function EngineeringInformation({ rowId, workTemplateTypeId, rowData }: modalProps, ref) {
+export default forwardRef(function EngineeringInformation({ rowId, rowData, detailData }: modalProps, ref) {
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
 
     const { loading, data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${rowId}/${workTemplateTypeId}`);
-        setFields(result?.workOrderCustomVOList)
-        resole(result);
-    }), { refreshDeps: [rowId, workTemplateTypeId, rowData] })
+        setFields(detailData?.workOrderCustomVOList)
+        resole(detailData);
+    }), { refreshDeps: [rowId, rowData,detailData] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
