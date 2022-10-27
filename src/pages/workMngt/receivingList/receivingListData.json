@@ -6,11 +6,6 @@
             "width": 150
         },
         {
-            "title": "纸质单号",
-            "dataIndex": "paperNumber",
-            "width": 100
-        },
-        {
             "title": "合同编号",
             "dataIndex": "contractNumber",
             "width": 180
@@ -19,11 +14,6 @@
             "title": "状态",
             "dataIndex": "receiveStatusName",
             "width": 60
-        },
-        {
-            "title": "结算方式",
-            "dataIndex": "settlementModeName",
-            "width": 100
         },
         {
             "title": "供应商",
@@ -38,6 +28,11 @@
         {
             "title": "到货时间",
             "dataIndex": "receiveTime",
+            "width": 100
+        },
+        {
+            "title": "车牌号",
+            "dataIndex": "totalWeight",
             "width": 100
         },
         {
@@ -68,6 +63,11 @@
         {
             "title": "制单人",
             "dataIndex": "createUserName",
+            "width": 100
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementModeName",
             "width": 100
         },
         {
@@ -153,11 +153,6 @@
                     "dataIndex": "supplyProductsName"
                 }
             ]
-        },
-        {
-            "title": "纸质单号",
-            "dataIndex": "paperNumber",
-            "type": "string"
         },
         {
             "title": "联系人",

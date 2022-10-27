@@ -64,6 +64,18 @@ export default function MaterialMngt(): React.ReactNode {
             }
         },
         {
+            key: 'updateUserName',
+            title: '修改人',
+            width: 150,
+            dataIndex: 'updateUserName'
+        },
+        {
+            key: 'updateTime',
+            title: '修改时间',
+            width: 150,
+            dataIndex: 'updateTime'
+        },
+        {
             key: 'weightAlgorithmName',
             title: '算法',
             width: 150,
