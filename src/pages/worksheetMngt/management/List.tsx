@@ -45,6 +45,7 @@ export default function List(): React.ReactNode {
     const [searchForm] = useForm();
     const [workTemplateTypeId, setWorkTemplateTypeId] = useState<string>('');
     const [dispatchingType, setDispatchingType] = useState<'batch' | 'single'>('single');
+    const [rowData, setRowData] = useState<Record<string, any>>({});
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
@@ -84,6 +85,12 @@ export default function List(): React.ReactNode {
             "title": "工单编号",
             "width": 150,
             "dataIndex": "workOrderNumber"
+        },
+        {
+            "key": "fieldValue",
+            "title": "业务编号",
+            "width": 150,
+            "dataIndex": "fieldValue"
         },
         {
             "key": "buildChannel",
@@ -168,6 +175,7 @@ export default function List(): React.ReactNode {
                     <Button type='link' onClick={() => {
                         setDetailVisible(true);
                         setRowId(record.id);
+                        setRowData(record)
                     }} >详情</Button>
                     <Button type='link' disabled={record?.status !== 1} onClick={() => {
                         setDispatchVisible(true);
@@ -178,6 +186,7 @@ export default function List(): React.ReactNode {
                         setDealVisible(true);
                         setRowId(record.id);
                         setWorkTemplateTypeId(record?.workTemplateTypeId)
+                        setRowData(record)
                     }}>处理</Button>
                     <Button type='link' disabled={record?.status === 3 || record?.dispatchStatus === 2} onClick={() => {
                         setVisible(true);
@@ -334,7 +343,7 @@ export default function List(): React.ReactNode {
         setFilterValue(values);
     }
 
-    const isAllEqual = (array:any[]) => {
+    const isAllEqual = (array: any[]) => {
         if (array.length > 0) {
             return !array.some((value, index) => {
                 return value !== array[0];
@@ -354,7 +363,7 @@ export default function List(): React.ReactNode {
                 <Space>
                     <Button type="primary" onClick={handleDispatchOk} ghost>完成</Button>
                     <Button onClick={() => {
-                        setDispatchVisible(false); 
+                        setDispatchVisible(false);
                         dispatchRef.current?.resetFields();
                     }}>关闭</Button>
                 </Space>
@@ -379,7 +388,7 @@ export default function List(): React.ReactNode {
             }
             title="报工信息"
             onCancel={() => setDealVisible(false)}>
-            <EngineeringInformation rowId={rowId} workTemplateTypeId={workTemplateTypeId} ref={dealRef} />
+            <EngineeringInformation rowData={rowData} rowId={rowId} workTemplateTypeId={workTemplateTypeId} ref={dealRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -393,7 +402,7 @@ export default function List(): React.ReactNode {
             }
             title="详情"
             onCancel={() => setDetailVisible(false)}>
-            <WorkOrderDetail rowId={rowId} />
+            <WorkOrderDetail rowData={rowData} rowId={rowId} />
         </Modal>
         <Modal
             destroyOnClose
@@ -443,11 +452,11 @@ export default function List(): React.ReactNode {
                         }} ghost>人工创建工单</Button>
                         <Button type='primary' disabled={selectedKeys.length === 0} onClick={() => {
                             const tip = isAllEqual(selectedRows.map((res: any) => res?.workTemplateId))
-                                                        console.log(tip)
+                            console.log(tip)
                             if (tip) {
                                 setRowId(selectedKeys?.join(','));
                                 setDispatchVisible(true);
-                                    setDispatchingType('batch')
+                                setDispatchingType('batch')
                             } else {
                                 message.warning('仅相同工单类型允许批量派工！')
                             }

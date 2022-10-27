@@ -38,16 +38,16 @@ export default function List(): React.ReactNode {
             title: '工单模板',
             dataIndex: 'templateName'
         },
-        //  {
-        //      key: 'triggerField',
-        //      title: '同步字段',
-        //      dataIndex: 'triggerField'
-        //  },
-        //  {
-        //      key: 'apiUrl',
-        //      title: '推送API',
-        //      dataIndex: 'apiUrl'
-        //  },
+         {
+             key: 'triggerField',
+             title: '同步字段',
+             dataIndex: 'triggerField'
+         },
+         {
+             key: 'apiUrl',
+             title: '推送API',
+             dataIndex: 'apiUrl'
+         },
         {
             key: 'status',
             title: '状态',

@@ -13,9 +13,10 @@ import styles from './Management.module.less'
 
 interface modalProps {
     rowId: string;
+    rowData: Record<string, any>
 }
 
-export default forwardRef(function WorkOrderDetail({ rowId }: modalProps, ref) {
+export default forwardRef(function WorkOrderDetail({ rowId, rowData }: modalProps, ref) {
 
     const baseColumns = [
         {
@@ -122,7 +123,7 @@ export default forwardRef(function WorkOrderDetail({ rowId }: modalProps, ref) {
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/${rowId}`);
         resole(result);
-    }), { refreshDeps: [rowId] })
+    }), { refreshDeps: [rowId, rowData] })
 
     return <Spin spinning={loading}>
         <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
@@ -144,6 +145,14 @@ export default forwardRef(function WorkOrderDetail({ rowId }: modalProps, ref) {
                 <Col span={5}>
                     <DetailTitle title="工单信息" key={2} />
                     <div className={styles.scroll}>
+                        <Row gutter={12} key={0} style={{ marginBottom: '6px' }} justify="space-around">
+                            <Col span={8}>
+                                {rowData?.fieldKey || '-'}
+                            </Col>
+                            <Col span={16}>
+                                {rowData?.fieldValue || '-'}
+                            </Col>
+                        </Row>
                         {
                             data?.workOrderNodeVOList?.map((res: any, index: number) => {
                                 return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
