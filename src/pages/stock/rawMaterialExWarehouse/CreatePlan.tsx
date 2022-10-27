@@ -55,7 +55,16 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const handleDetailAddModalOk = () => {
-        console.log(2)
+        let flag = false;
+        for (let i = 0; i < materialList.length; i += 1) {
+            if (materialList[i].issuedNumber!== materialList[0].issuedNumber) {
+                flag = true;
+            }
+        }
+        if (flag) {
+            message.error("请选择同一下达单下的明细！");
+            return false;
+        }
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
         //     for (let p = 0; p < materialList.length; p += 1) {
@@ -178,8 +187,8 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.type===2||fields.type===0) {
-            if(fields.type===2){
+        if (fields.outStockType===2||fields.outStockType===0) {
+            if(fields.outStockType===2){
                 setType(2)
             }else{
                 setType(0)
@@ -240,6 +249,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您选择出库明细!");
                 return false;
             }
+            console.log(popDataList)
             // 添加对长度以及数量的拦截
             let flag = false;
             let width = false;
@@ -281,7 +291,7 @@ export default function CreatePlan(props: any): JSX.Element {
         if (props.visible) {
             getBatchingStrategy();
             addCollectionForm.setFieldsValue({
-                type:0,
+                outStockType:0,
                 pickingTime: moment(new Date()).format("YYYY-MM-DD"),
                 issuedNumber:'',
                 projectName:'',
@@ -328,7 +338,7 @@ export default function CreatePlan(props: any): JSX.Element {
             })
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
-            setType(result?.type)
+            setType(result?.outStockType)
             result?.warehouseId && result?.warehouseId!==null && setWarehouseId(result?.warehouseId)
             resole({
                 ...result,
@@ -386,7 +396,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleSaveClick()}>
                     保存
                 </Button>,
                 <Button key="create" type="primary" onClick={() => submitRun()}>
@@ -406,8 +416,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         if(item.dataIndex==='issuedNumber'){
                             return ({
                                 ...item, 
-                                require: addCollectionForm.getFieldValue('type') === 0,
-                                disabled: addCollectionForm.getFieldValue('type') === 2
+                                require: addCollectionForm.getFieldValue('outStockType') === 0,
+                                disabled: addCollectionForm.getFieldValue('outStockType') === 2
                             })
                         }
                         if (item.dataIndex === "wareHouseId") {
@@ -450,7 +460,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 return ({
                                     ...item,
                                     width: 160,
-                                    render: (value: number, records: any, key: number) => <Input value={value || undefined} onChange={(value: any) => handleBatchChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <Input value={value || undefined} onChange={(value: any) => handleBatchChange(value, records.id)} key={key} maxLength={30}/>
                                 })
                             }
                             if (["num"].includes(item.dataIndex)&&type===0) {
