@@ -2,14 +2,15 @@
  * 创建计划列表
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, InputNumber, message, Spin } from 'antd';
+import { Modal, Form, Button, InputNumber, message, Spin, Input } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import {
     material,
     baseInfoColumn,
-    addMaterial
+    addMaterial,
+    addDetailMaterial
 } from "./CreatePlan.json";
 import moment from 'moment';
 import "./CreatePlan.less";
@@ -18,6 +19,8 @@ import { materialStandardOptions, materialTextureOptions } from '../../../config
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
+    const [detailVisible, setDetailVisible] = useState<boolean>(false)
+    const [type, setType] = useState<number>(0);
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     let [count, setCount] = useState<number>(1);
@@ -25,6 +28,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
     const materialStandardEnum:any = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const handleAddModalOk = () => {
+        
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
         //     for (let p = 0; p < materialList.length; p += 1) {
@@ -50,6 +54,45 @@ export default function CreatePlan(props: any): JSX.Element {
         setVisible(false)
     }
 
+    const handleDetailAddModalOk = () => {
+        console.log(2)
+        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        // for (let i = 0; i < popDataList.length; i += 1) {
+        //     for (let p = 0; p < materialList.length; p += 1) {
+        //         if (popDataList[i].id === materialList[p].id) {
+        //             materialList[p].structureTexture = popDataList[i].structureTexture;
+        //             materialList[p].materialTexture = popDataList[i].materialTexture;
+        //         }
+        //     }
+        // }
+        setMaterialList([...materialList, ...newMaterialList])
+        setPopDataList([...materialList.map((item: any) => {
+            return ({
+                ...item,
+                furnaceBatch: item.furnaceBatchNumber,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+            })
+        })])
+        setDetailVisible(false)
+    }
+    const handleBatchChange = (value: string, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    batch: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
     const handleNumChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
@@ -69,7 +112,44 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
-
+    const handleLengthChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    length: value,
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) * 1 / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) * 1 / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * 1 / 1000).toFixed(3)
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleWidthChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    width: value,
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(value || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * 1 / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(value || 0) * 1 / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * 1 / 1000).toFixed(3)
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
     // 移除
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.id !== id))
@@ -98,6 +178,16 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        if (fields.type===2||fields.type===0) {
+            if(fields.type===2){
+                setType(2)
+            }else{
+                setType(0)
+            }
+            setPopDataList([])
+            setMaterialList([])
+            return;
+        }
         if (fields.issuedNumber) {
             const result = fields.issuedNumber.records[0];
             addCollectionForm.setFieldsValue({
@@ -143,11 +233,55 @@ export default function CreatePlan(props: any): JSX.Element {
             console.log(error);
         }
     }
-
+    const handleSaveClick = async () => {
+        try {
+            const baseInfo = await addCollectionForm.validateFields();
+            if (popDataList.length < 1) {
+                message.error("请您选择出库明细!");
+                return false;
+            }
+            // 添加对长度以及数量的拦截
+            let flag = false;
+            let width = false;
+            let batch = false;
+            for (let i = 0; i < popDataList.length; i += 1) {
+                if (!(popDataList[i].length)) {
+                    flag = true;
+                }
+                if (!(popDataList[i].width)){
+                    width = true
+                }
+                if (!(popDataList[i].receiveBatchNumber)){
+                    batch = true
+                }
+            }
+            if (flag) {
+                message.error("请您填写长度！");
+                return false;
+            }
+            if (width) {
+                message.error("请您填写宽度！");
+                return false;
+            }
+            if (batch) {
+                message.error("请您填写收货批次！");
+                return false;
+            }
+            saveRun({
+                outStockDetailDTOList: popDataList,
+                ...baseInfo,
+                materialType: 1,
+                pickingUserId: baseInfo?.pickingUserId.id
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }
     useEffect(() => {
         if (props.visible) {
             getBatchingStrategy();
             addCollectionForm.setFieldsValue({
+                type:0,
                 pickingTime: moment(new Date()).format("YYYY-MM-DD"),
                 issuedNumber:'',
                 projectName:'',
@@ -166,13 +300,27 @@ export default function CreatePlan(props: any): JSX.Element {
                 id: props.id
             })
             message.success("创建成功！");
+            setType(0)
             props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
-
+    const { run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+        try {
+            const path = `/tower-storage/outStock/saveExcess` 
+            const result: { [key: string]: any } = await RequestUtil[ "post" ](path, props.type === "create" ? data : {
+                ...data,
+                id: props.id
+            })
+            message.success("创建成功！");
+            props?.handleCreate({ code: 1 })
+            resove(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`, {
@@ -180,6 +328,7 @@ export default function CreatePlan(props: any): JSX.Element {
             })
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
+            setType(result?.type)
             result?.warehouseId && result?.warehouseId!==null && setWarehouseId(result?.warehouseId)
             resole({
                 ...result,
@@ -211,11 +360,25 @@ export default function CreatePlan(props: any): JSX.Element {
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
+                setType(0)
                 props?.handleCreate();
+                
             }}
             maskClosable={false}
             width={1100}
-            footer={[
+            footer={type===0?[
+                <Button key="back" onClick={() => {
+                    setMaterialList([]);
+                    setPopDataList([]);
+                    setType(0)
+                    props?.handleCreate();
+                }}>
+                    取消
+                </Button>,
+                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                    确定
+                </Button>
+            ]:[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
@@ -224,7 +387,10 @@ export default function CreatePlan(props: any): JSX.Element {
                     取消
                 </Button>,
                 <Button key="create" type="primary" onClick={() => handleCreateClick()}>
-                    确定
+                    保存
+                </Button>,
+                <Button key="create" type="primary" onClick={() => submitRun()}>
+                    保存并提交
                 </Button>
             ]}
         >
@@ -237,6 +403,13 @@ export default function CreatePlan(props: any): JSX.Element {
                     col={2}
                     classStyle="baseInfo"
                     columns={baseInfoColumn.map((item: any) => {
+                        if(item.dataIndex==='issuedNumber'){
+                            return ({
+                                ...item, 
+                                require: addCollectionForm.getFieldValue('type') === 0,
+                                disabled: addCollectionForm.getFieldValue('type') === 2
+                            })
+                        }
                         if (item.dataIndex === "wareHouseId") {
                             return ({
                                 ...item, enum: batchingStrategy?.map((item: any) => ({
@@ -251,7 +424,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 />
                 <DetailTitle title="出库明细" />
                 <div className='btnWrapper'>
-                    <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择</Button>
+                    {type===0?
+                        <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择库存</Button>
+                        :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} onClick={() => setDetailVisible(true)}>选择货物明细</Button>}
                 </div>
                 <CommonTable
                     style={{ padding: "0" }}
@@ -271,10 +446,29 @@ export default function CreatePlan(props: any): JSX.Element {
                             }
                         },
                         ...material.map((item: any) => {
-                            if (["num"].includes(item.dataIndex)) {
+                            if (["receiveBatchNumber"].includes(item.dataIndex)&&type===2) {
+                                return ({
+                                    ...item,
+                                    width: 160,
+                                    render: (value: number, records: any, key: number) => <Input value={value || undefined} onChange={(value: any) => handleBatchChange(value, records.id)} key={key} />
+                                })
+                            }
+                            if (["num"].includes(item.dataIndex)&&type===0) {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                })
+                            }
+                            if (["length"].includes(item.dataIndex)&&type===2) {
+                                return ({
+                                    ...item,
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleLengthChange(value, records.id)} key={key} />
+                                })
+                            }
+                            if (["width"].includes(item.dataIndex)&&type===2) {
+                                return ({
+                                    ...item,
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
                                 })
                             }
                             return item;
@@ -332,6 +526,59 @@ export default function CreatePlan(props: any): JSX.Element {
                             totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+                        })) || [])
+                    }}
+                />
+            </Modal>
+            <Modal width={1100} title={`选择货物明细`} destroyOnClose
+                visible={detailVisible}
+                onOk={handleDetailAddModalOk}
+                onCancel={() => {
+                    setDetailVisible(false);
+                }}
+            >
+                <PopTableContent
+                    data={{
+                        ...addDetailMaterial as any,
+                        search: addDetailMaterial.search.map((res: any) => {
+                                    if (res.dataIndex === 'materialStandard') {
+                                        return ({
+                                            ...res,
+                                            enum: [{value:'',label:'全部'},...materialStandardEnum]
+                                        })
+                                    }
+                                    if (res.dataIndex === 'structureTexture') {
+                                        return ({
+                                            ...res,
+                                            enum: [{value:'',label:'全部'},...structureTextureEnum]
+                                        })
+                                    }
+                                    return res
+                        }),
+                        path: `${addDetailMaterial.path}?outStockItemStatus=2`
+                    }}
+                    value={{
+                        id: "",
+                        records: popDataList,
+                        value: ""
+                    }}
+                    onChange={(fields: any[]) => {
+                        addCollectionForm.setFieldsValue({
+                            issuedNumber:fields[0]?.issuedNumber,
+                            projectName:fields[0]?.projectName,
+                            planNumber:fields[0]?.planNumber,
+                            internalNumber:fields[0]?.internalNumber,
+                            productCategoryName:fields[0]?.productCategoryName,
+                        })
+                        setMaterialList(fields.map((item: any) => ({
+                            ...item,
+                            num:1,
+                            weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                            totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (1 || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (1 || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * (1|| 1) / 1000).toFixed(3)
                         })) || [])
                     }}
                 />
