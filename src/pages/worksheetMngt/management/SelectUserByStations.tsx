@@ -8,7 +8,7 @@ interface SelectUserByStationsProps {
     selectedKey?: string[];
     selectType?: 'radio' | 'checkbox';
     disabled?: boolean;
-    station?: string
+    station?: string;
 }
 
 export default function SelectUserByStations({
@@ -26,7 +26,7 @@ export default function SelectUserByStations({
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
-        console.log(selectedRowKeys)
+        console.log(selectedRowKeys,selectedRows)
     }
     const columns = [
         {
@@ -74,7 +74,9 @@ export default function SelectUserByStations({
             }}
             onOk={() => {
                 setVisible(false);
-                onSelect(selectedRows)
+                onSelect(selectedRows);
+                setSelectedKeys([]);
+                setSelectedRows([])
             }}
             width='60%'
         >

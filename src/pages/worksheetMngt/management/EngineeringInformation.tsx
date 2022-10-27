@@ -10,6 +10,7 @@ import { DetailContent, DetailTitle, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './Management.module.less'
+import ErrorList from "antd/lib/form/ErrorList";
 
 interface modalProps {
     rowId: string;
@@ -24,7 +25,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
     const { loading, data } = useRequest<any>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         setFields(detailData?.workOrderCustomVOList)
         resole(detailData);
-    }), { refreshDeps: [rowId, rowData,detailData] })
+    }), { refreshDeps: [rowId, rowData, detailData] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
@@ -93,46 +94,52 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
     })
 
     const getValueByApi = async (res: Record<string, any>, index: number) => {
-        const fieldValue = form?.getFieldsValue(true)?.data[index].res.fieldKey
-        const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/workOrder/trigger/${rowId}/${res.fieldKey}/${fieldValue}`)
-        console.log(fieldValue)
-        const newData = result?.map((res: { fieldKey: never, fieldValue: never }) => {
-            let arr = []
-            arr = [res?.fieldKey, res?.fieldValue]
-            return arr
-        })
-        const entriesData: any = Object.fromEntries(newData)
-        form.setFieldsValue({
-            ...entriesData
-        })
-        let newFields: any[] = []
-        result.forEach((element: any) => {
-            newFields = fields?.map((res: any) => {
-                if (element?.fieldKey === res?.fieldKey) {
-                    return {
-                        ...res,
-                        fieldKey: res?.fieldKey,
-                        fieldValue: element?.fieldValue
-                    }
-                } else {
-                    return {
-                        ...res,
-                        fieldKey: res?.fieldKey,
-                        fieldValue: res?.fieldValue
-                    }
-                }
+        const value = Object.entries(form?.getFieldsValue(true)?.data[index])[0]
+                    console.log(value)
+        if (value[1]) {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/workOrder/trigger/${rowId}/${value[0]}/${value[1]}`)
+
+            const newData = result?.map((res: { fieldKey: never, fieldValue: never }) => {
+                let arr = []
+                arr = [res?.fieldKey, res?.fieldValue]
+                return arr
             })
-        });
-        setFields([
-            ...newFields || [],
-        ])
+            const entriesData: any = Object.fromEntries(newData)
+            form.setFieldsValue({
+                ...entriesData
+            })
+            let newFields: any[] = []
+            result.forEach((element: any) => {
+                newFields = fields?.map((res: any) => {
+                    if (element?.fieldKey === res?.fieldKey) {
+                        return {
+                            ...res,
+                            fieldKey: res?.fieldKey,
+                            fieldValue: element?.fieldValue
+                        }
+                    } else {
+                        return {
+                            ...res,
+                            fieldKey: res?.fieldKey,
+                            fieldValue: res?.fieldValue
+                        }
+                    }
+                })
+            });
+            setFields([
+                ...newFields || [],
+            ])
+        } else {
+            message.warning('请输入值！')
+        }
+
     }
 
     const resetFields = () => {
         form.resetFields()
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, onBack, resetFields}), [ref, onSubmit, onBack, resetFields]);
+    useImperativeHandle(ref, () => ({ onSubmit, onBack, resetFields }), [ref, onSubmit, onBack, resetFields]);
 
     return <Spin spinning={loading}>
         <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
