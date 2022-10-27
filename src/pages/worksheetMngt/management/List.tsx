@@ -43,9 +43,9 @@ export default function List(): React.ReactNode {
     const [selectedRowsName, setSelectedRowsName] = useState<any>({});
     const [form] = useForm();
     const [searchForm] = useForm();
-    const [workTemplateTypeId, setWorkTemplateTypeId] = useState<string>('');
     const [dispatchingType, setDispatchingType] = useState<'batch' | 'single'>('single');
     const [rowData, setRowData] = useState<Record<string, any>>({});
+    const [detailData, setDetailData] = useState<Record<string, any>>({});
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
@@ -182,11 +182,12 @@ export default function List(): React.ReactNode {
                         setRowId(record.id);
                         setDispatchingType('single')
                     }} >派工</Button>
-                    <Button type='link' disabled={record?.status !== 1} onClick={() => {
+                    <Button type='link' disabled={record?.status !== 1} onClick={async () => {
+                        RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${record.id}/${record?.workTemplateTypeId}`).then(res => {
                         setDealVisible(true);
-                        setRowId(record.id);
-                        setWorkTemplateTypeId(record?.workTemplateTypeId)
-                        setRowData(record)
+                        setRowData(record);
+                        setDetailData(res);
+                        })
                     }}>处理</Button>
                     <Button type='link' disabled={record?.status === 3 || record?.dispatchStatus === 2} onClick={() => {
                         setVisible(true);
@@ -380,7 +381,7 @@ export default function List(): React.ReactNode {
             footer={
                 <Space>
                     <Button type="primary" onClick={handleDealOk} ghost>完成</Button>
-                    <Button type="primary" onClick={handleBack} ghost>退回</Button>
+                    {detailData?.flag === 1 ? null : <Button type="primary" onClick={handleBack} ghost>退回</Button>}
                     <Button onClick={() => {
                         setDealVisible(false);
                     }}>关闭</Button>
@@ -388,7 +389,7 @@ export default function List(): React.ReactNode {
             }
             title="报工信息"
             onCancel={() => setDealVisible(false)}>
-            <EngineeringInformation rowData={rowData} rowId={rowId} workTemplateTypeId={workTemplateTypeId} ref={dealRef} />
+            <EngineeringInformation rowData={rowData} rowId={rowId} detailData={detailData} ref={dealRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -458,7 +459,7 @@ export default function List(): React.ReactNode {
                                 setDispatchVisible(true);
                                 setDispatchingType('batch')
                             } else {
-                                message.warning('仅相同工单类型允许批量派工！')
+                                message.warning('仅相同工单标题允许批量派工！')
                             }
                         }} ghost>批量派工</Button>
                     </Space>
