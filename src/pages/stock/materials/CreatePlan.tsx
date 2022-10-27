@@ -82,6 +82,8 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string>("");
+    const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
+    const materialStandardEnum:any = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -417,7 +419,25 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             }
         }
     }, [props.visible])
-
+    //库区库位
+    const { data: locator } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree/${warehouseId}`)
+            resole(result?.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+                key: item.id,
+                disabled: true,
+                children: item.children?.map((cItem: any) => ({
+                    label: cItem.name,
+                    value: cItem.id,
+                    key: cItem.id
+                }) || [])
+            })) || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
     return (
         <Modal
             title={props.isEdit ? "编辑盘点单" : "新建盘点单"}
@@ -580,6 +600,27 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 <PopTableContent
                     data={{
                         ...addMaterial as any,
+                        search: (addMaterial as any).search.map((item: any) => {
+                            if (item.dataIndex === 'materialStandard') {
+                                return ({
+                                    ...item,
+                                    enum: [{value:'',label:'全部'},...materialStandardEnum]
+                                })
+                            }
+                            if (item.dataIndex === 'structureTexture') {
+                                return ({
+                                    ...item,
+                                    enum: [{value:'',label:'全部'},...structureTextureEnum]
+                                })
+                            }
+                            if (item.dataIndex === "locatorId") {
+                                return ({
+                                    ...item,
+                                    treeData: locator
+                                })
+                            }
+                            return item
+                        }),
                         path: `${addMaterial.path}?warehouseId=${warehouseId}`
                     }}
                     value={{
