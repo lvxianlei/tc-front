@@ -80,74 +80,74 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
 
     return <Spin spinning={loading}>
         <DetailContent key='WorksheetSynchronousNew' className={styles.WorksheetSynchronousNew}>
-        <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
-            <Form.Item
-                name={'name'}
-                label={'任务名称'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请输入任务名称`
-                    }
-                ]}>
-                <Input maxLength={100} />
-            </Form.Item>
-            <Form.Item
-                name={'templateId'}
-                label={'工单模板'}
-                rules={[
-                    {
-                        required: true,
-                        message: `请选择工单模板`
-                    }
-                ]}>
+            <Form form={form} layout="horizontal" labelCol={{ span: 4 }} labelAlign="right">
+                <Form.Item
+                    name={'name'}
+                    label={'任务名称'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请输入任务名称`
+                        }
+                    ]}>
+                    <Input maxLength={100} />
+                </Form.Item>
+                <Form.Item
+                    name={'templateId'}
+                    label={'工单模板'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请选择工单模板`
+                        }
+                    ]}>
 
-                <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e)}>
-                    {
-                        templateList?.map((res: any, ind: number) => {
-                            return <Select.Option value={res?.id} key={ind}>{res?.templateName}</Select.Option>
-                        })
-                    }
-                </Select>
-            </Form.Item>
-            {/* <Form.Item
-                         name={'triggerField'}
-                         label={'触发字段'}
-                         rules={[
-                             {
-                                 required: true,
-                                 message: `请选择触发字段`
-                             }
-                         ]}>
-                            
-                <Select placeholder={'请选择触发字段'} onChange={(e: any) => templateChange(e)}>
-                    {
-                        fields?.map((res: any, ind: number) => {
-                            return <Select.Option value={res?.id} key={ind}>{res?.fieldKey}</Select.Option>
-                        })
-                    }
-                </Select>
-                     </Form.Item> */}
+                    <Select placeholder={'请选择工单模板'} onChange={(e: any) => templateChange(e)}>
+                        {
+                            templateList?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.id} key={ind}>{res?.templateName}</Select.Option>
+                            })
+                        }
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name={'triggerField'}
+                    label={'触发字段'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请选择触发字段`
+                        }
+                    ]}>
 
-            <Form.Item
-                name={'description'}
-                label={'备注'}>
-                <Input.TextArea maxLength={800} />
-            </Form.Item>
-            {/* <Form.Item
-                         name={'apiUrl'}
-                         label={'推送API'}
-                         rules={[
-                             {
-                                 required: true,
-                                 message: `请输入推送API`
-                             }
-                         ]}>
-                         <Input.TextArea maxLength={800} />
-                     </Form.Item> */}
+                    <Select placeholder={'请选择触发字段'} onChange={(e: any) => templateChange(e)}>
+                        {
+                            fields?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.id} key={ind}>{res?.fieldKey}</Select.Option>
+                            })
+                        }
+                    </Select>
+                </Form.Item>
 
-        </Form>
-    </DetailContent>
-        </Spin>
+                <Form.Item
+                    name={'description'}
+                    label={'备注'}>
+                    <Input.TextArea maxLength={800} />
+                </Form.Item>
+                <Form.Item
+                    name={'apiUrl'}
+                    label={'推送API'}
+                    rules={[
+                        {
+                            required: true,
+                            message: `请输入推送API`
+                        }
+                    ]}>
+                    <Input.TextArea maxLength={800} />
+                </Form.Item>
+
+            </Form>
+        </DetailContent>
+    </Spin>
 })
 

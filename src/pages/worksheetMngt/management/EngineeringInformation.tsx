@@ -14,9 +14,10 @@ import styles from './Management.module.less'
 interface modalProps {
     rowId: string;
     workTemplateTypeId: string;
+    rowData: Record<string, any>;
 }
 
-export default forwardRef(function EngineeringInformation({ rowId, workTemplateTypeId }: modalProps, ref) {
+export default forwardRef(function EngineeringInformation({ rowId, workTemplateTypeId, rowData }: modalProps, ref) {
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
 
@@ -24,7 +25,7 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
         const result: any = await RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${rowId}/${workTemplateTypeId}`);
         setFields(result?.workOrderCustomVOList)
         resole(result);
-    }), { refreshDeps: [rowId, workTemplateTypeId] })
+    }), { refreshDeps: [rowId, workTemplateTypeId, rowData] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
@@ -48,8 +49,6 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
         try {
             form.validateFields().then(async res => {
                 let value = form.getFieldsValue(true)?.data
-
-                console.log(form.getFieldsValue(true))
                 value = value?.map((res: any) => {
                     const newRes = Object.entries(res)
                     console.log(newRes)
@@ -60,13 +59,11 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                         }
                     })[0]
                 })
-                console.log(value)
                 await saveRun({
                     workOrderId: data?.workOrderCustomVOList[0]?.workOrderId,
                     description: form.getFieldsValue(true)?.description,
                     workOrderNode: data?.workOrderCustomVOList[0]?.workOrderNode,
                     workOrderNodeUserCustomDTOList: value
-
                 })
                 resolve(true)
             })
@@ -96,49 +93,47 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
         }
     })
 
-    const getValueByApi = async (res: Record<string,any>, index: number) => {
-        const fieldValue= form?.getFieldsValue(true)?.data[index].res.fieldKey
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/workOrder/trigger/${rowId}/${res.fieldKey}/${fieldValue}`)
-            console.log(fieldValue)
-            const newData = result?.map((res: { fieldKey: never, fieldValue: never }) => {
-                let arr = []
-                arr = [res?.fieldKey, res?.fieldValue]
-                return arr
-            })
-            const entriesData: any = Object.fromEntries(newData)
-            form.setFieldsValue({
-                ...entriesData
-            })
-            let newFields: any[] = []
-            result.forEach((element: any) => {
-                newFields = fields?.map((res: any) => {
-                    if (element?.fieldKey === res?.fieldKey) {
-                        return {
-                            ...res,
-                            fieldKey: res?.fieldKey,
-                            fieldValue: element?.fieldValue
-                        }
-
-                    } else {
-                        return {
-                            ...res,
-                            fieldKey: res?.fieldKey,
-                            fieldValue: res?.fieldValue
-                        }
-
+    const getValueByApi = async (res: Record<string, any>, index: number) => {
+        const fieldValue = form?.getFieldsValue(true)?.data[index].res.fieldKey
+        const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/workOrder/trigger/${rowId}/${res.fieldKey}/${fieldValue}`)
+        console.log(fieldValue)
+        const newData = result?.map((res: { fieldKey: never, fieldValue: never }) => {
+            let arr = []
+            arr = [res?.fieldKey, res?.fieldValue]
+            return arr
+        })
+        const entriesData: any = Object.fromEntries(newData)
+        form.setFieldsValue({
+            ...entriesData
+        })
+        let newFields: any[] = []
+        result.forEach((element: any) => {
+            newFields = fields?.map((res: any) => {
+                if (element?.fieldKey === res?.fieldKey) {
+                    return {
+                        ...res,
+                        fieldKey: res?.fieldKey,
+                        fieldValue: element?.fieldValue
                     }
-                })
-            });
-            setFields([
-                ...newFields || [],
-            ])
+                } else {
+                    return {
+                        ...res,
+                        fieldKey: res?.fieldKey,
+                        fieldValue: res?.fieldValue
+                    }
+                }
+            })
+        });
+        setFields([
+            ...newFields || [],
+        ])
     }
 
     const resetFields = () => {
         form.resetFields()
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, onBack, resetFields }), [ref, onSubmit, onBack, resetFields]);
+    useImperativeHandle(ref, () => ({ onSubmit, onBack, resetFields}), [ref, onSubmit, onBack, resetFields]);
 
     return <Spin spinning={loading}>
         <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
@@ -187,33 +182,40 @@ export default forwardRef(function EngineeringInformation({ rowId, workTemplateT
                 <Col span={5}>
                     <DetailTitle title="工单信息" key={0} />
                     <div className={styles.scroll}>
+                        <Row gutter={12} key={0} style={{ marginBottom: '6px' }} justify="space-around">
+                            <Col span={8}>
+                                {rowData?.fieldKey || '-'}
+                            </Col>
+                            <Col span={16}>
+                                {rowData?.fieldValue || '-'}
+                            </Col>
+                        </Row>
+                        {
+                            data?.workOrderNodeVOList?.map((res: any, index: number) => {
+                                return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
+                                    {
+                                        res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
+                                            return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>
+                                                {
+                                                    item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
+                                                        return <Row gutter={12} key={i} style={{ marginBottom: '6px' }} justify="space-around">
+                                                            <Col span={8}>
+                                                                {field?.fieldKey}
+                                                            </Col>
+                                                            <Col span={16}>
+                                                                {field?.fieldValue || '-'}
+                                                            </Col>
+                                                        </Row>
+                                                    })
+                                                }
+                                            </Card>
+                                        })
+                                    }
+                                </Card>
+                            })
+                        }
 
-                    {
-                        data?.workOrderNodeVOList?.map((res: any, index: number) => {
-                            return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
-                                {
-                                    res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
-                                        return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>
-                                            {
-                                                item?.workOrderCustomDetailsVOList?.map((field: any, i: number) => {
-                                                    return <Row gutter={12} key={i} style={{ marginBottom: '6px' }} justify="space-around">
-                                                        <Col span={8}>
-                                                            {field?.fieldKey}
-                                                        </Col>
-                                                        <Col span={16}>
-                                                            {field?.fieldValue || '-'}
-                                                        </Col>
-                                                    </Row>
-                                                })
-                                            }
-                                        </Card>
-                                    })
-                                }
-                            </Card>
-                        })
-                    }
-            
-            </div>
+                    </div>
                 </Col>
             </Row>
         </DetailContent>
