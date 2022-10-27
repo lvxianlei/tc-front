@@ -87,7 +87,7 @@
         },
         {
             "title": "含税运费（元）",
-            "dataIndex": "totalUnTaxPrice",
+            "dataIndex": "totalTransportTaxPrice",
             "width": 160
         },
         {
@@ -97,7 +97,7 @@
         },
         {
             "title": "含税装卸费（元）",
-            "dataIndex": "totalUnTaxPrice",
+            "dataIndex": "totalUnloadTaxPrice",
             "width": 160
         },
         {

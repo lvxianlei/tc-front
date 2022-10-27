@@ -31,7 +31,8 @@ const outStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
+                {record?.outStockType!==2?<Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
+                :<Link to={`/stock/rawMaterialExWarehouse/backDetail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>}
             </>
         )
     }
@@ -105,8 +106,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         ...history.location.state as object
     });
     //统计
-    const { loading, data, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<any>(`/tower-storage/outStock/detail/statistics`, { ...filterValue })
+    const { loading, data, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<any>(`/tower-storage/outStock/detail/statistics`, { ...filterValue, ...value })
         setNum(data)
         resole(data)
     }))
@@ -130,8 +131,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         if (value.openTime) {
             const formatDate = value.openTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateTimeStart = `${formatDate[0]} 00:00:00`
-            value.updateTimeEnd = `${formatDate[1]} 23:59:59`
+            value.startUpdateTimeStart = `${formatDate[0]} 00:00:00`
+            value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.openTime
         }
         if (value.batcherId) {
@@ -152,11 +153,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (event.target.value === "b") {
             setPagePath("/tower-storage/outStock/detail")
             setColumns(outStock)
+            run(filterValue)
             return
         }
         if (event.target.value === "a") {
             setPagePath("/tower-storage/outStock")
             setColumns(outStockList)
+            run(filterValue)
             return
         }
     }

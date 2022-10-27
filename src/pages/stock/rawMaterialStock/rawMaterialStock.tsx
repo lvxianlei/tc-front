@@ -76,8 +76,8 @@ export default function RawMaterialStock(): React.ReactNode {
         }
     }))
     //统计
-    const { data: totalNum, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get<any>(`/tower-storage/materialStock/getMaterialStockStatics`, { ...filterValue })
+    const { data: totalNum, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get<any>(`/tower-storage/materialStock/getMaterialStockStatics`, { ...filterValue,...value })
         setNum(data)
         resole(data)
     }))
@@ -203,6 +203,18 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     },
                     {
+                        name: 'materialCategoryName',
+                        label: '分类',
+                        children: <Select style={{ width: "100px" }} defaultValue={""}>
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                data?.classify?.map((item: { materialCategoryId: string, materialCategoryName: string }) => <Select.Option
+                                    value={item.materialCategoryName}
+                                    key={item.materialCategoryId}>{item.materialCategoryName}</Select.Option>)
+                            }
+                        </Select>
+                    },
+                    {
                         name: 'structureTexture',
                         label: '材质',
                         children: <Select style={{ width: "100px" }} defaultValue={""}>
@@ -213,11 +225,6 @@ export default function RawMaterialStock(): React.ReactNode {
                                     key={item.id}>{item.name}</Select.Option>)
                             }
                         </Select>
-                    },
-                    {
-                        name: 'materialName',
-                        label: '品名',
-                        children: <Input width={100} maxLength={200} placeholder="请输入品名" />
                     },
                     {
                         name: 'materialStandard',
@@ -232,16 +239,14 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'classifyId',
-                        label: '分类',
-                        children: <Select style={{ width: "100px" }} defaultValue={""}>
-                            <Select.Option value='' key={'aa'}>全部</Select.Option>
-                            {
-                                data?.classify?.map((item: { materialCategoryId: string, materialCategoryName: string }) => <Select.Option
-                                    value={item.materialCategoryId}
-                                    key={item.materialCategoryId}>{item.materialCategoryName}</Select.Option>)
-                            }
-                        </Select>
+                        name: 'structureSpec',
+                        label: '规格',
+                        children: <Input width={100} maxLength={200} placeholder="请输入规格" />
+                    },
+                    {
+                        name: 'materialName',
+                        label: '品名',
+                        children: <Input width={100} maxLength={200} placeholder="请输入品名" />
                     },
                     {
                         name: 'length',
@@ -256,7 +261,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: '模糊查询项',
-                        children: <Input width={100} maxLength={200} placeholder="请输入规格/品名" />
+                        children: <Input width={100} maxLength={200} placeholder="请输入收货单号/收货批次" />
                     }
                 ]}
             />
