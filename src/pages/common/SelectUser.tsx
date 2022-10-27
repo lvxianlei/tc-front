@@ -84,7 +84,10 @@ export default function SelectUser({
                     rowSelection: {
                         type: selectType,
                         selectedRowKeys: selectedKeys,
-                        onChange: SelectChange
+                        onChange: SelectChange,
+                        getCheckboxProps: (record: Record<string, any>) => ({
+                          disabled: record?.status  === 0
+                        })
                     }
                 }}
                 searchFormItems={[
