@@ -293,7 +293,7 @@ export default function CreatePlan(props: any): JSX.Element {
             console.log(error);
         }
     }
-    const handleSaveClick = async () => {
+    const handleSaveClick = async (type: string) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
             if (popDataList.length < 1) {
@@ -305,6 +305,8 @@ export default function CreatePlan(props: any): JSX.Element {
             let flag = false;
             let width = false;
             let batch = false;
+            let locator = false;
+            let reservoir = false;
             for (let i = 0; i < popDataList.length; i += 1) {
                 if (!(popDataList[i].length)) {
                     flag = true;
@@ -314,6 +316,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 }
                 if (!(popDataList[i].receiveBatchNumber)){
                     batch = true
+                }
+                if (!(popDataList[i].locatorName)){
+                    locator = true
+                }
+                if (!(popDataList[i].reservoirName)){
+                    reservoir = true
                 }
             }
             if (flag) {
@@ -328,8 +336,32 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写收货批次！");
                 return false;
             }
-            saveRun({
-                outStockDetailDTOList: popDataList,
+            if (locator) {
+                message.error("请您选择区位！");
+                return false;
+            }
+            if (reservoir) {
+                message.error("请您选择库区！");
+                return false;
+            }
+            type==='save'&&saveRun({
+                outStockDetailDTOList: popDataList.map((item:any)=>{
+                    return {
+                        ...item,
+                        warehouseItemId: item?.locatorId
+                    }
+                }),
+                ...baseInfo,
+                materialType: 1,
+                pickingUserId: baseInfo?.pickingUserId.id
+            });
+            type==='submit'&&submitRun({
+                outStockDetailDTOList: popDataList.map((item:any)=>{
+                    return {
+                        ...item,
+                        warehouseItemId: item?.locatorId
+                    }
+                }),
                 ...baseInfo,
                 materialType: 1,
                 pickingUserId: baseInfo?.pickingUserId.id
@@ -448,10 +480,10 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleSaveClick()}>
+                <Button key="create" type="primary" onClick={() => handleSaveClick('save')}>
                     保存
                 </Button>,
-                <Button key="create" type="primary" onClick={() => submitRun()}>
+                <Button key="create" type="primary" onClick={() => handleSaveClick('submit')}>
                     保存并提交
                 </Button>
             ]}
