@@ -287,8 +287,9 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                                 message: '请选择人员'
                             }]}>
                                 <Input disabled suffix={
-                                    <SelectUserByStations disabled={res?.status === 3} key={index} selectedKey={res?.recipientUser} selectType="checkbox" station={res?.post} onSelect={(selectedRows: Record<string, any>) => {
+                                    <SelectUserByStations disabled={res?.status === 3} key={index} selectType="checkbox" station={res?.post} onSelect={(selectedRows: Record<string, any>) => {
                                         const value = form.getFieldsValue(true)?.data;
+                                        console.log(selectedRows)
                                         value[index] = {
                                             ...value[index] || [],
                                             recipientUser: selectedRows.map((res: { userId: any; }) => {
