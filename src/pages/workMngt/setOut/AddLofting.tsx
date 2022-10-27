@@ -193,7 +193,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                         let list = e.target.value.split(',');
                         let num: number = 0;
                         list.forEach(res => {
-                            num += Number(res.split('*')[1] || 1)
+                            num += res.split('*')[1] ? Number(res.split('*')[1] || 1) : 0
                         })
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
@@ -611,8 +611,19 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            setTableData([...rowData || []])
-            form.setFieldsValue({ data: [...rowData || []] })
+            const newData = rowData?.map(res => {
+                let list = res?.apertureNumber?.split(',');
+                let num: number = 0;
+                list?.forEach((item: any) => {
+                    num += item.split('*')[1] ? Number(item.split('*')[1] || 1) : 0
+                })
+                return {
+                    ...res,
+                    holesNum: num
+                }
+            })
+            setTableData([...newData || []])
+            form.setFieldsValue({ data: [...newData || []] })
             resole([])
         } catch (error) {
             reject(error)
