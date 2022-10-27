@@ -259,8 +259,8 @@ export default function CreatePlan(props: any): JSX.Element {
             })
             return;
         }
-        if (fields.wareHouseId) {
-            setWarehouseId(fields.wareHouseId);
+        if (fields.warehouseId) {
+            setWarehouseId(fields.warehouseId);
             return;
         }
     }
@@ -504,7 +504,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 disabled: addCollectionForm.getFieldValue('outStockType') === 2
                             })
                         }
-                        if (item.dataIndex === "wareHouseId") {
+                        if (item.dataIndex === "warehouseId") {
                             return ({
                                 ...item, enum: batchingStrategy?.map((item: any) => ({
                                     value: item.id,
