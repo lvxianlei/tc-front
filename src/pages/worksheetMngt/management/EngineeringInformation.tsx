@@ -94,19 +94,22 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
     })
 
     const getValueByApi = async (res: Record<string, any>, index: number) => {
-        const value = Object.entries(form?.getFieldsValue(true)?.data[index])[0]
-                    console.log(value)
+        const values = form.getFieldsValue(true).data
+        const value = Object.entries(values[index])[0]
         if (value[1]) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/workOrder/trigger/${rowId}/${value[0]}/${value[1]}`)
-
-            const newData = result?.map((res: { fieldKey: never, fieldValue: never }) => {
-                let arr = []
-                arr = [res?.fieldKey, res?.fieldValue]
-                return arr
-            })
-            const entriesData: any = Object.fromEntries(newData)
+            let newValues: any[] = []
+            result.forEach((element: any) => {
+                newValues = values?.map((res: any) => {
+                    if (element?.fieldKey === Object.keys(res)[0]) {
+                        return { [element?.fieldKey]: element?.fieldValue }
+                    } else {
+                        return res
+                    }
+                })
+            });
             form.setFieldsValue({
-                ...entriesData
+                data: newValues
             })
             let newFields: any[] = []
             result.forEach((element: any) => {
@@ -116,6 +119,12 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                             ...res,
                             fieldKey: res?.fieldKey,
                             fieldValue: element?.fieldValue
+                        }
+                    } else if (res?.fieldKey === value[0]) {
+                        return {
+                            ...res,
+                            fieldKey: value[0],
+                            fieldValue: value[1]
                         }
                     } else {
                         return {
