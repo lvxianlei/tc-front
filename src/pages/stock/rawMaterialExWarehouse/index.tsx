@@ -105,8 +105,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         ...history.location.state as object
     });
     //统计
-    const { loading, data, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<any>(`/tower-storage/outStock/detail/statistics`, { ...filterValue })
+    const { loading, data, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<any>(`/tower-storage/outStock/detail/statistics`, { ...filterValue, ...value })
         setNum(data)
         resole(data)
     }))
@@ -152,11 +152,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (event.target.value === "b") {
             setPagePath("/tower-storage/outStock/detail")
             setColumns(outStock)
+            run(filterValue)
             return
         }
         if (event.target.value === "a") {
             setPagePath("/tower-storage/outStock")
             setColumns(outStockList)
+            run(filterValue)
             return
         }
     }
