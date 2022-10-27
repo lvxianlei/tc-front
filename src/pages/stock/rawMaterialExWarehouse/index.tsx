@@ -31,7 +31,8 @@ const outStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                <Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
+                {record?.outStockType!==2?<Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
+                :<Link to={`/stock/rawMaterialExWarehouse/backDetail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>}
             </>
         )
     }
@@ -61,7 +62,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`)}
+                        onClick={() => history.push(record?.outStockType!==2?`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`:`/stock/rawMaterialExWarehouse/backDetail/${record.id}?weight=${record.totalWeight}`)}
                     >明细</Button>
                     <Button
                         type="link"
@@ -130,8 +131,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         if (value.openTime) {
             const formatDate = value.openTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateTimeStart = `${formatDate[0]} 00:00:00`
-            value.updateTimeEnd = `${formatDate[1]} 23:59:59`
+            value.startUpdateTimeStart = `${formatDate[0]} 00:00:00`
+            value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.openTime
         }
         if (value.batcherId) {
@@ -221,6 +222,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             <Select placeholder="请选择" style={{ width: "140px" }}>
                                 <Select.Option value="0">正常出库</Select.Option>
                                 <Select.Option value="1">盘点出库</Select.Option>
+                                <Select.Option value="2">余料回库</Select.Option>
                             </Select>
                         )
                     },
