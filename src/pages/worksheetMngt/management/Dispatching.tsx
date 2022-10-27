@@ -75,7 +75,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
     const { run: batchRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
             RequestUtil.post(`/tower-work/workOrder/saveDispatchList`, data).then(res => {
-            resove(true)
+                resove(true)
             })
         } catch (error) {
             reject(error)
@@ -146,25 +146,25 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
             if (lastData?.pattern === 'FS') {
                 if (item.planStartTime < lastData?.planEndTime) {
                     tip = false
-                    message.warning(`${item?.name}开始时间不符合上游模式设定`)
+                    message.warning(`${item?.node}开始时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             } else if (lastData?.pattern === 'FF') {
                 if (item.planEndTime < lastData?.planEndTime) {
                     tip = false
-                    message.warning(`${item?.name}结束时间不符合上游模式设定`)
+                    message.warning(`${item?.node}结束时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             } else if (lastData?.pattern === 'SF') {
                 if (item.planEndTime < lastData?.planStartTime) {
                     tip = false
-                    message.warning(`${item?.name}结束时间不符合上游模式设定`)
+                    message.warning(`${item?.node}结束时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             } else {
                 if (item.planStartTime < lastData?.planStartTime) {
                     tip = false
-                    message.warning(`${item?.name}开始时间不符合上游模式设定`)
+                    message.warning(`${item?.node}开始时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             }
