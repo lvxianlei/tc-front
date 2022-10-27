@@ -132,8 +132,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startStatusUpdateTime = `${formatDate[0]} 00:00:00`
-            value.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
+            value.startCreateTime = `${formatDate[0]} 00:00:00`
+            value.endCreateTime = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
         if (value.inTime) {
