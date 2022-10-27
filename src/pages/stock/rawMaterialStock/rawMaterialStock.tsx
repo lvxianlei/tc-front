@@ -239,6 +239,11 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     },
                     {
+                        name: 'structureSpec',
+                        label: '规格',
+                        children: <Input width={100} maxLength={200} placeholder="请输入规格" />
+                    },
+                    {
                         name: 'materialName',
                         label: '品名',
                         children: <Input width={100} maxLength={200} placeholder="请输入品名" />
@@ -256,7 +261,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: '模糊查询项',
-                        children: <Input width={100} maxLength={200} placeholder="请输入规格/品名" />
+                        children: <Input width={100} maxLength={200} placeholder="请输入收货单号/收货批次" />
                     }
                 ]}
             />
