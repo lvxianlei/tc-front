@@ -21,8 +21,7 @@ interface modalProps {
 export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref) {
     const [form] = Form.useForm();
     const [nodeData, setNodeData] = useState<any>([]);
-    const [isOk, setIsOk] = useState<boolean>(true);
-
+    let isOk = true
     const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let result: any = await RequestUtil.get<any>(`/tower-work/workOrder/workOrderNode/${rowId}`);
         result = result.map((res: any) => {
@@ -57,16 +56,13 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
         resole(result);
     }), { manual: type === 'single', refreshDeps: [rowId, type] })
 
-    useEffect(() => {
-        if (isOk) {
-            setIsOk(isOk)
-        }
-    }, [isOk])
-
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/workOrder/saveWorkOrderNode`, data)
-            resove(result)
+            await RequestUtil.post(`/tower-work/workOrder/saveWorkOrderNode`, data).then(res => {
+                resove(true)
+
+                isOk = true
+            })
         } catch (error) {
             reject(error)
         }
@@ -76,6 +72,8 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
         try {
             RequestUtil.post(`/tower-work/workOrder/saveDispatchList`, data).then(res => {
                 resove(true)
+
+                isOk = true
             })
         } catch (error) {
             reject(error)
@@ -87,53 +85,39 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
             form.validateFields().then(async res => {
                 const value = form.getFieldsValue(true);
                 if (value?.data?.filter((res: any) => res.upstreamNode === '任务开始')) {
-                    checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始')).then(async () => {
-                        if (isOk) {
-                            type === 'single' ?
-                                await saveRun([
+                    await checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始'))
+                    if (isOk) {
+                        type === 'single' ?
+                            await saveRun([
+                                ...value?.data.map((res: any) => {
+                                    return {
+                                        ...res,
+                                        recipientUser: res?.recipientUser?.join(','),
+                                        planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
+                                        planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
+                                        workOrderId: rowId
+                                    }
+                                })
+                            ])
+                            :
+                            await batchRun({
+                                workOrderIds: rowId?.split(','),
+                                workOrderNodeDTOList: [
                                     ...value?.data.map((res: any) => {
                                         return {
                                             ...res,
                                             recipientUser: res?.recipientUser?.join(','),
                                             planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
                                             planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
-                                            workOrderId: rowId
                                         }
                                     })
-                                ])
-                                :
-                                await batchRun({
-                                    workOrderIds: rowId?.split(','),
-                                    workOrderNodeDTOList: [
-                                        ...value?.data.map((res: any) => {
-                                            return {
-                                                ...res,
-                                                recipientUser: res?.recipientUser?.join(','),
-                                                planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
-                                                planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
-                                            }
-                                        })
-                                    ]
-                                })
-                            resolve(true)
-                        } else {
-                            reject(false)
-                        }
-                    })
-                } else {
-                    await saveRun([
-                        ...value?.data.map((res: any) => {
-                            return {
-                                ...res,
-                                recipientUser: res?.recipientUser?.join(','),
-                                planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
-                                planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
-                                workOrderId: rowId
-                            }
-                        })
-                    ])
+                                ]
+                            })
+                        resolve(true)
+                    } else {
+                        reject(false)
+                    }
                 }
-
             })
         } catch (error) {
             reject(false)
@@ -147,25 +131,25 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                 if (item.planStartTime < lastData?.planEndTime) {
                     tip = false
                     message.warning(`${item?.node}开始时间不符合上游模式设定`)
-                    setIsOk(false)
+                    isOk = false
                 }
             } else if (lastData?.pattern === 'FF') {
                 if (item.planEndTime < lastData?.planEndTime) {
                     tip = false
                     message.warning(`${item?.node}结束时间不符合上游模式设定`)
-                    setIsOk(false)
+                    isOk = false
                 }
             } else if (lastData?.pattern === 'SF') {
                 if (item.planEndTime < lastData?.planStartTime) {
                     tip = false
                     message.warning(`${item?.node}结束时间不符合上游模式设定`)
-                    setIsOk(false)
+                    isOk = false
                 }
             } else {
                 if (item.planStartTime < lastData?.planStartTime) {
                     tip = false
                     message.warning(`${item?.node}开始时间不符合上游模式设定`)
-                    setIsOk(false)
+                    isOk = false
                 }
             }
             const nextList = nodeData?.map((res: any) => {
