@@ -390,6 +390,7 @@ export default function CreatePlan(props: any): JSX.Element {
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
             setType(result?.outStockType)
+            result?.warehouseId && getWarehousing(result?.warehouseId,1)
             result?.warehouseId && result?.warehouseId!==null && setWarehouseId(result?.warehouseId)
             resole({
                 ...result,
