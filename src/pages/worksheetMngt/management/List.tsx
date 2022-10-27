@@ -183,6 +183,7 @@ export default function List(): React.ReactNode {
                         setDispatchingType('single')
                     }} >派工</Button>
                     <Button type='link' disabled={record?.status !== 1} onClick={async () => {
+                        setRowId(record?.id)
                         RequestUtil.post<any>(`/tower-work/workOrder/getWorkOrderNode/${record.id}/${record?.workTemplateId}`).then(res => {
                             setDealVisible(true);
                             setRowData(record);
@@ -483,7 +484,10 @@ export default function List(): React.ReactNode {
                     onChange: (selectedRowKeys: React.Key[], selectedRows: any): void => {
                         setSelectedKeys(selectedRowKeys);
                         setSelectedRows(selectedRows)
-                    }
+                    },
+                    getCheckboxProps: (record: Record<string, any>) => ({
+                      disabled: record?.status !== 1
+                    }),
                 }
             }}
         />
