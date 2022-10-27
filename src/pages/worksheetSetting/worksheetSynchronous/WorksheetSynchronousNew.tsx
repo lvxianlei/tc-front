@@ -119,8 +119,7 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
                             message: `请选择触发字段`
                         }
                     ]}>
-
-                    <Select placeholder={'请选择触发字段'} onChange={(e: any) => templateChange(e)}>
+                    <Select placeholder={'请选择触发字段'}>
                         {
                             fields?.map((res: any, ind: number) => {
                                 return <Select.Option value={res?.id} key={ind}>{res?.fieldKey}</Select.Option>

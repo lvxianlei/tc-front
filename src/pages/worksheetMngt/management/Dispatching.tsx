@@ -75,7 +75,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
     const { run: batchRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
             RequestUtil.post(`/tower-work/workOrder/saveDispatchList`, data).then(res => {
-            resove(true)
+                resove(true)
             })
         } catch (error) {
             reject(error)
@@ -87,39 +87,14 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
             form.validateFields().then(async res => {
                 const value = form.getFieldsValue(true);
                 if (value?.data?.filter((res: any) => res.upstreamNode === '任务开始')) {
-                    checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始')).then(async () => {
-                        if (isOk) {
-                            type === 'single' ?
-                                await saveRun([
-                                    ...value?.data.map((res: any) => {
-                                        return {
-                                            ...res,
-                                            recipientUser: res?.recipientUser?.join(','),
-                                            planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
-                                            planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
-                                            workOrderId: rowId
-                                        }
-                                    })
-                                ])
-                                :
-                                await batchRun({
-                                    workOrderIds: rowId?.split(','),
-                                    workOrderNodeDTOList: [
-                                        ...value?.data.map((res: any) => {
-                                            return {
-                                                ...res,
-                                                recipientUser: res?.recipientUser?.join(','),
-                                                planEndTime: res?.planEndTime.format('YYYY-MM-DD HH:mm:ss'),
-                                                planStartTime: res?.planStartTime.format('YYYY-MM-DD HH:mm:ss'),
-                                            }
-                                        })
-                                    ]
-                                })
-                            resolve(true)
-                        } else {
-                            reject(false)
-                        }
-                    })
+                    Promise.resolve().then(() => {
+                        checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始'))
+                        console.log('promise1');
+                      }).then(() =>  {
+                        console.log('promise2');
+                        
+                      });
+                    
                 } else {
                     await saveRun([
                         ...value?.data.map((res: any) => {
@@ -146,25 +121,25 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
             if (lastData?.pattern === 'FS') {
                 if (item.planStartTime < lastData?.planEndTime) {
                     tip = false
-                    message.warning(`${item?.name}开始时间不符合上游模式设定`)
+                    message.warning(`${item?.node}开始时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             } else if (lastData?.pattern === 'FF') {
                 if (item.planEndTime < lastData?.planEndTime) {
                     tip = false
-                    message.warning(`${item?.name}结束时间不符合上游模式设定`)
+                    message.warning(`${item?.node}结束时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             } else if (lastData?.pattern === 'SF') {
                 if (item.planEndTime < lastData?.planStartTime) {
                     tip = false
-                    message.warning(`${item?.name}结束时间不符合上游模式设定`)
+                    message.warning(`${item?.node}结束时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             } else {
                 if (item.planStartTime < lastData?.planStartTime) {
                     tip = false
-                    message.warning(`${item?.name}开始时间不符合上游模式设定`)
+                    message.warning(`${item?.node}开始时间不符合上游模式设定`)
                     setIsOk(false)
                 }
             }
@@ -183,6 +158,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                     resole(true)
                 }
             } else {
+                setIsOk(false)
                 reject(tip)
             }
         })
