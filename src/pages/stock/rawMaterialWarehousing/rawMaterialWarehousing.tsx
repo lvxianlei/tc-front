@@ -59,8 +59,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         endStatusUpdateTime: "",
     });
      //统计
-     const { loading, data, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<any>(`/tower-storage/warehousingEntry/statisticsWarehousingEntry`, { ...filterValue })
+     const { loading, data, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<any>(`/tower-storage/warehousingEntry/statisticsWarehousingEntry`, { ...filterValue,...value })
         setNum(data)
         resole(data)
     }))
@@ -169,11 +169,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (event.target.value === "b") {
             setPagePath("/tower-storage/warehousingEntry/warehousingEntryDetail")
             setColumns(inStock)
+            run({...filterValue})
             return
         }
         if (event.target.value === "a") {
             setPagePath("/tower-storage/warehousingEntry")
             setColumns(inStockList)
+            run({...filterValue})
             return
         }
     }

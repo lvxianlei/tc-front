@@ -76,8 +76,8 @@ export default function RawMaterialStock(): React.ReactNode {
         }
     }))
     //统计
-    const { data: totalNum, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get<any>(`/tower-storage/materialStock/getMaterialStockStatics`, { ...filterValue })
+    const { data: totalNum, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get<any>(`/tower-storage/materialStock/getMaterialStockStatics`, { ...filterValue,...value })
         setNum(data)
         resole(data)
     }))
