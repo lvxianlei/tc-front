@@ -213,7 +213,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                                     const result = [ record.id ]
                                     await backRun(result);
                                     history.go(0);
-                                }}>入库</Button>
+                                }}>回库</Button>
                                 <Popconfirm
                                     title="确认撤销?"
                                     onConfirm={() => handleRevocation(record.id)}

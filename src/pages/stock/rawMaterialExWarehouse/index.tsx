@@ -31,7 +31,7 @@ const outStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                {record?.outStockType!==2?<Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
+                {record?.type!==2?<Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>
                 :<Link to={`/stock/rawMaterialExWarehouse/backDetail/${record.outStockId}?weight=${record.totalWeight}`}>所在单据</Link>}
             </>
         )
@@ -62,7 +62,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`)}
+                        onClick={() => history.push(record?.type!==2?`/stock/rawMaterialExWarehouse/detail/${record.id}?weight=${record.totalWeight}`:`/stock/rawMaterialExWarehouse/backDetail/${record.id}?weight=${record.totalWeight}`)}
                     >明细</Button>
                     <Button
                         type="link"
@@ -222,6 +222,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             <Select placeholder="请选择" style={{ width: "140px" }}>
                                 <Select.Option value="0">正常出库</Select.Option>
                                 <Select.Option value="1">盘点出库</Select.Option>
+                                <Select.Option value="2">余料回库</Select.Option>
                             </Select>
                         )
                     },

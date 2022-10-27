@@ -2,7 +2,7 @@
     "baseInfoColumn": [
         {
             "title": "出库类型",
-            "dataIndex": "type",
+            "dataIndex": "outStockType",
             "required": true,
             "type": "select",
             "enum": [
