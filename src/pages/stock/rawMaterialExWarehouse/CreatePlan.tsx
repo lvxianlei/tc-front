@@ -2,7 +2,7 @@
  * 创建计划列表
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, InputNumber, message, Spin, Input } from 'antd';
+import { Modal, Form, Button, InputNumber, message, Spin, Input, Select } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -25,8 +25,29 @@ export default function CreatePlan(props: any): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     let [count, setCount] = useState<number>(1);
     const [warehouseId, setWarehouseId] = useState<string>("");
+    const [locatorId, setLocatorId] = useState('');//入库弹框选择库位
+    const [reservoirId, setReservoirId] = useState('');//入库弹框选择库区
+    const [ReservoirArea, setReservoirArea] = useState<any[]>([]);//入库库区数据
+    const [Location, setLocation] = useState<any[]>([]);//入库库位数据
     const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
     const materialStandardEnum:any = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    // 获取仓库/库区/库位
+    const getWarehousing = async (id?: any, type?: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/warehouse/tree`, {
+            id,
+            type,
+        });
+        switch (type) {
+            case 1:
+                setReservoirArea(data)
+                break;
+            case 2:
+                setLocation(data)
+                break;
+            default:
+                break;
+        }
+    }
     const handleAddModalOk = () => {
         
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
@@ -74,6 +95,7 @@ export default function CreatePlan(props: any): JSX.Element {
         //         }
         //     }
         // }
+        getWarehousing(warehouseId,1)
         setMaterialList([...materialList, ...newMaterialList])
         setPopDataList([...materialList.map((item: any) => {
             return ({
@@ -94,7 +116,7 @@ export default function CreatePlan(props: any): JSX.Element {
             if (item.id === id) {
                 return ({
                     ...item,
-                    batch: value
+                    receiveBatchNumber: value
                 })
             }
             return item
@@ -152,6 +174,35 @@ export default function CreatePlan(props: any): JSX.Element {
                     totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * 1 / 1000 / 1000).toFixed(3)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(value || 0) * 1 / 1000 / 1000 / 1000).toFixed(3)
                             : (Number(item?.proportion || 1) * 1 / 1000).toFixed(3)
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleReservoirChange = (value: string, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    reservoirId: ReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id,
+                    reservoirName: value,
+                })
+            }
+            return item
+        })
+        getWarehousing(ReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id, 2)
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleLocatorChange = (value: string, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    locatorId: Location.filter((itemOne:any)=>{return itemOne?.name===value})[0].id,
+                    locatorName: value
                 })
             }
             return item
@@ -436,7 +487,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <div className='btnWrapper'>
                     {type===0?
                         <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择库存</Button>
-                        :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} onClick={() => setDetailVisible(true)}>选择货物明细</Button>}
+                        :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setDetailVisible(true)}>选择货物明细</Button>}
                 </div>
                 <CommonTable
                     style={{ padding: "0" }}
@@ -460,7 +511,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 return ({
                                     ...item,
                                     width: 160,
-                                    render: (value: number, records: any, key: number) => <Input value={value || undefined} onChange={(value: any) => handleBatchChange(value, records.id)} key={key} maxLength={30}/>
+                                    render: (value: number, records: any, key: number) => <Input defaultValue={value || undefined} onBlur={(e: any) => handleBatchChange(e.target.value, records.id)} key={key} maxLength={30}/>
                                 })
                             }
                             if (["num"].includes(item.dataIndex)&&type===0) {
@@ -481,6 +532,53 @@ export default function CreatePlan(props: any): JSX.Element {
                                     render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
                                 })
                             }
+                            if (["reservoirName"].includes(item.dataIndex)&&type===2) {
+                                return ({
+                                    ...item,
+                                    render: (value: string, records: any, key: number) => <Select
+                                                className="select"
+                                                style={{ width: "100%" }}
+                                                value={value ? value : '请选择'}
+                                                onChange={(val) => { handleReservoirChange(val,records.id) }}
+                                            >
+                                                {
+                                                    ReservoirArea.map((item, index) => {
+                                                        return (
+                                                            <Select.Option
+                                                                value={item.name}
+                                                            >
+                                                                {item.name}
+                                                            </Select.Option>
+                                                        )
+                                                    })
+                                                }
+                                            </Select>
+                                })
+                            }
+                            if (["locatorName"].includes(item.dataIndex)&&type===2) {
+                                return ({
+                                    ...item,
+                                    render: (value: string, records: any, key: number) => <Select
+                                                className="select"
+                                                style={{ width: "100%" }}
+                                                value={value ? value : '请选择'}
+                                                onChange={(val) => { handleLocatorChange(val,records.id) }}
+                                            >
+                                                {
+                                                    Location.map((item, index) => {
+                                                        return (
+                                                            <Select.Option
+                                                                value={item.name}
+                                                            >
+                                                                {item.name}
+                                                            </Select.Option>
+                                                        )
+                                                    })
+                                                }
+                                            </Select>
+                                })
+                            }
+                            
                             return item;
                         }),
                         {
