@@ -66,7 +66,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     // 撤销
     const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/excess/revocation/${id}`,)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/outStock/excess/revocation/${id}`,)
             resole(result)
         } catch (error) {
             reject(error)
