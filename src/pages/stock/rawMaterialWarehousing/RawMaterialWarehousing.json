@@ -11,19 +11,19 @@
             "width": 150
         },
         {
-            "title": "车牌号",
-            "dataIndex": "carNumber",
+            "title": "到货时间",
+            "dataIndex": "receiveTime",
             "width": 100
         },
         {
-            "title": "入库人",
-            "dataIndex": "createUserName",
-            "width": 100
+            "title": "重量(吨)",
+            "dataIndex": "weight",
+            "width": 60
         },
         {
-            "title": "结算方式",
-            "dataIndex": "settlementModeName",
-            "width": 80
+            "title": "价税合计(元)",
+            "dataIndex": "taxPrice",
+            "width": 100
         },
         {
             "title": "状态",
@@ -39,12 +39,6 @@
             "title": "创建日期",
             "dataIndex": "createTime",
             "width": 80
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
-            "type": "date",
-            "width": 150
         },
         {
             "title": "供应商",
@@ -67,19 +61,25 @@
             "width": 180
         },
         {
-            "title": "到货时间",
-            "dataIndex": "receiveTime",
+            "title": "车牌号",
+            "dataIndex": "carNumber",
             "width": 100
         },
         {
-            "title": "重量(吨)",
-            "dataIndex": "weight",
-            "width": 60
+            "title": "入库人",
+            "dataIndex": "createUserName",
+            "width": 100
         },
         {
-            "title": "价税合计(元)",
-            "dataIndex": "taxPrice",
-            "width": 100
+            "title": "结算方式",
+            "dataIndex": "settlementModeName",
+            "width": 80
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "width": 150
         },
         {
             "title": "备注",
@@ -94,32 +94,11 @@
             "width": 150
         },
         {
-            "title": "收货单号",
-            "dataIndex": "receiveNumber",
-            "width": 120
-        },
-        {
-            "title": "车牌号",  
-            "dataIndex": "carNumber",
-            "width": 80
-        },
-        {
-            "title": "创建日期",
-            "dataIndex": "createTime",
-            "type": "date",
-            "width": 80
-        },
-        {
             "title": "入库日期",
             "dataIndex": "entryTime",
             "type": "date",
-            "width": 80
-        },
-        {
-            "title": "到货日期",
-            "dataIndex": "receiveTime",
-            "type": "date",
-            "width": 80
+            "format":"YYYY-MM-DD",
+            "width": 100
         },
         {
             "title": "品名",
@@ -167,6 +146,46 @@
             "width": 100
         },
         {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "width": 120
+        },
+        {
+            "title": "车牌号",  
+            "dataIndex": "carNumber",
+            "width": 80
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format":"YYYY-MM-DD",
+            "width": 100
+        },
+        
+        {
+            "title": "到货日期",
+            "dataIndex": "receiveTime",
+            "type": "date",
+            "format":"YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "仓库",
+            "dataIndex": "warehouseName",
+            "width": 100
+        },
+        {
+            "title": "库区",
+            "dataIndex": "reservoirName",
+            "width": 100
+        },
+        {
+            "title": "库位",
+            "dataIndex": "locatorName",
+            "width": 100
+        },
+        {
             "title": "含税单价(元)",
             "dataIndex": "taxPrice",
             "width": 100
@@ -184,21 +203,6 @@
         {
             "title": "不含税金额(元)",
             "dataIndex": "totalUnTaxPrice",
-            "width": 100
-        },
-        {
-            "title": "仓库",
-            "dataIndex": "warehouseName",
-            "width": 100
-        },
-        {
-            "title": "库区",
-            "dataIndex": "reservoirName",
-            "width": 100
-        },
-        {
-            "title": "库位",
-            "dataIndex": "locatorName",
             "width": 100
         },
         {

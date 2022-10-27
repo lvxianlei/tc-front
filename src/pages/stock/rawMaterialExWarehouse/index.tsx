@@ -4,7 +4,7 @@
  * 时间：2022/01/11
  */
 import React, { useState } from 'react';
-import { Input, Select, DatePicker, Button, Radio, message, Popconfirm } from 'antd';
+import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { baseColumn, outStockDetail } from "./data.json";
 import CreatePlan from "./CreatePlan";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
 const outStock = [
     {
@@ -55,7 +56,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         {
             title: '操作',
             dataIndex: 'key',
-            width: 140,
+            width: 160,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
@@ -240,6 +241,40 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'structureSpec',
                         label: '规格',
                         children: <Input placeholder="请输入规格" style={{ width: 150 }} />
+                    },
+                    {
+                        name: 'structureTexture',
+                        label: '材质',
+                        children: <Select style={{ width: "140px" }} defaultValue={""}>
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                materialTextureOptions?.map((item: { id: string, name: string }) => <Select.Option
+                                    value={item.name}
+                                    key={item.id}>{item.name}</Select.Option>)
+                            }
+                        </Select>
+                    },
+                    {
+                        name: 'materialStandard',
+                        label: '标准',
+                        children: <Select style={{ width: "140px" }} defaultValue={""}>
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                materialStandardOptions?.map((item: { id: string, name: string }) => <Select.Option
+                                    value={item.id}
+                                    key={item.id}>{item.name}</Select.Option>)
+                            }
+                        </Select>
+                    },
+                    {
+                        name: 'length',
+                        label: '长度',
+                        children: <InputNumber style={{ width: 150 }} />
+                    },
+                    {
+                        name: 'width',
+                        label: '宽度',
+                        children: <InputNumber style={{ width: 150 }} />
                     },
                     {
                         name: 'fuzzyQuery',
