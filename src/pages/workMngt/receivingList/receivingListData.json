@@ -32,7 +32,7 @@
         },
         {
             "title": "车牌号",
-            "dataIndex": "totalWeight",
+            "dataIndex": "carNumber",
             "width": 100
         },
         {
