@@ -3237,6 +3237,13 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // WO-工单管理-工单视图
+      "name": "工单视图",
+      "path": "/worksheetMngt/view",
+      "module": "./pages/worksheetMngt/view/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // 流程设计
       "name": "流程设计",
       "path": "/journal/workflow",
