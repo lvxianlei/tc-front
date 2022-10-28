@@ -12,6 +12,7 @@ import useRequest from '@ahooksjs/use-request';
 import styles from './FieldSynchronous.module.less';
 import { RuleObject } from "antd/lib/form";
 import { StoreValue } from "antd/lib/form/interface";
+import Deliverables from "../../setOutTask/Deliverables";
 
 interface modalProps {
     type: 'new' | 'edit';
@@ -164,13 +165,17 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                         <Row gutter={12}>
                             {
                                 checkFields && checkFields?.map((res: any, ind: number) => {
-                                    return <Col style={{ marginBottom: '6px' }} span={8}><Button key={ind} type={res?.status === 1 ? "primary" : undefined} onClick={() => {
-                                        checkFields[ind] = {
-                                            ...res,
-                                            status: res?.status === 1 ? 0 : 1
-                                        }
-                                        setCheckFields([...checkFields])
-                                    }} ghost={res?.status === 1 ? true : false}>{res?.fieldKey}</Button></Col>
+                                    return <Col style={{ marginBottom: '6px' }} span={8}>
+                                        <div key={ind} className={styles.clickBtn} style={res?.status === 1 ? { borderColor: '#FF8C00', color: '#FF8C00' } : {}} onClick={() => {
+                                            checkFields[ind] = {
+                                                ...res,
+                                                status: res?.status === 1 ? 0 : 1
+                                            }
+                                            setCheckFields([...checkFields])
+                                        }} >
+                                            {res?.fieldKey}
+                                        </div>
+                                    </Col>
                                 })
                             }
                         </Row>
