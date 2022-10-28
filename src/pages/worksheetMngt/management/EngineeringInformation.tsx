@@ -59,9 +59,9 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                     })[0]
                 })
                 await saveRun({
-                    workOrderId: rowId,
+                    workOrderId: data?.workOrderId,
                     description: form.getFieldsValue(true)?.description,
-                    workOrderNode: data?.workOrderCustomVOList &&data?.workOrderCustomVOList[0]?.workOrderNode,
+                    workOrderNode: data?.workOrderNode,
                     workOrderNodeUserCustomDTOList: value
                 })
                 resolve(true)
@@ -77,9 +77,9 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
             let value = form.getFieldsValue(true)
             if (value.description) {
                 await backRun({
-                    workOrderId: rowId,
+                    workOrderId: data?.workOrderId,
                     description: value?.description,
-                    workOrderNode: data?.workOrderCustomVOList && data?.workOrderCustomVOList[0]?.workOrderNode
+                    workOrderNode: data?.workOrderNode
                 })
                 resolve(true)
             } else {
