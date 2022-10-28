@@ -65,9 +65,9 @@ export default function OperationRecord({
         total: 0
     })
 
-    const { loading, data } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: FetchDataSource = await RequestUtil.get(`/tower-system/log`, { ...params, serviceId })
+            const result: FetchDataSource = await RequestUtil.get(`/tower-system/log`, { ...params, serviceId, ...data })
             setParams({
                 ...params,
                 current: result?.current,
@@ -80,6 +80,10 @@ export default function OperationRecord({
     }), { refreshDeps: [serviceId] })
 
     const handleCHange = async (page: number, pageSize: number) => {
+        run({
+            size: pageSize,
+            current: page
+        })
         setParams({
             ...params,
             size: pageSize,
