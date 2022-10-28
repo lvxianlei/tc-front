@@ -123,7 +123,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
                 const weight = calcFun.weight({
-                    length: value,
+                    length: item.length,
                     width: item.width,
                     weightAlgorithm: item.weightAlgorithm,
                     proportion: item.proportion
@@ -147,11 +147,11 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                     weight,
                     //账面重量
                     totalWeight: calcFun.totalWeight({
-                        length: value,
+                        length: item.length,
                         width: item.width,
                         weightAlgorithm: item.weightAlgorithm,
                         proportion: item.proportion,
-                        num: item.num
+                        num: value
                     }),
                     taxPrice: item.taxPrice || 0, // 单价
                     // 账目金额
