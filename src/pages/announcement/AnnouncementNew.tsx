@@ -25,8 +25,8 @@ export default function AnnouncementNew(): React.ReactNode {
         if (location.state.type === 'edit') {
             let data = await RequestUtil.get<IAnnouncement>(`/tower-system/notice/getNoticeById/${params.id}`);
             setDetailData({
-                ...data, 
-                userNames: data.staffList?.map((res: IStaffList) => { return res.userName }).join(','), 
+                ...data,
+                userNames: data.staffList?.map((res: IStaffList) => { return res.userName }).join(','),
                 staffList: data.staffList?.map((res: IStaffList) => {
                     return {
                         name: res.userName,
@@ -102,7 +102,7 @@ export default function AnnouncementNew(): React.ReactNode {
                 <Button key="cancel" type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ]}>
-            
+
             <DetailTitle title="基本信息" key={1} />
             <Form form={form} labelCol={{ span: 2 }}>
                 <Form.Item name="title" label="标题" initialValue={detailData.title} rules={[{
@@ -113,7 +113,7 @@ export default function AnnouncementNew(): React.ReactNode {
                     pattern: /^[^\s]*$/,
                     message: '禁止输入空格',
                 }]}>
-                    <Input placeholder="请输入" maxLength={50} />
+                    <Input placeholder="请输入" maxLength={200} />
                 </Form.Item>
                 <Form.Item name="content" label="内容" initialValue={BraftEditor.createEditorState(detailData.content)} rules={[{
                     "required": true,
@@ -122,12 +122,12 @@ export default function AnnouncementNew(): React.ReactNode {
                     <BraftEditor
                         value={editorState}
                         onChange={handleChange}
-                    />                
+                    />
                 </Form.Item>
                 <Form.Item name="userNames" label="分组" initialValue={detailData.userNames} rules={[{
                     "required": true,
                     "message": "请选择分组"
-                }]}>  
+                }]}>
                     <Input addonBefore={<>
                         <SelectUserTransfer save={(selectRows: IStaff[]) => {
                             const userNames = selectRows.map(res => { return res.name }).join(',');
