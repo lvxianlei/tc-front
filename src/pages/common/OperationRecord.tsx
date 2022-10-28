@@ -39,6 +39,7 @@ interface OperationRecordStates {
     operateTypeEnum: "OPERATE_RECORD" | "APPROVAL_RECORD"
     serviceName: string
     size: number
+    total: number
 }
 
 interface FetchDataSource {
@@ -60,12 +61,18 @@ export default function OperationRecord({
         current: 1,
         operateTypeEnum: operateTypeEnum === "OPERATION" ? "OPERATE_RECORD" : "APPROVAL_RECORD",
         serviceName,
-        size: 10
+        size: 10,
+        total: 0
     })
 
     const { loading, data } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: FetchDataSource = await RequestUtil.get(`/tower-system/log`, { ...params, serviceId })
+            setParams({
+                ...params,
+                current: result?.current,
+                total: result?.total
+            })
             resole(result?.records)
         } catch (error) {
             reject(error)
@@ -91,6 +98,7 @@ export default function OperationRecord({
             pagination={{
                 current: params.current,
                 pageSize: params.size,
+                total: params.total,
                 onChange: handleCHange
             }}
             dataSource={data as any || []}
