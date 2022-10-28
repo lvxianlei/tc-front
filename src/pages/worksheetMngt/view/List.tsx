@@ -183,7 +183,7 @@ export default function List(): React.ReactNode {
         ...item,
         start_date: item.planStartTime ? new Date(item.planStartTime) : new Date(),
         end_date: item.planEndTime ? new Date(item.planEndTime) : new Date(),
-        color: item.workOrderNumber ? '#0ac189' : '#FF8C00',
+        color: item.workOrderNumber ? '#0ac189' : item?.colour,
         "border": "1px dashed #ff0 !important"
       }
     })
