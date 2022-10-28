@@ -200,7 +200,15 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...(baseBackColumn as any),
+                    ...(baseBackColumn as any).map((item:any)=>{
+                        if (["num"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                render: (value: number, records: any, key: number) => <span>{-1}</span>
+                            })
+                        }
+                        return item
+                    }),
                     {
                         title: '操作',
                         width: 180,
