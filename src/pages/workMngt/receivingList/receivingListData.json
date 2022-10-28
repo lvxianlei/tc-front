@@ -270,7 +270,7 @@
             "title": "过磅重量(吨)",
             "dataIndex": "totalPonderationWeight",
             "type": "number",
-            "precision": 4
+            "precision": 5
         },
         {
             "title": "备注",
@@ -488,7 +488,7 @@
             "title": "理算重量（吨）",
             "dataIndex": "totalWeight",
             "type": "number",
-            "precision": 4,
+            "precision": 5,
             "disabled": true,
             "width":100
         },
@@ -496,8 +496,8 @@
             "title": "结算重量（吨）",
             "dataIndex": "balanceTotalWeight",
             "type": "number",
-            "precision": 3,
-            "max": 99999.999,
+            "precision": 5,
+            "max": 99999.99999,
             "required": true,
             "width":120
         },
