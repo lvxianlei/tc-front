@@ -23,7 +23,15 @@ const outStock = [
         width: 50,
         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
     },
-    ...outStockDetail,
+    ...outStockDetail.map((item:any)=>{
+        if (["num"].includes(item.dataIndex)) {
+            return ({
+                ...item,
+                render: (value: number, records: any, key: number) => <span>{value}</span>
+            })
+        }
+        return item
+    }),
     {
         title: '操作',
         dataIndex: 'key',
