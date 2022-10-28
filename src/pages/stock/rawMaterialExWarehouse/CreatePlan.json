@@ -347,7 +347,7 @@
             {
                 "title": "宽度",
                 "type": "number",
-                "dataIndex": "length"
+                "dataIndex": "width"
             },
             {
                 "title": "出库日期",
