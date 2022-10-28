@@ -719,6 +719,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
                             num:-1,
+                            reservoirName:'',
+                            locatorName:'',
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
