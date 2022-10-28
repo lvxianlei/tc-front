@@ -287,7 +287,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                                 message: '请选择人员'
                             }]}>
                                 <Input disabled suffix={
-                                    <SelectUserByStations disabled={res?.status === 3} key={index} selectType="checkbox" station={res?.post} onSelect={(selectedRows: Record<string, any>) => {
+                                    <SelectUserByStations disabled={res?.status === 3 && type === 'single'} key={index} selectType="checkbox" station={res?.post} onSelect={(selectedRows: Record<string, any>) => {
                                         const value = form.getFieldsValue(true)?.data;
                                         console.log(selectedRows)
                                         value[index] = {
@@ -315,7 +315,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                                 message: '请选择预计开始时间'
                             }]}>
                                 <DatePicker
-                                    disabled={res?.status === 3}
+                                    disabled={res?.status === 3 && type === 'single'}
                                     onChange={(e) => startTimeChange(e, res)}
                                     style={{ width: '100%' }}
                                     format="YYYY-MM-DD HH:mm:ss"
@@ -329,7 +329,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                                 message: '请选择预计结束时间'
                             }]}>
                                 <DatePicker
-                                    disabled={res?.status === 3}
+                                    disabled={res?.status === 3 && type === 'single'}
                                     disabledDate={(current: any) => {
                                         return current && current < form.getFieldsValue(true).data[index]?.planStartTime
                                     }}
