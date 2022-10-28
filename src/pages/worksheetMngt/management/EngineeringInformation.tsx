@@ -51,7 +51,6 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                 let value = form.getFieldsValue(true)?.data
                 value = value?.map((res: any) => {
                     const newRes = Object.entries(res)
-                    console.log(newRes)
                     return newRes.map((item: any) => {
                         return {
                             fieldKey: item[0],
@@ -93,44 +92,44 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         }
     })
 
-    const getValueByApi = async (res: Record<string, any>, index: number) => {
+    const getValueByApi = async (index: number) => {
         const values = form.getFieldsValue(true).data
         const value = Object.entries(values[index])[0]
         if (value[1]) {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-work/workOrder/trigger/${rowId}/${value[0]}/${value[1]}`)
-            let newValues: any[] = []
+            let newValues: any[] = values
             result.forEach((element: any) => {
-                newValues = values?.map((res: any) => {
+                newValues?.forEach((res: any, ind: number) => {
                     if (element?.fieldKey === Object.keys(res)[0]) {
-                        return { [element?.fieldKey]: element?.fieldValue }
-                    } else {
-                        return res
+                        newValues[ind] = {
+                            [element?.fieldKey]: element?.fieldValue
+                        }
+                    }
+                    if (res?.fieldKey === value[0]) {
+                        newValues[ind] = {
+                            [element?.fieldKey]: value[1]
+                        }
                     }
                 })
             });
             form.setFieldsValue({
-                data: newValues
+                data: [...newValues]
             })
-            let newFields: any[] = []
+            let newFields: any[] = fields
             result.forEach((element: any) => {
-                newFields = fields?.map((res: any) => {
+                newFields?.forEach((res: any, i: number) => {
                     if (element?.fieldKey === res?.fieldKey) {
-                        return {
+                        newFields[i] = {
                             ...res,
                             fieldKey: res?.fieldKey,
                             fieldValue: element?.fieldValue
                         }
-                    } else if (res?.fieldKey === value[0]) {
-                        return {
+                    }
+                    if (res?.fieldKey === value[0]) {
+                        newFields[i] = {
                             ...res,
-                            fieldKey: value[0],
+                            fieldKey: [element?.fieldKey],
                             fieldValue: value[1]
-                        }
-                    } else {
-                        return {
-                            ...res,
-                            fieldKey: res?.fieldKey,
-                            fieldValue: res?.fieldValue
                         }
                     }
                 })
@@ -171,7 +170,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                                                         </Form.Item>
                                                     </Col>
                                                     <Col span={6}>
-                                                        <Button type="primary" onClick={() => getValueByApi(res, index)} ghost>获取</Button>
+                                                        <Button type="primary" onClick={() => getValueByApi(index)} ghost>获取</Button>
                                                     </Col>
                                                 </Row>
                                             </Form.Item>
