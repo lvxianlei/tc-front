@@ -93,7 +93,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         }
     })
 
-    const getValueByApi = async (index: number) => {
+    const getValueByApi = async (trigger: string, index: number) => {
         const values = form.getFieldsValue(true).data
         const value = Object.entries(values[index])[0]
         if (value[1]) {
@@ -106,13 +106,15 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                             [element?.fieldKey]: element?.fieldValue
                         }
                     }
-                    if (res?.fieldKey === value[0]) {
-                        newValues[ind] = {
-                            [element?.fieldKey]: value[1]
-                        }
-                    }
                 })
             });
+            newValues = newValues.map(res => {
+                if (Object.keys(res)[0] === trigger) {
+                    return { [trigger]: value[1] }
+                } else {
+                    return res
+                }
+            })
             form.setFieldsValue({
                 data: [...newValues]
             })
@@ -126,15 +128,19 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                             fieldValue: element?.fieldValue
                         }
                     }
-                    if (res?.fieldKey === value[0]) {
-                        newFields[i] = {
-                            ...res,
-                            fieldKey: [element?.fieldKey],
-                            fieldValue: value[1]
-                        }
-                    }
                 })
             });
+            newFields = newFields?.map(res => {
+                if (res?.fieldKey === trigger) {
+                    return {
+                        ...res,
+                        fieldKey: trigger,
+                        fieldValue: value[1]
+                    }
+                } else {
+                    return res
+                }
+            })
             setFields([
                 ...newFields || [],
             ])
@@ -171,7 +177,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                                                         </Form.Item>
                                                     </Col>
                                                     <Col span={6}>
-                                                        <Button type="primary" onClick={() => getValueByApi(index)} ghost>获取</Button>
+                                                        <Button type="primary" onClick={() => getValueByApi(res?.fieldKey, index)} ghost>获取</Button>
                                                     </Col>
                                                 </Row>
                                             </Form.Item>
