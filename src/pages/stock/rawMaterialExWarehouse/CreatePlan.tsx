@@ -100,7 +100,6 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
-                furnaceBatch: item.furnaceBatchNumber,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                         : (Number(item?.proportion || 1) / 1000).toFixed(3),
@@ -702,7 +701,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                     }
                                     return res
                         }),
-                        path: `${addDetailMaterial.path}?outStockItemStatus=2`
+                        path: `${addDetailMaterial.path}?outStockItemStatus=2&outStockType=0`
                     }}
                     value={{
                         id: "",
