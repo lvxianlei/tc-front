@@ -376,7 +376,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax`)
             if (result.length > 0) {
                 for (let i = 0; i < result.length; i += 1) {
-                    if (result[i].id === "1") {
+                    if (result[i].modeName === "材料税率") {
                         resole(result[i]);
                         return;
                     }
