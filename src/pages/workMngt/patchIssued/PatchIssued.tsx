@@ -39,6 +39,7 @@ export default function PatchIssued(): React.ReactNode {
             galvanizeDemand: data?.supplyBatchEntryVO?.galvanizeDemand,
             packDemand: data?.supplyBatchEntryVO?.packDemand,
             isPerforate: data?.supplyBatchEntryVO.isPerforate,
+            supplyNumber: record?.supplyNumber
         })
         resole(data)
     }), { manual: true })
@@ -49,7 +50,8 @@ export default function PatchIssued(): React.ReactNode {
                 let value = form.getFieldsValue(true);
                 RequestUtil.post<any>(`/tower-science/supplyBatch/saveBatchDetail`, {
                     ...value,
-                    id: selectData?.supplyBatchEntryVO?.id
+                    id: selectData?.supplyBatchEntryVO?.id,
+                    supplyNumber: value?.supplyNumber
                 }).then(res => {
                     history.goBack();
                 });
