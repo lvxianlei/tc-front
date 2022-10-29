@@ -364,7 +364,7 @@ export default function Release(): React.ReactNode {
                     <Row>
                         <Col span={12}>
                             <Form.Item name="isPerforate" label="是否钻孔特殊要求">
-                                <Radio.Group  style={{ paddingLeft:"12px", width: "100%" }}  >
+                                <Radio.Group  style={{ paddingLeft:"12px", width: "100%" }}  defaultValue={0}>
                                     <Radio  value={1}>是</Radio>
                                     <Radio  value={0}>否</Radio>
                                 </Radio.Group>
