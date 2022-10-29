@@ -108,7 +108,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 weightAlgorithm: item.weightAlgorithm,
                 proportion: item.proportion,
                 num: item.num
-            }))).toFixed(4), 0)
+            }))).toFixed(5), 0)
 
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             const weight = calcObj.weight({
@@ -243,7 +243,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     weightAlgorithm: item.weightAlgorithm,
                     proportion: item.proportion,
                     num: item.num
-                }))).toFixed(4), 0)
+                }))).toFixed(5), 0)
             const dataSource: any[] = editData?.map((item: any, index: number) => {
                 // 结算重量
                 const balanceTotalWeight = calcObj.balanceTotalWeight(
@@ -312,7 +312,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             }
             if (meteringMode === 2) {
                 const totalPonderationWeight = dataSource.reduce((count: string, item: any) =>
-                    (parseFloat(count) + parseFloat(`${item.balanceTotalWeight}`)).toFixed(3), "0")
+                    (parseFloat(count) + parseFloat(`${item.balanceTotalWeight}`)).toFixed(5), "0")
                 form.setFieldsValue({ totalPonderationWeight })
             }
             setCargoData(dataSource || [])
@@ -330,7 +330,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     weightAlgorithm: item.weightAlgorithm,
                     proportion: item.proportion,
                     num: item.num
-                }))).toFixed(4), 0)
+                }))).toFixed(5), 0)
             // 结算重量
             const balanceTotalWeight = calcObj.balanceTotalWeight(
                 meteringMode,
@@ -391,7 +391,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         const seletTotal = selectRows.reduce((total: TotalState, current: any) => ({
             count: parseFloat(total.count || "0") + parseFloat(current.num),
-            weight: (parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(3),
+            weight: (parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
             taxPrice: (parseFloat(total.taxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
             unTaxPrice: (parseFloat(total.unTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
         }), {})
