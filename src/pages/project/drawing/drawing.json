@@ -185,6 +185,12 @@
             "dataIndex": "description",
             "type": "textarea",
             "maxLength": 300
+        },
+        {
+            "title": "确认备注",
+            "dataIndex": "rdDescription",
+            "type": "textarea",
+            "maxLength": 300
         }
     ],
     "connectContract": {
