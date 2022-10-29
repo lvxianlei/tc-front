@@ -217,7 +217,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                             // 0待出库 2 已出库  1缺料中 3待回库  4已回库
                             <>
                                 
-                                <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 4} onClick={async () => {
+                                <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 0} onClick={async () => {
                                     const result = [ record.id ]
                                     await backRun(result);
                                     history.go(0);
@@ -228,7 +228,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 4} type="link">撤销</Button>
+                                    <Button loading={revocating} disabled={record.outStockItemStatus === 2} type="link">撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -236,7 +236,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={deleting} disabled={record.outStockItemStatus === 4} type="link">删除</Button>
+                                    <Button loading={deleting} disabled={record.outStockItemStatus === 0} type="link">删除</Button>
                                 </Popconfirm>
                             </>
                         )
