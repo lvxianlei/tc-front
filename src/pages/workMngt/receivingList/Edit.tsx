@@ -232,7 +232,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setCargoData([])
         }
         if (fields.meteringMode || fields.totalPonderationWeight) {
-            const meteringMode = form.getFieldValue("meteringMode")
+            const meteringMode = fields.meteringMode||form.getFieldValue("meteringMode")
             const totalPonderationWeight = fields.totalPonderationWeight || form.getFieldValue("totalPonderationWeight") || "0"
             const editData = editForm.getFieldsValue(true).submit
             // 所有明细理算重量总和
@@ -287,6 +287,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 return postData
             })
             setCargoData(dataSource || [])
+            form.setFieldsValue({
+                meteringMode: fields.meteringMode?fields.meteringMode:form.getFieldValue("meteringMode"),
+                totalPonderationWeight: fields.totalPonderationWeight ? fields.totalPonderationWeight: form.getFieldValue("totalPonderationWeight")
+            })
         }
     }
 
@@ -457,7 +461,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
             })}
             dataSource={{
-                meteringMode: 2,
+                meteringMode: form.getFieldValue('meteringMode')?form.getFieldValue('meteringMode'):2,
                 receiveTime: moment(),
                 settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
