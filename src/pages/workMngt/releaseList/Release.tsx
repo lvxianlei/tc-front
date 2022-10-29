@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber } from 'antd';
+import {Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber, Radio} from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { CommonTable, DetailContent, DetailTitle, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -243,6 +243,7 @@ export default function Release(): React.ReactNode {
                             trialAssembleDemand: value.trialAssembleDemand,
                             voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
                             weldingDemand: value.weldingDemand,
+                            isPerforate:value.isPerforate,
                             trialAssembleSegments: trialValue,
                             loftingBatchProductDTOList: arr,
                             loftingBatchStatisticsDTOList: bTableDataSource.map((item: any) => {
@@ -314,7 +315,7 @@ export default function Release(): React.ReactNode {
                                 dataIndex: "productNames",
                             }
                         ]}
-                        pagination={false} 
+                        pagination={false}
                         dataSource={ releaseData?.loftingBatchDetailVOList}
                     /> */}
 
@@ -357,6 +358,16 @@ export default function Release(): React.ReactNode {
                                         </Select.Option>
                                     })}
                                 </Select>
+                            </Form.Item>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span={12}>
+                            <Form.Item name="isPerforate" label="是否钻孔特殊要求">
+                                <Radio.Group  style={{ paddingLeft:"12px", width: "100%" }}  >
+                                    <Radio  value={1}>是</Radio>
+                                    <Radio  value={0}>否</Radio>
+                                </Radio.Group>
                             </Form.Item>
                         </Col>
                     </Row>
