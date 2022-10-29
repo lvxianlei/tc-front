@@ -550,6 +550,15 @@
                 "minRows": 2
             },
             "maxLength": 1500
+        },
+        {
+            "title": "确认备注",
+            "dataIndex": "rdDescription",
+            "type": "textarea",
+            "autoSize": {
+                "minRows": 2
+            },
+            "maxLength": 1500
         }
     ],
     "taskNoticeDetailSpec": [
@@ -582,6 +591,11 @@
         {
             "title": "备注",
             "dataIndex": "peculiarDescription",
+            "type": "textarea"
+        },
+        {
+            "title": "确认备注",
+            "dataIndex": "rdDescription",
             "type": "textarea"
         }
     ],
