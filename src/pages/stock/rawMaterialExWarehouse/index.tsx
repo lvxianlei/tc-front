@@ -139,7 +139,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         if (value.openTime) {
             const formatDate = value.openTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startUpdateTimeStart = `${formatDate[0]} 00:00:00`
+            value.startUpdateTime = `${formatDate[0]} 00:00:00`
             value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.openTime
         }
