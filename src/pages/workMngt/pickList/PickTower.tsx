@@ -13,7 +13,7 @@ export interface IDetail {
     productCategory?: string;
     productCategoryName?: string;
     productId?: string;
-    productNumber?: string;
+    productNumber?: string | any[];
     materialDrawProductSegmentList?: IMaterialDetail[];
     legNumberA?: string;
     legNumberB?: string;
