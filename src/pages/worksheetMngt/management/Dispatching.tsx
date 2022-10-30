@@ -16,9 +16,10 @@ import SelectUserByStations from "./SelectUserByStations";
 interface modalProps {
     type: 'batch' | 'single'
     rowId: string;
+    getLoading: (loading: boolean) => void
 }
 
-export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref) {
+export default forwardRef(function Dispatching({ rowId, type, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [nodeData, setNodeData] = useState<any>([]);
     let isOk = true
@@ -60,8 +61,10 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
         try {
             await RequestUtil.post(`/tower-work/workOrder/saveWorkOrderNode`, data).then(res => {
                 resove(true)
-
                 isOk = true
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
             })
         } catch (error) {
             reject(error)
@@ -72,8 +75,10 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
         try {
             RequestUtil.post(`/tower-work/workOrder/saveDispatchList`, data).then(res => {
                 resove(true)
-
                 isOk = true
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
             })
         } catch (error) {
             reject(error)
@@ -87,6 +92,7 @@ export default forwardRef(function Dispatching({ rowId, type }: modalProps, ref)
                 if (value?.data?.filter((res: any) => res.upstreamNode === '任务开始')) {
                     await checkModel(value?.data?.filter((res: any) => res.upstreamNode === '任务开始'))
                     if (isOk) {
+                        getLoading(true)
                         type === 'single' ?
                             await saveRun([
                                 ...value?.data.map((res: any) => {

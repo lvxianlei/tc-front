@@ -17,9 +17,10 @@ import Deliverables from "../../setOutTask/Deliverables";
 interface modalProps {
     type: 'new' | 'edit';
     rowId: string;
+    getLoading: (loading:boolean) => void
 }
 
-export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalProps, ref) {
+export default forwardRef(function FieldSynchronousNew({ type, rowId, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
     const [checkFields, setCheckFields] = useState<any[]>([]);
@@ -59,10 +60,14 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
         }
     }
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/fieldSynchro`, data)
-            resove(result)
+            RequestUtil.post(`/tower-work/fieldSynchro`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -71,6 +76,7 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async res => {
+                getLoading(true)
                 const value = form.getFieldsValue(true);
                 await saveRun({
                     id: data?.id,

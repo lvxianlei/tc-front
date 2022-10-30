@@ -14,9 +14,10 @@ import styles from './WorksheetSynchronous.module.less'
 interface modalProps {
     type: 'new' | 'edit';
     rowId: string;
+    getLoading: (loading: boolean) => void
 }
 
-export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: modalProps, ref) {
+export default forwardRef(function WorksheetSynchronousNew({ type, rowId, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
 
@@ -41,15 +42,18 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
     }))
 
     const templateChange = async (e: any) => {
-        console.log(e)
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${e}`);
         setFields(result?.templateCustomVOList);
     }
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/workOrderSync/submitSyncWorkOrder`, data)
-            resove(result)
+            RequestUtil.post(`/tower-work/workOrderSync/submitSyncWorkOrder`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -58,14 +62,13 @@ export default forwardRef(function WorksheetSynchronousNew({ type, rowId }: moda
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async res => {
+                getLoading(true)
                 const value = form.getFieldsValue(true);
-                console.log(value)
                 await saveRun({
                     id: data?.id,
                     ...value
                 })
                 resolve(true);
-
             })
         } catch (error) {
             reject(false)

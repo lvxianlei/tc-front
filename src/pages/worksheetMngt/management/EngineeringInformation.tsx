@@ -10,15 +10,15 @@ import { DetailContent, DetailTitle, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './Management.module.less'
-import ErrorList from "antd/lib/form/ErrorList";
 
 interface modalProps {
     rowId: string;
     rowData: Record<string, any>;
     detailData: Record<string, any>;
+    getLoading: (loading: boolean) => void
 }
 
-export default forwardRef(function EngineeringInformation({ rowId, rowData, detailData }: modalProps, ref) {
+export default forwardRef(function EngineeringInformation({ rowId, rowData, detailData, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
 
@@ -27,10 +27,14 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         resole(detailData);
     }), { refreshDeps: [rowId, rowData, detailData] })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/workOrder/completeWorkOrderNode`, data)
-            resove(result)
+            await RequestUtil.post(`/tower-work/workOrder/completeWorkOrderNode`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -58,6 +62,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                         }
                     })[0]
                 })
+                getLoading(true)
                 await saveRun({
                     workOrderId: data?.workOrderId,
                     description: form.getFieldsValue(true)?.description,
@@ -76,6 +81,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         try {
             let value = form.getFieldsValue(true)
             if (value.description) {
+                getLoading(true)
                 await backRun({
                     workOrderId: data?.workOrderId,
                     description: value?.description,

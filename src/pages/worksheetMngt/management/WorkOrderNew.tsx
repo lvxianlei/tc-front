@@ -14,9 +14,10 @@ import styles from './Management.module.less'
 interface modalProps {
     type: 'new' | 'edit';
     rowId: string;
+    getLoading: (loading: boolean) => void
 }
 
-export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref) {
+export default forwardRef(function WorkOrderNew({ type, rowId, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [dealList, setDealList] = useState<any[]>([]);
     const [customList, setCustomList] = useState<any[]>([]);
@@ -149,10 +150,14 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
         }
     ]
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(type === 'new' ? `/tower-work/workOrder/createWorkOrderArtificial` : `/tower-work/workOrder/saveWorkOrder`, data)
-            resove(result)
+            await RequestUtil.post(type === 'new' ? `/tower-work/workOrder/createWorkOrderArtificial` : `/tower-work/workOrder/saveWorkOrder`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -162,6 +167,7 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
         try {
             form.validateFields().then(res => {
                 const value = form.getFieldsValue(true);
+                getLoading(true)
                 saveRun({
                     id: data?.id,
                     workTemplateId: value?.workTemplateId.split(',')[1],
@@ -179,7 +185,7 @@ export default forwardRef(function WorkOrderNew({ type, rowId }: modalProps, ref
     const templateChange = async (e: any) => {
         const result: any = await RequestUtil.get<any>(`/tower-work/template/${e?.split(',')[1]}`);
         setCustomList(result?.templateCustomVOList);
-        setDealList(result?.templateNodeVOList?.map((res:any) => {
+        setDealList(result?.templateNodeVOList?.map((res: any) => {
             return {
                 ...res,
                 agingSizeTemplate: res?.agingSize

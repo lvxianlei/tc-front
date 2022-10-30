@@ -4,7 +4,7 @@
  * @description 工单设置-工单模板管理
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Spin, TreeSelect, Popconfirm, message, Switch, Modal } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -121,6 +121,12 @@ export default function List(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
     const [rowId, setRowId] = useState<string>('');
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+    }, [confirmLoading])
+
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
@@ -158,12 +164,12 @@ export default function List(): React.ReactNode {
             visible={visible}
             width="80%"
             footer={<Space>
-                {type === 'detail' ? null : <Button type='primary' onClick={handleOk} ghost>完成</Button>}
+                {type === 'detail' ? null : <Button type='primary' loading={confirmLoading} onClick={handleOk} ghost>完成</Button>}
                 <Button onClick={() => { setVisible(false); ref.current?.resetFields(); }}>关闭</Button>
             </Space>}
             title={type === 'new' ? '新建工单模板' : type === 'edit' ? "编辑工单模板" : "详情"}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
-            <WorkOrderTemplateNew rowId={rowId} type={type} ref={ref} />
+            <WorkOrderTemplateNew getLoading={(loading) => setConfirmLoading(loading)} rowId={rowId} type={type} ref={ref} />
         </Modal>
         <Page
             path="/tower-work/template"
