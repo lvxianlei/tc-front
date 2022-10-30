@@ -98,42 +98,15 @@ export default function ManualDistribute(): ReactElement {
         }
     }), { refreshDeps: [pagenation.current, pagenation.pageSize, status] })
 
-    // const onSelectChange = (_: Key, selectedRowKeys: any[]) => {
-    //     if (status === 1) {
-    //         const newCounts = selectedRowKeys.reduce((result: CountProps, item: any) => ({
-    //             totalNumber: result.totalNumber + parseFloat(item.number || "0"),
-    //             totalWeight_s: Number((parseFloat(result.totalWeight_s) + parseFloat(item.totalWeight || "0"))).toFixed(4),
-    //             totalHolesNum: result.totalHolesNum + (parseFloat(item.holesNum || "0") * item.number)
-    //         }), {
-    //             totalNumber: 0,
-    //             totalGroupNum: 0,
-    //             totalWeight_s: 0,
-    //             totalWeight_w: 0,
-    //             totalHolesNum: 0
-    //         })
-    //         setSelectedRowKeys(selectedRowKeys)
-    //         setCounts(newCounts)
-    //         return
-    //     } else {
-    //         const selectRows = selectedRowKeys.reduce((result: any[], item: any) => {
-    //             const dataSegmentResult = data?.recordDate.records.filter((dataItem: any) => dataItem.segmentName === item.segmentName)
-    //             return result.concat(dataSegmentResult)
-    //         }, [])
-    //         const newCounts = selectRows.reduce((result: CountProps, item: any, index: number) => ({
-    //             totalGroupNum: item.id === selectRows[index - 1]?.id ? result.totalGroupNum || "0" : result.totalGroupNum + parseFloat(item.totalProcessNum || "0"),
-    //             totalWeight_w: Number((parseFloat(result.totalWeight_w) + parseFloat(item.singleGroupWeight || "0"))).toFixed(4)
-    //         }), {
-    //             totalNumber: 0,
-    //             totalGroupNum: 0,
-    //             totalWeight_s: 0,
-    //             totalWeight_w: 0,
-    //             totalHolesNum: 0
-    //         })
-    //         setSelectedRowKeys(selectedRowKeys)
-    //         setCounts({ ...newCounts, })
-    //         return
-    //     }
-    // }
+    const onSelectChange = (_: Key, selectedRowKeys: any[]) => {
+        if (status === 1) {
+            setSelectedRowKeys(selectedRowKeys)
+            return
+        } else {
+            setSelectedRowKeys(selectedRowKeys)
+            return
+        }
+    }
 
     const handleClick = () => {
         Modal.confirm({
@@ -288,7 +261,7 @@ export default function ManualDistribute(): ReactElement {
             rowKey={(records: any) => `${records.id}-${records.index}`}
             rowSelection={{
                 selectedRowKeys: selectedRowKeys.map((item: any) => `${item.id}-${item.index}`),
-                //onChange: onSelectChange,
+                onChange: onSelectChange,
                 checkboxColumn: status === 2 ? {
                     features: {
                         autoRowSpan: (v1: any, v2: any, row1: any, row2: any) => row1.id === row2.id,
