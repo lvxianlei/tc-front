@@ -46,6 +46,10 @@ export default function List(): React.ReactNode {
     const [dispatchingType, setDispatchingType] = useState<'batch' | 'single'>('single');
     const [rowData, setRowData] = useState<Record<string, any>>({});
     const [detailData, setDetailData] = useState<Record<string, any>>({});
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [dealLoading, setDealLoading] = useState<boolean>(false);
+    const [newLoading, setNewLoading] = useState<boolean>(false);
+
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
@@ -194,11 +198,11 @@ export default function List(): React.ReactNode {
                             onOk: () => new Promise(async (resove, reject) => {
                                 try {
                                     const value = await form.validateFields();
-                                        await RequestUtil.post(`/tower-work/workOrder/cancelWorkOrder/${record?.id}/${value?.description}`).then(res => {
-                                            message.success("取消成功")
-                                            history.go(0)
-                                        })
-                                        resove(true)
+                                    await RequestUtil.post(`/tower-work/workOrder/cancelWorkOrder/${record?.id}/${value?.description}`).then(res => {
+                                        message.success("取消成功")
+                                        history.go(0)
+                                    })
+                                    resove(true)
                                 } catch (error) {
                                     reject(false)
                                 }
@@ -322,6 +326,7 @@ export default function List(): React.ReactNode {
         try {
             await dispatchRef.current?.onSubmit()
             message.success("派工成功！")
+            setConfirmLoading(false)
             setDispatchVisible(true)
             history.go(0)
             resove(true)
@@ -350,6 +355,12 @@ export default function List(): React.ReactNode {
         }
     }
 
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+        setDealLoading(dealLoading);
+        setNewLoading(newLoading)
+    }, [confirmLoading, dealLoading, newLoading])
+
     return <>
         <Modal
             destroyOnClose
@@ -358,7 +369,7 @@ export default function List(): React.ReactNode {
             width="80%"
             footer={
                 <Space>
-                    <Button type="primary" onClick={handleDispatchOk} ghost>完成</Button>
+                    <Button type="primary" loading={confirmLoading} onClick={handleDispatchOk} ghost>完成</Button>
                     <Button onClick={() => {
                         setDispatchVisible(false);
                         dispatchRef.current?.resetFields();
@@ -367,7 +378,7 @@ export default function List(): React.ReactNode {
             }
             title={"派工"}
             onCancel={() => { setDispatchVisible(false); dispatchRef.current?.resetFields(); }}>
-            <Dispatching type={dispatchingType} rowId={rowId} ref={dispatchRef} />
+            <Dispatching getLoading={(loading) => setConfirmLoading(loading)} type={dispatchingType} rowId={rowId} ref={dispatchRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -376,7 +387,7 @@ export default function List(): React.ReactNode {
             width="95%"
             footer={
                 <Space>
-                    <Button type="primary" onClick={handleDealOk} ghost>完成</Button>
+                    <Button type="primary" loading={dealLoading} onClick={handleDealOk} ghost>完成</Button>
                     {detailData?.flag === 1 ? null : <Button type="primary" onClick={handleBack} ghost>退回</Button>}
                     <Button onClick={() => {
                         setDealVisible(false);
@@ -385,7 +396,7 @@ export default function List(): React.ReactNode {
             }
             title="报工信息"
             onCancel={() => setDealVisible(false)}>
-            <EngineeringInformation rowData={rowData} rowId={rowId} detailData={detailData} ref={dealRef} />
+            <EngineeringInformation getLoading={(loading) => setDealLoading(loading)} rowData={rowData} rowId={rowId} detailData={detailData} ref={dealRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -406,11 +417,18 @@ export default function List(): React.ReactNode {
             key='WorkOrderNew'
             visible={visible}
             width="60%"
-            onOk={handleOk}
-            okText="完成"
+            footer={
+                <Space>
+                    <Button type="primary" loading={newLoading} onClick={handleOk} ghost>完成</Button>
+                    <Button onClick={() => {
+                        setVisible(false);
+                        ref.current?.resetFields();
+                    }}>关闭</Button>
+                </Space>
+            }
             title={type === 'new' ? '新建' : "编辑"}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
-            <WorkOrderNew rowId={rowId} type={type} ref={ref} />
+            <WorkOrderNew getLoading={(loading) => setNewLoading(loading)} rowId={rowId} type={type} ref={ref} />
         </Modal>
         <Form form={searchForm} className={styles.selectBtn} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
             {

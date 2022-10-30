@@ -4,7 +4,7 @@
  * @description 工单设置-工单同步
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Space, Input, Button, Popconfirm, message, Switch, Modal } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -38,16 +38,16 @@ export default function List(): React.ReactNode {
             title: '工单模板',
             dataIndex: 'templateName'
         },
-         {
-             key: 'triggerField',
-             title: '同步字段',
-             dataIndex: 'triggerField'
-         },
-         {
-             key: 'apiUrl',
-             title: '推送API',
-             dataIndex: 'apiUrl'
-         },
+        {
+            key: 'triggerField',
+            title: '同步字段',
+            dataIndex: 'triggerField'
+        },
+        {
+            key: 'apiUrl',
+            title: '推送API',
+            dataIndex: 'apiUrl'
+        },
         {
             key: 'status',
             title: '状态',
@@ -102,10 +102,17 @@ export default function List(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
     const [rowId, setRowId] = useState<string>('');
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+    }, [confirmLoading])
+
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await ref.current?.onSubmit()
+            setConfirmLoading(false);
             message.success("保存成功！")
             setVisible(false)
             history.go(0)
@@ -121,12 +128,12 @@ export default function List(): React.ReactNode {
             key='workOrderTemplateNew'
             visible={visible}
             footer={<Space>
-                <Button type='primary' onClick={handleOk} ghost>提交</Button>
+                <Button type='primary' loading={confirmLoading} onClick={handleOk} ghost>提交</Button>
                 <Button onClick={() => { setVisible(false); ref.current?.resetFields(); }}>关闭</Button>
             </Space>}
             title={type === 'new' ? '新建' : "编辑"}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
-            <WorksheetSynchronousNew rowId={rowId} type={type} ref={ref} />
+            <WorksheetSynchronousNew getLoading={(loading) => setConfirmLoading(loading)} rowId={rowId} type={type} ref={ref} />
         </Modal>
         <Page
             path="/tower-work/workOrderSync"

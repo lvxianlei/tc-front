@@ -18,9 +18,10 @@ import { StoreValue } from "antd/lib/form/interface";
 interface modalProps {
     type: 'new' | 'edit' | 'detail';
     rowId: string;
+    getLoading: (loading: boolean) => void
 }
 
-export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalProps, ref) {
+export default forwardRef(function WorkOrderTemplateNew({ type, rowId, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [customForm] = Form.useForm();
     const [upstreamNodes, setUpstreamNode] = useState<any[]>([]);
@@ -326,10 +327,14 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
         }
     ]
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/template`, data)
-            resove(result)
+            await RequestUtil.post(`/tower-work/template`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                reject(e)
+                getLoading(false)
+            })
         } catch (error) {
             reject(error)
         }
@@ -342,7 +347,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId }: modalPr
                     customForm.validateFields().then(async res => {
                         const value = form.getFieldsValue(true);
                         const customValue = customForm.getFieldsValue(true);
-                        console.log(value, customValue)
+                        getLoading(true)
                         await saveRun({
                             id: data?.id,
                             templateName: value?.templateName,
