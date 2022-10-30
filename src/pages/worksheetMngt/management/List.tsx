@@ -6,9 +6,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Input, DatePicker, Button, message, Space, Select, Radio, Modal, TreeSelect, Form } from 'antd';
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from '../Management.module.less';
+import styles from './Management.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useHistory } from 'react-router-dom';
@@ -83,85 +83,71 @@ export default function List(): React.ReactNode {
         {
             "key": "workOrderNumber",
             "title": "工单编号",
-            "width": 150,
             "dataIndex": "workOrderNumber"
         },
         {
             "key": "fieldValue",
             "title": "业务编号",
-            "width": 150,
             "dataIndex": "fieldValue"
         },
         {
             "key": "buildChannel",
             "title": "产生途径",
-            "width": 150,
             "dataIndex": "buildChannel"
         },
         {
             "key": "workOrderTitle",
             "title": "工单标题",
-            "width": 150,
             "dataIndex": "workOrderTitle"
         },
         {
             "key": "workTemplateType",
             "title": "工单类型",
-            "width": 150,
             "dataIndex": "workTemplateType"
         },
         {
             "key": "statusName",
             "title": "工单状态",
-            "width": 150,
             "dataIndex": "statusName"
         },
         {
             "key": "dispatchStatusName",
             "title": "派工状态",
-            "width": 150,
             "dataIndex": "dispatchStatusName"
         },
         {
             "key": "workOrderNode",
             "title": "当前处理节点",
-            "width": 150,
             "dataIndex": "workOrderNode"
         },
         {
             "key": "recipientUserName",
             "title": "接收人",
-            "width": 150,
             "dataIndex": "recipientUserName"
         },
         {
             "key": "createTime",
             "title": "产生时间",
-            "width": 150,
             "dataIndex": "createTime"
         },
         {
             "key": "planStartTime",
             "title": "预计开始时间",
-            "width": 150,
             "dataIndex": "planStartTime"
         },
         {
             "key": "actualStartTime",
             "title": "实际开始时间",
-            "width": 150,
             "dataIndex": "actualStartTime",
         },
         {
             "key": "planEndTime",
             "title": "预计完成时间",
-            "width": 150,
             "dataIndex": "planEndTime"
         },
         {
             "key": "actualEndTime",
             "title": "实际完成时间",
-            "width": 150,
             "dataIndex": "actualEndTime"
         },
         {
@@ -169,7 +155,7 @@ export default function List(): React.ReactNode {
             "title": "操作",
             "dataIndex": "operation",
             fixed: "right" as FixedType,
-            "width": 150,
+            "width": 280,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space>
                     <Button type='link' onClick={() => {
@@ -419,14 +405,14 @@ export default function List(): React.ReactNode {
             destroyOnClose
             key='WorkOrderNew'
             visible={visible}
-            width="40%"
+            width="60%"
             onOk={handleOk}
             okText="完成"
             title={type === 'new' ? '新建' : "编辑"}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
             <WorkOrderNew rowId={rowId} type={type} ref={ref} />
         </Modal>
-        <Form form={searchForm} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
+        <Form form={searchForm} className={styles.selectBtn} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
             {
                 searchItems?.map((res: any) => {
                     return <Form.Item name={res?.name} label={res?.label}>
@@ -456,7 +442,7 @@ export default function List(): React.ReactNode {
                         <Radio.Button value={2}>已关闭</Radio.Button>
                         <Radio.Button value={3}>已取消</Radio.Button>
                     </Radio.Group>
-                    <Space size='small' style={{ position: 'absolute', right: '16px', top: 0 }}>
+                    <Space size='small'>
                         <Button type='primary' onClick={() => {
                             setVisible(true);
                             setType('new')
@@ -485,9 +471,7 @@ export default function List(): React.ReactNode {
                         setSelectedKeys(selectedRowKeys);
                         setSelectedRows(selectedRows)
                     },
-                    getCheckboxProps: (record: Record<string, any>) => ({
-                      disabled: record?.status !== 1
-                    }),
+                    getCheckboxProps: (record: Record<string, any>) => record?.status !== 1
                 }
             }}
         />

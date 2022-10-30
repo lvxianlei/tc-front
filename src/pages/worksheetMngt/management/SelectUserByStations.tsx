@@ -62,7 +62,7 @@ export default function SelectUserByStations({
     ]
     
     return <>
-        <Button disabled={disabled} type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
+        <Button disabled={disabled} size="small" type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
         <Modal
             visible={visible}
             title="选择人员"
