@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Input, DatePicker, Button, message, Space, Select, Radio, Modal, TreeSelect, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from '../Management.module.less';
+import styles from './Management.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useHistory } from 'react-router-dom';
@@ -419,14 +419,14 @@ export default function List(): React.ReactNode {
             destroyOnClose
             key='WorkOrderNew'
             visible={visible}
-            width="40%"
+            width="60%"
             onOk={handleOk}
             okText="完成"
             title={type === 'new' ? '新建' : "编辑"}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
             <WorkOrderNew rowId={rowId} type={type} ref={ref} />
         </Modal>
-        <Form form={searchForm} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
+        <Form form={searchForm} className={styles.selectBtn} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
             {
                 searchItems?.map((res: any) => {
                     return <Form.Item name={res?.name} label={res?.label}>
