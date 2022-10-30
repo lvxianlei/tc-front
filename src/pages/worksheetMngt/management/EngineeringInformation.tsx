@@ -10,15 +10,15 @@ import { DetailContent, DetailTitle, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './Management.module.less'
-import ErrorList from "antd/lib/form/ErrorList";
 
 interface modalProps {
     rowId: string;
     rowData: Record<string, any>;
     detailData: Record<string, any>;
+    getLoading: (loading: boolean) => void
 }
 
-export default forwardRef(function EngineeringInformation({ rowId, rowData, detailData }: modalProps, ref) {
+export default forwardRef(function EngineeringInformation({ rowId, rowData, detailData, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
 
@@ -27,10 +27,14 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         resole(detailData);
     }), { refreshDeps: [rowId, rowData, detailData] })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/workOrder/completeWorkOrderNode`, data)
-            resove(result)
+            await RequestUtil.post(`/tower-work/workOrder/completeWorkOrderNode`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -58,6 +62,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                         }
                     })[0]
                 })
+                getLoading(true)
                 await saveRun({
                     workOrderId: data?.workOrderId,
                     description: form.getFieldsValue(true)?.description,
@@ -76,6 +81,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         try {
             let value = form.getFieldsValue(true)
             if (value.description) {
+                getLoading(true)
                 await backRun({
                     workOrderId: data?.workOrderId,
                     description: value?.description,
@@ -93,7 +99,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         }
     })
 
-    const getValueByApi = async (index: number) => {
+    const getValueByApi = async (trigger: string, index: number) => {
         const values = form.getFieldsValue(true).data
         const value = Object.entries(values[index])[0]
         if (value[1]) {
@@ -106,13 +112,15 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                             [element?.fieldKey]: element?.fieldValue
                         }
                     }
-                    if (res?.fieldKey === value[0]) {
-                        newValues[ind] = {
-                            [element?.fieldKey]: value[1]
-                        }
-                    }
                 })
             });
+            newValues = newValues.map(res => {
+                if (Object.keys(res)[0] === trigger) {
+                    return { [trigger]: value[1] }
+                } else {
+                    return res
+                }
+            })
             form.setFieldsValue({
                 data: [...newValues]
             })
@@ -126,15 +134,19 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                             fieldValue: element?.fieldValue
                         }
                     }
-                    if (res?.fieldKey === value[0]) {
-                        newFields[i] = {
-                            ...res,
-                            fieldKey: [element?.fieldKey],
-                            fieldValue: value[1]
-                        }
-                    }
                 })
             });
+            newFields = newFields?.map(res => {
+                if (res?.fieldKey === trigger) {
+                    return {
+                        ...res,
+                        fieldKey: trigger,
+                        fieldValue: value[1]
+                    }
+                } else {
+                    return res
+                }
+            })
             setFields([
                 ...newFields || [],
             ])
@@ -171,7 +183,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                                                         </Form.Item>
                                                     </Col>
                                                     <Col span={6}>
-                                                        <Button type="primary" onClick={() => getValueByApi(index)} ghost>获取</Button>
+                                                        <Button type="primary" onClick={() => getValueByApi(res?.fieldKey, index)} ghost>获取</Button>
                                                     </Col>
                                                 </Row>
                                             </Form.Item>
@@ -188,7 +200,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                                 })
                             }
                         </Row>
-                        <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 3 }}>
+                        <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 2 }}>
                             <Input.TextArea maxLength={800} />
                         </Form.Item>
                     </Form>
@@ -199,15 +211,15 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                     <div className={styles.scroll}>
                         <Row gutter={12} key={0} style={{ marginBottom: '6px' }} justify="space-around">
                             <Col span={8}>
-                                {rowData?.fieldKey || '-'}
+                                {rowData?.fieldKey}
                             </Col>
                             <Col span={16}>
-                                {rowData?.fieldValue || '-'}
+                                {rowData?.fieldValue}
                             </Col>
                         </Row>
                         {
                             data?.workOrderNodeVOList?.map((res: any, index: number) => {
-                                return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
+                                return <Card title={res?.node} extra={<span>处理环节：{res?.processingName}</span>} style={{ marginBottom: '6px' }} key={index}>
                                     {
                                         res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
                                             return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>

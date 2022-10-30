@@ -4,7 +4,7 @@
  * @description 工单设置-模板类型
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Space, Button, Popconfirm, message, Spin, Modal, Form, Input } from 'antd';
 import { CommonTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -23,25 +23,15 @@ export default function ItemRepair(): React.ReactNode {
     const [type, setType] = useState<'edit' | 'new'>('new');
     const [form] = useForm();
     const history = useHistory();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+    }, [confirmLoading])
+
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             let resData: any = await RequestUtil.get(`/tower-work/template/type`);
-            // let resData = [
-            //     {
-            //         id: '111',typeName: '1', name: '111',level: 'aaa', description: '111',children: [{
-            //             id: '8',typeName: '111', name: '222',level: 'bbb',children: [{
-            //                 id: '9',typeName: '1111', name: '424',level: 'ccc',children:null
-            //             },{
-            //                 id: '52',typeName: '1111', name: '424',level: 'ccc',children: []
-            //             }]
-            //         }]
-            //     },
-            //     {
-            //         id: '222',typeName: '1', name: '111',level: 'aaa',children: [{
-            //             id: '2',typeName: '111', name: '222',level: 'bbb',children: []
-            //         }]
-            //     }
-            // ]
             const newData = await traversalTree(resData, [])
             console.log(newData)
             resole(newData);
@@ -83,7 +73,7 @@ export default function ItemRepair(): React.ReactNode {
                 ...resData.map(res => {
                     return {
                         key: res?.level,
-                        title:res?.name,
+                        title: res?.name,
                         width: 200,
                         dataIndex: res?.level
                     }
@@ -104,13 +94,17 @@ export default function ItemRepair(): React.ReactNode {
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             form.validateFields().then(res => {
+                setConfirmLoading(true)
                 const data = form.getFieldsValue(true);
-                console.log(data)
-                RequestUtil.post(`/tower-work/template/type`, data).then(res=> {
+                RequestUtil.post(`/tower-work/template/type`, data).then(res => {
                     setVisible(false);
                     message.success('保存成功！')
                     history.go(0)
-                resove(true)
+                    setConfirmLoading(false)
+                    resove(true)
+                }).catch(e => {
+                    setConfirmLoading(false)
+                    reject(false)
                 })
             })
         } catch (error) {
@@ -126,6 +120,7 @@ export default function ItemRepair(): React.ReactNode {
                 visible={visible}
                 title={type === 'new' ? '新增' : '编辑'}
                 onOk={handleOk}
+                confirmLoading={confirmLoading}
                 onCancel={() => {
                     setVisible(false);
                     form.resetFields();

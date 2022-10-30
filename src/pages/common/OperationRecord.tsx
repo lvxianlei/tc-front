@@ -39,6 +39,7 @@ interface OperationRecordStates {
     operateTypeEnum: "OPERATE_RECORD" | "APPROVAL_RECORD"
     serviceName: string
     size: number
+    total: number
 }
 
 interface FetchDataSource {
@@ -60,12 +61,18 @@ export default function OperationRecord({
         current: 1,
         operateTypeEnum: operateTypeEnum === "OPERATION" ? "OPERATE_RECORD" : "APPROVAL_RECORD",
         serviceName,
-        size: 10
+        size: 10,
+        total: 0
     })
 
-    const { loading, data } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: FetchDataSource = await RequestUtil.get(`/tower-system/log`, { ...params, serviceId })
+            const result: FetchDataSource = await RequestUtil.get(`/tower-system/log`, { ...params, serviceId, ...data })
+            setParams({
+                ...params,
+                current: result?.current,
+                total: result?.total
+            })
             resole(result?.records)
         } catch (error) {
             reject(error)
@@ -73,6 +80,10 @@ export default function OperationRecord({
     }), { refreshDeps: [serviceId] })
 
     const handleCHange = async (page: number, pageSize: number) => {
+        run({
+            size: pageSize,
+            current: page
+        })
         setParams({
             ...params,
             size: pageSize,
@@ -91,6 +102,7 @@ export default function OperationRecord({
             pagination={{
                 current: params.current,
                 pageSize: params.size,
+                total: params.total,
                 onChange: handleCHange
             }}
             dataSource={data as any || []}

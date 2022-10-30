@@ -12,13 +12,15 @@ import useRequest from '@ahooksjs/use-request';
 import styles from './FieldSynchronous.module.less';
 import { RuleObject } from "antd/lib/form";
 import { StoreValue } from "antd/lib/form/interface";
+import Deliverables from "../../setOutTask/Deliverables";
 
 interface modalProps {
     type: 'new' | 'edit';
     rowId: string;
+    getLoading: (loading:boolean) => void
 }
 
-export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalProps, ref) {
+export default forwardRef(function FieldSynchronousNew({ type, rowId, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [fields, setFields] = useState<any[]>([]);
     const [checkFields, setCheckFields] = useState<any[]>([]);
@@ -58,10 +60,14 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
         }
     }
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-work/fieldSynchro`, data)
-            resove(result)
+            RequestUtil.post(`/tower-work/fieldSynchro`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -70,6 +76,7 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async res => {
+                getLoading(true)
                 const value = form.getFieldsValue(true);
                 await saveRun({
                     id: data?.id,
@@ -164,13 +171,17 @@ export default forwardRef(function FieldSynchronousNew({ type, rowId }: modalPro
                         <Row gutter={12}>
                             {
                                 checkFields && checkFields?.map((res: any, ind: number) => {
-                                    return <Col style={{ marginBottom: '6px' }} span={8}><Button key={ind} type={res?.status === 1 ? "primary" : undefined} onClick={() => {
-                                        checkFields[ind] = {
-                                            ...res,
-                                            status: res?.status === 1 ? 0 : 1
-                                        }
-                                        setCheckFields([...checkFields])
-                                    }} ghost={res?.status === 1 ? true : false}>{res?.fieldKey}</Button></Col>
+                                    return <Col style={{ marginBottom: '6px' }} span={8}>
+                                        <div key={ind} className={styles.clickBtn} style={res?.status === 1 ? { borderColor: '#FF8C00', color: '#FF8C00' } : {}} onClick={() => {
+                                            checkFields[ind] = {
+                                                ...res,
+                                                status: res?.status === 1 ? 0 : 1
+                                            }
+                                            setCheckFields([...checkFields])
+                                        }} >
+                                            {res?.fieldKey}
+                                        </div>
+                                    </Col>
                                 })
                             }
                         </Row>

@@ -36,7 +36,7 @@ export default function List(): React.ReactNode {
   useEffect(() => {
 
     gantt.clearAll();
-    gantt.config.column_width = 20;
+    gantt.config.column_width = 80;
     gantt.config.columns = [
       {
         label: '工单编号',
@@ -60,7 +60,7 @@ export default function List(): React.ReactNode {
         name: "workOrderTitle",
         align: "center",
         resize: true,
-        width: 120,
+        width: 100,
         template: function (task: any) {
           return (
             `
@@ -88,7 +88,7 @@ export default function List(): React.ReactNode {
         label: '接收人',
         name: "recipientUserName",
         align: "center",
-        width: 100,
+        width: 80,
         template: function (task: any) {
           return (
             `
@@ -101,7 +101,7 @@ export default function List(): React.ReactNode {
         label: '预计开始时间',
         name: "planStartTime",
         align: "center",
-        width: 180,
+        width: 150,
         template: function (task: any) {
           return (
             `
@@ -114,7 +114,7 @@ export default function List(): React.ReactNode {
         label: '预计完成时间',
         name: "planEndTime",
         align: "center",
-        width: 180,
+        width: 150,
         template: function (task: any) {
           return (
             `
@@ -143,6 +143,7 @@ export default function List(): React.ReactNode {
     gantt.config.drag_progress = false;//拖拽进度
     gantt.config.drag_links = false;//通过拖拽的方式新增任务依赖的线条
     gantt.config.drag_move = false;
+    gantt.config.show_errors = false;
 
     gantt.config.layout = {
       css: "gantt_container",
@@ -183,7 +184,7 @@ export default function List(): React.ReactNode {
         ...item,
         start_date: item.planStartTime ? new Date(item.planStartTime) : new Date(),
         end_date: item.planEndTime ? new Date(item.planEndTime) : new Date(),
-        color: item.workOrderNumber ? '#0ac189' : '#FF8C00',
+        color: item.workOrderNumber ? '#0ac189' : item?.colour,
         "border": "1px dashed #ff0 !important"
       }
     })

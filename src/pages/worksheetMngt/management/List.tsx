@@ -6,9 +6,9 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Input, DatePicker, Button, message, Space, Select, Radio, Modal, TreeSelect, Form } from 'antd';
-import { Page } from '../../common';
+import { SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from '../Management.module.less';
+import styles from './Management.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useHistory } from 'react-router-dom';
@@ -46,6 +46,10 @@ export default function List(): React.ReactNode {
     const [dispatchingType, setDispatchingType] = useState<'batch' | 'single'>('single');
     const [rowData, setRowData] = useState<Record<string, any>>({});
     const [detailData, setDetailData] = useState<Record<string, any>>({});
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [dealLoading, setDealLoading] = useState<boolean>(false);
+    const [newLoading, setNewLoading] = useState<boolean>(false);
+
 
     const { data: templateTypes } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
@@ -83,85 +87,71 @@ export default function List(): React.ReactNode {
         {
             "key": "workOrderNumber",
             "title": "工单编号",
-            "width": 150,
             "dataIndex": "workOrderNumber"
         },
         {
             "key": "fieldValue",
             "title": "业务编号",
-            "width": 150,
             "dataIndex": "fieldValue"
         },
         {
             "key": "buildChannel",
             "title": "产生途径",
-            "width": 150,
             "dataIndex": "buildChannel"
         },
         {
             "key": "workOrderTitle",
             "title": "工单标题",
-            "width": 150,
             "dataIndex": "workOrderTitle"
         },
         {
             "key": "workTemplateType",
             "title": "工单类型",
-            "width": 150,
             "dataIndex": "workTemplateType"
         },
         {
             "key": "statusName",
             "title": "工单状态",
-            "width": 150,
             "dataIndex": "statusName"
         },
         {
             "key": "dispatchStatusName",
             "title": "派工状态",
-            "width": 150,
             "dataIndex": "dispatchStatusName"
         },
         {
             "key": "workOrderNode",
             "title": "当前处理节点",
-            "width": 150,
             "dataIndex": "workOrderNode"
         },
         {
             "key": "recipientUserName",
             "title": "接收人",
-            "width": 150,
             "dataIndex": "recipientUserName"
         },
         {
             "key": "createTime",
             "title": "产生时间",
-            "width": 150,
             "dataIndex": "createTime"
         },
         {
             "key": "planStartTime",
             "title": "预计开始时间",
-            "width": 150,
             "dataIndex": "planStartTime"
         },
         {
             "key": "actualStartTime",
             "title": "实际开始时间",
-            "width": 150,
             "dataIndex": "actualStartTime",
         },
         {
             "key": "planEndTime",
             "title": "预计完成时间",
-            "width": 150,
             "dataIndex": "planEndTime"
         },
         {
             "key": "actualEndTime",
             "title": "实际完成时间",
-            "width": 150,
             "dataIndex": "actualEndTime"
         },
         {
@@ -169,7 +159,7 @@ export default function List(): React.ReactNode {
             "title": "操作",
             "dataIndex": "operation",
             fixed: "right" as FixedType,
-            "width": 150,
+            "width": 280,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space>
                     <Button type='link' onClick={() => {
@@ -208,11 +198,11 @@ export default function List(): React.ReactNode {
                             onOk: () => new Promise(async (resove, reject) => {
                                 try {
                                     const value = await form.validateFields();
-                                        await RequestUtil.post(`/tower-work/workOrder/cancelWorkOrder/${record?.id}/${value?.description}`).then(res => {
-                                            message.success("取消成功")
-                                            history.go(0)
-                                        })
-                                        resove(true)
+                                    await RequestUtil.post(`/tower-work/workOrder/cancelWorkOrder/${record?.id}/${value?.description}`).then(res => {
+                                        message.success("取消成功")
+                                        history.go(0)
+                                    })
+                                    resove(true)
                                 } catch (error) {
                                     reject(false)
                                 }
@@ -336,6 +326,7 @@ export default function List(): React.ReactNode {
         try {
             await dispatchRef.current?.onSubmit()
             message.success("派工成功！")
+            setConfirmLoading(false)
             setDispatchVisible(true)
             history.go(0)
             resove(true)
@@ -364,6 +355,12 @@ export default function List(): React.ReactNode {
         }
     }
 
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+        setDealLoading(dealLoading);
+        setNewLoading(newLoading)
+    }, [confirmLoading, dealLoading, newLoading])
+
     return <>
         <Modal
             destroyOnClose
@@ -372,7 +369,7 @@ export default function List(): React.ReactNode {
             width="80%"
             footer={
                 <Space>
-                    <Button type="primary" onClick={handleDispatchOk} ghost>完成</Button>
+                    <Button type="primary" loading={confirmLoading} onClick={handleDispatchOk} ghost>完成</Button>
                     <Button onClick={() => {
                         setDispatchVisible(false);
                         dispatchRef.current?.resetFields();
@@ -381,7 +378,7 @@ export default function List(): React.ReactNode {
             }
             title={"派工"}
             onCancel={() => { setDispatchVisible(false); dispatchRef.current?.resetFields(); }}>
-            <Dispatching type={dispatchingType} rowId={rowId} ref={dispatchRef} />
+            <Dispatching getLoading={(loading) => setConfirmLoading(loading)} type={dispatchingType} rowId={rowId} ref={dispatchRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -390,7 +387,7 @@ export default function List(): React.ReactNode {
             width="95%"
             footer={
                 <Space>
-                    <Button type="primary" onClick={handleDealOk} ghost>完成</Button>
+                    <Button type="primary" loading={dealLoading} onClick={handleDealOk} ghost>完成</Button>
                     {detailData?.flag === 1 ? null : <Button type="primary" onClick={handleBack} ghost>退回</Button>}
                     <Button onClick={() => {
                         setDealVisible(false);
@@ -399,7 +396,7 @@ export default function List(): React.ReactNode {
             }
             title="报工信息"
             onCancel={() => setDealVisible(false)}>
-            <EngineeringInformation rowData={rowData} rowId={rowId} detailData={detailData} ref={dealRef} />
+            <EngineeringInformation getLoading={(loading) => setDealLoading(loading)} rowData={rowData} rowId={rowId} detailData={detailData} ref={dealRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -419,14 +416,21 @@ export default function List(): React.ReactNode {
             destroyOnClose
             key='WorkOrderNew'
             visible={visible}
-            width="40%"
-            onOk={handleOk}
-            okText="完成"
+            width="60%"
+            footer={
+                <Space>
+                    <Button type="primary" loading={newLoading} onClick={handleOk} ghost>完成</Button>
+                    <Button onClick={() => {
+                        setVisible(false);
+                        ref.current?.resetFields();
+                    }}>关闭</Button>
+                </Space>
+            }
             title={type === 'new' ? '新建' : "编辑"}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
-            <WorkOrderNew rowId={rowId} type={type} ref={ref} />
+            <WorkOrderNew getLoading={(loading) => setNewLoading(loading)} rowId={rowId} type={type} ref={ref} />
         </Modal>
-        <Form form={searchForm} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
+        <Form form={searchForm} className={styles.selectBtn} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
             {
                 searchItems?.map((res: any) => {
                     return <Form.Item name={res?.name} label={res?.label}>
@@ -456,7 +460,7 @@ export default function List(): React.ReactNode {
                         <Radio.Button value={2}>已关闭</Radio.Button>
                         <Radio.Button value={3}>已取消</Radio.Button>
                     </Radio.Group>
-                    <Space size='small' style={{ position: 'absolute', right: '16px', top: 0 }}>
+                    <Space size='small'>
                         <Button type='primary' onClick={() => {
                             setVisible(true);
                             setType('new')
@@ -485,9 +489,7 @@ export default function List(): React.ReactNode {
                         setSelectedKeys(selectedRowKeys);
                         setSelectedRows(selectedRows)
                     },
-                    getCheckboxProps: (record: Record<string, any>) => ({
-                      disabled: record?.status !== 1
-                    }),
+                    getCheckboxProps: (record: Record<string, any>) => record?.status !== 1
                 }
             }}
         />
