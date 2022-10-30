@@ -147,10 +147,10 @@ export default forwardRef(function WorkOrderDetail({ rowId, rowData }: modalProp
                     <div className={styles.scroll}>
                         <Row gutter={12} key={0} style={{ marginBottom: '6px' }} justify="space-around">
                             <Col span={8}>
-                                {rowData?.fieldKey || '-'}
+                                {rowData?.fieldKey}
                             </Col>
                             <Col span={16}>
-                                {rowData?.fieldValue || '-'}
+                                {rowData?.fieldValue}
                             </Col>
                         </Row>
                         {
