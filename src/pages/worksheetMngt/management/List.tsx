@@ -442,7 +442,7 @@ export default function List(): React.ReactNode {
                         <Radio.Button value={2}>已关闭</Radio.Button>
                         <Radio.Button value={3}>已取消</Radio.Button>
                     </Radio.Group>
-                    <Space size='small' style={{ position: 'absolute', right: '16px', top: 0 }}>
+                    <Space size='small'>
                         <Button type='primary' onClick={() => {
                             setVisible(true);
                             setType('new')

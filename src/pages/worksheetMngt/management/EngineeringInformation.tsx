@@ -194,7 +194,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                                 })
                             }
                         </Row>
-                        <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 3 }}>
+                        <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 2 }}>
                             <Input.TextArea maxLength={800} />
                         </Form.Item>
                     </Form>
@@ -213,7 +213,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                         </Row>
                         {
                             data?.workOrderNodeVOList?.map((res: any, index: number) => {
-                                return <Card title={res?.node} style={{ marginBottom: '6px' }} key={index}>
+                                return <Card title={res?.node} extra={<span>处理环节：{res?.processingName}</span>} style={{ marginBottom: '6px' }} key={index}>
                                     {
                                         res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
                                             return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>
