@@ -3208,6 +3208,13 @@
       "module": "./pages/system-mngt/workflow/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 数据门户
+      "name": "数据门户",
+      "path": "/data/door",
+      "module": "./pages/system-mngt/dataDoor/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }
