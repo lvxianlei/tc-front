@@ -193,7 +193,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                         let list = e.target.value.split(',');
                         let num: number = 0;
                         list.forEach(res => {
-                            num += res.split('*')[1] ? Number(res.split('*')[1] || 1) : 0
+                            num += res.split('*')[0] ? Number(res.split('*')[1] || 1) : 0
                         })
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
@@ -615,7 +615,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                 let list = res?.apertureNumber?.split(',');
                 let num: number = 0;
                 list?.forEach((item: any) => {
-                    num += item.split('*')[1] ? Number(item.split('*')[1] || 1) : 0
+                    num += item.split('*')[0] ? Number(item.split('*')[1] || 1) : 0
                 })
                 return {
                     ...res,
