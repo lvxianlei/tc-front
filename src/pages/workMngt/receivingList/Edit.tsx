@@ -21,10 +21,10 @@ interface ModalRef {
 }
 
 interface TotalState {
-    count?: string
-    weight?: string
-    taxPrice?: string
-    unTaxPrice?: string
+    num?: string
+    balanceTotalWeight?: string
+    totalTaxPrice?: string
+    totalUnTaxPrice?: string
 }
 
 export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Element {
@@ -69,6 +69,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...item,
                 num: item.num ? item.num : 0
             })) || [])
+            const seletTotal = result?.lists.reduce((total: TotalState, current: any) => ({
+                num: parseFloat(total.num || "0") + parseFloat(current.num),
+                balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+                totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+                totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+            }), {})
+            setTotal(seletTotal)
             resole({
                 ...formatData(BasicInformation, result),
                 supplierId: {
@@ -176,6 +183,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             delete postData.id
             return postData
         })
+        const seletTotal = dataSource.reduce((total: TotalState, current: any) => ({
+            num: parseFloat(total.num || "0") + parseFloat(current.num),
+            balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+            totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+            totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+        }), {})
+        setTotal(seletTotal)
         setCargoData(dataSource)
         setVisible(false);
     }
@@ -384,16 +398,23 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 totalUnloadTaxPrice,
                 totalUnloadPrice
             }
+            const seletTotal = dataSource.reduce((total: TotalState, current: any) => ({
+                num: parseFloat(total.num || "0") + parseFloat(current.num),
+                balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+                totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+                totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+            }), {})
+            setTotal(seletTotal)
             setCargoData(dataSource || [])
         }
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         const seletTotal = selectRows.reduce((total: TotalState, current: any) => ({
-            count: parseFloat(total.count || "0") + parseFloat(current.num),
-            weight: (parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
-            taxPrice: (parseFloat(total.taxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
-            unTaxPrice: (parseFloat(total.unTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+            num: parseFloat(total.num || "0") + parseFloat(current.num),
+            balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+            totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+            totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
         }), {})
         setTotal(seletTotal)
         setSelect(selectedRowKeys)
@@ -484,10 +505,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             ]}
         />
         <Space style={{ color: "red" }}>
-            <div><span>数量合计：</span><span>{total.count || "0"}</span></div>
-            <div><span>重量合计(吨)：</span><span>{total.weight || "0"}</span></div>
-            <div><span>含税金额合计(元)：</span><span>{total.taxPrice || "0"}</span></div>
-            <div><span>不含税金额合计(元)：</span><span>{total.unTaxPrice || "0"}</span></div>
+            <div><span>数量合计：</span><span>{total.num || "0"}</span></div>
+            <div><span>重量合计(吨)：</span><span>{total.balanceTotalWeight || "0"}</span></div>
+            <div><span>含税金额合计(元)：</span><span>{total.totalTaxPrice || "0"}</span></div>
+            <div><span>不含税金额合计(元)：</span><span>{total.totalUnTaxPrice || "0"}</span></div>
         </Space>
         <EditableTable
             haveIndex={false}
