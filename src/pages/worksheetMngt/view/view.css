@@ -1,0 +1,10 @@
+.gantt_task_line{
+    border: 0px;
+}
+/* .gantt_task_progress{
+    background-color: #000000;
+} */
+
+.dashed {
+    border: 1px dashed #999 !important;
+}
