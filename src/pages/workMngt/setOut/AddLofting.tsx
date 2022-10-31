@@ -408,7 +408,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'description',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "description"]} initialValue={_}>
-                    <Input.TextArea size="small" maxLength={50} />
+                    <Input.TextArea size="small" maxLength={200} />
                 </Form.Item>
             )
         },
