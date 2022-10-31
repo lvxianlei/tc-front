@@ -302,6 +302,7 @@ export default function CreatePlan(props: any): JSX.Element {
             console.log(popDataList)
             // 添加对长度以及数量的拦截
             let flag = false;
+            let num = false;
             let width = false;
             let batch = false;
             let locator = false;
@@ -321,6 +322,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 }
                 if (!(popDataList[i].reservoirName)){
                     reservoir = true
+                }
+                if (!(popDataList[i].num)){
+                    num = true
                 }
             }
             if (flag) {
@@ -343,10 +347,16 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您选择库区！");
                 return false;
             }
+            if (num) {
+                message.error("请您填写数量！");
+                return false;
+            }
             type==='save'&&saveRun({
                 outStockDetailDTOList: popDataList.map((item:any)=>{
                     return {
                         ...item,
+                        num: 0- item.num,
+                        totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId
                     }
                 }),
@@ -358,11 +368,14 @@ export default function CreatePlan(props: any): JSX.Element {
                 outStockDetailDTOList: popDataList.map((item:any)=>{
                     return {
                         ...item,
+                        num: 0- item.num,
+                        totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId
                     }
                 }),
                 ...baseInfo,
                 materialType: 1,
+                
                 pickingUserId: baseInfo?.pickingUserId.id
             });
         } catch (error) {
@@ -555,7 +568,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["num"].includes(item.dataIndex)&&type===2) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <span>{-1}</span>
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={ value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                                 })
                             }
                             if (["length"].includes(item.dataIndex)&&type===2) {
@@ -718,15 +731,15 @@ export default function CreatePlan(props: any): JSX.Element {
                         })
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
-                            num:-1,
+                            num:1,
                             reservoirName:'',
                             locatorName:'',
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                            totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (-1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (-1) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) * (-1) / 1000).toFixed(3)
+                            totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * (1) / 1000).toFixed(3)
                         })) || [])
                     }}
                 />
