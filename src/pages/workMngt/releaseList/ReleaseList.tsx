@@ -289,7 +289,7 @@ export default function ReleaseList(): React.ReactNode {
         },
         {
             key: 'isPerforateName',
-            title: '是否钻孔特殊要求',
+            title: '钻孔特殊要求',
             width: 100,
             dataIndex: 'isPerforateName'
         },
