@@ -38,6 +38,7 @@ export default function PatchIssued(): React.ReactNode {
             weldingDemand: data?.supplyBatchEntryVO?.weldingDemand,
             galvanizeDemand: data?.supplyBatchEntryVO?.galvanizeDemand,
             packDemand: data?.supplyBatchEntryVO?.packDemand,
+            isPerforate: data?.supplyBatchEntryVO.isPerforate,
             supplyNumber: record?.supplyNumber
         })
         resole(data)

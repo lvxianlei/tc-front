@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
-import Page from './Page';
 import { PlusOutlined } from '@ant-design/icons';
+import { Page } from '../../common';
 
-interface SelectUserProps {
+interface SelectUserByStationsProps {
     onSelect: (selectedRows: Record<string, any>) => void;
     selectedKey?: string[];
     selectType?: 'radio' | 'checkbox';
     disabled?: boolean;
-    requests?: Record<string, any>
+    station?: string;
 }
 
-export default function SelectUser({
+export default function SelectUserByStations({
     onSelect,
     selectedKey = [],
     selectType = 'radio',
     disabled = false,
-    requests = {}
-}: SelectUserProps): JSX.Element {
+    station = ""
+}: SelectUserByStationsProps): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState<any>({});
@@ -26,6 +26,7 @@ export default function SelectUser({
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
+        console.log(selectedRowKeys,selectedRows)
     }
     const columns = [
         {
@@ -44,6 +45,11 @@ export default function SelectUser({
             dataIndex: 'name'
         },
         {
+            title: '岗位',
+            width: 100,
+            dataIndex: 'stationName'
+        },
+        {
             title: '部门',
             width: 150,
             dataIndex: 'deptName'
@@ -54,9 +60,9 @@ export default function SelectUser({
             dataIndex: 'statusName'
         }
     ]
-
+    
     return <>
-        <Button disabled={disabled} type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
+        <Button disabled={disabled} size="small" type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
         <Modal
             visible={visible}
             title="选择人员"
@@ -68,7 +74,9 @@ export default function SelectUser({
             }}
             onOk={() => {
                 setVisible(false);
-                onSelect(selectedRows)
+                onSelect(selectedRows);
+                setSelectedKeys([]);
+                setSelectedRows([])
             }}
             width='60%'
         >
@@ -77,18 +85,19 @@ export default function SelectUser({
                 columns={columns}
                 headTabs={[]}
                 requestData={{
-                    deptName: '技术部',
-                    ...requests
+                    stationIds: station
                 }}
                 tableProps={{
                     rowSelection: {
                         type: selectType,
                         selectedRowKeys: selectedKeys,
+                        preserveSelectedRowKeys: true,
                         onChange: SelectChange,
                         getCheckboxProps: (record: Record<string, any>) => ({
                           disabled: record?.status  === 0
                         })
-                    }
+                    },
+                    rowKey: "userId"
                 }}
                 searchFormItems={[
                     {

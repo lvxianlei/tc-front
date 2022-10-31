@@ -3202,10 +3202,66 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // WO-工单设置-模板类型
+      "name": "模板类型",
+      "path": "/worksheetSetting/templateType",
+      "module": "./pages/worksheetSetting/templateType/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-工单模板管理
+      "name": "工单模板管理",
+      "path": "/worksheetSetting/worksheetTemplateMngt",
+      "module": "./pages/worksheetSetting/worksheetTemplateMngt/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-工单同步
+      "name": "工单同步",
+      "path": "/worksheetSetting/worksheetSynchronous",
+      "module": "./pages/worksheetSetting/worksheetSynchronous/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-字段同步
+      "name": "字段同步",
+      "path": "/worksheetSetting/fieldSynchronous",
+      "module": "./pages/worksheetSetting/fieldSynchronous/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单管理-工单管理
+      "name": "工单管理",
+      "path": "/worksheetMngt/management",
+      "module": "./pages/worksheetMngt/management/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单管理-工单管理
+      "name": "工单管理",
+      "path": "/worksheetMngt/management",
+      "module": "./pages/worksheetMngt/management/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单管理-工单视图
+      "name": "工单视图",
+      "path": "/worksheetMngt/view",
+      "module": "./pages/worksheetMngt/view/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // 流程设计
       "name": "流程设计",
       "path": "/journal/workflow",
       "module": "./pages/system-mngt/workflow/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 数据门户
+      "name": "数据门户",
+      "path": "/data/door",
+      "module": "./pages/system-mngt/dataDoor/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     }
