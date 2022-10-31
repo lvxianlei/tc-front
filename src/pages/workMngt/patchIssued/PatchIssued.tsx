@@ -51,7 +51,8 @@ export default function PatchIssued(): React.ReactNode {
                 RequestUtil.post<any>(`/tower-science/supplyBatch/saveBatchDetail`, {
                     ...value,
                     id: selectData?.supplyBatchEntryVO?.id,
-                    supplyNumber: value?.supplyNumber
+                    supplyNumber: value?.supplyNumber,
+                    isPerforate: value?.isPerforate || 0
                 }).then(res => {
                     history.goBack();
                 });

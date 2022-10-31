@@ -41,12 +41,12 @@ export default function Invoicing() {
                         <Button
                             type="link"
                             className="btn-operation-link"
-                            onClick={() => history.push(`/ingredients/lifting/detail/${record.planNumber}/${record.orderProjectName}`)}
+                            onClick={() => history.push(`/ingredients/lifting/detail/${record.planNumber}?orderProjectName=${record.orderProjectName}`)}
                         >提料明细</Button>
                         <Button
                             className="btn-operation-link"
                             type="link"
-                            onClick={() => history.push(`/ingredients/lifting/material/${record.planNumber}/${record.orderProjectName}`)}>
+                            onClick={() => history.push(`/ingredients/lifting/material/${record.planNumber}?orderProjectName=${record.orderProjectName}`)}>
                             材料明细
                         </Button>
                     </>
