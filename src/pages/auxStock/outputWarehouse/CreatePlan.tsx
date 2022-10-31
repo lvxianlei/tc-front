@@ -2,7 +2,7 @@
  * 创建出库单
  */
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { Modal, Form, Button, InputNumber, message, Spin } from 'antd';
+import { Modal, Form, Button, InputNumber, message, Spin, TreeSelect } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -150,6 +150,25 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         refreshDeps: [props.type, props.visible]
     })
 
+    //库区库位
+    const { data: locatorData } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree/${warehouseId}`)
+            resole(result?.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+                key: item.id,
+                disabled: true,
+                children: item.children?.map((cItem: any) => ({
+                    label: cItem.name,
+                    value: cItem.id,
+                    key: cItem.id
+                }) || [])
+            })) || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
     // 获取所有的仓库
     const { data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -256,7 +275,16 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             <PopTableContent
                 data={{
                     ...addMaterial as any,
-                    path: `${addMaterial.path}/${warehouseId}?materialType=2`
+                    search: (addMaterial as any).search.map((item: any) => {
+                        if (item.dataIndex === "locatorId") {
+                            return ({
+                                ...item,
+                                treeData: locatorData,
+                            })
+                        }
+                        return item
+                    }),
+                    path: `${addMaterial.path}?materialType=2&warehouseId=${warehouseId}`
                 }}
                 value={{
                     id: "",

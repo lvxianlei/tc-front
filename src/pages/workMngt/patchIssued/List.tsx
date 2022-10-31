@@ -1,6 +1,6 @@
 /**
  * @author zyc
- * @copyright © 2022 
+ * @copyright © 2022
  * @description 放样过程管理-补件下达列表
  */
 
@@ -156,6 +156,12 @@ export default function List(): React.ReactNode {
             title: '包装说明',
             width: 200,
             dataIndex: 'packDemand'
+        },
+        {
+            key: 'isPerforateName',
+            title: '是否钻孔特殊要求',
+            width: 100,
+            dataIndex: 'isPerforateName'
         },
         {
             key: 'operation',

@@ -64,6 +64,18 @@ export default function MaterialMngt(): React.ReactNode {
             }
         },
         {
+            key: 'updateUserName',
+            title: '修改人',
+            width: 150,
+            dataIndex: 'updateUserName'
+        },
+        {
+            key: 'updateTime',
+            title: '修改时间',
+            width: 150,
+            dataIndex: 'updateTime'
+        },
+        {
             key: 'weightAlgorithmName',
             title: '算法',
             width: 150,
@@ -322,7 +334,7 @@ export default function MaterialMngt(): React.ReactNode {
                             })
                         }
                     }]}>
-                        <Input addonBefore={code} maxLength={3} />
+                        <Input addonBefore={code} maxLength={4} />
                     </Form.Item></Col>
                 </Row>
                 <Row>
@@ -342,7 +354,7 @@ export default function MaterialMngt(): React.ReactNode {
                         required: true,
                         message: '请输入比重'
                     }]}>
-                        <InputNumber min={0} step="0.0001" precision={4} max={9999.9999} style={{ width: '100%' }} />
+                        <InputNumber min={0} step="0.0001" precision={4} max={999999.9999} style={{ width: '100%' }} />
                     </Form.Item></Col>
                 </Row>
                 <Row>

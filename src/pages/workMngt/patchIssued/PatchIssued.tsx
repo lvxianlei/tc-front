@@ -1,11 +1,11 @@
 /**
  * @author zyc
- * @copyright © 2022 
+ * @copyright © 2022
  * @description 放样过程管理-补件下达列表-补件下达
  */
 
 import React, { useRef, useState } from 'react';
-import { Spin, Button, Space, Form, Input, Descriptions, Row, Col, Modal, message, Select } from 'antd';
+import {Spin, Button, Space, Form, Input, Descriptions, Row, Col, Modal, message, Select, Radio} from 'antd';
 import { useHistory } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -170,6 +170,16 @@ export default function PatchIssued(): React.ReactNode {
                     <Col span={12}>
                         <Form.Item name="packDemand" label="包装说明" initialValue={selectData?.supplyBatchEntryVO?.packDemand}>
                             <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item name="isPerforate" label="是否钻孔特殊要求" initialValue={selectData?.supplyBatchEntryVO?.isPerforate}>
+                            <Radio.Group  style={{ paddingLeft:"12px", width: "100%" }} defaultValue={0}>
+                                <Radio  value={1}>是</Radio>
+                                <Radio  value={0}>否</Radio>
+                            </Radio.Group>
                         </Form.Item>
                     </Col>
                 </Row>

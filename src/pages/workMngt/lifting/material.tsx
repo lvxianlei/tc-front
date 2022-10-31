@@ -1,29 +1,31 @@
-import { Button } from "antd"
+import { Button, Row } from "antd"
 import React from "react"
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useLocation, useParams } from 'react-router-dom'
 import { DetailTitle, SearchTable as Page } from '../../common'
 import { liftingMaterial } from "./data.json"
 export default function Invoicing() {
     const history = useHistory()
-    const { planNumber, orderProjectName } = useParams<{
-        planNumber: string
-        orderProjectName: string
-    }>()
-
+    const location = useLocation()
+    const { planNumber } = useParams<{ planNumber: string }>()
+    const orderProjectName = decodeURI(location.search).replace("?orderProjectName=", "")
     return <>
-        <DetailTitle title={<>
-            材料汇总
+        <DetailTitle title="材料汇总" />
+        <Row style={{
+            padding: "8px 0",
+            fontSize: 16,
+            color: "#181818",
+            fontWeight: "bold"
+        }}>
             <span style={{
                 fontStyle: "normal",
                 fontSize: 12,
-                marginLeft: 16
             }}>
                 <span>计划号：<span style={{ color: "#FF8c00" }}>{planNumber}</span></span>
                 <span style={{
                     marginLeft: 16
                 }}>工程名称：<span style={{ color: "#FF8c00" }}>{orderProjectName}</span></span>
             </span>
-        </>} />
+        </Row>
         <Page
             path={`/tower-supply/task/scheme/planNumber/${planNumber}`}
             exportPath={`/tower-supply/task/scheme/planNumber/${planNumber}`}

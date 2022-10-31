@@ -41,8 +41,8 @@ export default function RawMaterialStock(): React.ReactNode {
 
     const { run, data: count } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const askPrice = await RequestUtil.get(`/tower-storage/materialStock/auxiliary/count`, { ...filterValue })
-            resole({ num: askPrice })
+            const askPrice:any = await RequestUtil.get(`/tower-storage/materialStock/auxiliary/count`, { ...filterValue })
+            resole({ num: askPrice?.num, totalTaxPrice:askPrice?.totalTaxPrice, weight:askPrice?.weight, totalPrice:askPrice?.totalPrice})
         } catch (error) {
             reject(error)
         }
@@ -130,7 +130,12 @@ export default function RawMaterialStock(): React.ReactNode {
                 <Button type="primary" ghost>导入</Button>
             </Upload>
             <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
-            <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{count?.num}</span></div>
+            <span>
+                <span >数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{count?.num||0}</span></span>
+                <span >重量合计（吨）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{count?.weight||0}</span></span>
+                <span >含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{count?.totalTaxPrice||0}</span></span>
+                <span >不含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{count?.totalPrice||0}</span></span>
+            </span>
             <div style={{ width: "2000px" }}>
                 <Radio.Group defaultValue={tabs} onChange={handleRadioChange}>
                     <Radio.Button value={1}>库存列表</Radio.Button>
