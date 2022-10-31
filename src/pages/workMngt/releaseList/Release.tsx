@@ -60,12 +60,6 @@ export default function Release(): React.ReactNode {
         const value = data?.loftingBatchProductVOList.filter((item: any) => {
             return item.isAll === 0 || item.isAll === '0'
         })
-        console.log(value.map((item: any) => {
-            return {
-                ...item,
-                batchNum: 0
-            }
-        }))
         setColumns([...columnsCommon, ...data?.segmentNameList?.map(((item: any) => ({
             title: item,
             align: "center",
@@ -81,6 +75,7 @@ export default function Release(): React.ReactNode {
         })))])
         form.setFieldsValue({
             ...data,
+            isPerforate: 0,
             cancelIssuedNumber: data?.cancelIssuedNumber && data?.cancelIssuedNumber !== null && data?.cancelIssuedNumber.indexOf(',') > -1 ? data?.cancelIssuedNumber.split(',') : undefined
             // loftingBatchProductDTOList:value.map((item:any)=>{
             //     return{
