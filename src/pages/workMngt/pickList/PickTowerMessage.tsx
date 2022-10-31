@@ -628,7 +628,7 @@ export default function Lofting(): React.ReactNode {
                             } disabled={params.status === '1'}>提料</Button>
                             : null}
                         {
-                            (materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserId()) > -1)
+                            (materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1)
                                 ?
                                 <Popconfirm
                                     title="确认提交?"
@@ -646,21 +646,6 @@ export default function Lofting(): React.ReactNode {
                                 </Popconfirm>
                                 : null
                         }
-                        {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
-                        {(materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ? <Popconfirm
-                            title="确认提交?"
-                            onConfirm={async () => {
-                                await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(() => {
-                                    message.success('提交成功！')
-                                }).then(() => {
-                                    history.push('/workMngt/pickList');
-                                })
-                            }}
-                            okText="确认"
-                            cancelText="取消"
-                        >
-                            <Button type="primary" ghost>提交</Button>
-                        </Popconfirm> : null}
                         {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
                         <span>塔型：{detailTop?.productCategoryName}</span>
