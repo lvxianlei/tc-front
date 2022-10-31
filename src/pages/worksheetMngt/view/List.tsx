@@ -125,7 +125,7 @@ export default function List(): React.ReactNode {
       }
     ];
     gantt.templates.task_text = function (start, end, task) {
-      return task.workOrderNumber ? `<b title='工单编号:${task.workOrderNumber}'>工单编号:</b> ` + task.workOrderNumber : `<b title='处理节点:${task.node}'>` + task.node + `</b> `;
+      return task.workOrderNumber ? `<b title='工单编号:${task.workOrderNumber}'>工单编号:</b> ` + task.workOrderNumber : `<b title='处理环节:${task.processingName}'>` + task.processingName + `</b> `;
     };
     gantt.config.scales = [
       { unit: "day", step: 1, date: "%d" },
