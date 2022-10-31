@@ -174,7 +174,24 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         <DetailTitle title="待选区" />
         <div>
             <Form form={serarchForm} style={{ paddingLeft: "14px" }}>
-                <Row gutter={[4, 4]}>
+            <Row gutter={[4, 4]}>
+                    <Col span={6}>
+                        <Form.Item
+                            name="materialName"
+                            label="品名">
+                            <Input placeholder="请输入品名" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            name="materialStandard"
+                            label="标准">
+                            <Select style={{ width: '100%' }} >
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        </Form.Item>
+                    </Col>
                     <Col span={6}>
                         <Form.Item
                             name="structureTexture"
@@ -192,16 +209,8 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                             <Input placeholder="请输入规格" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
-                        <Form.Item
-                            name="materialStandard"
-                            label="标准">
-                            <Select style={{ width: '100%' }} >
-                                <Select.Option value={''} key={''}>全部</Select.Option>
-                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
-                            </Select>
-                        </Form.Item>
-                    </Col>
+                </Row>
+                <Row gutter={[4, 4]}>
                     <Col span={6}>
                         <Form.Item
                             name="length"
