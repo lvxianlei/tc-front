@@ -284,6 +284,9 @@ export default function List(): React.ReactNode {
     const operationChange = (event: any) => {
         setConfirmStatus(event.target.value);
         setRefresh(!refresh);
+        setFilterValue({
+            status: event.target.value
+        });
     }
 
     const handleOk = () => new Promise(async (resove, reject) => {
