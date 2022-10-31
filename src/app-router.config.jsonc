@@ -1225,14 +1225,14 @@
     },
     {
       "name": "提料明细",
-      "path": "/ingredients/lifting/detail/:planNumber/:orderProjectName",
+      "path": "/ingredients/lifting/detail/:planNumber",
       "module": "./pages/workMngt/lifting/Overview",
       "exact": true,
       "authority": "tc_erp_sw_work_liftingSummary_detail"
     },
     {
       "name": "材料汇总",
-      "path": "/ingredients/lifting/material/:planNumber/:orderProjectName",
+      "path": "/ingredients/lifting/material/:planNumber",
       "module": "./pages/workMngt/lifting/material",
       "exact": true,
       "authority": "tc_erp_sw_work_liftingSummary_material"
