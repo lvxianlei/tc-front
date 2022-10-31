@@ -1,3 +1,4 @@
+// 原材料----计算
 interface WeightParams {
     width: number | string
     length: number | string
@@ -50,7 +51,7 @@ export const balanceTotalWeight = (
     if (meteringMode === 1) {
         return currentWeight
     }
-    return (totalPonderationWeight * (currentWeight / allTotalWeight)).toFixed(3) || "0"
+    return (totalPonderationWeight * (currentWeight / allTotalWeight)).toFixed(5) || "0"
 }
 
 /**
@@ -70,12 +71,12 @@ export const weight = ({ length = 0, width = 0, weightAlgorithm, proportion = 1 
     const cLenght = Number(length) * 0.001
     const cWidth = Number(width) * 0.001
     if ([1, "1"].includes(weightAlgorithm)) {
-        return (Number(proportion) * cLenght * 0.001).toFixed(3)
+        return (Number(proportion) * cLenght * 0.001).toFixed(5)
     }
-    if ([1, "1"].includes(weightAlgorithm)) {
-        return (Number(proportion) * cLenght * cWidth * 0.001).toFixed(3)
+    if ([2, "2"].includes(weightAlgorithm)) {
+        return (Number(proportion) * cLenght * cWidth * 0.001).toFixed(5)
     }
-    return (Number(proportion) * 0.001).toFixed(3)
+    return (Number(proportion) * 0.001).toFixed(5)
 }
 /**
  * 总重量
@@ -84,12 +85,12 @@ export const totalWeight = ({ length = 0, width = 0, weightAlgorithm, proportion
     const cLenght = Number(length) * 0.001
     const cWidth = Number(width) * 0.001
     if ([1, "1"].includes(weightAlgorithm)) {
-        return (Number(proportion) * cLenght * Number(num) * 0.001).toFixed(3)
+        return (Number(proportion) * cLenght * Number(num) * 0.001).toFixed(5)
     }
     if ([2, "2"].includes(weightAlgorithm)) {
-        return (Number(proportion) * cLenght * cWidth * Number(num) * 0.001).toFixed(3)
+        return (Number(proportion) * cLenght * cWidth * Number(num) * 0.001).toFixed(5)
     }
-    return (Number(proportion) * Number(num) * 0.001).toFixed(3)
+    return (Number(proportion) * Number(num) * 0.001).toFixed(5)
 }
 /**
 * 含税运费
@@ -127,3 +128,4 @@ export const totalUnloadPrice = (totalUnloadTaxPrice: any = 0, taxMode: any = 0)
  * 盈亏重量 = 盘点重量 - 账目重量 
  */
 export const profitAndLossWeight = () => { }
+

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Input, InputNumber, Select, DatePicker, Modal, Form, Row, Col, Button } from 'antd'
+import { Input, InputNumber, Select, DatePicker, Modal, Form, Row, Col, Button, TreeSelect } from 'antd'
 import CommonTable from "./CommonTable"
 import { PlusOutlined } from "@ant-design/icons"
 import RequestUtil from '../../utils/RequestUtil'
@@ -110,8 +110,8 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                 setSelectRows(currentSelectRows)
             } else {
                 setSelect(currentSelect.filter(item => item !== recordItemKey))
-                setSelectRows(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
-                onChange && onChange(currentSelectRows.filter((item: any) => item.id !== recordItemKey))
+                setSelectRows(currentSelectRows.filter((item: any) => typeof data.rowKey === "function" ? data.rowKey(item) : item[data.rowKey || "id"] !== recordItemKey))
+                onChange && onChange(currentSelectRows.filter((item: any) => typeof data.rowKey === "function" ? data.rowKey(item) : item[data.rowKey || "id"] !== recordItemKey))
             }
         } else {
             onChange && onChange(selectAllRows)
@@ -296,6 +296,13 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             {...componentProps}
         />,
         select: <SelfSelect {...props} data={data as SelectData} />,
+        tree: <TreeSelect 
+            {...props} 
+            treeData={data?.treeData as any} 
+            disabled={data.disabled}
+            style={{ width: "100px",  ...props.style }} 
+            {...componentProps}
+        />,
         date: <DatePicker
             {...data.picker ? { ...props, picker: data.picker } : { ...props }}
             onChange={(value) => props.onChange(value?.format(data.format || "YYYY-MM-DD HH:mm:ss"))}

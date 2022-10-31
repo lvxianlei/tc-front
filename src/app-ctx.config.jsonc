@@ -337,7 +337,36 @@
                 ]
             },
             {
-                "label": "库存管理",
+                "label": "辅材采购管理",
+                "icon": "gongying-caigourenwu_caigourenwu",
+                "path": "/buyAuxiliaryMaterial",
+                "appName": "SW",
+                "authority": "tc_erp_sw_purchaseTask",
+                "items": [
+                    {
+                        "label": "辅材采购计划",
+                        "path": "/buyAuxiliaryMaterial/purchasePlan",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    },
+                    {
+                        "label": "辅材采购汇总",
+                        "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    },
+                    {
+                        "label": "辅材询比价",
+                        "path": "/buyAuxiliaryMaterial/enquiryCompare",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    },
+                    {
+                        "label": "辅材合同管理",
+                        "path": "/buyAuxiliaryMaterial/ContractList",
+                        "authority": "tc_erp_sw_purchaseTask_material"
+                    }
+                ]
+            },
+            {
+                "label": "原材料库存",
                 "icon": "gongying-kucunguanli_kucunguanli",
                 "path": "/stock",
                 "appName": "SW",
@@ -372,6 +401,35 @@
                         "label": "原材料盘点",
                         "path": "/stock/materials",
                         "authority": "tc_erp_sw_stock_taking"
+                    }
+                ]
+            },
+            {
+                "label": "辅料库存",
+                "icon": "gongying-kucunguanli_kucunguanli",
+                "path": "/auxStock",
+                "appName": "SW",
+                "authority": "tc_erp_sw_auxiliary_stock",
+                "items": [
+                    {
+                        "label": "辅材收货单",
+                        "path": "/auxStock/receiving",
+                        "authority": "tc_erp_sw_stock_material_auxiliary_receive"
+                    },
+                    {
+                        "label": "辅材库存",
+                        "path": "/auxStock/warehouse",
+                        "authority": "tc_erp_sw_stock_auxiliary_material"
+                    },
+                    {
+                        "label": "辅材入库",
+                        "path": "/auxStock/entryWarehouse",
+                        "authority": "tc_erp_sw_stock_auxiliary_material"
+                    },
+                    {
+                        "label": "辅材出库",
+                        "path": "/auxStock/outputWarehouse",
+                        "authority": "tc_erp_sw_stock_material_out"
                     }
                 ]
             },
@@ -1075,6 +1133,34 @@
                 ]
             },
             {
+                "label": "流程设计",
+                "icon": "xitongrizhiTY_xitongrizhi",
+                "path": "/journa",
+                "appName": "COMM",
+                "authority": "tc_erp_sys_log",
+                "items": [
+                    {
+                        "label": "流程设计",
+                        "path": "/journal/workflow",
+                        "authority": "tc_erp_sys_log_operation"
+                    }
+                ]
+            },
+            // {
+            //     "label": "数字门户",
+            //     "icon": "xitongrizhiTY_xitongrizhi",
+            //     "path": "/data",
+            //     "appName": "COMM",
+            //     "authority": "tc_erp_sys_log",
+            //     "items": [
+            //         {
+            //             "label": "数字门户",
+            //             "path": "/data/door",
+            //             "authority": "tc_erp_sys_log_operation"
+            //         }
+            //     ]
+            // },
+            {
                 "label": "请款申请管理",
                 "icon": "caiwuzhongxin_qingkuanshenqing",
                 "path": "/fundApply",
@@ -1336,7 +1422,7 @@
                     }
                 ]
             },
-            { 
+            {
                 "label": "工作台",
                 "icon": "customer",
                 "path": "/workBenchASM",
@@ -1350,7 +1436,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "售后工单",
                 "icon": "customer",
                 "path": "/afterSales",
@@ -1364,7 +1450,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "费用记录",
                 "icon": "customer",
                 "path": "/expenseRecord",
@@ -1378,7 +1464,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "问题记录",
                 "icon": "customer",
                 "path": "/problemRecord",
@@ -1392,7 +1478,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "考核记录",
                 "icon": "customer",
                 "path": "/assessmentRecord",
@@ -1406,7 +1492,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "人员管理",
                 "icon": "customer",
                 "path": "/userRecord",
@@ -1420,7 +1506,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "配置",
                 "icon": "customer",
                 "path": "/setting",
@@ -1449,7 +1535,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "日历管理",
                 "icon": "customer",
                 "path": "/calendar",
@@ -1463,7 +1549,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "打卡管理",
                 "icon": "customer",
                 "path": "/clock",
@@ -1478,6 +1564,54 @@
                     {
                         "label": "人员网络图",
                         "path": "/clock/network",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "工单管理",
+                "icon": "customer",
+                "path": "/worksheetMngt",
+                "appName": "WO",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "工单视图",
+                        "path": "/worksheetMngt/view",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "工单管理",
+                        "path": "/worksheetMngt/management",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "工单设置",
+                "icon": "customer",
+                "path": "/worksheetSetting",
+                "appName": "WO",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "工单模板管理",
+                        "path": "/worksheetSetting/worksheetTemplateMngt",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "模板类型",
+                        "path": "/worksheetSetting/templateType",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "工单同步",
+                        "path": "/worksheetSetting/worksheetSynchronous",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "字段同步",
+                        "path": "/worksheetSetting/fieldSynchronous",
                         "authority": "tc_erp_sc_workbench_list"
                     }
                 ]

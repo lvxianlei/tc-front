@@ -159,8 +159,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link">发起</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>发起</Button>
                             </Popconfirm>
                             {/* <Popconfirm
                                 title="确认撤回?"
@@ -172,8 +173,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={record.status === 2}
                             >
-                                <Button type="link">撤回</Button>
+                                <Button type="link" disabled={record.status === 2}>撤回</Button>
                             </Popconfirm> */}
                             {/* 张运刚说撤回功能青岛没有提供接口，并没有实现，先隐藏 */}
                             <Popconfirm
@@ -186,8 +188,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link">删除</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>删除</Button>
                             </Popconfirm>
                         </Space>
                     )

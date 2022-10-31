@@ -45,12 +45,12 @@
         "appName": "QMS"
     },
     {
-        "authority": "",
+        "authority": "tc_erp_prod",
         "title": "生产中心",
         "description": "生产过程管理相关功能",
         "iconFont": "icon-shengchanzhongxin3", // iconfont
         "color": "#FF8C00", // iconfont的颜色
-        "path": "http://120.48.143.153:9020?saasid=",
+        "path": "http://120.48.143.153:9070/othersystem?saasid=",
         "corsWeb": true,
         "appName": "MC"
     },
@@ -104,6 +104,15 @@
         "color": "#FCCD06", // iconfont的颜色
         "path": "/invoicing/billList",
         "appName": "FC"
+    },
+    {
+        "authority": "tc_erp_sys",
+        "title": "工单中心",
+        "description": "解决派单，接收业务员系统关键数据",
+        "iconFont": "icon-shengchanzhongxin3", // iconfont
+        "color": "#4071FF", // iconfont的颜色
+        "path": "/worksheetMngt/view",
+        "appName": "WO"
     },
     {
         "authority": "tc_erp_sys",

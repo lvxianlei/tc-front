@@ -115,7 +115,8 @@ export default function Edit() {
                 business: contractValue.salesman,
                 projectCode: contractValue.projectNumber, // 项目编码
                 contractCode: contractValue.internalNumber,
-                contractType: contractValue.contractPlanStatus
+                contractType: contractValue.contractPlanStatus,
+                contractName: contractValue.contractName
             })
         }
         if (fields.backProportion) {

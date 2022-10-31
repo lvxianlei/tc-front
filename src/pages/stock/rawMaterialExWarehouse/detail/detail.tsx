@@ -15,7 +15,6 @@ import { baseColumn } from "./detail.json";
 
 import '../../StockPublicStyle.less';
 import './detail.less';
-import ExportList from '../../../../components/export/list';
 import AuthUtil from '@utils/AuthUtil';
 import { exportDown } from '@utils/Export';
 
@@ -181,6 +180,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             dataIndex: 'reservoirName',
             width: 100,
         }, {
+            title: '数量',
+            dataIndex: 'num',
+            width: 100,
+        }, {
             title: '物料编码',
             dataIndex: 'materialCode',
             width: 100,
@@ -211,10 +214,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }, {
             title: '宽度（mm）',
             dataIndex: 'width',
-            width: 100,
-        }, {
-            title: '数量',
-            dataIndex: 'num',
             width: 100,
         }, {
             title: '重量（吨）',

@@ -813,9 +813,9 @@ export default function Lofting(): React.ReactNode {
     const [missVisible, setMissVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
     const [type, setType] = useState<'new' | 'edit'>('new');
-    const [rowData, setRowData] = useState<any>([])
-    const userId = AuthUtil.getUserId();
+    const [rowData, setRowData] = useState<any>([]);
     const [copyVisible, setCopyVisible] = useState<boolean>(false);
+    const userId = AuthUtil.getUserInfo().user_id;
 
     const { data: segmentNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {

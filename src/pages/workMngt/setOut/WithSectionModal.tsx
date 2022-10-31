@@ -278,11 +278,11 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     const data = this.state.basicHeightList?.filter(res => res.basicHeight === e);
                                     this.setState({
                                         productList: data && data[0].productVOList,
-                                            detailData: {
-                                                ...this.state.detailData,
-                                                productNumber: '',
-                                                productIdList: []
-                                            }
+                                        detailData: {
+                                            ...this.state.detailData,
+                                            productNumber: '',
+                                            productIdList: []
+                                        }
                                     })
                                     this.fastForm.current?.setFieldsValue({
                                         productId: []
@@ -301,16 +301,32 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                                     required: true,
                                     message: '请选择杆塔'
                                 }]}>
-                                    <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
-                                        const productId = this.fastForm.current?.getFieldsValue(true).productId;
-                                        this.setState({
-                                            detailData: {
-                                                ...this.state.detailData,
-                                                productNumber: productId?.map((res: string) => res.split(',')[1]).join(','),
-                                                productIdList: productId?.map((res: string) => res.split(',')[0])
-                                            }
-                                        })
+                                    <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e: any) => {
+                                        if (Array.from(e)?.findIndex(res => res === 'all') !== -1) {
+                                            this.fastForm?.current?.setFieldsValue({
+                                                productId: [...this.state.productList?.map(res => {
+                                                    return res?.id + ',' + res?.productNumber
+                                                }) || [], 'all']
+                                            })
+                                            this.setState({
+                                                detailData: {
+                                                    ...this.state.detailData,
+                                                    productNumber: this.state.productList?.map((res: any) => res.productNumber).join(','),
+                                                    productIdList: this.state.productList?.map((res: any) => res.id)
+                                                }
+                                            })
+                                        } else {
+                                            const productId = this.fastForm.current?.getFieldsValue(true).productId;
+                                            this.setState({
+                                                detailData: {
+                                                    ...this.state.detailData,
+                                                    productNumber: productId?.map((res: string) => res.split(',')[1]).join(','),
+                                                    productIdList: productId?.map((res: string) => res.split(',')[0])
+                                                }
+                                            })
+                                        }
                                     }}>
+                                        <Select.Option key={999} value={'all'}>全部</Select.Option>
                                         {this.state.productList && this.state.productList.map(({ id, productNumber }, index) => {
                                             return <Select.Option key={index} value={id + ',' + productNumber || ''}>
                                                 {productNumber}

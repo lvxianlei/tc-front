@@ -1,6 +1,17 @@
 {
     "baseInfoColumn": [
         {
+            "title": "入库单号",
+            "dataIndex": "warehousingEntryNumber",
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入入库单号"
+                }
+            ]
+        },
+        {
             "title": "入库类型",
             "dataIndex": "warehousingType",
             "width": 100,
@@ -140,11 +151,11 @@
         },
         {
             "title": "不含税单价（元/吨）",
-            "dataIndex": "unTaxPrice"
+            "dataIndex": "price"
         },
         {
             "title": "不含税金额（元）",
-            "dataIndex": "totalUnTaxPrice"
+            "dataIndex": "totalPrice"
         },
         {
             "title": "库位",
@@ -177,10 +188,22 @@
                 "title": "查询",
                 "type": "string",
                 "dataIndex": "fuzzyQuery",
-                "placeholder": "收货批次/品名/规格"
+                "placeholder": "收货单号/车牌号/收货批次/品名/规格"
             }
         ],
         "columns": [
+            {
+                "title": "收货单号",
+                "dataIndex": "receiveBatchNumber"
+            },
+            {
+                "title": "车牌号",
+                "dataIndex": "receiveBatchNumber"
+            },
+            {
+                "title": "收货批次",
+                "dataIndex": "receiveBatchNumber"
+            },
             {
                 "title": "收货批次",
                 "dataIndex": "receiveBatchNumber"
@@ -242,8 +265,16 @@
                 "dataIndex": "totalUnTaxPrice"
             },
             {
+                "title": "含税运费（元）",
+                "dataIndex": "transportTaxPrice"
+            },
+            {
                 "title": "不含税运费（元）",
                 "dataIndex": "unTransportTaxPrice"
+            },
+            {
+                "title": "含税装卸费（元）",
+                "dataIndex": "unloadTaxPrice"
             },
             {
                 "title": "不含税装卸费（元）",

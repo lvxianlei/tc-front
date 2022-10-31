@@ -64,6 +64,18 @@ export default function MaterialMngt(): React.ReactNode {
             }
         },
         {
+            key: 'updateUserName',
+            title: '修改人',
+            width: 150,
+            dataIndex: 'updateUserName'
+        },
+        {
+            key: 'updateTime',
+            title: '修改时间',
+            width: 150,
+            dataIndex: 'updateTime'
+        },
+        {
             key: 'weightAlgorithmName',
             title: '算法',
             width: 150,
@@ -132,7 +144,8 @@ export default function MaterialMngt(): React.ReactNode {
                     materialTypeName: values.materialType.split(',')[1],
                     materialCategory: values.materialCategory.split(',')[0],
                     materialCategoryName: values.materialCategory.split(',')[1],
-                    materialCode: code + values.materialCode
+                    materialCode: code + values.materialCode,
+                    materialDataType: 2
                 }
                 if (title === '新增') {
                     RequestUtil.post(
@@ -148,14 +161,14 @@ export default function MaterialMngt(): React.ReactNode {
                     RequestUtil.put(
                         '/tower-system/material',
                         [{
-                        ...values,
-                        id: detailData.id
-                    }]).then(res => {
-                        close();
-                        setRefresh(!refresh);
-                        message.success('保存成功');
-                        history.go(0)
-                    })
+                            ...values,
+                            id: detailData.id
+                        }]).then(res => {
+                            close();
+                            setRefresh(!refresh);
+                            message.success('保存成功');
+                            history.go(0)
+                        })
                 }
             })
         }
@@ -168,6 +181,7 @@ export default function MaterialMngt(): React.ReactNode {
         return new Promise(async (resolve, reject) => {  // 返回一个promise
             const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
                 materialCode: code + value,
+                materialDataType: 2,
                 id: detailData.id
             });
             resolve(resData)
@@ -320,7 +334,7 @@ export default function MaterialMngt(): React.ReactNode {
                             })
                         }
                     }]}>
-                        <Input addonBefore={code} maxLength={3} />
+                        <Input addonBefore={code} maxLength={4} />
                     </Form.Item></Col>
                 </Row>
                 <Row>
@@ -340,7 +354,7 @@ export default function MaterialMngt(): React.ReactNode {
                         required: true,
                         message: '请输入比重'
                     }]}>
-                        <InputNumber min={0} step="0.0001" precision={4} max={9999.9999} style={{ width: '100%' }} />
+                        <InputNumber min={0} step="0.0001" precision={4} max={999999.9999} style={{ width: '100%' }} />
                     </Form.Item></Col>
                 </Row>
                 <Row>

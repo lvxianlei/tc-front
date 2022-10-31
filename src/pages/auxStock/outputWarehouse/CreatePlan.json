@@ -1,0 +1,213 @@
+{
+    "baseInfoColumn": [
+        {
+            "title": "出库类型",
+            "dataIndex": "type",
+            "type": "select",
+            "required": true,
+            "enum": [
+                {
+                    "label": "正常出库",
+                    "value": 0
+                },
+                {
+                    "label": "退料回库",
+                    "value": 1
+                }
+            ]
+        },
+        {
+            "title": "领料人",
+            "dataIndex": "pickingUserId",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "deptName"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "手机号",
+                    "dataIndex": "phone"
+                },
+                {
+                    "title": "角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "工号",
+                    "dataIndex": "number"
+                },
+                {
+                    "title": "邮箱",
+                    "dataIndex": "email"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "账号/手机号/姓名/工号/邮箱"
+                }
+            ]
+        },
+        {
+            "title": "领料仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择领料仓库"
+                }
+            ]
+        },
+        {
+            "title": "领料日期",
+            "dataIndex": "pickingTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择领料日期"
+                }
+            ]
+        },
+        {
+            "title": "领料部门",
+            "dataIndex": "departmentName",
+            "required": true
+        }
+    ],
+    "material": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice"
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice"
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "reservoirName"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorName"
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/materialStock/outDetails",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "品名",
+                "type": "string",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "type": "string",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "locatorId",
+                "type":"tree"
+                
+            }
+        ],
+        "columns": [
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "含税单价（元/吨）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税单价（元/吨）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
+            }
+        ]
+    }
+}

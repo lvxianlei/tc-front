@@ -31,7 +31,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
     const [leftSelectedRows, setLeftSelectedRows] = useState<any[]>([]);
     const [rightSelectedRowKeys, setRightSelectedRowKeys] = useState<string[]>([]);
     const [rightSelectedRows, setRightSelectedRows] = useState<any[]>([]);
-    const type = window.location.pathname.split('/')[6];
+    const type = window.location.pathname.split('/')[7];
 
     const { loading, data } = useRequest<ISegmentNameList[]>(() => new Promise(async (resole, reject) => {
         const data: ISegmentNameList[] = await RequestUtil.get(`/tower-science/welding/getWeldingSegment?weldingId=${params.id}`);

@@ -166,7 +166,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     required: true,
                     message: '请输入单段件数'
                 }]}>
-                    <InputNumber min={0} max={999} size="small" onChange={(e) => {
+                    <InputNumber min={0} max={9999} size="small" onChange={(e) => {
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
                             ...data[index],
@@ -186,14 +186,14 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'apertureNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "apertureNumber"]} initialValue={_} rules={[{
-                    pattern: /^[0-9*,]*$/,
-                    message: '仅可输入数字/,/*',
+                    pattern: /^[0-9*,.]*$/,
+                    message: '仅可输入数字/,/*/.',
                 }]}>
                     <Input size="small" maxLength={50} onBlur={(e) => {
                         let list = e.target.value.split(',');
                         let num: number = 0;
                         list.forEach(res => {
-                            num += Number(res.split('*')[1] || 1)
+                            num += res.split('*')[0] ? Number(res.split('*')[1] || 1) : 0
                         })
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
@@ -408,7 +408,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'description',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "description"]} initialValue={_}>
-                    <Input.TextArea size="small" maxLength={50} />
+                    <Input.TextArea size="small" maxLength={200} />
                 </Form.Item>
             )
         },
@@ -569,7 +569,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'perimeter',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perimeter"]} initialValue={_}>
-                    <InputNumber size="small" min={0} max={9999.99} />
+                    <InputNumber size="small" min={0} max={999999.99} />
                 </Form.Item>
             )
         },
@@ -611,8 +611,19 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            setTableData([...rowData || []])
-            form.setFieldsValue({ data: [...rowData || []] })
+            const newData = rowData?.map(res => {
+                let list = res?.apertureNumber?.split(',');
+                let num: number = 0;
+                list?.forEach((item: any) => {
+                    num += item.split('*')[0] ? Number(item.split('*')[1] || 1) : 0
+                })
+                return {
+                    ...res,
+                    holesNum: num
+                }
+            })
+            setTableData([...newData || []])
+            form.setFieldsValue({ data: [...newData || []] })
             resole([])
         } catch (error) {
             reject(error)

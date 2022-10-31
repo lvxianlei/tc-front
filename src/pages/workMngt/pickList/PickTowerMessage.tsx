@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table, Select, DatePicker, Row, Col } from 'antd';
+import { Space, Button, Popconfirm, Input, Form, message, Modal, Select, DatePicker, Row, Col } from 'antd';
 // import { SearchTable as Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './pickTowerMessage/Pick.module.less';
@@ -511,8 +511,8 @@ export default function Lofting(): React.ReactNode {
                     width: 100,
                     render: (_: undefined, record: any): React.ReactNode => (
                         <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                            <Button onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`) }} type='link' disabled={!(user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([record?.materialLeader]).indexOf(AuthUtil.getUserId()) > -1) || params.status === '1'}>提料</Button>
-                            <Button onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`) }} type='link' disabled={record.status !== 2 || !(materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([record?.materialCheckLeader]).indexOf(AuthUtil.getUserId()) > -1)}>校核</Button>
+                            <Button onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${record.id}`) }} type='link' disabled={!(user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([record?.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) || params.status === '1'}>提料</Button>
+                            <Button onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/check/${record.id}/${record.materialLeader}`) }} type='link' disabled={record.status !== 2 || !(materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([record?.materialCheckLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1)}>校核</Button>
                             <Button onClick={() => { history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/detail/${record.id}`) }} type='link' disabled={record.status < 3}>明细</Button>
                             {/* <TowerPickAssign type={ record.status < 2 ? 'message' : "detail" } title="指派信息" detailData={ record } id={ record.id } update={ onRefresh } /> */}
                             <Popconfirm
@@ -622,7 +622,7 @@ export default function Lofting(): React.ReactNode {
 
                             }
                         }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        {(user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([params?.materialLeader]).indexOf(AuthUtil.getUserId()) > -1) ?
+                        {(user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([params?.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ?
                             <Button type="primary" ghost onClick={
                                 () => history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
                             } disabled={params.status === '1'}>提料</Button>
@@ -647,6 +647,21 @@ export default function Lofting(): React.ReactNode {
                                 : null
                         }
                         {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserId() ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
+                        {(materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ? <Popconfirm
+                            title="确认提交?"
+                            onConfirm={async () => {
+                                await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(() => {
+                                    message.success('提交成功！')
+                                }).then(() => {
+                                    history.push('/workMngt/pickList');
+                                })
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type="primary" ghost>提交</Button>
+                        </Popconfirm> : null}
+                        {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
                         <span>塔型：{detailTop?.productCategoryName}</span>
                         <span>计划号：{detailTop?.planNumber}</span>
