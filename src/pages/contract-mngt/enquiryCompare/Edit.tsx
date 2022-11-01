@@ -31,6 +31,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
             const result: { [key: string]: any } = await RequestUtil.get( `/tower-supply/materialPurchasePlan/infoList`, {
                 ...filterValue,
                 // planStatus: 1,
+                usePlanDetailIds: props?.usePlanDetailIds||'',
                 current: pagenation.current,
                 pageSize: pagenation.pageSize
             })
@@ -453,7 +454,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         </Modal>
         <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
             onCancel={() => setChooseVisible(false)}>
-            <ChoosePlan ref={choosePlanRef} />
+            <ChoosePlan ref={choosePlanRef} usePlanDetailIds={popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)}/>
         </Modal>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit onChange={handGuaranteChange} />
