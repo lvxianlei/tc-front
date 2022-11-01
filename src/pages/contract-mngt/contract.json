@@ -93,8 +93,8 @@
             "dataIndex": "num"
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight"
+            "title": "总重量（吨）",
+            "dataIndex": "totalWeight"
         },
         {
             "title": "生产厂家",
@@ -147,8 +147,8 @@
             "dataIndex": "num"
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight"
+            "title": "总重量（吨）",
+            "dataIndex": "totalWeight"
         },
         {
             "title": "生产厂家",
@@ -662,6 +662,72 @@
             {
                 "title": "规格",
                 "dataIndex": "structureSpec"
+            }
+        ]
+    },
+    "addResultMaterial": {
+        "title": "比价结果",
+        "type": "popTable",
+        "path": "/tower-supply/comparisonPrice/result",
+        "width": 1011,
+        "selectType": "checkbox",
+        "rowKey":"comparisonPriceDetailId",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": [
+            {
+                "title": "询比价编号",
+                "dataIndex": "comparisonPriceNumber",
+                "search": true
+            },
+            {
+                "title": "采购计划编号",
+                "dataIndex": "purchasePlanNumber",
+                "search": true
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName",
+                "search": true
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "structureTexture",
+                "search": true
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec",
+                "search": true
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "search": true
+            },
+            {
+                "title": "宽度",
+                "dataIndex": "width"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "availableNum"
+            },
+            {
+                "title": "重量（吨）",
+                "dataIndex": "totalWeight"
+            },
+            {
+                "title": "报价（元）",
+                "dataIndex": "taxOffer"
+            },
+            {
+                "title": "生产厂家",
+                "dataIndex": "manufacturer"
             }
         ]
     }
