@@ -10,7 +10,7 @@ import {
     materialTextureOptions, transportationTypeOptions,
     settlementModeOptions
 } from "../../configuration/DictionaryOptions"
-import { contractBaseInfo, material, addMaterial } from "./contract.json"
+import { contractBaseInfo, material, addMaterial, addResultMaterial } from "./contract.json"
 
 // 新加运费信息
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
@@ -117,11 +117,13 @@ export const calcFun = {
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
+    const [resultVisible, setResultVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialList, setMaterialList] = useState<any[]>([])
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
+    const [supplierId, setSupplierId] = useState('')
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
 
     const [colunmnBase, setColunmnBase] = useState<any[]>(contractBaseInfo);
@@ -302,6 +304,51 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         })])
         setVisible(false)
     }
+    const handleAddResultModalOk = () => {
+        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        const newMaterialList: any[] = []
+        setMaterialList([...materialList.map((item: any) => {
+            const num = parseFloat(item.num || "1")
+            const taxPrice = parseFloat(item.taxOffer || "1.00")
+            const price = parseFloat(item.offer || "1.00")
+            return ({
+                ...item,
+                num,
+                taxPrice,
+                price,
+                spec: item.structureSpec,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                taxTotalAmount: (num * taxPrice).toFixed(2),
+                totalAmount: (num * price).toFixed(2)
+            })
+        })])
+        setPopDataList([...materialList.map((item: any) => {
+            const num = parseFloat(item.num || "1")
+            const taxPrice = parseFloat(item.taxOffer || "1.00")
+            const price = parseFloat(item.offer || "1.00")
+            return ({
+                ...item,
+                num,
+                taxPrice,
+                price,
+                spec: item.structureSpec,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                taxTotalAmount: (num * taxPrice).toFixed(2),
+                totalAmount: (num * price).toFixed(2)
+            })
+        })])
+        setResultVisible(false)
+    }
 
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
@@ -457,35 +504,44 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     num: parseFloat(item.num || "1"),
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
                     price: parseFloat(item.price || "1.00"),
-                    weight: calcFun.weight({
-                        weightAlgorithm: item.weightAlgorithm,
-                        proportion: item.proportion,
-                        length: item.length,
-                        width: item.width,
-                        [type]: value
-                    }),
-                    totalWeight: calcFun.totalWeight({
-                        length: item.length,
-                        width: item.width,
-                        proportion: item.proportion,
-                        weightAlgorithm: item.weightAlgorithm,
-                        num: item.num,
-                        [type]: value
-                    })
+                    // weight: calcFun.weight({
+                    //     weightAlgorithm: item.weightAlgorithm,
+                    //     proportion: item.proportion,
+                    //     length: item.length,
+                    //     width: item.width,
+                    //     [type]: value
+                    // }),
+                    // totalWeight: calcFun.totalWeight({
+                    //     length: item.length,
+                    //     width: item.width,
+                    //     proportion: item.proportion,
+                    //     weightAlgorithm: item.weightAlgorithm,
+                    //     num: item.num,
+                    //     [type]: value
+                    // })
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) * value / 1000).toFixed(3),
                 }
                 allData[dataIndex] = value
                 return ({
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
                     totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
-                    totalWeight: calcFun.totalWeight({
-                        length: item.length,
-                        width: item.width,
-                        proportion: item.proportion,
-                        weightAlgorithm: item.weightAlgorithm,
-                        num: item.num,
-                        [type]: value
-                    }),
+                    // totalWeight: calcFun.totalWeight({
+                    //     length: item.length,
+                    //     width: item.width,
+                    //     proportion: item.proportion,
+                    //     weightAlgorithm: item.weightAlgorithm,
+                    //     num: item.num,
+                    //     [type]: value
+                    // }),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) * value / 1000).toFixed(3),
                     [dataIndex]: value
                 })
             }
@@ -645,6 +701,46 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     })))
                 }} />
         </Modal>
+        <Modal width={addResultMaterial.width || 520} title={`选择${addResultMaterial.title}`} destroyOnClose visible={resultVisible}
+            onOk={handleAddResultModalOk} onCancel={() => setResultVisible(false)}>
+            <PopTableContent data={{
+                    ...(addResultMaterial as any),
+                    path: `${addResultMaterial?.path}?supplierId=${supplierId}`,
+                    columns: (addResultMaterial as any).columns.map((item: any) => {
+                        if (item.dataIndex === "standard") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: materialStandardEnum
+                            })
+                        }
+                        return item
+                    })
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => {
+                    setMaterialList(fields.map((item: any) => ({
+                        ...item,
+                        num: item?.num || 1,
+                        spec: item.structureSpec,
+                        source: item.source || 2,
+                        length: item.length || 1,
+                        taxPrice: item.taxPrice || 1.00,
+                        price: item.price || 1.00,
+                        width: item.width || 0,
+                        taxTotalAmount: item.taxTotalAmount || 1.00,
+                        totalAmount: item.totalAmount || 1.00,
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                        structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
+                    })))
+                }} />
+        </Modal>
         <DetailTitle title="合同基本信息" key="a" />
         <BaseInfo
             form={baseForm}
@@ -719,7 +815,21 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     } else {
                         setVisible(true)
                     }
-                }}>添加</Button>
+            }}>添加</Button>,
+            <Button
+                type="primary"
+                ghost
+                key="add"
+                style={{marginLeft:'10px'}}
+                onClick={async () => {
+                    const baseInfo = await baseForm.validateFields(['supplier'])
+                    if (baseInfo.supplier && !baseInfo.supplier.id) {
+                        message.warning("请先选择供应商...")
+                    } else {
+                        baseInfo.supplier &&setSupplierId(baseInfo.supplier.id)
+                        setResultVisible(true)
+                    }
+            }}>选择比价结果</Button>
         ]} />
         <CommonTable
             style={{ padding: "0" }}
