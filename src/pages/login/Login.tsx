@@ -74,7 +74,9 @@ export default function Login(): JSX.Element {
             })
         } else {
             const redirectURL = Base64.decode(location.hash)
-            Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
+            Cookies.set('DHWY_TOKEN', access_token, {
+                domain: process.env.COOKIES_DOMAIN
+            })
             Cookies.set('ACCOUNT', result.account, { domain: 'localhost' })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserInfo({
@@ -94,7 +96,6 @@ export default function Login(): JSX.Element {
             }
         }
     }
-
     return (
         <Layout className={layoutStyles.height100}>
             <Layout.Content className={style.content} >
