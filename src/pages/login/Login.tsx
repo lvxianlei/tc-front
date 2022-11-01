@@ -27,7 +27,7 @@ interface ICaptcha {
 interface ILoginState {
     readonly captcha: ICaptcha
 }
-
+console.log(process.env.COOKIES_DOMAIN, "-------")
 export default function Login(): JSX.Element {
     const location = useLocation()
     const history = useHistory()
