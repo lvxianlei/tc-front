@@ -94,7 +94,7 @@ export default function Login(): JSX.Element {
             }
         }
     }
-
+    console.log(Base64.decode(location.hash))
     return (
         <Layout className={layoutStyles.height100}>
             <Layout.Content className={style.content} >
