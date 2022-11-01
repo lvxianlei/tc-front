@@ -159,7 +159,7 @@ export default abstract class AuthUtil {
      * @param [options] 
      */
     public static setSinzetechAuth(token: string, refrenshToken: string): void {
-        Cookies.set(TOKEN_KEY, token)
+        Cookies.set(TOKEN_KEY, token, { domain: '.dhwy.cn' })
         sessionStorage.setItem(TOKEN_KEY, token)
         sessionStorage.setItem(REFRENSH_TOKEN, refrenshToken)
         this.timer && clearInterval(this.timer)
