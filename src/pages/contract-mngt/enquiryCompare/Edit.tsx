@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
-import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message } from "antd"
+import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message, DatePicker } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, IntgSelect, PopTableContent } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
@@ -28,9 +28,9 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         run
     } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, {
+            const result: { [key: string]: any } = await RequestUtil.get( `/tower-supply/materialPurchasePlan/infoList`, {
                 ...filterValue,
-                planStatus: 1,
+                // planStatus: 1,
                 current: pagenation.current,
                 pageSize: pagenation.pageSize
             })
@@ -45,23 +45,59 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
     const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
 
     return <>
-        <Form form={form} onFinish={(values) => run({
+        <Form form={form} onFinish={(values) =>{ 
+            if (values.date) {
+                const formatDate = values.date.map((item: any) => item.format("YYYY-MM-DD"))
+                values.startCreateTime = formatDate[0] + " 00:00:00"
+                values.endCreateTime = formatDate[1] + " 23:59:59"
+                delete values.date
+            }
+            run({
             ...values,
             purchaserId: values.purchaserId?.value
-        })}>
+        })}}>
             <Row gutter={[8, 8]}>
                 <Col><Form.Item label="采购类型" name="purchaseType">
                     <Select style={{ width: 200 }}>
-                        <Select.Option value="1">外部</Select.Option>
-                        <Select.Option value="2">内部</Select.Option>
-                        <Select.Option value="3">缺料</Select.Option>
+                        <Select.Option value="1">配料采购</Select.Option>
+                        <Select.Option value="2">库存采购</Select.Option>
+                        <Select.Option value="3">缺料采购</Select.Option>
                     </Select>
                 </Form.Item></Col>
-                <Col><Form.Item label="采购人" name="purchaserId">
+                {/* <Col><Form.Item label="采购人" name="purchaserId">
                     <IntgSelect width={200} />
-                </Form.Item></Col>
-                <Col><Form.Item label="采购计划编号" name="purchasePlanCode">
+                </Form.Item></Col> */}
+                <Col><Form.Item label="品名" name="materialName">
                     <Input />
+                </Form.Item></Col>
+                <Col><Form.Item label="标准" name="materialStandard">
+                    <Select style={{ width: "160px" }} defaultValue={""}>
+                        <Select.Option value='' key={'aa'}>全部</Select.Option>
+                        {
+                            materialStandardOptions?.map((item: { id: string, name: string }) => <Select.Option
+                                value={item.id}
+                                key={item.id}>{item.name}</Select.Option>)
+                        }
+                    </Select>
+                </Form.Item></Col>
+                <Col><Form.Item label="材质" name="structureTexture">
+                    <Select style={{ width: "160px" }} defaultValue={""}>
+                        <Select.Option value='' key={'aa'}>全部</Select.Option>
+                        {
+                            materialTextureOptions?.map((item: { id: string, name: string }) => <Select.Option
+                                value={item.name}
+                                key={item.id}>{item.name}</Select.Option>)
+                        }
+                    </Select>
+                </Form.Item></Col>
+                <Col><Form.Item label="规格" name="structureSpec">
+                    <Input />
+                </Form.Item></Col>
+                <Col><Form.Item label="申购日期" name="date">
+                    <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
+                </Form.Item></Col>
+                <Col><Form.Item label="模糊查询" name="purchasePlanCode">
+                    <Input placeholder="输入采购计划编号/物料编码进行查询"/>
                 </Form.Item></Col>
                 <Col><Form.Item>
                     <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
@@ -72,11 +108,12 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         </Form>
         <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
             rowSelection={{
-                type: "radio",
+                type: "checkbox",
                 onChange: (_: any, selectedRows: any[]) => {
                     setSelectRows(selectedRows)
                 }
             }}
+            rowKey='purchasePlanDetailId'
             pagination={{
                 size: "small",
                 pageSize: data?.pageSize,
@@ -250,14 +287,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows;
-        setPurchasePlanId(chooseData[0].id);
-        setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
+        // setPurchasePlanId(chooseData[0].purchasePlanId);
+        setMaterialList(chooseData?.map((item: any) => ({
             ...item,
-            num: item.planPurchaseNum || "0",
+            num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source: item.source || 1,
+            source:  1,
             weight: item.weight,
+            length: item.length,
             totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
@@ -265,13 +303,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
         })))
-        setPopDataList(chooseData[0]?.materials?.map((item: any) => ({
+        setPopDataList(chooseData?.map((item: any) => ({
             ...item,
-            num: item.planPurchaseNum || "0",
+            num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source: item.source || 1,
+            source:  1,
             weight: item.weight,
+            length: item.length,
             totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
@@ -418,7 +457,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         </Modal>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit onChange={handGuaranteChange} />
-        <DetailTitle title="询价原材料 *" operation={[
+        <DetailTitle title="询比价材料明细 *" operation={[
             <Button type="primary" ghost key="add" style={{ marginRight: 16 }}
                 onClick={() => setVisible(true)}>添加询价原材料</Button>,
             <Button type="primary" ghost key="choose" onClick={() => setChooseVisible(true)}>选择计划</Button>
