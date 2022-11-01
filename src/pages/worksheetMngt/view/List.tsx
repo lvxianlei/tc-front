@@ -72,13 +72,13 @@ export default function List(): React.ReactNode {
       },
       {
         label: '处理节点',
-        name: "node",
+        name: "processingName",
         align: "center",
         width: 100,
         template: function (task: any) {
           return (
             `
-              <span title="处理节点：${task.node}" >${task.node || '-'}</span>
+              <span title="处理节点：${task.processingName}" >${task.processingName || '-'}</span>
               `
           )
 
