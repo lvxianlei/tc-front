@@ -236,29 +236,14 @@
     "choosePlanList": [
         {
             "title": "采购计划编号",
-            "dataIndex": "purchasePlanCode",
+            "dataIndex": "purchasePlanNumber",
             "width": 150,
             "type": "string"
         },
         {
             "title": "采购类型",
-            "dataIndex": "purchaseType",
-            "type": "select",
-            "width": 50,
-            "enum": [
-                {
-                    "label": "外部",
-                    "value": 1
-                },
-                {
-                    "label": "内部",
-                    "value": 2
-                },
-                {
-                    "label": "缺料",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "purchaseTypeName",
+            "width": 80
         },
         {
             "title": "申购日期",

@@ -59,9 +59,9 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
             <Row gutter={[8, 8]}>
                 <Col><Form.Item label="采购类型" name="purchaseType">
                     <Select style={{ width: 200 }}>
-                        <Select.Option value="1">外部</Select.Option>
-                        <Select.Option value="2">内部</Select.Option>
-                        <Select.Option value="3">缺料</Select.Option>
+                        <Select.Option value="1">配料采购</Select.Option>
+                        <Select.Option value="2">库存采购</Select.Option>
+                        <Select.Option value="3">缺料采购</Select.Option>
                     </Select>
                 </Form.Item></Col>
                 {/* <Col><Form.Item label="采购人" name="purchaserId">
@@ -108,11 +108,12 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         </Form>
         <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
             rowSelection={{
-                type: "radio",
+                type: "checkbox",
                 onChange: (_: any, selectedRows: any[]) => {
                     setSelectRows(selectedRows)
                 }
             }}
+            rowKey='purchasePlanDetailId'
             pagination={{
                 size: "small",
                 pageSize: data?.pageSize,
@@ -286,14 +287,15 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleChoosePlanOk = () => {
         const chooseData = choosePlanRef.current?.selectRows;
-        setPurchasePlanId(chooseData[0].id);
-        setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
+        // setPurchasePlanId(chooseData[0].purchasePlanId);
+        setMaterialList(chooseData?.map((item: any) => ({
             ...item,
-            num: item.planPurchaseNum || "0",
+            num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source: item.source || 1,
+            source:  1,
             weight: item.weight,
+            length: item.length,
             totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
@@ -301,13 +303,14 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
         })))
-        setPopDataList(chooseData[0]?.materials?.map((item: any) => ({
+        setPopDataList(chooseData?.map((item: any) => ({
             ...item,
-            num: item.planPurchaseNum || "0",
+            num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source: item.source || 1,
+            source:  1,
             weight: item.weight,
+            length: item.length,
             totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
