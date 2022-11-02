@@ -1,0 +1,62 @@
+{
+    "baseColumn": [
+        {
+            "title": "送检单号",
+            "dataIndex": "warehousingEntryNumber",
+            "width": 150
+        },
+        {
+            "title": "状态",
+            "dataIndex": "receiveNumber",
+            "width": 150
+        },
+        {
+            "title": "检验批次",
+            "dataIndex": "carNumber",
+            "width": 100
+        },
+        {
+            "title": "入库类型",
+            "dataIndex": "createUserName",
+            "width": 100
+        },
+        {
+            "title": "收货单号",
+            "dataIndex": "settlementModeName",
+            "width": 80
+        },
+        {
+            "title": "到货去向",
+            "dataIndex": "receiveStatusName",
+            "width": 80
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName",
+            "width": 80
+        },
+        {
+            "title": "送检类型",
+            "dataIndex": "createTime",
+            "width": 80
+        },
+        {
+            "title": "是否加急",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "width": 150
+        },
+        {
+            "title": "送检人",
+            "dataIndex": "taxPrice",
+            "width": 100
+        },
+        {
+            "title": "送检日期",
+            "dataIndex": "receiveTime",
+            "type":"date",
+            "format":"YYYY-MM-DD",
+            "width": 120
+        }
+    ]
+}
