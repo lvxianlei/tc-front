@@ -41,6 +41,11 @@
             "width": 180
         },
         {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 100
+        },
+        {
             "title": "最新状态变更时间",
             "dataIndex": "updateTime",
             "type": "date",

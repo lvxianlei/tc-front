@@ -313,7 +313,6 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: "100px" }}>
                             <Select.Option value={''} key={''}>全部</Select.Option>
-                            <Select.Option value={1} key={1}>待确认</Select.Option>
                             <Select.Option value={2} key={2}>待指派</Select.Option>
                             <Select.Option value={3} key={3}>待完成</Select.Option>
                             <Select.Option value={4} key={4}>已完成</Select.Option>

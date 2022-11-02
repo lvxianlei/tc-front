@@ -287,6 +287,12 @@ export default function ReleaseList(): React.ReactNode {
             width: 200,
             dataIndex: 'galvanizeDemand'
         },
+        {
+            key: 'isPerforateName',
+            title: '钻孔特殊要求',
+            width: 100,
+            dataIndex: 'isPerforateName'
+        },
         // {
         //     key: 'status',
         //     title: '配料状态',

@@ -80,13 +80,14 @@ export default function WorkBenchMngt(): React.ReactNode {
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E7%A1%AE%E8%AE%A4%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
+				// {
+				// 	title: '待确认',
+				// 	dataIndex: 'confirmToBeConfirmed',
+				// 	path: '/taskMngt/ConfirmTaskMngt',
+				// 	state: 1,
+				// 	authority: 'tc_erp_rd_workbench_work_confirm_confirmed'
+				// }, 
 				{
-					title: '待确认',
-					dataIndex: 'confirmToBeConfirmed',
-					path: '/taskMngt/ConfirmTaskMngt',
-					state: 1,
-					authority: 'tc_erp_rd_workbench_work_confirm_confirmed'
-				}, {
 					title: '待指派',
 					dataIndex: 'confirmToBeAssigned',
 					path: '/taskMngt/ConfirmTaskMngt',
@@ -106,13 +107,14 @@ export default function WorkBenchMngt(): React.ReactNode {
 			icon: 'https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/rd%E5%B7%A5%E4%BD%9C%E5%8F%B0%E5%9B%BE%E6%A0%872/%E6%94%BE%E6%A0%B7%E4%BB%BB%E5%8A%A1.png',
 			col: 4,
 			child: [
+				// {
+				// 	title: '待确认',
+				// 	dataIndex: 'loftingToBeConfirmed',
+				// 	path: '/taskMngt/setOutTaskList',
+				// 	state: 1,
+				// 	authority: 'tc_erp_rd_workbench_work_lofting_confirmed'
+				// }, 
 				{
-					title: '待确认',
-					dataIndex: 'loftingToBeConfirmed',
-					path: '/taskMngt/setOutTaskList',
-					state: 1,
-					authority: 'tc_erp_rd_workbench_work_lofting_confirmed'
-				}, {
 					title: '待指派',
 					dataIndex: 'loftingToBeAssigned',
 					path: '/workMngt/scheduleList',

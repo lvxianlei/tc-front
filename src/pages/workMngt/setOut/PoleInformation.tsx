@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-杆塔信息
 */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Space, DatePicker, Select, Button, Row, Col, Form, TreeSelect, Spin, message } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -155,6 +155,12 @@ export default function PoleInformation(): React.ReactNode {
     const [allotData, setAllotData] = useState<IAllot>();
     const [loftingStatus, setLoftingStatus] = useState<number>(0);
     const [visible, setVisible] = useState<boolean>(false);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+    }, [confirmLoading])
+
 
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
@@ -234,6 +240,7 @@ export default function PoleInformation(): React.ReactNode {
             await onTip();
             await editRef.current?.onSubmit();
             message.success('提交成功！');
+            setConfirmLoading(false)
             setTipVisible(false);
             setAllotVisible(false);
             setRefresh(!refresh);
@@ -295,14 +302,14 @@ export default function PoleInformation(): React.ReactNode {
                         editRef.current?.resetFields()
                     }}>关闭</Button>
                     {/* <Button type="primary" onClick={handleModalOk} ghost>保存</Button> */}
-                    <Button type="primary" onClick={handleModalsubmit} ghost>保存并提交</Button>
+                    <Button type="primary" loading={confirmLoading} onClick={handleModalsubmit} ghost>保存并提交</Button>
                 </Space>
             }
             // onOk={handleModalOk}
             onCancel={() => setAllotVisible(false)}
             className={styles.tryAssemble}
         >
-            <AllotModal id={productId} allotData={allotData || {}} ref={editRef} status={loftingStatus} />
+            <AllotModal getLoading={(loading: boolean) => setConfirmLoading(loading)} id={productId} allotData={allotData || {}} ref={editRef} status={loftingStatus} />
         </Modal>
         <Page
             path="/tower-science/product/lofting"

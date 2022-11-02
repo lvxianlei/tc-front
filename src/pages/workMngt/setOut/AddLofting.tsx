@@ -58,7 +58,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     pattern: /^[0-9a-zA-Z-]*$/,
                     message: '仅可输入数字/字母/-',
                 }]}>
-                    <Input size="small" maxLength={20} />
+                    <Input size="small" maxLength={50} />
                 </Form.Item>
             )
         },
@@ -193,7 +193,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                         let list = e.target.value.split(',');
                         let num: number = 0;
                         list.forEach(res => {
-                            num += Number(res.split('*')[1] || 1)
+                            num += res.split('*')[0] ? Number(res.split('*')[1] || 1) : 0
                         })
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
@@ -408,7 +408,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'description',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "description"]} initialValue={_}>
-                    <Input.TextArea size="small" maxLength={50} />
+                    <Input.TextArea size="small" maxLength={200} />
                 </Form.Item>
             )
         },
@@ -611,8 +611,19 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
-            setTableData([...rowData || []])
-            form.setFieldsValue({ data: [...rowData || []] })
+            const newData = rowData?.map(res => {
+                let list = res?.apertureNumber?.split(',');
+                let num: number = 0;
+                list?.forEach((item: any) => {
+                    num += item.split('*')[0] ? Number(item.split('*')[1] || 1) : 0
+                })
+                return {
+                    ...res,
+                    holesNum: num
+                }
+            })
+            setTableData([...newData || []])
+            form.setFieldsValue({ data: [...newData || []] })
             resole([])
         } catch (error) {
             reject(error)

@@ -8,13 +8,15 @@ interface SelectUserProps {
     selectedKey?: string[];
     selectType?: 'radio' | 'checkbox';
     disabled?: boolean;
+    requests?: Record<string, any>
 }
 
 export default function SelectUser({
     onSelect,
     selectedKey = [],
     selectType = 'radio',
-    disabled = false
+    disabled = false,
+    requests = {}
 }: SelectUserProps): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
@@ -75,13 +77,17 @@ export default function SelectUser({
                 columns={columns}
                 headTabs={[]}
                 requestData={{
-                    deptName: '技术部'
+                    deptName: '技术部',
+                    ...requests
                 }}
                 tableProps={{
                     rowSelection: {
                         type: selectType,
                         selectedRowKeys: selectedKeys,
-                        onChange: SelectChange
+                        onChange: SelectChange,
+                        getCheckboxProps: (record: Record<string, any>) => ({
+                          disabled: record?.status  === 0
+                        })
                     }
                 }}
                 searchFormItems={[

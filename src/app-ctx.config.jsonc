@@ -808,11 +808,11 @@
                 "appName": "PC",
                 "authority": "tc_erp_aps_plan",
                 "items": [
-                    {
-                        "label": "计划排产",
-                        "path": "/planProd/planMgmt",
-                        "authority": "tc_erp_aps_plan"
-                    },
+                    // {
+                    //     "label": "计划排产",
+                    //     "path": "/planProd/planMgmt",
+                    //     "authority": "tc_erp_aps_plan"
+                    // },
                     {
                         "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
@@ -1149,6 +1149,20 @@
                     }
                 ]
             },
+            // {
+            //     "label": "数字门户",
+            //     "icon": "xitongrizhiTY_xitongrizhi",
+            //     "path": "/data",
+            //     "appName": "COMM",
+            //     "authority": "tc_erp_sys_log",
+            //     "items": [
+            //         {
+            //             "label": "数字门户",
+            //             "path": "/data/door",
+            //             "authority": "tc_erp_sys_log_operation"
+            //         }
+            //     ]
+            // },
             {
                 "label": "请款申请管理",
                 "icon": "caiwuzhongxin_qingkuanshenqing",
@@ -1387,7 +1401,7 @@
                     }
                 ]
             },
-            { 
+            {
                 "label": "工作台",
                 "icon": "customer",
                 "path": "/workBenchASM",
@@ -1401,7 +1415,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "售后工单",
                 "icon": "customer",
                 "path": "/afterSales",
@@ -1415,7 +1429,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "费用记录",
                 "icon": "customer",
                 "path": "/expenseRecord",
@@ -1429,7 +1443,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "问题记录",
                 "icon": "customer",
                 "path": "/problemRecord",
@@ -1443,7 +1457,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "考核记录",
                 "icon": "customer",
                 "path": "/assessmentRecord",
@@ -1457,7 +1471,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "人员管理",
                 "icon": "customer",
                 "path": "/userRecord",
@@ -1471,7 +1485,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "配置",
                 "icon": "customer",
                 "path": "/setting",
@@ -1500,7 +1514,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "日历管理",
                 "icon": "customer",
                 "path": "/calendar",
@@ -1514,7 +1528,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "打卡管理",
                 "icon": "customer",
                 "path": "/clock",
@@ -1529,6 +1543,54 @@
                     {
                         "label": "人员网络图",
                         "path": "/clock/network",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "工单管理",
+                "icon": "customer",
+                "path": "/worksheetMngt",
+                "appName": "WO",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "工单视图",
+                        "path": "/worksheetMngt/view",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "工单管理",
+                        "path": "/worksheetMngt/management",
+                        "authority": "tc_erp_sc_workbench_list"
+                    }
+                ]
+            },
+            {  
+                "label": "工单设置",
+                "icon": "customer",
+                "path": "/worksheetSetting",
+                "appName": "WO",
+                "authority": "tc_erp_sc_workbench",
+                "items": [
+                    {
+                        "label": "工单模板管理",
+                        "path": "/worksheetSetting/worksheetTemplateMngt",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "模板类型",
+                        "path": "/worksheetSetting/templateType",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "工单同步",
+                        "path": "/worksheetSetting/worksheetSynchronous",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "字段同步",
+                        "path": "/worksheetSetting/fieldSynchronous",
                         "authority": "tc_erp_sc_workbench_list"
                     }
                 ]

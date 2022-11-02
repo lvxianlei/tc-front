@@ -95,11 +95,17 @@ export default function AssemblyWeldingList(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
+                    {
+                        record.weldingLeader ? 
+                            <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}/${record.weldingLeader}`, state: { status: record.status } }}>组焊清单</Link>
+                        : 
+                        <Button type='link' onClick={() => {
+                            message.warning('当前无组焊负责人，请先进行指派')
+                        }}>组焊清单</Button>
+                    }
                     {/* {
                         record.weldingLeader.split(',').indexOf(userId) === -1 ?
-                            <Button type="link" disabled>组焊清单</Button> */}
-                            <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}/${record.weldingLeader}`, state: { status: record.status } }}>组焊清单</Link>
-                    {/* } */}
+                            <Button type="link" disabled>组焊清单</Button> */}{/* } */}
                     {/* <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);

@@ -107,6 +107,15 @@
     },
     {
         "authority": "tc_erp_sys",
+        "title": "工单中心",
+        "description": "解决派单，接收业务员系统关键数据",
+        "iconFont": "icon-shengchanzhongxin3", // iconfont
+        "color": "#4071FF", // iconfont的颜色
+        "path": "/worksheetMngt/view",
+        "appName": "WO"
+    },
+    {
+        "authority": "tc_erp_sys",
         "title": "通用中心",
         "description": "必备基础功能",
         "iconFont": "icon-tongyong2", // iconfont
