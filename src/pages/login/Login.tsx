@@ -77,9 +77,6 @@ export default function Login(): JSX.Element {
             Cookies.set('DHWY_TOKEN', access_token, {
                 domain: process.env.COOKIES_DOMAIN
             })
-            Cookies.set('DHWY_TOKEN', access_token, {
-                domain: 'localhost'
-            })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserInfo({
                 user_id,
