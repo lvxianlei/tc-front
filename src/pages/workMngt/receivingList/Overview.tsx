@@ -1,11 +1,12 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
 import { Button, message, Modal, Spin, Form } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, BaseInfo } from '../../common'
+import { DetailContent, BaseInfo, Attachment, AttachmentRef } from '../../common'
 import { CargoDetails } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import { SearchTable as Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil'
+import CreatePlan from "./CreatePlan"
 
 interface ReceiveStrokAttachProps {
     type: 1 | 2
@@ -13,6 +14,9 @@ interface ReceiveStrokAttachProps {
     receiveStockId: string
 }
 
+interface ReceiveStrokAttachUploadProps {
+    id: string
+}
 const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStrokAttachProps, ref): JSX.Element => {
     const [form] = Form.useForm()
     const [reservoirId, setReservoirId] = useState<string>()
@@ -135,9 +139,48 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     </Spin>
 
 })
+const ReceiveStrokAttachUpload = forwardRef(({ id }: ReceiveStrokAttachUploadProps, ref): JSX.Element => {
+    const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+    const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/attach?attachType=2&id=${id}`)
+            resole(result?.attachInfoDtos || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { refreshDeps: [id] })
 
+    const { run: saveRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            // 对上传数据进行处理
+            const fieldIds: any = [],
+                source = attachRef.current.getDataSource();
+            if (source.length < 1) {
+                message.error("请您先上传质保单！");
+                resole(false as any)
+                return false;
+            }
+            source.map((item: any) => fieldIds.push(item.id));
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
+                id,
+                fieldIds,
+                attachType: 2
+            })
+            resole(true as any)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
+
+    return <Spin spinning={loading}>
+        <Attachment dataSource={data} edit title="质保单" ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
+    </Spin>
+})
 export default function Overview() {
     const receiveRef = useRef<{ onSubmit: () => Promise<boolean> }>()
+    const receiveAttachRef = useRef<{ onSubmit: () => Promise<boolean> }>()
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false)
@@ -147,7 +190,17 @@ export default function Overview() {
     const [detailId, setDetailId] = useState<string[]>([])
     const [receiveStockId, setReceiveStockId] = useState<string>("")
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
-
+    const [saveAttachLoding, setSaveAttachLoading] = useState<boolean>(false)
+    const [isOpenId, setIsOpenId] = useState<boolean>(false);
+    const [editId, setEditId] = useState<string>('');
+    const [detailAttachId, setDetailAttachId] = useState<string>("")
+    const [attachVisible, setAttachVisible] = useState<boolean>(false)
+    const handleCreate = (options: any) => {
+        if (options?.code === 1) {
+            history.go(0);
+        }
+        setIsOpenId(false);
+    }
     // 统计数量
     const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -170,6 +223,17 @@ export default function Overview() {
             setSaveLoading(false)
             message.success(`${attchType === 1 ? "收货" : "拒收"}成功...`)
             setVisible(false)
+            history.go(0)
+        } catch (error) {
+            setSaveLoading(false)
+        }
+    }
+    const handleAttachOkK = async () => {
+        setSaveLoading(true)
+        try {
+            const result = await receiveAttachRef.current?.onSubmit()
+            setSaveAttachLoading(false)
+            setAttachVisible(false)
             history.go(0)
         } catch (error) {
             setSaveLoading(false)
@@ -211,6 +275,25 @@ export default function Overview() {
             }}>
             <ReceiveStrokAttach type={attchType} ids={detailId} receiveStockId={receiveStockId} ref={receiveRef} />
         </Modal>
+        <Modal
+            destroyOnClose
+            visible={attachVisible}
+            title={'质保单'}
+            confirmLoading={saveAttachLoding}
+            onOk={handleAttachOkK}
+            okText="保存"
+            onCancel={() => {
+                setDetailAttachId("")
+                setAttachVisible(false)
+            }}>
+            <ReceiveStrokAttachUpload id={detailAttachId} ref={receiveAttachRef}  />
+            </Modal>
+        <CreatePlan
+            visible={isOpenId}
+            id={editId}
+            type={'edit'}
+            handleCreate={handleCreate}
+        />
         <Page
             path="/tower-storage/receiveStock/detail"
             exportPath={"/tower-storage/receiveStock/detail"}
@@ -246,7 +329,12 @@ export default function Overview() {
                         setVisible(true)
                     }}
                 >批量收货</Button>
-                <Button type="primary" ghost onClick={() => message.warning("功能开发中...")} >申请质检</Button>
+                <Button type="primary" ghost onClick={async () => {
+                    setEditId(params.id)
+                    const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/quality/${params.id}`)
+                    setIsOpenId(true)
+                    
+                }} >申请送检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
                     已收货：重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}</span>
@@ -288,6 +376,10 @@ export default function Overview() {
                                 setVisible(true)
                             }}
                         >拒收</Button>
+                        <a style={{ marginRight: 12 }} onClick={() => {
+                            setDetailAttachId(records.id)
+                            setAttachVisible(true)
+                        }}>质保单</a>
                     </>
                 }
             ]}
