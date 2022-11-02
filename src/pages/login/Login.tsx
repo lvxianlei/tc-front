@@ -27,7 +27,7 @@ interface ICaptcha {
 interface ILoginState {
     readonly captcha: ICaptcha
 }
-console.log(process.env.COOKIES_DOMAIN, "-------")
+
 export default function Login(): JSX.Element {
     const location = useLocation()
     const history = useHistory()
@@ -77,7 +77,9 @@ export default function Login(): JSX.Element {
             Cookies.set('DHWY_TOKEN', access_token, {
                 domain: process.env.COOKIES_DOMAIN
             })
-            Cookies.set('ACCOUNT', result.account, { domain: 'localhost' })
+            Cookies.set('DHWY_TOKEN', access_token, {
+                domain: 'localhost'
+            })
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserInfo({
                 user_id,
