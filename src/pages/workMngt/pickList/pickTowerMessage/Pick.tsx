@@ -143,7 +143,7 @@ export default function Lofting(): React.ReactNode {
                         message: '仅可输入数字/字母/-',
                     }]}
                 >
-                    <Input size="small" onChange={() => rowChange(index)} maxLength={10} />
+                    <Input size="small" onChange={() => rowChange(index)} maxLength={50} />
                 </Form.Item>
             )
         },
@@ -841,7 +841,7 @@ export default function Lofting(): React.ReactNode {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
-                                    <Input size="small" maxLength={10} onBlur={()=>{
+                                    <Input size="small" maxLength={50} onBlur={()=>{
                                         if(isBig){
                                             const value = form.getFieldsValue(true).dataV.map((item:any)=>{
                                                 return {
@@ -1084,7 +1084,7 @@ export default function Lofting(): React.ReactNode {
                                     pattern: /^[0-9a-zA-Z-]*$/,
                                     message: '仅可输入数字/字母/-',
                                 }]}>
-                                    <Input size="small" maxLength={10} />
+                                    <Input size="small" maxLength={50} />
                                 </Form.Item>
                             )
                         },
