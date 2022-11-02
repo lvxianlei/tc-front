@@ -23,7 +23,7 @@ const ReceiveStrokAttach = forwardRef(({ id }: ReceiveStrokAttachProps, ref): JS
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/attach?attachType=1&id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/attach?attachType=2&id=${id}`)
             resole(result?.attachInfoDtos || [])
         } catch (error) {
             reject(error)
@@ -43,7 +43,8 @@ const ReceiveStrokAttach = forwardRef(({ id }: ReceiveStrokAttachProps, ref): JS
             source.map((item: any) => fieldIds.push(item.id));
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
                 id,
-                fieldIds
+                fieldIds,
+                attachType:2
             })
             resole(true as any)
         } catch (error) {
