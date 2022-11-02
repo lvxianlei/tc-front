@@ -390,9 +390,9 @@ export default function CreatePlan(props: any): JSX.Element {
                                         setDetailId(records.id)
                                         setVisible(true)
                                     }}>质保单</Button>
-                                    <Button type="link"  onClick={() => {
+                                    {/* <Button type="link"  onClick={() => {
                                         
-                                    }}>检验结果</Button>
+                                    }}>检验结果</Button> */}
                                 </>
                             })]}
                         pagination={false}
