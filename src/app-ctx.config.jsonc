@@ -780,11 +780,11 @@
                 "appName": "PC",
                 "authority": "tc_erp_aps_plan",
                 "items": [
-                    {
-                        "label": "计划排产",
-                        "path": "/planProd/planMgmt",
-                        "authority": "tc_erp_aps_plan"
-                    },
+                    // {
+                    //     "label": "计划排产",
+                    //     "path": "/planProd/planMgmt",
+                    //     "authority": "tc_erp_aps_plan"
+                    // },
                     {
                         "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
