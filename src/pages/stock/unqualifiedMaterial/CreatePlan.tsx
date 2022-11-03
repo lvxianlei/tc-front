@@ -213,8 +213,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写处理后长度！");
                 return false;
             }
-            type==='save'&&saveRun(popDataList);
-            type==='submit'&&submitRun(popDataList);
+            type==='save'&&saveRun(popDataList[0]);
+            type==='submit'&&submitRun(popDataList[0]);
         } catch (error) {
             console.log(error);
         }
@@ -245,17 +245,12 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/${props.id}`)
-            setPopDataList(result?.outStockDetailVOList)
-            setMaterialList(result?.outStockDetailVOList)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/nonconformityDisposal/${props.id}`)
+            setPopDataList([result])
+            setMaterialList([result])
             result?.warehouseId && result?.warehouseId!==null && setWarehouseId(result?.warehouseId)
             resole({
-                ...result,
-                pickingUserId: {
-                    id: result?.applyStaffId,
-                    value: result?.applyStaffName
-                },
-                pickingTime: result?.createTime
+                ...result
             })
         } catch (error) {
             reject(error)
@@ -396,7 +391,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 </>
                             })]}
                         pagination={false}
-                        dataSource={popDataList} />
+                        dataSource={[...popDataList]} />
                 </Spin>
             </Modal>
             <Modal
