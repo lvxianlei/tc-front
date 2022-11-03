@@ -82,7 +82,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link" disabled={record.inspectionStatus !== 0}>删除</Button>
+                        <Button type="link" disabled={!(record.inspectionStatus === 0||record.inspectionStatus === 1)}>删除</Button>
                     </Popconfirm>
 
                 </>
