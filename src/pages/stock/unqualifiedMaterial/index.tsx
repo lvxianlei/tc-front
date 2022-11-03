@@ -39,7 +39,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         {
             title: '操作',
             dataIndex: 'key',
-            width: 160,
+            width: 80,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <>

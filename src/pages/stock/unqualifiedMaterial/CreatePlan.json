@@ -2,11 +2,11 @@
     "baseInfoColumn": [
         {
             "title": "送检单号",
-            "dataIndex": "issuedNumber"
+            "dataIndex": "qualityInspectionNumber"
         },
         {
             "title": "收货单号",
-            "dataIndex": "wareHouseId"
+            "dataIndex": "receiveNumber"
         },
         {
             "title": "检验部门",
@@ -14,15 +14,15 @@
         },
         {
             "title": "检验员",
-            "dataIndex": "wareHouseId"
+            "dataIndex": "processUserName"
         },
         {
             "title": "检验批次",
-            "dataIndex": "wareHouseId"
+            "dataIndex": "inspectionBatchName"
         },
         {
             "title": "检验日期",
-            "dataIndex": "wareHouseId",
+            "dataIndex": "inspectionTime",
             "type":"date",
             "format":"YYYY-MM-DD"
         }
