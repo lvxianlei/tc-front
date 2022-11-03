@@ -5,7 +5,7 @@
  */
 
  import React, { useRef, useState } from 'react';
- import { Space, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select } from 'antd';
+ import { Space, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select, Popconfirm, Input } from 'antd';
  import { CommonTable } from '../../common';
  import { FixedType } from 'rc-table/lib/interface';
  import styles from './EngineeringData.module.less';
@@ -13,7 +13,8 @@
  import RequestUtil from '../../../utils/RequestUtil';
  import { useHistory, useParams } from 'react-router-dom';
  import { useForm } from 'antd/es/form/Form';
-import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
+import { productTypeOptions, supplyTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import DataUpload from './DataUpload';
  
  export interface ILofting {
      readonly id?: string;
@@ -75,6 +76,78 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
              dataIndex: 'specialPrice'
          }
      ]
+
+     const detailColumns = [
+        {
+            key: 'productTypeName',
+            title: '文件名',
+            width: 50,
+            dataIndex: 'productTypeName'
+        },
+        {
+            key: 'projectEntries',
+            title: '文件类型',
+            dataIndex: 'projectEntries',
+            width: 80
+        },
+        {
+            key: 'voltageGradePriceFirst',
+            title: '应用计划',
+            width: 100,
+            dataIndex: 'voltageGradePriceFirst'
+        },
+        {
+            key: 'voltageGradePriceSecond',
+            title: '文件后缀',
+            width: 100,
+            dataIndex: 'voltageGradePriceSecond'
+        },
+        {
+            key: 'voltageGradePriceThird',
+            title: '上传人',
+            width: 80,
+            dataIndex: 'voltageGradePriceThird'
+        },
+        {
+            key: 'specialPrice',
+            title: '上传时间',
+            width: 80,
+            dataIndex: 'specialPrice'
+        },
+        {
+            key: 'specialPrice',
+            title: '备注',
+            width: 80,
+            dataIndex: 'specialPrice'
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 150,
+            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                <Space direction="horizontal" size="small">
+                <Button type="link" onClick={() => {}}>查看</Button>
+                    <Popconfirm
+                        title="确认删除?"
+                        onConfirm={() => {
+                            RequestUtil.delete(``).then(res => {
+                                message.success('删除成功');
+                                history.go(0)
+                            });
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                    >
+                        <Button type="link">删除</Button>
+                    </Popconfirm>
+                <Button type="link" onClick={() => {}}>下载</Button>
+                    <Button type="link" onClick={() => {}}>编辑</Button>
+                </Space>
+            )
+        }
+    ]
  
      const [page, setPage] = useState({
          current: 1,
@@ -85,23 +158,16 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
      const [status, setStatus] = useState<string>('1');
      const history = useHistory();
      const newRef = useRef<EditRefProps>();
-     const [nowColumns, setNowColumns] = useState<any>(columns);
      const [visible, setVisible] = useState<boolean>(false);
      const [type, setType] = useState<'edit' | 'new'>('new');
      const [form] = useForm();
-     const materialRef = useRef<EditRefProps>();
-     const [materialVisible, setMaterialVisible] = useState<boolean>(false);
-     const [materialType, setMaterialType] = useState<'edit' | 'new'>('new');
-     const [materialRowData, setMaterialRowData] = useState<any>();
-     const boltRef = useRef<EditRefProps>();
-     const [boltVisible, setBoltVisible] = useState<boolean>(false);
-     const [boltType, setBoltType] = useState<'edit' | 'new'>('new');
-     const [boltRowData, setBoltRowData] = useState<any>();
+     const [searchForm] = useForm();
      const [detailData, setDetailData] = useState<any>();
      const [rowData, setRowData] = useState<any>();
+     const [filterValues, setFilterValues] = useState<Record<string, any>>();
  
-     const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig) => new Promise(async (resole, reject) => {
-         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status });
+     const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig, filter?: Record<string,any>) => new Promise(async (resole, reject) => {
+         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status, ...filter });
          setPage({ ...result })
          resole(result?.records || [])
      }), { refreshDeps: [status] })
@@ -133,109 +199,75 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
          }
      })
  
-     const delRow = (id: string) => {
-         Modal.confirm({
-             title: "删除",
-             content: "确定删除放样定额配置？",
-             okText: '确定',
-             cancelText: '取消',
-             onOk: () => {
-                 RequestUtil.delete(`/tower-science/projectPrice?id=${id}`).then(res => {
-                     message.success("删除成功！")
-                     history.go(0)
-                 })
-             }
-         })
-     }
- 
-     const otherEdit = (record: Record<string, any>) => {
-         form.setFieldsValue({ price: record?.price })
-         Modal.confirm({
-             title: "编辑",
-             icon: null,
-             closable: true,
-             content: <Form form={form} labelCol={{ span: 6 }}>
-                 <Form.Item
-                     label="金额"
-                     name="price"
-                     rules={[{ required: true, message: '请输入金额' }]}
-                     initialValue={record?.price}>
-                     <InputNumber />
-                 </Form.Item>
-             </Form>,
-             onOk: async () => new Promise(async (resove, reject) => {
-                 try {
-                     const value = await form.validateFields();
-                     RequestUtil.post(`/tower-science/projectPrice/other`, { ...record, ...value }).then(res => {
-                         message.success("编辑成功！")
-                         form.setFieldsValue({ price: '' })
-                         history.go(0)
-                     })
-                     resove(true)
-                 } catch (error) {
-                     reject(false)
-                 }
-             }),
-             onCancel() {
-                 form.setFieldsValue({ price: '' })
-             }
-         })
-     }
- 
-     const materialHandleOk = () => new Promise(async (resove, reject) => {
-         try {
-             await materialRef.current?.onSubmit()
-             message.success("保存成功！")
-             setMaterialVisible(false)
-             history.go(0)
-             resove(true)
-         } catch (error) {
-             reject(false)
-         }
-     })
- 
-     const boltHandleOk = () => new Promise(async (resove, reject) => {
-         try {
-             await boltRef.current?.onSubmit()
-             message.success("保存成功！")
-             setBoltVisible(false)
-             history.go(0)
-             resove(true)
-         } catch (error) {
-             reject(false)
-         }
-     })
- 
      const onRowChange = async (record: Record<string, any>) => {
         detailRun(record.id);
         setRowData(record)
     }
 
+    const onSearch = (values: Record<string, any>) => {
+        detailRun(rowData?.id)
+    }
+
+    const onFinish = (values: Record<string, any>) => {
+        setFilterValues(values);
+        run({},{ ...values });
+    }
+
      return <Spin spinning={loading}>
-         {/* <Modal
+         <Modal
              destroyOnClose
-             key='LoftQuotaNew'
+             key='DataUpload'
              visible={visible}
-             title={type === 'new' ? '新增' : '编辑'}
+             title={'上传'}
              onOk={handleOk}
              onCancel={() => setVisible(false)}>
-             <LoftQuotaNew type={type} record={rowData} ref={newRef} />
-         </Modal> */}
-         <Row className={styles.search}>
-             <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
-                 setStatus(event.target.value);
-                 run();
-             }}>
-                 <Radio.Button value={'1'} key="1">全部</Radio.Button>
-                 <Radio.Button value={'2'} key="2">100KV及以下</Radio.Button>
-                 <Radio.Button value={'3'} key="3">220KV</Radio.Button>
-                 <Radio.Button value={'4'} key="4">500KV</Radio.Button>
-                 <Radio.Button value={'5'} key="5">750KV</Radio.Button>
-                 <Radio.Button value={'6'} key="6">800KV</Radio.Button>
-                 <Radio.Button value={'7'} key="7">1000KV及以上</Radio.Button>
-                 <Radio.Button value={'8'} key="8">国外工程</Radio.Button>
-             </Radio.Group>
-         </Row>
+             <DataUpload type={type} record={rowData} ref={newRef} />
+         </Modal>
+         <Form form={searchForm} layout="inline" onFinish={onFinish}>
+                    
+                    <Form.Item label='电压等级' name="status">
+                        
+                    <Select placeholder="请选择电压等级">
+                            {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
+                    </Form.Item>
+                    
+                    <Form.Item label='工程类型' name="status" initialValue={''}>
+                        
+                    <Select placeholder="请选择工程类型">
+                    <Select.Option value={''} key="0">全部</Select.Option>
+                    <Select.Option value={'国内'} key="1">国内</Select.Option>
+                    <Select.Option value={'国外'} key="2">国外</Select.Option>
+                            
+                        </Select>
+                    </Form.Item>
+                    
+                    <Form.Item label='产品类型' name="status" initialValue={''}>
+                        
+                    <Select placeholder="请选择产品类型">
+                    <Select.Option value={''} key="0">全部</Select.Option>
+                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                        return <Select.Option key={index} value={id}>
+                            {name}
+                        </Select.Option>
+                    })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label='模糊查询项' name="fuzzyMsg">
+                        <Input style={{ width: '400px' }} placeholder="合同编号/项目名称/工程名称/客户名称/计划号" />
+                    </Form.Item>
+                    <Form.Item>
+                        <Space direction="horizontal">
+                            <Button type="primary" htmlType="submit">搜索</Button>
+                            <Button htmlType="reset">重置</Button>
+    
+                        </Space>
+                    </Form.Item>
+                    </Form>
          <CommonTable
              haveIndex
              columns={columns}
@@ -265,36 +297,47 @@ import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
             
             </Col>
             <Col>
-            <Row>
-                <Form>
-                <Col>
-                <Form.Item label="文件类型" name="">
-                <Select style={{ width: "100px" }}>
-                            <Select.Option value={''} key={''}>全部</Select.Option>
-                    {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={index} value={id}>
-                            {name}
-                        </Select.Option>
-                    })}
-                        </Select>
+                <Form form={form} layout="inline" onFinish={onSearch}>
+                    
+                <Form.Item label='文件类型' name="status">
+                    
+                <Select placeholder="文件类型">
+                        {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
                 </Form.Item>
-                </Col>
-                <Col>
-                <Form.Item label="计划号" name="">
-                <Select style={{ width: "100px" }}>
-                            <Select.Option value={''} key={''}>全部</Select.Option>
-                    {rowData.a && rowData?.a?.map((res: any, index: number) => {
-                        return <Select.Option key={index} value={res}>
-                            {res}
-                        </Select.Option>
-                    })}
-                        </Select>
+                <Form.Item label='计划号' name="status">
+                    
+                <Select placeholder="计划号">
+                        {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
                 </Form.Item>
-                </Col>
+                <Form.Item>
+                    <Space direction="horizontal">
+                        <Button type="primary" htmlType="submit">搜索</Button>
+                        <Button htmlType="reset">重置</Button>
 
+                    </Space>
+                </Form.Item>
                 </Form>
-            </Row>
+            </Col>
+            <Col>
+            <Button type='primary' ghost>上传</Button>
             </Col>
          </Row>
+         
+         <CommonTable
+             haveIndex
+             columns={detailColumns}
+             dataSource={data}
+             pagination={false}
+         />
      </Spin>
  }

@@ -745,6 +745,11 @@
                         "authority": "tc_erp_rd_order_adjustment"
                     },
                     {
+                        "label": "过磅异常",
+                        "path": "/businessDisposal/weighingAbnormal",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
                         "label": "返修单",
                         "path": "/businessDisposal/repairList",
                         "authority": "tc_erp_rd_order_adjustment"

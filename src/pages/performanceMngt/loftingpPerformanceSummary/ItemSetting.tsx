@@ -131,7 +131,7 @@
      const [form] = Form.useForm();
  
      return <DetailContent key='CoefficientPerformance'>
-         <CommonTable dataSource={itemData || []} columns={[
+         <CommonTable dataSource={itemData || []} pagination={false} columns={[
             ...setColumns,
             {
                 title: '操作',

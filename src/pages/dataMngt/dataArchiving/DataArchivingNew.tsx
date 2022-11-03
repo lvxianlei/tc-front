@@ -20,7 +20,7 @@ import { certificateTypeOptions } from "../../../configuration/DictionaryOptions
  export default forwardRef(function DataArchivingNew({ record, type }: modalProps, ref) {
      const [form] = Form.useForm();
      const [towerSelects, setTowerSelects] = useState([]);
-     const [planNums,setPlanNums] = useState<any>({});
+     const [planNums,setPlanNums] = useState<any>([]);
  
      const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
          try {
@@ -151,7 +151,7 @@ import { certificateTypeOptions } from "../../../configuration/DictionaryOptions
              </>
                  :
                  <Form form={form}>
-                     <Descriptions bordered size="small" className={styles.description}>
+                     <Descriptions bordered column={3} size="small" className={styles.description}>
                          <Descriptions.Item label="状态">
                              <Form.Item name="trialAssemble" initialValue={0} rules={[
                                  {
@@ -208,6 +208,7 @@ import { certificateTypeOptions } from "../../../configuration/DictionaryOptions
                                  <Input maxLength={10}/>
                              </Form.Item>
                          </Descriptions.Item>
+                         <Descriptions.Item children></Descriptions.Item>
                          <Descriptions.Item label="工程名称">
                              <Form.Item name="planNumber">
                                  <Select

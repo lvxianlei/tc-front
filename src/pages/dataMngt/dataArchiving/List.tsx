@@ -199,6 +199,7 @@ import DataArchivingNew from './DataArchivingNew';
              destroyOnClose
              key='DataArchivingNew'
              visible={visible}
+             width="50%"
              title={type === 'new' ? '上传' : type === 'edit' ?'编辑': '查看'}
              onOk={handleOk}
              onCancel={() => {

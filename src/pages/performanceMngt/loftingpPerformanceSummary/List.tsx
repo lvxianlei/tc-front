@@ -260,7 +260,7 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Button type='primary' className={styles.bottom} ghost>绩效条目设置</Button>
+        <Button type='primary' onClick={() => setVisible(true)} className={styles.bottom} ghost>绩效条目设置</Button>
         <Row gutter={12} className={styles.bottom}>
             <Col span={18}>
         <CommonTable
