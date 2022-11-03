@@ -178,8 +178,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             type==='save'&&saveRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
-                        receiveStockDetailId: item?.detailId,
-                        productionTime: item?.manufactureTime,
+                        receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
+                        productionTime: item?.manufactureTime?item?.manufactureTime:item?.productionTime,
                         ...item,
                         inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
                     }
@@ -187,7 +187,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 id:params.id,
                 // initialQualityInspectionNumber: data?.initialQualityInspectionNumber,
                 receiveStockId: data?.receiveStockId,
-                productionTime: data?.productionTime,
                 receiveNumber: data?.receiveNumber,
                 supplierId:data?.supplierId,
                 supplierName:data?.supplierName,
@@ -198,8 +197,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             type==='submit'&&saveRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
-                        receiveStockDetailId: item?.detailId,
-                        productionTime: item?.manufactureTime,
+                        receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
+                        productionTime: item?.manufactureTime?item?.manufactureTime:item?.productionTime,
                         ...item,
                         inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
                     }
@@ -207,7 +206,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 id:params.id,
                 // initialQualityInspectionNumber: data?.initialQualityInspectionNumber,
                 receiveStockId: data?.receiveStockId,
-                productionTime: data?.productionTime,
                 receiveNumber: data?.receiveNumber,
                 supplierId:data?.supplierId,
                 supplierName:data?.supplierName,
