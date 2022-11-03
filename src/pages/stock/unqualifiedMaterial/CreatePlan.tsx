@@ -188,6 +188,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 if (!(popDataList[i].purchaseDepartmentOpinion)) {
                     purchaseDepartmentOpinion = true;
                 }
+                popDataList[i].processScheme = popDataList[i].purchaseDepartmentOpinion 
+                delete popDataList[i].processSchemeName 
             }
             if (processedTaxPrice) {
                 message.error("请您填写处理后单价！");
