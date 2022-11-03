@@ -10,11 +10,11 @@
         },
         {
             "title": "检验部门",
-            "dataIndex": "wareHouseId"
+            "dataIndex": "inspectionDeptName"
         },
         {
             "title": "检验员",
-            "dataIndex": "processUserName"
+            "dataIndex": "inspectionUserName"
         },
         {
             "title": "检验批次",
