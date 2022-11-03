@@ -126,7 +126,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             reject(error)
         }
     }))
-    const handleCreateClick = async () => {
+    const handleCreateClick = async (type:string) => {
         try {
             if (popDataList.length < 1) {
                 message.error("当前没有送检单数据,不可保存或提交!");
@@ -175,7 +175,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 message.error("请您选择检验方案！");
                 return false;
             }
-            saveRun({
+            type==='save'&&saveRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
                         receiveStockDetailId: item?.detailId,
@@ -192,7 +192,28 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 supplierId:data?.supplierId,
                 supplierName:data?.supplierName,
                 warehouseId:data?.warehouseId,
-                inspectionBatch: 2
+                inspectionBatch: 2,
+                commit:0
+            });
+            type==='submit'&&saveRun({
+                qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
+                    return {
+                        receiveStockDetailId: item?.detailId,
+                        productionTime: item?.manufactureTime,
+                        ...item,
+                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
+                    }
+                }),
+                id:params.id,
+                // initialQualityInspectionNumber: data?.initialQualityInspectionNumber,
+                receiveStockId: data?.receiveStockId,
+                productionTime: data?.productionTime,
+                receiveNumber: data?.receiveNumber,
+                supplierId:data?.supplierId,
+                supplierName:data?.supplierName,
+                warehouseId:data?.warehouseId,
+                inspectionBatch: 2,
+                commit:1
             });
         } catch (error) {
             console.log(error);
@@ -341,8 +362,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     }}>
                         取消
                     </Button>,
-                    <Button key="create" type="primary" onClick={() => handleCreateClick()}>
-                        确定
+                    <Button key="create" type="primary" onClick={() => handleCreateClick('save')}>
+                        保存
+                    </Button>,
+                    <Button key="create" type="primary" onClick={() => handleCreateClick('submit')}>
+                        保存并提交
                     </Button>
                 ]}
             >
