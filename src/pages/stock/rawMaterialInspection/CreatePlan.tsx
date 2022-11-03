@@ -116,6 +116,10 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCreateClick = async (type:string) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
+            if (popDataList.length < 1) {
+                message.error("当前没有送检单数据,不可保存或提交!");
+                return false;
+            }
             // 添加对取样数量的拦截
             let inspectionNum = false;
             let machiningUser = false;
@@ -164,11 +168,16 @@ export default function CreatePlan(props: any): JSX.Element {
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
+                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+                        receiveStockDetailId: item?.detailId,
+                        productionTime: item?.manufactureTime
                     }
                 }),
                 ...baseInfo,
-                // id:baseInfo.receiveNumber?.records[0]?.id,
+                receiveStockId: baseInfo.receiveNumber?.records[0]?.id,
+                supplierId: result?.supplierId,
+                supplierName:result?.supplierName,
+                productionTime: result?.productionTime,
                 receiveNumber: baseInfo.receiveNumber?.records[0]?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1
@@ -176,12 +185,17 @@ export default function CreatePlan(props: any): JSX.Element {
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
+                        receiveStockDetailId: item?.detailId,
+                        productionTime: item?.manufactureTime,
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
+                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
                     }
                 }),
                 ...baseInfo,
-                // id:baseInfo.receiveNumber?.records[0]?.id,
+                receiveStockId: baseInfo.receiveNumber?.records[0]?.id,
+                supplierId: result?.supplierId,
+                supplierName:result?.supplierName,
+                productionTime: result?.productionTime,
                 receiveNumber: baseInfo.receiveNumber?.records[0]?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1
@@ -198,7 +212,6 @@ export default function CreatePlan(props: any): JSX.Element {
             })
         }
     }, [props.visible])
-
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = props.type === "create" ? `/tower-storage/qualityInspection` : '/tower-storage/qualityInspection'
@@ -227,13 +240,31 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any[] = await RequestUtil.get(`/tower-storage/receiveStock/quality/${props.id}`)
+            const result: any = await RequestUtil.get(`/tower-storage/qualityInspection/detail/${props.id}`)
             const userData: any = await RequestUtil.get(`/tower-system/employee?size=10000`);
             setUserList(userData.records);
-            setPopDataList(result)
-            setMaterialList(result)
+            setPopDataList(result?.qualityInspectionDetailVOS.map((item:any)=>{
+                return {
+                    ...item,
+                    inspectionTypeName: item?.inspectionTypeName?item?.inspectionTypeName.split(','):[],
+                    type: item?.inspectionNum>0?1:2
+    
+                }
+            }))
+            setMaterialList(result?.qualityInspectionDetailVOS.map((item:any)=>{
+                return {
+                    ...item,
+                    inspectionTypeName: item?.inspectionTypeName?item?.inspectionTypeName.split(','):[],
+                    type: item?.inspectionNum>0?1:2
+    
+                }
+            }))
             resole({
                 ...result,
+                receiveNumber: {
+                    id: result?.receiveStockId,
+                    value: result?.receiveNumber
+                },
             })
         } catch (error) {
             reject(error)
