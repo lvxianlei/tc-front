@@ -192,11 +192,11 @@ export default function CreatePlan(props: any): JSX.Element {
                     }
                 }),
                 ...baseInfo,
-                receiveStockId: baseInfo.receiveNumber?.records[0]?.id,
+                receiveStockId: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.id: result?.id,
                 supplierId: result?.supplierId,
                 supplierName:result?.supplierName,
                 productionTime: result?.productionTime,
-                receiveNumber: baseInfo.receiveNumber?.records[0]?.receiveNumber,
+                receiveNumber: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.receiveNumber:baseInfo?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1
             });
@@ -263,7 +263,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...result,
                 receiveNumber: {
                     id: result?.receiveStockId,
-                    value: result?.receiveNumber
+                    value: result?.receiveNumber,
+                    records:[{id: result?.receiveStockId,
+                    value: result?.receiveNumber}]
                 },
             })
         } catch (error) {

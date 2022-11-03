@@ -191,6 +191,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 supplierId:data?.supplierId,
                 supplierName:data?.supplierName,
                 warehouseId:data?.warehouseId,
+                isUrgent: data?.isUrgent,
                 inspectionBatch: 2,
                 commit:0
             });
@@ -207,6 +208,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 // initialQualityInspectionNumber: data?.initialQualityInspectionNumber,
                 receiveStockId: data?.id,
                 receiveNumber: data?.receiveNumber,
+                isUrgent: data?.isUrgent,
                 supplierId:data?.supplierId,
                 supplierName:data?.supplierName,
                 warehouseId:data?.warehouseId,
