@@ -61,12 +61,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
-                    <Button type="link"
+                   {record?.inspectionStatus!==3? <Button type="link"
                         onClick={() => history.push(`/rawMaterialInspection/inspection/detail/${record.id}`)}
-                    >明细</Button>
+                    >明细</Button>:
                     <Button type="link"
                         onClick={() => history.push(`/rawMaterialInspection/inspection/reviewDetail/${record.id}`)}
-                    >明细</Button>
+                    >明细</Button>}
                     <Button
                         type="link"
                         onClick={
@@ -82,7 +82,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link" disabled={record.stockStatus === 2}>删除</Button>
+                        <Button type="link" disabled={record.inspectionStatus !== 1}>删除</Button>
                     </Popconfirm>
 
                 </>

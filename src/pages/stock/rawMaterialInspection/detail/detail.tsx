@@ -100,17 +100,38 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             message.error("请选择需要复检数据！");
             return false;
         }
+        setLoading(true)
         // const result: any = await RequestUtil.put(`/tower-storage/warehousingEntry/batchSaveWarehousingEntry`, selectedRowKeys )
-        setPopDataList([...selectedRow])
+        setPopDataList(selectedRow.map((item:any)=>{
+            return {
+                ...item,
+                inspectionTypeName: item?.inspectionTypeName?item?.inspectionTypeName.split(','):[],
+                type: item?.inspectionNum>0?1:2
+
+            }
+        }))
         const userData: any = await RequestUtil.get(`/tower-system/employee?size=10000`);
         setUserList(userData.records);
-        setLoading(true)
+        setLoading(false)
         setVisible(true)
         
     }
-
+    const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-storage/qualityInspection/detail/${params.id}`)
+            resole({
+                ...result
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }))
     const handleCreateClick = async () => {
         try {
+            if (popDataList.length < 1) {
+                message.error("当前没有送检单数据,不可保存或提交!");
+                return false;
+            }
             // 添加对取样数量的拦截
             let inspectionNum = false;
             let machiningUser = false;
@@ -154,18 +175,24 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 message.error("请您选择检验方案！");
                 return false;
             }
-            // const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${props.id}`)
-            // console.log(result)
             saveRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
+                        receiveStockDetailId: item?.detailId,
+                        productionTime: item?.manufactureTime,
                         ...item,
                         inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
                     }
                 }),
-                // id:props.id,
-                // warehouseId:result?.warehouseId,
-                inspectionBatch:2
+                id:params.id,
+                // initialQualityInspectionNumber: data?.initialQualityInspectionNumber,
+                receiveStockId: data?.receiveStockId,
+                productionTime: data?.productionTime,
+                receiveNumber: data?.receiveNumber,
+                supplierId:data?.supplierId,
+                supplierName:data?.supplierName,
+                warehouseId:data?.warehouseId,
+                inspectionBatch: 2
             });
         } catch (error) {
             console.log(error);

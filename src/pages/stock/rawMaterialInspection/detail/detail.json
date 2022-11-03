@@ -62,7 +62,7 @@
         },
         {
             "title": "取样数量",
-            "dataIndex": "qualityNum",
+            "dataIndex": "inspectionNum",
             "width": 160
         },
         {
@@ -140,27 +140,27 @@
         {
             "title": "力学结论",
             "dataIndex": "mechanicalConclusion",
-            "width": 120
+            "width": 100
         },
         {
             "title": "化学结论",
             "dataIndex": "chemicalConclusion",
-            "width": 120
+            "width": 100
         },
         {
             "title": "初检结论",
             "dataIndex": "initialTotalConclusion",
-            "width": 120
+            "width": 100
         },
         {
             "title": "初检力学结论",
             "dataIndex": "initialMechanicalConclusion",
-            "width": 80
+            "width": 110
         },
         {
             "title": "初检化学结论",
             "dataIndex": "initialChemicalConclusion",
-            "width": 80
+            "width": 120
         },
         {
             "title": "收货批次",
@@ -209,7 +209,7 @@
         },
         {
             "title": "取样数量",
-            "dataIndex": "qualityNum",
+            "dataIndex": "inspectionNum",
             "width": 160
         },
         {

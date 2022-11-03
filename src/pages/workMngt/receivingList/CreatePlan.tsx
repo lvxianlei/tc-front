@@ -101,9 +101,13 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }
 
-    const handleCreateClick = async () => {
+    const handleCreateClick = async (type:string) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
+            if (popDataList.length < 1) {
+                message.error("当前没有送检单数据,不可保存或提交!");
+                return false;
+            }
             // 添加对取样数量的拦截
             let inspectionNum = false;
             let machiningUser = false;
@@ -149,16 +153,39 @@ export default function CreatePlan(props: any): JSX.Element {
             }
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${props.id}`)
             console.log(result)
-            saveRun({
+            type==='save'&&saveRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
+                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+                        receiveStockDetailId: item?.detailId,
+                        productionTime: item?.manufactureTime
                     }
                 }),
                 ...baseInfo,
-                // id:props.id,
-                receiveNumber: result?.result,
+                receiveStockId: props.id,
+                supplierId: result?.supplierId,
+                supplierName:result?.supplierName,
+                productionTime: result?.productionTime,
+                receiveNumber: result?.receiveNumber,
+                warehouseId:result?.warehouseId,
+                inspectionBatch:1
+            });
+            type==='submit'&&submitRun({
+                qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
+                    return {
+                        ...item,
+                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+                        receiveStockDetailId: item?.detailId,
+                        productionTime: item?.manufactureTime
+                    }
+                }),
+                ...baseInfo,
+                receiveStockId: props.id,
+                supplierId: result?.supplierId,
+                supplierName:result?.supplierName,
+                productionTime: result?.productionTime,
+                receiveNumber: result?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1
             });
@@ -166,70 +193,6 @@ export default function CreatePlan(props: any): JSX.Element {
             console.log(error);
         }
     }
-    // const handleSubmitClick = async () => {
-    //     try {
-    //         const baseInfo = await addCollectionForm.validateFields();
-    //         // 添加对取样数量的拦截
-    //         let inspectionNum = false;
-    //         let machiningUser = false;
-    //         let sampler = false;
-    //         let machiningNum = false;
-    //         let inspectionScheme = false
-    //         for (let i = 0; i < popDataList.length; i += 1) {
-    //             if (!(popDataList[i].inspectionNum)&&popDataList[i].inspectionScheme!==0) {
-    //                 inspectionNum = true;
-    //             }
-    //             if (!(popDataList[i].machiningUser)) {
-    //                 machiningUser = true;
-    //             }
-    //             if (!(popDataList[i].sampler)) {
-    //                 sampler = true;
-    //             }
-    //             if (!(popDataList[i].machiningNum)) {
-    //                 machiningNum = true;
-    //             }
-    //             if (!(popDataList[i].inspectionScheme)&&popDataList[i].inspectionNum!==0) {
-    //                 inspectionScheme = true;
-    //             }
-    //         }
-    //         if (inspectionNum) {
-    //             message.error("请您填写取样数量！");
-    //             return false;
-    //         }
-    //         if (machiningNum) {
-    //             message.error("请您填写机加数量！");
-    //             return false;
-    //         }
-    //         if (sampler) {
-    //             message.error("请您选择取样人！");
-    //             return false;
-    //         }
-    //         if (machiningUser) {
-    //             message.error("请您选择机加人！");
-    //             return false;
-    //         }
-    //         if (inspectionScheme) {
-    //             message.error("请您选择检验方案！");
-    //             return false;
-    //         }
-    //         const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${props.id}`)
-    //         console.log(result)
-    //         submitRun({
-    //             qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
-    //                 return {
-    //                     ...item,
-    //                     inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
-    //                 }
-    //             }),
-    //             ...baseInfo,
-    //             id:props.id,
-    //             warehouseId:result?.warehouseId,
-    //             inspectionBatch:1
-    //         });
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
 
     useEffect(() => {
         if (props.visible) {
@@ -246,7 +209,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...data,
                 // id: props.id
             })
-            message.success("创建成功！");
+            message.success("保存成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
@@ -297,12 +260,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick('save')}>
                     保存
                 </Button>,
-                // <Button key="create" type="primary" onClick={() => handleSubmitClick()}>
-                //     保存并提交
-                // </Button>
+                <Button key="create" type="primary" onClick={() => handleCreateClick('submit')}>
+                    保存并提交
+                </Button>
             ]}
         >
             <Spin spinning={loading}>

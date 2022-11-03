@@ -2,32 +2,32 @@
     "baseColumn": [
         {
             "title": "送检单号",
-            "dataIndex": "warehousingEntryNumber",
+            "dataIndex": "qualityInspectionNumber",
             "width": 150
         },
         {
             "title": "状态",
-            "dataIndex": "receiveNumber",
+            "dataIndex": "inspectionStatusName",
             "width": 150
         },
         {
             "title": "检验批次",
-            "dataIndex": "carNumber",
+            "dataIndex": "inspectionBatchName",
             "width": 100
         },
         {
             "title": "入库类型",
-            "dataIndex": "createUserName",
+            "dataIndex": "warehousingEntryTypeName",
             "width": 100
         },
         {
             "title": "收货单号",
-            "dataIndex": "settlementModeName",
+            "dataIndex": "receiveNumber",
             "width": 80
         },
         {
             "title": "到货去向",
-            "dataIndex": "receiveStatusName",
+            "dataIndex": "warehouseName",
             "width": 80
         },
         {
@@ -37,23 +37,22 @@
         },
         {
             "title": "送检类型",
-            "dataIndex": "createTime",
+            "dataIndex": "inspectionTypeName",
             "width": 80
         },
         {
             "title": "是否加急",
-            "dataIndex": "updateTime",
-            "type": "date",
+            "dataIndex": "isUrgentName",
             "width": 150
         },
         {
             "title": "送检人",
-            "dataIndex": "taxPrice",
+            "dataIndex": "createUserName",
             "width": 100
         },
         {
             "title": "送检日期",
-            "dataIndex": "receiveTime",
+            "dataIndex": "createTime",
             "type":"date",
             "format":"YYYY-MM-DD",
             "width": 120
