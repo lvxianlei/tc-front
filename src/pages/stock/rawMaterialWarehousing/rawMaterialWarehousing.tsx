@@ -44,7 +44,7 @@ const inStock = [
 ]
 export default function RawMaterialWarehousing(): React.ReactNode {
     const history = useHistory();
-    const [visible, setVisible] = useState<boolean>(false);
+    // const [visible, setVisible] = useState<boolean>(false);
     const [id, setId] = useState<string>();
     const addRef = useRef<EditRefProps>();
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
@@ -146,18 +146,18 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         run({...value})
         return value
     }
-    // 新增回调
-    const handleOk = () => new Promise(async (resove, reject) => {
-        try {
-            await addRef.current?.onSubmit()
-            message.success("完善纸质单号成功...")
-            setVisible(false)
-            history.go(0)
-            resove(true)
-        } catch (error) {
-            reject(false)
-        }
-    })
+    // // 新增回调
+    // const handleOk = () => new Promise(async (resove, reject) => {
+    //     try {
+    //         await addRef.current?.onSubmit()
+    //         message.success("完善纸质单号成功...")
+    //         setVisible(false)
+    //         history.go(0)
+    //         resove(true)
+    //     } catch (error) {
+    //         reject(false)
+    //     }
+    // })
 
     const handleCreate = (options: any) => {
         if (options?.code === 1) {
@@ -293,7 +293,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     }
                 ]}
             />
-            <Modal
+            {/* <Modal
                 title={'输入'}
                 visible={visible}
                 width={500}
@@ -315,7 +315,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 ]}
             >
                 <PaperOrderModal ref={addRef} id={id} />
-            </Modal>
+            </Modal> */}
             
             <CreatePlan
                 visible={isOpenId}
