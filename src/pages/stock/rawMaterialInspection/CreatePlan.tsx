@@ -180,7 +180,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 productionTime: result?.productionTime,
                 receiveNumber: baseInfo.receiveNumber?.records[0]?.receiveNumber,
                 warehouseId:result?.warehouseId,
-                inspectionBatch:1
+                inspectionBatch:1,
+                commit:0,
             });
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
@@ -198,7 +199,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 productionTime: result?.productionTime,
                 receiveNumber: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.receiveNumber:baseInfo?.receiveNumber,
                 warehouseId:result?.warehouseId,
-                inspectionBatch:1
+                inspectionBatch:1,
+                commit:1
             });
         } catch (error) {
             console.log(error);
@@ -212,12 +214,13 @@ export default function CreatePlan(props: any): JSX.Element {
             })
         }
     }, [props.visible])
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
         try {
-            const path = props.type === "create" ? `/tower-storage/qualityInspection` : '/tower-storage/qualityInspection'
-            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
-                ...data,
-                id: props.id
+            const path = `/tower-storage/qualityInspection`
+            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
+                ...tranferData,
+                id: props.id,
+                quailtyInspectionNumber: data?.quailtyInspectionNumber,
             })
             message.success("保存成功！");
             props?.handleCreate({ code: 1 })
@@ -226,10 +229,14 @@ export default function CreatePlan(props: any): JSX.Element {
             reject(error)
         }
     }), { manual: true })
-    const { run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: submitRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
         try {
-            const path =  '/tower-storage/tower-storage/qualityInspection/inspection'
-            const result: { [key: string]: any } = await RequestUtil.post(path,  data )
+            const path =  '/tower-storage/qualityInspection'
+            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
+                ...tranferData,
+                id: props.id,
+                quailtyInspectionNumber: data?.quailtyInspectionNumber,
+            })
             message.success("提交成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
