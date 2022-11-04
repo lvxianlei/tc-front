@@ -57,7 +57,7 @@
   "scripts": {
     "start": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",
     "intg": "cross-env REACT_APP_ENV=integration GENERATE_SOURCEMAP=true react-app-rewired start",
-    "build": " GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
+    "build": " GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build --max_old_space_size===8000",
     "build:dev": "cross-env REACT_APP_ENV=development npm run build",
     "build:test": "cross-env REACT_APP_ENV=test npm run build",
     "build:uat": "cross-env REACT_APP_ENV=uat npm run build",
