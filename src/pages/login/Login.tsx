@@ -74,9 +74,18 @@ export default function Login(): JSX.Element {
             })
         } else {
             const redirectURL = Base64.decode(location.hash)
-            Cookies.set('DHWY_TOKEN', access_token, {
-                domain: process.env.COOKIES_DOMAIN
-            })
+            if (process.env.REACT_APP_ENV === "integration") {
+                Cookies.set('DHWY_TOKEN', access_token, {
+                    domain: process.env.COOKIES_DOMAIN
+                })
+                Cookies.set('DHWY_TOKEN', access_token, {
+                    domain: 'localhost'
+                })
+            } else {
+                Cookies.set('DHWY_TOKEN', access_token, {
+                    domain: process.env.COOKIES_DOMAIN
+                })
+            }
             AuthUtil.setSinzetechAuth(access_token, refresh_token)
             AuthUtil.setUserInfo({
                 user_id,
