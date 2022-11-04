@@ -220,7 +220,7 @@ export default function CreatePlan(props: any): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
                 ...tranferData,
                 id: props.id,
-                quailtyInspectionNumber: data?.quailtyInspectionNumber,
+                qualityInspectionNumber: data?.qualityInspectionNumber,
             })
             message.success("保存成功！");
             props?.handleCreate({ code: 1 })
@@ -235,7 +235,7 @@ export default function CreatePlan(props: any): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
                 ...tranferData,
                 id: props.id,
-                quailtyInspectionNumber: data?.quailtyInspectionNumber,
+                qualityInspectionNumber: data?.qualityInspectionNumber,
             })
             message.success("提交成功！");
             props?.handleCreate({ code: 1 })
