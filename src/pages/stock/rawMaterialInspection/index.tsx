@@ -61,7 +61,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
-                   {record?.inspectionStatus!==3? <Button type="link"
+                   {record?.inspectionBatch!==2? <Button type="link"
                         onClick={() => history.push(`/rawMaterialInspection/inspection/detail/${record.id}`)}
                     >明细</Button>:
                     <Button type="link"
@@ -75,7 +75,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 setEditId(record.id)
                                 setOperationType("edit")
                             }
-                        }>编辑</Button>
+                        } disabled={!(record.inspectionStatus === 0||record.inspectionStatus === 1)}>编辑</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => handleDelete(record?.id)}
