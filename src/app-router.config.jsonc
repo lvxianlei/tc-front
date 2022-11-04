@@ -3272,13 +3272,6 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
-    { // RD-绩效管理-杂项绩效管理
-      "name": "杂项绩效管理",
-      "path": "/performanceMngt/miscellaneousPerformance",
-      "module": "./pages/performanceMngt/miscellaneousPerformance/List",
-      "exact": true,
-      "authority": "tc_erp_rd_fix_item_config_list"
-    },
     { // RD-绩效管理-人员工资绩效
       "name": "人员工资绩效",
       "path": "/performanceMngt/performanceSalary",

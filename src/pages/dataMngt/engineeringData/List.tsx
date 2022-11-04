@@ -4,8 +4,8 @@
  * @description RD-资料管理-工程资料管理
  */
 
- import React, { useRef, useState } from 'react';
- import { Space, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select, Popconfirm, Input } from 'antd';
+ import React, { useEffect, useRef, useState } from 'react';
+ import { Space, Form,Image, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select, Popconfirm, Input } from 'antd';
  import { CommonTable } from '../../common';
  import { FixedType } from 'rc-table/lib/interface';
  import styles from './EngineeringData.module.less';
@@ -125,10 +125,18 @@ import DataUpload from './DataUpload';
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 150,
+            width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                <Button type="link" onClick={() => {}}>查看</Button>
+                <Button type="link" onClick={() => {
+                    Modal.confirm({
+                        title: "查看",
+                        icon: null,
+                        content: <Image src={record?.url||''}/>,
+                        cancelText:"关闭",
+                        okButtonProps: {style: {display: 'none'}}
+                    })
+                }}>查看</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
@@ -155,7 +163,7 @@ import DataUpload from './DataUpload';
          total: 0
      })
  
-     const [status, setStatus] = useState<string>('1');
+     const [status, setStatus] = useState<string>('');
      const history = useHistory();
      const newRef = useRef<EditRefProps>();
      const [visible, setVisible] = useState<boolean>(false);
@@ -165,6 +173,13 @@ import DataUpload from './DataUpload';
      const [detailData, setDetailData] = useState<any>();
      const [rowData, setRowData] = useState<any>();
      const [filterValues, setFilterValues] = useState<Record<string, any>>();
+     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+
+     
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+    }, [confirmLoading])
+
  
      const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig, filter?: Record<string,any>) => new Promise(async (resole, reject) => {
          const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status, ...filter });
@@ -218,12 +233,15 @@ import DataUpload from './DataUpload';
              destroyOnClose
              key='DataUpload'
              visible={visible}
+             width="50%"
              title={'上传'}
+             okText="保存"
              onOk={handleOk}
+             confirmLoading={confirmLoading}
              onCancel={() => setVisible(false)}>
-             <DataUpload type={type} record={rowData} ref={newRef} />
+             <DataUpload getLoading={(loading) => setConfirmLoading(loading)} type={type} record={rowData} ref={newRef} />
          </Modal>
-         <Form form={searchForm} layout="inline" onFinish={onFinish}>
+         <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFinish}>
                     
                     <Form.Item label='电压等级' name="status">
                         
@@ -283,16 +301,16 @@ import DataUpload from './DataUpload';
                 className: styles.tableRow
             })}
          />
-         <Row className={styles.search}>
+         <Row className={styles.search} gutter={12}>
             <Col>
              <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
                  setStatus(event.target.value);
                  run();
              }}>
-                 <Radio.Button value={'1'} key="1">业务文件</Radio.Button>
-                 <Radio.Button value={'2'} key="2">技术文件</Radio.Button>
-                 <Radio.Button value={'3'} key="3">工艺文件</Radio.Button>
-                 <Radio.Button value={'4'} key="4">结算文件</Radio.Button>
+             <Radio.Button value={''} key="0">全部</Radio.Button>
+                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    return <Radio.Button value={id} key={id}>{name}</Radio.Button>
+                })}
              </Radio.Group>
             
             </Col>
@@ -329,7 +347,10 @@ import DataUpload from './DataUpload';
                 </Form>
             </Col>
             <Col>
-            <Button type='primary' ghost>上传</Button>
+            <Button type='primary' onClick={() => {
+                setVisible(true);
+                setType('new');
+             }}  ghost>上传</Button>
             </Col>
          </Row>
          

@@ -15,9 +15,10 @@ import { certificateTypeOptions } from "../../../configuration/DictionaryOptions
  interface modalProps {
      readonly record?: any;
      readonly type?: 'new' | 'detail' | 'edit';
+     getLoading: (loading:boolean) => void
  }
  
- export default forwardRef(function DataArchivingNew({ record, type }: modalProps, ref) {
+ export default forwardRef(function DataArchivingNew({ record, type,getLoading }: modalProps, ref) {
      const [form] = Form.useForm();
      const [towerSelects, setTowerSelects] = useState([]);
      const [planNums,setPlanNums] = useState<any>([]);
@@ -118,6 +119,7 @@ import { certificateTypeOptions } from "../../../configuration/DictionaryOptions
          try {
              const value = await form.validateFields();
              console.log(value)
+             getLoading(true)
              await saveRun({
                  ...value
              })
@@ -129,8 +131,12 @@ import { certificateTypeOptions } from "../../../configuration/DictionaryOptions
  
      const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
          try {
-             const result: any = await RequestUtil.post(`/tower-science/trialAssembly/save`, data)
-             resove(result)
+             RequestUtil.post(`/tower-science/trialAssembly/save`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
          } catch (error) {
              reject(error)
          }

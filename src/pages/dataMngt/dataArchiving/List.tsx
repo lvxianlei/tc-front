@@ -4,7 +4,7 @@
  * @description RD-资料管理-资料存档管理
  */
 
- import React, { useRef, useState } from 'react';
+ import React, { useEffect, useRef, useState } from 'react';
  import { Space, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select, Input, Popconfirm } from 'antd';
  import { CommonTable, Page } from '../../common';
  import { FixedType } from 'rc-table/lib/interface';
@@ -174,7 +174,13 @@ import DataArchivingNew from './DataArchivingNew';
      const [type, setType] = useState<'edit' | 'new' | 'detail'>('new');
      const [filterValue, setFilterValue] = useState();
      const [ refresh, setRefresh ] = useState<boolean>(false);
-     const [rowData,setRowData] = useState<any>();
+     const [rowData,setRowData] = useState<any>();     
+     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+
+     useEffect(() => {
+         setConfirmLoading(confirmLoading);
+     }, [confirmLoading])
+ 
  
      const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig) => new Promise(async (resole, reject) => {
          const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status });
@@ -202,11 +208,12 @@ import DataArchivingNew from './DataArchivingNew';
              width="50%"
              title={type === 'new' ? '上传' : type === 'edit' ?'编辑': '查看'}
              onOk={handleOk}
+             confirmLoading={confirmLoading}
              onCancel={() => {
                 setVisible(false);
                 newRef.current?.resetFields();
                 }}>
-             <DataArchivingNew type={type} record={rowData} ref={newRef} />
+             <DataArchivingNew getLoading={(loading) => setConfirmLoading(loading)} type={type} record={rowData} ref={newRef} />
          </Modal>
          <Page
             path=""

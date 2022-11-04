@@ -9,19 +9,22 @@
  import { Attachment, BaseInfo, CommonTable, DetailContent } from '../../common';
  import RequestUtil from '../../../utils/RequestUtil';
  import useRequest from '@ahooksjs/use-request';
- import styles from './DataArchiving.module.less';
-import { certificateTypeOptions } from "../../../configuration/DictionaryOptions";
+ import styles from './EngineeringData.module.less';
 import { AttachmentRef, FileProps } from "../../common/Attachment";
+import { FixedType } from 'rc-table/lib/interface';
+import { productTypeOptions } from "../../../configuration/DictionaryOptions";
  
  interface modalProps {
      readonly record?: any;
      readonly type?: 'new' | 'detail' | 'edit';
+     getLoading: (loading:boolean) => void
  }
  
- export default forwardRef(function DataUpload({ record, type }: modalProps, ref) {
+ export default forwardRef(function DataUpload({ record, type, getLoading }: modalProps, ref) {
      const [form] = Form.useForm();
-     const [towerSelects, setTowerSelects] = useState([]);
-     const [planNums,setPlanNums] = useState<any>([]);
+     const [uploadData, setUploadData] = useState<any>([{
+        id: '444'
+     }]);
      const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
  
      const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -42,48 +45,97 @@ import { AttachmentRef, FileProps } from "../../common/Attachment";
         {
             "key": "status",
             "title": "文件类别",
-            "dataIndex": "status"
+            "dataIndex": "status",
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, 'segmentName']} rules={[{
+                    required: true,
+                    message: '请选择文件类别'
+                }]}>
+                <Select placeholder="请选择文件类别">
+                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    return <Select.Option key={index} value={id}>
+                        {name}
+                    </Select.Option>
+                })}
+                    </Select>
+                </Form.Item>
+            )
         },
         {
             "key": "repairTime",
             "title": "文件类型",
-            "dataIndex": "repairTime"
+            "dataIndex": "repairTime",
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, 'segmentName']} rules={[{
+                    required: true,
+                    message: '请选择文件类型'
+                }]}>
+                <Select placeholder="请选择产品类型">
+                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    return <Select.Option key={index} value={id}>
+                        {name}
+                    </Select.Option>
+                })}
+                    </Select>
+                </Form.Item>
+            )
         },
         {
             "key": "wasteProductReceiptNumber",
             "title": "应用计划",
-            "dataIndex": "wasteProductReceiptNumber"
+            "dataIndex": "wasteProductReceiptNumber",
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, 'segmentName']} rules={[{
+                    required: true,
+                    message: '请选择文件类型'
+                }]}>
+                <Select placeholder="请选择产品类型">
+                <Select.Option value={''} key="0">全部</Select.Option>
+                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    return <Select.Option key={index} value={id}>
+                        {name}
+                    </Select.Option>
+                })}
+                    </Select>
+                </Form.Item>
+            )
         },
         {
             "key": "productTypeName",
             "title": "备注",
-            "dataIndex": "productTypeName"
+            "dataIndex": "productTypeName",
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, 'segmentName']}>
+                    <Input.TextArea placeholder="请输入备注" size='small' maxLength={800} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 50,
+            render: (_: undefined, record: Record<string, any>,index: number): React.ReactNode => (
+                    <Button type="link" onClick={() => delRow(index)}>删除</Button>
+            )
         }
     ]
-  
-    const { data: ProjectNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/listAll`);
-        resole(nums)
-    }), {})
- 
-    const ProjectNameChange = async (e: any) => {
-        const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
-        setPlanNums(data || [])
+
+    const delRow = (index: number) => {
+        const value = form.getFieldsValue(true)?.data;
+        value?.splice(index, 1);
+        setUploadData([...value]);
         form.setFieldsValue({
-            productCategoryId: ''
-        });
+            data: [...value]
+        })
     }
-     const planNumChange = async (e: any) => {
-         const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
-         setTowerSelects(data || [])
-         form.setFieldsValue({
-             productCategoryId: ''
-         });
-     }
  
      const onSave = () => new Promise(async (resolve, reject) => {
          try {
              const value = await form.validateFields();
+             
+             getLoading(true)
              console.log(value)
              await saveRun({
                  ...value
@@ -96,8 +148,12 @@ import { AttachmentRef, FileProps } from "../../common/Attachment";
  
      const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
          try {
-             const result: any = await RequestUtil.post(`/tower-science/trialAssembly/save`, data)
-             resove(result)
+             await RequestUtil.post(`/tower-science/trialAssembly/save`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
          } catch (error) {
              reject(error)
          }
@@ -113,11 +169,14 @@ import { AttachmentRef, FileProps } from "../../common/Attachment";
      return <DetailContent>
         <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
                 console.log(dataInfo)
-            }}><Button type="primary" ghost>上传</Button></Attachment>
+                setUploadData([...dataInfo])
+            }}><Button type="primary" style={{marginBottom: '16px'}} ghost>上传</Button></Attachment>
+            <Form form={form} className={styles.upload_form}>
          <CommonTable 
          columns={tableColumns}
-         dataSource={[]}
+         dataSource={uploadData || []}
          />
+         </Form>
      </DetailContent>
  })
  
