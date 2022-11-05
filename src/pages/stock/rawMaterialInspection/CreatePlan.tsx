@@ -169,7 +169,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     return {
                         ...item,
                         inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
-                        receiveStockDetailId: item?.detailId,
+                        receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
                         productionTime: item?.manufactureTime
                     }
                 }),
@@ -186,7 +186,7 @@ export default function CreatePlan(props: any): JSX.Element {
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
-                        receiveStockDetailId: item?.detailId,
+                        receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
                         productionTime: item?.manufactureTime,
                         ...item,
                         inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
