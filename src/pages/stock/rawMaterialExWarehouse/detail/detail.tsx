@@ -374,8 +374,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.updateTime) {
             const formatDate = value.updateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateTimeStart = `${formatDate[0]} 00:00:00`
-            value.updateTimeEnd = `${formatDate[1]} 23:59:59`
+            value.startUpdateTime = `${formatDate[0]} 00:00:00`
+            value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.updateTime
         }
         if (value.outStockStaffId) {
