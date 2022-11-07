@@ -950,6 +950,13 @@
       "exact": true,
       "authority": "tc_erp_sw_config_list_angle"
     },
+    { // 配置管理-质检策略配置
+      "name": "质检策略配置",
+      "path": "/config/configList/qualityInspection",
+      "module": "./pages/stock/qualityInspection/QualityInspection",
+      "exact": true,
+      "authority": "tc_erp_sw_config_list_else"
+    },
     { // 配置管理-其他参数配置
       "name": "其他参数配置",
       "path": "/config/configList/otherParameters",
