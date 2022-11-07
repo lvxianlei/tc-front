@@ -22,12 +22,12 @@
         },
         {
             "title": "检验方案",
-            "dataIndex": "qualitySchemeName",
+            "dataIndex": "inspectionSchemeName",
             "width": 120
         },
         {
             "title": "检验分类名称",
-            "dataIndex": "qualityTypeName",
+            "dataIndex": "inspectionTypeName",
             "width": 120
         },
         {
@@ -169,12 +169,12 @@
         },
         {
             "title": "检验方案",
-            "dataIndex": "qualitySchemeName",
+            "dataIndex": "inspectionSchemeName",
             "width": 120
         },
         {
             "title": "检验分类名称",
-            "dataIndex": "qualityTypeName",
+            "dataIndex": "inspectionTypeName",
             "width": 120
         },
         {
