@@ -42,12 +42,12 @@ export default function SetOutTaskList(): React.ReactNode {
                     await RequestUtil.put(`/tower-storage/settingConfig/on/${record?.id}`)
                     message.success('开启成功！')
                     history.go(0)
-                } }>开启</Button>
+                } } disabled={record?.takeEffect===1}>开启</Button>
                 <Button type="link" onClick={ async () => {
                     await RequestUtil.put(`/tower-storage/settingConfig/off/${record?.id}`)
                     message.success('关闭成功！')
                     history.go(0)
-                } }>关闭</Button>
+                } } disabled={record?.takeEffect===2}>关闭</Button>
                 </Space>
             )
         }
