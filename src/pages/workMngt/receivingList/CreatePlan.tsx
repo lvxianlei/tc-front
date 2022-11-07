@@ -34,6 +34,18 @@ export default function CreatePlan(props: any): JSX.Element {
         })
         setPopDataList(list.slice(0))
     }
+    const handleInspectionTypeNameChange = (value: number, receiveStockDetailId: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
+                return ({
+                    ...item,
+                    inspectionTypeName: value
+                })
+            }
+            return item
+        })
+        setPopDataList(list.slice(0))
+    }
     const handleNumChange = (value: number, receiveStockDetailId: string) => {
         const list = popDataList.map((item: any) => {
             if (item.receiveStockDetailId === receiveStockDetailId) {
@@ -313,7 +325,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["inspectionTypeName"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <Select placeholder="请选择" value={value} style={{ width: "150px" }} mode='multiple' disabled={records?.inspectionScheme!==3}>
+                                    render: (value: number, records: any, key: number) => <Select placeholder="请选择" value={value} style={{ width: "150px" }} mode='multiple' disabled={records?.inspectionScheme!==3} onChange={(value: number) => handleInspectionTypeNameChange(value, records.receiveStockDetailId)}>
                                         {testTypeOptions && testTypeOptions.map(({  name }, index) => {
                                             return <Select.Option key={index} value={name}>
                                                 {name}
