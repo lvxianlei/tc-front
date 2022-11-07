@@ -15,7 +15,7 @@
  
 }
  
- export default forwardRef(function GenerationOfMaterialApply({ }: modalProps, ref) {
+ export default forwardRef(function RewardDetailsConfiguration({ }: modalProps, ref) {
      const [form] = Form.useForm();
      const [detailForm] = Form.useForm();
      const [towerSelects, setTowerSelects] = useState([]);
