@@ -125,7 +125,7 @@
         },
         {
             "title": "轧制批号",
-            "dataIndex": "weight"
+            "dataIndex": "rollingNumber"
         },
         {
             "title": "出厂日期",
