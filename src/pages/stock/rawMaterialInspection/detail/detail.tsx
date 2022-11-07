@@ -181,7 +181,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
                         productionTime: item?.manufactureTime?item?.manufactureTime:item?.productionTime,
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
+                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
                     }
                 }),
                 id:params.id,
@@ -201,7 +201,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
                         productionTime: item?.manufactureTime?item?.manufactureTime:item?.productionTime,
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
+                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
                     }
                 }),
                 id:params.id,

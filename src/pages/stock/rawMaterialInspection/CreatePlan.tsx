@@ -168,8 +168,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
-                        receiveStockDetailId: item?.receiveStockDetailId?item?.receiveStockDetailId:item?.receiveStockDetailId,
+                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+                        receiveStockDetailId: item?.receiveStockDetailId,
                         productionTime: item?.manufactureTime
                     }
                 }),
@@ -177,7 +177,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 receiveStockId: baseInfo.receiveNumber?.records[0]?.id,
                 supplierId: result?.supplierId,
                 supplierName:result?.supplierName,
-                productionTime: result?.productionTime,
+                receiveTime: result?.receiveTime,
                 receiveNumber: baseInfo.receiveNumber?.records[0]?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1,
@@ -186,17 +186,17 @@ export default function CreatePlan(props: any): JSX.Element {
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
-                        receiveStockDetailId: item?.receiveStockDetailId?item?.receiveStockDetailId:item?.receiveStockDetailId,
+                        receiveStockDetailId: item?.receiveStockDetailId,
                         productionTime: item?.manufactureTime,
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
                     }
                 }),
                 ...baseInfo,
                 receiveStockId: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.id: result?.id,
                 supplierId: result?.supplierId,
                 supplierName:result?.supplierName,
-                productionTime: result?.productionTime,
+                receiveTime: result?.receiveTime,
                 receiveNumber: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.receiveNumber:baseInfo?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1,
