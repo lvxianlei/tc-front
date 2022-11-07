@@ -19,9 +19,9 @@ export default function CreatePlan(props: any): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [userList, setUserList] = useState<any>();
 
-    const handleInspectionSchemeChange = (value: number, id: string) => {
+    const handleInspectionSchemeChange = (value: number, receiveStockDetailId: string) => {
         const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
                 return ({
                     ...item,
                     inspectionScheme: value,
@@ -358,7 +358,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             return item;
                         })]}
                     pagination={false}
-                    dataSource={popDataList} />
+                    dataSource={[...popDataList]} />
             </Spin>
         </Modal>
     )
