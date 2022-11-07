@@ -5,19 +5,23 @@
  */
 
  import React, { useState } from 'react';
- import { Space, Input, DatePicker, Button, Form, TablePaginationConfig, Modal } from 'antd';
+ import { Space, Input, DatePicker, Button, Form, TablePaginationConfig, Modal, message, Row, Col } from 'antd';
  import styles from './PerformanceDetail.module.less';
  import { IResponseData } from '../../common/Page';
  import RequestUtil from '../../../utils/RequestUtil';
  import { CommonTable } from '../../common';
  import useRequest from '@ahooksjs/use-request';
 import RewardDetailsConfiguration from './RewardDetailsConfiguration';
+import { FixedType } from 'rc-table/lib/interface';
+import { useHistory } from 'react-router-dom';
  
  export default function List(): React.ReactNode {
      const [detailData, setDetailData] = useState<any>();
      const [form] = Form.useForm();
      const [filterValues, setFilterValues] = useState<Record<string, any>>();
      const [visible, setVisible] = useState<boolean>(false);
+     const [description, setDescription] = useState<string>('');
+     const history = useHistory();
 
      const columns= [
         {
@@ -30,7 +34,7 @@ import RewardDetailsConfiguration from './RewardDetailsConfiguration';
             "key": "productCategoryName",
             "title": "奖励条目",
             "dataIndex": "productCategoryName",
-            "width": 80
+            "width": 200
         },
         {
             "key": "productTypeName",
@@ -42,7 +46,7 @@ import RewardDetailsConfiguration from './RewardDetailsConfiguration';
             "key": "wasteStructureNum",
             "title": "奖励人数",
             "dataIndex": "wasteStructureNum",
-            "width": 120
+            "width": 50
         },
         {
             "key": "wasteNum",
@@ -64,6 +68,46 @@ import RewardDetailsConfiguration from './RewardDetailsConfiguration';
             "dataIndex": "rejectWeight",
             "width": 120,
             "type": "number"
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 80,
+            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                <Button type="link" onClick={() => {
+                   Modal.confirm({
+                    title: "编辑",
+                    icon: null,
+                    okText: '保存',
+                            content: <Row>
+                            <Col span={4}>备注</Col>
+                            <Col span={20}>
+                            <Input.TextArea defaultValue={record?.description} onChange={(e) => {
+                                console.log(e)
+                                setDescription(e?.target.value)
+                            }} maxLength={300}/>
+                            </Col>
+                            </Row>,
+                                            onOk: () => new Promise(async (resolve, reject) => {
+                                                try {
+                                                    console.log(description)
+                                                    RequestUtil.post<any>(``).then(res => {
+                                                        message.success('编辑成功');
+                                                        history.go(0)
+                                                        resolve(true)
+                                                    })
+                                                } catch (error) {
+                                                    reject(false)
+                                                }
+                                            }),
+                                            onCancel() {
+                                                setDescription('')
+                                            }
+                                        })
+                }}>编辑</Button>
+            )
         }
     ]
 
@@ -187,7 +231,7 @@ import RewardDetailsConfiguration from './RewardDetailsConfiguration';
                      </Space>
                  </Form.Item>
              </Form>
-             <Button type='primary' ghost>奖励条目配置</Button>
+             <Button type='primary' onClick={() => setVisible(true)} ghost>奖励条目配置</Button>
              <p><span>**年**月</span>奖励明细</p>
              <CommonTable
                  haveIndex

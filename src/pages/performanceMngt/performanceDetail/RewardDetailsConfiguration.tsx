@@ -51,64 +51,55 @@
             "key": "wasteNum",
             "title": "参数4",
             "dataIndex": "wasteNum",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "penaltyAmount",
             "title": "参数5",
             "dataIndex": "penaltyAmount",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
             "title": "参数6",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
             "title": "参数7",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
             "title": "参数8",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
             "title": "参数9",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
             "title": "参数10",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
             "title": "参数11",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
             "title": "参数12",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         },
         {
             "key": "rejectWeight",
@@ -121,8 +112,7 @@
             "key": "rejectWeight",
             "title": "状态",
             "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "width": 120
         }
     ]
 
