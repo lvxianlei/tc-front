@@ -143,8 +143,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.openTime
         }
-        if (value.batcherId) {
-            value.applyStaffId = value.batcherId.value
+        if (value.outStockStaffId) {
+            value.outStockStaffId = value.outStockStaffId.value
         }
         setFilterValue({ ...filterValue, ...value })
         run({...filterValue, ...value})
@@ -235,7 +235,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'batcherId',
+                        name: 'outStockStaffId',
                         label: '申请人',
                         children: <IntgSelect width={200} />
                     },
