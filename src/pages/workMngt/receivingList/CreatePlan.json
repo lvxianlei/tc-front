@@ -53,12 +53,12 @@
             "dataIndex": "width"
         },
         {
-            "title": "数量（mm）",
+            "title": "数量",
             "dataIndex": "num"
         },
         {
             "title": "炉批号",
-            "dataIndex": "furnaceBatch"
+            "dataIndex": "furnaceBatchNumber"
         },
         {
             "title": "质保书号",
