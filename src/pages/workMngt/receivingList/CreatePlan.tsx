@@ -181,7 +181,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 receiveTime: result?.receiveTime,
                 receiveNumber: result?.receiveNumber,
                 warehouseId:result?.warehouseId,
-                inspectionBatch:1
+                inspectionBatch:1,
+                commit:0,
             });
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
@@ -199,7 +200,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 receiveTime: result?.receiveTime,
                 receiveNumber: result?.receiveNumber,
                 warehouseId:result?.warehouseId,
-                inspectionBatch:1
+                inspectionBatch:1,
+                commit:1,
             });
         } catch (error) {
             console.log(error);
