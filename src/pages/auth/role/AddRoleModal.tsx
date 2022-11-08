@@ -45,7 +45,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     }), { manual: true })
 
     // 获取树结构
-    const { loading: loadingTree, run: getUser, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { loading: loadingTree, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: IAuthority[] = await RequestUtil.get<IAuthority[]>(`/sinzetech-system/role/component/tree`);
             resole(result);
@@ -54,7 +54,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), {})
+    }))
 
 
     // 新增保存
@@ -94,14 +94,19 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
             reject(false)
         }
     })
+
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit]);
+
     const onExpand = (expandedKeysValue: React.Key[]) => {
         setExpandedKeys(expandedKeysValue);
         setAutoExpandParent(false);
     };
-    const onCheck = (checkedKeys: { checked: React.Key[]; halfChecked: React.Key[]; } | React.Key[]): void => {
+
+    const onCheck = (checkedKeys: any, info: any): void => {
+        console.log(checkedKeys, info)
         setCheckedKeys(checkedKeys as React.Key[]);
     }
+
     const expandKeysByValue = (authorities: IAuthority[]): number[] => {
         let data: number[] = [];
         authorities.forEach((authority: IAuthority): void => {
@@ -132,9 +137,9 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 </Form.Item>
                 <Form.Item
                     name="code"
-                    style={{display:'none'}}
+                    style={{ display: 'none' }}
                 >
-                    <Input type="hidden"/>
+                    <Input type="hidden" />
                 </Form.Item>
                 <Form.Item
                     label="功能权限"
@@ -157,6 +162,6 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                     </div>
                 </Form.Item>
             </Form>
-            </Spin>
+        </Spin>
     )
 })
