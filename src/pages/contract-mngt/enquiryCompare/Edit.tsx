@@ -97,7 +97,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                 <Col><Form.Item label="申购日期" name="date">
                     <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                 </Form.Item></Col>
-                <Col><Form.Item label="模糊查询" name="purchasePlanCode">
+                <Col><Form.Item label="模糊查询" name="fuzzyQuery">
                     <Input placeholder="输入采购计划编号/物料编码进行查询"/>
                 </Form.Item></Col>
                 <Col><Form.Item>
