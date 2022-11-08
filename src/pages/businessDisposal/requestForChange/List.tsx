@@ -32,7 +32,7 @@ import { CommonTable } from '../../common';
      const [filterValues, setFilterValues] = useState<Record<string, any>>();
      const [visible, setVisible] = useState<boolean>(false);
      const addRef = useRef<EditRefProps>();
-     const [type, setType] = useState<'new' | 'detail'>('new');
+     const [type, setType] = useState<'new' | 'edit' | 'detail'>('new');
      const [rowId, setRowId] = useState<string>();
      const [searchForm] = useForm();
      const [filterValue, setFilterValue] = useState<any>({});
@@ -292,9 +292,9 @@ import { CommonTable } from '../../common';
      return <>
          <Modal
              destroyOnClose
-             key='ApplyTrial'
+             key='RequestForChange'
              visible={visible}
-             title={type === 'new' ? '试装/免试装申请' : '详情'}
+             title={type === 'new' ? '申请' : type === 'edit' ? '编辑' : '详情'}
              footer={<Space direction="horizontal" size="small">
                  {type === 'new' ?
                      <>
@@ -318,7 +318,7 @@ import { CommonTable } from '../../common';
                  setVisible(false);
                  addRef.current?.resetFields();
              }}>
-             {/* <ApplyTrial type={type} id={rowId} ref={addRef} /> */}
+             {/* <RequestForChange type={type} id={rowId} ref={addRef} /> */}
          </Modal>
          <Form form={searchForm} className={styles.selectBtn} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
             {
@@ -368,7 +368,7 @@ import { CommonTable } from '../../common';
                                 >
                                     <Button disabled={!(record.status === 1 || record.status === 5)} type="link">发起</Button>
                                 </Popconfirm>
-                                {/* <Popconfirm
+                                <Popconfirm
                                     title="确认撤回?"
                                     onConfirm={() => {
                                         RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/withdraw/${record.id}`).then(res => {
@@ -381,8 +381,7 @@ import { CommonTable } from '../../common';
                                     disabled={record.status !== 2}
                                 >
                                     <Button disabled={record.status !== 2} type="link">撤回</Button>
-                                </Popconfirm> */}
-                                {/* 和补件申请撤回一样，先隐藏 */}
+                                </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
                                     onConfirm={() => {
@@ -397,6 +396,11 @@ import { CommonTable } from '../../common';
                                 >
                                     <Button disabled={!(record.status === 1 || record.status === 5)} type="link">删除</Button>
                                 </Popconfirm>
+                                <Button type='link' onClick={() => {
+                                    setRowId(record?.id);
+                                    setVisible(true);
+                                    setType('detail');
+                                }}>编辑</Button>
                             </Space>
                         )
                     }
