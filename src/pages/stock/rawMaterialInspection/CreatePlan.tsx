@@ -108,8 +108,8 @@ export default function CreatePlan(props: any): JSX.Element {
 
 
     const performanceBondChange = async (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.receiveNumber) {
-            const result = fields.receiveNumber.records[0];
+        if (fields.receiveId) {
+            const result = fields.receiveId.records[0];
             const list: any[] = await RequestUtil.get(`/tower-storage/receiveStock/quality/${result.id}`)
             const userData: any = await RequestUtil.get(`/tower-system/employee?size=10000`);
             setUserList(userData.records);
@@ -176,7 +176,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您选择检验方案！");
                 return false;
             }
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${baseInfo.receiveNumber?.records[0]?.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${baseInfo.receiveId?.records[0]?.id}`)
             type==='save'&&saveRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
@@ -187,11 +187,11 @@ export default function CreatePlan(props: any): JSX.Element {
                     }
                 }),
                 ...baseInfo,
-                receiveStockId: baseInfo.receiveNumber?.records[0]?.id,
+                receiveStockId: baseInfo.receiveId?.records[0]?.id,
                 supplierId: result?.supplierId,
                 supplierName:result?.supplierName,
                 receiveTime: result?.receiveTime,
-                receiveNumber: baseInfo.receiveNumber?.records[0]?.receiveNumber,
+                receiveNumber: baseInfo.receiveId?.records[0]?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1,
                 commit:0,
@@ -206,11 +206,11 @@ export default function CreatePlan(props: any): JSX.Element {
                     }
                 }),
                 ...baseInfo,
-                receiveStockId: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.id: result?.id,
+                receiveStockId: baseInfo.receiveId?.records?baseInfo.receiveId?.records[0]?.id: result?.id,
                 supplierId: result?.supplierId,
                 supplierName:result?.supplierName,
                 receiveTime: result?.receiveTime,
-                receiveNumber: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.receiveNumber:baseInfo?.receiveNumber,
+                receiveNumber: baseInfo.receiveId?.records?baseInfo.receiveId?.records[0]?.receiveNumber:baseInfo?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1,
                 commit:1
@@ -281,7 +281,7 @@ export default function CreatePlan(props: any): JSX.Element {
             }))
             resole({
                 ...result,
-                receiveNumber: {
+                receiveId: {
                     id: result?.receiveStockId,
                     value: result?.receiveNumber,
                     records:[{id: result?.receiveStockId,
