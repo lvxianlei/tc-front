@@ -312,7 +312,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const { run: getUser, data: weightData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/detail/statistics`, {
-                ...filterValue
+                ...filterValue,
+                id:params.id
             })
             resole(result)
         } catch (error) {
@@ -381,7 +382,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (value.outStockStaffId) {
             value.outStockStaffId = value.outStockStaffId.value
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue({...value, id: params.id  })
         return value
     }
 
