@@ -9,8 +9,9 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import moment from 'moment';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import SelectUserByPick from './SelectUserByPick';
 
-export interface TowerPickAssignProps {}
+export interface TowerPickAssignProps { }
 export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPickAssignProps>, WithTranslation {
     readonly id: number | string;
     readonly update: () => void;
@@ -57,7 +58,7 @@ interface IAppointed {
 class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerPickAssignState> {
 
     private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-    
+
     /**
      * @protected
      * @description Gets form
@@ -66,11 +67,11 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     protected getForm(): FormInstance | null {
         return this.form?.current;
     }
-    
+
     public state: TowerPickAssignState = {
         visible: false,
         repeatModal: false,
-        time:'',
+        time: '',
         user: [],
         materialCheckLeader: [],
         departmentData: [],
@@ -92,11 +93,11 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     private async modalShow(): Promise<void> {
         this.getUserList();
         // const data = this.props.type === 'message'||this.props.type === 'detail'? await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`):await RequestUtil.get<IAppointed>(`/tower-science/materialProductCategory/assign/${ this.props.id }`)
-        const data:any = await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${ this.props.id }`)
+        const data: any = await RequestUtil.get<IAppointed>(`/tower-science/drawProductSegment/detail/${this.props.id}`)
         // const departmentData = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
         const renderEnum: any = patternTypeOptions && patternTypeOptions.map(({ id, name }) => {
             return {
-                label:name,
+                label: name,
                 value: id,
             }
         })
@@ -111,22 +112,23 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
         // if(this.props.type === 'message'||this.props.type === 'detail'){  //提料指派1.2.0版本 去掉
         detailData = {
             ...detailData,
-            
+
             plannedDeliveryTime: moment(data?.plannedDeliveryTime)
         }
         // }
-        this.getForm()?.setFieldsValue({  ...data, ...detailData,  
-            materialLeader: data?.materialLeader?data?.materialLeader.indexOf(',')?data?.materialLeader.split(','):[data?.materialLeader]:[],
-        // materialLeaderName: values.materialLeader.split('-')[1],
-            pattern: data?.pattern&&data?.patternName?data?.pattern+','+data?.patternName:'',
-            materialCheckLeader: data?.materialCheckLeader?data?.materialCheckLeader.indexOf(',')?data?.materialCheckLeader.split(','):[data?.materialCheckLeader]:[],
+        this.getForm()?.setFieldsValue({
+            ...data, ...detailData,
+            materialLeader: data?.materialLeader ? data?.materialLeader.indexOf(',') ? data?.materialLeader.split(',') : [data?.materialLeader] : [],
+            // materialLeaderName: values.materialLeader.split('-')[1],
+            pattern: data?.pattern && data?.patternName ? data?.pattern + ',' + data?.patternName : '',
+            materialCheckLeader: data?.materialCheckLeader ? data?.materialCheckLeader.indexOf(',') ? data?.materialCheckLeader.split(',') : [data?.materialCheckLeader] : [],
         });
         // if(data?.materialCheckLeaderDepartment && data.materialLeaderDepartment){
         //     this.onDepartmentChange(data.materialCheckLeaderDepartment, "校核人");
         //     this.onDepartmentChange(data.materialLeaderDepartment,"提料人");
         // }
     }
-    
+
     /**
      * @protected
      * @description Determines whether submit on
@@ -153,12 +155,12 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     message.success('指派成功');
                 }).then(() => {
                     this.getForm()?.resetFields();
-                    this.setState({  
+                    this.setState({
                         visible: false
                     })
-                    if(window.location.pathname.indexOf('/1/')>-1){
+                    if (window.location.pathname.indexOf('/1/') > -1) {
                         this.props.path();
-                    }  else{
+                    } else {
                         this.props.update();
                     }
                     // 
@@ -239,64 +241,64 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
     //                 value={ item.id }
     //             />;
     // });
-    
-     /**
-     * @description Renders AbstractDetailComponent
-     * @returns render 
-     */
+
+    /**
+    * @description Renders AbstractDetailComponent
+    * @returns render 
+    */
     public render(): React.ReactNode {
         return <>
-            <Button 
-                type={ this.props.title === "塔型提料指派" ? "primary" : 'link' } 
-                onClick={ () => this.modalShow() } 
+            <Button
+                type={this.props.title === "塔型提料指派" ? "primary" : 'link'}
+                onClick={() => this.modalShow()}
                 ghost
             >
-                { this.props.title }
+                {this.props.title}
             </Button>
             <Modal
-                visible={ this.state.visible } 
-                width="60%" 
-                title="塔型提料指派" 
+                visible={this.state.visible}
+                width="60%"
+                title="塔型提料指派"
                 footer={
-                    <Space direction="horizontal" className={ styles.bottomBtn }>
-                        <Button 
-                            type="ghost" 
-                            onClick={ () => this.modalCancel() }
+                    <Space direction="horizontal" className={styles.bottomBtn}>
+                        <Button
+                            type="ghost"
+                            onClick={() => this.modalCancel()}
                         >
                             关闭
                         </Button>
                         {
-                            this.props.type === 'detail'?
-                            null:
-                            <Button 
-                                type="primary" 
-                                onClick={ () => this.onSubmit() } 
-                                ghost
-                            >
-                                提交
-                            </Button>
+                            this.props.type === 'detail' ?
+                                null :
+                                <Button
+                                    type="primary"
+                                    onClick={() => this.onSubmit()}
+                                    ghost
+                                >
+                                    提交
+                                </Button>
                         }
                     </Space>
-                } 
-                onCancel={ () => this.modalCancel() }
+                }
+                onCancel={() => this.modalCancel()}
             >
-                <DetailContent className={ styles.modalHeight }>
-                    <Form 
-                        ref={ this.form } 
-                        className={ styles.descripForm }
+                <DetailContent className={styles.modalHeight}>
+                    <Form
+                        ref={this.form}
+                        className={styles.descripForm}
                     >
-                        <Descriptions 
-                            title="" 
-                            bordered 
-                            size="small" 
-                            colon={ false } 
-                            column={ 3 }
+                        <Descriptions
+                            title=""
+                            bordered
+                            size="small"
+                            colon={false}
+                            column={3}
                         >
                             <Descriptions.Item label="塔型">
-                                { this.state.appointed?.productCategoryName }
+                                {this.state.appointed?.productCategoryName}
                             </Descriptions.Item>
                             <Descriptions.Item label="模式">
-                                <Form.Item 
+                                <Form.Item
                                     name="pattern"
                                     initialValue={'全部'}
                                     rules={[{
@@ -305,50 +307,50 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     }
                                     ]}>
                                     <Select style={{ width: '100%' }}>
-                                        { patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
-                                            return <Select.Option key={ index } value={ id+','+name }>
-                                                { name }
+                                        {patternTypeOptions && patternTypeOptions.map(({ id, name }, index) => {
+                                            return <Select.Option key={index} value={id + ',' + name}>
+                                                {name}
                                             </Select.Option>
-                                        }) }
+                                        })}
                                     </Select>
                                 </Form.Item>
                                 {/* { this.props.type === 'detail'||this.props.type === 'message'? this.state.appointed?.pattern: this.state.appointed?.patternName } */}
-                                
-                           </Descriptions.Item>
-                            { this.props.type === 'detail' ?
-                                <><Descriptions.Item label="段信息">
-                                    { this.props.detailData?.name || '' }
-                                </Descriptions.Item>
-                                <Descriptions.Item label="提料人">
-                                    { this.props.detailData?.materialLeaderDepartmentName || '' } - {  this.props.detailData?.materialLeaderName || '' }
-                                </Descriptions.Item>
-                                <Descriptions.Item label="校核人">
-                                    { this.props.detailData?.materialCheckLeaderDepartmentName || '' } - {  this.props.detailData?.materialCheckLeaderName || '' }
-                                </Descriptions.Item>
-                                <Descriptions.Item label="交付时间">
-                                    { this.props.detailData?.plannedDeliveryTime || '' }
-                                </Descriptions.Item></>
-                                : <><Descriptions.Item label="段信息">
-                                <Form.Item 
-                                    name="name"
-                                    initialValue={'全部'}
-                                    rules={[{
-                                        required: true,
-                                        message: '请输入段信息'
-                                    },
-                                    {
-                                        pattern: /^[^\s]*$/,
-                                        message: '禁止输入空格',
-                                    },
-                                    {
-                                        pattern: /^(全部)$|^([0-9a-zA-Z-,]*)$/,
-                                        message: '仅可输入数字/字母/-/,/全部',
-                                    }]}>
-                                    <Input placeholder="请输入（1-3，5，ac，w，全部）" disabled/>
-                                </Form.Item>
+
                             </Descriptions.Item>
-                            <Descriptions.Item label="提料人">
-                                {/* <Form.Item name="materialLeaderDepartment"
+                            {this.props.type === 'detail' ?
+                                <><Descriptions.Item label="段信息">
+                                    {this.props.detailData?.name || ''}
+                                </Descriptions.Item>
+                                    <Descriptions.Item label="提料人">
+                                        {this.props.detailData?.materialLeaderDepartmentName || ''} - {this.props.detailData?.materialLeaderName || ''}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="校核人">
+                                        {this.props.detailData?.materialCheckLeaderDepartmentName || ''} - {this.props.detailData?.materialCheckLeaderName || ''}
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="交付时间">
+                                        {this.props.detailData?.plannedDeliveryTime || ''}
+                                    </Descriptions.Item></>
+                                : <><Descriptions.Item label="段信息">
+                                    <Form.Item
+                                        name="name"
+                                        initialValue={'全部'}
+                                        rules={[{
+                                            required: true,
+                                            message: '请输入段信息'
+                                        },
+                                        {
+                                            pattern: /^[^\s]*$/,
+                                            message: '禁止输入空格',
+                                        },
+                                        {
+                                            pattern: /^(全部)$|^([0-9a-zA-Z-,]*)$/,
+                                            message: '仅可输入数字/字母/-/,/全部',
+                                        }]}>
+                                        <Input placeholder="请输入（1-3，5，ac，w，全部）" disabled />
+                                    </Form.Item>
+                                </Descriptions.Item>
+                                    <Descriptions.Item label="提料人">
+                                        {/* <Form.Item name="materialLeaderDepartment"
                                     rules={[{
                                         required: true,
                                         message: '请选择部门'
@@ -366,17 +368,25 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
                                 </Form.Item> */}
-                                <Form.Item name="materialLeader"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} 
-                                    style={ { 
-                                        width: '50%', 
-                                        display: 'inline-block' 
-                                    } }
-                                >
-                                    <Select placeholder="请选择" style={{width:'120px'}} mode='multiple'>
+                                        <Form.Item name="materialLeaderName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}
+                                            style={{
+                                                width: '50%',
+                                                display: 'inline-block'
+                                            }}
+                                        >
+                                            <Input style={{ width: '120px' }} size="small" disabled suffix={[
+                                                <SelectUserByPick requests={{ deptName: '技术-提料组' }} key={0} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form.current?.setFieldsValue({
+                                                        materialLeader: selectedRows?.map((res: any) => res?.userId),
+                                                        materialLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
+                                                    })
+                                                }} />
+                                            ]} />
+                                            {/* <Select placeholder="请选择" style={{width:'120px'}} mode='multiple'>
                                         { this.state?.user && this.state.user.map((item: any) => {
                                             return <Select.Option 
                                                         key={ item.userId } 
@@ -385,11 +395,11 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                         { item.name }
                                                     </Select.Option>
                                         }) }
-                                    </Select>
-                                </Form.Item>
-                            </Descriptions.Item>
-                            <Descriptions.Item label="校核人">
-                                {/* <Form.Item 
+                                    </Select> */}
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="校核人">
+                                        {/* <Form.Item 
                                     name="materialCheckLeaderDepartment"
                                     rules={[{
                                         required: true,
@@ -413,18 +423,26 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                         { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
                                     </TreeSelect>
                                 </Form.Item> */}
-                                <Form.Item 
-                                    name="materialCheckLeader"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} 
-                                    style={ { 
-                                        width: '50%', 
-                                        display: 'inline-block' 
-                                    } }
-                                >
-                                    <Select placeholder="请选择" style={{width:'120px'}}  mode='multiple'>
+                                        <Form.Item
+                                            name="materialCheckLeaderName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}
+                                            style={{
+                                                width: '50%',
+                                                display: 'inline-block'
+                                            }}
+                                        >
+                                            <Input style={{ width: '120px' }} size="small" disabled suffix={[
+                                                <SelectUserByPick key={1} requests={{ deptName: '技术-提料组' }} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form.current?.setFieldsValue({
+                                                        materialCheckLeader: selectedRows?.map((res: any) => res?.userId),
+                                                        materialCheckLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
+                                                    })
+                                                }} />
+                                            ]} />
+                                            {/* <Select placeholder="请选择" style={{width:'120px'}}  mode='multiple'>
                                         { this.state?.user && this.state.user.map((item: any) => {
                                             return <Select.Option 
                                                         key={ item.userId } 
@@ -433,21 +451,21 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                         { item.name }
                                                     </Select.Option>
                                         }) }
-                                    </Select>
-                                </Form.Item>
-                            </Descriptions.Item>
-                            <Descriptions.Item label="交付时间">
-                                <Form.Item 
-                                    name="plannedDeliveryTime"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择交付时间'
-                                    }]}>
-                                    <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current)=> {
-                                        return current && current < moment(this.state.time);
-                                    }} showTime/>
-                                </Form.Item>
-                            </Descriptions.Item></>
+                                    </Select> */}
+                                        </Form.Item>
+                                    </Descriptions.Item>
+                                    <Descriptions.Item label="交付时间">
+                                        <Form.Item
+                                            name="plannedDeliveryTime"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择交付时间'
+                                            }]}>
+                                            <DatePicker format={'YYYY-MM-DD HH:mm:ss'} disabledDate={(current) => {
+                                                return current && current < moment(this.state.time);
+                                            }} showTime />
+                                        </Form.Item>
+                                    </Descriptions.Item></>
                             }
                         </Descriptions>
                     </Form>
