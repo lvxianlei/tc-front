@@ -703,7 +703,7 @@ export default function PackingListNew(): React.ReactNode {
                 <Form.Item name="segmentId" label="段名">
                     <Select placeholder="请选择" style={{ width: '150px' }} mode="multiple">
                         {userList && userList.map((item: any) => {
-                            return <Select.Option key={item.id} value={item.segmentId}>{item.segmentName}</Select.Option>
+                            return <Select.Option key={item.segmentId} value={item.segmentId}>{item.segmentName}</Select.Option>
                         })}
                     </Select>
                 </Form.Item>
