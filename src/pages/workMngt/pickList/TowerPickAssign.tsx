@@ -146,9 +146,9 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                     productCategoryName: this.state.appointed?.productCategoryName,
                     pattern: values.pattern.split(',')[0],
                     patternName: values.pattern.split(',')[1],
-                    // materialLeader: values.materialLeader.join(','),
+                    materialLeader: values.materialLeader.join(','),
                     // materialLeaderName: values.materialLeader.split('-')[1],
-                    // materialCheckLeader: values.materialCheckLeader.join(','),
+                    materialCheckLeader: values.materialCheckLeader.join(','),
                     // materialCheckLeaderName: values.materialCheckLeader.split('-')[1],
                 }
                 RequestUtil.post(`/tower-science/drawProductSegment/assign`, { ...values }).then(() => {
@@ -382,7 +382,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                 <SelectUserByPick requests={{ deptName: '技术-提料组' }} key={0} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
                                                     this.form.current?.setFieldsValue({
                                                         materialLeader: selectedRows?.map((res: any) => res?.userId),
-                                                        materialLeaderName: selectedRows?.map((res: any) => res?.name)
+                                                        materialLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
                                                     })
                                                 }} />
                                             ]} />
@@ -438,7 +438,7 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                                 <SelectUserByPick key={1} requests={{ deptName: '技术-提料组' }} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
                                                     this.form.current?.setFieldsValue({
                                                         materialCheckLeader: selectedRows?.map((res: any) => res?.userId),
-                                                        materialCheckLeaderName: selectedRows?.map((res: any) => res?.name)
+                                                        materialCheckLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
                                                     })
                                                 }} />
                                             ]} />
