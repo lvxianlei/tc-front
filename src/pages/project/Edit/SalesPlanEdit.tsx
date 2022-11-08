@@ -170,7 +170,9 @@ export default function SalesPlanEdit() {
                 newProductDetailsData[item.id] = item
             }
         })
-        const resonData = await resonRun(newProductDetails.map((item: any) => item?.businessId))
+        const postIds: string[] = newProductDetails.map((item: any) => item?.businessId)
+        const filterPostIds = postIds.filter((item: any, index: number, array: any[]) => index === array.indexOf(item))
+        const resonData = await resonRun(filterPostIds)
         cargoDtoForm.setFieldsValue({ rdDescription: resonData.filter((item: any) => !!item).join("\n") })
         setProductDetails(newProductDetails)
         productDetailsForm.setFieldsValue(newProductDetailsData)
