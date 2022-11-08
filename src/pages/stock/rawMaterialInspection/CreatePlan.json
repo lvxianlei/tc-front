@@ -2,7 +2,7 @@
     "baseInfoColumn": [
         {
             "title": "收货单号",
-            "dataIndex": "receiveNumber",
+            "dataIndex": "receiveId",
             "required": true,
             "type": "popTable",
             "width": 1101,
