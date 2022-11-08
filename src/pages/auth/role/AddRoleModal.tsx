@@ -16,7 +16,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [halfComponents, setHalfComponents] = useState<React.Key[]>([]);
     const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
     const resetFields = () => {
         addCollectionForm.setFieldsValue({
@@ -38,6 +38,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 name: result && result.name,
                 code: result && result.code
             })
+            setHalfComponents(result.halfComponents || []);
             setCheckedKeys(result.componentList || []);
         } catch (error) {
             reject(error)
@@ -87,8 +88,21 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 message.error("至少选择一个功能权限");
                 return;
             }
-            id ? await run({ path: "/sinzetech-system/role", data: { ...baseData, components: checkedKeys, roleId: id }, type: 2 }) :
-                await run({ path: "/sinzetech-system/role", data: { ...baseData, components: checkedKeys }, type: 1 })
+            id ? await run({
+                path: "/sinzetech-system/role", data: {
+                    ...baseData,
+                    components: checkedKeys,
+                    halfComponents,
+                    roleId: id
+                }, type: 2
+            }) :
+                await run({
+                    path: "/sinzetech-system/role", data: {
+                        ...baseData,
+                        components: checkedKeys,
+                        halfComponents
+                    }, type: 1
+                })
             resolve(true)
         } catch (error) {
             reject(false)
@@ -97,10 +111,11 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit]);
     const onExpand = (expandedKeysValue: React.Key[]) => {
         setExpandedKeys(expandedKeysValue);
-        setAutoExpandParent(false);
+        // setAutoExpandParent(false);
     };
-    const onCheck = (checkedKeys: { checked: React.Key[]; halfChecked: React.Key[]; } | React.Key[]): void => {
+    const onCheck = (checkedKeys: { checked: React.Key[]; halfChecked: React.Key[]; } | React.Key[], info: any): void => {
         setCheckedKeys(checkedKeys as React.Key[]);
+        setHalfComponents(info.halfCheckedKeys || []);
     }
     const expandKeysByValue = (authorities: IAuthority[]): number[] => {
         let data: number[] = [];
@@ -132,9 +147,9 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 </Form.Item>
                 <Form.Item
                     name="code"
-                    style={{display:'none'}}
+                    style={{ display: 'none' }}
                 >
-                    <Input type="hidden"/>
+                    <Input type="hidden" />
                 </Form.Item>
                 <Form.Item
                     label="功能权限"
@@ -148,15 +163,15 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                             expandedKeys={expandedKeys}
                             autoExpandParent={autoExpandParent}
                             onCheck={onCheck}
-                            checkedKeys={checkedKeys}
-                            selectedKeys={selectedKeys}
-                            // defaultCheckedKeys={checkedKeys}
-                            defaultExpandAll
+                            checkedKeys={{
+                                checked: checkedKeys,
+                                halfChecked: halfComponents
+                            }}
                             treeData={wrapAuthority2DataNode(authority as (IAuthority & DataNode)[])}
                         />
                     </div>
                 </Form.Item>
             </Form>
-            </Spin>
+        </Spin>
     )
 })
