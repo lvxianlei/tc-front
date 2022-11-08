@@ -312,7 +312,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
@@ -332,7 +332,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
@@ -369,12 +369,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
                 operatorId: AuthUtil.getUserInfo().user_id,
                 supplierId: baseInfo.supplier.id,
-                supplierName: baseInfo.supplier.value,
-                // purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
-                // purchasePlanNumber: baseInfo.purchasePlan.value || data?.purchasePlanNumber,
-                // comparisonPriceId: baseInfo.comparisonPriceNumber.records ? baseInfo.comparisonPriceNumber.records[0].id : baseInfo.comparisonPriceId,
-                // comparisonPriceNumber: baseInfo.comparisonPriceNumber.records ? baseInfo.comparisonPriceNumber.records[0].comparisonPriceNumber : baseInfo.comparisonPriceNumber,
-                transportBearDto: {
+                supplierName: baseInfo.supplier.value,transportBearDto: {
                     ...freightInfo,
                     transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
                     transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
@@ -428,56 +423,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleBaseInfoChange = async (fields: any, allFields: any) => {
         if (fields.supplier) {
-            // if (allFields?.purchasePlan) {
-            //     // const comparisonPriceNumberId = baseForm.getFieldValue("comparisonPriceNumber").id
-            //     // const meterialList: any[] = await getComparisonPrice(comparisonPriceNumberId, fields.supplier.id)
-            //     setMaterialList(materialList.map((item: any) => {
-            //         const num = parseFloat(item.num || "1")
-            //         const weight = calcFun.weight({
-            //             weightAlgorithm: item.weightAlgorithm * 1,
-            //             proportion: item.proportion,
-            //             length: item.length,
-            //             width: item.width
-            //         })
-            //         const totalWeight = parseFloat(item.totalWeight || "1.00")
-            //         const taxPrice = parseFloat(item.taxOffer || "1.00")
-            //         return ({
-            //             ...item,
-            //             source: 1,
-            //             num,
-            //             weight,
-            //             taxPrice,
-            //             price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
-            //             structureTexture: item.structureTexture,
-            //             structureTextureId: item.structureTextureId,
-            //             taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-            //             totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
-            //         })
-            //     }))
-            //     setPopDataList(materialList.map((item: any) => {
-            //         const num = parseFloat(item.num || "1")
-            //         const weight = calcFun.weight({
-            //             weightAlgorithm: item.weightAlgorithm * 1,
-            //             proportion: item.proportion,
-            //             length: item.length,
-            //             width: item.width
-            //         })
-            //         const totalWeight = parseFloat(item.totalWeight || "1.00")
-            //         const taxPrice = parseFloat(item.taxOffer || "1.00")
-            //         return ({
-            //             ...item,
-            //             source: 1,
-            //             num,
-            //             weight,
-            //             taxPrice,
-            //             price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
-            //             structureTexture: item.structureTexture,
-            //             structureTextureId: item.structureTextureId,
-            //             taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-            //             totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
-            //         })
-            //     }))
-            // }
         }
     }
 
