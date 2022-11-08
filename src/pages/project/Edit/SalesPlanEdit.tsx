@@ -54,7 +54,7 @@ export default function SalesPlanEdit() {
 
     const { loading: rdResonLoading, run: resonRun } = useRequest<{ [key: string]: any }>((postData: string[]) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/drawingConfirmation/rdDescription`, { ids: postData })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/drawingConfirmation/rdDescription`, { ids: postData })
             resole(result)
         } catch (error) {
             reject(error)
