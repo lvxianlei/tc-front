@@ -91,7 +91,7 @@
         },
         {
             "title": "测量长度",
-            "dataIndex": "caliber"
+            "dataIndex": "gageLength"
         },
         {
             "title": "外观检验结果",
