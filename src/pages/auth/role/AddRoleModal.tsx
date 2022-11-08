@@ -16,7 +16,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     const [addCollectionForm] = Form.useForm();
     const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
     const [checkedKeys, setCheckedKeys] = useState<React.Key[]>([]);
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [halfComponents, setHalfComponents] = useState<React.Key[]>([]);
     const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
     const resetFields = () => {
         addCollectionForm.setFieldsValue({
@@ -38,6 +38,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 name: result && result.name,
                 code: result && result.code
             })
+            setHalfComponents(result.halfComponents || []);
             setCheckedKeys(result.componentList || []);
         } catch (error) {
             reject(error)
@@ -45,7 +46,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
     }), { manual: true })
 
     // 获取树结构
-    const { loading: loadingTree, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { loading: loadingTree, run: getUser, data: authority = [] } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: IAuthority[] = await RequestUtil.get<IAuthority[]>(`/sinzetech-system/role/component/tree`);
             resole(result);
@@ -54,7 +55,7 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }))
+    }), {})
 
 
     // 新增保存
@@ -87,26 +88,35 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                 message.error("至少选择一个功能权限");
                 return;
             }
-            id ? await run({ path: "/sinzetech-system/role", data: { ...baseData, components: checkedKeys, roleId: id }, type: 2 }) :
-                await run({ path: "/sinzetech-system/role", data: { ...baseData, components: checkedKeys }, type: 1 })
+            id ? await run({
+                path: "/sinzetech-system/role", data: {
+                    ...baseData,
+                    components: checkedKeys,
+                    halfComponents,
+                    roleId: id
+                }, type: 2
+            }) :
+                await run({
+                    path: "/sinzetech-system/role", data: {
+                        ...baseData,
+                        components: checkedKeys,
+                        halfComponents
+                    }, type: 1
+                })
             resolve(true)
         } catch (error) {
             reject(false)
         }
     })
-
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit]);
-
     const onExpand = (expandedKeysValue: React.Key[]) => {
         setExpandedKeys(expandedKeysValue);
-        setAutoExpandParent(false);
+        // setAutoExpandParent(false);
     };
-
-    const onCheck = (checkedKeys: any, info: any): void => {
-        console.log(checkedKeys, info)
+    const onCheck = (checkedKeys: { checked: React.Key[]; halfChecked: React.Key[]; } | React.Key[], info: any): void => {
         setCheckedKeys(checkedKeys as React.Key[]);
+        setHalfComponents(info.halfCheckedKeys || []);
     }
-
     const expandKeysByValue = (authorities: IAuthority[]): number[] => {
         let data: number[] = [];
         authorities.forEach((authority: IAuthority): void => {
@@ -153,10 +163,10 @@ export default forwardRef(function AddRoleModal({ id }: EditProps, ref) {
                             expandedKeys={expandedKeys}
                             autoExpandParent={autoExpandParent}
                             onCheck={onCheck}
-                            checkedKeys={checkedKeys}
-                            selectedKeys={selectedKeys}
-                            // defaultCheckedKeys={checkedKeys}
-                            defaultExpandAll
+                            checkedKeys={{
+                                checked: checkedKeys,
+                                halfChecked: halfComponents
+                            }}
                             treeData={wrapAuthority2DataNode(authority as (IAuthority & DataNode)[])}
                         />
                     </div>
