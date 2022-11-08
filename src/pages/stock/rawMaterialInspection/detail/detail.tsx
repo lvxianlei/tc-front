@@ -179,7 +179,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
                         receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
-                        productionTime: item?.manufactureTime?item?.manufactureTime:item?.productionTime,
+                        manufactureTime: item?.manufactureTime,
                         ...item,
                         inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
                     }
@@ -199,7 +199,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
                         receiveStockDetailId: item?.detailId?item?.detailId:item?.receiveStockDetailId,
-                        productionTime: item?.manufactureTime?item?.manufactureTime:item?.productionTime,
+                        manufactureTime: item?.manufactureTime,
                         ...item,
                         inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):''
                     }
