@@ -47,12 +47,12 @@
         },
         {
             "title": "送检人",
-            "dataIndex": "createUserName",
+            "dataIndex": "inspectionUserName",
             "width": 100
         },
         {
             "title": "送检日期",
-            "dataIndex": "createTime",
+            "dataIndex": "inspectionTime",
             "type":"date",
             "format":"YYYY-MM-DD",
             "width": 120
