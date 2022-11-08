@@ -263,20 +263,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
                 taxPrice,
                 price,
+                // taxPrice: parseFloat(item.taxPrice || "1.00"),
+                // price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                 spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
-                weight: calcFun.weight({
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    length: item.length,
-                    width: item.width
-                }),
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -284,7 +286,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
@@ -292,12 +294,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 price,
                 spec: item.structureSpec,
                 width: formatSpec(item.structureSpec).width,
-                weight: calcFun.weight({
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    length: item.length,
-                    width: item.width
-                }),
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -502,6 +504,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     //     num: item.num,
                     //     [type]: value
                     // })
+                    
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                             : (Number(item?.proportion || 1) / 1000).toFixed(5),
