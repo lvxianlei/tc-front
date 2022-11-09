@@ -262,19 +262,19 @@
             },
             {
                 "title": "含税运费（元）",
-                "dataIndex": "transportTaxPrice"
+                "dataIndex": "totalTransportTaxPrice"
             },
             {
                 "title": "不含税运费（元）",
-                "dataIndex": "unTransportTaxPrice"
+                "dataIndex": "totalTransportPrice"
             },
             {
                 "title": "含税装卸费（元）",
-                "dataIndex": "unloadTaxPrice"
+                "dataIndex": "totalUnloadTaxPrice"
             },
             {
                 "title": "不含税装卸费（元）",
-                "dataIndex": "unUnloadTaxPrice"
+                "dataIndex": "totalUnloadPrice"
             },
             {
                 "title": "库位",
