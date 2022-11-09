@@ -85,7 +85,7 @@ export default function Detail(props: OverViewProps): JSX.Element {
                     }
                 })}
             />
-            <DetailTitle title="运费信息" />
+            {/* <DetailTitle title="运费信息" />
             <BaseInfo
                 form={addCollectionForm}
                 dataSource={baseInfomation}
@@ -98,7 +98,7 @@ export default function Detail(props: OverViewProps): JSX.Element {
                 dataSource={baseInfomation}
                 col={3}
                 columns={[...handlingChargesInfo]}
-            />
+            /> */}
             <DetailTitle title="货物明细" />
             <Space style={{ color: "red" }}>
                 <div><span>数量合计：</span><span>{total.num || "0"}</span></div>
