@@ -9,17 +9,18 @@
  import { BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
  import RequestUtil from '../../../utils/RequestUtil';
  import useRequest from '@ahooksjs/use-request';
- import styles from './IsTrialDress.module.less';
+ import styles from './RequestForChange.module.less';
 import SelectByTaskNum from "./SelectByTaskNum";
 import { FixedType } from 'rc-table/lib/interface';
 import { productTypeOptions, voltageGradeOptions } from "../../../configuration/DictionaryOptions";
  
  interface modalProps {
      readonly id?: any;
-     readonly type?: 'new' | 'detail';
+     readonly type?: 'new' | 'edit';
+     getLoading: (loading: boolean) => void
  }
  
- export default forwardRef(function RequestForChange({ id, type }: modalProps, ref) {
+ export default forwardRef(function ApplyForChange({ id, type,getLoading }: modalProps, ref) {
      const [form] = Form.useForm();
      const [changeForm] = Form.useForm();
      const [selectedForm] = Form.useForm();
@@ -31,6 +32,7 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
      const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
          try {
              const result: any = await RequestUtil.get(`/tower-science/trialAssembly/getDetails?id=${id}`)
+             console.log(result)
              resole(result)
          } catch (error) {
              reject(error)
@@ -136,7 +138,7 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 150,
+            width: 80,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                     <Button type='link' onClick={() => {
 
@@ -216,7 +218,7 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 150,
+            width: 80,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                     <Button type='link' onClick={() => {
                         const value  = selectedForm?.getFieldsValue(true)?.data;
@@ -238,7 +240,7 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
         Modal.confirm({
             title: "添加修改",
             icon: null,
-            content: <Form form={changeForm} layout="inline">
+            content: <Form form={changeForm} layout="horizontal">
                 <Form.Item
                     label='塔型名'
                     name="packageFirst"
@@ -313,6 +315,7 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
          try {
              const value = await form.validateFields();
              console.log(value)
+             getLoading(true)
              await saveRun({
                  ...value
              })
@@ -324,8 +327,12 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
  
      const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
          try {
-             const result: any = await RequestUtil.post(`/tower-science/trialAssembly/save`, data)
-             resove(result)
+             await RequestUtil.post(`/tower-science/trialAssembly/save`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                reject(e)
+                getLoading(false)
+            })
          } catch (error) {
              reject(error)
          }
@@ -334,6 +341,8 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
      const onSubmit = () => new Promise(async (resolve, reject) => {
          try {
              const value = await form.validateFields();
+             
+             getLoading(true)
              await submitRun({
                  ...value
              })
@@ -345,8 +354,12 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
  
      const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
          try {
-             const result: any = await RequestUtil.post(`/tower-science/trialAssembly/saveAndLaunch`, data)
-             resove(result)
+              await RequestUtil.post(`/tower-science/trialAssembly/saveAndLaunch`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                reject(e)
+                getLoading(false)
+            })
          } catch (error) {
              reject(error)
          }
@@ -360,16 +373,16 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
  
      useImperativeHandle(ref, () => ({ onSubmit, onSave, resetFields }), [ref, onSubmit, onSave, resetFields]);
  
-     return <DetailContent>
+     return <DetailContent className={styles.changeForm}>
         <Form form={form}>
 
-                 <BaseInfo dataSource={data || {}} columns={...applyColumns?.map(res => {
+                 <BaseInfo dataSource={data || {}} columns={applyColumns?.map(res => {
                     if (res.dataIndex === "taskNum") {
                         return ({
                             ...res,
                             render: (_: string, record: Record<string,any>, index: number) => (
                                 <Form.Item name={"taskNum"}>
-                                    
+                              <Input size="small" disabled suffix={      
                 <SelectByTaskNum onSelect={(selectedRows: Record<string, any>) => {
                     console.log(selectedRows[0])
                     setChangeData([])
@@ -377,7 +390,7 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
                         taskNumId: selectedRows[0]?.id,
                         taskNum: selectedRows[0]?.taskNum
                     })
-                }} />
+                }} />}/>
                                 </Form.Item>
                             )
                         })
@@ -403,22 +416,27 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
                         })
                     }
                     return res
-                 })} col={3} />
+                 })} col={5} />
          
         </Form>
-        <Button type="primary" onClick={bulkChanges} ghost>批量修改</Button>
+        <Button type="primary" className={styles.bottom16} onClick={bulkChanges} ghost>批量修改</Button>
         <CommonTable 
+        haveIndex
         columns={changeColumns} 
-        dataSource={changeData} 
+        dataSource={changeData}
+        className={styles.bottom16} 
+        pagination={false}
         rowSelection={{
             selectedRowKeys: selectedKeys,
             type: "checkbox",
             onChange: SelectedChange,
         }}
         />
-        <Button type="primary" onClick={removeAll} ghost>移除全部</Button>
+        <Button type="primary" className={styles.bottom16} onClick={removeAll} ghost>移除全部</Button>
         <Form form={selectedForm}>
         <CommonTable 
+        haveIndex
+         className={styles.bottom16}
         columns={selectedColumns.map(res => {
             if (res.dataIndex === "") {
                 return ({
@@ -487,6 +505,7 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
 
             return res
         })} 
+        pagination={false}
         dataSource={selectedData}
         />
 

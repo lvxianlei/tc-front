@@ -4,20 +4,18 @@
  * @description 业务处置管理-明细变更申请
  */
 
- import React, { useRef, useState } from 'react';
+ import React, { useEffect, useRef, useState } from 'react';
  import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TreeSelect, Modal, TablePaginationConfig } from 'antd';
  import { FixedType } from 'rc-table/lib/interface';
  import styles from './RequestForChange.module.less';
  import { useHistory } from 'react-router-dom';
  import Page, { IResponseData } from '../../common/Page';
- import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
  import RequestUtil from '../../../utils/RequestUtil';
  import useRequest from '@ahooksjs/use-request';
- import { TreeNode } from 'antd/lib/tree-select';
- import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import SelectUser from '../../common/SelectUser';
 import { useForm } from 'antd/lib/form/Form';
 import { CommonTable } from '../../common';
+import ApplyForChange from './ApplyForChange';
  
  interface EditRefProps {
      onSubmit: () => void;
@@ -31,18 +29,28 @@ import { CommonTable } from '../../common';
      const history = useHistory();
      const [filterValues, setFilterValues] = useState<Record<string, any>>();
      const [visible, setVisible] = useState<boolean>(false);
+     const [detailVisible, setDetailVisible] = useState<boolean>(false);
      const addRef = useRef<EditRefProps>();
-     const [type, setType] = useState<'new' | 'edit' | 'detail'>('new');
+     const detailRef = useRef<EditRefProps>();
+     const [type, setType] = useState<'new' | 'edit'>('new');
+     const [dtype, setDtype] = useState<'apply' | 'detail'>('apply');
      const [rowId, setRowId] = useState<string>();
      const [searchForm] = useForm();
      const [filterValue, setFilterValue] = useState<any>({});
      const [detailData, setDetailData] = useState<any>();
+     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
      const [page, setPage] = useState({
          current: 1,
          size: 10,
          total: 0
      })
      
+     
+    useEffect(() => {
+        setConfirmLoading(confirmLoading);
+    }, [confirmLoading])
+
+    
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/wasteProductReceipt`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
         setPage({ ...data });
@@ -215,6 +223,7 @@ import { CommonTable } from '../../common';
             dataIndex: 'checkRewardAmount'
         }
     ]
+
      const handleOk = () => new Promise(async (resove, reject) => {
          try {
              await addRef.current?.onSave()
@@ -241,6 +250,31 @@ import { CommonTable } from '../../common';
          }
      })
 
+     const handleRejectOk = () => new Promise(async (resove, reject) => {
+        try {
+            await detailRef.current?.onReject();
+            message.success("拒绝成功！")
+            setVisible(false)
+            detailRef.current?.resetFields();
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const handlePassOk = () => new Promise(async (resove, reject) => {
+        try {
+            await detailRef.current?.onPass();
+            message.success("通过成功！")
+            setVisible(false)
+            detailRef.current?.resetFields();
+            history.go(0)
+            resove(true)
+        } catch (error) {
+            reject(false)
+        }
+    })
      const searchItems = [
         {
             name: 'updateStatusTime',
@@ -262,7 +296,7 @@ import { CommonTable } from '../../common';
         {
             name: 'recipientUserName',
             label: '接收人',
-            children: <Input style={{ width: '80%' }} disabled suffix={[
+            children: <Input size='small' style={{ width: '80%' }} disabled suffix={[
                 <SelectUser requests={{ deptName: '' }} onSelect={(selectedRows: Record<string, any>) => {
                     searchForm?.setFieldsValue({
                         recipientUser: selectedRows[0]?.userId,
@@ -290,37 +324,59 @@ import { CommonTable } from '../../common';
     }
 
      return <>
+     <Modal
+         destroyOnClose
+         key='Detail'
+         visible={detailVisible}
+         title={'详情'}
+         footer={<Space direction="horizontal" size="small">
+             {dtype === 'apply' ?
+                 <>
+                     <Button onClick={handleRejectOk} type="primary" ghost>拒绝</Button>
+                     <Button onClick={handlePassOk} type="primary" ghost>通过</Button>
+                 </>
+                 :
+                 null
+             }
+             <Button onClick={() => {
+                 setDetailVisible(false);
+                 addRef.current?.resetFields();
+             }}>关闭</Button>
+         </Space>}
+         width="90%"
+         onCancel={() => {
+            setDetailVisible(false);
+            detailRef.current?.resetFields();
+         }}>
+         {/* <ApplyOrDetail type={dtype} id={rowId} ref={detailRef} /> */}
+     </Modal>
          <Modal
              destroyOnClose
              key='RequestForChange'
              visible={visible}
-             title={type === 'new' ? '申请' : type === 'edit' ? '编辑' : '详情'}
+             title={type === 'new' ? '申请' : '编辑'}
              footer={<Space direction="horizontal" size="small">
                  {type === 'new' ?
                      <>
-                         <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
-                         <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
+                         <Button onClick={handleOk} type="primary" loading={confirmLoading} ghost>保存并关闭</Button>
+                         <Button onClick={handleLaunchOk} type="primary" loading={confirmLoading} ghost>保存并发起</Button>
                      </>
                      :
                      null
-                     // <>
-                     //     <Button>拒绝</Button>
-                     //     <Button>通过</Button>
-                     // </>
                  }
                  <Button onClick={() => {
                      setVisible(false);
                      addRef.current?.resetFields();
                  }}>关闭</Button>
              </Space>}
-             width="60%"
+             width="90%"
              onCancel={() => {
                  setVisible(false);
                  addRef.current?.resetFields();
              }}>
-             {/* <RequestForChange type={type} id={rowId} ref={addRef} /> */}
+             <ApplyForChange type={type} getLoading={(loading) => setConfirmLoading(loading)} id={rowId} ref={addRef} />
          </Modal>
-         <Form form={searchForm} className={styles.selectBtn} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
+         <Form form={searchForm} className={styles.bottom16} layout="inline" onFinish={(values: Record<string, any>) => onFilterSubmit(values)}>
             {
                 searchItems?.map((res: any) => {
                     return <Form.Item name={res?.name} label={res?.label}>
@@ -337,8 +393,12 @@ import { CommonTable } from '../../common';
                 }}>重置</Button>
             </Form.Item>
         </Form>
-         
+         <Button type='primary' className={styles.bottom16} onClick={() => {
+            setType('new');
+            setVisible(true)
+         }} ghost>申请</Button>
         <CommonTable
+         className={styles.bottom16}
                 haveIndex
                 columns={[
                     ...columns,{
@@ -351,8 +411,8 @@ import { CommonTable } from '../../common';
                             <Space direction="horizontal" size="small">
                                 <Button type='link' onClick={() => {
                                     setRowId(record?.id);
-                                    setVisible(true);
-                                    setType('detail');
+                                    setDetailVisible(true);
+                                    setDtype('detail');
                                 }}>详情</Button>
                                 <Popconfirm
                                     title="确认发起?"
@@ -399,7 +459,7 @@ import { CommonTable } from '../../common';
                                 <Button type='link' onClick={() => {
                                     setRowId(record?.id);
                                     setVisible(true);
-                                    setType('detail');
+                                    setType('edit');
                                 }}>编辑</Button>
                             </Space>
                         )
