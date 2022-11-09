@@ -1145,6 +1145,26 @@
                     }
                 ]
             },
+            {
+                "label": "通用中心",
+                "icon": "xitongrizhiTY_xitongrizhi",
+                "path": "/commCenter",
+                "appName": "COMM",
+                "authority": "tc_erp_sys_log",
+                "items": [
+                    {
+                        "label": "单位分类",
+                        "path": "/commCenter/unitClass",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "单位管理",
+                        "path": "/commCenter/unitMngt",
+                        "authority": "tc_erp_sys_log_operation"
+                    }
+                   
+                ]
+            },
             // {
             //     "label": "数字门户",
             //     "icon": "xitongrizhiTY_xitongrizhi",

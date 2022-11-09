@@ -1,0 +1,100 @@
+{
+    "table": [
+        {
+            "title": "文档编码",
+            "dataIndex": "code"
+        },
+        {
+            "title": "版本",
+            "dataIndex": "version"
+        },
+        {
+            "title": "文档名称",
+            "dataIndex": "name"
+        },
+        {
+            "title": "文档类型",
+            "dataIndex": "typeName"
+        },
+        {
+            "title": "文档标签",
+            "dataIndex": "tag"
+        },
+        {
+            "title": "文档状态",
+            "dataIndex": "docStatus"
+        },
+        {
+            "title": "关联项目",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "接受人员",
+            "dataIndex": "receiveNames"
+        },
+        {
+            "title": "使用范围",
+            "dataIndex": "useDeptNames"
+        },
+        {
+            "title": "原件位置",
+            "dataIndex": "originalPosition"
+        },
+        {
+            "title": "是否要审核",
+            "dataIndex": "isApprovalName"
+        },
+        {
+            "title": "归档日期--",
+            "dataIndex": "",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "执行日期",
+            "dataIndex": "executionTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "到期时间",
+            "dataIndex": "expiryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "过期日期--",
+            "dataIndex": "",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "排序",
+            "dataIndex": "sort"
+        },
+        {
+            "title": "起草时间--",
+            "dataIndex": "",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "起草人",
+            "dataIndex": "drafterName"
+        },
+        {
+            "title": "修改时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "修改人",
+            "dataIndex": "updateName"
+        }
+    ]
+}

@@ -1,0 +1,60 @@
+{
+    "table": [
+        {
+            "title": "单位编码",
+            "dataIndex": "code"
+        },
+        {
+            "title": "单位名称",
+            "dataIndex": "name"
+        },
+        {
+            "title": "单位简码",
+            "dataIndex": "simpleCode"
+        },
+        {
+            "title": "分类名称",
+            "dataIndex": "unitTypeName"
+        },
+        {
+            "title": "精度",
+            "dataIndex": "accuracy"
+        },
+        {
+            "title": "是否是基准单位",
+            "dataIndex": "isDatumUnit"
+        },
+        {
+            "title": "与基准单位换算关系",
+            "dataIndex": "datumUnitRelation"
+        },
+        {
+            "title": "备注--",
+            "dataIndex": "description"
+        },
+        {
+            "title": "排序",
+            "dataIndex": "sort"
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "creatName"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "修改人",
+            "dataIndex": "updateName"
+        },
+        {
+            "title": "修改时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        }
+    ]
+}
