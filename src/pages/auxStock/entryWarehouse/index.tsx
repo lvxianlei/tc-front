@@ -229,7 +229,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 visible={visible}
                 width={1011}
                 confirmLoading={confirmLoading}
-                title={oprationType === "create" ? '创建出库单' : "编辑出库单"}
+                title={oprationType === "create" ? '创建入库单' : "编辑入库单"}
                 onOk={handleModalOk}
                 onCancel={() => {
                     setVisible(false)
