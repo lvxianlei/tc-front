@@ -285,7 +285,9 @@ export default function CreatePlan(props: any): JSX.Element {
                     id: result?.receiveStockId,
                     value: result?.receiveNumber,
                     records:[{id: result?.receiveStockId,
-                    value: result?.receiveNumber}]
+                    value: result?.receiveNumber,
+                    receiveNumber: result?.receiveNumber,
+                }]
                 },
             })
         } catch (error) {
