@@ -167,7 +167,7 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
+    }), { ready: props.type === "edit" && props.id && props.visible , refreshDeps: [props.visible, props.type, props.id] })
 
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
