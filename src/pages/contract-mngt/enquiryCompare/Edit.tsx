@@ -491,7 +491,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return ({
                             ...item,
                             render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
+                                
                                 const newData = materialList.map((item: any, index: number) => {
+                                    
                                     if (index === key) {
                                         return {
                                             ...item,
@@ -501,7 +503,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                     }
                                     return item
                                 })
-                                setMaterialList(newData)
+                                setMaterialList(newData.slice(0))
+                                setPopDataList(newData.slice(0))
                             }}>
                                 {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
@@ -521,7 +524,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                     }
                                     return item
                                 })
-                                setMaterialList(newData)
+                                setMaterialList(newData.slice(0))
+                                setPopDataList(newData.slice(0))
                             }}>
                                 {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
@@ -534,6 +538,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
-            dataSource={popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
+            dataSource={[...popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))]} />
     </Spin>
 })
