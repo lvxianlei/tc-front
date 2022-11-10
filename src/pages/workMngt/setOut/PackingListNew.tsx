@@ -41,9 +41,14 @@ export default function PackingListNew(): React.ReactNode {
     const [reuse, setReuse] = useState<any>();
     const [packageAttributeName, setPackageAttributeName] = useState<string>('专用');
     const [packageWeight, setPackageWeight] = useState<number>(0);
+    const [totalWelds, setTotalWelds] = useState<number>(0);
     const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
-    useEffect(() => setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0), [JSON.stringify([...packagingData])])
+    useEffect(() => {
+        setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0)
+        setTotalWelds(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).filter(res => res.isMainPart === 1).map(item => { return Number(item.singleNum) }).join('+')) || 0)
+    }, [JSON.stringify([...packagingData])]
+    )
 
     const { loading, data } = useRequest<IPackingList>(() => new Promise(async (resole, reject) => {
         if (!location.state) {
@@ -747,7 +752,7 @@ export default function PackingListNew(): React.ReactNode {
                             <span className={styles.content}>{selectWeight}kg</span>
                         </Col>
                         <Col>电焊件：
-                            <span className={styles.content}>{dataShowParts(selectedRow).filter(res => res.isMainPart === 1).length}</span>
+                            <span className={styles.content}>{eval(dataShowParts(selectedRow).filter(res => res.isMainPart === 1).map(item => { return Number(item.singleNum) }).join('+'))}</span>
                         </Col>
                         <Col>
                             <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>
@@ -840,7 +845,8 @@ export default function PackingListNew(): React.ReactNode {
                             <span className={styles.content}>{showParts ? packagingData?.length : dataShowParts(packagingData).length}</span>
                         </Col>
                         <Col span={4}>电焊件：
-                            <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span>
+                            {/* <span className={styles.content}>{(showParts ? packagingData : dataShowParts(packagingData)).filter(res => res.isMainPart === 1).length}</span> */}
+                            <span className={styles.content}>{totalWelds}</span>
                         </Col>
                         <Col span={8}>
                             <Button className={styles.fastBtn} type="primary" onClick={packRemove} ghost>移除</Button>
