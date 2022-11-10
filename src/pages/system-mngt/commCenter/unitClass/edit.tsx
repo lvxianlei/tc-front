@@ -1,5 +1,5 @@
-import { Form, Spin } from "antd"
 import React, { forwardRef, useImperativeHandle } from "react"
+import { Form, Spin } from "antd"
 import { BaseInfo, DetailTitle } from "../../../common"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
@@ -13,7 +13,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const data: { [key: string]: any } = await RequestUtil.get(`/tower-system/docType/${id}`)
+            const data: { [key: string]: any } = await RequestUtil.get(`/tower-system/unitType/${id}`)
             resole(data)
         } catch (error) {
             console.log(error)
@@ -22,7 +22,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
     }), { manual: id === "create" })
 
     const { loading: confirmLoading, run: saveRun } = useRequest((params: any) => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil[id === "create" ? "post" : "put"](`/tower-system/docType`, params)
+        const data: any = await RequestUtil[id === "create" ? "post" : "put"](`/tower-system/unitType`, params)
         resole(data)
     }), { manual: true })
 

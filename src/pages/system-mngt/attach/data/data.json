@@ -96,5 +96,218 @@
             "title": "修改人",
             "dataIndex": "updateName"
         }
-    ]
+    ],
+    "edit": {
+        "base": [
+            {
+                "title": "文档编码",
+                "dataIndex": "code"
+            },
+            {
+                "title": "版本",
+                "dataIndex": "version",
+                "disabled": true
+            },
+            {
+                "title": "文档状态",
+                "dataIndex": "docStatus",
+                "disabled": true
+            },
+            {
+                "title": "文档名称",
+                "dataIndex": "name"
+            },
+            {
+                "title": "文件类型",
+                "dataIndex": "typeId",
+                "type": "fetchSelect",
+                "path": "/tower-system/docType"
+            },
+            {
+                "title": "文档标签",
+                "dataIndex": "tag",
+                "type": "fetchSelect",
+                "path": "/tower-system/doc/tag",
+                "mode": "tags",
+                "tokenSeparators": [
+                    ","
+                ]
+            },
+            {
+                "title": "关联项目",
+                "dataIndex": "projectName"
+            },
+            {
+                "title": "关联合同",
+                "dataIndex": "contractName"
+            },
+            {
+                "title": "关联销售计划",
+                "dataIndex": "taskNoticeName"
+            },
+            {
+                "title": "起草人",
+                "dataIndex": "drafterId",
+                "type": "popTable",
+                "width": 1101,
+                "path": "/tower-system/employee",
+                "rowKey": "userId",
+                "readOnly": true,
+                "dependencies": true,
+                "value": "name",
+                "columns": [
+                    {
+                        "title": "部门",
+                        "dataIndex": "deptName"
+                    },
+                    {
+                        "title": "姓名",
+                        "dataIndex": "name"
+                    },
+                    {
+                        "title": "账号",
+                        "dataIndex": "account"
+                    },
+                    {
+                        "title": "手机号",
+                        "dataIndex": "phone"
+                    },
+                    {
+                        "title": "角色",
+                        "dataIndex": "roleName"
+                    },
+                    {
+                        "title": "工号",
+                        "dataIndex": "number"
+                    },
+                    {
+                        "title": "邮箱",
+                        "dataIndex": "email"
+                    }
+                ],
+                "search": [
+                    {
+                        "title": "",
+                        "dataIndex": "fuzzyQuery",
+                        "width": 200,
+                        "placeholder": "账号/手机号/姓名/工号/邮箱"
+                    }
+                ]
+            },
+            {
+                "title": "接收人员",
+                "dataIndex": "receiveIds",
+                "type": "popTable",
+                "width": 1101,
+                "selectType": "checkbox",
+                "path": "/tower-system/employee",
+                "rowKey": "userId",
+                "readOnly": true,
+                "dependencies": true,
+                "value": "name",
+                "columns": [
+                    {
+                        "title": "部门",
+                        "dataIndex": "deptName"
+                    },
+                    {
+                        "title": "姓名",
+                        "dataIndex": "name"
+                    },
+                    {
+                        "title": "账号",
+                        "dataIndex": "account"
+                    },
+                    {
+                        "title": "手机号",
+                        "dataIndex": "phone"
+                    },
+                    {
+                        "title": "角色",
+                        "dataIndex": "roleName"
+                    },
+                    {
+                        "title": "工号",
+                        "dataIndex": "number"
+                    },
+                    {
+                        "title": "邮箱",
+                        "dataIndex": "email"
+                    }
+                ],
+                "search": [
+                    {
+                        "title": "",
+                        "dataIndex": "fuzzyQuery",
+                        "width": 200,
+                        "placeholder": "账号/手机号/姓名/工号/邮箱"
+                    }
+                ]
+            },
+            {
+                "title": "使用部门",
+                "dataIndex": "useDept",
+                "type": "popTable",
+                "path": "/tower-system/department",
+                "width": 1011,
+                "value": "name",
+                "dependencies": true,
+                "readOnly": true,
+                "selectType": "checkbox",
+                "columns": [
+                    {
+                        "title": "部门名称",
+                        "dataIndex": "name"
+                    },
+                    {
+                        "title": "类型",
+                        "dataIndex": "classification"
+                    },
+                    {
+                        "title": "简介",
+                        "dataIndex": "description"
+                    }
+                ]
+            },
+            {
+                "title": "原件位置",
+                "dataIndex": "originalPosition"
+            },
+            {
+                "title": "执行日期",
+                "dataIndex": "executionTime",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "到期时间",
+                "dataIndex": "expiryDate",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "是否要审核",
+                "dataIndex": "isApprovalName"
+            },
+            {
+                "title": "审核流程",
+                "dataIndex": "approvalProcessId",
+                "type": "fetchSelect",
+                "path": "/tower-system/docApproval"
+            },
+            {
+                "title": "排序",
+                "dataIndex": "sort",
+                "type": "number",
+                "precision": 0,
+                "min": 0,
+                "step": 1
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description",
+                "type": "textarea"
+            }
+        ]
+    }
 }

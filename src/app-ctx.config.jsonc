@@ -1129,6 +1129,11 @@
                 "authority": "tc_erp_sys_log",
                 "items": [
                     {
+                        "label": "文档审批类型管理",
+                        "path": "/attach/approval",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
                         "label": "文档分类管理",
                         "path": "/attach/class",
                         "authority": "tc_erp_sys_log_operation"

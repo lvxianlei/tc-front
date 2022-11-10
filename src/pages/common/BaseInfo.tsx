@@ -8,7 +8,7 @@ export interface BaseInfoItemProps {
     name: string
     label: string
     value: string | number | null | undefined
-    type?: 'text' | 'number' | 'date' | 'select' | 'phone'
+    type?: 'text' | 'number' | 'date' | 'select' | 'phone' | "fetchSelect"
 }
 
 export interface BaseInfoColumnsProps {
@@ -74,6 +74,7 @@ export function formatData(columns: any[], dataSource: any): object {
             const types: any = {
                 number: (value && ![-1, "-1"].includes(value)) ? value : 0,
                 select: ([-1, "-1"].includes(value)) ? null : value,
+                fetchSelect: ([-1, "-1"].includes(value)) ? null : value,
                 date: value ? moment(value).format(dataItem.format || "YYYY-MM-DD HH:mm:ss") : undefined,
                 string: (value && !["-1", -1, "0", 0].includes(value)) ? value : "",
                 phone: (value && !["-1", -1, "0", 0].includes(value)) ? value : "",
@@ -102,7 +103,7 @@ const popTableTransform = (value: any) => {
 export const generateRules = (type: string, columnItems: any) => {
     let rules = columnItems.rules || []
     if (columnItems.required) {
-        const inputType = ["date", "select", "popTable"].includes(columnItems.type) ? "选择" : "输入"
+        const inputType = ["date", "select", "popTable", "fetchSelect"].includes(columnItems.type) ? "选择" : "输入"
         rules = [
             {
                 "required": true,
@@ -133,7 +134,7 @@ export const generateRules = (type: string, columnItems: any) => {
 const generatePlaceholder = (columnItems: any): string => {
     let placeholder = columnItems.placeholder || ""
     if (!columnItems.disabled) {
-        const inputType = ["date", "select", "popTable"].includes(columnItems.type) ? "选择" : "输入"
+        const inputType = ["date", "select", "popTable", "fetchSelect"].includes(columnItems.type) ? "选择" : "输入"
         placeholder = `请${inputType}${columnItems.title}`
     }
     return placeholder
@@ -238,7 +239,11 @@ export default function BaseInfo({ dataSource, columns, form, edit, col = 4, onC
                                 validateTrigger={item.validateTrigger}
                                 rules={generateRules(item.type, item)}
                             >
-                                <FormItemType type={item.type} data={item} placeholder={generatePlaceholder(item)} render={item.render} />
+                                <FormItemType
+                                    type={item.type}
+                                    data={item}
+                                    placeholder={generatePlaceholder(item)}
+                                    render={item.render} />
                             </Form.Item>
                         </div>
                     </Col>

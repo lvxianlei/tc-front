@@ -3258,6 +3258,13 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // 文档审批类型管理
+      "label": "文档审批类型管理",
+      "path": "/attach/approval",
+      "module": "./pages/system-mngt/attach/approval/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // 文档分类管理
       "name": "文档分类管理",
       "path": "/attach/class",

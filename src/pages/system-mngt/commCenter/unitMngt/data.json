@@ -56,5 +56,68 @@
             "type": "date",
             "format": "YYYY-MM-DD"
         }
-    ]
+    ],
+    "edit": {
+        "base": [
+            {
+                "title": "单位编码",
+                "dataIndex": "code"
+            },
+            {
+                "title": "单位名称",
+                "dataIndex": "name"
+            },
+            {
+                "title": "单位简码",
+                "dataIndex": "simpleCode"
+            },
+            {
+                "title": "精度",
+                "dataIndex": "accuracy",
+                "type": "number",
+                "precision": 0,
+                "min": 0,
+                "step": 1
+            },
+            {
+                "title": "单位分类",
+                "dataIndex": "unitTypeId",
+                "type": "fetchSelect",
+                "path": "/tower-system/unitType"
+            },
+            {
+                "title": "是否是基准单位",
+                "dataIndex": "isDatumUnit",
+                "type": "select",
+                "enum": [
+                    {
+                        "value": 1,
+                        "label": "是"
+                    },
+                    {
+                        "value": 0,
+                        "label": "否"
+                    }
+                ]
+            },
+            {
+                "title": "与基准单位换算关系",
+                "dataIndex": "datumUnitRelation",
+                "type": "number"
+            },
+            {
+                "title": "排序",
+                "dataIndex": "sort",
+                "type": "number",
+                "precision": 0,
+                "min": 0,
+                "step": 1
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description",
+                "type": "textarea"
+            }
+        ]
+    }
 }

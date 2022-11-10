@@ -29,7 +29,7 @@ export default function Index() {
                 <Edit id={editId} ref={editRef} />
             </Modal>
             <SearchTable
-                path="/tower-system/docType"
+                path="/tower-system/docApproval"
                 extraOperation={<>
                     <Button type="primary"
                         onClick={() => {

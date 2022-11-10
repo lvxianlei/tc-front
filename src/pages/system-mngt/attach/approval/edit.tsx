@@ -13,7 +13,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const data: { [key: string]: any } = await RequestUtil.get(`/tower-system/docType/${id}`)
+            const data: { [key: string]: any } = await RequestUtil.get(`/tower-system/docApproval/${id}`)
             resole(data)
         } catch (error) {
             console.log(error)
@@ -22,7 +22,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
     }), { manual: id === "create" })
 
     const { loading: confirmLoading, run: saveRun } = useRequest((params: any) => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil[id === "create" ? "post" : "put"](`/tower-system/docType`, params)
+        const data: any = await RequestUtil[id === "create" ? "post" : "put"](`/tower-system/docApproval`, params)
         resole(data)
     }), { manual: true })
 
