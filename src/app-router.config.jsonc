@@ -3299,6 +3299,7 @@
       "module": "./pages/system-mngt/commCenter/unitMngt/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // 质量检验流程-原材料送检单
       "name": "原材料送检单",
       "path": "/rawMaterialInspection/inspection",
