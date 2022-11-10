@@ -8,7 +8,7 @@ export interface BaseInfoItemProps {
     name: string
     label: string
     value: string | number | null | undefined
-    type?: 'text' | 'number' | 'date' | 'select' | 'phone' | "fetchSelect"
+    type?: 'text' | 'number' | 'date' | 'select' | 'phone' | "fetchSelect" | "chooseUser"
 }
 
 export interface BaseInfoColumnsProps {
@@ -58,7 +58,8 @@ function formatDataType(dataItem: any, dataSource: any): string {
         text: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         phone: (value && !["-1", -1, "0", 0].includes(value)) ? value : "-",
         textarea: <div dangerouslySetInnerHTML={{ __html: value ? formatTextarea(value, dataItem) : "-" }} />,
-        popTable: value || "-"
+        popTable: value || "-",
+        chooseUser: value || "-"
     }
     return types[dataItem.type || "string"]
 }
@@ -82,7 +83,11 @@ export function formatData(columns: any[], dataSource: any): object {
                 popTable: value || {
                     value: "",
                     id: ""
-                }
+                },
+                chooseUser: value || {
+                    value: "",
+                    id: ""
+                },
             }
             formatedData[dataSourceKey] = types[dataItem.type || "string"]
         }
@@ -112,7 +117,7 @@ export const generateRules = (type: string, columnItems: any) => {
             ...rules
         ]
     }
-    if (type === "popTable") {
+    if (type === "popTable" || type === "chooseUser") {
         rules = rules.map((item: any) => {
             if (item.required) {
                 return ({ ...item, transform: popTableTransform })
@@ -134,7 +139,7 @@ export const generateRules = (type: string, columnItems: any) => {
 const generatePlaceholder = (columnItems: any): string => {
     let placeholder = columnItems.placeholder || ""
     if (!columnItems.disabled) {
-        const inputType = ["date", "select", "popTable", "fetchSelect"].includes(columnItems.type) ? "选择" : "输入"
+        const inputType = ["date", "select", "popTable", "fetchSelect", "chooseUser"].includes(columnItems.type) ? "选择" : "输入"
         placeholder = `请${inputType}${columnItems.title}`
     }
     return placeholder

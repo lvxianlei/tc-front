@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import moment from 'moment'
 import { stringify } from 'query-string';
 import FetchSelect from './FetchSelect'
+import ChooseUser, { ChooseUserData } from './ChooseUser'
 export type FormItemTypesType = "text" | "number" | "phone" | "select" | "fetchSelect" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
 
 interface SelectOption {
@@ -170,6 +171,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         <CommonTable
             columns={columns}
             rowSelection={{
+                checkStrictly: false,
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
                 onSelect: onSelectChange,
@@ -350,6 +352,7 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
         fetchSelect: <FetchSelect {...props}
             value={props.value}
             data={data as unknown} {...componentProps} />,
+        chooseUser: <ChooseUser {...props} data={data as ChooseUserData} />
     }
     return <>{render ? render(data, props) : ItemTypes[type]}</>
 }

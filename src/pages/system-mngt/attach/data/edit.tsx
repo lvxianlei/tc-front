@@ -5,7 +5,7 @@ import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { edit } from "./data.json"
 interface EditProps {
-    id: "create" | "string"
+    id: "create" | string
 }
 
 export default forwardRef(function Edit({ id }: EditProps, ref) {
@@ -26,30 +26,36 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
         resole(data)
     }), { manual: true })
 
-    const handleSave = async () => {
-        const saveData = await form.validateFields()
-        const postData = id === "create" ? saveData : {
-            ...saveData,
-            id
+    const handleSave = () => new Promise(async (resove, reject) => {
+        try {
+            const saveData = await form.validateFields()
+            const postData = id === "create" ? saveData : {
+                ...saveData,
+                id
+            }
+            console.log(postData.useDept)
+            await saveRun({
+                ...postData,
+                typeId: postData.typeId?.value,
+                typeName: postData.typeId?.label,
+
+                approvalProcessId: postData.approvalProcessId?.value,
+                approvalProcessName: postData.approvalProcessId?.label,
+
+                drafterId: postData.drafterId?.id,
+                drafterName: postData.drafterId?.value,
+
+                receiveIds: postData.drafterId?.id,
+                receiveNames: postData.drafterId?.value,
+
+                useDept: postData.drafterId?.records?.map((item: any) => item.id).join(","),
+                useDeptNames: postData.drafterId?.records?.map((item: any) => item.name).join(","),
+            })
+        } catch (error) {
+            console.log(error)
+            reject(error)
         }
-        await saveRun({
-            ...postData,
-            typeId: postData.typeId?.value,
-            typeName: postData.typeId?.label,
-
-            approvalProcessId: postData.approvalProcessId?.value,
-            approvalProcessName: postData.approvalProcessId?.label,
-
-            drafterId: postData.drafterId?.id,
-            drafterName: postData.drafterId?.value,
-
-            receiveIds: postData.drafterId?.id,
-            receiveNames: postData.drafterId?.value,
-
-            useDept: postData.drafterId?.id,
-            useDeptNames: postData.drafterId?.value,
-        })
-    }
+    })
 
     useImperativeHandle(ref, () => ({ confirmLoading, onSave: handleSave }), [confirmLoading, handleSave])
 

@@ -22,7 +22,26 @@
         },
         {
             "title": "文档状态",
-            "dataIndex": "docStatus"
+            "dataIndex": "docStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "新建",
+                    "value": 1
+                },
+                {
+                    "label": "评审",
+                    "value": 2
+                },
+                {
+                    "label": "发布",
+                    "value": 3
+                },
+                {
+                    "label": "撤回",
+                    "value": 4
+                }
+            ]
         },
         {
             "title": "关联项目",
@@ -197,52 +216,7 @@
             {
                 "title": "接收人员",
                 "dataIndex": "receiveIds",
-                "type": "popTable",
-                "width": 1101,
-                "selectType": "checkbox",
-                "path": "/tower-system/employee",
-                "rowKey": "userId",
-                "readOnly": true,
-                "dependencies": true,
-                "value": "name",
-                "columns": [
-                    {
-                        "title": "部门",
-                        "dataIndex": "deptName"
-                    },
-                    {
-                        "title": "姓名",
-                        "dataIndex": "name"
-                    },
-                    {
-                        "title": "账号",
-                        "dataIndex": "account"
-                    },
-                    {
-                        "title": "手机号",
-                        "dataIndex": "phone"
-                    },
-                    {
-                        "title": "角色",
-                        "dataIndex": "roleName"
-                    },
-                    {
-                        "title": "工号",
-                        "dataIndex": "number"
-                    },
-                    {
-                        "title": "邮箱",
-                        "dataIndex": "email"
-                    }
-                ],
-                "search": [
-                    {
-                        "title": "",
-                        "dataIndex": "fuzzyQuery",
-                        "width": 200,
-                        "placeholder": "账号/手机号/姓名/工号/邮箱"
-                    }
-                ]
+                "type": "chooseUser"
             },
             {
                 "title": "使用部门",
@@ -250,6 +224,7 @@
                 "type": "popTable",
                 "path": "/tower-system/department",
                 "width": 1011,
+                "rowKey": "id",
                 "value": "name",
                 "dependencies": true,
                 "readOnly": true,
@@ -287,7 +262,18 @@
             },
             {
                 "title": "是否要审核",
-                "dataIndex": "isApprovalName"
+                "dataIndex": "isApprovalName",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "是",
+                        "value": 0
+                    },
+                    {
+                        "label": "否",
+                        "value": 1
+                    }
+                ]
             },
             {
                 "title": "审核流程",
