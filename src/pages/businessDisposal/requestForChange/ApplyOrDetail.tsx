@@ -5,8 +5,8 @@
  */
 
  import React, { useImperativeHandle, forwardRef, useState } from "react";
- import { Button, Descriptions, Form, Input, Select, Modal } from 'antd';
- import { BaseInfo, CommonTable, DetailContent, DetailTitle, OperationRecord } from '../../common';
+ import { Input} from 'antd';
+ import { BaseInfo, DetailContent, DetailTitle, OperationRecord } from '../../common';
  import RequestUtil from '../../../utils/RequestUtil';
  import useRequest from '@ahooksjs/use-request';
  import styles from './RequestForChange.module.less';
@@ -134,9 +134,7 @@
      useImperativeHandle(ref, () => ({ onPass, onReject, resetFields }), [ref, onPass, onReject, resetFields]);
  
      return <DetailContent className={styles.changeForm}>
-
                  <BaseInfo dataSource={data || {}} columns={detailColumns} col={3} />
-       
                  <OperationRecord title="操作信息" serviceId={id} serviceName="tower-science" />
                  <DetailTitle title="回复信息"/>
                  <Input.TextArea onChange={(e) => {
