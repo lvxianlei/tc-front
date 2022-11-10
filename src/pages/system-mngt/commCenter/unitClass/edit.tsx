@@ -5,7 +5,7 @@ import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { edit } from "./data.json"
 interface EditProps {
-    id: "create" | "string"
+    id: "create" | string
 }
 
 export default forwardRef(function Edit({ id }: EditProps, ref) {
