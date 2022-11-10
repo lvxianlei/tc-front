@@ -461,7 +461,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     return (
         <Modal
-            title={'创建出库单'}
+            title={'出库单'}
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
