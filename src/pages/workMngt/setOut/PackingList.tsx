@@ -158,7 +158,7 @@ export default function PackingList(): React.ReactNode {
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16}`}>
             <Button type="primary" onClick={GeneratePDFWeight} ghost>生成PDF-带重量</Button>
-            <Button type="primary" onClick={GeneratePDF} ghost>生成PDF</Button>
+            <Button type="primary" onClick={GeneratePDF} ghost>生成PDF-不带重量</Button>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             <Button type="primary" ghost onClick={() => setVisible(true)} disabled={!isShow}>套用包</Button>
             <Button type="primary" disabled={!isShow} onClick={() => {
