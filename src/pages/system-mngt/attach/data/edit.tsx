@@ -56,7 +56,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
 
                 useDept: postData.useDept?.records?.map((item: any) => item.id).join(","),
                 useDeptNames: postData.useDept?.records?.map((item: any) => item.name).join(","),
-
+                fileIds: attachRef.current?.getDataSource()?.map((item: any) => item.id)
             })
         } catch (error) {
             console.log(error)
