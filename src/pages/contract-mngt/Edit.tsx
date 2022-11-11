@@ -272,7 +272,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 // taxPrice: parseFloat(item.taxPrice || "1.00"),
                 // price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                 spec: item.structureSpec,
-                width: formatSpec(item.structureSpec).width,
+                width: item?.width||0,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
@@ -293,7 +293,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 taxPrice,
                 price,
                 spec: item.structureSpec,
-                width: formatSpec(item.structureSpec).width,
+                width: item?.width||0,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
