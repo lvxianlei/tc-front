@@ -467,6 +467,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             haveIndex
             style={{ padding: "0" }}
             rowKey="key"
+            pagination={false}
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {
                     if (item.dataIndex === "num") {
