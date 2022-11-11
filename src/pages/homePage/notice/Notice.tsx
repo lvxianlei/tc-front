@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Input } from 'antd';
+import { Button, Input } from 'antd';
 import { Link } from 'react-router-dom';
-import { Page } from '../../common';
+import { Page, SearchTable } from '../../common';
 
 export default function Notice(): React.ReactNode {
-    const [ filterValue, setFilterValue ] = useState({});
+    const [filterValue, setFilterValue] = useState({});
 
     const columns = [
         {
@@ -12,7 +12,7 @@ export default function Notice(): React.ReactNode {
             width: 150,
             dataIndex: 'title',
             render: (_: string, record: Record<string, any>): React.ReactNode => (
-                <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
+                <Link to={`/homePage/notice/detail/${record.id}`}>{_}</Link>
             )
         },
         {
@@ -34,24 +34,36 @@ export default function Notice(): React.ReactNode {
             title: '发布时间',
             width: 200,
             dataIndex: 'releaseTime'
+        },
+        {
+            title: "操作",
+            dataIndex: "opration",
+            width: 50,
+            render: (_: any, records: any) => <>
+                <Button type="link" size="small" >查看</Button>
+                <Button
+                    type="link"
+                    size="small"
+                    disabled={records?.signState === 2}
+                >签收</Button>
+            </>
         }
     ]
 
-    return <Page
+    return <SearchTable
         path="/tower-system/notice/staff/list"
-        columns={ columns }
-        headTabs={ [] }
-        searchFormItems={ [
+        columns={columns as any[]}
+        searchFormItems={[
             {
                 name: 'msg',
                 label: '模糊查询项',
-                children: <Input maxLength={50} placeholder="请输入标题/内容查询"/>
+                children: <Input maxLength={50} placeholder="请输入标题/内容查询" />
             }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
+        ]}
+        filterValue={filterValue}
+        onFilterSubmit={(values: any) => {
             setFilterValue(values);
             return values;
-        } }
+        }}
     />
 }
