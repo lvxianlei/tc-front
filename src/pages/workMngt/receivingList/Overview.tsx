@@ -256,23 +256,23 @@ export default function Overview() {
 
     const handleSelectChange = (ids: any, selectRows: any[]) => {
         setSelectedRows(ids)
-        const rWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { totalWeight: any; })=>{
+        const rWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalWeight: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
         },0)
-        const receiveWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { balanceTotalWeight: any; })=>{
+        const receiveWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { balanceTotalWeight: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.balanceTotalWeight!==null?cur.balanceTotalWeight:0) 
         },0)
-        const receivePrice = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+        const receivePrice = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalTaxPrice: any; })=>{
             console.log(cur.totalTaxPrice)
             return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )
         },0)
-        const wWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalWeight: any; })=>{
+        const wWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { totalWeight: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
         },0)      
-        const waitWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { balanceTotalWeight: any; })=>{
+        const waitWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { balanceTotalWeight: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.balanceTotalWeight!==null?cur.balanceTotalWeight:0)
         },0)
-        const waitPrice = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+        const waitPrice = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { totalTaxPrice: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0)
         },0)
         setUserData({
