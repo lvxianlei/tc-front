@@ -128,22 +128,6 @@
                 "disabled": true
             },
             {
-                "title": "版本类型",
-                "dataIndex": "versionType",
-                "required": true,
-                "type": "select",
-                "enum": [
-                    {
-                        "label": "大版本",
-                        "value": 2
-                    },
-                    {
-                        "label": "小版本",
-                        "value": 1
-                    }
-                ]
-            },
-            {
                 "title": "文档状态",
                 "dataIndex": "docStatus",
                 "disabled": true
