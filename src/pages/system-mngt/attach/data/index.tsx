@@ -130,24 +130,6 @@ export default function Index() {
         >
             <Overview id={editId} />
         </Modal>
-        {/* <Modal
-            title="送审"
-            visible={sendApplyVisible}
-            width={416}
-            destroyOnClose
-            onCancel={() => setSendApplyVisible(false)}
-            onOk={handleSendApplyModalOk}
-            confirmLoading={sendApplyLoading}
-        >
-            <BaseInfo columns={[
-                {
-                    title: "送审流程",
-                    dataIndex: "abc",
-                    type: "select",
-                    enum: []
-                }
-            ]} dataSource={{}} />
-        </Modal> */}
         <Modal
             title={recordEnum[recordType]}
             visible={recordVisible}
@@ -223,7 +205,7 @@ export default function Index() {
                         overlay={(<Menu onClick={(event: any) => handleRecords(event, records?.id)}>
                             <Menu.Item key="signIn">签收日志</Menu.Item>
                             <Menu.Item key="opration">操作日志</Menu.Item>
-                            <Menu.Item key="examine">审核日志</Menu.Item>
+                            {/* <Menu.Item key="examine">审核日志</Menu.Item> */}
                         </Menu>)}
                         trigger={['click']}
                     >

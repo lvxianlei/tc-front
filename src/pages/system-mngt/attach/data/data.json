@@ -267,11 +267,11 @@
                 "enum": [
                     {
                         "label": "是",
-                        "value": 0
+                        "value": 1
                     },
                     {
                         "label": "否",
-                        "value": 1
+                        "value": 0
                     }
                 ]
             },
@@ -389,7 +389,46 @@
             }
         ]
     },
-    "signIn": [],
-    "opration": [],
+    "signIn": [
+        {
+            "title": "签收人姓名",
+            "dataIndex": "staffName"
+        },
+        {
+            "title": "签收状态",
+            "dataIndex": "state",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未读",
+                    "value": 0
+                },
+                {
+                    "label": "已读",
+                    "value": 1
+                },
+                {
+                    "label": "签收",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "发送时间",
+            "dataIndex": "sendTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "签收时间",
+            "dataIndex": "signInTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "累计时长",
+            "dataIndex": ""
+        }
+    ],
     "examine": []
 }
