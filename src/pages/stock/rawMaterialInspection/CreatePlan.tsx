@@ -234,6 +234,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...tranferData,
                 id: props.id,
                 qualityInspectionNumber: data?.qualityInspectionNumber,
+                inspectionStatus: data?.inspectionStatus
             })
             message.success("保存成功！");
             props?.handleCreate({ code: 1 })
@@ -249,6 +250,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...tranferData,
                 id: props.id,
                 qualityInspectionNumber: data?.qualityInspectionNumber,
+                inspectionStatus: data?.inspectionStatus
             })
             message.success("提交成功！");
             props?.handleCreate({ code: 1 })
