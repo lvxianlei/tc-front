@@ -1,6 +1,7 @@
-import React, { forwardRef, useImperativeHandle } from "react"
-import { Form, Spin } from "antd"
-import { Attachment, BaseInfo, DetailTitle } from "../../../common"
+import React, { forwardRef, useImperativeHandle, useRef, useState } from "react"
+import { Form, Modal, Spin } from "antd"
+import { BaseInfo, DetailTitle } from "../../../common"
+import Attachment from "./Attach"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { edit } from "./data.json"
@@ -9,8 +10,11 @@ interface EditProps {
 }
 
 export default forwardRef(function Edit({ id }: EditProps, ref) {
+    const attachRef = useRef<any>()
     const [form] = Form.useForm()
-
+    const [modalForm] = Form.useForm()
+    const [visible, setVisible] = useState<boolean>(false)
+    const [versionType, setVersionType] = useState<1 | 2>(1)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const data: { [key: string]: any } = await RequestUtil.get(`/tower-system/doc/detail`, { id })
@@ -33,9 +37,11 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 ...saveData,
                 id
             }
-            console.log(postData.useDept)
+
             await saveRun({
                 ...postData,
+                versionType,
+                tag: postData.tag?.map((item: any) => item.value).join(","),
                 typeId: postData.typeId?.value,
                 typeName: postData.typeId?.label,
 
@@ -45,11 +51,12 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 drafterId: postData.drafterId?.id,
                 drafterName: postData.drafterId?.value,
 
-                receiveIds: postData.drafterId?.id,
-                receiveNames: postData.drafterId?.value,
+                receiveIds: postData.receiveIds?.id,
+                receiveNames: postData.receiveIds?.value,
 
-                useDept: postData.drafterId?.records?.map((item: any) => item.id).join(","),
-                useDeptNames: postData.drafterId?.records?.map((item: any) => item.name).join(","),
+                useDept: postData.useDept?.records?.map((item: any) => item.id).join(","),
+                useDeptNames: postData.useDept?.records?.map((item: any) => item.name).join(","),
+
             })
         } catch (error) {
             console.log(error)
@@ -59,63 +66,113 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
 
     useImperativeHandle(ref, () => ({ confirmLoading, onSave: handleSave }), [confirmLoading, handleSave])
 
-    return <Spin spinning={loading}>
-        <DetailTitle title="基本信息" />
-        <BaseInfo
-            form={form}
-            col={3}
-            edit
-            columns={edit.base.map((item: any) => {
-                if (item.dataIndex === "typeId") {
-                    return ({
-                        ...item,
-                        transformData: (data: any) => data?.records?.map((item: any) => ({
-                            label: item.name,
-                            value: item.id
-                        }))
-                    })
-                }
-                if (item.dataIndex === "approvalProcessId") {
-                    return ({
-                        ...item,
-                        transformData: (data: any) => data?.records?.map((item: any) => ({
-                            label: item.name,
-                            value: item.id
-                        }))
-                    })
-                }
-                return item
-            })}
-            dataSource={{
-                ...data,
-                drafterId: {
-                    id: data?.drafterId,
-                    value: data?.drafterName
-                },
-                receiveIds: {
-                    id: data?.receiveIds,
-                    value: data?.receiveNames,
-                    records: data?.receiveIds?.split(",").map((item: string) => ({
-                        id: item
-                    })) || []
-                },
-                useDept: {
-                    id: data?.useDept,
-                    value: data?.useDeptNames,
-                    records: data?.useDept?.split(",").map((item: string) => ({
-                        id: item
-                    })) || []
-                },
-                typeId: data?.typeId ? {
-                    value: data?.typeId,
-                    label: data?.typeName,
-                } : undefined,
-                approvalProcessId: data?.approvalProcessId ? {
-                    value: data?.approvalProcessId,
-                    label: data?.approvalProcessName,
-                } : undefined
-            }}
-        />
-        <Attachment />
-    </Spin>
+    const handleModalOk = async () => {
+        const vision = await modalForm.validateFields()
+        setVersionType(vision.versionType)
+        setVisible(false)
+    }
+
+    return <>
+        <Modal
+            title="选择版本类型"
+            visible={visible}
+            width={1101}
+            destroyOnClose
+            onCancel={() => setVisible(false)}
+            onOk={handleModalOk}
+        >
+            <BaseInfo
+                form={modalForm}
+                edit
+                col={1}
+                columns={[
+                    {
+                        "title": "版本类型",
+                        "dataIndex": "versionType",
+                        "required": true,
+                        "type": "select",
+                        "enum": [
+                            {
+                                "label": "大版本",
+                                "value": 2
+                            },
+                            {
+                                "label": "小版本",
+                                "value": 1
+                            }
+                        ]
+                    }]}
+                dataSource={{ versionType: 1 }} />
+        </Modal>
+        <Spin spinning={loading}>
+            <DetailTitle title="基本信息" />
+            <BaseInfo
+                form={form}
+                col={3}
+                edit
+                columns={edit.base.map((item: any) => {
+                    if (item.dataIndex === "typeId") {
+                        return ({
+                            ...item,
+                            transformData: (data: any) => data?.records?.map((item: any) => ({
+                                label: item.name,
+                                value: item.id
+                            }))
+                        })
+                    }
+                    if (item.dataIndex === "tag") {
+                        return ({
+                            ...item,
+                            transformData: (data: any) => data.map((item: any) => ({
+                                value: item,
+                                label: item
+                            }))
+                        })
+                    }
+                    if (item.dataIndex === "approvalProcessId") {
+                        return ({
+                            ...item,
+                            transformData: (data: any) => data?.records?.map((item: any) => ({
+                                label: item.name,
+                                value: item.id
+                            }))
+                        })
+                    }
+                    return item
+                })}
+                dataSource={{
+                    ...data,
+                    tag: data?.tag ? data?.tag.split(",") : [],
+                    drafterId: {
+                        id: data?.drafterId,
+                        value: data?.drafterName
+                    },
+                    receiveIds: {
+                        id: data?.receiveIds,
+                        value: data?.receiveNames,
+                        records: data?.receiveIds?.split(",").map((item: string, index: number) => ({
+                            id: item,
+                            name: data?.receiveNames.split(",")[index]
+                        })) || []
+                    },
+                    useDept: {
+                        id: data?.useDept,
+                        value: data?.useDeptNames,
+                        records: data?.useDept?.split(",").map((item: string) => ({
+                            id: item
+                        })) || []
+                    },
+                    typeId: data?.typeId ? {
+                        value: data?.typeId,
+                        label: data?.typeName,
+                    } : undefined,
+                    approvalProcessId: data?.approvalProcessId ? {
+                        value: data?.approvalProcessId,
+                        label: data?.approvalProcessName,
+                    } : undefined
+                }}
+            />
+            <Attachment edit ref={attachRef} dataSource={data?.attachInfoVos} />
+        </Spin>
+    </>
 })
