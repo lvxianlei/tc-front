@@ -7,6 +7,8 @@ import Edit from "./edit"
 import { table } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
+import Overview from "./overview"
+import Records from "./record"
 const recordEnum: { [key: string]: any } = {
     signIn: "签收日志",
     opration: "操作日志",
@@ -15,13 +17,12 @@ const recordEnum: { [key: string]: any } = {
 export default function Index() {
     const history = useHistory()
     const editRef = useRef<any>()
-    const [form] = Form.useForm()
     const [visible, setVisible] = useState<boolean>(false)
-    const [sendApplyVisible, setSendApplyVisible] = useState<boolean>(false)
+    const [detailVisible, setDetailVisible] = useState<boolean>(false)
+    const [recordVisible, setRecordVisible] = useState<boolean>(false)
     const [selectedKeys, setSelectedKeys] = useState<string[]>()
     const [editId, setEditId] = useState<"create" | string>("create")
-    const [sendApplyId, setSendApplyId] = useState<string>()
-    const [recordType, setRecordType] = useState<string>("signIn")
+    const [recordType, setRecordType] = useState<"signIn" | "opration" | "examine">("signIn")
     const { run: remove } = useRequest<{ [key: string]: any }>((ids: string[]) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-system/doc?ids=${ids.join(",")}`)
@@ -85,16 +86,18 @@ export default function Index() {
         history.go(0)
     }
 
-    const handleSendApplyModalOk = async () => {
-        const saveData = await form.validateFields()
-        await sendApply({ ...saveData, id: sendApplyId })
-        setSendApplyVisible(false)
-        await message.success("送审成功")
-        history.go(0)
-    }
+    // const handleSendApplyModalOk = async () => {
+    //     const saveData = await form.validateFields()
+    //     await sendApply({ ...saveData, id: sendApplyId })
+    //     setSendApplyVisible(false)
+    //     await message.success("送审成功")
+    //     history.go(0)
+    // }
 
     const handleRecords = ({ key }: any, id: string) => {
-        console.log(key, recordEnum[key], id)
+        setEditId(id)
+        setRecordType(key)
+        setRecordVisible(true)
     }
 
     return (<>
@@ -110,6 +113,24 @@ export default function Index() {
             <Edit id={editId} ref={editRef} />
         </Modal>
         <Modal
+            title="详情"
+            visible={detailVisible}
+            width={1101}
+            destroyOnClose
+            footer={[
+                <Button key="close" onClick={() => {
+                    setEditId("")
+                    setDetailVisible(false)
+                }}>关闭</Button>
+            ]}
+            onCancel={() => {
+                setEditId("")
+                setDetailVisible(false)
+            }}
+        >
+            <Overview id={editId} />
+        </Modal>
+        {/* <Modal
             title="送审"
             visible={sendApplyVisible}
             width={416}
@@ -126,24 +147,20 @@ export default function Index() {
                     enum: []
                 }
             ]} dataSource={{}} />
-        </Modal>
+        </Modal> */}
         <Modal
             title={recordEnum[recordType]}
-            visible={sendApplyVisible}
-            width={416}
+            visible={recordVisible}
+            width={1101}
             destroyOnClose
-            onCancel={() => setSendApplyVisible(false)}
-            onOk={handleSendApplyModalOk}
-            confirmLoading={sendApplyLoading}
+            onCancel={() => setRecordVisible(false)}
+            footer={[
+                <Button
+                    key="close"
+                    onClick={() => setRecordVisible(false)}>关闭</Button>
+            ]}
         >
-            <BaseInfo columns={[
-                {
-                    title: "送审流程",
-                    dataIndex: "abc",
-                    type: "select",
-                    enum: []
-                }
-            ]} dataSource={{}} />
+            <Records id={editId} type={recordType} />
         </Modal>
         <SearchTable
             path="/tower-system/doc"
@@ -172,7 +189,7 @@ export default function Index() {
                         type="link"
                         size="small"
                         onClick={() => {
-                            setVisible(true)
+                            setDetailVisible(true)
                             setEditId(records?.id)
                         }}
                     >

@@ -262,7 +262,7 @@
             },
             {
                 "title": "是否要审核",
-                "dataIndex": "isApprovalName",
+                "dataIndex": "isApproval",
                 "type": "select",
                 "enum": [
                     {
@@ -295,5 +295,101 @@
                 "type": "textarea"
             }
         ]
-    }
+    },
+    "detail": {
+        "base": [
+            {
+                "title": "文档编码",
+                "dataIndex": "code"
+            },
+            {
+                "title": "版本",
+                "dataIndex": "version",
+                "disabled": true
+            },
+            {
+                "title": "文档状态",
+                "dataIndex": "docStatus",
+                "disabled": true
+            },
+            {
+                "title": "文档名称",
+                "dataIndex": "name"
+            },
+            {
+                "title": "文件类型",
+                "dataIndex": "typeId",
+                "type": "fetchSelect",
+                "path": "/tower-system/docType"
+            },
+            {
+                "title": "文档标签",
+                "dataIndex": "tag"
+            },
+            {
+                "title": "关联项目",
+                "dataIndex": "projectName"
+            },
+            {
+                "title": "关联合同",
+                "dataIndex": "contractName"
+            },
+            {
+                "title": "关联销售计划",
+                "dataIndex": "taskNoticeName"
+            },
+            {
+                "title": "起草人",
+                "dataIndex": "drafterMame"
+            },
+            {
+                "title": "接收人员",
+                "dataIndex": "receiveNames"
+            },
+            {
+                "title": "使用部门",
+                "dataIndex": "useDeptName"
+            },
+            {
+                "title": "原件位置",
+                "dataIndex": "originalPosition"
+            },
+            {
+                "title": "执行日期",
+                "dataIndex": "executionTime",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "到期时间",
+                "dataIndex": "expiryDate",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "是否要审核",
+                "dataIndex": "isApprovalName"
+            },
+            {
+                "title": "审核流程",
+                "dataIndex": "approvalProcessName"
+            },
+            {
+                "title": "排序",
+                "dataIndex": "sort",
+                "type": "number",
+                "precision": 0,
+                "min": 0,
+                "step": 1
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description",
+                "type": "textarea"
+            }
+        ]
+    },
+    "signIn": [],
+    "opration": [],
+    "examine": []
 }
