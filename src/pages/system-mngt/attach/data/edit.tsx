@@ -33,9 +33,10 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 ...saveData,
                 id
             }
-            console.log(postData.useDept)
+
             await saveRun({
                 ...postData,
+                tag: postData.tag?.map((item: any) => item.value).join(","),
                 typeId: postData.typeId?.value,
                 typeName: postData.typeId?.label,
 
@@ -45,11 +46,11 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 drafterId: postData.drafterId?.id,
                 drafterName: postData.drafterId?.value,
 
-                receiveIds: postData.drafterId?.id,
-                receiveNames: postData.drafterId?.value,
+                receiveIds: postData.receiveIds?.id,
+                receiveNames: postData.receiveIds?.value,
 
-                useDept: postData.drafterId?.records?.map((item: any) => item.id).join(","),
-                useDeptNames: postData.drafterId?.records?.map((item: any) => item.name).join(","),
+                useDept: postData.useDept?.records?.map((item: any) => item.id).join(","),
+                useDeptNames: postData.useDept?.records?.map((item: any) => item.name).join(","),
             })
         } catch (error) {
             console.log(error)
@@ -95,8 +96,9 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 receiveIds: {
                     id: data?.receiveIds,
                     value: data?.receiveNames,
-                    records: data?.receiveIds?.split(",").map((item: string) => ({
-                        id: item
+                    records: data?.receiveIds?.split(",").map((item: string, index: number) => ({
+                        id: item,
+                        name: data?.receiveNames.split(",")[index]
                     })) || []
                 },
                 useDept: {
