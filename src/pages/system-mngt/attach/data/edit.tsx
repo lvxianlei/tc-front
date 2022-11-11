@@ -1,16 +1,18 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from "react"
-import { Form, Modal, Spin } from "antd"
+import { Form, message, Modal, Spin } from "antd"
 import { BaseInfo, DetailTitle } from "../../../common"
 import Attachment from "./Attach"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { edit } from "./data.json"
+import { useHistory } from "react-router-dom"
 interface EditProps {
     id: "create" | string
 }
 
 export default forwardRef(function Edit({ id }: EditProps, ref) {
     const attachRef = useRef<any>()
+    const history = useHistory()
     const [form] = Form.useForm()
     const [modalForm] = Form.useForm()
     const [visible, setVisible] = useState<boolean>(false)
@@ -33,11 +35,14 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
     const handleSave = () => new Promise(async (resove, reject) => {
         try {
             const saveData = await form.validateFields()
+            if (id !== "create") {
+                setVisible(true)
+                return
+            }
             const postData = id === "create" ? saveData : {
                 ...saveData,
                 id
             }
-
             await saveRun({
                 ...postData,
                 versionType,
@@ -58,6 +63,9 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                 useDeptNames: postData.useDept?.records?.map((item: any) => item.name).join(","),
                 fileIds: attachRef.current?.getDataSource()?.map((item: any) => item.id)
             })
+            message.success("保存成功...")
+            resove(true)
+            history.go(0)
         } catch (error) {
             console.log(error)
             reject(error)
@@ -68,6 +76,32 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
 
     const handleModalOk = async () => {
         const vision = await modalForm.validateFields()
+        const saveData = await form.validateFields()
+        const postData = id === "create" ? saveData : {
+            ...saveData,
+            id
+        }
+        await saveRun({
+            ...postData,
+            versionType,
+            tag: postData.tag?.map((item: any) => item.value).join(","),
+            typeId: postData.typeId?.value,
+            typeName: postData.typeId?.label,
+
+            approvalProcessId: postData.approvalProcessId?.value,
+            approvalProcessName: postData.approvalProcessId?.label,
+
+            drafterId: postData.drafterId?.id,
+            drafterName: postData.drafterId?.value,
+
+            receiveIds: postData.receiveIds?.id,
+            receiveNames: postData.receiveIds?.value,
+
+            useDept: postData.useDept?.records?.map((item: any) => item.id).join(","),
+            useDeptNames: postData.useDept?.records?.map((item: any) => item.name).join(","),
+            fileIds: attachRef.current?.getDataSource()?.map((item: any) => item.id)
+        })
+        await message.success("保存成功...")
         setVersionType(vision.versionType)
         setVisible(false)
     }
@@ -76,7 +110,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
         <Modal
             title="选择版本类型"
             visible={visible}
-            width={1101}
+            width={550}
             destroyOnClose
             onCancel={() => setVisible(false)}
             onOk={handleModalOk}
@@ -84,7 +118,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             <BaseInfo
                 form={modalForm}
                 edit
-                col={1}
+                col={2}
                 columns={[
                     {
                         "title": "版本类型",
@@ -134,7 +168,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                             ...item,
                             transformData: (data: any) => data?.records?.map((item: any) => ({
                                 label: item.name,
-                                value: item.id
+                                value: item.code
                             }))
                         })
                     }
@@ -151,7 +185,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                         id: data?.receiveIds,
                         value: data?.receiveNames,
                         records: data?.receiveIds?.split(",").map((item: string, index: number) => ({
-                            id: item,
+                            userId: item,
                             name: data?.receiveNames.split(",")[index]
                         })) || []
                     },

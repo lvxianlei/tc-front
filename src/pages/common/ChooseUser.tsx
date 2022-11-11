@@ -189,7 +189,7 @@ const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
                         <Col span={15}>
                             <Table
                                 bordered={false}
-                                rowKey="id"
+                                rowKey="userId"
                                 loading={loading || groupLoading}
                                 rowSelection={{
                                     getCheckboxProps: (item) => ({
@@ -225,7 +225,7 @@ const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
                     {
                         direction === "right" && <Table
                             bordered={false}
-                            rowKey="id"
+                            rowKey="userId"
                             rowSelection={{
                                 getCheckboxProps: (item) => ({
                                     disabled: listDisabled || item.disabled
@@ -301,7 +301,7 @@ const ChooseUser: FC<ChooseUserData> = ({ data, ...props }) => {
     const handleOk = () => {
         const dataSource = actionRef.current?.dataSource
         const newValue = {
-            id: dataSource?.map((item: any) => item.id).join(","),
+            id: dataSource?.map((item: any) => item.userId).join(","),
             value: dataSource?.map((item: any) => item.name).join(","),
             records: dataSource || []
         }
