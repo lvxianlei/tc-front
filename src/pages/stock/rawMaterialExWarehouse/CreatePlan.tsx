@@ -387,7 +387,7 @@ export default function CreatePlan(props: any): JSX.Element {
             getBatchingStrategy();
             addCollectionForm.setFieldsValue({
                 outStockType:0,
-                pickingTime: moment(new Date()).format("YYYY-MM-DD"),
+                pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                 issuedNumber:'',
                 projectName:'',
                 planNumber:'',
