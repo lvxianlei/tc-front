@@ -780,14 +780,14 @@
       "path": "/bulletin/contract",
       "module": "./pages/cockpit/contract/index",
       "exact": true,
-      "authority": "tc_erp_sw_cockpit_contract"
+      "authority": "tc_erp_sw_cockpit_contract_list"
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
       "path": "/bulletin/contract/overView/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
-      "authority": "sw_cockpit_contract_kanban_details"
+      "authority": "tc_erp_sw_cockpit_contract_detail"
     },
     { //询价任务
       "name": "工程报价任务",
