@@ -144,6 +144,22 @@ export default function CreatePlan(props: any): JSX.Element {
                 setMaterialList(result?.warehousingEntryDetailList)
                 result?.warehouseId && result?.warehouseId!==null&& setWarehouseId(result?.warehouseId)
                 result?.supplierId && result?.supplierId!==null&& setSupplierId(result?.supplierId)
+                addCollectionForm.setFieldsValue({
+                    ...result,
+                    warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
+                    supplierId: {
+                        id: result?.supplierId,
+                        value: result?.supplierName,
+                        records:[{
+                            id: result?.supplierId,
+                            value: result?.supplierName,
+                            contactManTel:result?.contactsPhone,
+                            contactMan:result?.contactsUser,
+                            supplierName:result?.supplierName,
+                        }]
+                        
+                    }
+                })
                 resole({
                     ...result,
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
