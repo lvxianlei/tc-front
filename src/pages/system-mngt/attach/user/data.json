@@ -138,7 +138,7 @@
             },
             {
                 "title": "文件类型",
-                "dataIndex": "typeId",
+                "dataIndex": "typeCode",
                 "type": "fetchSelect",
                 "path": "/tower-system/docType"
             },
@@ -277,7 +277,7 @@
             },
             {
                 "title": "审核流程",
-                "dataIndex": "approvalProcessId",
+                "dataIndex": "approvalProcessCode",
                 "type": "fetchSelect",
                 "path": "/tower-system/docApproval"
             },
