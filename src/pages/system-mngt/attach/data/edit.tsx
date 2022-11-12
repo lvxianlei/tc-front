@@ -53,11 +53,13 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
             }
             await saveRun({
                 ...postData,
-                parentId: parent?.id,
+
                 versionType,
                 tag: postData.tag?.map((item: any) => item.value).join(","),
+               
                 typeId: postData.typeId?.value,
                 typeName: postData.typeId?.label,
+                typeCode: postData.typeId?.code,
 
                 approvalProcessId: postData.approvalProcessId?.value,
                 approvalProcessName: postData.approvalProcessId?.label,
@@ -159,7 +161,8 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                             ...item,
                             transformData: (data: any) => data?.records?.map((item: any) => ({
                                 label: item.name,
-                                value: item.id
+                                value: item.id,
+                                code: item.code,
                             }))
                         })
                     }
@@ -206,8 +209,9 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                         })) || []
                     },
                     typeId: data?.typeId ? {
-                        value: data?.typeId,
-                        label: data?.typeName,
+                        value: data?.typeId || parent?.id,
+                        label: data?.typeName || parent?.title,
+                        code: data?.typeCode || parent?.code,
                     } : undefined,
                     approvalProcessId: data?.approvalProcessId ? {
                         value: data?.approvalProcessId,
