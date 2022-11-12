@@ -4,11 +4,18 @@ import { BaseInfo, DetailTitle } from "../../../common"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { edit } from "./data.json"
-interface EditProps {
-    id: "create" | string
+interface ParentData {
+    code: string,
+    title: string,
+    id: string
 }
 
-export default forwardRef(function Edit({ id }: EditProps, ref) {
+interface EditProps {
+    id: "create" | string
+    parent?: ParentData
+}
+
+export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
     const [form] = Form.useForm()
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -32,7 +39,10 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             ...saveData,
             id
         }
-        await saveRun(postData)
+        await saveRun({
+            ...postData,
+            parentId: parent?.id
+        })
     }
 
     useImperativeHandle(ref, () => ({ confirmLoading, onSave: handleSave }), [confirmLoading, handleSave])

@@ -33,7 +33,7 @@ const formatTreeData: ((treeData: any[], type?: "group") => any[]) = (treeData =
             return ({
                 ...item,
                 title: type === "group" ? `${item.name}-${item.type}` : item.name,
-                key: type === "group" ? item.employeeId : item.id,
+                key: type === "group" ? item.employeeId || item.id : item.id,
                 icon: <ApartmentOutlined />,
                 children: formatTreeData(item.children)
             })
@@ -41,7 +41,7 @@ const formatTreeData: ((treeData: any[], type?: "group") => any[]) = (treeData =
         return ({
             ...item,
             title: type === "group" ? `${item.name}-${item.type}` : item.name,
-            key: type === "group" ? item.employeeId : item.id,
+            key: type === "group" ? item.employeeId || item.id : item.id,
             icon: <ApartmentOutlined />,
         })
     })
@@ -57,13 +57,21 @@ interface PagenationProps {
 }
 
 interface TableTransferProps {
+    initRightData: any[]
+    transferRef: RefObject<any>
     [key: string]: any
 }
 
-const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
+const TableTransfer = ({
+    targetKeys,
+    initRightData,
+    transferRef,
+    ...restProps }: TableTransferProps) => {
     const [chooseType, setChooseType] = useState<"dept" | "group">("dept")
     const [filterId, setFilterId] = useState<string>("")
-    const [tableDataSource, setTableDataSource] = useState<any[]>([])
+    const [leftData, setLeftData] = useState<any[]>([])
+    const [rightData, setRightData] = useState<any[]>(initRightData)
+
     const [pagination, setPagination] = useState<PagenationProps>({
         current: 1,
         size: 10
@@ -73,6 +81,11 @@ const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
         current: 1,
         size: 10
     })
+
+    useEffect(() => setRightData([
+        ...rightData,
+        initRightData.filter((item: any) => !rightData.map((rItem: any) => rItem.userId).includes(item.userId))]),
+        [JSON.stringify(initRightData)])
 
     const { loading: deptLoading, data: deptData } = useRequest<any>(() => new Promise(async (resolve, reject) => {
         try {
@@ -103,41 +116,49 @@ const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
                 ...pagination,
                 dept: filterId
             })
-            resolve({
-                ...result,
-                records: result?.records?.map((item: any) => ({
-                    ...item,
-                    key: item.id
-                }))
-            })
+            resolve(result)
         } catch (error) {
             reject(error)
         }
     }), {
         ready: chooseType === "dept",
         refreshDeps: [JSON.stringify(pagination), filterId],
-        onSuccess: (data: any) => setTableDataSource(data.records || [])
+        onSuccess: (data: any) => {
+            const currentData = data.records?.map((item: any) => ({ ...item, key: item.userId })) || []
+            setLeftData(currentData)
+            setRightData([...rightData, ...currentData.filter((item: any) => !rightData.map((rItem: any) => rItem.userId).includes(item.userId))])
+        }
     })
 
     const handleSelect = (event: any) => setFilterId(event)
 
-    const handleGroupSelect = (_: any, node: any) => setTableDataSource(node?.node?.noticeGroupEmployeeVOList?.map((item: any) => ({
-        ...item,
-        id: item.employeeId,
-        name: item.employeeName,
-        deptName: item.deptName
-    })))
+    const handleGroupSelect = (_: any, node: any) => {
+        setLeftData(node?.node?.noticeGroupEmployeeVOList?.map((item: any) => ({
+            ...item,
+            userId: item.employeeId,
+            key: item.employeeId,
+            name: item.employeeName,
+            deptName: item.deptName
+        })))
+        setRightData([...rightData, ...node?.node?.noticeGroupEmployeeVOList?.map((item: any) => ({
+            ...item,
+            userId: item.employeeId,
+            key: item.employeeId,
+            name: item.employeeName,
+            deptName: item.deptName
+        })).filter((item: any) => !rightData.map((rItem: any) => rItem.userId).includes(item.userId))])
+    }
 
     const paginationChange = (page: number, pageSize: any) => setPagination({
         ...pagination,
         current: page,
         size: pageSize || pagination.size
     })
-
+    useImperativeHandle(transferRef, () => ({ rightData }), [rightData])
     return (
         <Transfer
             {...restProps}
-            rowKey={(record: any) => record.id}
+            rowKey={(record) => record.userId}
             titles={[
                 "待选区",
                 <Space key="choosed">
@@ -150,13 +171,37 @@ const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
                 direction,
                 onItemSelectAll,
                 onItemSelect,
-                selectedKeys: listSelectedRows,
+                selectedKeys: listSelectedKeys,
                 disabled: listDisabled
             }) => {
-                const leftDataSource = tableDataSource?.map((item: any) => ({
+                const leftDataSource = leftData?.map((item: any) => ({
                     ...item,
-                    disabled: targetKeys.map((item: any) => item.id).includes(item.id)
+                    disabled: targetKeys.includes(item.userId)
                 }))
+
+                const rightDataSource = rightData.filter((item: any) =>
+                    targetKeys.includes(item.userId)
+                )
+
+                const rowSelection = {
+                    getCheckboxProps: (item: any) => ({
+                        disabled: listDisabled || item.disabled
+                    }),
+                    onSelectAll(selected: boolean, selectedRows: any[]) {
+                        const treeSelectedKeys = selectedRows
+                            .filter((item) => !item.disabled)
+                            .map(({ userId }) => userId)
+                        const diffKeys = selected
+                            ? difference(treeSelectedKeys, listSelectedKeys)
+                            : difference(listSelectedKeys, treeSelectedKeys)
+                        onItemSelectAll(diffKeys, selected)
+                    },
+                    onSelect({ userId }: any, selected: boolean) {
+                        onItemSelect(userId, selected)
+                    },
+                    selectedRowKeys: listSelectedKeys
+                }
+
                 return <>
                     {direction === "left" && <Row>
                         <Col span={9} style={{ maxHeight: 600, overflowY: "auto" }}>
@@ -189,28 +234,10 @@ const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
                         <Col span={15}>
                             <Table
                                 bordered={false}
-                                rowKey="userId"
                                 loading={loading || groupLoading}
-                                rowSelection={{
-                                    getCheckboxProps: (item) => ({
-                                        disabled: listDisabled || item.disabled
-                                    }),
-                                    onSelectAll(selected, selectedRows) {
-                                        const listSelectedKeys = listSelectedRows.map((item: any) => item.id)
-                                        const treeSelectedKeys = selectedRows
-                                            .filter((item) => !item.disabled)
-                                            .map(({ id }) => id)
-                                        const diffKeys = selected
-                                            ? difference(treeSelectedKeys, listSelectedKeys)
-                                            : difference(listSelectedKeys, treeSelectedKeys);
-                                        onItemSelectAll((selected ? selectedRows : listSelectedRows).filter((item: any) => diffKeys.includes(item.id)), selected);
-                                    },
-                                    onSelect(selectRows: any, selected) {
-                                        onItemSelect(selectRows, selected);
-                                    },
-                                    selectedRowKeys: listSelectedRows.map((item: any) => item.id)
-                                }}
+                                rowSelection={rowSelection}
                                 size="small"
+                                rowKey="userId"
                                 columns={userColumns}
                                 pagination={{
                                     total: userData?.total,
@@ -225,29 +252,11 @@ const TableTransfer = ({ targetKeys, ...restProps }: TableTransferProps) => {
                     {
                         direction === "right" && <Table
                             bordered={false}
-                            rowKey="userId"
-                            rowSelection={{
-                                getCheckboxProps: (item) => ({
-                                    disabled: listDisabled || item.disabled
-                                }),
-                                onSelectAll(selected, selectedRows) {
-                                    const listSelectedKeys = listSelectedRows.map((item: any) => item.id)
-                                    const treeSelectedKeys = selectedRows
-                                        .filter((item) => !item.disabled)
-                                        .map(({ id }) => id)
-                                    const diffKeys = selected
-                                        ? difference(treeSelectedKeys, listSelectedKeys)
-                                        : difference(listSelectedKeys, treeSelectedKeys);
-                                    onItemSelectAll((selected ? selectedRows : listSelectedRows).filter((item: any) => diffKeys.includes(item.id)), selected);
-                                },
-                                onSelect(selectRows: any, selected) {
-                                    onItemSelect(selectRows, selected);
-                                },
-                                selectedRowKeys: listSelectedRows.map((item: any) => item.id)
-                            }}
+                            rowSelection={rowSelection}
                             size="small"
+                            rowKey="userId"
                             columns={[userColumns[1]]}
-                            dataSource={targetKeys}
+                            dataSource={rightDataSource}
                         />
                     }
                 </>
@@ -261,23 +270,26 @@ interface ChooseUserContentProps {
 }
 
 const ChooseUserContent: FC<ChooseUserContentProps> = ({ actionRef, values = [] }) => {
-    const [targetRows, setTargetRows] = useState<any[]>(values);
-    const handleTransferChange = (targetKeys: any[], direction: "left" | "right", moveKeys: any[]) => {
+    const transferRef = useRef<any>()
+    const [targetKeys, setTargetKeys] = useState<any[]>(values.map((item: any) => item.userId));
+    const handleTransferChange = (targeted: any[], direction: "left" | "right", moveKeys: any[]) => {
         if (direction === "left") {
-            setTargetRows(targetRows.filter((item: any) => !moveKeys.some((sItem: any) => sItem.id === item.id)))
+            setTargetKeys(targetKeys.filter((item: any) => !moveKeys.includes(item)))
             return
         }
         if (direction === "right") {
-            setTargetRows([...targetRows, ...targetKeys])
+            setTargetKeys([...targetKeys, ...targeted])
         }
     }
 
     useImperativeHandle(actionRef, () => ({
-        dataSource: targetRows
-    }), [JSON.stringify(targetRows)])
+        dataSource: transferRef.current?.rightData.filter((item: any) => targetKeys.includes(item.userId))
+    }), [targetKeys, transferRef])
 
     return (<TableTransfer
-        targetKeys={targetRows}
+        targetKeys={targetKeys}
+        transferRef={transferRef}
+        initRightData={values}
         showSelectAll={false}
         listStyle={({ direction }: any) => ({
             flex: direction === "left" ? "1 1 65%" : "1 1 35%",
