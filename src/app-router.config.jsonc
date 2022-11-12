@@ -3127,14 +3127,14 @@
     },
     { // RD-放样过程管理-补件下达列表-下达明细
       "name": "下达明细",
-      "path": "/workMngt/patchIssuedList/issuedDetail/:id",
+      "path": "/workMngt/patchIssuedList/issuedDetail/:id/:productCategoryId",
       "module": "./pages/workMngt/patchIssued/IssuedDetail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
     { // RD-放样过程管理-补件下达列表-电焊明细
       "name": "电焊明细",
-      "path": "/workMngt/patchIssuedList/weldingDetail/:id",
+      "path": "/workMngt/patchIssuedList/weldingDetail/:id/:productCategoryId",
       "module": "./pages/workMngt/patchIssued/WeldingDetail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
