@@ -318,9 +318,7 @@
             },
             {
                 "title": "文件类型",
-                "dataIndex": "typeId",
-                "type": "fetchSelect",
-                "path": "/tower-system/docType"
+                "dataIndex": "typeName"
             },
             {
                 "title": "文档标签",
@@ -340,7 +338,7 @@
             },
             {
                 "title": "起草人",
-                "dataIndex": "drafterMame"
+                "dataIndex": "drafterName"
             },
             {
                 "title": "接收人员",

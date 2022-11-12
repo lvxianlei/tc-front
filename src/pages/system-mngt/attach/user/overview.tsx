@@ -18,42 +18,13 @@ export default function Overview({ id }: EditProps) {
             console.log(error)
             reject(error)
         }
-    }), { manual: id === "create" })
+    }))
 
     return <Spin spinning={loading}>
         <DetailTitle title="基本信息" />
         <BaseInfo
             col={3}
-            columns={detail.base.map((item: any) => {
-                if (item.dataIndex === "typeId") {
-                    return ({
-                        ...item,
-                        transformData: (data: any) => data?.records?.map((item: any) => ({
-                            label: item.name,
-                            value: item.id
-                        }))
-                    })
-                }
-                if (item.dataIndex === "tag") {
-                    return ({
-                        ...item,
-                        transformData: (data: any) => data.map((item: any) => ({
-                            value: item,
-                            label: item
-                        }))
-                    })
-                }
-                if (item.dataIndex === "approvalProcessId") {
-                    return ({
-                        ...item,
-                        transformData: (data: any) => data?.records?.map((item: any) => ({
-                            label: item.name,
-                            value: item.id
-                        }))
-                    })
-                }
-                return item
-            })}
+            columns={detail.base}
             dataSource={{
                 ...data,
             }}
