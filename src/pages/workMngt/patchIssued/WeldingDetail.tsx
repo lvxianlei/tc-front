@@ -3,21 +3,21 @@ import { Input, Button, Form, Space } from 'antd';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable } from '../../common';
-import RequestUtil from '../../../utils/RequestUtil';
+import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 
 export default function WeldingDetail(): React.ReactNode {
     const history = useHistory();
     const [filterValue, setFilterValue] = useState<any>({});
-    const params = useParams<{ id: string, weldingId: string }>()
+    const params = useParams<{ id: string, productCategoryId: string }>()
     const [pages, setPages] = useState<any>({
         current: 1,
         size: 20
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, id: params.id, ...data });
+            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, id: params.productCategoryId, ...data });
             if(result?.records.length > 0 && result?.records[0]?.id) {
                 getSegmentData(result?.records[0]?.id)
             }
@@ -25,7 +25,7 @@ export default function WeldingDetail(): React.ReactNode {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [params.id] })
+    }), { refreshDeps: [params.productCategoryId] })
     
     const { data: segmentData, run: getSegmentData } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -150,6 +150,26 @@ export default function WeldingDetail(): React.ReactNode {
             dataIndex: 'craftName',
         }
     ]
+
+    
+    const GeneratePDF = async () => {
+        RequestUtil.get<any>(`/tower-science/supplyBatch/weld/${params.id}`).then(res => {
+            console.log(res)
+            fetch(`http://127.0.0.1:2001/print`, {
+                mode: 'cors',
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(res, jsonStringifyReplace)
+            }).then((res) => {
+                console.log(res)
+                // return res.blob();
+            })
+
+        })
+    }
+    
     return (
         <>
             <Form layout="inline" onFinish={async (values) => {
@@ -171,10 +191,11 @@ export default function WeldingDetail(): React.ReactNode {
             <Space direction="horizontal" size="middle" style={{ padding: '6px 0' }}>
                 <Button type="primary" onClick={() => {
                     downloadTemplate(`/tower-science/supplyBatch/downloadBatch`, '组焊明细', {
-                        id: params.id,
+                        id: params.productCategoryId,
                         fuzzyMsg: filterValue?.fuzzyMsg
                     }, false, 'array')
                 }}>导出</Button>
+                <Button type="primary" onClick={GeneratePDF} ghost>打印PDF</Button>
                 <Button onClick={() => history.goBack()} >返回</Button>
             </Space>
 
