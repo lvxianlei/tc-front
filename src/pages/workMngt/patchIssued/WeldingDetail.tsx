@@ -10,14 +10,14 @@ import { downloadTemplate } from '../setOut/downloadTemplate';
 export default function WeldingDetail(): React.ReactNode {
     const history = useHistory();
     const [filterValue, setFilterValue] = useState<any>({});
-    const params = useParams<{ id: string, weldingId: string }>()
+    const params = useParams<{ id: string, productCategoryId: string }>()
     const [pages, setPages] = useState<any>({
         current: 1,
         size: 20
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, id: params.id, ...data });
+            const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, id: params.productCategoryId, ...data });
             if(result?.records.length > 0 && result?.records[0]?.id) {
                 getSegmentData(result?.records[0]?.id)
             }
@@ -25,7 +25,7 @@ export default function WeldingDetail(): React.ReactNode {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [params.id] })
+    }), { refreshDeps: [params.productCategoryId] })
     
     const { data: segmentData, run: getSegmentData } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
@@ -191,7 +191,7 @@ export default function WeldingDetail(): React.ReactNode {
             <Space direction="horizontal" size="middle" style={{ padding: '6px 0' }}>
                 <Button type="primary" onClick={() => {
                     downloadTemplate(`/tower-science/supplyBatch/downloadBatch`, '组焊明细', {
-                        id: params.id,
+                        id: params.productCategoryId,
                         fuzzyMsg: filterValue?.fuzzyMsg
                     }, false, 'array')
                 }}>导出</Button>
