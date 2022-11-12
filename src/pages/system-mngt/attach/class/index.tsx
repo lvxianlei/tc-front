@@ -1,17 +1,34 @@
 import React, { useRef, useState } from "react"
 import { useHistory } from "react-router"
-import { Button, Input, message, Modal } from "antd"
+import { Button, Col, Input, message, Modal, Row, Spin, Tree } from "antd"
+import { DirectoryTreeProps } from "antd/lib/tree"
+import { ApartmentOutlined } from "@ant-design/icons"
 import { SearchTable } from "../../../common"
-import { table } from "./data.json"
 import Edit from "./edit"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
+import { generateTreeData } from "@utils/generateTreeData"
+import { table } from "./data.json"
 export default function Index() {
     const history = useHistory()
     const editRef = useRef<any>()
+    const [treeSelect, setTreeSelect] = useState<{
+        code: string,
+        title: string,
+        id: string
+    }>({ code: "", title: "", id: "" })
     const [visible, setVisible] = useState<boolean>(false)
     const [selectedKeys, setSelectedKeys] = useState<string[]>()
     const [editId, setEditId] = useState<"create" | string>("create")
+
+    const { loading, data: treeData } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any[] = await RequestUtil.get(`/tower-system/docType/tree`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }))
 
     const { run: remove } = useRequest<{ [key: string]: any }>((ids: string[]) => new Promise(async (resole, reject) => {
         try {
@@ -47,6 +64,11 @@ export default function Index() {
         await message.success("保存成功")
         history.go(0)
     }
+
+    const handleSelect: DirectoryTreeProps['onSelect'] = (_keys, { node }: any) => {
+        setTreeSelect({ code: node.code, id: node.id, title: node.title as string } as any)
+    }
+
     return (
         <>
             <Modal
@@ -58,10 +80,11 @@ export default function Index() {
                 onOk={handleModalOk}
                 confirmLoading={editRef.current?.confirmLoading}
             >
-                <Edit id={editId} ref={editRef} />
+                <Edit id={editId} ref={editRef} parent={treeSelect}/>
             </Modal>
             <SearchTable
                 path="/tower-system/docType"
+                filterValue={{ code: treeSelect.code }}
                 extraOperation={<>
                     <Button type="primary"
                         onClick={() => {
@@ -110,6 +133,24 @@ export default function Index() {
                         onChange: (selectedKeys: string[]) => setSelectedKeys(selectedKeys)
                     }
                 }}
+                tableRender={(dom: any) => <Row gutter={[8, 8]}>
+                    <Col span={3}>
+                        <Spin spinning={loading}>
+                            <Tree.DirectoryTree
+                                showIcon
+                                defaultExpandAll
+                                onSelect={handleSelect}
+                                treeData={[{
+                                    key: "",
+                                    title: "全部",
+                                    icon: <ApartmentOutlined />,
+                                },
+                                ...generateTreeData(treeData || [])]}
+                            />
+                        </Spin>
+                    </Col>
+                    <Col span={21}>{dom}</Col>
+                </Row>}
             />
         </>)
 }
