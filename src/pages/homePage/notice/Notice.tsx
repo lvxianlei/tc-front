@@ -1,10 +1,40 @@
 import React, { useState } from 'react';
-import { Button, Input } from 'antd';
-import { Link } from 'react-router-dom';
-import { Page, SearchTable } from '../../common';
+import { Button, Input, message, Modal } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
+import { SearchTable } from '../../common';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '@utils/RequestUtil';
 
 export default function Notice(): React.ReactNode {
-    const [filterValue, setFilterValue] = useState({});
+    const history = useHistory()
+    const [filterValue, setFilterValue] = useState({})
+
+    const { run: signIn } = useRequest<{ [key: string]: any }>((id: string[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-system/notice/staff/sign`, { id })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleSignIn = async (id: string) => {
+        Modal.confirm({
+            title: "签收",
+            content: "确定签收吗？",
+            onOk: () => new Promise(async (resolve, reject) => {
+                try {
+                    await signIn(id)
+                    resolve(true)
+                    await message.success('签收成功...')
+                    history.go(0)
+                } catch (error) {
+                    reject(false)
+                    console.log(error)
+                }
+            })
+        })
+    }
 
     const columns = [
         {
@@ -40,11 +70,16 @@ export default function Notice(): React.ReactNode {
             dataIndex: "opration",
             width: 50,
             render: (_: any, records: any) => <>
-                <Button type="link" size="small" >查看</Button>
+                <Button type="link" size="small"
+                    onClick={() => history.push(`/attach/data`, {
+                        type: "notice",
+                        id: records.id
+                    })}>查看</Button>
                 <Button
                     type="link"
                     size="small"
                     disabled={records?.signState === 2}
+                    onClick={handleSignIn.bind(null, records.id)}
                 >签收</Button>
             </>
         }
