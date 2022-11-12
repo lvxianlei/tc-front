@@ -54,11 +54,11 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                 ...postData,
                 tag: postData.tag?.map((item: any) => item.value).join(","),
 
-                typeCode: postData.typeId?.value,
-                typeName: postData.typeId?.label,
+                typeCode: postData.typeCode?.value,
+                typeName: postData.typeCode?.label,
 
-                approvalProcessCode: postData.approvalProcessId?.value,
-                approvalProcessName: postData.approvalProcessId?.label,
+                approvalProcessCode: postData.approvalProcessCode?.value,
+                approvalProcessName: postData.approvalProcessCode?.label,
 
                 drafterId: postData.drafterId?.id,
                 drafterName: postData.drafterId?.value,
@@ -92,11 +92,11 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
             ...postData,
             versionType: version.versionType,
             tag: postData.tag?.map((item: any) => item.value).join(","),
-            typeCode: postData.typeId?.value,
-            typeName: postData.typeId?.label,
+            typeCode: postData.typeCode?.value,
+            typeName: postData.typeCode?.label,
 
-            approvalProcessCode: postData.approvalProcessId?.value,
-            approvalProcessName: postData.approvalProcessId?.label,
+            approvalProcessCode: postData.approvalProcessCode?.value,
+            approvalProcessName: postData.approvalProcessCode?.label,
 
             drafterId: postData.drafterId?.id,
             drafterName: postData.drafterId?.value,
@@ -136,15 +136,15 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                         "enum": [
                             {
                                 "label": "大版本",
-                                "value": 2
+                                "value": 1
                             },
                             {
                                 "label": "小版本",
-                                "value": 1
+                                "value": 2
                             }
                         ]
                     }]}
-                dataSource={{ versionType: 1 }} />
+                dataSource={{ versionType: 2 }} />
         </Modal>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
@@ -208,10 +208,10 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                             id: item
                         })) || []
                     },
-                    typeCode: data?.typeId ? {
+                    typeCode: {
                         value: data?.typeCode || parent?.code,
                         label: data?.typeName || parent?.title
-                    } : undefined,
+                    },
                     approvalProcessCode: data?.approvalProcessCode ? {
                         value: data?.approvalProcessCode,
                         label: data?.approvalProcessName,
