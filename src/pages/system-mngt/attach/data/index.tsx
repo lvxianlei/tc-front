@@ -167,7 +167,7 @@ export default function Index() {
         </Modal>
         <SearchTable
             path="/tower-system/doc"
-            filterValue={{ typeId: treeSelect.id }}
+            filterValue={{ typeCode: treeSelect.code, typeName: treeSelect.title }}
             extraOperation={<>
                 <Button type="primary"
                     onClick={() => {
