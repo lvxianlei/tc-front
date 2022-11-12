@@ -3,7 +3,7 @@ import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable, Page } from '../../common';
-import RequestUtil from '../../../utils/RequestUtil';
+import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
 import ExportList from '../../../components/export/list';
@@ -23,8 +23,8 @@ export default function ReleaseList(): React.ReactNode {
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeld`, { ...pages, weldingId:params.weldingId, fuzzyMsg: data?.fuzzyMsg,id: params.id })
-            const dataSource:any = result?.records?.length>0? await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`,{segmentId: result?.records[0]?.id}):[];
+            const result: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeld`, { ...pages, weldingId: params.weldingId, fuzzyMsg: data?.fuzzyMsg, id: params.id })
+            const dataSource: any = result?.records?.length > 0 ? await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`, { segmentId: result?.records[0]?.id }) : [];
             setSegmentDataSource([...dataSource]);
             resole(result?.records)
         } catch (error) {
@@ -110,8 +110,8 @@ export default function ReleaseList(): React.ReactNode {
             title: '是否主件',
             width: 150,
             dataIndex: 'isMainPart',
-            render:(number:any)=>{
-                return number?[0,'0'].includes(number)?'否':'是':'-'
+            render: (number: any) => {
+                return number ? [0, '0'].includes(number) ? '否' : '是' : '-'
             }
         },
         {
@@ -157,59 +157,80 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'craftName',
         }
     ]
+
+    const GeneratePDF = async () => {
+        RequestUtil.get<any>(`/tower-science/loftingBatch/weld/${params.id}`).then(res => {
+            console.log(res)
+            fetch(`http://127.0.0.1:2001/print`, {
+                mode: 'cors',
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(res, jsonStringifyReplace)
+            }).then((res) => {
+                console.log(res)
+                // return res.blob();
+            })
+
+        })
+    }
+
     return (
         <>
-        <Form layout="inline" style={{margin:'20px'}} onFinish={async (values) => {
-            console.log(values)
-            setFilterValue(values)
-            await run({
-            ...values
-        })}}>
-              <Form.Item label='模糊查询项' name='fuzzyMsg'>
-                <Input placeholder="" maxLength={200} />
-              </Form.Item>
-              <Form.Item>
-                  <Button type="primary" htmlType="submit">查询</Button>
-              </Form.Item>
-              <Form.Item>
-                  <Button htmlType="reset">重置</Button>
-              </Form.Item>
+            <Form layout="inline" style={{ margin: '20px' }} onFinish={async (values) => {
+                console.log(values)
+                setFilterValue(values)
+                await run({
+                    ...values
+                })
+            }}>
+                <Form.Item label='模糊查询项' name='fuzzyMsg'>
+                    <Input placeholder="" maxLength={200} />
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit">查询</Button>
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType="reset">重置</Button>
+                </Form.Item>
             </Form>
-        {/* <Button  type="primary" onClick={() => setIsExport(true)} ghost>导出</Button> */}
-        <Button style={{margin:'0px 10px 20px 20px'}} type="primary" onClick={() => {
-            downloadTemplate(`/tower-science/loftingBatch/downloadBatch`, '组焊', {
-                id: params.id,
-                fuzzyMsg: filterValue?.fuzzyMsg,
-                weldingId: params.weldingId
-            },false, 'array')
-        }}>导出</Button>
-        <Button style={{margin:'0px 20px 0px 0px'}}  onClick={() => history.goBack()} >返回</Button>
-        <div style={{display:'flex',width:'100%'}} >
-            <div style={{width:'40%',padding:'0px 20px 20px 20px'}}>
-                
-                <CommonTable
-                    style={{ padding: "0" }}
-                    loading={loading}
-                    columns={columns}
-                    rowKey={(item: any) => `${item.id}`}
-                    pagination={{
-                        current: pages?.current,
-                        pageSize: pages?.size,
-                        onChange: handleCHange
-                    }}
-                    onRow={(record:any) => ({
-                        onClick: async (event: any) => {
-                            const data:any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`,{segmentId: record.id});
-                            setSegmentDataSource([...data]);
-                        }
-                    })}
-                    dataSource={data as any || []}
-                />
+            {/* <Button  type="primary" onClick={() => setIsExport(true)} ghost>导出</Button> */}
+            <Button style={{ margin: '0px 10px 20px 20px' }} type="primary" onClick={() => {
+                downloadTemplate(`/tower-science/loftingBatch/downloadBatch`, '组焊', {
+                    id: params.id,
+                    fuzzyMsg: filterValue?.fuzzyMsg,
+                    weldingId: params.weldingId
+                }, false, 'array')
+            }}>导出</Button>
+            <Button type="primary" onClick={GeneratePDF} ghost>打印PDF</Button>
+            <Button style={{ margin: '0px 20px 0px 0px' }} onClick={() => history.goBack()} >返回</Button>
+            <div style={{ display: 'flex', width: '100%' }} >
+                <div style={{ width: '40%', padding: '0px 20px 20px 20px' }}>
+
+                    <CommonTable
+                        style={{ padding: "0" }}
+                        loading={loading}
+                        columns={columns}
+                        rowKey={(item: any) => `${item.id}`}
+                        pagination={{
+                            current: pages?.current,
+                            pageSize: pages?.size,
+                            onChange: handleCHange
+                        }}
+                        onRow={(record: any) => ({
+                            onClick: async (event: any) => {
+                                const data: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`, { segmentId: record.id });
+                                setSegmentDataSource([...data]);
+                            }
+                        })}
+                        dataSource={data as any || []}
+                    />
+                </div>
+                <div style={{ width: '60%', paddingRight: '20px' }} >
+                    <CommonTable columns={detailColumns} dataSource={segmentDataSource} pagination={false} />
+                </div>
             </div>
-            <div style={{width:'60%',paddingRight:'20px'}} >
-                <CommonTable columns={detailColumns} dataSource={segmentDataSource} pagination={false}/>
-            </div>
-        </div>
         </>
     )
 }
