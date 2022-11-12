@@ -3,13 +3,13 @@ import { Button, Input, message, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
-import RequestUtil from '../../../utils/RequestUtil';
+import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 
 export default function IssuedDetail(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
@@ -155,6 +155,43 @@ export default function IssuedDetail(): React.ReactNode {
         setFilterValue(value)
         return value
     }
+
+    const GeneratePDFPage = async () => {
+        RequestUtil.get<any>(`/tower-science/supplyBatch/structure/page/print/${params.id}`).then(res => {
+            console.log(res)
+            fetch(`http://127.0.0.1:2001/print`, {
+                mode: 'cors',
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(res, jsonStringifyReplace)
+            }).then((res) => {
+                console.log(res)
+                // return res.blob();
+            })
+
+        })
+    }
+
+    const GeneratePDF = async () => {
+        RequestUtil.get<any>(`/tower-science/supplyBatch/structure/print/${params.id}`).then(res => {
+            console.log(res)
+            fetch(`http://127.0.0.1:2001/print`, {
+                mode: 'cors',
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(res, jsonStringifyReplace)
+            }).then((res) => {
+                console.log(res)
+                // return res.blob();
+            })
+
+        })
+    }
+    
     return (
         <Page
             path="/tower-science/supplyBatch/batchDetail"
@@ -162,19 +199,21 @@ export default function IssuedDetail(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={{ id: params.id }}
+            requestData={{ id: params.productCategoryId }}
             exportPath="/tower-science/supplyBatch/batchDetail"
             extraOperation={<Space>
                 {/* <Button type='primary' ghost onClick={async () => {
-                    await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.id}`);
+                    await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.productCategoryId}`);
                     message.success('更新成功！')
                     history.go(0)
                 }} >更新下达明细</Button>
                 <Button type='primary' ghost onClick={async () => {
-                    await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.id}`);
+                    await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.productCategoryId}`);
                     message.success('刷新成功！')
                     history.go(0)
                 }} >刷新件号数据</Button> */}
+                <Button type="primary" onClick={GeneratePDFPage} ghost>打印PDF-分页</Button>
+                <Button type="primary" onClick={GeneratePDF} ghost>打印PDF-不分页</Button>
                 <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
             </Space>}
             searchFormItems={[
