@@ -170,7 +170,7 @@ export default function Index() {
             path="/tower-system/doc"
             filterValue={{
                 currentUserId: AuthUtil.getUserInfo().user_id,
-                typeId: treeSelect.id
+                typeCode: treeSelect.code, typeName: treeSelect.title
             }}
             extraOperation={<>
                 <Button type="primary"
