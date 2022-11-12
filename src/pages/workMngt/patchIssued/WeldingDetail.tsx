@@ -3,7 +3,7 @@ import { Input, Button, Form, Space } from 'antd';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable } from '../../common';
-import RequestUtil from '../../../utils/RequestUtil';
+import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 
@@ -150,6 +150,26 @@ export default function WeldingDetail(): React.ReactNode {
             dataIndex: 'craftName',
         }
     ]
+
+    
+    const GeneratePDF = async () => {
+        RequestUtil.get<any>(`/tower-science/supplyBatch/weld/${params.id}`).then(res => {
+            console.log(res)
+            fetch(`http://127.0.0.1:2001/print`, {
+                mode: 'cors',
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(res, jsonStringifyReplace)
+            }).then((res) => {
+                console.log(res)
+                // return res.blob();
+            })
+
+        })
+    }
+    
     return (
         <>
             <Form layout="inline" onFinish={async (values) => {
@@ -175,6 +195,7 @@ export default function WeldingDetail(): React.ReactNode {
                         fuzzyMsg: filterValue?.fuzzyMsg
                     }, false, 'array')
                 }}>导出</Button>
+                <Button type="primary" onClick={GeneratePDF} ghost>打印PDF</Button>
                 <Button onClick={() => history.goBack()} >返回</Button>
             </Space>
 
