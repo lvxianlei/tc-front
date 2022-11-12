@@ -9,7 +9,7 @@ import useRequest from '@ahooksjs/use-request';
 export default function IssuedDetail(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
@@ -199,16 +199,16 @@ export default function IssuedDetail(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={{ id: params.id }}
+            requestData={{ id: params.productCategoryId }}
             exportPath="/tower-science/supplyBatch/batchDetail"
             extraOperation={<Space>
                 {/* <Button type='primary' ghost onClick={async () => {
-                    await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.id}`);
+                    await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.productCategoryId}`);
                     message.success('更新成功！')
                     history.go(0)
                 }} >更新下达明细</Button>
                 <Button type='primary' ghost onClick={async () => {
-                    await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.id}`);
+                    await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.productCategoryId}`);
                     message.success('刷新成功！')
                     history.go(0)
                 }} >刷新件号数据</Button> */}
