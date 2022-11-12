@@ -41,7 +41,8 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
         }
         await saveRun({
             ...postData,
-            parentId: parent?.id
+            parentId: data?.parentId || parent?.id,
+            parentName: data?.parentId || parent?.title,
         })
     }
 
