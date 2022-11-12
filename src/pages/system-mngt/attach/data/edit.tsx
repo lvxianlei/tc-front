@@ -24,7 +24,6 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
     const [form] = Form.useForm()
     const [modalForm] = Form.useForm()
     const [visible, setVisible] = useState<boolean>(false)
-    const [versionType, setVersionType] = useState<1 | 2>(1)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const data: { [key: string]: any } = await RequestUtil.get(`/tower-system/doc/detail`, { id })
@@ -53,15 +52,12 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
             }
             await saveRun({
                 ...postData,
-
-                versionType,
                 tag: postData.tag?.map((item: any) => item.value).join(","),
-               
-                typeId: postData.typeId?.value,
-                typeName: postData.typeId?.label,
-                typeCode: postData.typeId?.code,
 
-                approvalProcessId: postData.approvalProcessId?.value,
+                typeCode: postData.typeId?.value,
+                typeName: postData.typeId?.label,
+
+                approvalProcessCode: postData.approvalProcessId?.value,
                 approvalProcessName: postData.approvalProcessId?.label,
 
                 drafterId: postData.drafterId?.id,
@@ -85,8 +81,8 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
 
     useImperativeHandle(ref, () => ({ confirmLoading, onSave: handleSave }), [confirmLoading, handleSave])
 
-    const handleModalOk = async () => {
-        const vision = await modalForm.validateFields()
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        const version = await modalForm.validateFields()
         const saveData = await form.validateFields()
         const postData = id === "create" ? saveData : {
             ...saveData,
@@ -94,12 +90,12 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
         }
         await saveRun({
             ...postData,
-            versionType,
+            versionType: version.versionType,
             tag: postData.tag?.map((item: any) => item.value).join(","),
-            typeId: postData.typeId?.value,
+            typeCode: postData.typeId?.value,
             typeName: postData.typeId?.label,
 
-            approvalProcessId: postData.approvalProcessId?.value,
+            approvalProcessCode: postData.approvalProcessId?.value,
             approvalProcessName: postData.approvalProcessId?.label,
 
             drafterId: postData.drafterId?.id,
@@ -113,9 +109,10 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
             fileIds: attachRef.current?.getDataSource()?.map((item: any) => item.id)
         })
         await message.success("保存成功...")
-        setVersionType(vision.versionType)
         setVisible(false)
-    }
+        resove(true)
+        history.go(0)
+    })
 
     return <>
         <Modal
@@ -156,13 +153,12 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                 col={3}
                 edit
                 columns={edit.base.map((item: any) => {
-                    if (item.dataIndex === "typeId") {
+                    if (item.dataIndex === "typeCode") {
                         return ({
                             ...item,
                             transformData: (data: any) => data?.records?.map((item: any) => ({
                                 label: item.name,
-                                value: item.id,
-                                code: item.code,
+                                value: item.code
                             }))
                         })
                     }
@@ -175,7 +171,7 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                             }))
                         })
                     }
-                    if (item.dataIndex === "approvalProcessId") {
+                    if (item.dataIndex === "approvalProcessCode") {
                         return ({
                             ...item,
                             transformData: (data: any) => data?.records?.map((item: any) => ({
@@ -188,7 +184,11 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                 })}
                 dataSource={{
                     ...data,
-                    tag: data?.tag ? data?.tag.split(",") : [],
+                    tag: data?.tag ? data?.tag.split(",").map((item: string) => ({
+                        label: item,
+                        value: item
+                    })) : [],
+
                     drafterId: {
                         id: data?.drafterId,
                         value: data?.drafterName
@@ -208,13 +208,12 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                             id: item
                         })) || []
                     },
-                    typeId: data?.typeId ? {
-                        value: data?.typeId || parent?.id,
-                        label: data?.typeName || parent?.title,
-                        code: data?.typeCode || parent?.code,
+                    typeCode: data?.typeId ? {
+                        value: data?.typeCode || parent?.code,
+                        label: data?.typeName || parent?.title
                     } : undefined,
-                    approvalProcessId: data?.approvalProcessId ? {
-                        value: data?.approvalProcessId,
+                    approvalProcessCode: data?.approvalProcessCode ? {
+                        value: data?.approvalProcessCode,
                         label: data?.approvalProcessName,
                     } : undefined
                 }}
