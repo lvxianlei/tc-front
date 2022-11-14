@@ -227,7 +227,7 @@ export default function IssuedDetail(): React.ReactNode {
                 try {
                     RequestUtil.post<any>(`/tower-science/supplyBatch/structure/page/print`, {
                         ...form?.getFieldsValue(true),
-                        batchIssuedId: params?.id
+                        supplyBatchId: params?.id
                     }).then(res => {
                         console.log(res)
                         fetch(`http://127.0.0.1:2001/print`, {
@@ -303,7 +303,10 @@ export default function IssuedDetail(): React.ReactNode {
             </Form>,
             onOk: () => new Promise(async (resolve, reject) => {
                 try {
-                    RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`).then(res => {
+                    RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`, {
+                        ...form?.getFieldsValue(true),
+                        supplyBatchId: params?.id
+                    }).then(res => {
                         console.log(res)
                         fetch(`http://127.0.0.1:2001/print`, {
                             mode: 'cors',
