@@ -14,8 +14,10 @@ export default function ReleaseList(): React.ReactNode {
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
     const [form] = useForm();
+    const [pageForm] = useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
@@ -198,8 +200,9 @@ export default function ReleaseList(): React.ReactNode {
 
     const GeneratePDFPage = () => new Promise(async (resolve, reject) => {
         try {
+            setConfirmLoading(true)
             RequestUtil.post<any>(`/tower-science/loftingBatch/structure/print/page`, {
-                ...form?.getFieldsValue(true),
+                ...pageForm?.getFieldsValue(true),
                 batchIssuedId: params?.id
             }).then(res => {
                 console.log(res)
@@ -212,19 +215,29 @@ export default function ReleaseList(): React.ReactNode {
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
                     console.log(res)
+                    setConfirmLoading(false)
+                    pageForm.resetFields();
                     resolve(true)
                     // return res.blob();
+                }).catch(e => {
+                    setConfirmLoading(false)
+                    console.log(e)
+                    reject(false)
                 })
-
+            }).catch(e => {
+                setConfirmLoading(false)
+                console.log(e)
+                reject(false)
             })
         } catch (error) {
+            setConfirmLoading(false)
             console.log(error)
             reject(false)
         }
     })
 
     const GeneratePDF = () => new Promise(async (resolve, reject) => {
-
+        setConfirmLoading(true)
         try {
             RequestUtil.post<any>(`/tower-science/loftingBatch/structure/print`, {
                 ...form?.getFieldsValue(true),
@@ -239,11 +252,21 @@ export default function ReleaseList(): React.ReactNode {
                     },
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
-                    resolve(true)
                     console.log(res)
+                    setConfirmLoading(false)
+                    form.resetFields();
+                    resolve(true)
                     // return res.blob();
+                }).catch(e => {
+                    setConfirmLoading(false)
+                    console.log(e)
+                    reject(false)
                 })
 
+            }).catch(e => {
+                setConfirmLoading(false)
+                console.log(e)
+                reject(false)
             })
         } catch (error) {
             console.log(error)
@@ -258,10 +281,10 @@ export default function ReleaseList(): React.ReactNode {
             onOk={GeneratePDFPage}
             onCancel={() => {
                 setPageVisible(false);
-                form.resetFields()
+                pageForm.resetFields()
             }}
         >
-            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+            <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
                 <Form.Item label='材料名称' name='materialNameList'>
                     <Select placeholder="请选择材料名称" mode='multiple' allowClear>
                         {materialDatas && materialDatas.map((item, index) => {

@@ -13,8 +13,10 @@ export default function IssuedDetail(): React.ReactNode {
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
     const [form] = useForm();
+    const [pageForm] = useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
@@ -182,8 +184,9 @@ export default function IssuedDetail(): React.ReactNode {
 
     const GeneratePDFPage = () => new Promise(async (resolve, reject) => {
         try {
+            setConfirmLoading(true)
             RequestUtil.post<any>(`/tower-science/supplyBatch/structure/page/print`, {
-                ...form?.getFieldsValue(true),
+                ...pageForm?.getFieldsValue(true),
                 supplyBatchId: params?.id
             }).then(res => {
                 fetch(`http://127.0.0.1:2001/print`, {
@@ -195,12 +198,22 @@ export default function IssuedDetail(): React.ReactNode {
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
                     console.log(res)
+                    setConfirmLoading(false)
+                    pageForm.resetFields();
                     resolve(true);
                     // return res.blob();
+                }).catch(e => {
+                    setConfirmLoading(false)
+                    console.log(e)
+                    reject(false)
                 })
-
+            }).catch(e => {
+                setConfirmLoading(false)
+                console.log(e)
+                reject(false)
             })
         } catch (error) {
+            setConfirmLoading(false)
             console.log(error)
             reject(false)
         }
@@ -208,6 +221,7 @@ export default function IssuedDetail(): React.ReactNode {
 
     const GeneratePDF = () => new Promise(async (resolve, reject) => {
         try {
+            setConfirmLoading(true)
             RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`, {
                 ...form?.getFieldsValue(true),
                 supplyBatchId: params?.id
@@ -222,10 +236,20 @@ export default function IssuedDetail(): React.ReactNode {
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
                     console.log(res)
+                    setConfirmLoading(false)
+                    form.resetFields();
                     resolve(true)
                     // return res.blob();
+                }).catch(e => {
+                    setConfirmLoading(false)
+                    console.log(e)
+                    reject(false)
                 })
 
+            }).catch(e => {
+                setConfirmLoading(false)
+                console.log(e)
+                reject(false)
             })
         } catch (error) {
             console.log(error)
@@ -240,10 +264,11 @@ export default function IssuedDetail(): React.ReactNode {
             onOk={GeneratePDFPage}
             onCancel={() => {
                 setPageVisible(false);
-                form.resetFields()
+                pageForm.resetFields()
             }}
+            confirmLoading={confirmLoading}
         >
-            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+            <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
                 <Form.Item label='材料名称' name='materialNameList'>
                     <Select placeholder="请选择材料名称" mode='multiple' allowClear>
                         {materialDatas && materialDatas.map((item, index) => {
@@ -293,6 +318,7 @@ export default function IssuedDetail(): React.ReactNode {
                 setVisible(false);
                 form.resetFields()
             }}
+            confirmLoading={confirmLoading}
         >
             <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
                 <Form.Item label='材料名称' name='materialNameList'>
