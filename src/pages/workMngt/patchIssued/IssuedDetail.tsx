@@ -199,6 +199,7 @@ export default function IssuedDetail(): React.ReactNode {
                 }).then((res) => {
                     console.log(res)
                     setConfirmLoading(false)
+                    setPageVisible(false)
                     pageForm.resetFields();
                     resolve(true);
                     // return res.blob();
@@ -238,6 +239,7 @@ export default function IssuedDetail(): React.ReactNode {
                     console.log(res)
                     setConfirmLoading(false)
                     form.resetFields();
+                    setVisible(false)
                     resolve(true)
                     // return res.blob();
                 }).catch(e => {
