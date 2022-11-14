@@ -13,31 +13,33 @@ export default function IssuedDetail(): React.ReactNode {
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
     const [form] = useForm();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [pageVisible, setPageVisible] = useState<boolean>(false);
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
         resole(value);
     }))
-    
-    const { data: specDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+
+    const { data: specDatas, run: specRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/supplyBatch/structure/spec/${params.id}`);
         resole(data || []);
-    }))
+    }), { manual: true })
 
-    const { data: textureDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+    const { data: textureDatas, run: textureRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/supplyBatch/structure/texture/${params.id}`);
         resole(data || []);
-    }))
+    }), { manual: true })
 
-    const { data: craftDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+    const { data: craftDatas, run: craftRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/supplyBatch/craft/name/${params.id}`);
         resole(data || []);
-    }))
+    }), { manual: true })
 
-    const { data: materialDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+    const { data: materialDatas, run: materialRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/supplyBatch/material/name/${params.id}`);
         resole(data || []);
-    }))
+    }), { manual: true })
 
     const columns = [
         {
@@ -178,11 +180,70 @@ export default function IssuedDetail(): React.ReactNode {
         return value
     }
 
-    const GeneratePDFPage = async () => {
-        Modal.confirm({
-            title: "生成PDF",
-            icon: null,
-            content: <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+    const GeneratePDFPage = () => new Promise(async (resolve, reject) => {
+        try {
+            RequestUtil.post<any>(`/tower-science/supplyBatch/structure/page/print`, {
+                ...form?.getFieldsValue(true),
+                supplyBatchId: params?.id
+            }).then(res => {
+                fetch(`http://127.0.0.1:2001/print`, {
+                    mode: 'cors',
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(res, jsonStringifyReplace)
+                }).then((res) => {
+                    console.log(res)
+                    resolve(true);
+                    // return res.blob();
+                })
+
+            })
+        } catch (error) {
+            console.log(error)
+            reject(false)
+        }
+    })
+
+    const GeneratePDF = () => new Promise(async (resolve, reject) => {
+        try {
+            RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`, {
+                ...form?.getFieldsValue(true),
+                supplyBatchId: params?.id
+            }).then(res => {
+                console.log(res)
+                fetch(`http://127.0.0.1:2001/print`, {
+                    mode: 'cors',
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(res, jsonStringifyReplace)
+                }).then((res) => {
+                    console.log(res)
+                    resolve(true)
+                    // return res.blob();
+                })
+
+            })
+        } catch (error) {
+            console.log(error)
+            reject(false)
+        }
+    })
+
+    return (<>
+        <Modal
+            visible={pageVisible}
+            title="生成PDF-分页"
+            onOk={GeneratePDFPage}
+            onCancel={() => {
+                setPageVisible(false);
+                form.resetFields()
+            }}
+        >
+            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
                 <Form.Item label='材料名称' name='materialNameList'>
                     <Select placeholder="请选择材料名称" mode='multiple' allowClear>
                         {materialDatas && materialDatas.map((item, index) => {
@@ -222,45 +283,18 @@ export default function IssuedDetail(): React.ReactNode {
                 <Form.Item>
                     <Button htmlType="reset">重置</Button>
                 </Form.Item>
-            </Form>,
-            onOk: () => new Promise(async (resolve, reject) => {
-                try {
-                    RequestUtil.post<any>(`/tower-science/supplyBatch/structure/page/print`, {
-                        ...form?.getFieldsValue(true),
-                        supplyBatchId: params?.id
-                    }).then(res => {
-                        console.log(res)
-                        fetch(`http://127.0.0.1:2001/print`, {
-                            mode: 'cors',
-                            method: 'post',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(res, jsonStringifyReplace)
-                        }).then((res) => {
-                            console.log(res)
-                            resolve(true);
-                            // return res.blob();
-                        })
-
-                    })
-                } catch (error) {
-                    console.log(error)
-                    reject(false)
-                }
-            }),
-            onCancel() {
+            </Form>
+        </Modal>
+        <Modal
+            visible={visible}
+            title="生成PDF-不分页"
+            onOk={GeneratePDF}
+            onCancel={() => {
+                setVisible(false);
                 form.resetFields()
-            }
-        })
-
-    }
-
-    const GeneratePDF = async () => {
-        Modal.confirm({
-            title: "生成PDF",
-            icon: null,
-            content: <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+            }}
+        >
+            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
                 <Form.Item label='材料名称' name='materialNameList'>
                     <Select placeholder="请选择材料名称" mode='multiple' allowClear>
                         {materialDatas && materialDatas.map((item, index) => {
@@ -300,41 +334,8 @@ export default function IssuedDetail(): React.ReactNode {
                 <Form.Item>
                     <Button htmlType="reset">重置</Button>
                 </Form.Item>
-            </Form>,
-            onOk: () => new Promise(async (resolve, reject) => {
-                try {
-                    RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`, {
-                        ...form?.getFieldsValue(true),
-                        supplyBatchId: params?.id
-                    }).then(res => {
-                        console.log(res)
-                        fetch(`http://127.0.0.1:2001/print`, {
-                            mode: 'cors',
-                            method: 'post',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify(res, jsonStringifyReplace)
-                        }).then((res) => {
-                            console.log(res)
-                            resolve(true)
-                            // return res.blob();
-                        })
-
-                    })
-                } catch (error) {
-                    console.log(error)
-                    reject(false)
-                }
-            }),
-            onCancel() {
-                form.resetFields()
-            }
-        })
-
-    }
-
-    return (
+            </Form>
+        </Modal>
         <Page
             path="/tower-science/supplyBatch/batchDetail"
             columns={columns}
@@ -354,8 +355,20 @@ export default function IssuedDetail(): React.ReactNode {
                     message.success('刷新成功！')
                     history.go(0)
                 }} >刷新件号数据</Button> */}
-                <Button type="primary" onClick={GeneratePDFPage} ghost>打印PDF-分页</Button>
-                <Button type="primary" onClick={GeneratePDF} ghost>打印PDF-不分页</Button>
+                <Button type="primary" onClick={() => {
+                    specRun();
+                    craftRun();
+                    textureRun();
+                    materialRun();
+                    setPageVisible(true);
+                }} ghost>打印PDF-分页</Button>
+                <Button type="primary" onClick={() => {
+                    specRun();
+                    craftRun();
+                    textureRun();
+                    materialRun();
+                    setVisible(true);
+                }} ghost>打印PDF-不分页</Button>
                 <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
             </Space>}
             searchFormItems={[
@@ -378,5 +391,6 @@ export default function IssuedDetail(): React.ReactNode {
                 },
             ]}
         />
+    </>
     )
 }
