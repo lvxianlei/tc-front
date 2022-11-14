@@ -1,20 +1,42 @@
 import React, { useState } from 'react';
-import { Button, Input, message, Select, Space } from 'antd';
+import { Button, Form, Input, message, Modal, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import { useForm } from 'antd/es/form/Form';
 
 export default function IssuedDetail(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
+    const [form] = useForm();
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
         resole(value);
+    }))
+    
+    const { data: specDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/supplyBatch/structure/spec/${params.id}`);
+        resole(data || []);
+    }))
+
+    const { data: textureDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/supplyBatch/structure/texture/${params.id}`);
+        resole(data || []);
+    }))
+
+    const { data: craftDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/supplyBatch/craft/name/${params.id}`);
+        resole(data || []);
+    }))
+
+    const { data: materialDatas } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/supplyBatch/material/name/${params.id}`);
+        resole(data || []);
     }))
 
     const columns = [
@@ -157,41 +179,158 @@ export default function IssuedDetail(): React.ReactNode {
     }
 
     const GeneratePDFPage = async () => {
-        RequestUtil.get<any>(`/tower-science/supplyBatch/structure/page/print/${params.id}`).then(res => {
-            console.log(res)
-            fetch(`http://127.0.0.1:2001/print`, {
-                mode: 'cors',
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(res, jsonStringifyReplace)
-            }).then((res) => {
-                console.log(res)
-                // return res.blob();
-            })
+        Modal.confirm({
+            title: "生成PDF",
+            icon: null,
+            content: <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+                <Form.Item label='材料名称' name='materialNameList'>
+                    <Select placeholder="请选择材料名称" mode='multiple' allowClear>
+                        {materialDatas && materialDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='规格' name='structureSpecList'>
+                    <Select placeholder="请选择规格" mode='multiple' allowClear>
+                        {specDatas && specDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='材质' name='structureTextureList'>
+                    <Select placeholder="请选择材质" mode='multiple' allowClear>
+                        {textureDatas && textureDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='工艺' name='craftNameList'>
+                    <Select placeholder="请选择工艺" mode='multiple' allowClear>
+                        {craftDatas && craftDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType="reset">重置</Button>
+                </Form.Item>
+            </Form>,
+            onOk: () => new Promise(async (resolve, reject) => {
+                try {
+                    RequestUtil.post<any>(`/tower-science/supplyBatch/structure/page/print`, {
+                        ...form?.getFieldsValue(true),
+                        batchIssuedId: params?.id
+                    }).then(res => {
+                        console.log(res)
+                        fetch(`http://127.0.0.1:2001/print`, {
+                            mode: 'cors',
+                            method: 'post',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(res, jsonStringifyReplace)
+                        }).then((res) => {
+                            console.log(res)
+                            resolve(true);
+                            // return res.blob();
+                        })
 
+                    })
+                } catch (error) {
+                    console.log(error)
+                    reject(false)
+                }
+            }),
+            onCancel() {
+                form.resetFields()
+            }
         })
+
     }
 
     const GeneratePDF = async () => {
-        RequestUtil.get<any>(`/tower-science/supplyBatch/structure/print/${params.id}`).then(res => {
-            console.log(res)
-            fetch(`http://127.0.0.1:2001/print`, {
-                mode: 'cors',
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(res, jsonStringifyReplace)
-            }).then((res) => {
-                console.log(res)
-                // return res.blob();
-            })
+        Modal.confirm({
+            title: "生成PDF",
+            icon: null,
+            content: <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+                <Form.Item label='材料名称' name='materialNameList'>
+                    <Select placeholder="请选择材料名称" mode='multiple' allowClear>
+                        {materialDatas && materialDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='规格' name='structureSpecList'>
+                    <Select placeholder="请选择规格" mode='multiple' allowClear>
+                        {specDatas && specDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='材质' name='structureTextureList'>
+                    <Select placeholder="请选择材质" mode='multiple' allowClear>
+                        {textureDatas && textureDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='工艺' name='craftNameList'>
+                    <Select placeholder="请选择工艺" mode='multiple' allowClear>
+                        {craftDatas && craftDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType="reset">重置</Button>
+                </Form.Item>
+            </Form>,
+            onOk: () => new Promise(async (resolve, reject) => {
+                try {
+                    RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`).then(res => {
+                        console.log(res)
+                        fetch(`http://127.0.0.1:2001/print`, {
+                            mode: 'cors',
+                            method: 'post',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(res, jsonStringifyReplace)
+                        }).then((res) => {
+                            console.log(res)
+                            resolve(true)
+                            // return res.blob();
+                        })
 
+                    })
+                } catch (error) {
+                    console.log(error)
+                    reject(false)
+                }
+            }),
+            onCancel() {
+                form.resetFields()
+            }
         })
+
     }
-    
+
     return (
         <Page
             path="/tower-science/supplyBatch/batchDetail"
