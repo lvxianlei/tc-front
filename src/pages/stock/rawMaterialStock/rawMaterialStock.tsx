@@ -121,7 +121,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <Modal
                 destroyOnClose
                 visible={visible}
-                title={attchType === 1 ? "质保单" : "质检单"}
+                title={attchType === 1 ? "质检单" : "质保单"}
                 confirmLoading={saveLoding}
                 onOk={handleAttachOk}
                 okText="保存"

@@ -31,7 +31,7 @@
         },
         {
             "title": "申请人",
-            "dataIndex": "allocationUserName",
+            "dataIndex": "createUserName",
             "width": 80
         },
         {
