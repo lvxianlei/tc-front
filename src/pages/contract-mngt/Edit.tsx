@@ -263,20 +263,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
                 taxPrice,
                 price,
+                // taxPrice: parseFloat(item.taxPrice || "1.00"),
+                // price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                 spec: item.structureSpec,
-                width: formatSpec(item.structureSpec).width,
-                weight: calcFun.weight({
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    length: item.length,
-                    width: item.width
-                }),
+                width: item?.width||0,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -284,20 +286,20 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
                 taxPrice,
                 price,
                 spec: item.structureSpec,
-                width: formatSpec(item.structureSpec).width,
-                weight: calcFun.weight({
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    length: item.length,
-                    width: item.width
-                }),
+                width: item?.width||0,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -310,7 +312,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
@@ -330,7 +332,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
@@ -367,12 +369,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
                 operatorId: AuthUtil.getUserInfo().user_id,
                 supplierId: baseInfo.supplier.id,
-                supplierName: baseInfo.supplier.value,
-                // purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
-                // purchasePlanNumber: baseInfo.purchasePlan.value || data?.purchasePlanNumber,
-                // comparisonPriceId: baseInfo.comparisonPriceNumber.records ? baseInfo.comparisonPriceNumber.records[0].id : baseInfo.comparisonPriceId,
-                // comparisonPriceNumber: baseInfo.comparisonPriceNumber.records ? baseInfo.comparisonPriceNumber.records[0].comparisonPriceNumber : baseInfo.comparisonPriceNumber,
-                transportBearDto: {
+                supplierName: baseInfo.supplier.value,transportBearDto: {
                     ...freightInfo,
                     transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
                     transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
@@ -426,56 +423,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleBaseInfoChange = async (fields: any, allFields: any) => {
         if (fields.supplier) {
-            // if (allFields?.purchasePlan) {
-            //     // const comparisonPriceNumberId = baseForm.getFieldValue("comparisonPriceNumber").id
-            //     // const meterialList: any[] = await getComparisonPrice(comparisonPriceNumberId, fields.supplier.id)
-            //     setMaterialList(materialList.map((item: any) => {
-            //         const num = parseFloat(item.num || "1")
-            //         const weight = calcFun.weight({
-            //             weightAlgorithm: item.weightAlgorithm * 1,
-            //             proportion: item.proportion,
-            //             length: item.length,
-            //             width: item.width
-            //         })
-            //         const totalWeight = parseFloat(item.totalWeight || "1.00")
-            //         const taxPrice = parseFloat(item.taxOffer || "1.00")
-            //         return ({
-            //             ...item,
-            //             source: 1,
-            //             num,
-            //             weight,
-            //             taxPrice,
-            //             price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
-            //             structureTexture: item.structureTexture,
-            //             structureTextureId: item.structureTextureId,
-            //             taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-            //             totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
-            //         })
-            //     }))
-            //     setPopDataList(materialList.map((item: any) => {
-            //         const num = parseFloat(item.num || "1")
-            //         const weight = calcFun.weight({
-            //             weightAlgorithm: item.weightAlgorithm * 1,
-            //             proportion: item.proportion,
-            //             length: item.length,
-            //             width: item.width
-            //         })
-            //         const totalWeight = parseFloat(item.totalWeight || "1.00")
-            //         const taxPrice = parseFloat(item.taxOffer || "1.00")
-            //         return ({
-            //             ...item,
-            //             source: 1,
-            //             num,
-            //             weight,
-            //             taxPrice,
-            //             price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
-            //             structureTexture: item.structureTexture,
-            //             structureTextureId: item.structureTextureId,
-            //             taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-            //             totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
-            //         })
-            //     }))
-            // }
         }
     }
 
@@ -483,9 +430,10 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         const newData = popDataList.map((item: any, itemIndex: number) => {
             if (itemIndex === index) {
                 const allData: any = {
-                    num: parseFloat(item.num || "1"),
+                    num: value || 1,
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
-                    price: parseFloat(item.price || "1.00"),
+                    price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
+                    // price: parseFloat(item.price || "1.00"),
                     // weight: calcFun.weight({
                     //     weightAlgorithm: item.weightAlgorithm,
                     //     proportion: item.proportion,
@@ -501,18 +449,19 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     //     num: item.num,
                     //     [type]: value
                     // })
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * value / 1000).toFixed(3),
+                    
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) * value / 1000).toFixed(5),
                 }
-                allData[dataIndex] = value
                 return ({
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
                     totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
+                    price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                     // totalWeight: calcFun.totalWeight({
                     //     length: item.length,
                     //     width: item.width,
@@ -521,9 +470,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     //     num: item.num,
                     //     [type]: value
                     // }),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * value / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) * value / 1000).toFixed(5),
                     [dataIndex]: value
                 })
             }
@@ -746,8 +695,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 signingTime: moment(),
                 invoiceCharacter: 1,
                 meteringMode: 2,
-                deliveryMethod: deliveryMethodEnum?.[1]?.value,
-                settlementMode: settlementModeEnum?.[0]?.value
+                // deliveryMethod: deliveryMethodEnum?.[1]?.value,
+                settlementMode: settlementModeEnum?.[0]?.value,
+                ...data
             }} edit />
         <DetailTitle title="运费信息" key="b" />
         <BaseInfo
@@ -907,7 +857,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={popDataList} />
+            dataSource={[...popDataList]} />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })

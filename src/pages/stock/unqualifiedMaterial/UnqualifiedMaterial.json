@@ -32,7 +32,7 @@
         },
         {
             "title": "送检单号",
-            "dataIndex": "qualityInspectionNumber",
+            "dataIndex": "inspectionNumber",
             "width": 150
         },
         {

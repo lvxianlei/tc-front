@@ -406,6 +406,11 @@
                         "authority": "tc_erp_sw_stock_material"
                     },
                     {
+                        "label": "原材料调拨单",
+                        "path": "/stock/rawMaterialAllocation",
+                        "authority": "tc_erp_sw_stock_material"
+                    },
+                    {
                         "label": "原材料收货单",
                         "path": "/stock/receiving",
                         "authority": "tc_erp_sw_stock_material_receive"

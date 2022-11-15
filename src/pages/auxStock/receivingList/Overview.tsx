@@ -178,6 +178,7 @@ export default function Overview() {
             destroyOnClose
             visible={visible}
             // title={attchType === 1 ? "质保单" : "质检单"}
+            width={attchType === 1 ? "30%" : '60%'}
             title={attchType === 1 ? "收货" : "拒绝收货"}
             confirmLoading={saveLoding}
             onOk={handleAttachOk}

@@ -144,6 +144,22 @@ export default function CreatePlan(props: any): JSX.Element {
                 setMaterialList(result?.warehousingEntryDetailList)
                 result?.warehouseId && result?.warehouseId!==null&& setWarehouseId(result?.warehouseId)
                 result?.supplierId && result?.supplierId!==null&& setSupplierId(result?.supplierId)
+                addCollectionForm.setFieldsValue({
+                    ...result,
+                    warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
+                    supplierId: {
+                        id: result?.supplierId,
+                        value: result?.supplierName,
+                        records:[{
+                            id: result?.supplierId,
+                            value: result?.supplierName,
+                            contactManTel:result?.contactsPhone,
+                            contactMan:result?.contactsUser,
+                            supplierName:result?.supplierName,
+                        }]
+                        
+                    }
+                })
                 resole({
                     ...result,
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
@@ -167,7 +183,7 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
+    }), { ready: props.type === "edit" && props.id && props.visible , refreshDeps: [props.visible, props.type, props.id] })
 
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -196,7 +212,7 @@ export default function CreatePlan(props: any): JSX.Element {
     }), { manual: true })
     return (
         <Modal
-            title={'新建入库单'}
+            title={'入库单'}
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);

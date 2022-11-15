@@ -97,7 +97,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
                 <Col><Form.Item label="申购日期" name="date">
                     <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                 </Form.Item></Col>
-                <Col><Form.Item label="模糊查询" name="purchasePlanCode">
+                <Col><Form.Item label="模糊查询" name="fuzzyQuery">
                     <Input placeholder="输入采购计划编号/物料编码进行查询"/>
                 </Form.Item></Col>
                 <Col><Form.Item>
@@ -333,12 +333,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(3)
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(5)
                 })
             }
             return item
@@ -348,12 +348,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(3)
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(5)
                 })
             }
             return item
@@ -467,6 +467,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             haveIndex
             style={{ padding: "0" }}
             rowKey="key"
+            pagination={false}
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {
                     if (item.dataIndex === "num") {
@@ -491,7 +492,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return ({
                             ...item,
                             render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
+                                
                                 const newData = materialList.map((item: any, index: number) => {
+                                    
                                     if (index === key) {
                                         return {
                                             ...item,
@@ -501,7 +504,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                     }
                                     return item
                                 })
-                                setMaterialList(newData)
+                                setMaterialList(newData.slice(0))
+                                setPopDataList(newData.slice(0))
                             }}>
                                 {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
@@ -521,7 +525,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                     }
                                     return item
                                 })
-                                setMaterialList(newData)
+                                setMaterialList(newData.slice(0))
+                                setPopDataList(newData.slice(0))
                             }}>
                                 {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
@@ -534,6 +539,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     dataIndex: "opration",
                     render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
-            dataSource={popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
+            dataSource={[...popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))]} />
     </Spin>
 })

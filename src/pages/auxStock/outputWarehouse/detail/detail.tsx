@@ -552,7 +552,7 @@ export default function Index(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'applyStaffId',
+                        name: 'outStockStaffId',
                         label: '出库人',
                         children: <IntgSelect width={200} />
                     },
