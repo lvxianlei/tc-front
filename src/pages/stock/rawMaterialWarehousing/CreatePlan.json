@@ -194,15 +194,11 @@
         "columns": [
             {
                 "title": "收货单号",
-                "dataIndex": "receiveBatchNumber"
+                "dataIndex": "receiveNumber"
             },
             {
                 "title": "车牌号",
-                "dataIndex": "receiveBatchNumber"
-            },
-            {
-                "title": "收货批次",
-                "dataIndex": "receiveBatchNumber"
+                "dataIndex": "carNumber"
             },
             {
                 "title": "收货批次",
@@ -266,19 +262,19 @@
             },
             {
                 "title": "含税运费（元）",
-                "dataIndex": "transportTaxPrice"
+                "dataIndex": "totalTransportTaxPrice"
             },
             {
                 "title": "不含税运费（元）",
-                "dataIndex": "unTransportTaxPrice"
+                "dataIndex": "totalTransportPrice"
             },
             {
                 "title": "含税装卸费（元）",
-                "dataIndex": "unloadTaxPrice"
+                "dataIndex": "totalUnloadTaxPrice"
             },
             {
                 "title": "不含税装卸费（元）",
-                "dataIndex": "unUnloadTaxPrice"
+                "dataIndex": "totalUnloadPrice"
             },
             {
                 "title": "库位",
