@@ -337,6 +337,34 @@
                 ]
             },
             {
+                "label": "原材料送检单",
+                "icon": "gongying-hetongguanli_hetongguanli",
+                "path": "/rawMaterialInspection",
+                "appName": "SW",
+                "authority": "tc_erp_sw_contract",
+                "items": [
+                    {
+                        "label": "原材料送检单",
+                        "path": "/rawMaterialInspection/inspection",
+                        "authority": "tc_erp_sw_contract_material"
+                    }
+                ]
+            },
+            {
+                "label": "原材料不合格处置单",
+                "icon": "gongying-hetongguanli_hetongguanli",
+                "path": "/unqualifiedMaterial",
+                "appName": "SW",
+                "authority": "tc_erp_sw_contract",
+                "items": [
+                    {
+                        "label": "原材料不合格处置单",
+                        "path": "/unqualifiedMaterial/disposal",
+                        "authority": "tc_erp_sw_contract_material"
+                    }
+                ]
+            },
+            {
                 "label": "辅材采购管理",
                 "icon": "gongying-caigourenwu_caigourenwu",
                 "path": "/buyAuxiliaryMaterial",
@@ -375,6 +403,11 @@
                     {
                         "label": "原材料库存",
                         "path": "/stock/rawMaterialStock",
+                        "authority": "tc_erp_sw_stock_material"
+                    },
+                    {
+                        "label": "原材料调拨单",
+                        "path": "/stock/rawMaterialAllocation",
                         "authority": "tc_erp_sw_stock_material"
                     },
                     {
@@ -1122,18 +1155,67 @@
                 ]
             },
             {
-                "label": "数字门户",
+                "label": "文档管理",
                 "icon": "xitongrizhiTY_xitongrizhi",
-                "path": "/data",
+                "path": "/attach",
                 "appName": "COMM",
                 "authority": "tc_erp_sys_log",
                 "items": [
                     {
-                        "label": "数字门户",
-                        "path": "/data/door",
+                        "label": "文档审批类型管理",
+                        "path": "/attach/approval",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "文档分类管理",
+                        "path": "/attach/class",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "文档数据管理",
+                        "path": "/attach/data",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "个人文档列表",
+                        "path": "/attach/user",
                         "authority": "tc_erp_sys_log_operation"
                     }
                 ]
+            },
+            {
+                "label": "通用中心",
+                "icon": "xitongrizhiTY_xitongrizhi",
+                "path": "/commCenter",
+                "appName": "COMM",
+                "authority": "tc_erp_sys_log",
+                "items": [
+                    {
+                        "label": "单位分类",
+                        "path": "/commCenter/unitClass",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "单位管理",
+                        "path": "/commCenter/unitMngt",
+                        "authority": "tc_erp_sys_log_operation"
+                    }
+                   
+                ]
+            },
+            {
+                 "label": "数字门户",
+                 "icon": "xitongrizhiTY_xitongrizhi",
+                 "path": "/data",
+                 "appName": "COMM",
+                 "authority": "tc_erp_sys_log",
+                 "items": [
+                     {
+                        "label": "数字门户",
+                        "path": "/data/door",
+                         "authority": "tc_erp_sys_log_operation"
+                     }
+                 ]
             },
             {
                 "label": "请款申请管理",
@@ -1519,7 +1601,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "工单管理",
                 "icon": "customer",
                 "path": "/worksheetMngt",
@@ -1538,7 +1620,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "工单设置",
                 "icon": "customer",
                 "path": "/worksheetSetting",

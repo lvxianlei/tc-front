@@ -151,7 +151,7 @@ export default function Invoicing() {
                 {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
-                    children: <Input placeholder="方案编号/生产批次/塔型/下达单号" style={{ width: 300 }} />
+                    children: <Input placeholder="方案编号/生产批次/下达单/塔型/下达单号" style={{ width: 300 }} />
                 }
             ]}
         />

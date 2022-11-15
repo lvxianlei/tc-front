@@ -387,7 +387,7 @@ export default function CreatePlan(props: any): JSX.Element {
             getBatchingStrategy();
             addCollectionForm.setFieldsValue({
                 outStockType:0,
-                pickingTime: moment(new Date()).format("YYYY-MM-DD"),
+                pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                 issuedNumber:'',
                 projectName:'',
                 planNumber:'',
@@ -447,7 +447,7 @@ export default function CreatePlan(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }), { ready: props.type === "edit" && props.id, refreshDeps: [props.type, props.id] })
+    }), { ready: props.type === "edit" && props.id && props.visible, refreshDeps: [props.visible, props.type, props.id] })
 
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -461,7 +461,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     return (
         <Modal
-            title={'创建出库单'}
+            title={'出库单'}
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
@@ -556,31 +556,31 @@ export default function CreatePlan(props: any): JSX.Element {
                                 return ({
                                     ...item,
                                     width: 160,
-                                    render: (value: number, records: any, key: number) => <Input defaultValue={value || undefined} onBlur={(e: any) => handleBatchChange(e.target.value, records.id)} key={key} maxLength={30}/>
+                                    render: (value: number, records: any, key: number) => <Input defaultValue={value || undefined} onBlur={(e: any) => handleBatchChange(e.target.value, records.id)} key={key} maxLength={30} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 })
                             }
                             if (["num"].includes(item.dataIndex)&&type===0) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 })
                             }
                             if (["num"].includes(item.dataIndex)&&type===2) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={ value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={ value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 })
                             }
                             if (["length"].includes(item.dataIndex)&&type===2) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleLengthChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleLengthChange(value, records.id)} key={key} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 })
                             }
                             if (["width"].includes(item.dataIndex)&&type===2) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 })
                             }
                             if (["reservoirName"].includes(item.dataIndex)&&type===2) {
@@ -591,6 +591,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                                 style={{ width: "100%" }}
                                                 value={value ? value : '请选择'}
                                                 onChange={(val) => { handleReservoirChange(val,records.id) }}
+                                                disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
                                             >
                                                 {
                                                     ReservoirArea.map((item, index) => {
@@ -614,6 +615,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                                 style={{ width: "100%" }}
                                                 value={value ? value : '请选择'}
                                                 onChange={(val) => { handleLocatorChange(val,records.id) }}
+                                                disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
                                             >
                                                 {
                                                     Location.map((item, index) => {
@@ -638,7 +640,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             dataIndex: "opration",
                             render: (_: any, records: any) => <>
                                 {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
-                                <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.id)}>移除</Button>
+                                <Button type="link" disabled={records.source === 1||(records?.outStockItemStatus&&records?.outStockItemStatus!==0)} onClick={() => handleRemove(records.id)}>移除</Button>
                             </>
                         }]}
                     pagination={false}

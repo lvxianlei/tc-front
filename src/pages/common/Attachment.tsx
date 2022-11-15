@@ -274,7 +274,7 @@ export default forwardRef(function ({
             title={title}
             {...edit ? {
                 operation: [
-                    <Space direction="horizontal">
+                    <Space direction="horizontal" key="attachs">
                         <Upload
                             key="sub"
                             name="file"
