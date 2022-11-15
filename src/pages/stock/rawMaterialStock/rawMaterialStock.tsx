@@ -121,7 +121,7 @@ export default function RawMaterialStock(): React.ReactNode {
             <Modal
                 destroyOnClose
                 visible={visible}
-                title={attchType === 1 ? "质保单" : "质检单"}
+                title={attchType === 1 ? "质检单" : "质保单"}
                 confirmLoading={saveLoding}
                 onOk={handleAttachOk}
                 okText="保存"
@@ -142,7 +142,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     fixed: "left",
                     render: (text: any, item: any, index: any) => <span>{index + 1}</span>
                 },
-                ...listPage,
+                ...listPage as any,
                 {
                     title: '操作',
                     dataIndex: 'key',
@@ -151,12 +151,12 @@ export default function RawMaterialStock(): React.ReactNode {
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
                             <a style={{ marginRight: 12 }} onClick={() => {
-                                setAttachType(1)
+                                setAttachType(2)
                                 setDetailId(record.id)
                                 setVisible(true)
                             }}>质保单</a>
                             <a style={{ marginRight: 12 }} onClick={() => {
-                                setAttachType(2)
+                                setAttachType(1)
                                 setDetailId(record.id)
                                 setVisible(true)
                             }}>质检单</a>
@@ -200,6 +200,12 @@ export default function RawMaterialStock(): React.ReactNode {
                 }
                 filterValue={filterValue}
                 onFilterSubmit={(value: any) => {
+                    if (value.time) {
+                        const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD"))
+                        value.startCreateTime = `${formatDate[0]} 00:00:00`
+                        value.endCreateTime = `${formatDate[1]} 23:59:59`
+                        delete value.time
+                    }
                     if (value.length) {
                         value.lengthMin = value.length.lengthMin
                         value.lengthMax = value.length.lengthMax
@@ -209,6 +215,11 @@ export default function RawMaterialStock(): React.ReactNode {
                     return value
                 }}
                 searchFormItems={[
+                    {
+                        name: 'time',
+                        label: '入库日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
                     {
                         name: 'materialCategoryName',
                         label: '分类',
@@ -264,6 +275,16 @@ export default function RawMaterialStock(): React.ReactNode {
                         name: 'width',
                         label: '宽度',
                         children: <InputNumber />
+                    },
+                    {
+                        name: 'furnaceBatchNumber',
+                        label: '炉批号',
+                        children: <Input width={100}  placeholder="请输入炉批号"/>
+                    },
+                    {
+                        name: 'warrantyNumber',
+                        label: '质保书号',
+                        children: <Input width={100}  placeholder="请输入炉批号"/>
                     },
                     {
                         name: 'warehouseId',

@@ -10,7 +10,7 @@ import {
     materialTextureOptions, transportationTypeOptions,
     settlementModeOptions
 } from "../../configuration/DictionaryOptions"
-import { contractBaseInfo, material, addMaterial } from "./contract.json"
+import { contractBaseInfo, material, addMaterial, addResultMaterial } from "./contract.json"
 
 // 新加运费信息
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
@@ -117,11 +117,13 @@ export const calcFun = {
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
+    const [resultVisible, setResultVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialList, setMaterialList] = useState<any[]>([])
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
+    const [supplierId, setSupplierId] = useState('')
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
 
     const [colunmnBase, setColunmnBase] = useState<any[]>(contractBaseInfo);
@@ -153,7 +155,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 ...result,
                 operator: { id: result.operatorId, value: result.operatorName },
                 supplier: { id: result.supplierId, value: result.supplierName },
-                purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
+                // purchasePlan: { id: result.purchasePlanId, value: result.purchasePlanNumber }
             })
             if (result?.transportBearVo?.transportBear == 1) {
                 setNewfreightInformation(oneFreight.slice(0))
@@ -261,20 +263,22 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setMaterialList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
                 taxPrice,
                 price,
+                // taxPrice: parseFloat(item.taxPrice || "1.00"),
+                // price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                 spec: item.structureSpec,
-                width: formatSpec(item.structureSpec).width,
-                weight: calcFun.weight({
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    length: item.length,
-                    width: item.width
-                }),
+                width: item?.width||0,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
@@ -282,25 +286,70 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
-            const price = parseFloat(item.offer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
             return ({
                 ...item,
                 num,
                 taxPrice,
                 price,
                 spec: item.structureSpec,
-                width: formatSpec(item.structureSpec).width,
-                weight: calcFun.weight({
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    length: item.length,
-                    width: item.width
-                }),
+                width: item?.width||0,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
                 taxTotalAmount: (num * taxPrice).toFixed(2),
                 totalAmount: (num * price).toFixed(2)
             })
         })])
         setVisible(false)
+    }
+    const handleAddResultModalOk = () => {
+        // const newMaterialList = popDataList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        const newMaterialList: any[] = []
+        setMaterialList([...materialList.map((item: any) => {
+            const num = parseFloat(item.num || "1")
+            const taxPrice = parseFloat(item.taxOffer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            return ({
+                ...item,
+                num,
+                taxPrice,
+                price,
+                spec: item.structureSpec,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                taxTotalAmount: (num * taxPrice).toFixed(2),
+                totalAmount: (num * price).toFixed(2)
+            })
+        })])
+        setPopDataList([...materialList.map((item: any) => {
+            const num = parseFloat(item.num || "1")
+            const taxPrice = parseFloat(item.taxOffer || "1.00")
+            const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            return ({
+                ...item,
+                num,
+                taxPrice,
+                price,
+                spec: item.structureSpec,
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                taxTotalAmount: (num * taxPrice).toFixed(2),
+                totalAmount: (num * price).toFixed(2)
+            })
+        })])
+        setResultVisible(false)
     }
 
     const handleRemove = (id: string) => {
@@ -320,12 +369,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 fileIds: attchsRef.current.getDataSource().map(item => item.id),
                 operatorId: AuthUtil.getUserInfo().user_id,
                 supplierId: baseInfo.supplier.id,
-                supplierName: baseInfo.supplier.value,
-                purchasePlanId: baseInfo.purchasePlan?.id || data?.purchasePlanId,
-                purchasePlanNumber: baseInfo.purchasePlan.value || data?.purchasePlanNumber,
-                comparisonPriceId: baseInfo.comparisonPriceNumber.records ? baseInfo.comparisonPriceNumber.records[0].id : baseInfo.comparisonPriceId,
-                comparisonPriceNumber: baseInfo.comparisonPriceNumber.records ? baseInfo.comparisonPriceNumber.records[0].comparisonPriceNumber : baseInfo.comparisonPriceNumber,
-                transportBearDto: {
+                supplierName: baseInfo.supplier.value,transportBearDto: {
                     ...freightInfo,
                     transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
                     transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
@@ -379,74 +423,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleBaseInfoChange = async (fields: any, allFields: any) => {
         if (fields.supplier) {
-            if (allFields?.purchasePlan) {
-                const comparisonPriceNumberId = baseForm.getFieldValue("comparisonPriceNumber").id
-                const meterialList: any[] = await getComparisonPrice(comparisonPriceNumberId, fields.supplier.id)
-                setMaterialList(meterialList.map((item: any) => {
-                    const num = parseFloat(item.num || "1")
-                    const weight = calcFun.weight({
-                        weightAlgorithm: item.weightAlgorithm * 1,
-                        proportion: item.proportion,
-                        length: item.length,
-                        width: item.width
-                    })
-                    const totalWeight = parseFloat(item.totalWeight || "1.00")
-                    const taxPrice = parseFloat(item.taxOffer || "1.00")
-                    return ({
-                        ...item,
-                        source: 1,
-                        num,
-                        weight,
-                        taxPrice,
-                        price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
-                        structureTexture: item.structureTexture,
-                        structureTextureId: item.structureTextureId,
-                        taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-                        totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
-                    })
-                }))
-                setPopDataList(meterialList.map((item: any) => {
-                    const num = parseFloat(item.num || "1")
-                    const weight = calcFun.weight({
-                        weightAlgorithm: item.weightAlgorithm * 1,
-                        proportion: item.proportion,
-                        length: item.length,
-                        width: item.width
-                    })
-                    const totalWeight = parseFloat(item.totalWeight || "1.00")
-                    const taxPrice = parseFloat(item.taxOffer || "1.00")
-                    return ({
-                        ...item,
-                        source: 1,
-                        num,
-                        weight,
-                        taxPrice,
-                        price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
-                        structureTexture: item.structureTexture,
-                        structureTextureId: item.structureTextureId,
-                        taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
-                        totalAmount: (totalWeight * taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(2)
-                    })
-                }))
-            }
-        }
-        if (fields.comparisonPriceNumber) {
-            baseForm.setFieldsValue({
-                purchasePlan: {
-                    id: fields.comparisonPriceNumber.records?.[0]?.purchasePlanId,
-                    value: fields.comparisonPriceNumber.records?.[0]?.purchasePlanCode
-                }
-            })
-            setColunmnBase(colunmnBase.map(((item: any) => {
-                if (item.dataIndex === "supplier") {
-                    return ({
-                        ...item,
-                        disabled: false,
-                        path: `/tower-supply/comparisonPrice/getComparisonPrice?comparisonPriceId=${fields.comparisonPriceNumber.id}`
-                    })
-                }
-                return item
-            })))
         }
     }
 
@@ -454,38 +430,49 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         const newData = popDataList.map((item: any, itemIndex: number) => {
             if (itemIndex === index) {
                 const allData: any = {
-                    num: parseFloat(item.num || "1"),
+                    num: value || 1,
                     taxPrice: parseFloat(item.taxPrice || "1.00"),
-                    price: parseFloat(item.price || "1.00"),
-                    weight: calcFun.weight({
-                        weightAlgorithm: item.weightAlgorithm,
-                        proportion: item.proportion,
-                        length: item.length,
-                        width: item.width,
-                        [type]: value
-                    }),
-                    totalWeight: calcFun.totalWeight({
-                        length: item.length,
-                        width: item.width,
-                        proportion: item.proportion,
-                        weightAlgorithm: item.weightAlgorithm,
-                        num: item.num,
-                        [type]: value
-                    })
+                    price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
+                    // price: parseFloat(item.price || "1.00"),
+                    // weight: calcFun.weight({
+                    //     weightAlgorithm: item.weightAlgorithm,
+                    //     proportion: item.proportion,
+                    //     length: item.length,
+                    //     width: item.width,
+                    //     [type]: value
+                    // }),
+                    // totalWeight: calcFun.totalWeight({
+                    //     length: item.length,
+                    //     width: item.width,
+                    //     proportion: item.proportion,
+                    //     weightAlgorithm: item.weightAlgorithm,
+                    //     num: item.num,
+                    //     [type]: value
+                    // })
+                    
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) * value / 1000).toFixed(5),
                 }
-                allData[dataIndex] = value
                 return ({
                     ...item,
                     taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
                     totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
-                    totalWeight: calcFun.totalWeight({
-                        length: item.length,
-                        width: item.width,
-                        proportion: item.proportion,
-                        weightAlgorithm: item.weightAlgorithm,
-                        num: item.num,
-                        [type]: value
-                    }),
+                    price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
+                    // totalWeight: calcFun.totalWeight({
+                    //     length: item.length,
+                    //     width: item.width,
+                    //     proportion: item.proportion,
+                    //     weightAlgorithm: item.weightAlgorithm,
+                    //     num: item.num,
+                    //     [type]: value
+                    // }),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) * value / 1000).toFixed(5),
                     [dataIndex]: value
                 })
             }
@@ -645,6 +632,46 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     })))
                 }} />
         </Modal>
+        <Modal width={addResultMaterial.width || 520} title={`选择${addResultMaterial.title}`} destroyOnClose visible={resultVisible}
+            onOk={handleAddResultModalOk} onCancel={() => setResultVisible(false)}>
+            <PopTableContent data={{
+                    ...(addResultMaterial as any),
+                    path: `${addResultMaterial?.path}?supplierId=${supplierId}`,
+                    columns: (addResultMaterial as any).columns.map((item: any) => {
+                        if (item.dataIndex === "standard") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: materialStandardEnum
+                            })
+                        }
+                        return item
+                    })
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => {
+                    setMaterialList(fields.map((item: any) => ({
+                        ...item,
+                        num: item?.num || 1,
+                        spec: item.structureSpec,
+                        source: item.source || 2,
+                        length: item.length || 1,
+                        taxPrice: item.taxPrice || 1.00,
+                        price: item.price || 1.00,
+                        width: item.width || 0,
+                        taxTotalAmount: item.taxTotalAmount || 1.00,
+                        totalAmount: item.totalAmount || 1.00,
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                        structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
+                    })))
+                }} />
+        </Modal>
         <DetailTitle title="合同基本信息" key="a" />
         <BaseInfo
             form={baseForm}
@@ -668,8 +695,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 signingTime: moment(),
                 invoiceCharacter: 1,
                 meteringMode: 2,
-                deliveryMethod: deliveryMethodEnum?.[1]?.value,
-                settlementMode: settlementModeEnum?.[0]?.value
+                // deliveryMethod: deliveryMethodEnum?.[1]?.value,
+                settlementMode: settlementModeEnum?.[0]?.value,
+                ...data
             }} edit />
         <DetailTitle title="运费信息" key="b" />
         <BaseInfo
@@ -713,13 +741,27 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 ghost
                 key="add"
                 onClick={async () => {
-                    const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
-                    if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
-                        message.warning("请先选择询比价信息...")
-                    } else {
+                    // const baseInfo = await baseForm.validateFields(['comparisonPriceNumber']);
+                    // if (baseInfo?.comparisonPriceNumber?.records && !baseInfo?.comparisonPriceNumber?.records[0]?.id) {
+                    //     message.warning("请先选择询比价信息...")
+                    // } else {
                         setVisible(true)
+                    // }
+            }}>添加</Button>,
+            <Button
+                type="primary"
+                ghost
+                key="add"
+                style={{marginLeft:'10px'}}
+                onClick={async () => {
+                    const baseInfo = await baseForm.validateFields(['supplier'])
+                    if (baseInfo.supplier && !baseInfo.supplier.id) {
+                        message.warning("请先选择供应商...")
+                    } else {
+                        baseInfo.supplier &&setSupplierId(baseInfo.supplier.id)
+                        setResultVisible(true)
                     }
-                }}>添加</Button>
+            }}>选择比价结果</Button>
         ]} />
         <CommonTable
             style={{ padding: "0" }}
@@ -815,7 +857,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={popDataList} />
+            dataSource={[...popDataList]} />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })
