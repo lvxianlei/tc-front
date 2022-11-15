@@ -16,6 +16,7 @@ import SelectUser from '../../common/SelectUser';
 import { useForm } from 'antd/lib/form/Form';
 import { CommonTable } from '../../common';
 import ApplyForChange from './ApplyForChange';
+import ApplyOrDetail from './ApplyOrDetail';
  
  interface EditRefProps {
      onSubmit: () => void;
@@ -348,7 +349,7 @@ import ApplyForChange from './ApplyForChange';
             setDetailVisible(false);
             detailRef.current?.resetFields();
          }}>
-         {/* <ApplyOrDetail type={dtype} id={rowId} ref={detailRef} /> */}
+         <ApplyOrDetail type={dtype} id={rowId} ref={detailRef} />
      </Modal>
          <Modal
              destroyOnClose
@@ -406,7 +407,6 @@ import ApplyForChange from './ApplyForChange';
                         title: '操作',
                         dataIndex: 'operation',
                         fixed: 'right' as FixedType,
-                        width: 150,
                         render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                             <Space direction="horizontal" size="small">
                                 <Button type='link' onClick={() => {

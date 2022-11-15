@@ -13,7 +13,7 @@
  
  interface modalProps {
      readonly id?: any;
-     readonly type?: 'new' | 'edit';
+     readonly type?: 'apply' | 'detail';
  }
  
  export default forwardRef(function ApplyOrDetail({ id, type }: modalProps, ref) {
@@ -27,7 +27,7 @@
          } catch (error) {
              reject(error)
          }
-     }), { manual: type === 'new', refreshDeps: [id, type] })
+     }), { refreshDeps: [id, type] })
 
      const detailColumns = [
         {
