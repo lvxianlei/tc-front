@@ -203,19 +203,19 @@ export default function Overview() {
         setIsOpenId(false);
     }
     // 统计数量
-    // const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
-    //     try {
-    //         const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
-    //             receiveStockId: params.id,
-    //             startStatusUpdateTime: filterValue["startStatusUpdateTime"] || "",
-    //             endStatusUpdateTime: filterValue["endStatusUpdateTime"] || "",
-    //             receiveDetailStatus: filterValue["receiveDetailStatus"] || ""
-    //         })
-    //         resole(result)
-    //     } catch (error) {
-    //         reject(error)
-    //     }
-    // }), { refreshDeps: [params.id] })
+    const { data: numData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
+                receiveStockId: params.id,
+                startStatusUpdateTime: filterValue["startStatusUpdateTime"] || "",
+                endStatusUpdateTime: filterValue["endStatusUpdateTime"] || "",
+                receiveDetailStatus: filterValue["receiveDetailStatus"] || ""
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { refreshDeps: [params.id] })
 
     const handleAttachOk = async () => {
         setSaveLoading(true)
@@ -366,12 +366,12 @@ export default function Overview() {
                 }} >申请送检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
-                    已收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.rWeight}</span>
-                    结算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight}</span>
-                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receivePrice}</span>
-                    待收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ userData?.wWeight}</span>
-                    结算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight}</span>
-                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice}</span>
+                    已收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight||0}</span>
+                    结算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receiveBalanceWeight||0}</span>
+                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receivePrice||0}</span>
+                    待收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ userData?.wWeight ||0}</span>
+                    结算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight||0}</span>
+                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice||0}</span>
                 </span>
             </>}
             tableProps={{
