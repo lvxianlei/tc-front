@@ -54,7 +54,7 @@ export default function SalesPlanEdit() {
 
     const { loading: rdResonLoading, run: resonRun } = useRequest<{ [key: string]: any }>((postData: string[]) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/drawingConfirmation/rdDescription`, { ids: postData })
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/drawingConfirmation/rdDescription`, { ids: postData })
             resole(result)
         } catch (error) {
             reject(error)
@@ -170,7 +170,9 @@ export default function SalesPlanEdit() {
                 newProductDetailsData[item.id] = item
             }
         })
-        const resonData = await resonRun(newProductDetails.map((item: any) => item?.businessId))
+        const postIds: string[] = newProductDetails.map((item: any) => item?.businessId)
+        const filterPostIds = postIds.filter((item: any, index: number, array: any[]) => index === array.indexOf(item))
+        const resonData = await resonRun(filterPostIds)
         cargoDtoForm.setFieldsValue({ rdDescription: resonData.filter((item: any) => !!item).join("\n") })
         setProductDetails(newProductDetails)
         productDetailsForm.setFieldsValue(newProductDetailsData)
