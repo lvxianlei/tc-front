@@ -39,7 +39,7 @@ export default function ChooseApply(): JSX.Element {
                                                     herf = res.path
                                             }
                                             if (res.appName === "MC") {
-                                                herf = res.path + AuthUtil.getUserInfo().user_id + "&tenantid=" + AuthUtil.getTenantId()
+                                                herf = `${process.env.MES_BASE_URL}${res.path}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
                                             }
                                             window.location.href = herf
                                             return
