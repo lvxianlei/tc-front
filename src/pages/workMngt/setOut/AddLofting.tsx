@@ -58,7 +58,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     pattern: /^[0-9a-zA-Z-]*$/,
                     message: '仅可输入数字/字母/-',
                 }]}>
-                    <Input size="small" maxLength={50} />
+                    <Input size="small" maxLength={20} />
                 </Form.Item>
             )
         },

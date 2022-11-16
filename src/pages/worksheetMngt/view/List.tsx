@@ -5,11 +5,17 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Button, Form } from 'antd';
+import { Input, DatePicker, Button, message, Space, Select, Radio, Modal, TreeSelect, Form } from 'antd';
+import { Page } from '../../common';
+import { FixedType } from 'rc-table/lib/interface';
+import styles from '../Management.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
+import { useHistory } from 'react-router-dom';
+import SelectUser from '../../common/SelectUser';
 import { useForm } from 'antd/lib/form/Form';
 import { gantt } from 'dhtmlx-gantt';
+import moment from 'moment';
 import './view.css';
 import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
 
@@ -99,7 +105,7 @@ export default function List(): React.ReactNode {
         template: function (task: any) {
           return (
             `
-              <span title="预计开始时间:${task.status === 1 ? task.planStartTime || '-' : task.actualStartTime || '-'}" >${task.status === 1 ? task.planStartTime || '-' : task.actualStartTime || '-'}</span>
+              <span title="预计开始时间:${task.planStartTime ? task.planStartTime : '-'}" >${task.planStartTime ? task.planStartTime : '-'}</span>
               `
           )
         }
@@ -112,7 +118,7 @@ export default function List(): React.ReactNode {
         template: function (task: any) {
           return (
             `
-            <span title="预计完成时间:${task.status === 1 ? task.planEndTime || '-' : task.actualEndTime || '-'}" >${task.status === 1 ? task.planEndTime || '-' : task.actualEndTime || '-'}</span>
+            <span title="预计完成时间:${task.planEndTime ? task.planEndTime : '-'}" >${task.planEndTime ? task.planEndTime : '-'}</span>
             `
           )
         }

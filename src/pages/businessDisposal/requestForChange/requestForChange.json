@@ -1,0 +1,241 @@
+{
+    "columns": [
+        {
+            "key": "changeNumber",
+            "title": "明细变更申请编号",
+            "width": 120,
+            "dataIndex": "changeNumber"
+        },
+        {
+            "key": "examineStatusName",
+            "title": "审批状态",
+            "width": 80,
+            "dataIndex": "examineStatusName"
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态变更时间",
+            "width": 80,
+            "dataIndex": "updateStatusTime"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "internalNumber",
+            "title": "内部合同号",
+            "width": 100,
+            "dataIndex": "internalNumber"
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "width": 100,
+            "dataIndex": "projectName"
+        },
+        {
+            "key": "drawTaskNum",
+            "title": "确认任务编号",
+            "width": 100,
+            "dataIndex": "drawTaskNum"
+        },
+        {
+            "key": "deptName",
+            "title": "所属部门",
+            "width": 80,
+            "dataIndex": "deptName"
+        },
+        {
+            "key": "userName",
+            "title": "发起人",
+            "width": 80,
+            "dataIndex": "userName"
+        },
+        {
+            "key": "changeExplain",
+            "title": "变更说明",
+            "width": 150,
+            "dataIndex": "changeExplain"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 150,
+            "dataIndex": "description"
+        },
+        {
+            "key": "updateDescription",
+            "title": "备注（修改后）",
+            "width": 120,
+            "dataIndex": "updateDescription"
+        }
+    ],
+
+    "detailColumns": [
+        {
+            "key": "changeTypeName",
+            "title": "变更类型",
+            "width": 50,
+            "dataIndex": "changeTypeName"
+        },
+        {
+            "key": "productNumber",
+            "title": "杆塔号（修改前）",
+            "width": 80,
+            "dataIndex": "productNumber"
+        },
+        {
+            "key": "changeProductNumber",
+            "title": "杆塔号（修改后）",
+            "width": 80,
+            "dataIndex": "changeProductNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名（修改前）",
+            "width": 80,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "changeProductCategoryName",
+            "title": "塔型名（修改后）",
+            "width": 80,
+            "dataIndex": "changeProductCategoryName"
+        },
+        {
+            "key": "steelProductShape",
+            "title": "塔型钢印号（修改前）",
+            "width": 80,
+            "dataIndex": "steelProductShape"
+        },
+        {
+            "key": "changeSteelProductShape",
+            "title": "塔型钢印号（修改后）",
+            "width": 80,
+            "dataIndex": "changeSteelProductShape"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级（修改前）",
+            "width": 80,
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "changeVoltageGradeName",
+            "title": "电压等级（修改后）",
+            "width": 80,
+            "dataIndex": "changeVoltageGradeName"
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型（修改前）",
+            "width": 80,
+            "dataIndex": "productTypeName"
+        },
+        {
+            "key": "changeProductTypeName",
+            "title": "产品类型（修改后）",
+            "width": 80,
+            "dataIndex": "changeProductTypeName"
+        }
+    ],
+
+    "applyColumns": [
+        {
+            "key": "drawTaskNum",
+            "title": "确认任务编号",
+            "width": 50,
+            "dataIndex": "drawTaskNum"
+        },
+        {
+            "key": "scTaskNum",
+            "title": "营销任务编号",
+            "width": 80,
+            "dataIndex": "scTaskNum"
+        },
+        {
+            "key": "internalNumber",
+            "title": "内部合同编号",
+            "width": 80,
+            "dataIndex": "internalNumber"
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "width": 80,
+            "dataIndex": "projectName"
+        },
+        {
+            "key": "changeExplain",
+            "title": "变更说明",
+            "width": 80,
+            "dataIndex": "changeExplain"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "contractName",
+            "title": "合同名称",
+            "width": 80,
+            "dataIndex": "contractName"
+        },
+        {
+            "key": "aeName",
+            "title": "业务员",
+            "width": 80,
+            "dataIndex": "aeName"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 80,
+            "dataIndex": "description"
+        },
+        {
+            "key": "updateDescription",
+            "title": "备注（修改后）",
+            "width": 80,
+            "dataIndex": "updateDescription"
+        }
+    ],
+
+    "changeColumns":[
+        {
+            "key": "name",
+            "title": "杆塔号",
+            "width": 50,
+            "dataIndex": "name"
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "width": 80,
+            "dataIndex": "productTypeName"
+        },
+        {
+            "key": "voltageLevelName",
+            "title": "电压等级（kv）",
+            "width": 80,
+            "dataIndex": "voltageLevelName"
+        },
+        {
+            "key": "productCategory",
+            "title": "塔型",
+            "width": 80,
+            "dataIndex": "productCategory"
+        },
+        {
+            "key": "steelProductShape",
+            "title": "塔型钢印号",
+            "width": 80,
+            "dataIndex": "steelProductShape"
+        }
+    ]
+}

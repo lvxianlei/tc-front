@@ -144,11 +144,6 @@
                     "message": "请选择领料日期"
                 }
             ]
-        },
-        {
-            "title": "备注",
-            "dataIndex": "remark",
-            "type": "textarea"
         }
        
     ],

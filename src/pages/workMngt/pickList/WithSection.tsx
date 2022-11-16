@@ -163,8 +163,7 @@ export default forwardRef(function Edit({ type, id, productCategoryId }: EditPro
                 message.error('请输入正确格式');
                 setFastLoading(false);
             } else {
-                let inputList = inputString.split(',');
-                inputList =inputList.filter(x => x!=='')
+                const inputList = inputString.split(',');
                 let list: IMaterialDetail[] = [];
                 inputList.forEach((res: string) => {
                     const newRes = res.split('*')[0].replace(/\(|\)/g, "");
