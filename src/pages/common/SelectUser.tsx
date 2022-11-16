@@ -1,8 +1,3 @@
-/**
- * @author zyc
- * @copyright © 2022 
- * @description 选择人员（技术部）
- */
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
 import Page from './Page';

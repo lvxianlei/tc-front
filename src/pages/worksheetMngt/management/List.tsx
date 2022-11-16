@@ -294,6 +294,7 @@ export default function List(): React.ReactNode {
             await ref.current?.onSubmit()
             message.success("保存成功！")
             setVisible(false)
+            setNewLoading(false)
             history.go(0)
             resove(true)
         } catch (error) {
@@ -305,6 +306,7 @@ export default function List(): React.ReactNode {
         try {
             await dealRef.current?.onSubmit()
             message.success("处理完成！")
+            setDealLoading(false)
             setDealVisible(false)
             history.go(0)
             resove(true)
@@ -317,6 +319,7 @@ export default function List(): React.ReactNode {
         try {
             await dealRef.current?.onBack()
             message.success("退回成功！")
+            setDealLoading(false)
             setDealVisible(false)
             history.go(0)
             resove(true)

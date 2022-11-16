@@ -147,7 +147,6 @@ export default function List(): React.ReactNode {
                     width: 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Link to={`/businessDisposal/patchApplication/edit/${record.id}`}><Button type='link'>编辑</Button></Link>
                             <Link to={`/businessDisposal/patchApplication/detail/${record.id}`}>详情</Link>
                             <Popconfirm
                                 title="确认发起?"

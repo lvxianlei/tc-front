@@ -330,9 +330,9 @@
     ],
     "patchColumns": [
         {
-            "key": "productCategoryName",
+            "key": "productCategory",
             "title": "塔型名称",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "productCategory",
             "width": 100
         },
         {

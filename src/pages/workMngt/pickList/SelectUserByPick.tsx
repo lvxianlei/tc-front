@@ -1,15 +1,14 @@
 /**
- * @author zyc
+* @author zyc
  * @copyright © 2022 
- * @description 业务处置管理-明细变更申请-申请-添加
+ * @description 选择用户来自
  * */
-
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { Page } from '../../common';
 
-interface SelectByTaskNumProps {
+interface SelectUserByPickProps {
     onSelect: (selectedRows: Record<string, any>) => void;
     selectedKey?: string[];
     selectType?: 'radio' | 'checkbox';
@@ -17,13 +16,13 @@ interface SelectByTaskNumProps {
     requests?: Record<string, any>
 }
 
-export default function SelectByTaskNum({
+export default function SelectUserByPick({
     onSelect,
     selectedKey = [],
     selectType = 'radio',
     disabled = false,
     requests = {}
-}: SelectByTaskNumProps): JSX.Element {
+}: SelectUserByPickProps): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState<any>({});
@@ -35,59 +34,29 @@ export default function SelectByTaskNum({
     }
     const columns = [
         {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'taskNum',
-            title: '确认任务编号',
+            title: '账号',
             width: 100,
-            dataIndex: 'taskNum'
+            dataIndex: 'account'
         },
         {
-            key: 'scTaskNum',
-            title: '营销任务编号',
+            title: '手机号',
             width: 100,
-            dataIndex: 'scTaskNum'
+            dataIndex: 'phone'
         },
         {
-            key: 'planNumber',
-            title: '计划号',
+            title: '姓名',
             width: 100,
-            dataIndex: 'planNumber'
+            dataIndex: 'name'
         },
         {
-            key: 'confirmName',
-            title: '确认人',
-            width: 200,
-            dataIndex: 'confirmName'
+            title: '部门',
+            width: 150,
+            dataIndex: 'deptName'
         },
         {
-            key: 'contractNum',
-            title: '内部合同编号',
-            width: 200,
-            dataIndex: 'contractNum'
-        },
-        {
-            key: 'projectName',
-            title: '工程名称',
-            width: 200,
-            dataIndex: 'projectName'
-        },
-        {
-            key: 'contractName',
-            title: '合同名称',
-            width: 100,
-            dataIndex: 'contractName'
-        },
-        {
-            key: 'aeName',
-            title: '业务经理',
-            width: 100,
-            dataIndex: 'aeName'
+            title: '状态',
+            width: 150,
+            dataIndex: 'statusName'
         }
     ]
 
@@ -95,21 +64,23 @@ export default function SelectByTaskNum({
         <Button disabled={disabled} type='link' onClick={() => setVisible(true)}><PlusOutlined /></Button>
         <Modal
             visible={visible}
-            title="添加"
+            title="选择人员"
             onCancel={() => {
                 setVisible(false);
                 setSelectedKeys([])
                 setSelectedRows([])
+                setFilterValue({})
                 form.resetFields();
             }}
             onOk={() => {
                 setVisible(false);
+                setFilterValue({})
                 onSelect(selectedRows)
             }}
             width='60%'
         >
             <Page
-                path="/tower-science/productChange/draw/list"
+                path="/tower-system/employee"
                 columns={columns}
                 headTabs={[]}
                 requestData={{
@@ -127,9 +98,11 @@ export default function SelectByTaskNum({
                 }}
                 searchFormItems={[
                     {
-                        name: 'fuzzyMsg',
-                        label: '模糊查询项',
-                        children: <Input maxLength={50} width="200" placeholder="任务编号/合同名称/业务经理" />
+                        name: 'deptName',
+                        label: '部门',
+                        children: <Form.Item initialValue={requests?.deptName} name={'deptName'}>
+                            <Input maxLength={50} placeholder="请输入部门" />
+                        </Form.Item>
                     }
                 ]}
                 filterValue={filterValue}

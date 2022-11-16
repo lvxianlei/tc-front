@@ -719,33 +719,13 @@
                 "authority": "tc_erp_rd_system",
                 "items": [
                     {
-                        "label": "放样塔型绩效汇总",
-                        "path": "/performanceMngt/loftingpPerformanceSummary",
-                        "authority": "tc_erp_rd_config_system"
-                    },
-                    {
                         "label": "放样计件",
                         "path": "/performanceMngt/loftingPiece",
                         "authority": "tc_erp_rd_config_system"
                     },
                     {
-                        "label": "绩效奖励明细",
-                        "path": "/performanceMngt/performanceDetail",
-                        "authority": "tc_erp_rd_config_system"
-                    },
-                    {
-                        "label": "杂项绩效管理",
-                        "path": "/performanceMngt/miscellaneousPerformance",
-                        "authority": "tc_erp_rd_config_system"
-                    },
-                    {
                         "label": "不合格处置单考核",
                         "path": "/performanceMngt/unqualifiedCheck",
-                        "authority": "tc_erp_rd_trial_config"
-                    },
-                    {
-                        "label": "人员工资绩效",
-                        "path": "/performanceMngt/performanceSalary",
                         "authority": "tc_erp_rd_trial_config"
                     }
                 ]
@@ -757,11 +737,6 @@
                 "appName": "RD",
                 "authority": "tc_erp_rd_business",
                 "items": [
-                    {
-                        "label": "明细变更申请",
-                        "path": "/businessDisposal/requestForChange",
-                        "authority": "tc_erp_rd_order_adjustment"
-                    },
                     {
                         "label": "补件申请",
                         "path": "/businessDisposal/patchApplication",
@@ -775,16 +750,6 @@
                     {
                         "label": "取消暂停恢复",
                         "path": "/businessDisposal/cancelOrPauseOrrestore",
-                        "authority": "tc_erp_rd_order_adjustment"
-                    },
-                    {
-                        "label": "代料",
-                        "path": "/businessDisposal/generationOfMaterial",
-                        "authority": "tc_erp_rd_order_adjustment"
-                    },
-                    {
-                        "label": "过磅异常",
-                        "path": "/businessDisposal/weighingAbnormal",
                         "authority": "tc_erp_rd_order_adjustment"
                     },
                     {
@@ -848,11 +813,11 @@
                 "appName": "PC",
                 "authority": "tc_erp_aps_plan",
                 "items": [
-                    {
-                        "label": "计划排产",
-                        "path": "/planProd/planMgmt",
-                        "authority": "tc_erp_aps_plan"
-                    },
+                    // {
+                    //     "label": "计划排产",
+                    //     "path": "/planProd/planMgmt",
+                    //     "authority": "tc_erp_aps_plan"
+                    // },
                     {
                         "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
@@ -1189,69 +1154,20 @@
                     }
                 ]
             },
-            {
-                "label": "文档管理",
-                "icon": "xitongrizhiTY_xitongrizhi",
-                "path": "/attach",
-                "appName": "COMM",
-                "authority": "tc_erp_sys_log",
-                "items": [
-                    {
-                        "label": "文档审批类型管理",
-                        "path": "/attach/approval",
-                        "authority": "tc_erp_sys_log_operation"
-                    },
-                    {
-                        "label": "文档分类管理",
-                        "path": "/attach/class",
-                        "authority": "tc_erp_sys_log_operation"
-                    },
-                    {
-                        "label": "文档数据管理",
-                        "path": "/attach/data",
-                        "authority": "tc_erp_sys_log_operation"
-                    },
-                    {
-                        "label": "个人文档列表",
-                        "path": "/attach/user",
-                        "authority": "tc_erp_sys_log_operation"
-                    }
-                ]
-            },
-            {
-                "label": "通用中心",
-                "icon": "xitongrizhiTY_xitongrizhi",
-                "path": "/commCenter",
-                "appName": "COMM",
-                "authority": "tc_erp_sys_log",
-                "items": [
-                    {
-                        "label": "单位分类",
-                        "path": "/commCenter/unitClass",
-                        "authority": "tc_erp_sys_log_operation"
-                    },
-                    {
-                        "label": "单位管理",
-                        "path": "/commCenter/unitMngt",
-                        "authority": "tc_erp_sys_log_operation"
-                    }
-                   
-                ]
-            },
-            {
-                 "label": "数字门户",
-                 "icon": "xitongrizhiTY_xitongrizhi",
-                 "path": "/data",
-                 "appName": "COMM",
-                 "authority": "tc_erp_sys_log",
-                 "items": [
-                     {
-                        "label": "数字门户",
-                        "path": "/data/door",
-                         "authority": "tc_erp_sys_log_operation"
-                     }
-                 ]
-            },
+            // {
+            //     "label": "数字门户",
+            //     "icon": "xitongrizhiTY_xitongrizhi",
+            //     "path": "/data",
+            //     "appName": "COMM",
+            //     "authority": "tc_erp_sys_log",
+            //     "items": [
+            //         {
+            //             "label": "数字门户",
+            //             "path": "/data/door",
+            //             "authority": "tc_erp_sys_log_operation"
+            //         }
+            //     ]
+            // },
             {
                 "label": "请款申请管理",
                 "icon": "caiwuzhongxin_qingkuanshenqing",
@@ -1484,33 +1400,9 @@
                         "authority": "tc_erp_rd_fix_item_config"
                     },
                     {
-                        "label": "杂项条目配置",
-                        "path": "/baseSetting/miscellaneousItems",
-                        "authority": "tc_erp_sys_system_quota"
-                    },
-                    {
                         "label": "定额配置",
                         "path": "/baseSetting/quotaConfig",
                         "authority": "tc_erp_sys_system_quota"
-                    }
-                ]
-            },
-            {  
-                "label": "资料管理",
-                "icon": "customer",
-                "path": "/dataMngt",
-                "appName": "RD",
-                "authority": "tc_erp_rd_problem",
-                "items": [
-                    {
-                        "label": "工程资料管理",
-                        "path": "/dataMngt/EngineeringData",
-                        "authority": "tc_erp_rd_problem"
-                    },
-                    {
-                        "label": "资料存档管理",
-                        "path": "/dataMngt/dataArchiving",
-                        "authority": "tc_erp_rd_problem"
                     }
                 ]
             },
@@ -1660,7 +1552,7 @@
                     }
                 ]
             },
-            {
+            {  
                 "label": "工单管理",
                 "icon": "customer",
                 "path": "/worksheetMngt",
@@ -1679,7 +1571,7 @@
                     }
                 ]
             },
-            {
+            {  
                 "label": "工单设置",
                 "icon": "customer",
                 "path": "/worksheetSetting",
