@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Form } from 'antd'
 import { Link, useLocation } from 'react-router-dom'
 import { Page } from '../../common'
-import { FixedType } from 'rc-table/lib/interface';
 
 export default function ScheduleList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -13,7 +12,6 @@ export default function ScheduleList(): React.ReactNode {
             title: '序号',
             dataIndex: 'index',
             width: 50,
-            fixed: "left" as FixedType,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
@@ -90,7 +88,6 @@ export default function ScheduleList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
-            fixed: "right" as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={`/workMngt/scheduleList/scheduleView/${record.id}/${record.status}`}>查看</Link>

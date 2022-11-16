@@ -356,7 +356,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 }
             )
             const data = await result.blob()
-            console.log(data, "----------")
             var blob = new Blob([data]);
             var reader = new FileReader();
             reader.readAsDataURL(blob);
