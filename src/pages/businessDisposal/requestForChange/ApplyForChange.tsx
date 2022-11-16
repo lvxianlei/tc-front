@@ -4,232 +4,296 @@
  * @description 业务处置管理-明细变更申请-申请
  */
 
- import React, { useImperativeHandle, forwardRef, useState } from "react";
- import { Button, Descriptions, Form, Input, Select, Modal } from 'antd';
- import { BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
- import RequestUtil from '../../../utils/RequestUtil';
- import useRequest from '@ahooksjs/use-request';
- import styles from './RequestForChange.module.less';
+import React, { useImperativeHandle, forwardRef, useState } from "react";
+import { Button, Form, Input, Select, Modal, Spin } from "antd";
+import { BaseInfo, CommonTable, DetailContent } from "../../common";
+import RequestUtil from "../../../utils/RequestUtil";
+import useRequest from "@ahooksjs/use-request";
+import styles from "./RequestForChange.module.less";
 import SelectByTaskNum from "./SelectByTaskNum";
-import { FixedType } from 'rc-table/lib/interface';
-import { productTypeOptions, voltageGradeOptions } from "../../../configuration/DictionaryOptions";
- 
- interface modalProps {
-     readonly id?: any;
-     readonly type?: 'new' | 'edit';
-     getLoading: (loading: boolean) => void
- }
- 
- export default forwardRef(function ApplyForChange({ id, type,getLoading }: modalProps, ref) {
-     const [form] = Form.useForm();
-     const [changeForm] = Form.useForm();
-     const [selectedForm] = Form.useForm();
-     const [changeData, setChangeData] = useState<any>([]);
-     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
-     const [selectedRows, setSelectedRows] = useState<any[]>([]);
-     const [selectedData, setSelectedData] = useState([]);
- 
-     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-         try {
-             const result: any = await RequestUtil.get(`/tower-science/trialAssembly/getDetails?id=${id}`)
-             console.log(result)
-             resole(result)
-         } catch (error) {
-             reject(error)
-         }
-     }), { manual: type === 'new', refreshDeps: [id, type] })
+import { FixedType } from "rc-table/lib/interface";
+import { productTypeOptions, typeOfChangeOptions, voltageGradeOptions } from "../../../configuration/DictionaryOptions";
 
-     const applyColumns = [
+interface modalProps {
+    readonly id?: any;
+    readonly type?: "new" | "edit";
+    getLoading: (loading: boolean) => void
+}
+
+export default forwardRef(function ApplyForChange({ id, type, getLoading }: modalProps, ref) {
+    const [form] = Form.useForm();
+    const [changeForm] = Form.useForm();
+    const [selectedForm] = Form.useForm();
+    const [changeData, setChangeData] = useState<any>([]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [selectedData, setSelectedData] = useState<any>([]);
+    const [detailData, setDetailData] = useState({});
+
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-science/productChange/${id}`)
+            console.log(result)
+            setDetailData({ ...result })
+            run(result?.drawTaskId, result?.productChangeDetailList)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: type === "new", refreshDeps: [id, type] })
+
+    const { run } = useRequest<any>((id: string, list: any[]) => new Promise(async (resole, reject) => {
+        try {
+            RequestUtil.get(`/tower-science/productChange/product/list/${id}`).then((res: any) => {
+                console.log(res)
+                let newData: any = [];
+                list.forEach(item => {
+                    newData = res?.filter((items: any) => {
+                        return items?.id === item?.drawProductId
+                    })
+                })
+                console.log(newData)
+                setChangeData(newData || [])
+
+            })
+            resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const applyColumns = [
         {
-            key: 'taskNum',
-            title: '确认任务编号',
+            "key": "drawTaskNum",
+            "title": "确认任务编号",
             width: 50,
-            dataIndex: 'taskNum'
+            dataIndex: "drawTaskNum"
         },
         {
-            key: 'partNum',
-            title: '营销任务编号',
+            "key": "scTaskNum",
+            "title": "营销任务编号",
             width: 80,
-            dataIndex: 'partNum'
+            dataIndex: "scTaskNum"
         },
         {
-            key: 'mistakenPartNum',
-            title: '内部合同编号',
+            "key": "internalNumber",
+            "title": "内部合同编号",
             width: 80,
-            dataIndex: 'mistakenPartNum'
+            dataIndex: "internalNumber"
         },
         {
-            key: 'loftingUserName',
-            title: '工程名称',
+            "key": "projectName",
+            "title": "工程名称",
             width: 80,
-            dataIndex: 'loftingUserName'
+            dataIndex: "projectName"
         },
         {
-            key: 'loftingPrice',
-            title: '变更说明',
+            "key": "changeExplain",
+            "title": "变更说明",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "changeExplain"
         },
         {
-            key: 'loftingPunishmentAmount',
-            title: '计划号',
+            "key": "planNumber",
+            "title": "计划号",
             width: 80,
-            dataIndex: 'loftingPunishmentAmount'
+            dataIndex: "planNumber"
         },
         {
-            key: 'leaderPunishmentAmount',
-            title: '合同名称',
+            "key": "contractName",
+            "title": "合同名称",
             width: 80,
-            dataIndex: 'leaderPunishmentAmount'
+            dataIndex: "contractName"
         },
         {
-            key: 'loftingPerformanceAmount',
-            title: '业务员',
+            "key": "aeName",
+            "title": "业务员",
             width: 80,
-            dataIndex: 'loftingPerformanceAmount'
+            dataIndex: "aeName"
         },
         {
-            key: 'checkUserName',
-            title: '备注',
+            "key": "description",
+            "title": "备注",
             width: 80,
-            dataIndex: 'checkUserName'
+            dataIndex: "description"
         },
         {
-            key: 'checkPrice',
-            title: '备注（修改后）',
+            "key": "updateDescription",
+            "title": "备注（修改后）",
             width: 80,
-            dataIndex: 'checkPrice'
+            dataIndex: "updateDescription"
         }
     ]
 
     const changeColumns = [
         {
-            key: 'taskNum',
-            title: '杆塔号',
+            "key": "name",
+            "title": "杆塔号",
             width: 50,
-            dataIndex: 'taskNum'
+            dataIndex: "name"
         },
         {
-            key: 'partNum',
-            title: '产品类型',
+            "key": "productTypeName",
+            "title": "产品类型",
             width: 80,
-            dataIndex: 'partNum'
+            dataIndex: "productTypeName"
         },
         {
-            key: 'mistakenPartNum',
-            title: '电压等级（kv）',
+            "key": "voltageLevelName",
+            "title": "电压等级（kv）",
             width: 80,
-            dataIndex: 'mistakenPartNum'
+            dataIndex: "voltageLevelName"
         },
         {
-            key: 'loftingUserName',
-            title: '塔型',
+            "key": "productCategory",
+            "title": "塔型",
             width: 80,
-            dataIndex: 'loftingUserName'
+            dataIndex: "productCategory"
         },
         {
-            key: 'loftingPrice',
-            title: '塔型钢印号',
+            "key": "steelProductShape",
+            "title": "塔型钢印号",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "steelProductShape"
         },
         {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
+            "key": "operation",
+            "title": "操作",
+            dataIndex: "operation",
+            fixed: "right" as FixedType,
             width: 80,
-            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                    <Button type='link' onClick={() => {
-
-                    }}>修改</Button>
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Button type="link" onClick={() => {
+                    const value = selectedForm?.getFieldsValue(true)?.data;
+                    selectedForm.setFieldsValue({
+                        data: [
+                            ...value || [],
+                            {
+                                ...record,
+                                id: '',
+                                drawProductId: record?.id,
+                                productCategoryName: record?.productCategory,
+                                productNumber: record?.name,
+                                voltageGradeName: record?.voltageLevelName,
+                            }
+                        ]
+                    })
+                    setSelectedData([
+                        ...value || [],
+                        {
+                            ...record,
+                            id: '',
+                            drawProductId: record?.id,
+                            productCategoryName: record?.productCategory,
+                            productNumber: record?.name,
+                            voltageGradeName: record?.voltageLevelName,
+                        }
+                    ])
+                    changeData.splice(index, 1);
+                    setChangeData([...changeData])
+                }}>添加</Button>
             )
         }
     ]
 
     const selectedColumns = [
         {
-            key: 'taskNum',
-            title: '变更类型',
+            "key": "changeTypeId",
+            "title": "变更类型",
             width: 50,
-            dataIndex: 'taskNum'
+            dataIndex: "changeTypeId"
         },
         {
-            key: 'partNum',
-            title: '杆塔号（修改前）',
+            "key": "productNumber",
+            "title": "杆塔号（修改前）",
             width: 80,
-            dataIndex: 'partNum'
+            dataIndex: "productNumber"
         },
         {
-            key: 'mistakenPartNum',
-            title: '杆塔号（修改后）',
+            "key": "changeProductNumber",
+            "title": "杆塔号（修改后）",
             width: 80,
-            dataIndex: 'mistakenPartNum'
+            dataIndex: "changeProductNumber"
         },
         {
-            key: 'loftingUserName',
-            title: '塔型名（修改前）',
+            "key": "productCategoryName",
+            "title": "塔型名（修改前）",
             width: 80,
-            dataIndex: 'loftingUserName'
+            dataIndex: "productCategoryName"
         },
         {
-            key: 'loftingPrice',
-            title: '塔型名（修改后）',
+            "key": "changeProductCategoryName",
+            "title": "塔型名（修改后）",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "changeProductCategoryName"
         },
         {
-            key: 'loftingPrice',
-            title: '塔型钢印号（修改前）',
+            "key": "steelProductShape",
+            "title": "塔型钢印号（修改前）",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "steelProductShape"
         },
         {
-            key: 'loftingPrice',
-            title: '塔型钢印号（修改后）',
+            "key": "changeSteelProductShape",
+            "title": "塔型钢印号（修改后）",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "changeSteelProductShape"
         },
         {
-            key: 'loftingPrice',
-            title: '电压等级（修改前）',
+            "key": "voltageGradeName",
+            "title": "电压等级（修改前）",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "voltageGradeName"
         },
         {
-            key: 'loftingPrice',
-            title: '电压等级（修改后）',
+            "key": "changeVoltageGrade",
+            "title": "电压等级（修改后）",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "changeVoltageGrade"
         },
         {
-            key: 'loftingPrice',
-            title: '产品名称（修改前）',
+            "key": "productTypeName",
+            "title": "产品类型（修改前）",
             width: 80,
-            dataIndex: 'loftingPrice'
+            dataIndex: "productTypeName"
         },
         {
-            key: 'loftingPrice',
-            title: '产品名称（修改后）',
+            "key": "changeProductType",
+            "title": "产品类型（修改后）",
             width: 80,
-            dataIndex: 'loftingPrice'
-        },{
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
+            dataIndex: "changeProductType"
+        },
+        {
+            "key": "operation",
+            "title": "操作",
+            dataIndex: "operation",
+            fixed: "right" as FixedType,
             width: 80,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                    <Button type='link' onClick={() => {
-                        const value  = selectedForm?.getFieldsValue(true)?.data;
-                        value?.splice(index, 1)
-                        console.log(value)
-                        setSelectedData(value)
-                    }}>移除</Button>
+                <Button type="link" onClick={() => {
+                    const value = selectedForm?.getFieldsValue(true)?.data;
+                    console.log(value)
+                    setChangeData([
+                        ...changeData || [],
+                        {
+                            ...record,
+                            id: record?.drawProductId,
+                            productCategory: record?.productCategoryName,
+                            name: record?.productNumber,
+                            voltageLevelName: record?.voltageGradeName,
+                        }
+                    ])
+                    value?.splice(index, 1)
+                    console.log(value)
+                    selectedForm?.setFieldsValue({
+                        data: [...value]
+                    })
+                    setSelectedData([...value])
+                }}>移除</Button>
             )
         }
     ]
-    
+
     const SelectedChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -242,23 +306,23 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
             icon: null,
             content: <Form form={changeForm} layout="horizontal">
                 <Form.Item
-                    label='塔型名'
-                    name="packageFirst"
+                    label="塔型名"
+                    name="changeProductCategoryName"
                 >
-                    <Input maxLength={100}/>
+                    <Input maxLength={100} />
                 </Form.Item>
                 <Form.Item
-                    label='塔型钢印号'
-                    name='packageFirstStartTime'
+                    label="塔型钢印号"
+                    name="changeSteelProductShape"
                 >
-                    <Input maxLength={100}/>
+                    <Input maxLength={100} />
                 </Form.Item>
                 <Form.Item
-                    label='电压等级kV'
-                    name="packageSecond"
+                    label="电压等级kV"
+                    name="changeVoltageGrade"
                 >
-                    <Select style={{width:'100%'}} allowClear>
-                    {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                    <Select style={{ width: "100%" }} allowClear>
+                        {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
@@ -266,39 +330,53 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    label='产品类型'
-                    name='packageSecondStartTime'
+                    label="产品类型"
+                    name="changeProductType"
                 >
-                    <Select style={{ width: '100%' }} allowClear>
-                {
-                    productTypeOptions?.map((item: any, index: number) =>
-                        <Select.Option value={item.id} key={index}>
-                            {item.name}
-                        </Select.Option>
-                    )
-                }
-            </Select>
+                    <Select style={{ width: "100%" }} allowClear>
+                        {
+                            productTypeOptions?.map((item: any, index: number) =>
+                                <Select.Option value={item.id} key={index}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        }
+                    </Select>
                 </Form.Item>
                 <Form.Item
-                    label='变更类型'
-                    name='packageCompleteTime'
+                    label="变更类型"
+                    name="changeTypeId"
                 >
-                    <Select style={{ width: '100%' }} allowClear>
-                        <Select.Option value={'设计变更'} key={0}>设计变更</Select.Option>
-                        <Select.Option value={'需求变更'} key={0}>需求变更</Select.Option>
-                        <Select.Option value={'输入变更'} key={0}>输入变更</Select.Option>
-                        <Select.Option value={'其他'} key={0}>其他</Select.Option>
-            </Select>
+                    <Select style={{ width: "100%" }} allowClear>
+                        {typeOfChangeOptions && typeOfChangeOptions.map(({ id, name }, index) => {
+                            return <Select.Option key={index} value={id}>
+                                {name}
+                            </Select.Option>
+                        })}
+                    </Select>
                 </Form.Item>
-                
+
             </Form>,
             onOk: () => new Promise(async (resove, reject) => {
                 try {
-                    const value = await changeForm.validateFields()
-                    console.log(value)
+                    const values = changeForm.getFieldsValue(true);
+                    let newChangeData: any[] = changeData || []
+                    const newSelectedData = selectedRows?.map(res => {
+                        newChangeData = newChangeData.filter((item: any) => res?.id !== item?.id)
+                        return {
+                            ...res,
+                            ...values
+                        }
+                    })
+                    console.log(newSelectedData, newChangeData)
+                    setSelectedData([...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData])
+                    selectedForm?.setFieldsValue({
+                        data: [...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData]
+                    })
+                    setChangeData([...newChangeData])
                     resove(true)
                 } catch (error) {
-                    reject(false)
+                    reject(error)
                 }
             }),
             onCancel() {
@@ -308,209 +386,257 @@ import { productTypeOptions, voltageGradeOptions } from "../../../configuration/
     }
 
     const removeAll = () => {
+        const newList = selectedData?.map((res: any) => {
+            return {
+                ...res,
+                id: res?.drawProductId,
+                productCategory: res?.productCategoryName,
+                name: res?.productNumber,
+                voltageLevelName: res?.voltageGradeName,
+            }
+        })
+        setChangeData([
+            ...changeData || [],
+            ...newList || []
+        ])
         setSelectedData([])
     }
- 
-     const onSave = () => new Promise(async (resolve, reject) => {
-         try {
-             const value = await form.validateFields();
-             console.log(value)
-             getLoading(true)
-             await saveRun({
-                 ...value
-             })
-             resolve(true);
-         } catch (error) {
-             reject(false)
-         }
-     })
- 
-     const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
-         try {
-             await RequestUtil.post(`/tower-science/trialAssembly/save`, data).then(res => {
-                resove(true)
-            }).catch(e => {
-                reject(e)
-                getLoading(false)
-            })
-         } catch (error) {
-             reject(error)
-         }
-     }), { manual: true })
- 
-     const onSubmit = () => new Promise(async (resolve, reject) => {
-         try {
-             const value = await form.validateFields();
-             
-             getLoading(true)
-             await submitRun({
-                 ...value
-             })
-             resolve(true);
-         } catch (error) {
-             reject(false)
-         }
-     })
- 
-     const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
-         try {
-              await RequestUtil.post(`/tower-science/trialAssembly/saveAndLaunch`, data).then(res => {
-                resove(true)
-            }).catch(e => {
-                reject(e)
-                getLoading(false)
-            })
-         } catch (error) {
-             reject(error)
-         }
-     }), { manual: true })
- 
-     const resetFields = () => {
-         form.resetFields();
-         changeForm.resetFields();
-         selectedForm.resetFields();
-     }
- 
-     useImperativeHandle(ref, () => ({ onSubmit, onSave, resetFields }), [ref, onSubmit, onSave, resetFields]);
- 
-     return <DetailContent className={styles.changeForm}>
-        <Form form={form}>
 
-                 <BaseInfo dataSource={data || {}} columns={applyColumns?.map(res => {
-                    if (res.dataIndex === "taskNum") {
+    const onSave = () => new Promise(async (resolve, reject) => {
+        try {
+            const value = await form.validateFields();
+            console.log(value)
+            getLoading(true)
+            await saveRun({
+                ...value
+            })
+            resolve(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
+        try {
+            await RequestUtil.post(`/tower-science/productChange`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                reject(e)
+                getLoading(false)
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const onSubmit = () => new Promise(async (resolve, reject) => {
+        try {
+            const value = await form.validateFields();
+
+            getLoading(true)
+            await submitRun({
+                ...value
+            })
+            resolve(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
+        try {
+            await RequestUtil.post(`/tower-science/productChange/submit`, data).then(res => {
+                resove(true)
+            }).catch(e => {
+                reject(e)
+                getLoading(false)
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const resetFields = () => {
+        form.resetFields();
+        changeForm.resetFields();
+        selectedForm.resetFields();
+    }
+
+    useImperativeHandle(ref, () => ({ onSubmit, onSave, resetFields }), [ref, onSubmit, onSave, resetFields]);
+
+    return <Spin spinning={loading}>
+        <DetailContent className={styles.changeForm}>
+            <Form form={form}>
+                <BaseInfo dataSource={detailData || {}} columns={applyColumns?.map(res => {
+                    if (res.dataIndex === "drawTaskNum") {
                         return ({
                             ...res,
-                            render: (_: string, record: Record<string,any>, index: number) => (
-                                <Form.Item name={"taskNum"}>
-                              <Input size="small" disabled suffix={      
-                <SelectByTaskNum onSelect={(selectedRows: Record<string, any>) => {
-                    console.log(selectedRows[0])
-                    setChangeData([])
-                    form?.setFieldsValue({
-                        taskNumId: selectedRows[0]?.id,
-                        taskNum: selectedRows[0]?.taskNum
-                    })
-                }} />}/>
+                            render: (_: string, record: Record<string, any>, index: number) => (
+                                <Form.Item name={"drawTaskNum"}>
+                                    <Input size="small" disabled suffix={
+                                        <SelectByTaskNum onSelect={(selectedRows: Record<string, any>) => {
+                                            RequestUtil.get(`/tower-science/productChange/product/list/${selectedRows[0]?.id}`).then(res => {
+                                                console.log(res)
+                                                setChangeData(res || [])
+                                                setDetailData({
+                                                    ...selectedRows[0],
+                                                })
+                                                form?.setFieldsValue({
+                                                    ...selectedRows[0],
+                                                    productCategoryName: selectedRows[0]?.productCategory,
+                                                    productNumber: selectedRows[0]?.name,
+                                                    voltageGradeName: selectedRows[0]?.voltageLevelName,
+                                                    id: '',
+                                                    drawTaskNumId: selectedRows[0]?.id,
+                                                    drawTaskNum: selectedRows[0]?.taskNum,
+                                                })
+                                                setSelectedData([]);
+                                                selectedForm?.setFieldsValue({
+                                                    data: []
+                                                })
+                                            })
+
+                                        }} />} />
                                 </Form.Item>
                             )
                         })
                     }
-                    if (res.dataIndex === "") { //变更说明
+                    if (res.dataIndex === "changeExplain") { //变更说明
                         return ({
                             ...res,
-                            render: (_: string, record: Record<string,any>, index: number) => (
-                                <Form.Item name={""}>        
-                <Input.TextArea maxLength={800}/>
+                            render: (_: string, record: Record<string, any>, index: number) => (
+                                <Form.Item name={"changeExplain"}>
+                                    <Input.TextArea maxLength={800} />
                                 </Form.Item>
                             )
                         })
                     }
-                    if (res.dataIndex === "") {//备注（修改后）
+                    if (res.dataIndex === "updateDescription") {//备注（修改后）
                         return ({
                             ...res,
-                            render: (_: string, record: Record<string,any>, index: number) => (
-                                <Form.Item name={""}>        
-                <Input.TextArea maxLength={800}/>
+                            render: (_: string, record: Record<string, any>, index: number) => (
+                                <Form.Item name={"updateDescription"}>
+                                    <Input.TextArea maxLength={800} />
                                 </Form.Item>
                             )
                         })
                     }
                     return res
-                 })} col={5} />
-         
-        </Form>
-        <Button type="primary" className={styles.bottom16} onClick={bulkChanges} ghost>批量修改</Button>
-        <CommonTable 
-        haveIndex
-        columns={changeColumns} 
-        dataSource={changeData}
-        className={styles.bottom16} 
-        pagination={false}
-        rowSelection={{
-            selectedRowKeys: selectedKeys,
-            type: "checkbox",
-            onChange: SelectedChange,
-        }}
-        />
-        <Button type="primary" className={styles.bottom16} onClick={removeAll} ghost>移除全部</Button>
-        <Form form={selectedForm}>
-        <CommonTable 
-        haveIndex
-         className={styles.bottom16}
-        columns={selectedColumns.map(res => {
-            if (res.dataIndex === "") {
-                return ({
-                    ...res,
-                    render: (_: string, record: Record<string,any>, index: number) => (
-                        <Form.Item name={['data', index, '']}>
-                            <Input maxLength={100}/>
-                        </Form.Item>
-                    )
-                })
-            }
-            if (res.dataIndex === "") {
-                return ({
-                    ...res,
-                    render: (_: string, record: Record<string,any>, index: number) => (
-                        <Form.Item name={['data', index, '']}>
-                            <Input maxLength={100}/>
-                        </Form.Item>
-                    )
-                })
-            }
-            if (res.dataIndex === "") {
-                return ({
-                    ...res,
-                    render: (_: string, record: Record<string,any>, index: number) => (
-                        <Form.Item name={['data', index, '']}>
-                            <Input maxLength={100}/>
-                        </Form.Item>
-                    )
-                })
-            }
-            if (res.dataIndex === "") {
-                return ({
-                    ...res,
-                    render: (_: string, record: Record<string,any>, index: number) => (
-                        <Form.Item name={['data', index, '']}>
-                        <Select style={{width:'100%'}} allowClear>
-                        {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={index} value={id}>
-                                    {name}
-                                </Select.Option>
-                            })}
-                        </Select>
-                        </Form.Item>
-                    )
-                })
-            }
-            if (res.dataIndex === "") {
-                return ({
-                    ...res,
-                    render: (_: string, record: Record<string,any>, index: number) => (
-                        <Form.Item name={['data', index, '']}>
-                        <Select style={{ width: '100%' }} allowClear>
-                    {
-                        productTypeOptions?.map((item: any, index: number) =>
-                            <Select.Option value={item.id} key={index}>
-                                {item.name}
-                            </Select.Option>
-                        )
-                    }
-                </Select>
-                        </Form.Item>
-                    )
-                })
-            }
+                })} col={5} />
 
-            return res
-        })} 
-        pagination={false}
-        dataSource={selectedData}
-        />
+            </Form>
+            <Button type="primary" className={styles.bottom16} onClick={bulkChanges} ghost>批量修改</Button>
+            <CommonTable
+                haveIndex
+                columns={changeColumns}
+                dataSource={changeData}
+                className={styles.bottom16}
+                pagination={false}
+                rowSelection={{
+                    selectedRowKeys: selectedKeys,
+                    type: "checkbox",
+                    onChange: SelectedChange,
+                }}
+            />
+            <Button type="primary" className={styles.bottom16} onClick={removeAll} ghost>移除全部</Button>
+            <Form form={selectedForm}>
+                <CommonTable
+                    haveIndex
+                    className={styles.bottom16}
+                    columns={selectedColumns.map(res => {
+                        if (res.dataIndex === "changeTypeId") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeTypeId"]} rules={[
+                                        {
+                                            required: true,
+                                            message: '请选择变更类型'
+                                        }
+                                    ]}>
+                                        <Select style={{ width: "100%" }} allowClear>
+                                            {typeOfChangeOptions && typeOfChangeOptions.map(({ id, name }, index) => {
+                                                return <Select.Option key={index} value={id}>
+                                                    {name}
+                                                </Select.Option>
+                                            })}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeProductNumber") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeProductNumber"]}>
+                                        <Input maxLength={100} />
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeProductCategoryName") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeProductCategoryName"]}>
+                                        <Input maxLength={100} />
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeSteelProductShape") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeSteelProductShape"]}>
+                                        <Input maxLength={100} />
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeVoltageGrade") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeVoltageGrade"]}>
+                                        <Select style={{ width: "100%" }} allowClear>
+                                            {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                                                return <Select.Option key={index} value={id}>
+                                                    {name}
+                                                </Select.Option>
+                                            })}
+                                        </Select>
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeProductType") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeProductType"]}>
+                                        <Select style={{ width: "100%" }} allowClear>
+                                            {
+                                                productTypeOptions?.map((item: any, index: number) =>
+                                                    <Select.Option value={item.id} key={index}>
+                                                        {item.name}
+                                                    </Select.Option>
+                                                )
+                                            }
+                                        </Select>
+                                    </Form.Item>
+                                )
+                            })
+                        }
 
-        </Form>
-     </DetailContent>
- })
- 
- 
+                        return res
+                    })}
+                    pagination={false}
+                    dataSource={selectedData}
+                />
+            </Form>
+        </DetailContent>
+    </Spin>
+})
+

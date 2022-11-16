@@ -2,7 +2,7 @@
  * @author zyc
  * @copyright © 2022 
  * @description 业务处置管理-明细变更申请-申请-添加
- * */ 
+ * */
 
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
@@ -109,7 +109,7 @@ export default function SelectByTaskNum({
             width='60%'
         >
             <Page
-                path="/tower-science/drawTask"
+                path="/tower-science/productChange/draw/list"
                 columns={columns}
                 headTabs={[]}
                 requestData={{
@@ -121,7 +121,7 @@ export default function SelectByTaskNum({
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange,
                         getCheckboxProps: (record: Record<string, any>) => ({
-                          disabled: record?.status  === 0
+                            disabled: record?.status === 0
                         })
                     }
                 }}
@@ -129,7 +129,7 @@ export default function SelectByTaskNum({
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input maxLength={50} placeholder="任务编号/合同名称/业务经理" />
+                        children: <Input maxLength={50} width="200" placeholder="任务编号/合同名称/业务经理" />
                     }
                 ]}
                 filterValue={filterValue}
