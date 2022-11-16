@@ -199,7 +199,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 form={addCollectionForm}
                 edit
                 dataSource={data || {
-                    pickingTime: moment(new Date()).format("YYYY-MM-DD")
+                    pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
                 }}
                 col={2}
                 classStyle="baseInfo"

@@ -9,10 +9,6 @@
             "dataIndex": "supplierName"
         },
         {
-            "title": "纸质单号",
-            "dataIndex": "paperNumber"
-        },
-        {
             "title": "联系人",
             "dataIndex": "contactsUser"
         },
@@ -130,6 +126,11 @@
             "width": 70
         },
         {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "width":100
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName",
             "type": "string",
@@ -232,6 +233,12 @@
             "dataIndex": "rollingNumber"
         },
         {
+            "title": "出厂日期",
+            "dataIndex": "manufactureTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
+        },
+        {
             "title": "生产厂家",
             "dataIndex": "manufacturer",
             "maxLength": 30
@@ -247,6 +254,10 @@
         {
             "title": "管径",
             "dataIndex": "caliber"
+        },
+        {
+            "title": "测量长度",
+            "dataIndex": "gageLength"
         },
         {
             "title": "外观检验效果",

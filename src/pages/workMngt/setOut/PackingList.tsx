@@ -11,7 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
-import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
+import RequestUtil from '../../../utils/RequestUtil';
 import ExportList from '../../../components/export/list';
 import { IBundle, ICount, IPackingList } from './ISetOut';
 import { bundleColumns, columns } from './SetOutInformation.json';
@@ -83,42 +83,6 @@ export default function PackingList(): React.ReactNode {
         }
     })
 
-    const GeneratePDFWeight = async () => {
-        RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/${params.productId}`).then(res => {
-            console.log(res)
-            fetch(`http://127.0.0.1:2001/print`, {
-                mode: 'cors',
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(res, jsonStringifyReplace)
-            }).then((res) => {
-                console.log(res)
-                // return res.blob();
-            })
-
-        })
-    }
-
-    const GeneratePDF = async () => {
-        RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/noWeight/${params.productId}`).then(res => {
-            console.log(res)
-            fetch(`http://127.0.0.1:2001/print`, {
-                mode: 'cors',
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(res, jsonStringifyReplace)
-            }).then((res) => {
-                console.log(res)
-                // return res.blob();
-            })
-
-        })
-    }
-
     return <>
         <Modal
             destroyOnClose
@@ -156,9 +120,7 @@ export default function PackingList(): React.ReactNode {
                 <span className={styles.content}>{count?.untreatedCount}</span>
             </span>
         </Space>
-        <Space direction="horizontal" size="small" className={`${styles.padding16}`}>
-            <Button type="primary" onClick={GeneratePDFWeight} ghost>生成PDF-带重量</Button>
-            <Button type="primary" onClick={GeneratePDF} ghost>生成PDF-不带重量</Button>
+        <Space direction="horizontal" size="small" className={`${styles.padding16} ${styles.btnRight}`}>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             <Button type="primary" ghost onClick={() => setVisible(true)} disabled={!isShow}>套用包</Button>
             <Button type="primary" disabled={!isShow} onClick={() => {

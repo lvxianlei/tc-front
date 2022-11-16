@@ -149,7 +149,6 @@ export default function List(): React.ReactNode {
         try {
             await ref.current?.onSubmit()
             message.success("保存成功！")
-            setConfirmLoading(false)
             setVisible(false)
             history.go(0)
             resove(true)

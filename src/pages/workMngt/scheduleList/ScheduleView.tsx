@@ -1,71 +1,15 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Spin, message } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, Spin, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { CommonTable, DetailTitle, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TextArea from 'antd/lib/input/TextArea';
 import useRequest from '@ahooksjs/use-request';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
-import { TreeNode } from 'antd/lib/tree-select';
-import styles from './scheduleList.module.less';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import SchedulePlan from './SchedulePlan';
-
-
-const tableColumns = [
-    { 
-        title: '序号', 
-        dataIndex: 'index', 
-        key: 'index', 
-        render: (_a: any, _b: any, index: number): React.ReactNode => (
-            <span>{index + 1}</span>
-        ) 
-    },
-    { 
-        title: '操作部门', 
-        dataIndex: 'createDeptName', 
-        key: 'createDeptName', 
-    },
-    { 
-        title: '操作人', 
-        dataIndex: 'createUserName', 
-        key: 'createUserName' 
-    },
-    { 
-        title: '操作时间', 
-        dataIndex: 'createTime', 
-        key: 'createTime' 
-    },
-    { 
-        title: '操作', 
-        dataIndex: 'status', 
-        key: 'status', 
-        render: (value: number, record: object): React.ReactNode => {
-            const renderEnum: any = [
-                {
-                    value: 1,
-                    label: "指派"
-                },
-                {
-                    value: 2,
-                    label: "编辑"
-                },
-                {
-                    value: null,
-                    label: "-"
-                },
-            ]
-            return <>{value!==-1&&value?renderEnum.find((item: any) => item.value === value).label:''}</>
-        }
-    },
-    { 
-        title: '备注', 
-        dataIndex: 'description', 
-        key: 'description' 
-    }
-]
+import { tableColumns, columns }  from "./userBase.json"
 
 export default function ScheduleView(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
@@ -96,8 +40,8 @@ export default function ScheduleView(): React.ReactNode {
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
-        console.log(selectedRows)
     }
+
     const handleModalOk = async () => {
         try {
             await form.validateFields();
@@ -113,17 +57,12 @@ export default function ScheduleView(): React.ReactNode {
             saveData.smallSampleDeliverTime= moment(saveData.smallSampleDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.deliveryDrawDeliverTime= moment(saveData.deliveryDrawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
             saveData.drawDeliverTime= moment(saveData.drawDeliverTime).format('YYYY-MM-DD HH:mm:ss');
-           
-
             if( saveData.loftingUser&&Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0){
                 let user:any = []
                 if(saveData.loftingMutualReview.indexOf('0')>-1){
                     saveData.loftingMutualReview.splice(saveData.loftingMutualReview.indexOf('0'),1)
-                    console.log(saveData.loftingMutualReview)
-                    console.log(saveData.loftingUser)
                     user = saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.concat(saveData.loftingUser):saveData.loftingUser
                     saveData.loftingMutualReview = Array.from(new Set(user))
-                    console.log(Array.from(new Set(user)))
                 }
             }else{
                 saveData.loftingMutualReview='';
@@ -134,7 +73,6 @@ export default function ScheduleView(): React.ReactNode {
                     saveData.weldingUser.splice(saveData.weldingUser.indexOf('0'),1)
                     user = saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.concat(saveData.weldingUser):saveData.weldingUser
                     saveData.weldingUser = Array.from(new Set(user))
-                   
                 }
             }else{
                 saveData.weldingUser='';
@@ -142,22 +80,13 @@ export default function ScheduleView(): React.ReactNode {
             saveData.loftingMutualReview = Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.join(','):''
             saveData.weldingUser=Array.isArray(saveData.weldingUser)&&saveData.weldingUser.length>0?saveData.weldingUser.join(','):''
             saveData.loftingUser= Array.isArray(saveData.loftingUser)&&saveData.loftingUser.length>0?saveData.loftingUser.join(','):'';
-            console.log(saveData.loftingMutualReview)
-           
-            // saveData.loftingMutualReview= Array.isArray(saveData.loftingMutualReview)&&saveData.loftingMutualReview.length>0?saveData.loftingMutualReview.join(','):'';
-            // saveData.weldingUser= Array.isArray(saveData.weldingUser)&&saveData.weldingUser.length>0?saveData.weldingUser.join(','):'';
-            
             saveData.ncUser = saveData?.ncUser&&saveData?.ncUser.indexOf('0')===0?saveData?.programmingLeader:saveData?.ncUser;
             saveData.productPartUser = saveData?.productPartUser&&saveData?.productPartUser.indexOf('0')===0?saveData?.ncUser:saveData?.productPartUser;
             saveData.packageUser = saveData?.packageUser&&saveData?.packageUser.indexOf('0')===0?saveData?.productPartUser:saveData?.packageUser;
-           
             saveData.boltPlanCheckUser = saveData?.boltPlanCheckUser&&saveData?.boltPlanCheckUser.indexOf('0')===0?saveData?.boltLeader:saveData?.boltPlanCheckUser;
-            saveData.boltCheckUser = saveData?.boltCheckUser&&saveData?.boltCheckUser.indexOf('0')===0?saveData?.boltPlanCheckUser:saveData?.boltCheckUser;
-            saveData.boltUser = saveData?.boltUser&&saveData?.boltUser.indexOf('0')===0?saveData?.productPartUser:saveData?.boltUser;
-
-            saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader&&saveData?.deliveryDrawLeader.indexOf('0')===0?saveData?.drawLeader:saveData?.deliveryDrawLeader;
-  
-           
+            saveData.boltCheckUser = saveData?.boltCheckUser&&saveData?.boltCheckUser?.join(',');
+            saveData.boltUser = saveData?.boltUser&&saveData?.boltUser?.join(',');
+            saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader&&saveData?.deliveryDrawLeader.indexOf('0')===0?saveData?.drawLeader:saveData?.deliveryDrawLeader;         
             await RequestUtil.post('/tower-science/productCategory/assign', saveData).then(()=>{
 
                 setVisible(false);
@@ -166,28 +95,22 @@ export default function ScheduleView(): React.ReactNode {
                 form.resetFields([
                     'pattern',
                     'boltCheckUser',
-                    // 'boltDeliverTime',
                     'boltLeader',
                     'boltPlanCheckUser',
                     'boltUser',
-                    // 'deliveryDrawDeliverTime',
                     'deliveryDrawLeader',
-                    // 'drawDeliverTime',
                     'drawLeader',
                     'hangLineBoardCheckUser',
                     'legConfigurationCheckUser',
                     'legConfigurationUser',
                     'legProgrammingUser',
-                    // 'loftingDeliverTime',
                     'loftingLeader',
                     'loftingMutualReview',
                     'loftingUser',
                     'ncUser',
                     'packageUser',
                     'productPartUser',
-                    // 'programmingDeliverTime',
                     'programmingLeader',
-                    // 'smallSampleDeliverTime',
                     'weldingUser',
                     'smallSampleLeader',
                     'description'
@@ -204,339 +127,10 @@ export default function ScheduleView(): React.ReactNode {
             }).then(()=>{
                 setRefresh(!refresh);
             })
-        
         } catch (error) {
             console.log(error)
         }
     }
-    const columns = [
-        {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
-            key: 'name',
-            title: '塔型',
-            width: 100,
-            dataIndex: 'name'
-        },
-        {
-            key: 'steelProductShape',
-            title: '塔型钢印号',
-            width: 100,
-            dataIndex: 'steelProductShape'
-        },
-        {
-            key: 'patternName',
-            title: '模式',
-            width: 100,
-            dataIndex: 'patternName',
-        },
-        {
-            key: 'priorityName',
-            title: '优先级',
-            width: 100,
-            dataIndex: 'priorityName',
-        },
-        // {
-        //     key: 'materialLeaderName',
-        //     title: '提料负责人',
-        //     width: 200,
-        //     dataIndex: 'materialLeaderName'
-        // },
-        // {
-        //     key: 'materialPartLeaderName',
-        //     title: '提料配段负责人',
-        //     width: 100,
-        //     dataIndex: 'materialPartLeaderName'
-        // },
-        {
-            key: 'loftingLeaderName',
-            title: '放样负责人',
-            width: 100,
-            dataIndex: 'loftingLeaderName'
-        },
-        {
-            key: 'loftingUserName',
-            title: '放样员',
-            width: 100,
-            dataIndex: 'loftingUserName'
-        },
-        {
-            key: 'legConfigurationUserName',
-            title: '放样高低腿配置编制',
-            width: 130,
-            dataIndex: 'legConfigurationUserName'
-        },
-        {
-            key: 'legConfigurationCheckUserName',
-            title: '放样高低腿配置校核',
-            width: 130,
-            dataIndex: 'legConfigurationCheckUserName'
-        },
-        {
-            key: 'hangLineBoardCheckUserName',
-            title: '放样挂线板校核',
-            width: 100,
-            dataIndex: 'hangLineBoardCheckUserName'
-        },
-        {
-            key: 'loftingMutualReviewName',
-            title: '审图校卡',
-            width: 100,
-            dataIndex: 'loftingMutualReviewName'
-        },
-        {
-            key: 'programmingLeaderName',
-            title: '校核人',
-            width: 100,
-            dataIndex: 'programmingLeaderName'
-        },
-        // {
-        //     key: 'weldingLeaderName',
-        //     title: '编程负责人',
-        //     width: 100,
-        //     dataIndex: 'weldingLeaderName'
-        // },
-        {
-            key: 'smallSampleLeaderName',
-            title: '小样图上传',
-            width: 100,
-            dataIndex: 'smallSampleLeaderName'
-        },
-        {
-            key: 'boltUserName',
-            title: '螺栓清单',
-            width: 100,
-            dataIndex: 'boltUserName'
-        },
-        {
-            key: 'boltCheckUserName',
-            title: '螺栓清单校核',
-            width: 100,
-            dataIndex: 'boltCheckUserName'
-        },
-        {
-            key: 'boltLeaderName',
-            title: '螺栓计划',
-            width: 100,
-            dataIndex: 'boltLeaderName'
-        },
-        {
-            key: 'boltPlanCheckUserName',
-            title: '螺栓计划校核',
-            width: 100,
-            dataIndex: 'boltPlanCheckUserName'
-        },
-        {
-            key: 'weldingUserName',
-            title: '组焊清单',
-            width: 100,
-            dataIndex: 'weldingUserName'
-        },
-        {
-            key: 'productPartUserName',
-            title: '杆塔配段',
-            width: 100,
-            dataIndex: 'productPartUserName'
-        },
-        {
-            key: 'ncUserName',
-            title: 'NC程序',
-            width: 100,
-            dataIndex: 'ncUserName'
-        },
-        {
-            key: 'packageUserName',
-            title: '包装清单',
-            width: 100,
-            dataIndex: 'packageUserName'
-        },
-        {
-            key: 'deliveryDrawLeaderName',
-            title: '发货图纸',
-            width: 100,
-            dataIndex: 'deliveryDrawLeaderName'
-        },
-        {
-            key: 'drawLeaderName',
-            title: '组装图纸',
-            width: 100,
-            dataIndex: 'drawLeaderName'
-        },
-        {
-            key: 'legProgrammingUserName',
-            title: '编程高低腿',
-            width: 100,
-            dataIndex: 'legProgrammingUserName'
-        },
-        {
-            key: 'programmingLeaderName',
-            title: '生产下达',
-            width: 100,
-            dataIndex: 'programmingLeaderName'
-        },
-        {
-            key: 'description',
-            title: '备注',
-            width: 200,
-            dataIndex: 'description'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
-            width: 100,
-            render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
-                    <Button type='link' onClick={async ()=>{
-                        
-                        setVisible(true);
-                        setLoad(true)
-                        setBatch(true)
-                        const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
-                        setScheduleData(resData);
-                  
-                        // // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                        // //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                        // //     let uom = new Date(resData.materialDeliverTime);
-                        // //     let newDate =new Date(uom.setHours(uom.getHours() + day));
-                        // //     resData.materialPartDeliverTime = newDate
-                        // // }
-                        if(resData?.assignConfigVO?.weldingCompletionTime 
-                            && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
-                            && resData?.assignConfigVO.smallSampleCompletionTime 
-                            && resData?.assignConfigVO.boltCompletionTime
-                            && resData?.assignConfigVO.drawDeliverTime
-                            && resData?.assignConfigVO.blotDrawDeliverTime 
-                            && resData?.loftingDeliverTime){
-                                
-                            const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
-                            const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
-                            const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
-                            const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
-                            const weldingDrawTime = Number(scheduleData.assignConfigVO.blotDrawDeliverTime);
-                            const boltDrawTime = Number(scheduleData.assignConfigVO.weldingDrawDeliverTime);
-                            let newWeldingCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
-                            let newLoftingWithSectionCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
-                            let newSmallSampleCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
-                            let newBoltCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
-                            let newWeldingDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime + boltDrawTime));
-                            let newBoltDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + weldingDrawTime));
-                            resData.weldingDeliverTime=newWeldingCompletionTime
-                            resData.boltDeliverTime=newBoltCompletionTime
-                            resData.smallSampleDeliverTime=newSmallSampleCompletionTime
-                            resData.loftingPartDeliverTime=newLoftingWithSectionCompletionTime
-                            resData.deliveryDrawDeliverTime=newBoltDrawTime
-                            resData.drawDeliverTime=newWeldingDrawTime
-                        }
-                        form.setFieldsValue({
-                            ...resData,
-                            boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
-                            weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
-                            loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
-                            drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
-                            loftingUser: resData.loftingUser&&resData.loftingUser!==null ? resData.loftingUser.indexOf(',')>-1?resData.loftingUser.split(','):[resData.loftingUser]:[],
-                            loftingMutualReview: resData.loftingMutualReview&&resData.loftingMutualReview!==null ? resData.loftingMutualReview.indexOf(',')>-1?resData.loftingMutualReview.split(','):[resData.loftingMutualReview]:['0'],
-                            weldingUser: resData.weldingUser&&resData.weldingUser!==null ? resData.weldingUser.indexOf(',')>-1?resData.weldingUser.split(','):[resData.weldingUser]:['0'],
-                            smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
-                            ncUser:resData.ncUser?resData.ncUser:'0',
-                            packageUser:resData.packageUser?resData.packageUser:'0',
-                            productPartUser:resData.productPartUser?resData.productPartUser:'0',
-                            boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
-                            boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
-                            boltUser:resData.boltUser?resData.boltUser:'0',
-                            deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
-                           
-                            boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
-                            weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
-                            loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
-                            loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
-                            programmingDeliverTime: resData.programmingDeliverTime?moment(resData.programmingDeliverTime):'',
-                            smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
-                            deliveryDrawDeliverTime:resData.deliveryDrawDeliverTime? moment(resData.deliveryDrawDeliverTime):'',
-                            drawDeliverTime:resData.drawDeliverTime? moment(resData.drawDeliverTime):'',
-                        });
-                        setLoad(false)
-                    }} disabled={record.loftingStatus===5&&record.boltStatus===4&&record.weldingStatus===4&&record.smallSampleStatus===2&&record.templateLoftingStatus===2}>指派</Button>
-                    <Button type='link' onClick={async ()=>{
-                        setEdit(true);
-                        setVisible(true);
-                        setLoad(true)
-                        const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
-                        setScheduleData(resData);
-                     
-                        // if(resData?.assignConfigVO?.materialWithSectionCompletionTime && resData?.materialDeliverTime){
-                        //     const day = Number(resData.assignConfigVO.materialWithSectionCompletionTime);
-                        //     let uom = new Date(resData.materialDeliverTime);
-                        //     let newDate =new Date(uom.setHours(uom.getHours() + day));
-                        //     resData.materialPartDeliverTime = newDate
-                        // }
-                        if(resData?.assignConfigVO?.weldingCompletionTime 
-                            && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
-                            && resData?.assignConfigVO.smallSampleCompletionTime 
-                            && resData?.assignConfigVO.boltCompletionTime
-                            && resData?.assignConfigVO.drawDeliverTime
-                            && resData?.assignConfigVO.blotDrawDeliverTime 
-                            && resData?.loftingDeliverTime){
-                            const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
-                            const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
-                            const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
-                            const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
-                            const weldingDrawTime = Number(resData.assignConfigVO.drawDeliverTime);
-                            const boltDrawTime = Number(resData.assignConfigVO.blotDrawDeliverTime);
-                            let newWeldingCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
-                            let newLoftingWithSectionCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
-                            let newSmallSampleCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
-                            let newBoltCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
-                            let newWeldingDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime + boltDrawTime));
-                            let newBoltDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + weldingDrawTime));
-                            resData.weldingDeliverTime=newWeldingCompletionTime
-                            resData.boltDeliverTime=newBoltCompletionTime
-                            resData.smallSampleDeliverTime=newSmallSampleCompletionTime
-                            resData.loftingPartDeliverTime=newLoftingWithSectionCompletionTime
-                            resData.deliveryDrawDeliverTime=newBoltDrawTime
-                            resData.drawDeliverTime=newWeldingDrawTime
-                        }
-                        form.setFieldsValue({
-                            ...resData,
-                            boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
-                            weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
-                            loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
-                            drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
-                            loftingUser: resData.loftingUser&&resData.loftingUser!==null ? resData.loftingUser.indexOf(',')>-1?resData.loftingUser.split(','):[resData.loftingUser]:[],
-                            loftingMutualReview: resData.loftingMutualReview&&resData.loftingMutualReview!==null ? resData.loftingMutualReview.indexOf(',')>-1?resData.loftingMutualReview.split(','):[resData.loftingMutualReview]:['0'],
-                            weldingUser: resData.weldingUser&&resData.weldingUser!==null ? resData.weldingUser.indexOf(',')>-1?resData.weldingUser.split(','):[resData.weldingUser]:['0'],
-                            smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
-                            ncUser:resData.ncUser?resData.ncUser:'0',
-                            packageUser:resData.packageUser?resData.packageUser:'0',
-                            productPartUser:resData.productPartUser?resData.productPartUser:'0',
-                            boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
-                            boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
-                            boltUser:resData.boltUser?resData.boltUser:'0',
-                            deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
-                            
-                            boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
-                            weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
-                            loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
-                            loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
-                            programmingDeliverTime: resData.programmingDeliverTime?moment(resData.programmingDeliverTime):'',
-                            smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
-                            deliveryDrawDeliverTime:resData.deliveryDrawDeliverTime? moment(resData.deliveryDrawDeliverTime):'',
-                            drawDeliverTime:resData.drawDeliverTime? moment(resData.drawDeliverTime):'',
-                        
-                        });
-                        
-                        setLoad(false)
-                    }} disabled={!record.loftingLeaderName}>详情</Button>
-                </Space>
-            )
-        }
-    ]
 
     const handleModalCancel = () => {
         setVisible(false);
@@ -756,7 +350,7 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="boltDeliverTime" label="" rules={[{required: true,message:'请选择螺栓清单交付时间'}]} >
-                                        <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
+                                        <DatePicker showTime style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -775,7 +369,7 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="drawDeliverTime" label="" rules={[{required: true,message:'请选择组装图纸计划交付时间 '}]} >
-                                        <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
+                                        <DatePicker showTime style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -837,7 +431,7 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="deliveryDrawDeliverTime" label="" rules={[{required: true,message:'请选择发货图纸计划交付时间'}]} >
-                                        <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
+                                        <DatePicker showTime style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -876,8 +470,7 @@ export default function ScheduleView(): React.ReactNode {
                             <Row>
                                 <Col span={18}>
                                     <Form.Item name="boltUser" label="螺栓清单"> 
-                                        <Select disabled={edit||scheduleData?.boltStatus===4} allowClear>
-                                            <Select.Option key={'0'} value={'0'}>同上</Select.Option>
+                                        <Select disabled={edit||scheduleData?.boltStatus===4} mode="multiple" allowClear>
                                             { user && user.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -899,7 +492,7 @@ export default function ScheduleView(): React.ReactNode {
                                 </Col>
                                 <Col span={6}>
                                     <Form.Item name="smallSampleDeliverTime" label="" rules={[{required: true,message:'请选择小样图交付时间'}]}>
-                                        <DatePicker  style={{width:'100%'}} disabled format={'YYYY-MM-DD HH:mm:ss'}/>
+                                        <DatePicker showTime style={{width:'100%'}} format={'YYYY-MM-DD HH:mm:ss'}/>
                                     </Form.Item>
                                 </Col>
                             </Row>
@@ -938,8 +531,7 @@ export default function ScheduleView(): React.ReactNode {
                             <Row>
                                 <Col span={18}>
                                     <Form.Item name="boltCheckUser" label="螺栓清单校核"> 
-                                        <Select disabled={edit||scheduleData?.smallSampleStatus===2} allowClear>
-                                            <Select.Option key={'0'} value={'0'}>同上</Select.Option>
+                                        <Select disabled={edit||scheduleData?.smallSampleStatus===2} mode="multiple" allowClear>
                                             { user && user.map((item:any)=>{
                                                 return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                             }) }
@@ -1021,12 +613,155 @@ export default function ScheduleView(): React.ReactNode {
                 </Spin>
                 {edit&&<>
                 <DetailTitle title="操作信息" />
-                <CommonTable columns={tableColumns} dataSource={scheduleData?.assignLogList} pagination={ false } />
+                <CommonTable haveIndex columns={tableColumns} dataSource={scheduleData?.assignLogList} pagination={ false } />
                 </>}
             </Modal>
             <Page
                 path={ `/tower-science/productCategory/taskPage` }
-                columns={ columns }
+                columns={ [
+                    {
+                        key: "index",
+                        title: "序号",
+                        dataIndex: "index",
+                        width: 50,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
+                    ...columns, 
+                    {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 100,
+            render: (_: undefined, record: any): React.ReactNode => (
+                <Space direction="horizontal" size="small">
+                    <Button type='link' onClick={async ()=>{
+                        setVisible(true);
+                        setLoad(true)
+                        setBatch(true)
+                        const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
+                        setScheduleData(resData);
+                        if(resData?.assignConfigVO?.weldingCompletionTime 
+                            && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
+                            && resData?.assignConfigVO.smallSampleCompletionTime 
+                            && resData?.assignConfigVO.boltCompletionTime
+                            && resData?.assignConfigVO.drawDeliverTime
+                            && resData?.assignConfigVO.blotDrawDeliverTime 
+                            && resData?.loftingDeliverTime){
+                            const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
+                            const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
+                            const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
+                            const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
+                            const weldingDrawTime = Number(scheduleData.assignConfigVO.blotDrawDeliverTime);
+                            const boltDrawTime = Number(scheduleData.assignConfigVO.weldingDrawDeliverTime);
+                            let newWeldingCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
+                            let newLoftingWithSectionCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
+                            let newSmallSampleCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
+                            let newBoltCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
+                            let newWeldingDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime + boltDrawTime));
+                            let newBoltDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + weldingDrawTime));
+                            resData.weldingDeliverTime=newWeldingCompletionTime
+                            resData.boltDeliverTime=newBoltCompletionTime
+                            resData.smallSampleDeliverTime=newSmallSampleCompletionTime
+                            resData.loftingPartDeliverTime=newLoftingWithSectionCompletionTime
+                            resData.deliveryDrawDeliverTime=newBoltDrawTime
+                            resData.drawDeliverTime=newWeldingDrawTime
+                        }
+                        form.setFieldsValue({
+                            ...resData,
+                            boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                            weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                            loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                            drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                            loftingUser: resData.loftingUser&&resData.loftingUser!==null ? resData.loftingUser.indexOf(',')>-1?resData.loftingUser.split(','):[resData.loftingUser]:[],
+                            loftingMutualReview: resData.loftingMutualReview&&resData.loftingMutualReview!==null ? resData.loftingMutualReview.indexOf(',')>-1?resData.loftingMutualReview.split(','):[resData.loftingMutualReview]:['0'],
+                            weldingUser: resData.weldingUser&&resData.weldingUser!==null ? resData.weldingUser.indexOf(',')>-1?resData.weldingUser.split(','):[resData.weldingUser]:['0'],
+                            smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                            ncUser:resData.ncUser?resData.ncUser:'0',
+                            packageUser:resData.packageUser?resData.packageUser:'0',
+                            productPartUser:resData.productPartUser?resData.productPartUser:'0',
+                            boltCheckUser:resData.boltCheckUser&&resData.boltCheckUse?.split(','),
+                            boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
+                            boltUser:resData.boltUser&&resData.boltUser?.split(','),
+                            deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
+                           
+                            boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
+                            weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
+                            loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
+                            loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
+                            programmingDeliverTime: resData.programmingDeliverTime?moment(resData.programmingDeliverTime):'',
+                            smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
+                            deliveryDrawDeliverTime:resData.deliveryDrawDeliverTime? moment(resData.deliveryDrawDeliverTime):'',
+                            drawDeliverTime:resData.drawDeliverTime? moment(resData.drawDeliverTime):'',
+                        });
+                        setLoad(false)
+                    }} disabled={record.loftingStatus===5&&record.boltStatus===4&&record.weldingStatus===4&&record.smallSampleStatus===2&&record.templateLoftingStatus===2}>指派</Button>
+                    <Button type='link' onClick={async ()=>{
+                        setEdit(true);
+                        setVisible(true);
+                        setLoad(true)
+                        const resData: any = await RequestUtil.get(`/tower-science/productCategory/${record.id}`);
+                        setScheduleData(resData);
+                        if(resData?.assignConfigVO?.weldingCompletionTime 
+                            && resData?.assignConfigVO?.loftingWithSectionCompletionTime 
+                            && resData?.assignConfigVO.smallSampleCompletionTime 
+                            && resData?.assignConfigVO.boltCompletionTime
+                            && resData?.assignConfigVO.drawDeliverTime
+                            && resData?.assignConfigVO.blotDrawDeliverTime 
+                            && resData?.loftingDeliverTime){
+                            const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
+                            const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
+                            const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
+                            const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
+                            const weldingDrawTime = Number(resData.assignConfigVO.drawDeliverTime);
+                            const boltDrawTime = Number(resData.assignConfigVO.blotDrawDeliverTime);
+                            let newWeldingCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
+                            let newLoftingWithSectionCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
+                            let newSmallSampleCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
+                            let newBoltCompletionTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
+                            let newWeldingDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime + boltDrawTime));
+                            let newBoltDrawTime =new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + weldingDrawTime));
+                            resData.weldingDeliverTime=newWeldingCompletionTime
+                            resData.boltDeliverTime=newBoltCompletionTime
+                            resData.smallSampleDeliverTime=newSmallSampleCompletionTime
+                            resData.loftingPartDeliverTime=newLoftingWithSectionCompletionTime
+                            resData.deliveryDrawDeliverTime=newBoltDrawTime
+                            resData.drawDeliverTime=newWeldingDrawTime
+                        }
+                        form.setFieldsValue({
+                            ...resData,
+                            boltLeader:resData.boltLeader&& resData.boltLeader!==-1?resData.boltLeader:'',
+                            weldingLeader:resData.weldingLeader&& resData.weldingLeader!==-1?resData.weldingLeader:'',
+                            loftingLeader:resData.loftingLeader&& resData.loftingLeader!==-1?resData.loftingLeader:'',
+                            drawLeader:resData.drawLeader&& resData.drawLeader!==-1?resData.drawLeader:'',
+                            loftingUser: resData.loftingUser&&resData.loftingUser!==null ? resData.loftingUser.indexOf(',')>-1?resData.loftingUser.split(','):[resData.loftingUser]:[],
+                            loftingMutualReview: resData.loftingMutualReview&&resData.loftingMutualReview!==null ? resData.loftingMutualReview.indexOf(',')>-1?resData.loftingMutualReview.split(','):[resData.loftingMutualReview]:['0'],
+                            weldingUser: resData.weldingUser&&resData.weldingUser!==null ? resData.weldingUser.indexOf(',')>-1?resData.weldingUser.split(','):[resData.weldingUser]:['0'],
+                            smallSampleLeader:resData.smallSampleLeader&& resData.smallSampleLeader!==-1?resData.smallSampleLeader:'',
+                            ncUser:resData.ncUser?resData.ncUser:'0',
+                            packageUser:resData.packageUser?resData.packageUser:'0',
+                            productPartUser:resData.productPartUser?resData.productPartUser:'0',
+                            boltCheckUser:resData.boltCheckUser&&resData.boltCheckUser?.split(','),
+                            boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
+                            boltUser:resData.boltUser&&resData.boltUser?.split(','),
+                            deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
+                            
+                            boltDeliverTime:resData.boltDeliverTime?moment(resData.boltDeliverTime):'',
+                            weldingDeliverTime: resData.weldingDeliverTime?moment(resData.weldingDeliverTime):'',
+                            loftingDeliverTime: resData.loftingDeliverTime?moment(resData.loftingDeliverTime):'',
+                            loftingPartDeliverTime: resData.loftingPartDeliverTime?moment(resData.loftingPartDeliverTime):'',
+                            programmingDeliverTime: resData.programmingDeliverTime?moment(resData.programmingDeliverTime):'',
+                            smallSampleDeliverTime:resData.smallSampleDeliverTime? moment(resData.smallSampleDeliverTime):'',
+                            deliveryDrawDeliverTime:resData.deliveryDrawDeliverTime? moment(resData.deliveryDrawDeliverTime):'',
+                            drawDeliverTime:resData.drawDeliverTime? moment(resData.drawDeliverTime):'',
+                        
+                        });
+                        
+                        setLoad(false)
+                    }} disabled={!record.loftingLeaderName}>详情</Button>
+                </Space>
+            )
+        } ] }
                 exportPath={`/tower-science/productCategory/taskPage`}
                 extraOperation={
                     <Space>
@@ -1083,9 +818,9 @@ export default function ScheduleView(): React.ReactNode {
                                 ncUser:resData.ncUser?resData.ncUser:'0',
                                 packageUser:resData.packageUser?resData.packageUser:'0',
                                 productPartUser:resData.productPartUser?resData.productPartUser:'0',
-                                boltCheckUser:resData.boltCheckUser?resData.boltCheckUser:'0',
+                                boltCheckUser:resData.boltCheckUser&&resData.boltCheckUser.split(','),
                                 boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
-                                boltUser:resData.boltUser?resData.boltUser:'0',
+                                boltUser:resData.boltUser&&resData.boltUser.split(','),
                                 deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
                             });
                             setLoad(false)

@@ -84,12 +84,12 @@ const DemoRadar = () => {
             spec: "实际"
         },
         {
-            name: '订单响应周期',
+            name: '订单相应周期',
             star: 1000,
             spec: "标准"
         },
         {
-            name: '订单响应周期',
+            name: '订单相应周期',
             star: 1626,
             spec: "实际"
         },

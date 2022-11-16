@@ -1,0 +1,121 @@
+{
+    "columns": [
+        {
+            "key": "trialAssembleName",
+            "title": "运单编号",
+            "dataIndex": "trialAssembleName",
+            "width": 100
+        },
+        {
+            "key": "statusName",
+            "title": "审批状态",
+            "dataIndex": "statusName",
+            "width": 100
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTime",
+            "width": 100
+        },
+        {
+            "key": "trialNumber",
+            "title": "计划号",
+            "dataIndex": "trialNumber",
+            "width": 150
+        },
+        {
+            "key": "planNumber",
+            "title": "工程名称",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "发车日期",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "productTypeName",
+            "title": "过磅重量（吨）",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "计划重量（吨）",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        }
+    ],
+    "baseColumns": [
+        {
+            "key": "trialAssembleName",
+            "title": "计划号",
+            "dataIndex": "trialAssembleName"
+        },
+        {
+            "key": "planNumber",
+            "title": "工程名称",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "过磅日期",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "过磅重量（吨）",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "productTypeName",
+            "title": "计划重量（吨）",
+            "dataIndex": "productTypeName"
+        }
+    ],
+    "towerColumns": [
+        {
+            "key": "voltageGradeName",
+            "title": "产品名称",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "塔型",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "呼高",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "基数",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "塔位号",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "班组",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "包名称",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "总重量（吨）",
+            "dataIndex": "voltageGradeName"
+        }
+    ]
+}

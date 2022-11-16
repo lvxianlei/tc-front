@@ -224,8 +224,8 @@
             "type": "number"
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight",
+            "title": "总重（吨）",
+            "dataIndex": "totalWeight",
             "type": "number"
         },
         {
@@ -236,83 +236,72 @@
     "choosePlanList": [
         {
             "title": "采购计划编号",
-            "dataIndex": "purchasePlanCode",
+            "dataIndex": "purchasePlanNumber",
             "width": 150,
             "type": "string"
         },
         {
             "title": "采购类型",
-            "dataIndex": "purchaseType",
-            "type": "select",
-            "width": 50,
-            "enum": [
-                {
-                    "label": "外部",
-                    "value": 1
-                },
-                {
-                    "label": "内部",
-                    "value": 2
-                },
-                {
-                    "label": "缺料",
-                    "value": 3
-                }
-            ]
+            "dataIndex": "purchaseTypeName",
+            "width": 80
         },
         {
-            "title": "塔型（个）",
-            "dataIndex": "productCategoryNum",
-            "width": 50,
+            "title": "申购日期",
+            "dataIndex": "createTime",
+            "width": 100,
+            "type": "date",
+            "format":"YYYY-MM-DD"
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "width": 100,
             "type": "string"
         },
         {
-            "title": "杆塔（基）",
-            "dataIndex": "productNum",
-            "width": 50,
-            "type": "integer"
-        },
-        {
-            "title": "圆钢收货量（吨）/总重（吨）",
-            "dataIndex": "roundSteelTotal",
-            "width": 50,
-            "type": "number"
-        },
-        {
-            "title": "角钢收货量（吨）/总重（吨）",
-            "dataIndex": "angleSteelTotal",
-            "width": 50,
-            "type": "number"
-        },
-        {
-            "title": "钢板收货量（吨）/总重（吨）",
-            "dataIndex": "steelPlateTotal",
-            "width": 50,
-            "type": "number"
-        },
-        {
-            "title": "采购人",
-            "dataIndex": "purchaserName",
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 100,
             "type": "string"
         },
         {
-            "title": "计划状态",
-            "dataIndex": "purchasePlanStatus",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "待完成",
-                    "value": 1
-                },
-                {
-                    "label": "已完成",
-                    "value": 2
-                },
-                {
-                    "label": "已取消",
-                    "value": 3
-                }
-            ]
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "width": 100,
+            "type": "string"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 100
+        },
+        {
+            "title": "总重量（吨）",
+            "dataIndex": "totalWeight",
+            "width": 100
         }
     ],
     "addMaterial": {

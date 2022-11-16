@@ -237,10 +237,10 @@ export default function PoleInformation(): React.ReactNode {
     const handleModalsubmit = () => new Promise(async (resove, reject) => {
         try {
             setButtonName('提交')
+            console.log('*****')
             await onTip();
             await editRef.current?.onSubmit();
             message.success('提交成功！');
-            setConfirmLoading(false)
             setTipVisible(false);
             setAllotVisible(false);
             setRefresh(!refresh);
