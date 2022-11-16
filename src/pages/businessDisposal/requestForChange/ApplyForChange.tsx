@@ -13,6 +13,7 @@ import styles from "./RequestForChange.module.less";
 import SelectByTaskNum from "./SelectByTaskNum";
 import { FixedType } from "rc-table/lib/interface";
 import { productTypeOptions, typeOfChangeOptions, voltageGradeOptions } from "../../../configuration/DictionaryOptions";
+import { applyColumns, changeColumns } from "./requestForChange.json"
 
 interface modalProps {
     readonly id?: any;
@@ -33,8 +34,16 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/productChange/${id}`)
-            console.log(result)
             setDetailData({ ...result })
+            setSelectedData(result?.productChangeDetailList || [])
+            selectedForm.setFieldsValue({
+                data: [
+                    ...result?.productChangeDetailList || []
+                ]
+            })
+            form?.setFieldsValue({
+                ...result
+            })
             run(result?.drawTaskId, result?.productChangeDetailList)
             resole(result)
         } catch (error) {
@@ -45,16 +54,13 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
     const { run } = useRequest<any>((id: string, list: any[]) => new Promise(async (resole, reject) => {
         try {
             RequestUtil.get(`/tower-science/productChange/product/list/${id}`).then((res: any) => {
-                console.log(res)
                 let newData: any = [];
                 list.forEach(item => {
                     newData = res?.filter((items: any) => {
-                        return items?.id === item?.drawProductId
+                        return items?.id !== item?.drawProductId
                     })
                 })
-                console.log(newData)
                 setChangeData(newData || [])
-
             })
             resole(true)
         } catch (error) {
@@ -62,217 +68,82 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
         }
     }), { manual: true })
 
-    const applyColumns = [
-        {
-            "key": "drawTaskNum",
-            "title": "确认任务编号",
-            width: 50,
-            dataIndex: "drawTaskNum"
-        },
-        {
-            "key": "scTaskNum",
-            "title": "营销任务编号",
-            width: 80,
-            dataIndex: "scTaskNum"
-        },
-        {
-            "key": "internalNumber",
-            "title": "内部合同编号",
-            width: 80,
-            dataIndex: "internalNumber"
-        },
-        {
-            "key": "projectName",
-            "title": "工程名称",
-            width: 80,
-            dataIndex: "projectName"
-        },
-        {
-            "key": "changeExplain",
-            "title": "变更说明",
-            width: 80,
-            dataIndex: "changeExplain"
-        },
-        {
-            "key": "planNumber",
-            "title": "计划号",
-            width: 80,
-            dataIndex: "planNumber"
-        },
-        {
-            "key": "contractName",
-            "title": "合同名称",
-            width: 80,
-            dataIndex: "contractName"
-        },
-        {
-            "key": "aeName",
-            "title": "业务员",
-            width: 80,
-            dataIndex: "aeName"
-        },
-        {
-            "key": "description",
-            "title": "备注",
-            width: 80,
-            dataIndex: "description"
-        },
-        {
-            "key": "updateDescription",
-            "title": "备注（修改后）",
-            width: 80,
-            dataIndex: "updateDescription"
-        }
-    ]
-
-    const changeColumns = [
-        {
-            "key": "name",
-            "title": "杆塔号",
-            width: 50,
-            dataIndex: "name"
-        },
-        {
-            "key": "productTypeName",
-            "title": "产品类型",
-            width: 80,
-            dataIndex: "productTypeName"
-        },
-        {
-            "key": "voltageLevelName",
-            "title": "电压等级（kv）",
-            width: 80,
-            dataIndex: "voltageLevelName"
-        },
-        {
-            "key": "productCategory",
-            "title": "塔型",
-            width: 80,
-            dataIndex: "productCategory"
-        },
-        {
-            "key": "steelProductShape",
-            "title": "塔型钢印号",
-            width: 80,
-            dataIndex: "steelProductShape"
-        },
-        {
-            "key": "operation",
-            "title": "操作",
-            dataIndex: "operation",
-            fixed: "right" as FixedType,
-            width: 80,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Button type="link" onClick={() => {
-                    const value = selectedForm?.getFieldsValue(true)?.data;
-                    selectedForm.setFieldsValue({
-                        data: [
-                            ...value || [],
-                            {
-                                ...record,
-                                id: '',
-                                drawProductId: record?.id,
-                                productCategoryName: record?.productCategory,
-                                productNumber: record?.name,
-                                voltageGradeName: record?.voltageLevelName,
-                            }
-                        ]
-                    })
-                    setSelectedData([
-                        ...value || [],
-                        {
-                            ...record,
-                            id: '',
-                            drawProductId: record?.id,
-                            productCategoryName: record?.productCategory,
-                            productNumber: record?.name,
-                            voltageGradeName: record?.voltageLevelName,
-                        }
-                    ])
-                    changeData.splice(index, 1);
-                    setChangeData([...changeData])
-                }}>添加</Button>
-            )
-        }
-    ]
-
     const selectedColumns = [
         {
             "key": "changeTypeId",
             "title": "变更类型",
-            width: 50,
-            dataIndex: "changeTypeId"
+            "width": 50,
+            "dataIndex": "changeTypeId"
         },
         {
             "key": "productNumber",
             "title": "杆塔号（修改前）",
-            width: 80,
-            dataIndex: "productNumber"
+            "width": 80,
+            "dataIndex": "productNumber"
         },
         {
             "key": "changeProductNumber",
             "title": "杆塔号（修改后）",
-            width: 80,
-            dataIndex: "changeProductNumber"
+            "width": 80,
+            "dataIndex": "changeProductNumber"
         },
         {
             "key": "productCategoryName",
             "title": "塔型名（修改前）",
-            width: 80,
-            dataIndex: "productCategoryName"
+            "width": 80,
+            "dataIndex": "productCategoryName"
         },
         {
             "key": "changeProductCategoryName",
             "title": "塔型名（修改后）",
-            width: 80,
-            dataIndex: "changeProductCategoryName"
+            "width": 80,
+            "dataIndex": "changeProductCategoryName"
         },
         {
             "key": "steelProductShape",
             "title": "塔型钢印号（修改前）",
-            width: 80,
-            dataIndex: "steelProductShape"
+            "width": 80,
+            "dataIndex": "steelProductShape"
         },
         {
             "key": "changeSteelProductShape",
             "title": "塔型钢印号（修改后）",
-            width: 80,
-            dataIndex: "changeSteelProductShape"
+            "width": 80,
+            "dataIndex": "changeSteelProductShape"
         },
         {
             "key": "voltageGradeName",
             "title": "电压等级（修改前）",
-            width: 80,
-            dataIndex: "voltageGradeName"
+            "width": 80,
+            "dataIndex": "voltageGradeName"
         },
         {
             "key": "changeVoltageGrade",
             "title": "电压等级（修改后）",
-            width: 80,
-            dataIndex: "changeVoltageGrade"
+            "width": 80,
+            "dataIndex": "changeVoltageGrade"
         },
         {
             "key": "productTypeName",
             "title": "产品类型（修改前）",
-            width: 80,
-            dataIndex: "productTypeName"
+            "width": 80,
+            "dataIndex": "productTypeName"
         },
         {
             "key": "changeProductType",
             "title": "产品类型（修改后）",
-            width: 80,
-            dataIndex: "changeProductType"
+            "width": 80,
+            "dataIndex": "changeProductType"
         },
         {
             "key": "operation",
             "title": "操作",
-            dataIndex: "operation",
+            "dataIndex": "operation",
             fixed: "right" as FixedType,
-            width: 80,
+            "width": 80,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Button type="link" onClick={() => {
                     const value = selectedForm?.getFieldsValue(true)?.data;
-                    console.log(value)
                     setChangeData([
                         ...changeData || [],
                         {
@@ -284,7 +155,6 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         }
                     ])
                     value?.splice(index, 1)
-                    console.log(value)
                     selectedForm?.setFieldsValue({
                         data: [...value]
                     })
@@ -300,7 +170,6 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
     }
 
     const bulkChanges = () => {
-        console.log(selectedRows)
         Modal.confirm({
             title: "添加修改",
             icon: null,
@@ -368,7 +237,6 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                             ...values
                         }
                     })
-                    console.log(newSelectedData, newChangeData)
                     setSelectedData([...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData])
                     selectedForm?.setFieldsValue({
                         data: [...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData]
@@ -404,11 +272,12 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            console.log(value)
+            const value = form.getFieldsValue(true);
+            const values = selectedForm?.getFieldsValue(true)?.data
             getLoading(true)
             await saveRun({
-                ...value
+                ...value,
+                productChangeDetailList: values
             })
             resolve(true);
         } catch (error) {
@@ -431,11 +300,12 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-
+            const value = form.getFieldsValue(true);
+            const values = selectedForm?.getFieldsValue(true)?.data
             getLoading(true)
             await submitRun({
-                ...value
+                ...value,
+                productChangeDetailList: values
             })
             resolve(true);
         } catch (error) {
@@ -467,7 +337,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
     return <Spin spinning={loading}>
         <DetailContent className={styles.changeForm}>
             <Form form={form}>
-                <BaseInfo dataSource={detailData || {}} columns={applyColumns?.map(res => {
+                <BaseInfo dataSource={detailData || {}} columns={applyColumns?.map((res: any) => {
                     if (res.dataIndex === "drawTaskNum") {
                         return ({
                             ...res,
@@ -476,7 +346,6 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                     <Input size="small" disabled suffix={
                                         <SelectByTaskNum onSelect={(selectedRows: Record<string, any>) => {
                                             RequestUtil.get(`/tower-science/productChange/product/list/${selectedRows[0]?.id}`).then(res => {
-                                                console.log(res)
                                                 setChangeData(res || [])
                                                 setDetailData({
                                                     ...selectedRows[0],
@@ -487,7 +356,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                     productNumber: selectedRows[0]?.name,
                                                     voltageGradeName: selectedRows[0]?.voltageLevelName,
                                                     id: '',
-                                                    drawTaskNumId: selectedRows[0]?.id,
+                                                    drawTaskId: selectedRows[0]?.id,
                                                     drawTaskNum: selectedRows[0]?.taskNum,
                                                 })
                                                 setSelectedData([]);
@@ -528,7 +397,46 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
             <Button type="primary" className={styles.bottom16} onClick={bulkChanges} ghost>批量修改</Button>
             <CommonTable
                 haveIndex
-                columns={changeColumns}
+                columns={[
+                    ...changeColumns,
+                    {
+                        "key": "operation",
+                        "title": "操作",
+                        "dataIndex": "operation",
+                        fixed: "right" as FixedType,
+                        "width": 80,
+                        render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                            <Button type="link" onClick={() => {
+                                const value = selectedForm?.getFieldsValue(true)?.data;
+                                selectedForm.setFieldsValue({
+                                    data: [
+                                        ...value || [],
+                                        {
+                                            ...record,
+                                            id: '',
+                                            drawProductId: record?.id,
+                                            productCategoryName: record?.productCategory,
+                                            productNumber: record?.name,
+                                            voltageGradeName: record?.voltageLevelName,
+                                        }
+                                    ]
+                                })
+                                setSelectedData([
+                                    ...value || [],
+                                    {
+                                        ...record,
+                                        id: '',
+                                        drawProductId: record?.id,
+                                        productCategoryName: record?.productCategory,
+                                        productNumber: record?.name,
+                                        voltageGradeName: record?.voltageLevelName,
+                                    }
+                                ])
+                                changeData.splice(index, 1);
+                                setChangeData([...changeData])
+                            }}>添加</Button>
+                        )
+                    }]}
                 dataSource={changeData}
                 className={styles.bottom16}
                 pagination={false}

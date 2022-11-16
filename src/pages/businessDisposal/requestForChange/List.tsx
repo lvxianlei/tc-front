@@ -17,6 +17,7 @@ import { useForm } from "antd/lib/form/Form";
 import { CommonTable } from "../../common";
 import ApplyForChange from "./ApplyForChange";
 import ApplyOrDetail from "./ApplyOrDetail";
+import { columns, detailColumns } from "./requestForChange.json"
 
 interface EditRefProps {
     onSubmit: () => void;
@@ -34,7 +35,6 @@ export default function List(): React.ReactNode {
     const addRef = useRef<EditRefProps>();
     const detailRef = useRef<EditRefProps>();
     const [type, setType] = useState<"new" | "edit">("new");
-    const [dtype, setDtype] = useState<"apply" | "detail">("apply");
     const [rowId, setRowId] = useState<string>();
     const [searchForm] = useForm();
     const [detailData, setDetailData] = useState<any>();
@@ -44,7 +44,6 @@ export default function List(): React.ReactNode {
         size: 10,
         total: 0
     })
-
 
     useEffect(() => {
         setConfirmLoading(confirmLoading);
@@ -81,148 +80,8 @@ export default function List(): React.ReactNode {
         run({ current: current, size: pageSize }, { ...filterValues })
     }
 
-    const columns = [
-        {
-            "key": "changeNumber",
-            "title": "明细变更申请编号",
-            "width": 120,
-            "dataIndex": "changeNumber"
-        },
-        {
-            "key": "examineStatusName",
-            "title": "审批状态",
-            "width": 80,
-            "dataIndex": "examineStatusName"
-        },
-        {
-            "key": "updateStatusTime",
-            "title": "最新状态变更时间",
-            "width": 80,
-            "dataIndex": "updateStatusTime"
-        },
-        {
-            "key": "planNumber",
-            "title": "计划号",
-            "width": 80,
-            "dataIndex": "planNumber"
-        },
-        {
-            "key": "internalNumber",
-            "title": "内部合同号",
-            "width": 100,
-            "dataIndex": "internalNumber"
-        },
-        {
-            "key": "projectName",
-            "title": "工程名称",
-            "width": 100,
-            "dataIndex": "projectName"
-        },
-        {
-            "key": "drawTaskNum",
-            "title": "确认任务编号",
-            "width": 100,
-            "dataIndex": "drawTaskNum"
-        },
-        {
-            "key": "deptName",
-            "title": "所属部门",
-            "width": 80,
-            "dataIndex": "deptName"
-        },
-        {
-            "key": "userName",
-            "title": "发起人",
-            "width": 80,
-            "dataIndex": "userName"
-        },
-        {
-            "key": "changeExplain",
-            "title": "变更说明",
-            "width": 150,
-            "dataIndex": "changeExplain"
-        },
-        {
-            "key": "description",
-            "title": "备注",
-            "width": 150,
-            "dataIndex": "description"
-        },
-        {
-            "key": "updateDescription",
-            "title": "备注（修改后）",
-            "width": 120,
-            "dataIndex": "updateDescription"
-        }
-    ]
-    const detailColumns = [
-        {
-            "key": "changeTypeName",
-            "title": "变更类型",
-            "width": 50,
-            "dataIndex": "changeTypeName"
-        },
-        {
-            "key": "productNumber",
-            "title": "杆塔号（修改前）",
-            "width": 80,
-            "dataIndex": "productNumber"
-        },
-        {
-            "key": "changeProductNumber",
-            "title": "杆塔号（修改后）",
-            "width": 80,
-            "dataIndex": "changeProductNumber"
-        },
-        {
-            "key": "productCategoryName",
-            "title": "塔型名（修改前）",
-            "width": 80,
-            "dataIndex": "productCategoryName"
-        },
-        {
-            "key": "changeProductCategoryName",
-            "title": "塔型名（修改后）",
-            "width": 80,
-            "dataIndex": "changeProductCategoryName"
-        },
-        {
-            "key": "steelProductShape",
-            "title": "塔型钢印号（修改前）",
-            "width": 80,
-            "dataIndex": "steelProductShape"
-        },
-        {
-            "key": "changeSteelProductShape",
-            "title": "塔型钢印号（修改后）",
-            "width": 80,
-            "dataIndex": "changeSteelProductShape"
-        },
-        {
-            "key": "voltageGradeName",
-            "title": "电压等级（修改前）",
-            "width": 80,
-            "dataIndex": "voltageGradeName"
-        },
-        {
-            "key": "changeVoltageGradeName",
-            "title": "电压等级（修改后）",
-            "width": 80,
-            "dataIndex": "changeVoltageGradeName"
-        },
-        {
-            "key": "productTypeName",
-            "title": "产品类型（修改前）",
-            "width": 80,
-            "dataIndex": "productTypeName"
-        },
-        {
-            "key": "changeProductTypeName",
-            "title": "产品类型（修改后）",
-            "width": 80,
-            "dataIndex": "changeProductTypeName"
-        }
-    ]
+
+
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
@@ -250,31 +109,6 @@ export default function List(): React.ReactNode {
         }
     })
 
-    const handleRejectOk = () => new Promise(async (resove, reject) => {
-        try {
-            await detailRef.current?.onReject();
-            message.success("拒绝成功！")
-            setVisible(false)
-            detailRef.current?.resetFields();
-            history.go(0)
-            resove(true)
-        } catch (error) {
-            reject(false)
-        }
-    })
-
-    const handlePassOk = () => new Promise(async (resove, reject) => {
-        try {
-            await detailRef.current?.onPass();
-            message.success("通过成功！")
-            setVisible(false)
-            detailRef.current?.resetFields();
-            history.go(0)
-            resove(true)
-        } catch (error) {
-            reject(false)
-        }
-    })
     const searchItems = [
         {
             name: "updateStatusTime",
@@ -294,13 +128,13 @@ export default function List(): React.ReactNode {
             </Select>
         },
         {
-            name: "userId",
+            name: "userIdName",
             label: "发起人",
             children: <Input size="small" style={{ width: "80%" }} disabled suffix={[
                 <SelectUser requests={{ deptName: "" }} onSelect={(selectedRows: Record<string, any>) => {
                     searchForm?.setFieldsValue({
-                        recipientUser: selectedRows[0]?.userId,
-                        recipientUserName: selectedRows[0]?.name
+                        userId: selectedRows[0]?.userId,
+                        userIdName: selectedRows[0]?.name
                     })
                 }} />
             ]} />
@@ -321,6 +155,7 @@ export default function List(): React.ReactNode {
         }
         values.userId = searchForm?.getFieldsValue(true)?.userId
         setFilterValues(values);
+        run({}, values)
     }
 
     return <Spin spinning={loading}>
@@ -330,14 +165,6 @@ export default function List(): React.ReactNode {
             visible={detailVisible}
             title={"详情"}
             footer={<Space direction="horizontal" size="small">
-                {dtype === "apply" ?
-                    <>
-                        <Button onClick={handleRejectOk} type="primary" ghost>拒绝</Button>
-                        <Button onClick={handlePassOk} type="primary" ghost>通过</Button>
-                    </>
-                    :
-                    null
-                }
                 <Button onClick={() => {
                     setDetailVisible(false);
                     addRef.current?.resetFields();
@@ -346,9 +173,8 @@ export default function List(): React.ReactNode {
             width="90%"
             onCancel={() => {
                 setDetailVisible(false);
-                detailRef.current?.resetFields();
             }}>
-            <ApplyOrDetail type={dtype} id={rowId} ref={detailRef} />
+            <ApplyOrDetail id={rowId} ref={detailRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -356,14 +182,8 @@ export default function List(): React.ReactNode {
             visible={visible}
             title={type === "new" ? "申请" : "编辑"}
             footer={<Space direction="horizontal" size="small">
-                {type === "new" ?
-                    <>
-                        <Button onClick={handleOk} type="primary" loading={confirmLoading} ghost>保存并关闭</Button>
-                        <Button onClick={handleLaunchOk} type="primary" loading={confirmLoading} ghost>保存并发起</Button>
-                    </>
-                    :
-                    null
-                }
+                <Button onClick={handleOk} type="primary" loading={confirmLoading} ghost>保存并关闭</Button>
+                <Button onClick={handleLaunchOk} type="primary" loading={confirmLoading} ghost>保存并发起</Button>
                 <Button onClick={() => {
                     setVisible(false);
                     addRef.current?.resetFields();
@@ -413,7 +233,6 @@ export default function List(): React.ReactNode {
                             <Button type="link" onClick={() => {
                                 setRowId(record?.id);
                                 setDetailVisible(true);
-                                setDtype("detail");
                             }}>详情</Button>
                             <Popconfirm
                                 title="确认发起?"
@@ -425,23 +244,23 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5)}
+                                disabled={!(record.examineStatus === 1 || record.examineStatus === 5)}
                             >
-                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">发起</Button>
+                                <Button disabled={!(record.examineStatus === 1 || record.examineStatus === 5)} type="link">发起</Button>
                             </Popconfirm>
                             <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
-                                    RequestUtil.post(``).then(res => {
+                                    RequestUtil.post(`/tower-science/productChange/retract/${record.id}`).then(res => {
                                         message.success("撤回成功");
                                         history.go(0);
                                     });
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={record.status !== 2}
+                                disabled={record.examineStatus !== 2}
                             >
-                                <Button disabled={record.status !== 2} type="link">撤回</Button>
+                                <Button disabled={record.examineStatus !== 2} type="link">撤回</Button>
                             </Popconfirm>
                             <Popconfirm
                                 title="确认删除?"
@@ -453,9 +272,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5)}
+                                disabled={!(record.examineStatus === 1 || record.examineStatus === 5)}
                             >
-                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">删除</Button>
+                                <Button disabled={!(record.examineStatus === 1 || record.examineStatus === 5)} type="link">删除</Button>
                             </Popconfirm>
                             <Button type="link" onClick={() => {
                                 setRowId(record?.id);
