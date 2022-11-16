@@ -125,7 +125,31 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [stevedoringForm] = Form.useForm()
     const [supplierId, setSupplierId] = useState('')
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
-
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [numData, setNumData] = useState<any>({});
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows);
+        const totalNum = selectedRows.reduce((pre: any,cur: { num: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.num!==null?cur.num:0) 
+        },0)
+        const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
+        },0)
+        const taxPrice = selectedRows.reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+        },0)
+        const unTaxPrice = selectedRows.reduce((pre: any,cur: { totalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+        },0) 
+        setNumData({
+            totalNum,
+            totalWeight,
+            taxPrice,
+            unTaxPrice
+        })
+    }
     const [colunmnBase, setColunmnBase] = useState<any[]>(contractBaseInfo);
     // 运费的数组
     const [newfreightInformation, setNewfreightInformation] = useState<any>(oneFreight); // 运费信息
@@ -763,10 +787,30 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     }
             }}>选择比价结果</Button>
         ]} />
+        
+        <span style={{ marginLeft: "20px" }}>
+            数量合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.totalNum||0}</span>
+            重量合计(吨)：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.totalWeight||0}</span>
+            含税金额合计(元)：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.taxPrice||0}</span>
+            不合计金额合计（元）：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ numData?.unTaxPrice ||0}</span>
+        </span>
         <CommonTable
             style={{ padding: "0" }}
             rowKey="key"
             columns={[
+                {
+                    key: 'index',
+                    title: '序号',
+                    dataIndex: 'index',
+                    width: '5%',
+                    render: (_a: any, _b: any, index: number): React.ReactNode => {
+                        return (
+                            <span>
+                                {index + 1}
+                            </span>
+                        )
+                    }
+                },
                 ...material.map((item: any) => {
                     if (item.dataIndex === "num") {
                         return ({
@@ -857,7 +901,13 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={[...popDataList]} />
+            dataSource={[...popDataList]}
+            rowSelection={{
+                selectedRowKeys: selectedKeys,
+                type: "checkbox",
+                onChange: SelectChange,
+            }}
+            />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })
