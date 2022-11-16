@@ -51,7 +51,7 @@ export enum DictionaryEnums {
     PLAN_NAME = 118,
     TOWER_STRUCTURE = 109,
     SUPPLY_TYPE = 1010,
-    TYPE_OF_CHANGE = 1,
+    TYPE_OF_CHANGE = 1011,
 }
 
 let productType: IDict[] | undefined = [];
