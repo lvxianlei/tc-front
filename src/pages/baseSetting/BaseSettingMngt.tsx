@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Spin, Form, Row, Col, Select, InputNumber, message } from 'antd';
+import { Button, Spin, Form, Row, Col, Select, InputNumber, message, Input } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { DetailContent, DetailTitle } from '../common';
 import useRequest from '@ahooksjs/use-request';
@@ -49,7 +49,6 @@ export default function TowerDetail(): React.ReactNode {
                                 ( fields , { add, remove }) => fields.map(
                                     field => (
                                     <>
-                                        <Col span={ 3 }></Col>
                                         <Col span={ 3 }>
                                         <Form.Item name={[ field.name , 'name']}>
                                             <span><span style={{color:'red'}}>* </span> {detailData&&detailData[field.name].name}</span>
@@ -60,7 +59,7 @@ export default function TowerDetail(): React.ReactNode {
                                             <InputNumber style={{width:'100%'}} precision={0} min={0}/>
                                         </Form.Item>
                                         </Col>
-                                        <Col span={ 1 }>
+                                        <Col>
                                         <Form.Item  name={[ field.name , 'type']}>
                                             <Select defaultValue={1}>
                                                 <Select.Option value={1} key={1}>天</Select.Option>
@@ -68,7 +67,19 @@ export default function TowerDetail(): React.ReactNode {
                                             </Select>
                                         </Form.Item>
                                         </Col>
-                                        <Col span={ 1 }></Col>
+                                        <Col>
+                                        <Form.Item  name={[ field.name , 'type']}>
+                                            <Select defaultValue={1}>
+                                                <Select.Option value={1} key={1}>自然日</Select.Option>
+                                                <Select.Option value={2} key={2}>工作日</Select.Option>
+                                            </Select>
+                                        </Form.Item>
+                                        </Col>
+                                        <Col>
+                                        <Form.Item  name={[ field.name , 'type']}>
+                                            <Input.TextArea maxLength={400}/>
+                                        </Form.Item>
+                                        </Col>
                                     </>
                                     )
                                 )

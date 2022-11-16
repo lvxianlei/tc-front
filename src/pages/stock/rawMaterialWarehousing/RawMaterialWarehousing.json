@@ -217,7 +217,7 @@
         },
         {
             "title": "入库类型",
-            "dataIndex": "warehousingTypeName",
+            "dataIndex": "warehousingEntryStatusName",
             "width": 100
         },
         {

@@ -16,8 +16,8 @@ const {
 const DotenvWebpack = require("dotenv-webpack");
 const Dotenv = require("dotenv");
 const AntdDayjsWebpackPlugin = require("antd-dayjs-webpack-plugin");
-// const MockWebpackPlugin = require("mock-webpack-plugin");
-// const mockConfig = require("./mock/config");
+const MockWebpackPlugin = require("mock-webpack-plugin");
+const mockConfig = require("./mock/config");
 const { DefinePlugin, DllReferencePlugin } = require("webpack");
 const dllConfig = require("./config-overrides-dll")
 const envConfig = Dotenv.config({
@@ -120,16 +120,16 @@ module.exports = process.env.REACT_APP_ENV === "dll" ? dllConfig : {
         "process.env.REACT_APP_ENV": envConfig.parsed.REQUEST_API_PATH_PREFIX
       })
     ),
-    // process.env.REACT_APP_ENV === "development"
-    //   ? addWebpackPlugin(
-    //     new MockWebpackPlugin({
-    //       // mock config
-    //       config: mockConfig,
-    //       // mock server port, avoid collision with application port
-    //       port: 3001
-    //     })
-    //   )
-    //   : undefined
+    process.env.REACT_APP_ENV === "development"
+      ? addWebpackPlugin(
+        new MockWebpackPlugin({
+          // mock config
+          config: mockConfig,
+          // mock server port, avoid collision with application port
+          port: 3001
+        })
+      )
+      : undefined
   ),
   devServer: overrideDevServer(function (config) {
     const proxy = {

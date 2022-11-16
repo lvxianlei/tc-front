@@ -719,13 +719,33 @@
                 "authority": "tc_erp_rd_system",
                 "items": [
                     {
+                        "label": "放样塔型绩效汇总",
+                        "path": "/performanceMngt/loftingpPerformanceSummary",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
                         "label": "放样计件",
                         "path": "/performanceMngt/loftingPiece",
                         "authority": "tc_erp_rd_config_system"
                     },
                     {
+                        "label": "绩效奖励明细",
+                        "path": "/performanceMngt/performanceDetail",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
+                        "label": "杂项绩效管理",
+                        "path": "/performanceMngt/miscellaneousPerformance",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
                         "label": "不合格处置单考核",
                         "path": "/performanceMngt/unqualifiedCheck",
+                        "authority": "tc_erp_rd_trial_config"
+                    },
+                    {
+                        "label": "人员工资绩效",
+                        "path": "/performanceMngt/performanceSalary",
                         "authority": "tc_erp_rd_trial_config"
                     }
                 ]
@@ -750,6 +770,16 @@
                     {
                         "label": "取消暂停恢复",
                         "path": "/businessDisposal/cancelOrPauseOrrestore",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
+                        "label": "代料",
+                        "path": "/businessDisposal/generationOfMaterial",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
+                        "label": "过磅异常",
+                        "path": "/businessDisposal/weighingAbnormal",
                         "authority": "tc_erp_rd_order_adjustment"
                     },
                     {
@@ -813,11 +843,11 @@
                 "appName": "PC",
                 "authority": "tc_erp_aps_plan",
                 "items": [
-                    // {
-                    //     "label": "计划排产",
-                    //     "path": "/planProd/planMgmt",
-                    //     "authority": "tc_erp_aps_plan"
-                    // },
+                    {
+                        "label": "计划排产",
+                        "path": "/planProd/planMgmt",
+                        "authority": "tc_erp_aps_plan"
+                    },
                     {
                         "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
@@ -1449,9 +1479,33 @@
                         "authority": "tc_erp_rd_fix_item_config"
                     },
                     {
+                        "label": "杂项条目配置",
+                        "path": "/baseSetting/miscellaneousItems",
+                        "authority": "tc_erp_sys_system_quota"
+                    },
+                    {
                         "label": "定额配置",
                         "path": "/baseSetting/quotaConfig",
                         "authority": "tc_erp_sys_system_quota"
+                    }
+                ]
+            },
+            {  
+                "label": "资料管理",
+                "icon": "customer",
+                "path": "/dataMngt",
+                "appName": "RD",
+                "authority": "tc_erp_rd_problem",
+                "items": [
+                    {
+                        "label": "工程资料管理",
+                        "path": "/dataMngt/EngineeringData",
+                        "authority": "tc_erp_rd_problem"
+                    },
+                    {
+                        "label": "资料存档管理",
+                        "path": "/dataMngt/dataArchiving",
+                        "authority": "tc_erp_rd_problem"
                     }
                 ]
             },

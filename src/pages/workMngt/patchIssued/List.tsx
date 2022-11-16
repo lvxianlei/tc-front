@@ -185,8 +185,8 @@ export default function List(): React.ReactNode {
                     >
                         <Button disabled={record.status === 2} type="link">取消下达</Button>
                     </Popconfirm>
-                    <Link to={`/workMngt/patchIssuedList/issuedDetail/${record?.id}/${record.supplyProductCategoryId}`}>下达明细</Link>
-                    <Link to={`/workMngt/patchIssuedList/weldingDetail/${record?.id}/${record.supplyProductCategoryId}`}>电焊明细</Link>
+                    <Link to={`/workMngt/patchIssuedList/issuedDetail/${record.supplyProductCategoryId}`}>下达明细</Link>
+                    <Link to={`/workMngt/patchIssuedList/weldingDetail/${record.supplyProductCategoryId}`}>电焊明细</Link>
                 </Space>
             )
         }

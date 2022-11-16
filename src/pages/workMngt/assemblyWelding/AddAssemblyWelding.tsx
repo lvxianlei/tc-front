@@ -44,7 +44,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
             setSettingData([...result]);
             const baseData = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, segmentId: params.segmentId });
             setMainPartId(baseData.records[0]?.mainPartId || '');
-            form.setFieldsValue({ weldGrade: '无', ...baseData.records[0], segmentName: [] });
+            form.setFieldsValue({ ...baseData.records[0], segmentName: [] });
             setSegment(baseData?.records[0]?.segmentId + ',' + baseData?.records[0]?.segmentName)
             getComponentList({})
         } else {
@@ -790,7 +790,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         {compoundTypeOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                     </Select>
                 </Form.Item>
-                <Form.Item name="weldGrade" label="焊缝等级" initialValue={'无'} rules={[{
+                <Form.Item name="weldGrade" label="焊缝等级" rules={[{
                     "required": true,
                     "message": "请选择焊缝等级"
                 }]}>

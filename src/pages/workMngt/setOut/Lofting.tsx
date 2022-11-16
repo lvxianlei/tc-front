@@ -22,6 +22,7 @@ import StructureTextureEdit from './StructureTextureEdit';
 import MissCheck from './MissCheck';
 import AddLofting from './AddLofting';
 import useRequest from '@ahooksjs/use-request';
+import PeriodCopy from './PeriodCopy';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -812,7 +813,8 @@ export default function Lofting(): React.ReactNode {
     const [missVisible, setMissVisible] = useState<boolean>(false);
     const [addVisible, setAddVisible] = useState<boolean>(false);
     const [type, setType] = useState<'new' | 'edit'>('new');
-    const [rowData, setRowData] = useState<any>([])
+    const [rowData, setRowData] = useState<any>([]);
+    const [copyVisible, setCopyVisible] = useState<boolean>(false);
     const userId = AuthUtil.getUserInfo().user_id;
 
     const { data: segmentNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -833,7 +835,32 @@ export default function Lofting(): React.ReactNode {
         }
     }), {})
 
+    const handleCopyModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('段明细复制成功！');
+            setCopyVisible(false);
+            history.go(0);
+            resove(true);
+            editRef.current?.resetFields();
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return <DetailContent>
+        <Modal
+            destroyOnClose
+            visible={copyVisible}
+            title="段明细复制"
+            onOk={handleCopyModalOk}
+            className={styles.tryAssemble}
+            onCancel={() => {
+                setCopyVisible(false);
+                editRef.current?.resetFields();
+            }}>
+            <PeriodCopy id={params.id} segmentId={params.productSegmentId === 'all' ? '' : params.productSegmentId} ref={editRef} />
+        </Modal>
         <Modal
             destroyOnClose
             key='StructureTextureAbbreviations'
@@ -917,11 +944,7 @@ export default function Lofting(): React.ReactNode {
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
-                },
-                onRow: (record: Record<string, any>) => ({
-                    className: record.specialCode === '1' ?
-                        styles.row_color_1 : undefined
-                })
+                }
             }}
             requestData={{ segmentId: params.productSegmentId === 'all' ? '' : params.productSegmentId, ...filterValue, productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
@@ -934,6 +957,11 @@ export default function Lofting(): React.ReactNode {
                 >
                     <Button type="primary" ghost disabled={!isShow}>删除</Button>
                 </Popconfirm>
+                <Button type="primary" ghost
+                    onClick={() => {
+                        setCopyVisible(true)
+                    }}
+                >段明细复制</Button>
                 <Upload
                     action={() => {
                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
