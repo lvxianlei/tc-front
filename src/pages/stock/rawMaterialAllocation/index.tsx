@@ -49,7 +49,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     >查看</Button>
                     <Button
                         type="link"
-                        disabled={record.outStockStatus === 1}
+                        disabled={record.allocationStatus === 1}
                         onClick={
                             () => {
                                 setIsOpenId(true)
