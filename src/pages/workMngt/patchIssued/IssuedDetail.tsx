@@ -197,10 +197,7 @@ export default function IssuedDetail(): React.ReactNode {
                     },
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
-                    console.log(res)
                     setConfirmLoading(false)
-                    setPageVisible(false)
-                    pageForm.resetFields();
                     resolve(true);
                     // return res.blob();
                 }).catch(e => {
@@ -236,10 +233,7 @@ export default function IssuedDetail(): React.ReactNode {
                     },
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
-                    console.log(res)
                     setConfirmLoading(false)
-                    form.resetFields();
-                    setVisible(false)
                     resolve(true)
                     // return res.blob();
                 }).catch(e => {
