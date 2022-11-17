@@ -139,6 +139,7 @@ export default function List(): React.ReactNode {
     gantt.config.drag_move = false;
     gantt.config.show_errors = false;
 
+    gantt.config.task_scroll_offset = 50;
     gantt.config.layout = {
       css: "gantt_container",
       cols: [
@@ -165,9 +166,9 @@ export default function List(): React.ReactNode {
     gantt.init("planProd");
     gantt.i18n.setLocale("cn");
     gantt.templates.task_class = function (start, end, item) {
-      return  item?.workOrderNumber ? item?.status ===1 ? 'dashed' : '' :  item?.status ===3 ? '' : 'dashed'
+      return item?.workOrderNumber ? item?.status === 1 ? 'dashed' : '' : item?.status === 3 ? '' : 'dashed'
     };
-  
+
     const value = data?.length > 0 && data?.reduce((res: any, item: any) => {
       const parent = { ...item };
       delete parent?.workOrderNodeViewList;
