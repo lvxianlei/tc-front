@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input, message, Modal, Radio } from "antd";
+import { Button, DatePicker, Input, message, Modal, Radio } from "antd";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { DetailContent, SearchTable } from "../../common";
 import { TabTypes } from "../Detail";
@@ -54,6 +54,25 @@ export default function Index() {
             message.success("成功提交审核...")
             history.go(0)
         }
+    }
+
+    const handleFilterSubmit = (value: any) => {
+        if (value.startCreateTime) {
+            const formatDate = value.startCreateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCreateTime = formatDate[0] + " 00:00:00"
+            value.endCreateTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.startIssueTime) {
+            const formatDate = value.startIssueTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startIssueTime = formatDate[0] + " 00:00:00"
+            value.endIssueTime = formatDate[1] + " 23:59:59"
+        }
+        if (value.startApprovalTime) {
+            const formatDate = value.startApprovalTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startApprovalTime = formatDate[0] + " 00:00:00"
+            value.endApprovalTime = formatDate[1] + " 23:59:59"
+        }
+        return value
     }
 
     return <DetailContent style={{ paddingTop: 14 }}>
@@ -132,7 +151,24 @@ export default function Index() {
                     name: 'orderProjectName',
                     label: '订单工程名称',
                     children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
-                }
-            ]} />
+                },
+                {
+                    name: 'startApprovalTime',
+                    label: '审批完成日期',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'startCreateTime',
+                    label: '制单日期',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'startIssueTime',
+                    label: '下发日期',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+            ]}
+            onFilterSubmit={handleFilterSubmit}
+        />
     </DetailContent>
 }
