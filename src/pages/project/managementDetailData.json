@@ -366,6 +366,10 @@
         {
             "title": "审批状态",
             "dataIndex": "taskReviewStatus"
+        },
+        {
+            "title": "审核完成日期",
+            "dataIndex": "approvalTime"
         }
     ],
     "taskNoticeEditBaseInfo": [
