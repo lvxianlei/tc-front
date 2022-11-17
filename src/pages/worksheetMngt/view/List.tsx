@@ -178,7 +178,8 @@ export default function List(): React.ReactNode {
         ...item,
         start_date: item.planStartTime ? new Date(item.planStartTime) : new Date(),
         end_date: item.planEndTime ? new Date(item.planEndTime) : new Date(),
-        color: item.workOrderNumber ? '#0ac189' : item?.colour,
+        // color: item.workOrderNumber ? '#0ac189' : item?.colour,
+        color: item.status === 3 ? '#0ac189' : '#0000003b',
         "border": "1px dashed #ff0 !important"
       }
     })
