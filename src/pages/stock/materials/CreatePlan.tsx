@@ -2,11 +2,12 @@
  * 创建原材料盘点
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
+import { Modal, Form, Button, InputNumber, Select, message, Input } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
     addMaterial,
+    addNewMaterial,
     baseInfoColumn,
     baseInfoEditColumn
 } from "./CreatePlan.json";
@@ -79,7 +80,9 @@ export const calcFun = {
 export default function CreatePlan(props: CreateInterface): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
+    const [materialVisible, setMaterialVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
+    const [addMaterialList, setAddMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string>("");
     const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
@@ -112,16 +115,47 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         })])
         setVisible(false)
     }
-
+    const handleAddMaterialModalOk = () => {
+        setAddMaterialList([...addMaterialList.map((item: any) => {
+            const num = parseFloat(item.stockTakingNum || "0")
+            return ({
+                ...item,
+                stockTakingNum: num,
+                weight: item.weight || "1.00",
+            })
+        })])
+        setPopDataList([...materialList, ...addMaterialList.map((item: any) => {
+            const num = parseFloat(item.stockTakingNum || "0")
+            return ({
+                ...item,
+                stockTakingNum: num,
+                weight: item.weight || "1.00",
+            })
+        })])
+        setMaterialVisible(false)
+    }
     // 移除
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.id !== id))
         setPopDataList(materialList.filter((item: any) => item.id !== id))
     }
-
-    const handleNumChange = (value: number, id: string) => {
-        const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+    
+    const handleBatchChange = (value: string, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
+                return ({
+                    ...item,
+                    receiveBatchNumber: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleNumChange = (value: number, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
                 const weight = calcFun.weight({
                     length: item.length,
                     width: item.width,
@@ -151,7 +185,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                         width: item.width,
                         weightAlgorithm: item.weightAlgorithm,
                         proportion: item.proportion,
-                        num: value
+                        num: item.num
                     }),
                     taxPrice: item.taxPrice || 0, // 单价
                     // 账目金额
@@ -170,11 +204,11 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (item.taxPrice || 0)).toFixed(2))).toFixed(2),
                     // 不含税金额
-                    totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * value / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
-                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
+                    totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+((+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (value) / 1000 / 1000).toFixed(3)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (value) / 1000 / 1000 / 1000).toFixed(3)
+                        : (Number(item?.proportion || 1) * (value) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3))).toFixed(2),
                 })
             }
             return item
@@ -183,9 +217,9 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         setPopDataList([...list])
     }
 
-    const lengthChange = (value: number, id: string) => {
-        const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+    const lengthChange = (value: number, id: number) => {
+        const list = popDataList.map((item: any, index:number) => {
+            if (index === id) {
                 const weight = calcFun.weight({
                     length: value,
                     width: item.width,
@@ -251,9 +285,9 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         setPopDataList(list)
     }
 
-    const widthChange = (value: number, id: string) => {
-        const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+    const widthChange = (value: number, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
                 return ({
                     ...item,
                     width: value
@@ -264,7 +298,37 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         setMaterialList([...list]);
         setPopDataList([...list])
     }
-
+    const taxPriceChange = (value: number, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
+                return ({
+                    ...item,
+                    taxPrice: value,
+                    unTaxPrice: ((value || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6),
+                    // 账目金额
+                    totalTaxPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * (item.length||0)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * (item.length||0 )* Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (value || 0)).toFixed(2),
+                    // 盘点金额
+                    stockTakingPrice: (Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * (item.length||0)) * (item.stockTakingNum || 1) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * (item.length||0) * Number(item.width || 0) * (item.stockTakingNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * (item.stockTakingNum || 1) / 1000).toFixed(3)) * (value|| 0)).toFixed(2),
+                    // 盈亏金额
+                    profitAndLossPrice: ((+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length||0)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length||0) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3)) * (value || 0)).toFixed(2)) - (+(Number(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length||0)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length||0) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)) * (value || 0)).toFixed(2))).toFixed(2),
+                    // 不含税金额
+                    totalUnTaxPrice: (Number(((value || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (item.stockTakingWeight-item.totalWeight)).toFixed(2),
+                
+                })
+            }
+            return item
+        })
+        setMaterialList([...list]);
+        setPopDataList([...list])
+    }
     const handleSuccessClick = async () => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
@@ -490,7 +554,16 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             />
             <DetailTitle title="入库明细" />
             <div className='btnWrapper'>
-                <Button type='primary' key="add" ghost disabled={!warehouseId} onClick={() => setVisible(true)}>选择</Button>
+                <Button type='primary' key="add" ghost disabled={!warehouseId} onClick={() => setVisible(true)}>选择库存</Button>
+                <Button
+                    type="primary"
+                    ghost
+                    key="add"
+                    disabled={!warehouseId}
+                    style={{marginLeft:'10px'}}
+                    onClick={async () => {
+                        setMaterialVisible(true)
+                }}>选择物料档案</Button>
             </div>
             <CommonTable
                 rowKey={"id"}
@@ -500,13 +573,13 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                         if (["stockTakingNum"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || undefined} onChange={(value: number) => handleNumChange(value, key)} key={key} />
                             })
                         }
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => lengthChange(value, key)} key={key} />
                             })
                         }
                         if (item.dataIndex === "width") {
@@ -517,7 +590,27 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                     max={99999}
                                     value={value}
                                     precision={0}
-                                    onChange={(value: number) => widthChange(value, records.id)} key={key} />
+                                    onChange={(value: number) => widthChange(value, key)} key={key} />
+                            })
+                        }
+                        if (item.dataIndex === "receiveBatchNumber") {
+                            return ({
+                                ...item,
+                                render: (value: number, records: any, key: number) => <Input
+                                    defaultValue={value || undefined}
+                                    style={{width: '150px'}}
+                                    onBlur={(e: any) => handleBatchChange(e.target.value, key)}
+                                 />
+                            })
+                        }
+                        if (item.dataIndex === "taxPrice") {
+                            return ({
+                                ...item,
+                                render: (value: number, records: any, key: number) => <InputNumber
+                                    min={0}
+                                    value={value}
+                                    precision={2}
+                                    onChange={(value: number) => taxPriceChange(value, key)} key={key} />
                             })
                         }
                         if (item.dataIndex === "materialStandard") {
@@ -694,15 +787,97 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 // 不含税单价
                                 unTaxPrice: ((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6),
                                 // 不含税金额
-                                totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
-                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
-                                        : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
-                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
-                                                : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(2)
+                                totalUnTaxPrice: (Number(((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6)) * (+((+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000).toFixed(3)
+                                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.stockTakingNum || item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                    : (Number(item?.proportion || 1) * ((item.stockTakingNum || item.num) || 1) / 1000).toFixed(3))) - (+(item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * ((item.num) || 1) / 1000 / 1000).toFixed(3)
+                                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * ((item.num) || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                            : (Number(item?.proportion || 1) * ((item.num) || 1) / 1000).toFixed(3)))).toFixed(3))).toFixed(2)
                             }))
                         ] || [])
                     }}
                 />
+            </Modal>
+            <Modal width={addNewMaterial.width || 520} title={`选择${addNewMaterial.title}`} destroyOnClose visible={materialVisible}
+                onOk={handleAddMaterialModalOk} onCancel={() => setMaterialVisible(false)}>
+                <PopTableContent data={{
+                    ...(addNewMaterial as any),
+                    columns: (addNewMaterial as any).columns.map((item: any) => {
+                        if (item.dataIndex === "standard") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: materialStandardEnum
+                            })
+                        }
+                        return item
+                    })
+                }}
+                    value={{
+                        id: "",
+                        records: [],
+                        value: ""
+                    }}
+                    onChange={(fields: any[]) => {
+                        // fields.map((element: any, index: number) => {
+                        //     if (element.structureSpec) {
+                        //         element["spec"] = element.structureSpec;
+                        //         element["weight"] = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
+                        //         element["totalWeight"] = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
+                        //     }
+                        // });
+                        setAddMaterialList([
+                            // ...materialList,
+                            ...fields.map((item: any) => ({
+                                ...item,
+                                materialId: item.id,
+                                source: item.source || 2,
+                                materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                                materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                                structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                                structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
+
+
+                                /**
+                                 *  账面数量=当前收货批次下当前原材料的库存数量
+                                    账面重量=根据账面数量计算，按照各自重量计算公式计算（保留三位小数）
+                                    盘点数量=用户手动输入的数值，默认显示库存数量，用户可手动修改
+                                    盘点重量=根据盘点数量计算，根据账面数量计算，按照各自重量计算公式计算（保留三位小数）
+                                    盈亏数量=盘点数量-账面数量
+                                    盈亏重量=盘点重量-账面重量
+                                    单价=库存中当前原材料的含税单价
+                                    账面金额=当前原材料重量*单价（保留两位小数）
+                                    盘点金额=盘点重量*单价（保留两位小数）
+                                    盈亏金额=盘点金额-账面金额
+                                    不含税单价=单价/(1+材料税率/100)（保留六位小数）
+                                    不含税金额=不含税单价*盈亏重量（保留两位小数）
+                                 */
+                                num: '0',
+                                stockTakingNum: 0, // 盘点数量
+                                profitAndLossNum: 0, // 盈亏数量
+                                // stockTakingWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000).toFixed(3), // 盘点重量
+                                stockTakingWeight: 0,
+                                // 盈亏重量 = 盘点重量 - 账目重量
+                                profitAndLossWeight: 0,
+                                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                                // totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.num) || 1)) / 1000 / 1000).toFixed(3), // 账面重量
+                                totalWeight: '0',
+                                taxPrice: item.taxPrice || 0, // 单价
+                                // 账目金额
+                                totalTaxPrice: 0,
+                                // 盘点金额
+                                // stockTakingPrice: (((Number(item?.proportion || 1) * Number(item.length || 1) * ((item.stockTakingNum || item.num) || 1)) / 1000 / 1000) * (item.taxPrice || 0)).toFixed(2),
+                                stockTakingPrice: 0,
+                                // 盈亏金额
+                                profitAndLossPrice: 0,
+                                // 不含税单价
+                                unTaxPrice: ((item.taxPrice || 0) / (1 + ((statisticsData?.taxVal || 0) / 100))).toFixed(6),
+                                // 不含税金额
+                                totalUnTaxPrice: 0
+                            }))
+                        ] || [])
+                    }} />
             </Modal>
         </Modal>
     )
