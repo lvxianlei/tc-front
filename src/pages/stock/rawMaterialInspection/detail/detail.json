@@ -121,11 +121,6 @@
             "width": 120
         },
         {
-            "title": "质量证明书号",
-            "dataIndex": "qualityCertificateNumber",
-            "width": 120
-        },
-        {
             "title": "合同号",
             "dataIndex": "contractNumber",
             "width": 120
@@ -265,11 +260,6 @@
         {
             "title": "质保书号",
             "dataIndex": "warrantyNumber",
-            "width": 120
-        },
-        {
-            "title": "质量证明书号",
-            "dataIndex": "qualityCertificateNumber",
             "width": 120
         },
         {
