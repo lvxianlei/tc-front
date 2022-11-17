@@ -73,6 +73,11 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId, getLoadin
         resole(treeNode(result))
     }), {})
 
+    const { data: urlList } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        let result: any = await RequestUtil.get<any>(`/tower-work/template/api/url`);
+        resole(result)
+    }), {})
+
     const treeNode = (nodes: any) => {
         nodes?.forEach((res: any) => {
             res.title = res?.name;
@@ -207,21 +212,38 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId, getLoadin
             )
         },
         {
-            key: 'colour',
-            title: '颜色',
-            dataIndex: 'colour',
+            key: 'parentUrl',
+            title: '跳转API',
+            dataIndex: 'parentUrl',
             width: 100,
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['node', index, 'colour']} rules={[{
-                    required: true,
-                    message: '请选择颜色'
-                }]}>
-                    <SelectColor disabled={type === 'detail'} defaultColor={record?.colour} onChange={(color: string) => {
-                        console.log(color)
-                    }} />
+                <Form.Item name={['node', index, 'parentUrl']}>
+                    <Select disabled={type === 'detail'} mode="multiple" placeholder={'请选择'}>
+                        {
+                            urlList && urlList?.map((res: any, ind: number) => {
+                                return <Select.Option value={res?.apiUrl} key={ind}>{res?.apiName}</Select.Option>
+                            })
+                        }
+                    </Select>
                 </Form.Item>
             )
         }
+        // {
+        //     key: 'colour',
+        //     title: '颜色',
+        //     dataIndex: 'colour',
+        //     width: 100,
+        //     render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+        //         <Form.Item name={['node', index, 'colour']} rules={[{
+        //             required: true,
+        //             message: '请选择颜色'
+        //         }]}>
+        //             <SelectColor disabled={type === 'detail'} defaultColor={record?.colour} onChange={(color: string) => {
+        //                 console.log(color)
+        //             }} />
+        //         </Form.Item>
+        //     )
+        // }
     ]
 
     const customColumns = [

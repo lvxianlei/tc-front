@@ -121,7 +121,7 @@ export default forwardRef(function WorkOrderDetail({ rowId, rowData }: modalProp
     ]
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/${rowId}`);
+        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/getDetails/${rowId}`);
         resole(result);
     }), { refreshDeps: [rowId, rowData] })
 
