@@ -14,6 +14,8 @@ export default function Invoicing() {
         purchaserId: history.location.state ? sessionStorage.getItem('USER_ID') : "",
     })
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
+    const [editId, setEditId] = useState<string>('');
+    const [operationType, setOperationType] = useState<'create'|'edit'>('create');
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/materialPurchasePlan/${id}`)
@@ -89,18 +91,32 @@ export default function Invoicing() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 80,
+                        width: 120,
                         render: (_: any, record: any) => {
                             return <>
                                 <Link className="btn-operation-link" to={{
                                     pathname: `/ingredients/planList/purchaseList/${record.id}/${record.purchaseType}`,
                                     search: `productionBatchNos=${record.productionBatchNos}`
                                 }}>采购清单</Link>
-
+                                <Button
+                                    type="link"
+                                    disabled={record.purchasePlanStatus === 2}
+                                    onClick={
+                                        () => {
+                                            setIsOpenId(true)
+                                            setEditId(record.id)
+                                            setOperationType("edit")
+                                        }
+                                    }
+                                >编辑</Button>
                             </>
                         }
                     }]}
-                extraOperation={<Button type="primary" ghost onClick={() => setIsOpenId(true)}>创建采购计划</Button>}
+                extraOperation={<Button type="primary" ghost onClick={() =>{ 
+                    setIsOpenId(true)
+                    setEditId('')
+                    setOperationType("create")
+                }}>创建采购计划</Button>}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
                 searchFormItems={[
@@ -137,6 +153,8 @@ export default function Invoicing() {
             <CreatePlan
                 visible={isOpenId}
                 handleCreate={handleCreate}
+                id={editId}
+                type={operationType}
             />
         </>
     )

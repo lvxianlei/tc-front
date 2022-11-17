@@ -3,7 +3,7 @@
  * author: mschange
  * time: 2022/4/21
  */
-import { Button, Checkbox, Col, Form, InputNumber, message, Modal, Row, Select, Tabs, Tooltip } from 'antd';
+import { Button, Checkbox, Col, Form, InputNumber, message, Modal, Radio, Row, Select, Tabs, Tooltip } from 'antd';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
@@ -57,7 +57,14 @@ export default function IngredientsList(): React.ReactNode {
         // { key: "batchingStrategy", value: "配料策略设置" },
         { key: "goback", value: "返回", type: "default" }
     ]
-
+    // 按钮
+    const dbtnList: BtnList[] = [
+        // { key: "inherit", value: "继承一次方案" },
+        { key: "fast", value: "快速配料" },
+        { key: "programme", value: "已配方案" },
+        // { key: "batchingStrategy", value: "配料策略设置" },
+        { key: "goback", value: "返回", type: "default" }
+    ]
     // 全局存储的数据接口
     const [globallyStoredData, setGloballyStoredData] = useState<any>([]);
 
@@ -124,6 +131,8 @@ export default function IngredientsList(): React.ReactNode {
     // 当前选中的所有明细
     const [activeInfo, setActiveInfo] = useState<any>({});
 
+    const [indeterminateStock, setIndeterminateStock] = useState(true);
+    const [checkAllStock, setCheckAllStock] = useState(false);
     // 操作按钮
     const handleBtnClick = (options: BtnList) => {
         switch (options.key) {
@@ -163,7 +172,34 @@ export default function IngredientsList(): React.ReactNode {
                 break;
         }
     }
-
+    // 获取库存
+    const { run: getAvailableInventoryList, data: AvailableInventoryData } = useRequest<{ [key: string]: any }>((
+        inRoadInventory: number = 2,
+        structureTexture: string = "",
+        structureSpec: string = ""
+    ) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-storage/materialStock/getAvailableInventoryList`, {
+                structureTexture, // 材质
+                structureSpec, // 规格
+                inRoadInventory, // 是否使用在途库存（1:使用 2:不使用）
+            });
+            let v: any[] = [];
+            let s: any[] = [];
+            for (let i = 0; i < result.length; i += 1) {
+                v.push({
+                    meterNumber: result[i].length
+                })
+                s.push(result[i].length)
+            }
+            setMiter(s);
+            setAvailableInventoryData(result || []);
+            setCount(++count);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     // 保存数据处理
     const handleSaveData = (code: number) => {
         const result = globallyStoredData;
@@ -242,7 +278,22 @@ export default function IngredientsList(): React.ReactNode {
         setActiveKey(`fangan${+(panes[panes.length - 1].key?.split("fangan")[1] as any) + 1}`);
         setGloballyStoredData(v)
     };
+    const onCheckAllChangeStock = (e: CheckboxChangeEvent) => {
+        const list = [];
+        for (let i = 0; i < AvailableInventoryData?.length; i += 1) {
+            list.push(AvailableInventoryData?.[i].length)
+        }
+        serarchForm.setFieldsValue({
+            idealRepertoryLengthList: e.target.checked ? list : []
+        })
+        setIndeterminate(false);
+        setCheckAll(e.target.checked);
+    };
 
+    const onCheckChangeStock = (list: CheckboxValueType[]) => {
+        setIndeterminate(!!list.length && list.length < AvailableInventoryData?.length);
+        setCheckAll(list.length === AvailableInventoryData?.length);
+    };
     // 移除
     const remove = (targetKey: string) => {
         let newActiveKey: any = activeKey;
@@ -659,6 +710,7 @@ export default function IngredientsList(): React.ReactNode {
         const result = globallyStoredData?.filter((v: any) => v.key === options)[0].children;
         // 获取构建分类明细
         getSortDetail(params.id, options.split("_")[1], options.split("_")[0]);
+        getAvailableInventoryList(2, options.split("_")[0], options.split("_")[1] );
         if (JSON.stringify(result[0].batchingStrategy) == "{}") {
             serarchForm.resetFields();
         } else {
@@ -796,7 +848,7 @@ export default function IngredientsList(): React.ReactNode {
                 getIngredient(result?.[0]?.structureSpec);
                 // // 获取构建分类明细
                 getSortDetail(params.id, result?.[0]?.structureSpec, result?.[0]?.structureTexture);
-
+                getAvailableInventoryList(2, result?.[0]?.structureTexture, result?.[0]?.structureSpec, );
                 // 全局存储数据结构
                 // setGloballyStoredData
                 const v: any = []
@@ -1005,10 +1057,16 @@ export default function IngredientsList(): React.ReactNode {
 
     return (
         <div className='ingredientsListWrapper'>
-            <DetailContent operation={[
+            <DetailContent operation={params.status==='1'?[
                 <span className='texts' style={{ marginRight: 4 }}>长度合计:</span>,
                 <span className='values' style={{ marginRight: 16 }}>{lengthAll}</span>,
                 ...btnList.map((item: BtnList) => {
+                    return <Button key={item.key} type={item.type ? item.type : "primary"} style={{ marginRight: 16 }} onClick={() => handleBtnClick(item)}>{item.value}</Button>
+                })
+            ]:[
+                <span className='texts' style={{ marginRight: 4 }}>长度合计:</span>,
+                <span className='values' style={{ marginRight: 16 }}>{lengthAll}</span>,
+                ...dbtnList.map((item: BtnList) => {
                     return <Button key={item.key} type={item.type ? item.type : "primary"} style={{ marginRight: 16 }} onClick={() => handleBtnClick(item)}>{item.value}</Button>
                 })
             ]}>
@@ -1020,6 +1078,8 @@ export default function IngredientsList(): React.ReactNode {
                     <span className='values'>{params.productCategoryName || ""}</span>
                     <span className='texts'>标准:</span>
                     <span className='values'>{params.materialStandardName || ""}</span>
+                    <span className='texts'>状态:</span>
+                    <span className='values'>{params.status==='1'?'待完成':params.status==='3'?'已完成':'' || ""}</span>
                 </div>
                 {
                     constructionClassification.length > 0 && <div className='content_wrapper'>
@@ -1083,10 +1143,10 @@ export default function IngredientsList(): React.ReactNode {
                                                 <div className='ingredients_content_wrapper'>
                                                     <div className='ingredients_content_wrapper_right'>
                                                         <div className='ingredients_content_wrapper_right_detail'>
-                                                            <DetailTitle key="detail" title="构件明细" col={{ left: 8, right: 16 }} operation={[
+                                                            <DetailTitle key="detail" title="构件明细" col={{ left: 8, right: 16 }} operation={params.status==='1'?[
                                                                 <Button type="primary" ghost key="add" style={{ marginRight: 8, padding: "6px 16px" }} disabled={autoLoading} onClick={() => getAuto()}>自动配料</Button>,
                                                                 <Button type="primary" ghost key="choose" style={{ padding: "6px 16px" }} disabled={loading} onClick={() => getScheme(1)}>手动配料</Button>
-                                                            ]} />
+                                                            ]:[]} />
                                                             <CommonTableBeFore
                                                                 size="small"
                                                                 rowSelection={{
@@ -1377,12 +1437,112 @@ export default function IngredientsList(): React.ReactNode {
                         />
                     </Form.Item>
 
-                    <DetailTitle title="原材料米数" key={"strategy"} operation={[
+                    {/* <DetailTitle title="原材料米数" key={"strategy"} operation={[
                         <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
                             全选
                         </Checkbox>
-                    ]} />
-                    <Form.Item
+                    ]} /> */}
+                    <DetailTitle title="原材料米数" key={"strategy"} operation={
+                        value === "2" ? [
+                            <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+                                全选
+                            </Checkbox>
+                        ] : [
+                            <Checkbox indeterminate={indeterminateStock} onChange={onCheckAllChangeStock} checked={checkAllStock}>
+                                全选
+                            </Checkbox>
+                        ]
+                    } />
+                    <Radio.Group onChange={onRaioChange} value={value} style={{ marginBottom: 8 }}>
+                        <Radio value={"1"}>可用库存</Radio>
+                        <Radio value={"2"}>理想库存</Radio>
+                    </Radio.Group>
+                    {
+                        value === "1" && <>
+                            <Form.Item
+                                name="available"
+                                rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择可用库存"
+                                    }
+                                ]}
+                            >
+                                <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChangeStock}>
+                                    <Row>
+                                        {
+                                            AvailableInventoryData?.map((item: any) => {
+                                                return <Col span={12} style={{ marginBottom: 8 }}>
+                                                    <Checkbox value={item.length}>{item.length} 可用数量:{item?.available}</Checkbox>
+                                                </Col>
+                                            })
+                                        }
+                                    </Row>
+                                </Checkbox.Group>
+                            </Form.Item>
+                        </>
+                    }
+                    {
+                        value === "2" && <>
+                            <Form.Item
+                                name="idealRepertoryLengthList"
+                                rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择理想库存"
+                                    }
+                                ]}
+                            >
+                                <Checkbox.Group style={{ width: '100%' }} onChange={onCheckChange}>
+                                    <Row>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="6000">6000</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="6500">6500</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="7000">7000</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="7500">7500</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="8000">8000</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="8500">8500</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="9000">9000</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="9500">9500</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="10000">10000</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="10500">10500</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="11000">11000</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="11500">11500</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="12000">12000</Checkbox>
+                                        </Col>
+                                        <Col span={8} style={{ marginBottom: 8 }}>
+                                            <Checkbox value="12500">12500</Checkbox>
+                                        </Col>
+                                    </Row>
+                                </Checkbox.Group>
+                            </Form.Item>
+                        </>
+                    }
+                    {/* <Form.Item
                         name="idealRepertoryLengthList"
                         rules={[
                             {
@@ -1437,7 +1597,7 @@ export default function IngredientsList(): React.ReactNode {
                                 </Col>
                             </Row>
                         </Checkbox.Group>
-                    </Form.Item>
+                    </Form.Item> */}
                 </Form>
             </Modal>
             {/* 已配方案 */}

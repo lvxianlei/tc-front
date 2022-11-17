@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Button, Input, DatePicker, Select, Modal, Form, message } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, Form, message, Popconfirm } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./productionData.json"
@@ -97,7 +97,7 @@ export default function Invoicing() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 160,
+                    width: 220,
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" className="btn-operation-link" onClick={() => {
@@ -117,6 +117,25 @@ export default function Invoicing() {
                             >
                                 <Link to={`/ingredients/production/batchingScheme/${record.id}`}>配料单</Link>
                             </Button>
+                            <Popconfirm
+                                title="确定删除吗？"
+                                className='btn-operation-link'
+                                disabled={record.batcheTaskStatus !== 3}
+                                onConfirm={async () => {
+                                    await RequestUtil.put(`/tower-supply/task/produce/cancel/${record.id}`)
+                                    message.success("删除成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button
+                                    type="link"
+                                    size="small"
+                                    className="btn-operation-link"
+                                    disabled={record.batcheTaskStatus !== 3}
+                                >删除方案</Button>
+                            </Popconfirm>
                         </>
                     }
                 }]}
