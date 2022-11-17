@@ -294,6 +294,50 @@
                 "dataIndex": "description",
                 "type": "textarea"
             }
+        ],
+        "messageWarn": [
+            {
+                "title": "提醒时间",
+                "dataIndex": "reminderTime",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "提醒内容",
+                "dataIndex": "reminderContent",
+                "type": "text"
+            },
+            {
+                "title": "提醒类型",
+                "dataIndex": "reminderType",
+                "type": "addUser"
+            },
+            {
+                "title": "提醒人",
+                "dataIndex": "reminderName",
+                "edit": false
+            },
+            {
+                "title": "是否签收",
+                "dataIndex": "ee",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "是",
+                        "value": 1
+                    },
+                    {
+                        "label": "否",
+                        "value": 0
+                    }
+                ]
+            },
+            {
+                "title": "通知渠道",
+                "dataIndex": "ff",
+                "type": "select",
+                "enum": []
+            }
         ]
     },
     "detail": {
@@ -428,5 +472,71 @@
             "dataIndex": ""
         }
     ],
-    "examine": []
+    "examine": [],
+    "userSetting": {
+        "jobsMngt": [
+            {
+                "title": "岗位名称",
+                "dataIndex": "stationName"
+            }
+        ],
+        "staffMngt": [
+            {
+                "title": "账号",
+                "width": 100,
+                "dataIndex": "account"
+            },
+            {
+                "title": "手机号",
+                "width": 100,
+                "dataIndex": "phone"
+            },
+            {
+                "title": "角色",
+                "width": 150,
+                "dataIndex": "roleName"
+            },
+            {
+                "title": "姓名",
+                "width": 100,
+                "dataIndex": "name"
+            },
+            {
+                "title": "部门",
+                "width": 150,
+                "dataIndex": "deptName"
+            },
+            {
+                "title": "工号",
+                "dataIndex": "number",
+                "width": 120
+            },
+            {
+                "title": "员工类型",
+                "width": 100,
+                "dataIndex": "categoryName"
+            },
+            {
+                "title": "岗位",
+                "width": 150,
+                "dataIndex": "stationName"
+            },
+            {
+                "title": "邮箱",
+                "width": 150,
+                "dataIndex": "email"
+            },
+            {
+                "title": "状态",
+                "width": 50,
+                "dataIndex": "statusName"
+            }
+        ],
+        "roles": [
+            {
+                "title": "角色名称",
+                "dataIndex": "name"
+            }
+        ]
+    }
 }

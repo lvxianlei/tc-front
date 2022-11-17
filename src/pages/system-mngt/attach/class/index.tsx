@@ -15,8 +15,9 @@ export default function Index() {
     const [treeSelect, setTreeSelect] = useState<{
         code: string,
         title: string,
+        parentId: string,
         id: string
-    }>({ code: "", title: "", id: "" })
+    }>({ code: "", title: "", id: "", parentId: "" })
     const [visible, setVisible] = useState<boolean>(false)
     const [selectedKeys, setSelectedKeys] = useState<string[]>()
     const [editId, setEditId] = useState<"create" | string>("create")
@@ -66,7 +67,12 @@ export default function Index() {
     }
 
     const handleSelect: DirectoryTreeProps['onSelect'] = (_keys, { node }: any) => {
-        setTreeSelect({ code: node.code, id: node.id, title: node.title as string } as any)
+        setTreeSelect({
+            code: node.code,
+            id: node.id,
+            parentId: node.parentId,
+            title: node.title as string
+        } as any)
     }
 
     return (
@@ -80,11 +86,11 @@ export default function Index() {
                 onOk={handleModalOk}
                 confirmLoading={editRef.current?.confirmLoading}
             >
-                <Edit id={editId} ref={editRef} parent={treeSelect}/>
+                <Edit id={editId} ref={editRef} parent={treeSelect} />
             </Modal>
             <SearchTable
                 path="/tower-system/docType"
-                filterValue={{ code: treeSelect.code }}
+                filterValue={{ parentId: treeSelect.parentId }}
                 extraOperation={<>
                     <Button type="primary"
                         onClick={() => {

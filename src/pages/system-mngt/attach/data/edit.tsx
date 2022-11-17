@@ -1,11 +1,11 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from "react"
+import { useHistory } from "react-router-dom"
 import { Form, message, Modal, Spin } from "antd"
-import { BaseInfo, DetailTitle } from "../../../common"
+import { BaseInfo, DetailTitle, EditableTable } from "../../../common"
 import Attachment from "./Attach"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { edit } from "./data.json"
-import { useHistory } from "react-router-dom"
 
 interface ParentData {
     code: string,
@@ -218,6 +218,20 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                     } : undefined
                 }}
             />
+            <DetailTitle title="信息提醒" />
+            <EditableTable columns={edit.messageWarn.map((item: any) => {
+                if (item.type === "addUser") {
+                    return ({
+                        ...item,
+                        render: (value: any, _record: any, index: number) => <Form.Item
+                            style={{ margin: 0 }}
+                            name={['submit', index, item.dataIndex]}>
+                            
+                        </Form.Item>
+                    })
+                }
+                return item
+            })} dataSource={[]} />
             <Attachment edit ref={attachRef} dataSource={data?.attachInfoVos} />
         </Spin>
     </>
