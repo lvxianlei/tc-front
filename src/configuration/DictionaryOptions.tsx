@@ -50,7 +50,8 @@ export enum DictionaryEnums {
     SETTLEMENT_MODE_TYPE = 12002,
     PLAN_NAME = 118,
     TOWER_STRUCTURE = 109,
-    SUPPLY_TYPE = 1010
+    SUPPLY_TYPE = 1010,
+    TYPE_OF_CHANGE = 1011,
 }
 
 let productType: IDict[] | undefined = [];
@@ -102,6 +103,7 @@ let settlementMode: IDict[] | undefined = [];
 let planName: IDict[] | undefined = [];
 let towerStructure: IDict[] | undefined = [];
 let supplyType: IDict[] | undefined = [];
+let typeOfChange: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -152,6 +154,7 @@ if (dictionary) {
     planName = dictionary[DictionaryEnums.PLAN_NAME];
     towerStructure = dictionary[DictionaryEnums.TOWER_STRUCTURE];
     supplyType = dictionary[DictionaryEnums.SUPPLY_TYPE];
+    typeOfChange = dictionary[DictionaryEnums.TYPE_OF_CHANGE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -201,3 +204,4 @@ export const settlementModeOptions = settlementMode; // 结算方式
 export const planNameOptions = planName; // 计划名称
 export const towerStructureOptions = towerStructure; // 铁塔结构
 export const supplyTypeOptions = supplyType; // 补件类型
+export const typeOfChangeOptions = typeOfChange; // 变更类型
