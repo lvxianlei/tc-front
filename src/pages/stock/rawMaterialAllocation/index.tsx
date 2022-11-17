@@ -150,10 +150,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.endAllocationTime = `${formatDate[1]} 23:59:59`
             delete value.allocationTime
         }
-        if (value.batcherId) {
-            value.applyStaffId = value.batcherId.value
+        if (value.allocationUser) {
+            value.allocationUser = value.allocationUser.value
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue({ ...value })
         return value
     }
 
