@@ -221,6 +221,7 @@ import AuthUtil from '@utils/AuthUtil';
                 allocationStockDetailDTOS: popDataList.map((item:any)=>{
                      return {
                          ...item,
+                         contractNumber: item?.materialContractNumber,
                          allocationWarehouseIn: baseInfo.allocationWarehouseIn,
                          allocationWarehouseOut: baseInfo.allocationWarehouseOut,
                      }
@@ -233,6 +234,7 @@ import AuthUtil from '@utils/AuthUtil';
                 allocationStockDetailDTOS: popDataList.map((item:any)=>{
                      return {
                          ...item,
+                         contractNumber: item?.materialContractNumber,
                          allocationWarehouseIn: baseInfo.allocationWarehouseIn,
                          allocationWarehouseOut: baseInfo.allocationWarehouseOut,
                      }
