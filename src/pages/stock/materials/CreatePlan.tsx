@@ -332,12 +332,12 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     const handleSuccessClick = async () => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
-            if (materialList.length < 1) {
+            if (popDataList.length < 1) {
                 message.error("请您选择入库明细!");
                 return false;
             }
-            materialList.forEach((item: any) => {
-                if (item.id && item.source && item.source === 2) {
+            popDataList.forEach((item: any) => {
+                if (item.id && item.num && item.num > 0) {
                     item["materialStockId"] = item.id
                     // 删除id属性
                     delete item.id;
@@ -346,7 +346,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 }
             })
             const v: any = {
-                stockTakingDetailDTOList: materialList,
+                stockTakingDetailDTOList: popDataList,
                 warehouseName: batchingStrategy?.filter((item: any) => item.id === baseInfo.warehouseId)[0].name,
                 warehouseId: baseInfo.warehouseId
             }
@@ -364,19 +364,21 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     const handleCreateClick = async () => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
-            if (materialList.length < 1) {
+            if (popDataList.length < 1) {
                 message.error("请您选择入库明细!");
                 return false;
             }
-            materialList.forEach((item: any) => {
-                if (item.id && item.source && item.source === 2) {
-                    // 删除id属性
+            popDataList.forEach((item: any) => {
+                if (item.id && item.num && item.num > 0) {
                     item["materialStockId"] = item.id
+                    // 删除id属性
+                    delete item.id;
+                } else {
                     delete item.id;
                 }
             })
             const v: any = {
-                stockTakingDetailDTOList: materialList,
+                stockTakingDetailDTOList: popDataList,
                 warehouseName: batchingStrategy?.filter((item: any) => item.id === baseInfo.warehouseId)[0].name,
                 warehouseId: baseInfo.warehouseId
             }

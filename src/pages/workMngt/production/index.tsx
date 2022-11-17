@@ -97,7 +97,7 @@ export default function Invoicing() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 160,
+                    width: 220,
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" className="btn-operation-link" onClick={() => {
@@ -120,9 +120,9 @@ export default function Invoicing() {
                             <Popconfirm
                                 title="确定删除吗？"
                                 className='btn-operation-link'
-                                // disabled={records.comparisonStatus !== 1}
+                                disabled={record.batcheTaskStatus !== 3}
                                 onConfirm={async () => {
-                                    await RequestUtil.get(``)
+                                    await RequestUtil.put(`/tower-supply/task/produce/cancel/${record.id}`)
                                     message.success("删除成功...")
                                     history.go(0)
                                 }}
@@ -133,7 +133,7 @@ export default function Invoicing() {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
-                                    // disabled={records.comparisonStatus !== 1}
+                                    disabled={record.batcheTaskStatus !== 3}
                                 >删除方案</Button>
                             </Popconfirm>
                         </>
