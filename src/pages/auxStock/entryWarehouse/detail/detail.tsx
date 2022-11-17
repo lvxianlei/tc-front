@@ -36,14 +36,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     }), { manual: true })
 
     // 统计信息接口
-    const { data: statisticsData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { data: statisticsData, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehousingEntry/statisticsWarehousingEntry/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehousingEntry/statisticsWarehousingEntry`,{warehousingEntryId: params.id, materialType: 2})
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }))
+    }), {})
 
     // 撤销
     const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {

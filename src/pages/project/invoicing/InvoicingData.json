@@ -413,13 +413,13 @@
             "enum": []
         },
         {
-            "title": "理重",
+            "title": "理重(吨)",
             "dataIndex": "reasonWeight",
             "type": "number",
             "disabled": true
         },
         {
-            "title": "计划重量",
+            "title": "计划重量(吨)",
             "dataIndex": "planWeight",
             "type": "number",
             "disabled": true

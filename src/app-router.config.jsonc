@@ -866,6 +866,13 @@
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     },
+    { // 库存管理-原材料出-回库详情
+      "name": "原材料出库详情",
+      "path": "/stock/rawMaterialExWarehouse/backDetail/:id",
+      "module": "./pages/stock/rawMaterialExWarehouse/detail/detailBack",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_info"
+    },
     { // 库存管理-辅材库存
       "name": "辅材库存",
       "path": "/auxStock/warehouse",
@@ -1218,14 +1225,14 @@
     },
     {
       "name": "提料明细",
-      "path": "/ingredients/lifting/detail/:planNumber/:orderProjectName",
+      "path": "/ingredients/lifting/detail/:planNumber",
       "module": "./pages/workMngt/lifting/Overview",
       "exact": true,
       "authority": "tc_erp_sw_work_liftingSummary_detail"
     },
     {
       "name": "材料汇总",
-      "path": "/ingredients/lifting/material/:planNumber/:orderProjectName",
+      "path": "/ingredients/lifting/material/:planNumber",
       "module": "./pages/workMngt/lifting/material",
       "exact": true,
       "authority": "tc_erp_sw_work_liftingSummary_material"
@@ -3113,14 +3120,14 @@
     },
     { // RD-放样过程管理-补件下达列表-下达明细
       "name": "下达明细",
-      "path": "/workMngt/patchIssuedList/issuedDetail/:id",
+      "path": "/workMngt/patchIssuedList/issuedDetail/:id/:productCategoryId",
       "module": "./pages/workMngt/patchIssued/IssuedDetail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
     { // RD-放样过程管理-补件下达列表-电焊明细
       "name": "电焊明细",
-      "path": "/workMngt/patchIssuedList/weldingDetail/:id",
+      "path": "/workMngt/patchIssuedList/weldingDetail/:id/:productCategoryId",
       "module": "./pages/workMngt/patchIssued/WeldingDetail",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
@@ -3248,6 +3255,13 @@
       "name": "流程设计",
       "path": "/journal/workflow",
       "module": "./pages/system-mngt/workflow/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 数据门户
+      "name": "数据门户",
+      "path": "/data/door",
+      "module": "./pages/system-mngt/dataDoor/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     }

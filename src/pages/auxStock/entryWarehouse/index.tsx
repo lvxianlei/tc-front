@@ -34,6 +34,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         startStatusUpdateTime: "",
         endStatusUpdateTime: "",
     });
+    const [num, setNum] = useState<any>({});
+     //统计
+     const { loading, data, run } = useRequest((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data = await RequestUtil.get<any>(`/tower-storage/warehousingEntry/statisticsWarehousingEntry`, { ...filterValue, materialType: 2 })
+        setNum(data)
+        resole(data)
+    }))
     // 删除
     const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -52,6 +59,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             delete value.startRefundTime
         }
         setFilterValue({ ...value })
+        run(value)
         return value
     }
     // 新增回调
@@ -171,6 +179,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Radio.Button value={2}>入库明细</Radio.Button>
                             </Radio.Group>
                         </div>
+                        <span>
+                            <span >数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.entryNum||0}</span></span>
+                            <span >理算重量合计（吨）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.receiveWeight||0}</span></span>
+                            <span >过磅重量合计（吨）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.receivePonderationWeight||0}</span></span>
+                            <span >含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.receiveTaxPrice||0}</span></span>
+                            <span >不含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.receivePrice||0}</span></span>
+                        </span>
                     </>
                 }
                 searchFormItems={[

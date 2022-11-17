@@ -58,7 +58,7 @@
     "start": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false react-app-rewired start",
     "intg": "cross-env REACT_APP_ENV=integration GENERATE_SOURCEMAP=true react-app-rewired start",
     "build": " GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true react-app-rewired build",
-    "build:dev": "cross-env REACT_APP_ENV=integration npm run build",
+    "build:dev": "cross-env REACT_APP_ENV=development npm run build",
     "build:test": "cross-env REACT_APP_ENV=test npm run build",
     "build:uat": "cross-env REACT_APP_ENV=uat npm run build",
     "test": "cross-env REACT_APP_ENV=development GENERATE_SOURCEMAP=false=8192 react-app-rewired test",

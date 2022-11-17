@@ -293,7 +293,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    totalWeight: (parseFloat(item.weight || "0.00") * value).toFixed(2)
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(3)
                 })
             }
             return item
@@ -303,7 +308,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    totalWeight: (parseFloat(item.weight || "0.00") * value).toFixed(2)
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(3)
                 })
             }
             return item
@@ -316,8 +326,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: item.weightAlgorithm === '0' ? ((item.proportion * item.thickness * item.width * value) / 1000 / 1000).toFixed(3) : item.weightAlgorithm === '1' ? ((item.proportion * value) / 1000 / 1000).toFixed(3) : null,
-                    totalWeight: (parseFloat(item.weight || "0.00") * (item.num || 0)).toFixed(3)
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) * Number(item.num||0) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) * Number(item.num||0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * Number(item.num||0) / 1000).toFixed(3)
                 })
             }
             return item
@@ -327,19 +341,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     length: value,
-                    weight: calcFun.weight({
-                        weightAlgorithm: item.weightAlgorithm,
-                        proportion: item.proportion,
-                        length: item.length,
-                        width: item.width
-                    }),
-                    totalWeight: calcFun.totalWeight({
-                        weightAlgorithm: item.weightAlgorithm,
-                        proportion: item.proportion,
-                        length: item.length,
-                        width: item.width,
-                        num: item.num
-                    })
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) * Number(item.num||0) / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) * Number(item.num||0) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1) * Number(item.num||0) / 1000).toFixed(3)
                 })
             }
             return item

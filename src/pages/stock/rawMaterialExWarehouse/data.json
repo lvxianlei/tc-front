@@ -11,9 +11,39 @@
             "width": 80
         },
         {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 80
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 80
+        },
+        {
+            "title": "内部合同号",
+            "dataIndex": "internalNumber",
+            "width": 80
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
             "title": "总重量(吨)/出库重量(吨)",
             "dataIndex": "totalWeight",
             "width": 180
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 100
         },
         {
             "title": "最新状态变更时间",
@@ -21,11 +51,6 @@
             "type": "date",
             "format": "YYYY-MM-DD",
             "width": 120
-        },
-        {
-            "title": "工程名称",
-            "dataIndex": "projectName",
-            "width": 80
         },
         {
             "title": "申请人",
@@ -36,12 +61,6 @@
             "title": "出库类型",
             "dataIndex": "outStockTypeName",
             "width": 80
-        },
-        {
-            "title": "创建日期",
-            "dataIndex": "createTime",
-            "type": "date",
-            "width": 100
         }
     ],
     "outStockDetail": [
@@ -51,8 +70,8 @@
             "width": 100
         },
         {
-            "title": "创建日期",
-            "dataIndex": "createTime",
+            "title": "出库日期",
+            "dataIndex": "outStockTime",
             "type": "date",
             "format": "YYYY-MM-DD",
             "width": 100
@@ -93,8 +112,60 @@
             "width": 100
         },
         {
-            "title": "重量（吨）",
+            "title": "单重（吨）",
             "dataIndex": "weight",
+            "width": 100
+        },
+        {
+            "title": "总重（吨）",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "title": "仓库",
+            "dataIndex": "warehouseName",
+            "width": 120
+        },
+        {
+            "title": "库区",
+            "dataIndex": "reservoirName",
+            "width": 120
+        },
+        {
+            "title": "库位",
+            "dataIndex": "locatorName",
+            "width": 120
+        },
+        {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 120
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 120
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 120
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 120
+        },
+        {
+            "title": "内部合同号",
+            "dataIndex": "internalNumber",
+            "width": 120
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
             "width": 100
         },
         {
@@ -115,21 +186,6 @@
         {
             "title": "不含税金额（元）",
             "dataIndex": "totalUnTaxPrice",
-            "width": 120
-        },
-        {
-            "title": "仓库",
-            "dataIndex": "warehouseName",
-            "width": 120
-        },
-        {
-            "title": "库区",
-            "dataIndex": "reservoirName",
-            "width": 120
-        },
-        {
-            "title": "库位",
-            "dataIndex": "locatorName",
             "width": 120
         },
         {

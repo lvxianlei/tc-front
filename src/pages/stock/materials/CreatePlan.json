@@ -163,6 +163,31 @@
                 "type": "string",
                 "dataIndex": "fuzzyQuery",
                 "placeholder": "收货批次/品名/规格"
+            },
+            {
+                "title": "标准",
+                "type": "select",
+                "dataIndex": "materialStandard"
+            },
+            {
+                "title": "材质",
+                "type": "select",
+                "dataIndex": "structureTexture"
+            },
+            {
+                "title": "长度",
+                "type": "number",
+                "dataIndex": "length"
+            },
+            {
+                "title": "宽度",
+                "type": "number",
+                "dataIndex": "width"
+            },
+            {
+                "title": "库位",
+                "type":"tree",
+                "dataIndex": "locatorId"
             }
         ],
         "columns": [

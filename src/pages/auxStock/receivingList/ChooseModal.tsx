@@ -153,9 +153,16 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                     </Col>
                     <Col span={6}>
                         <Form.Item
-                            name="fuzzyQuery"
-                            label="模糊搜索">
-                            <Input placeholder="品名/合同编号" />
+                            name="materialName"
+                            label="品名">
+                            <Input placeholder="请输入品名" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            name="contractNumber"
+                            label="合同编号">
+                            <Input placeholder="请输入合同编号" />
                         </Form.Item>
                     </Col>
                     <Col span={4}>

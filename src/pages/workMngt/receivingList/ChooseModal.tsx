@@ -1,9 +1,10 @@
 import React, { forwardRef, useImperativeHandle, useState } from "react"
-import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Spin } from "antd"
+import { Button, Col, Form, Input, InputNumber, message, Modal, Row, Select, Spin } from "antd"
 import { CommonTable, DetailTitle } from "../../common"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 import { SelectedArea, Selected } from "./receivingListData.json"
+import { materialStandardOptions, materialTextureOptions } from "../../../configuration/DictionaryOptions"
 
 interface ChooseModalProps {
     id: string,
@@ -173,12 +174,55 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
         <DetailTitle title="待选区" />
         <div>
             <Form form={serarchForm} style={{ paddingLeft: "14px" }}>
-                <Row gutter={[4, 4]}>
+            <Row gutter={[4, 4]}>
+                    <Col span={6}>
+                        <Form.Item
+                            name="materialName"
+                            label="品名">
+                            <Input placeholder="请输入品名" />
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            name="materialStandard"
+                            label="标准">
+                            <Select style={{ width: '100%' }} >
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            name="structureTexture"
+                            label="材质">
+                            <Select style={{ width: '100%' }} >
+                                <Select.Option value={''} key={''}>全部</Select.Option>
+                                {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.name} key={index}>{item.name}</Select.Option>)}
+                            </Select>
+                        </Form.Item>
+                    </Col>
                     <Col span={6}>
                         <Form.Item
                             name="structureSpec"
                             label="规格">
                             <Input placeholder="请输入规格" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row gutter={[4, 4]}>
+                    <Col span={6}>
+                        <Form.Item
+                            name="length"
+                            label="长度">
+                            <InputNumber placeholder="请输入长度" style={{width:'100%'}}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={6}>
+                        <Form.Item
+                            name="width"
+                            label="宽度">
+                            <InputNumber placeholder="请输入宽度" style={{width:'100%'}}/>
                         </Form.Item>
                     </Col>
                     <Col span={6}>

@@ -151,10 +151,20 @@
         "readOnly": true,
         "search": [
             {
-                "title": "查询",
+                "title": "品名",
                 "type": "string",
-                "dataIndex": "fuzzyQuery",
-                "placeholder": "品名/规格"
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "type": "string",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "locatorId",
+                "type":"tree"
+                
             }
         ],
         "columns": [

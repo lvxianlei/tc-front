@@ -17,6 +17,10 @@
             "dataIndex": "productTypeName"
         },
         {
+            "title": "试组装类型",
+            "dataIndex": "trialAssemble"
+        },
+        {
             "title": "执行状态",
             "dataIndex": "executeStatus",
             "type": "select",
@@ -47,6 +51,10 @@
             "dataIndex": "productCategory"
         },
         {
+            "title": "计划号",
+            "dataIndex": "planNum"
+        },
+        {
             "title": "产品类型",
             "dataIndex": "productTypeName"
         },
@@ -57,6 +65,10 @@
         {
             "title": "加工单元",
             "dataIndex": "processWorkshop"
+        },
+        {
+            "title": "试组装类型",
+            "dataIndex": "trialAssemble"
         },
         {
             "title": "执行状态",

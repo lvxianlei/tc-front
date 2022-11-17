@@ -16,9 +16,10 @@ interface AllotModalProps {
     id: string;
     allotData: IAllot;
     status: number | string;
+    getLoading: (loading: boolean) => void
 }
 
-export default forwardRef(function AllotModal({ id, allotData, status }: AllotModalProps, ref) {
+export default forwardRef(function AllotModal({ id, allotData, status, getLoading }: AllotModalProps, ref) {
     const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [towerData, setTowerData] = useState<any[]>([])
@@ -62,21 +63,16 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
 
     const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`, postData);
-            resole(result)
+            RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`, postData).then(res => {
+                resole(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
-
-    // const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
-    //     try {
-    //         const result = await RequestUtil.post(`/tower-science/productStructure/getAllocation/save`, postData);
-    //         resole(result)
-    //     } catch (error) {
-    //         reject(error)
-    //     }
-    // }), { manual: true })
 
     const onCheck = () => new Promise(async (resolve, reject) => {
         try {
@@ -90,6 +86,7 @@ export default forwardRef(function AllotModal({ id, allotData, status }: AllotMo
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await form.validateFields()
+            getLoading(true)
             await submitRun({
                 // productId: id,
                 // productCategory: data?.productCategory,

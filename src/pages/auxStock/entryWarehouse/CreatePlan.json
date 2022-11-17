@@ -156,7 +156,8 @@
             },
             {
                 "title": "库位",
-                "dataIndex": "reservoirArea"
+                "dataIndex": "locatorId",
+                "type":"tree"
             }
         ],
         "columns": [

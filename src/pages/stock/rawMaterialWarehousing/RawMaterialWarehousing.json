@@ -1,19 +1,29 @@
 {
     "baseColumn": [
         {
+            "title": "入库单号",
+            "dataIndex": "warehousingEntryNumber",
+            "width": 150
+        },
+        {
             "title": "收货单号",
             "dataIndex": "receiveNumber",
             "width": 150
         },
         {
-            "title": "纸质单号",
-            "dataIndex": "paperNumber",
-            "width": 120
+            "title": "到货时间",
+            "dataIndex": "receiveTime",
+            "width": 100
         },
         {
-            "title": "结算方式",
-            "dataIndex": "settlementModeName",
-            "width": 80
+            "title": "重量(吨)",
+            "dataIndex": "weight",
+            "width": 60
+        },
+        {
+            "title": "价税合计(元)",
+            "dataIndex": "taxPrice",
+            "width": 100
         },
         {
             "title": "状态",
@@ -26,15 +36,9 @@
             "width": 80
         },
         {
-            "title": "入库日期",
-            "dataIndex": "warehousingTime",
+            "title": "创建日期",
+            "dataIndex": "createTime",
             "width": 80
-        },
-        {
-            "title": "最新状态变更时间",
-            "dataIndex": "updateTime",
-            "type": "date",
-            "width": 150
         },
         {
             "title": "供应商",
@@ -57,23 +61,173 @@
             "width": 180
         },
         {
-            "title": "到货时间",
-            "dataIndex": "receiveTime",
+            "title": "车牌号",
+            "dataIndex": "carNumber",
             "width": 100
         },
         {
-            "title": "重量(吨)",
-            "dataIndex": "weight",
-            "width": 60
+            "title": "入库人",
+            "dataIndex": "createUserName",
+            "width": 100
         },
         {
-            "title": "价税合计(元)",
-            "dataIndex": "price",
-            "width": 100
+            "title": "结算方式",
+            "dataIndex": "settlementModeName",
+            "width": 80
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "width": 150
         },
         {
             "title": "备注",
             "dataIndex": "remark",
+            "width": 120
+        }
+    ],
+    "inStockDetail": [
+        {
+            "title": "入库单号",
+            "dataIndex": "warehousingEntryNumber",
+            "width": 150
+        },
+        {
+            "title": "入库日期",
+            "dataIndex": "entryTime",
+            "type": "date",
+            "format":"YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 150
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 80
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 80
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "width": 180
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "width": 100
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 60
+        },
+        {
+            "title": "理算重量(吨)",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "title": "结算重量(吨)",
+            "dataIndex": "balanceTotalWeight",
+            "width": 100
+        },
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "width": 120
+        },
+        {
+            "title": "车牌号",  
+            "dataIndex": "carNumber",
+            "width": 80
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format":"YYYY-MM-DD",
+            "width": 100
+        },
+        
+        {
+            "title": "到货日期",
+            "dataIndex": "receiveTime",
+            "type": "date",
+            "format":"YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "仓库",
+            "dataIndex": "warehouseName",
+            "width": 100
+        },
+        {
+            "title": "库区",
+            "dataIndex": "reservoirName",
+            "width": 100
+        },
+        {
+            "title": "库位",
+            "dataIndex": "locatorName",
+            "width": 100
+        },
+        {
+            "title": "含税单价(元)",
+            "dataIndex": "taxPrice",
+            "width": 100
+        },
+        {
+            "title": "含税金额(元)",
+            "dataIndex": "totalTaxPrice",
+            "width": 100
+        },
+        {
+            "title": "不含税单价(元)",
+            "dataIndex": "unTaxPrice",
+            "width": 100
+        },
+        {
+            "title": "不含税金额(元)",
+            "dataIndex": "totalUnTaxPrice",
+            "width": 100
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "width": 100
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "width": 100
+        },
+        {
+            "title": "入库类型",
+            "dataIndex": "warehousingTypeName",
+            "width": 100
+        },
+        {
+            "title": "入库人",
+            "dataIndex": "updateUserName",
+            "width": 100
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName",
             "width": 120
         }
     ]

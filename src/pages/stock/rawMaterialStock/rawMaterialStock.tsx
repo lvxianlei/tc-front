@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
 import { useHistory } from 'react-router';
-import { Input, Select, Modal, message, Spin, Button, Upload, InputNumber } from 'antd';
+import { Input, Select, Modal, message, Spin, Button, Upload, InputNumber, DatePicker } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"
@@ -61,6 +61,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState({})
+    const [num, setNum] = useState<any>({});
     const receiveRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -74,7 +75,31 @@ export default function RawMaterialStock(): React.ReactNode {
             reject(error)
         }
     }))
-
+    const [ReservoirArea, setReservoirArea] = useState<any[]>([]);//入库库区数据
+    const [Location, setLocation] = useState<any[]>([]);//入库库位数据
+    // 获取仓库/库区/库位
+    const getWarehousing = async (id?: any, type?: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/warehouse/tree`, {
+            id,
+            type,
+        });
+        switch (type) {
+            case 1:
+                setReservoirArea(data)
+                break;
+            case 2:
+                setLocation(data)
+                break;
+            default:
+                break;
+        }
+    }
+    //统计
+    const { data: totalNum, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data:any = await RequestUtil.get<any>(`/tower-storage/materialStock/getMaterialStockStatics`, { ...filterValue,...value })
+        setNum(data)
+        resole(data)
+    }))
     const handleAttachOk = async () => {
         setSaveLoading(true)
         const res = await receiveRef.current.onSubmit()
@@ -165,7 +190,12 @@ export default function RawMaterialStock(): React.ReactNode {
                         <Button type="primary" ghost>导入</Button>
                     </Upload>
                     <Button type="primary" ghost onClick={handleDownload}>模版下载</Button>
-                    <div>数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.num}</span> 重量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{data?.weight}</span></div>
+                    <span>
+                        <span >数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.num||0}</span></span>
+                        <span >重量合计（吨）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.weight||0}</span></span>
+                        <span >含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalTaxPrice||0}</span></span>
+                        <span >不含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalPrice||0}</span></span>
+                    </span>
                 </>
                 }
                 filterValue={filterValue}
@@ -175,18 +205,19 @@ export default function RawMaterialStock(): React.ReactNode {
                         value.lengthMax = value.length.lengthMax
                     }
                     setFilterValue(value)
+                    run(value)
                     return value
                 }}
                 searchFormItems={[
                     {
-                        name: 'warehouseId',
-                        label: '仓库',
+                        name: 'materialCategoryName',
+                        label: '分类',
                         children: <Select style={{ width: "100px" }} defaultValue={""}>
                             <Select.Option value='' key={'aa'}>全部</Select.Option>
                             {
-                                data?.warehouseList?.map((item: { id: string, name: string }) => <Select.Option
-                                    value={item.id}
-                                    key={item.id}>{item.name}</Select.Option>)
+                                data?.classify?.map((item: { materialCategoryId: string, materialCategoryName: string }) => <Select.Option
+                                    value={item.materialCategoryName}
+                                    key={item.materialCategoryId}>{item.materialCategoryName}</Select.Option>)
                             }
                         </Select>
                     },
@@ -203,11 +234,6 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'materialName',
-                        label: '品名',
-                        children: <Input width={100} maxLength={200} placeholder="请输入品名" />
-                    },
-                    {
                         name: 'materialStandard',
                         label: '标准',
                         children: <Select style={{ width: "100px" }} defaultValue={""}>
@@ -220,16 +246,14 @@ export default function RawMaterialStock(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'classifyId',
-                        label: '分类',
-                        children: <Select style={{ width: "100px" }} defaultValue={""}>
-                            <Select.Option value='' key={'aa'}>全部</Select.Option>
-                            {
-                                data?.classify?.map((item: { materialCategoryId: string, materialCategoryName: string }) => <Select.Option
-                                    value={item.materialCategoryId}
-                                    key={item.materialCategoryId}>{item.materialCategoryName}</Select.Option>)
-                            }
-                        </Select>
+                        name: 'structureSpec',
+                        label: '规格',
+                        children: <Input width={100} maxLength={200} placeholder="请输入规格" />
+                    },
+                    {
+                        name: 'materialName',
+                        label: '品名',
+                        children: <Input width={100} maxLength={200} placeholder="请输入品名" />
                     },
                     {
                         name: 'length',
@@ -242,9 +266,62 @@ export default function RawMaterialStock(): React.ReactNode {
                         children: <InputNumber />
                     },
                     {
+                        name: 'warehouseId',
+                        label: '仓库',
+                        children: <Select style={{ width: "100px" }} defaultValue={""} onChange={(val) => {  getWarehousing(val, 1) }}>
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                data?.warehouseList?.map((item: { id: string, name: string }) => <Select.Option
+                                    value={item.id}
+                                    key={item.id}>{item.name}</Select.Option>)
+                            }
+                        </Select>
+                    },
+                    {
+                        name: 'reservoirId',
+                        label: '库区',
+                        children: <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                            onChange={(val:any) => {  getWarehousing(val, 2) }}
+                        >
+                            {
+                                ReservoirArea.map((item, index) => {
+                                    return (
+                                        <Select.Option
+                                            value={item.id}
+                                        >
+                                            {item.name}
+                                        </Select.Option>
+                                    )
+                                })
+                            }
+                        </Select>
+                    },
+                    {
+                        name: 'locatorId',
+                        label: '库位',
+                        children: <Select
+                            className="select"
+                            style={{ width: "100px" }}
+                        >
+                            {
+                                Location.map((item, index) => {
+                                    return (
+                                        <Select.Option
+                                            value={item.id}
+                                        >
+                                            {item.name}
+                                        </Select.Option>
+                                    )
+                                })
+                            }
+                        </Select>
+                    },
+                    {
                         name: 'fuzzyQuery',
                         label: '模糊查询项',
-                        children: <Input width={100} maxLength={200} placeholder="请输入规格/品名" />
+                        children: <Input width={100} maxLength={200} placeholder="请输入收货单号/收货批次" />
                     }
                 ]}
             />

@@ -52,6 +52,15 @@ export default function SalesPlanEdit() {
         }
     }), { manual: true })
 
+    const { loading: rdResonLoading, run: resonRun } = useRequest<{ [key: string]: any }>((postData: string[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/drawingConfirmation/rdDescription`, { ids: postData })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const { loading: saveAndApproveLoading, run: saveAndApproveRun } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/taskNotice/saveAndApprove`, postData)
@@ -146,7 +155,7 @@ export default function SalesPlanEdit() {
         modalRun(saleOrderId)
     }
 
-    const handleModalOk = () => {
+    const handleModalOk = async () => {
         const productDetailsData = productDetailsForm.getFieldsValue()
         const newProductDetailsData: { [key: string]: any } = {}
         productDetailsForm.resetFields()
@@ -161,6 +170,10 @@ export default function SalesPlanEdit() {
                 newProductDetailsData[item.id] = item
             }
         })
+        const postIds: string[] = newProductDetails.map((item: any) => item?.businessId)
+        const filterPostIds = postIds.filter((item: any, index: number, array: any[]) => index === array.indexOf(item))
+        const resonData = await resonRun(filterPostIds)
+        cargoDtoForm.setFieldsValue({ rdDescription: resonData.filter((item: any) => !!item).join("\n") })
         setProductDetails(newProductDetails)
         productDetailsForm.setFieldsValue(newProductDetailsData)
         setVisible(false)
@@ -268,6 +281,7 @@ export default function SalesPlanEdit() {
             title="选择明细"
             visible={visible}
             width={1011}
+            confirmLoading={rdResonLoading}
             onCancel={() => setVisible(false)}
             onOk={handleModalOk}
             destroyOnClose>

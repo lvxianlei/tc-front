@@ -82,6 +82,8 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string>("");
+    const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
+    const materialStandardEnum:any = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         for (let i = 0; i < popDataList.length; i += 1) {
@@ -121,7 +123,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
                 const weight = calcFun.weight({
-                    length: value,
+                    length: item.length,
                     width: item.width,
                     weightAlgorithm: item.weightAlgorithm,
                     proportion: item.proportion
@@ -145,11 +147,11 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                     weight,
                     //账面重量
                     totalWeight: calcFun.totalWeight({
-                        length: value,
+                        length: item.length,
                         width: item.width,
                         weightAlgorithm: item.weightAlgorithm,
                         proportion: item.proportion,
-                        num: item.num
+                        num: value
                     }),
                     taxPrice: item.taxPrice || 0, // 单价
                     // 账目金额
@@ -374,7 +376,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/tax`)
             if (result.length > 0) {
                 for (let i = 0; i < result.length; i += 1) {
-                    if (result[i].id === "1") {
+                    if (result[i].modeName === "材料税率") {
                         resole(result[i]);
                         return;
                     }
@@ -417,7 +419,25 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             }
         }
     }, [props.visible])
-
+    //库区库位
+    const { data: locator } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/tree/${warehouseId}`)
+            resole(result?.map((item: any) => ({
+                label: item.name,
+                value: item.id,
+                key: item.id,
+                disabled: true,
+                children: item.children?.map((cItem: any) => ({
+                    label: cItem.name,
+                    value: cItem.id,
+                    key: cItem.id
+                }) || [])
+            })) || [])
+        } catch (error) {
+            reject(error)
+        }
+    }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
     return (
         <Modal
             title={props.isEdit ? "编辑盘点单" : "新建盘点单"}
@@ -580,7 +600,28 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 <PopTableContent
                     data={{
                         ...addMaterial as any,
-                        path: `${addMaterial.path}/${warehouseId}`
+                        search: (addMaterial as any).search.map((item: any) => {
+                            if (item.dataIndex === 'materialStandard') {
+                                return ({
+                                    ...item,
+                                    enum: [{value:'',label:'全部'},...materialStandardEnum]
+                                })
+                            }
+                            if (item.dataIndex === 'structureTexture') {
+                                return ({
+                                    ...item,
+                                    enum: [{value:'',label:'全部'},...structureTextureEnum]
+                                })
+                            }
+                            if (item.dataIndex === "locatorId") {
+                                return ({
+                                    ...item,
+                                    treeData: locator
+                                })
+                            }
+                            return item
+                        }),
+                        path: `${addMaterial.path}?warehouseId=${warehouseId}`
                     }}
                     value={{
                         id: "",

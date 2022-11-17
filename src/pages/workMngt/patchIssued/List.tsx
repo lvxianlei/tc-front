@@ -1,6 +1,6 @@
 /**
  * @author zyc
- * @copyright © 2022 
+ * @copyright © 2022
  * @description 放样过程管理-补件下达列表
  */
 
@@ -31,6 +31,12 @@ export default function List(): React.ReactNode {
             title: '补件下达编号',
             width: 120,
             dataIndex: 'supplyBatchNumber'
+        },
+        {
+            key: 'supplyNumber',
+            title: '补件编号',
+            width: 120,
+            dataIndex: 'supplyNumber'
         },
         {
             key: 'status',
@@ -152,6 +158,12 @@ export default function List(): React.ReactNode {
             dataIndex: 'packDemand'
         },
         {
+            key: 'isPerforateName',
+            title: '是否钻孔特殊要求',
+            width: 100,
+            dataIndex: 'isPerforateName'
+        },
+        {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
@@ -173,8 +185,8 @@ export default function List(): React.ReactNode {
                     >
                         <Button disabled={record.status === 2} type="link">取消下达</Button>
                     </Popconfirm>
-                    <Link to={`/workMngt/patchIssuedList/issuedDetail/${record.supplyProductCategoryId}`}>下达明细</Link>
-                    <Link to={`/workMngt/patchIssuedList/weldingDetail/${record.supplyProductCategoryId}`}>电焊明细</Link>
+                    <Link to={`/workMngt/patchIssuedList/issuedDetail/${record?.id}/${record.supplyProductCategoryId}`}>下达明细</Link>
+                    <Link to={`/workMngt/patchIssuedList/weldingDetail/${record?.id}/${record.supplyProductCategoryId}`}>电焊明细</Link>
                 </Space>
             )
         }
@@ -216,7 +228,7 @@ export default function List(): React.ReactNode {
             {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input style={{ width: '200px' }} placeholder="补件下达编号/计划号/塔型/工程名称" />
+                children: <Input style={{ width: '200px' }} placeholder="补件下达编号/补件编号/计划号/塔型/工程名称" />
             }
         ]}
         filterValue={filterValue}

@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails } from "./receivingListData.json"
 import * as calcObj from '@utils/calcUtil'
+import moment from "moment"
 /**
  * 纸质单号，原材料税款合计，车辆牌照
  */
@@ -20,10 +21,10 @@ interface ModalRef {
 }
 
 interface TotalState {
-    count?: string
-    weight?: string
-    taxPrice?: string
-    unTaxPrice?: string
+    num?: string
+    balanceTotalWeight?: string
+    totalTaxPrice?: string
+    totalUnTaxPrice?: string
 }
 
 export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Element {
@@ -68,6 +69,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 ...item,
                 num: item.num ? item.num : 0
             })) || [])
+            const seletTotal = result?.lists.reduce((total: TotalState, current: any) => ({
+                num: parseFloat(total.num || "0") + parseFloat(current.num),
+                balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+                totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+                totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+            }), {})
+            setTotal(seletTotal)
             resole({
                 ...formatData(BasicInformation, result),
                 supplierId: {
@@ -107,7 +115,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 weightAlgorithm: item.weightAlgorithm,
                 proportion: item.proportion,
                 num: item.num
-            }))).toFixed(4), 0)
+            }))).toFixed(5), 0)
 
         const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
             const weight = calcObj.weight({
@@ -175,6 +183,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             delete postData.id
             return postData
         })
+        const seletTotal = dataSource.reduce((total: TotalState, current: any) => ({
+            num: parseFloat(total.num || "0") + parseFloat(current.num),
+            balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+            totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+            totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+        }), {})
+        setTotal(seletTotal)
         setCargoData(dataSource)
         setVisible(false);
     }
@@ -184,21 +199,27 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const baseFormData = await form.validateFields()
             await editForm.validateFields()
             const editData = editForm.getFieldsValue(true).submit
-            const result = {
-                ...baseFormData,
-                supplierId,
-                supplierName: baseFormData.supplierId.value,
-                lists: editData.map((item: any) => {
-                    if ([2, "2"].includes(baseFormData.meteringMode)) {
-                        return ({ ...item, ponderationWeight: item.balanceTotalWeight })
-                    }
-                    return item
-                }),
-                num: baseFormData.num,
-                unloadUsersName: baseFormData.unloadUsersName.value,
-                unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
+            if(editData.filter((item:any)=>{return item?.meteringMode!==baseFormData?.meteringMode}).length>0){
+                message.error('明细与基本信息中的计量方式不一致，不可确定！')
+                throw 'error'
+            }else{
+                const result = {
+                    ...baseFormData,
+                    supplierId,
+                    supplierName: baseFormData.supplierId.value,
+                    lists: editData.map((item: any) => {
+                        if ([2, "2"].includes(baseFormData.meteringMode)) {
+                            return ({ ...item, ponderationWeight: item.balanceTotalWeight })
+                        }
+                        return item
+                    }),
+                    num: baseFormData.num,
+                    unloadUsersName: baseFormData.unloadUsersName.value,
+                    unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
+                }
+                await saveRun(result)
             }
-            await saveRun(result)
+            
             resole(true)
         } catch (error) {
             console.log(error)
@@ -225,7 +246,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             setCargoData([])
         }
         if (fields.meteringMode || fields.totalPonderationWeight) {
-            const meteringMode = form.getFieldValue("meteringMode")
+            const meteringMode = fields.meteringMode||form.getFieldValue("meteringMode")
             const totalPonderationWeight = fields.totalPonderationWeight || form.getFieldValue("totalPonderationWeight") || "0"
             const editData = editForm.getFieldsValue(true).submit
             // 所有明细理算重量总和
@@ -236,7 +257,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     weightAlgorithm: item.weightAlgorithm,
                     proportion: item.proportion,
                     num: item.num
-                }))).toFixed(4), 0)
+                }))).toFixed(5), 0)
             const dataSource: any[] = editData?.map((item: any, index: number) => {
                 // 结算重量
                 const balanceTotalWeight = calcObj.balanceTotalWeight(
@@ -280,6 +301,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 return postData
             })
             setCargoData(dataSource || [])
+            form.setFieldsValue({
+                meteringMode: fields.meteringMode?fields.meteringMode:form.getFieldValue("meteringMode"),
+                totalPonderationWeight: fields.totalPonderationWeight ? fields.totalPonderationWeight: form.getFieldValue("totalPonderationWeight")
+            })
         }
     }
 
@@ -301,7 +326,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             }
             if (meteringMode === 2) {
                 const totalPonderationWeight = dataSource.reduce((count: string, item: any) =>
-                    (parseFloat(count) + parseFloat(`${item.balanceTotalWeight}`)).toFixed(3), "0")
+                    (parseFloat(count) + parseFloat(`${item.balanceTotalWeight}`)).toFixed(5), "0")
                 form.setFieldsValue({ totalPonderationWeight })
             }
             setCargoData(dataSource || [])
@@ -319,7 +344,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     weightAlgorithm: item.weightAlgorithm,
                     proportion: item.proportion,
                     num: item.num
-                }))).toFixed(4), 0)
+                }))).toFixed(5), 0)
             // 结算重量
             const balanceTotalWeight = calcObj.balanceTotalWeight(
                 meteringMode,
@@ -373,16 +398,23 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 totalUnloadTaxPrice,
                 totalUnloadPrice
             }
+            const seletTotal = dataSource.reduce((total: TotalState, current: any) => ({
+                num: parseFloat(total.num || "0") + parseFloat(current.num),
+                balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+                totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+                totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+            }), {})
+            setTotal(seletTotal)
             setCargoData(dataSource || [])
         }
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
         const seletTotal = selectRows.reduce((total: TotalState, current: any) => ({
-            count: parseFloat(total.count || "0") + parseFloat(current.num),
-            weight: (parseFloat(total.weight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(3),
-            taxPrice: (parseFloat(total.taxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
-            unTaxPrice: (parseFloat(total.unTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+            num: parseFloat(total.num || "0") + parseFloat(current.num),
+            balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
+            totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
+            totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
         }), {})
         setTotal(seletTotal)
         setSelect(selectedRowKeys)
@@ -450,7 +482,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
             })}
             dataSource={{
-                meteringMode: 1,
+                meteringMode: form.getFieldValue('meteringMode')?form.getFieldValue('meteringMode'):2,
+                receiveTime: moment(),
                 settlementMode: settlementModeOptions?.[0]?.id,
                 ...data
             }} />
@@ -472,10 +505,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             ]}
         />
         <Space style={{ color: "red" }}>
-            <div><span>数量合计：</span><span>{total.count || "0"}</span></div>
-            <div><span>重量合计(吨)：</span><span>{total.weight || "0"}</span></div>
-            <div><span>含税金额合计(元)：</span><span>{total.taxPrice || "0"}</span></div>
-            <div><span>不含税金额合计(元)：</span><span>{total.unTaxPrice || "0"}</span></div>
+            <div><span>数量合计：</span><span>{total.num || "0"}</span></div>
+            <div><span>重量合计(吨)：</span><span>{total.balanceTotalWeight || "0"}</span></div>
+            <div><span>含税金额合计(元)：</span><span>{total.totalTaxPrice || "0"}</span></div>
+            <div><span>不含税金额合计(元)：</span><span>{total.totalUnTaxPrice || "0"}</span></div>
         </Space>
         <EditableTable
             haveIndex={false}

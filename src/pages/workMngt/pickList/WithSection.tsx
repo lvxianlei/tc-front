@@ -163,7 +163,8 @@ export default forwardRef(function Edit({ type, id, productCategoryId }: EditPro
                 message.error('请输入正确格式');
                 setFastLoading(false);
             } else {
-                const inputList = inputString.split(',');
+                let inputList = inputString.split(',');
+                inputList =inputList.filter(x => x!=='')
                 let list: IMaterialDetail[] = [];
                 inputList.forEach((res: string) => {
                     const newRes = res.split('*')[0].replace(/\(|\)/g, "");
@@ -254,15 +255,30 @@ export default forwardRef(function Edit({ type, id, productCategoryId }: EditPro
                         required: true,
                         message: '请选择杆塔'
                     }]}>
-                        <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={() => {
-                            const productId = fastForm.getFieldsValue(true).productId;
-                            setProductNumber(productId?.map((res: string) => res.split(',')[1]).join(','))
-                            setDetailData({
-                                ...detailData,
-                                productNumber: productId?.map((res: string) => res.split(',')[1]),
-                                productIdList: productId?.map((res: string) => res.split(',')[0])
-                            })
+                        <Select placeholder="请选择杆塔" mode="multiple" style={{ width: '150px' }} getPopupContainer={triggerNode => triggerNode.parentNode} onChange={(e: any) => {
+                            if (Array.from(e)?.findIndex(res => res === 'all') !== -1) {
+                                fastForm?.setFieldsValue({
+                                    productId: [...productList?.map(res => {
+                                        return res?.id + ',' + res?.productNumber
+                                    }) || [], 'all']
+                                })
+                                setProductNumber(productList?.map((res: any) => res.productNumber).join(','))
+                                setDetailData({
+                                    ...detailData,
+                                    productNumber: productList?.map((res: any) => res.productNumber),
+                                    productIdList: productList?.map((res: any) => res.id)
+                                })
+                            } else {
+                                const productId = fastForm.getFieldsValue(true).productId;
+                                setProductNumber(productId?.map((res: string) => res.split(',')[1]).join(','))
+                                setDetailData({
+                                    ...detailData,
+                                    productNumber: productId?.map((res: string) => res.split(',')[1]),
+                                    productIdList: productId?.map((res: string) => res.split(',')[0])
+                                })
+                            }
                         }}>
+                            <Select.Option key={999} value={'all'}>全部</Select.Option>
                             {productList && productList.map(({ id, productNumber }, index) => {
                                 return <Select.Option key={index} value={id + ',' + productNumber || ''}>
                                     {productNumber}

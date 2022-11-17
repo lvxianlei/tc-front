@@ -336,7 +336,7 @@
                     }
                 ]
             },
-{
+            {
                 "label": "辅材采购管理",
                 "icon": "gongying-caigourenwu_caigourenwu",
                 "path": "/buyAuxiliaryMaterial",
@@ -780,11 +780,11 @@
                 "appName": "PC",
                 "authority": "tc_erp_aps_plan",
                 "items": [
-                    {
-                        "label": "计划排产",
-                        "path": "/planProd/planMgmt",
-                        "authority": "tc_erp_aps_plan"
-                    },
+                    // {
+                    //     "label": "计划排产",
+                    //     "path": "/planProd/planMgmt",
+                    //     "authority": "tc_erp_aps_plan"
+                    // },
                     {
                         "label": "技术派工",
                         "path": "/planProd/planScheduleMngt",
@@ -1121,6 +1121,20 @@
                     }
                 ]
             },
+            // {
+            //     "label": "数字门户",
+            //     "icon": "xitongrizhiTY_xitongrizhi",
+            //     "path": "/data",
+            //     "appName": "COMM",
+            //     "authority": "tc_erp_sys_log",
+            //     "items": [
+            //         {
+            //             "label": "数字门户",
+            //             "path": "/data/door",
+            //             "authority": "tc_erp_sys_log_operation"
+            //         }
+            //     ]
+            // },
             {
                 "label": "请款申请管理",
                 "icon": "caiwuzhongxin_qingkuanshenqing",
@@ -1359,7 +1373,7 @@
                     }
                 ]
             },
-            { 
+            {
                 "label": "工作台",
                 "icon": "customer",
                 "path": "/workBenchASM",
@@ -1373,7 +1387,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "售后工单",
                 "icon": "customer",
                 "path": "/afterSales",
@@ -1387,7 +1401,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "费用记录",
                 "icon": "customer",
                 "path": "/expenseRecord",
@@ -1401,7 +1415,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "问题记录",
                 "icon": "customer",
                 "path": "/problemRecord",
@@ -1415,7 +1429,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "考核记录",
                 "icon": "customer",
                 "path": "/assessmentRecord",
@@ -1429,7 +1443,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "人员管理",
                 "icon": "customer",
                 "path": "/userRecord",
@@ -1443,7 +1457,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "配置",
                 "icon": "customer",
                 "path": "/setting",
@@ -1472,7 +1486,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "日历管理",
                 "icon": "customer",
                 "path": "/calendar",
@@ -1486,7 +1500,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "打卡管理",
                 "icon": "customer",
                 "path": "/clock",
