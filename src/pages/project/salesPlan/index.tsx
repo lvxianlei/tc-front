@@ -57,15 +57,15 @@ export default function Index() {
     }
 
     const handleFilterSubmit = (value: any) => {
-        if (value.startDeliveryTime) {
-            const formatDate = value.startDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startDeliveryTime = formatDate[0] + " 00:00:00"
-            value.endDeliveryTime = formatDate[1] + " 23:59:59"
+        if (value.startCreateTime) {
+            const formatDate = value.startCreateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCreateTime = formatDate[0] + " 00:00:00"
+            value.endCreateTime = formatDate[1] + " 23:59:59"
         }
-        if (value.startPlanDeliveryTime) {
-            const formatDate = value.startPlanDeliveryTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startPlanDeliveryTime = formatDate[0] + " 00:00:00"
-            value.endPlanDeliveryTime = formatDate[1] + " 23:59:59"
+        if (value.startIssueTime) {
+            const formatDate = value.startIssueTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startIssueTime = formatDate[0] + " 00:00:00"
+            value.endIssueTime = formatDate[1] + " 23:59:59"
         }
         if (value.startApprovalTime) {
             const formatDate = value.startApprovalTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -153,18 +153,18 @@ export default function Index() {
                     children: <Input placeholder="订单工程名称" style={{ width: 210 }} />
                 },
                 {
-                    name: 'startDeliveryTime',
-                    label: '客户交货日期',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
-                    name: 'startPlanDeliveryTime',
-                    label: '计划交货日期',
-                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                },
-                {
                     name: 'startApprovalTime',
                     label: '审批完成日期',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'startCreateTime',
+                    label: '制单日期',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'startIssueTime',
+                    label: '下发日期',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
             ]}
