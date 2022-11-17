@@ -1,6 +1,6 @@
 import React, { useState, forwardRef, useRef, useImperativeHandle } from 'react';
 import { useHistory } from 'react-router';
-import { Input, Select, Modal, message, Spin, Button, Upload, InputNumber, DatePicker } from 'antd';
+import { Input, Select, Modal, message, Spin, Button, Upload, InputNumber, DatePicker, Form } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import { listPage } from "./rowMaterial.json"
@@ -13,9 +13,11 @@ import '../StockPublicStyle.less';
 interface ReceiveStrokAttachProps {
     type: 1 | 2
     id: string
+    dataSource: any
 }
-const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, ref): JSX.Element => {
+const ReceiveStrokAttach = forwardRef(({ type, id, dataSource }: ReceiveStrokAttachProps, ref): JSX.Element => {
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
+    const [form] = Form.useForm();
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/attach?attachType=${type}&id=${id}`)
@@ -36,10 +38,18 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
                 return false;
             }
             source.map((item: any) => fieldIds.push(item.id));
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/materialStock/attach`, type===2?{
                 attachType: type,
                 id,
-                fieldIds
+                fieldIds,
+                furnaceBatchNumber: form.getFieldValue('furnaceBatchNumber'),
+                warrantyNumber: form.getFieldValue('warrantyNumber')
+            }:{
+                attachType: type,
+                id,
+                fieldIds,
+                furnaceBatchNumber: dataSource?.furnaceBatchNumber,
+                warrantyNumber:dataSource?.warrantyNumber
             })
             resole(true as any)
         } catch (error) {
@@ -50,6 +60,14 @@ const ReceiveStrokAttach = forwardRef(({ type, id }: ReceiveStrokAttachProps, re
     useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
 
     return <Spin spinning={loading}>
+        {type===2&&<Form form={form} labelCol={{ span: 6 }}>
+            <Form.Item name='furnaceBatchNumber' label='炉批号' initialValue={dataSource?.furnaceBatchNumber}>
+                <Input maxLength={50}/>
+            </Form.Item>
+            <Form.Item name='warrantyNumber' label='质保书号' initialValue={dataSource?.warrantyNumber}>
+                <Input maxLength={50}/>
+            </Form.Item>
+        </Form>}
         <Attachment dataSource={data} edit title="附件" ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
     </Spin>
 })
@@ -61,6 +79,8 @@ export default function RawMaterialStock(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState({})
+    const [lineData, setLineData] = useState<any>({})
+    const [dataSource, setDataSource] = useState({})
     const [num, setNum] = useState<any>({});
     const receiveRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -110,6 +130,7 @@ export default function RawMaterialStock(): React.ReactNode {
         setSaveLoading(false)
         message.success("保存成功...")
         setVisible(false)
+        history.go(0)
     }
 
     const handleDownload = () => {
@@ -130,7 +151,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     setDetailId("")
                     setVisible(false)
                 }}>
-                <ReceiveStrokAttach type={attchType} id={detailId} ref={receiveRef} />
+                <ReceiveStrokAttach type={attchType} id={detailId} ref={receiveRef} dataSource={dataSource}/>
             </Modal>
             <Page
                 path={`/tower-storage/materialStock`}
@@ -151,11 +172,13 @@ export default function RawMaterialStock(): React.ReactNode {
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
                             <a style={{ marginRight: 12 }} onClick={() => {
+                                setDataSource(record)
                                 setAttachType(2)
                                 setDetailId(record.id)
                                 setVisible(true)
                             }}>质保单</a>
                             <a style={{ marginRight: 12 }} onClick={() => {
+                                setDataSource(record)
                                 setAttachType(1)
                                 setDetailId(record.id)
                                 setVisible(true)
@@ -205,6 +228,11 @@ export default function RawMaterialStock(): React.ReactNode {
                         value.startCreateTime = `${formatDate[0]} 00:00:00`
                         value.endCreateTime = `${formatDate[1]} 23:59:59`
                         delete value.time
+                    }
+                    if (value.date) {
+                        const formatDate = value.date.format("YYYY-MM-DD")
+                        value.balanceTime = `${formatDate} 00:00:00`
+                        delete value.date
                     }
                     if (value.length) {
                         value.lengthMin = value.length.lengthMin
@@ -338,6 +366,11 @@ export default function RawMaterialStock(): React.ReactNode {
                                 })
                             }
                         </Select>
+                    },
+                    {
+                        name: 'date',
+                        label: '结存日期',
+                        children: <DatePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
                         name: 'fuzzyQuery',
