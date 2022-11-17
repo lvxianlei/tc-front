@@ -139,9 +139,9 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList(list.slice(0))
     }
 
-    const lengthChange = (value: number, id: string) => {
-        const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+    const lengthChange = (value: number, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
                 return ({
                     ...item,
                     length: value,
@@ -171,9 +171,9 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList(list.slice(0))
     }
 
-    const widthChange = (value: number, id: string) => {
-        const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+    const widthChange = (value: number, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
                 return ({
                     ...item,
                     width: value,
@@ -207,6 +207,20 @@ export default function CreatePlan(props: any): JSX.Element {
             }
             if (flag) {
                 message.error("请您填写长度、宽度、数量！");
+                return false;
+            }
+            let find = false;
+            for (var i = 0; i < materialList.length; i++) {
+                for (var j = i + 1; j < materialList.length; j++) {
+                    if (materialList[i].materialName === materialList[j].materialName && materialList[i].structureSpec===materialList[j].structureSpec&& materialList[i].structureTexture===materialList[j].structureTexture&& materialList[i].length===materialList[j].length&& materialList[i].width===materialList[j].width) { 
+                        find = true; 
+                        break;
+                    }
+                }
+                if (find) break;
+            }
+            if (find) {
+                message.error("存在重复数据，请修改！");
                 return false;
             }
             saveRun({
@@ -357,7 +371,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                     min={0}
                                     precision={0}
                                     value={value || 0}
-                                    onChange={(value: number) => lengthChange(value, records.id)} key={key} />
+                                    onChange={(value: number) => lengthChange(value, key)} key={key} />
                             })
                         }
                         if (item.dataIndex === "width") {
@@ -368,7 +382,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                     max={99999}
                                     value={value}
                                     precision={0}
-                                    onChange={(value: number) => widthChange(value, records.id)} key={key} />
+                                    onChange={(value: number) => widthChange(value, key)} key={key} />
                             })
                         }
                         if (item.dataIndex === "materialStandard") {
@@ -428,8 +442,9 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setIndexNumber(index);
                                 setDataCopy(records);
                                 setVisibleNumber(true);
-                            }}>复制</Button>
-                            <Button type="link" disabled={records.source === 1||records.comparePriceId!==0} onClick={() => handleRemove(index)}>移除</Button>
+                            }}
+                            disabled={records.comparePriceId&&records.comparePriceId!==0}>复制</Button>
+                            <Button type="link" disabled={records.source === 1||(records.comparePriceId&&records.comparePriceId!==0)} onClick={() => handleRemove(index)}>移除</Button>
                         </>
                     }]}
                 pagination={false}
