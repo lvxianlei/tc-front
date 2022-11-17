@@ -3,18 +3,27 @@
  */
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Button, Input, Space } from 'antd';
+import { Button, Input, Row, Space } from 'antd';
 import { SearchTable as Page } from '../../common';
 import RequestUtil from "../../../utils/RequestUtil";
 import { productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import ConfirmableButton from "../../../components/ConfirmableButton";
 
+const calcContractTotal = (records: any[]) => {
+    return records.reduce((result: { weight: string, amount: string }, item: any) => ({
+        weight: (parseFloat(result.weight) + parseFloat(item.orderWeight || "0.00")).toFixed(2),
+        amount: (parseFloat(result.amount) + parseFloat(item.taxAmount || "0.00")).toFixed(2)
+    }), { weight: "0.00", amount: "0.00" })
+}
+
 export default function SaleOrder(): JSX.Element {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
+    const [selectedRows, setSelectedRows] = useState<any[]>([])
     const params = useParams<{ id: string }>();
     const entryPath = params.id ? "management" : "order"
     const [filterValue, setFilterValue] = useState({ projectId: params.id });
+    const total: any = calcContractTotal(selectedRows)
     const onFilterSubmit = (value: any) => {
         value["projectId"] = params.id;
         setFilterValue({ projectId: params.id })
@@ -152,6 +161,15 @@ export default function SaleOrder(): JSX.Element {
                     <Button type="primary" onClick={() => {
                         history.push(`/project/${entryPath}/new/order/${params.id}`);
                     }}>新增订单</Button>
+                    {
+                        selectedRows.length > 0 && <Row style={{ width: 1600 }}>
+                            <Row style={{ color: "#FF8C00", fontWeight: 600, fontSize: 14 }}>合计：</Row>
+                            <Space>
+                                <div>订单总价：<span style={{ color: "#FF8C00" }}>{total.amount}元</span></div>
+                                <div>订单重量：<span style={{ color: "#FF8C00" }}>{total.weight}吨</span></div>
+                            </Space>
+                        </Row>
+                    }
                 </>}
                 columns={[
                     {
@@ -213,6 +231,15 @@ export default function SaleOrder(): JSX.Element {
                         children: <Input placeholder="内部合同号/订单号/订单工程名称/合同签订单位" style={{ width: 210 }} />
                     }
                 ]}
+                tableProps={{
+                    rowSelection: {
+                        type: "checkbox",
+                        selectedRowKeys: selectedRows?.map((item: any) => item.id),
+                        onChange: (_: string[], selectedRows: any[]) => {
+                            setSelectedRows(selectedRows)
+                        },
+                    }
+                }}
             />
         </>
     )
