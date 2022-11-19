@@ -315,11 +315,11 @@
             {
                 "title": "提醒人",
                 "dataIndex": "reminderName",
-                "edit": false
+                "readOnly": true
             },
             {
                 "title": "是否签收",
-                "dataIndex": "ee",
+                "dataIndex": "isSign",
                 "type": "select",
                 "enum": [
                     {
@@ -334,9 +334,18 @@
             },
             {
                 "title": "通知渠道",
-                "dataIndex": "ff",
+                "dataIndex": "noticeChannel",
                 "type": "select",
-                "enum": []
+                "enum": [
+                    {
+                        "label": "平台信息",
+                        "value": 1
+                    },
+                    {
+                        "label": "站内信息",
+                        "value": 2
+                    }
+                ]
             }
         ]
     },
