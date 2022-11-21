@@ -276,7 +276,7 @@ export default function List(): React.ReactNode {
                             >
                                 <Button disabled={!(record.examineStatus === 1 || record.examineStatus === 5)} type="link">删除</Button>
                             </Popconfirm>
-                            <Button type="link" onClick={() => {
+                            <Button type="link" disabled={!(record.examineStatus === 1 || record.examineStatus === 5)} onClick={() => {
                                 setRowId(record?.id);
                                 setVisible(true);
                                 setType("edit");

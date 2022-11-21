@@ -44,7 +44,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
             form?.setFieldsValue({
                 ...result
             })
-            run(result?.drawTaskId, result?.productChangeDetailList)
+            run(result?.drawTaskId, result?.productChangeDetailList?.map((res: any) => res?.drawProductId))
             resole(result)
         } catch (error) {
             reject(error)
@@ -55,10 +55,8 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
         try {
             RequestUtil.get(`/tower-science/productChange/product/list/${id}`).then((res: any) => {
                 let newData: any = [];
-                list.forEach(item => {
-                    newData = res?.filter((items: any) => {
-                        return items?.id !== item?.drawProductId
-                    })
+                newData = res?.filter((items: any) => {
+                    return list.findIndex(e => e === items?.id) === -1
                 })
                 setChangeData(newData || [])
             })
@@ -234,6 +232,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         newChangeData = newChangeData.filter((item: any) => res?.id !== item?.id)
                         return {
                             ...res,
+                            productNumber: res?.name,
                             ...values
                         }
                     })
