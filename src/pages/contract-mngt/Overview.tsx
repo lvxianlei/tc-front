@@ -32,7 +32,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.num!==null?cur.num:0) 
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
         },0)
         const taxPrice = selectedRows.reduce((pre: any,cur: { taxTotalAmount: any; })=>{
             return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)

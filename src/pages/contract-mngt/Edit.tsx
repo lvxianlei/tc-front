@@ -132,7 +132,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         const totalNum = selectedRows.reduce((pre: any,cur: { num: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.num!==null?cur.num:0) 
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.num!==null?cur.num:1) 
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
@@ -379,6 +379,28 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
         setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+        const totalNum = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { num: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.num&&cur.num!==null?cur.num:0) 
+        },0) 
+        const totalWeight = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { totalWeight: any; })=>{
+            return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+        },0) 
+        const taxPrice = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+        },0)
+        const unTaxPrice = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { totalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+        },0)
+        setNumData({
+            totalNum,
+            totalWeight,
+            taxPrice,
+            unTaxPrice
+        })
+        setSelectedRows(selectedRows.filter((item:any)=>{return item?.materialCode!==id}))
+        setSelectedKeys(selectedRows.filter((item:any)=>{return item?.materialCode!==id}).map((item:any)=>{
+            return  item.index
+        }))
     }
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, materialList])
@@ -483,8 +505,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }
                 return ({
                     ...item,
-                    taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
-                    totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
+                    index: itemIndex,
+                    taxTotalAmount: (value * allData.taxPrice).toFixed(2),
+                    totalAmount: (value * allData.price).toFixed(2),
                     price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                     // totalWeight: calcFun.totalWeight({
                     //     length: item.length,
@@ -500,8 +523,32 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     [dataIndex]: value
                 })
             }
-            return item
+            return {
+                ...item,
+                index: itemIndex,
+            }
         })
+        if(selectedKeys.includes(index)){
+            const totalNum = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { num: any; })=>{
+                return parseFloat(pre!==null?pre:0) + parseFloat(cur.num&&cur.num!==null?cur.num:0) 
+            },0) 
+            const totalWeight = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalWeight: any; })=>{
+                return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+            },0) 
+            const taxPrice = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+            },0)
+            const unTaxPrice = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+            },0)
+            setNumData({
+                totalNum,
+                totalWeight,
+                taxPrice,
+                unTaxPrice
+            })
+        }
+        
         setMaterialList(newData.slice(0));
         setPopDataList(newData.slice(0))
     }
@@ -511,6 +558,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             if (index === id) {
                 return ({
                     ...item,
+                    index,
                     [type]: value,
                     weight: calcFun.weight({
                         weightAlgorithm: item.weightAlgorithm,
@@ -529,8 +577,31 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     }),
                 })
             }
-            return item
+            return {
+                ...item,
+                index
+            }
         })
+        if(selectedKeys.includes(id)){
+            const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { num: any; })=>{
+                return parseFloat(pre!==null?pre:0) + parseFloat(cur.num&&cur.num!==null?cur.num:0) 
+            },0) 
+            const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalWeight: any; })=>{
+                return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+            },0) 
+            const taxPrice = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+            },0)
+            const unTaxPrice = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+            },0)
+            setNumData({
+                totalNum,
+                totalWeight,
+                taxPrice,
+                unTaxPrice
+            })
+        }
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
@@ -796,7 +867,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         </span>
         <CommonTable
             style={{ padding: "0" }}
-            rowKey="key"
+            rowKey="index"
             columns={[
                 {
                     key: 'index',
@@ -901,7 +972,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={[...popDataList]}
+            dataSource={[...popDataList].map((item:any,index:number)=>{
+                return {
+                    ...item,
+                    index
+                }
+            })}
             rowSelection={{
                 selectedRowKeys: selectedKeys,
                 type: "checkbox",

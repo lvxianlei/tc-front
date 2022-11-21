@@ -22,7 +22,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const [addMaterialList, setAddMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
 
-    let [count, setCount] = useState<number>(1);
+    let [count, setCount] = useState<number>(0);
     let [indexNumber, setIndexNumber] = useState<number>(0);
     let [dataCopy, setDataCopy] = useState<any[]>([]);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
@@ -32,10 +32,10 @@ export default function CreatePlan(props: any): JSX.Element {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         const totalNum = selectedRows.reduce((pre: any,cur: { planPurchaseNum: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum&&cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
-            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
+            return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
         },0)
         setNumData({
             totalNum,
@@ -45,24 +45,24 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleAddModalOkNumber = async () => {
         const baseData = await addCollectionNumberForm.validateFields();
         let ix = count,
-            materialListCopy = materialList,
-            popDataListCopy = popDataList;
-        for (let i = 0; i < baseData.name; i += 1) {
+        materialListCopy = materialList
+        // popDataListCopy = popDataList;
+        for (let i = 0; i < baseData.name; i+=1) {
             const result = {
                 ...dataCopy,
                 width: 0,
                 length: 0,
                 planPurchaseNum: "",
                 totalWeight: "",
-                id: (ix + 1) + ""
+                id: (ix + 1) + "",
             }
             ix = ix + 1;
             materialListCopy.splice((indexNumber + 1), 0, result);
-            popDataListCopy.splice((indexNumber + 1), 0, result);
+            // popDataListCopy.splice((indexNumber + 1), 0, result);
         }
         setCount(ix)
-        setMaterialList(materialListCopy.slice(0))
-        setPopDataList(popDataListCopy.slice(0));
+        setMaterialList(materialListCopy)
+        setPopDataList(materialListCopy);
         setVisibleNumber(false);
     }
 
@@ -101,22 +101,20 @@ export default function CreatePlan(props: any): JSX.Element {
 
     // 移除
     const handleRemove = (id: number) => {
-        console.log(id)
-        if(selectedKeys.includes(id)){
-            const totalNum = selectedRows.filter((item:any)=>{return !selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
-                return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
-            },0) 
-            const totalWeight = selectedRows.filter((item:any)=>{return !selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
-                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
-            },0)
-            setNumData({
-                totalNum,
-                totalWeight
-            })
-        }
         setMaterialList(materialList.filter((item: any, index:number) => index !== id))
         setPopDataList(materialList.filter((item: any, index: number) => index !== id))
         
+        const totalNum = selectedRows.filter((item:any)=>{return  item.index!==id}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum&&cur.planPurchaseNum!==null?cur.planPurchaseNum:0) ||0
+        },0) 
+        const totalWeight = selectedRows.filter((item:any)=>{return  item.index!==id}).reduce((pre: any,cur: { totalWeight: any; })=>{
+            return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) ||0
+        },0)
+        setNumData({
+            totalNum,
+            totalWeight
+        })
+        setSelectedRows(selectedRows.filter((item:any)=>{return  item.index!==id}))
     }
 
     const handleNumChange = (value: number, id: string) => {
@@ -137,10 +135,10 @@ export default function CreatePlan(props: any): JSX.Element {
         })
         if(selectedKeys.includes(id)){
             const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
-                return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
+                return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum&&cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
             },0) 
             const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
-                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+                return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
             },0)
             setNumData({
                 totalNum,
@@ -171,10 +169,10 @@ export default function CreatePlan(props: any): JSX.Element {
         })
         if(selectedKeys.includes(id)){
             const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
-                return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
+                return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum&&cur.planPurchaseNum!==null?cur.planPurchaseNum:0) ||0
             },0) 
             const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
-                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+                return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) ||0
             },0)
             setNumData({
                 totalNum,
@@ -458,11 +456,19 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setVisibleNumber(true);
                             }}
                             disabled={(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))}>复制</Button>
-                            <Button type="link" disabled={records.source === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => handleRemove(index)}>移除</Button>
+                            <Button type="link" disabled={records.source === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
+                                handleRemove(index)
+                               
+                            }}>移除</Button>
                         </>
                     }]}
                 pagination={false}
-                dataSource={[...popDataList]} 
+                dataSource={[...popDataList.map((item:any, index:number)=>{
+                    return {
+                        ...item,
+                        index: index
+                    }
+                })]} 
                 rowSelection={{
                     selectedRowKeys: selectedKeys,
                     type: "checkbox",
