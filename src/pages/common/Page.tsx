@@ -29,7 +29,8 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     sourceKey?: string,
     isSunmryLine?: (result: IResponseData) => void;//添加计算行
     exportObject?: { [key: string]: any }, // 导出可能会包含的id等
-    clearSearch?: boolean
+    clearSearch?: boolean;
+    pageSize?: number;  //条数
 }
 export interface IResponseData {
     readonly current: number;
@@ -112,7 +113,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     }
 
     public async componentDidMount() {
-        this.fetchTableData({ ...this.props.filterValue });
+        this.fetchTableData({ ...this.props.filterValue }, { pageSize: this.props?.pageSize });
     }
 
     public async componentDidUpdate(nextProps: any) {
@@ -142,7 +143,7 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
     public async onFilterSubmit(values: Record<string, any>) {
         const tablePagination: TablePaginationConfig = {
             current: 1,
-            pageSize: 20,
+            pageSize: this.props?.pageSize || 20,
             total: 0,
             showSizeChanger: false
         }
