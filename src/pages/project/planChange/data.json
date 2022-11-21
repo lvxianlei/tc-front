@@ -1,0 +1,225 @@
+{
+    "table": [
+        {
+            "title": "状态",
+            "dataIndex": "status",
+            "width": 80
+        },
+        {
+            "title": "变更单据号",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "销售计划号",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "产品名称",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "合同名称",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "客户名称",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "变更类型",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "变更塔基数",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "变更总重量",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "归属区域",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "修改日期",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "修改说明",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "备注",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "修改人",
+            "dataIndex": "",
+            "width": 100
+        },
+        {
+            "title": "修改时间",
+            "dataIndex": "",
+            "width": 100
+        }
+    ],
+    "edit": {
+        "base": [
+            {
+                "title": "变更单据号",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "销售计划号",
+                "dataIndex": ""
+            },
+            {
+                "title": "内部合同号",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "工程名称",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "客户名称",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "变更基数",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "总重量",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "业务经理",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "归属区域",
+                "dataIndex": "",
+                "disabled": true
+            },
+            {
+                "title": "修改说明",
+                "dataIndex": "",
+                "type": "textarea"
+            },
+            {
+                "title": "备注",
+                "dataIndex": "",
+                "type": "textarea"
+            }
+        ],
+        "content": [
+            {
+                "title": "变更内容",
+                "dataIndex": ""
+            },
+            {
+                "title": "变更前内容",
+                "dataIndex": ""
+            },
+            {
+                "title": "变更后内容",
+                "dataIndex": ""
+            },
+            {
+                "title": "备注",
+                "dataIndex": ""
+            }
+        ],
+        "suspend": [
+            {
+                "title": "塔形",
+                "dataIndex": "",
+                "edit": false
+            },
+            {
+                "title": "呼高",
+                "dataIndex": "",
+                "edit": false
+            },
+            {
+                "title": "杆塔号",
+                "dataIndex": "",
+                "edit": false
+            },
+            {
+                "title": "基数",
+                "dataIndex": "",
+                "edit": false
+            },
+            {
+                "title": "单重（吨）",
+                "dataIndex": "",
+                "edit": false
+            },
+            {
+                "title": "总重（吨）",
+                "dataIndex": "",
+                "edit": false
+            },
+            {
+                "title": "备注",
+                "dataIndex": ""
+            },
+            {
+                "title": "是否下发车间",
+                "dataIndex": ""
+            },
+            {
+                "title": "生产状态",
+                "dataIndex": ""
+            },
+            {
+                "title": "已加工重量",
+                "dataIndex": ""
+            }
+        ]
+    }
+}

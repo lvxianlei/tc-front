@@ -578,6 +578,13 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view_task_notice"
     },
+    { // 计划变更
+      "label": "计划变更",
+      "path": "/project/planChange",
+      "module": "./pages/project/planChange/index",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_task_notice"
+    },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/new/cost/:projectId",
