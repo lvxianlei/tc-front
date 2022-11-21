@@ -331,7 +331,7 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
             }
             return item
           })}
-          dataSource={[]}
+          dataSource={data?.docReminderVos}
         />
         <Attachment edit ref={attachRef} dataSource={data?.attachInfoVos} />
       </Spin>
