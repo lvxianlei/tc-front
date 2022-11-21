@@ -177,14 +177,13 @@ export default function ReleaseList(): React.ReactNode {
         try {
             form.validateFields().then(res => {
                 setConfirmLoading(true)
-                RequestUtil.get<any>(`/tower-science/loftingBatch/weld/${params.id}`).then(res => {
+                RequestUtil.get<any>(`/tower-science/loftingBatch/weld/${params.id}?printerName=${form.getFieldsValue(true)?.printerName}`).then(res => {
                     fetch(`http://127.0.0.1:2001/print`, {
                         mode: 'cors',
                         method: 'post',
                         headers: {
                             'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(res, jsonStringifyReplace)
+                        }
                     }).then((res) => {
                         setConfirmLoading(false)
                         resolve(true)
