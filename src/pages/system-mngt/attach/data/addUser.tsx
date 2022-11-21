@@ -28,7 +28,7 @@ interface AddUserProps {
   pushType: 1 | 2 | 3
 }
 
-const AddUserContent = forwardRef(function AddUser (
+const AddUserContent = forwardRef(function AddUser(
   { dataSource = [], pushType = 1 }: AddUserProps,
   ref
 ) {
@@ -156,6 +156,8 @@ const AddUserContent = forwardRef(function AddUser (
       )}
       <Table
         size='small'
+        style={{ width: "100%" }}
+        scroll={{ x: "100%" }}
         rowKey='pushId'
         columns={columns}
         dataSource={data?.records.map((item: any) => ({
@@ -173,7 +175,7 @@ const AddUserContent = forwardRef(function AddUser (
   )
 })
 
-export default function AddUser ({ data, ...props }: any) {
+export default function AddUser({ data, ...props }: any) {
   const typeNameEnum = { 1: '角色', 2: '岗位', 3: '人员' }
   const addUserRef = useRef<any>()
   const [visible, setVisible] = useState<boolean>(false)
@@ -240,7 +242,7 @@ export default function AddUser ({ data, ...props }: any) {
         onClick={
           data.readOnly === undefined || data.readOnly
             ? () => !data.disabled && setVisible(true)
-            : () => {}
+            : () => { }
         }
         readOnly={data.readOnly === undefined ? true : data.readOnly}
         value={value?.typeName}

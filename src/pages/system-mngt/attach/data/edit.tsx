@@ -42,7 +42,13 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                 ids: item.reminderIds,
                 names: item.reminderNames,
                 type: item.reminderType,
-                typeName: typeNameEnum[item.reminderType as 1 | 2 | 3]
+                typeName: typeNameEnum[item.reminderType as 1 | 2 | 3],
+                records: item.reminderIds?.split(",").map((ritem: any, index: number) => ({
+                  id: ritem,
+                  pushId: ritem,
+                  userId: ritem,
+                  pushName: item.reminderNames?.split(",")?.[index]
+                }))
               }
             }))
           })
