@@ -13,7 +13,7 @@
         {
             "title": "送检状态",
             "dataIndex": "isInspectName",
-            "width": 60
+            "width": 80
         },
         {
             "title": "状态",
