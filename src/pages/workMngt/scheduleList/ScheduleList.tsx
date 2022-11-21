@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Form } from 'antd'
 import { Link, useLocation } from 'react-router-dom'
 import { Page } from '../../common'
+import { FixedType } from 'rc-table/lib/interface';
 
 export default function ScheduleList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -53,7 +54,7 @@ export default function ScheduleList(): React.ReactNode {
         {
             key: 'productCategoryNum',
             title: '塔型（个）',
-            width: 150,
+            width: 80,
             dataIndex: 'productCategoryNum'
         },
         {
@@ -71,7 +72,7 @@ export default function ScheduleList(): React.ReactNode {
         {
             key: 'productNum',
             title: '杆塔（基）',
-            width: 150,
+            width: 80,
             dataIndex: 'productNum'
         },
         {
@@ -88,6 +89,7 @@ export default function ScheduleList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             dataIndex: 'operation',
+            fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Link to={`/workMngt/scheduleList/scheduleView/${record.id}/${record.status}`}>查看</Link>
@@ -100,14 +102,14 @@ export default function ScheduleList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
         if (value.planTime) {
             const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.plannedDeliveryTimeStart = formatDate[0]+ ' 00:00:00';
-            value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';
+            value.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.planTime
         }
         setFilterValue(value)
@@ -124,18 +126,23 @@ export default function ScheduleList(): React.ReactNode {
             requestData={{
                 status: location.state?.state
             }}
+            tableProps={{
+                pagination: {
+                    pageSize: 100
+                }
+            }}
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',
                     label: '最新状态变更时间',
-                    children: <DatePicker.RangePicker format='YYYY-MM-DD'/>
+                    children: <DatePicker.RangePicker format='YYYY-MM-DD' />
                 },
                 {
                     name: 'status',
-                    label:'任务状态',
-                    children: <Form.Item name="status" initialValue={ location.state?.state || '' }>
-                        <Select style={{width:"100px"}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
+                    label: '任务状态',
+                    children: <Form.Item name="status" initialValue={location.state?.state || ''}>
+                        <Select style={{ width: "100px" }}>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={2} key={2}>待指派</Select.Option>
                             <Select.Option value={3} key={3}>待完成</Select.Option>
                         </Select>
@@ -144,7 +151,7 @@ export default function ScheduleList(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="请输入放样任务编号/计划号/订单编号/内部合同编号进行查询" maxLength={200} />
+                    children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型"  style={{ width: "350px" }} />
                 },
             ]}
         />
