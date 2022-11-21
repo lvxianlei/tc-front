@@ -7,7 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '@utils/RequestUtil'
 import { edit } from './data.json'
 import AddUser from './addUser'
-
+const typeNameEnum = { 1: '角色', 2: '岗位', 3: '人员' }
 interface ParentData {
   code: string
   title: string
@@ -34,7 +34,18 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
             `/tower-system/doc/detail`,
             { id }
           )
-          resole(data)
+          resole({
+            ...data,
+            docReminderVos: data?.docReminderVos?.map((item: any) => ({
+              ...item,
+              reminderType: {
+                ids: item.reminderIds,
+                names: item.reminderNames,
+                type: item.reminderType,
+                typeName: typeNameEnum[item.reminderType as 1 | 2 | 3]
+              }
+            }))
+          })
         } catch (error) {
           console.log(error)
           reject(error)
