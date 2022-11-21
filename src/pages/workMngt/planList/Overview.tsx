@@ -11,7 +11,7 @@ import { materialStandardOptions, materialTextureOptions } from "../../../config
 export default function Edit() {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const history = useHistory()
-    const params = useParams<{ id: string, purchaseType: string }>()
+    const params = useParams<{ id: string, purchaseType: string, status: string }>()
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
@@ -187,9 +187,9 @@ export default function Edit() {
                 {isEdit && <Button key="add" type="primary" style={{ margin: "0px 16px" }} onClick={() => setVisible(true)}>添加</Button>}
             </>}
                 operation={[
-                    <Fragment key="edit">{!isEdit && <Button key="edit" type="primary" style={{ marginRight: 16 }} onClick={() => setIsEdit(true)}>编辑</Button>}</Fragment>,
-                    <Button key="cancel" loading={cancelPlanLoading} type="primary" style={{ marginRight: 16 }} onClick={handleCancelPlan}>取消计划</Button>,
-                    <Fragment key="save">{isEdit && <Button key="save" loading={saveLoading} type="primary" style={{ marginRight: 16 }} onClick={handleSave}>保存</Button>}</Fragment>,
+                    // <Fragment key="edit">{!isEdit && <Button key="edit" type="primary" style={{ marginRight: 16 }} onClick={() => setIsEdit(true)}>编辑</Button>}</Fragment>,
+                    <Fragment key="save">{params.status ==='1'&&<Button key="cancel" loading={cancelPlanLoading} type="primary" style={{ marginRight: 16 }} onClick={handleCancelPlan}>取消计划</Button>}</Fragment>,
+                    // <Fragment key="save">{isEdit && <Button key="save" loading={saveLoading} type="primary" style={{ marginRight: 16 }} onClick={handleSave}>保存</Button>}</Fragment>,
                     <Button key="goback" type="ghost" onClick={() => history.goBack()}>返回</Button>
                 ]}>
                 {!isEdit && <CommonTable

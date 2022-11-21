@@ -120,7 +120,7 @@ export default function ContractMngt() {
                         width: 270,
                         render: (_: any, records: any) => <>
                             <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
+                            <Button disabled={records.isRelate!==0} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
                             }}>取消</Button>
