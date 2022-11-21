@@ -368,6 +368,12 @@ export default function CreatePlan(props: any): JSX.Element {
                                         </Select>
                                     })
                                 }
+                                if (["processedMaterialStandard"].includes(item.dataIndex)&&props.type==='edit') {
+                                    return ({
+                                        ...item,
+                                        render: (value: string, records: any, key: number) => <span>{records?.processedMaterialStandardName}</span>
+                                    })
+                                }
                                 if (["processedStructureTexture"].includes(item.dataIndex)&&props.type==='create') {
                                     return ({
                                         ...item,
