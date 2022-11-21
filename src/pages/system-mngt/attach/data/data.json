@@ -314,7 +314,7 @@
             },
             {
                 "title": "提醒人",
-                "dataIndex": "reminderName",
+                "dataIndex": "reminderNames",
                 "readOnly": true
             },
             {

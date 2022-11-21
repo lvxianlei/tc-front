@@ -19,7 +19,7 @@ interface EditProps {
   parent?: ParentData
 }
 
-export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
+export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
   const attachRef = useRef<any>()
   const history = useHistory()
   const [form] = Form.useForm()
@@ -59,6 +59,7 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
     new Promise(async (resove, reject) => {
       try {
         const saveData = await form.validateFields()
+        const editable = await editableForm.validateFields()
         if (id !== 'create') {
           setVisible(true)
           return
@@ -67,9 +68,9 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
           id === 'create'
             ? saveData
             : {
-                ...saveData,
-                id
-              }
+              ...saveData,
+              id
+            }
         await saveRun({
           ...postData,
           tag: postData.tag?.map((item: any) => item.value).join(','),
@@ -94,7 +95,12 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
             .join(','),
           fileIds: attachRef.current
             ?.getDataSource()
-            ?.map((item: any) => item.id) 
+            ?.map((item: any) => item.id),
+          docReminderDtos: editable.submit?.map((item: any) => ({
+            ...item,
+            reminderIds: item.reminderType.ids,
+            reminderType: item.reminderType.type
+          }))
         })
         message.success('保存成功...')
         resove(true)
@@ -120,7 +126,7 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
           if (item.id === changeRowData.id) {
             return {
               ...item,
-              reminderName: item.reminderType.names
+              reminderNames: item.reminderType.names
             }
           }
           return item
@@ -132,14 +138,15 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
   const handleModalOk = () =>
     new Promise(async (resove, reject) => {
       const version = await modalForm.validateFields()
+      const editable = await editableForm.validateFields()
       const saveData = await form.validateFields()
       const postData =
         id === 'create'
           ? saveData
           : {
-              ...saveData,
-              id
-            }
+            ...saveData,
+            id
+          }
       await saveRun({
         ...postData,
         versionType: version.versionType,
@@ -162,7 +169,12 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
         useDeptNames: postData.useDept?.records
           ?.map((item: any) => item.name)
           .join(','),
-        fileIds: attachRef.current?.getDataSource()?.map((item: any) => item.id)
+        fileIds: attachRef.current?.getDataSource()?.map((item: any) => item.id),
+        docReminderDtos: editable.submit?.map((item: any) => ({
+          ...item,
+          reminderIds: item.reminderType.ids,
+          reminderType: item.reminderType.type
+        }))
       })
       await message.success('保存成功...')
       setVisible(false)
@@ -248,9 +260,9 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
             ...data,
             tag: data?.tag
               ? data?.tag.split(',').map((item: string) => ({
-                  label: item,
-                  value: item
-                }))
+                label: item,
+                value: item
+              }))
               : [],
 
             drafterId: {
@@ -282,9 +294,9 @@ export default forwardRef(function Edit ({ id, parent }: EditProps, ref) {
             },
             approvalProcessCode: data?.approvalProcessCode
               ? {
-                  value: data?.approvalProcessCode,
-                  label: data?.approvalProcessName
-                }
+                value: data?.approvalProcessCode,
+                label: data?.approvalProcessName
+              }
               : undefined
           }}
         />
