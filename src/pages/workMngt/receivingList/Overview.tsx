@@ -366,7 +366,7 @@ export default function Overview() {
                 }} >申请送检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
-                    已收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight||0}</span>
+                    已收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receiveWeight||0}</span>
                     结算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receiveBalanceWeight||0}</span>
                     含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receivePrice||0}</span>
                     待收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ userData?.wWeight ||0}</span>

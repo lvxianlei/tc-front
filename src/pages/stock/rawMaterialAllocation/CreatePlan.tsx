@@ -221,6 +221,7 @@ import AuthUtil from '@utils/AuthUtil';
                 allocationStockDetailDTOS: popDataList.map((item:any)=>{
                      return {
                          ...item,
+                         contractNumber: item?.materialContractNumber,
                          allocationWarehouseIn: baseInfo.allocationWarehouseIn,
                          allocationWarehouseOut: baseInfo.allocationWarehouseOut,
                      }
@@ -233,6 +234,7 @@ import AuthUtil from '@utils/AuthUtil';
                 allocationStockDetailDTOS: popDataList.map((item:any)=>{
                      return {
                          ...item,
+                         contractNumber: item?.materialContractNumber,
                          allocationWarehouseIn: baseInfo.allocationWarehouseIn,
                          allocationWarehouseOut: baseInfo.allocationWarehouseOut,
                      }
@@ -258,12 +260,13 @@ import AuthUtil from '@utils/AuthUtil';
          }
      }, [props.visible])
  
-     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+     const { run: saveRun } = useRequest<{ [key: string]: any }>((save: any) => new Promise(async (resove, reject) => {
          try {
              const path = '/tower-storage/allocationStock'
-             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
-                 ...data,
-                 id: props.id
+             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? save : {
+                 ...save,
+                 id: props.id,
+                 allocationNumber: data?.allocationNumber
              })
              message.success("创建成功！");
              setType(0)
@@ -273,12 +276,13 @@ import AuthUtil from '@utils/AuthUtil';
              reject(error)
          }
      }), { manual: true })
-     const { run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+     const { run: submitRun } = useRequest<{ [key: string]: any }>((submit: any) => new Promise(async (resove, reject) => {
          try {
              const path = '/tower-storage/allocationStock'
-             const result: { [key: string]: any } = await RequestUtil[ props.type === "create" ? "post" : "put" ](path, props.type === "create" ? data : {
-                 ...data,
-                 id: props.id
+             const result: { [key: string]: any } = await RequestUtil[ props.type === "create" ? "post" : "put" ](path, props.type === "create" ? submit : {
+                 ...submit,
+                 id: props.id,
+                 allocationNumber: data?.allocationNumber
              })
              message.success("创建成功！");
              props?.handleCreate({ code: 1 })

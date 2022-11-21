@@ -341,7 +341,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             setSelectedRowKeys(selectedRowKeys);
                             setSelectedRow(selectedRows)
                         },
-                        getCheckboxProps: (record: any) => record.totalConclusion === '不合格'
+                        getCheckboxProps: (record: any) => record.totalConclusion === '合格'
                     }
                 }}
             />
