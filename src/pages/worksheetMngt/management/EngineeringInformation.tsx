@@ -166,12 +166,12 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
         <DetailContent key='WorkOrderDetail' className={styles.WorkOrderDetail}>
             <Row gutter={12}>
                 <Col span={19}>
-                    <Form form={form} labelCol={{ span: 8 }}>
+                    <Form form={form} labelCol={{ span: 10 }}>
                         <Row gutter={24}>
                             {
                                 [...fields || []]?.map((res: any, index: number) => {
                                     return res?.triggerField === 1 ?
-                                        <Col span={6} key={index}>
+                                        <Col span={8} key={index}>
                                             <Form.Item label={res?.fieldKey} >
                                                 <Row gutter={12}>
                                                     <Col span={18}>
@@ -189,7 +189,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                                             </Form.Item>
                                         </Col>
                                         :
-                                        <Col span={6} key={index}>
+                                        <Col span={8} key={index}>
                                             <Form.Item label={res?.fieldKey} key={index} rules={res?.required === 1 ? [{
                                                 required: true,
                                                 message: `请输入${res?.fieldKey}`
@@ -200,7 +200,7 @@ export default forwardRef(function EngineeringInformation({ rowId, rowData, deta
                                 })
                             }
                         </Row>
-                        <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 2 }}>
+                        <Form.Item label="完成/退回说明" name="description" labelCol={{ span: 3 }}>
                             <Input.TextArea maxLength={800} />
                         </Form.Item>
                     </Form>
