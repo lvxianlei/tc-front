@@ -183,7 +183,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         ...item,
                         inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
                         receiveStockDetailId: item?.receiveStockDetailId,
-                        manufactureTime: item?.manufactureTime
+                        manufactureTime: item?.manufactureTime,
+                        contractNumber: item?.contractNumber?item?.contractNumber:item?.materialContractNumber,
                     }
                 }),
                 ...baseInfo,
@@ -202,6 +203,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         receiveStockDetailId: item?.receiveStockDetailId,
                         manufactureTime: item?.manufactureTime,
                         ...item,
+                        contractNumber: item?.contractNumber?item?.contractNumber:item?.materialContractNumber,
                         inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
                     }
                 }),
@@ -305,7 +307,7 @@ export default function CreatePlan(props: any): JSX.Element {
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
-                props?.handleCreate();
+                props?.handleCreate({code:1});
             }}
             maskClosable={false}
             width={1100}
@@ -313,7 +315,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate();
+                    props?.handleCreate({code:1});
                 }}>
                     取消
                 </Button>,
