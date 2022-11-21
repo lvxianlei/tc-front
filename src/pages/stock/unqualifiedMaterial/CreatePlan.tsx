@@ -92,6 +92,19 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
+    const handleWidthChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    processedLength: value 
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
     const handlePriceChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
@@ -164,6 +177,7 @@ export default function CreatePlan(props: any): JSX.Element {
             
             // 拦截
             let processedLength = false;
+            let processedWidth = false;
             let processedTaxPrice = false;
             let processedStructureSpec = false;
             let processedStructureTexture = false;
@@ -171,6 +185,9 @@ export default function CreatePlan(props: any): JSX.Element {
             let purchaseDepartmentOpinion = false;
             for (let i = 0; i < popDataList.length; i += 1) {
                 if (!(popDataList[i].processedLength)) {
+                    processedLength = true;
+                }
+                if (!(popDataList[i].processedWidth)) {
                     processedLength = true;
                 }
                 if (!(popDataList[i].processedTaxPrice)) {
@@ -213,6 +230,10 @@ export default function CreatePlan(props: any): JSX.Element {
             }
             if (processedLength) {
                 message.error("请您填写处理后长度！");
+                return false;
+            }
+            if (processedWidth) {
+                message.error("请您填写处理后宽度！");
                 return false;
             }
             type==='save'&&saveRun(popDataList[0]);
@@ -376,8 +397,14 @@ export default function CreatePlan(props: any): JSX.Element {
                                         render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleLengthChange(value, records.id)} key={key} />
                                     })
                                 }
+                                if (["processedWidth"].includes(item.dataIndex)&&props.type==='create') {
+                                    return ({
+                                        ...item,
+                                        render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
+                                    })
+                                }
                                 return item;
-                            },
+                            }),
                             {
                                 title: "操作",
                                 fixed: "right",
@@ -391,7 +418,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                         
                                     }}>检验结果</Button> */}
                                 </>
-                            })]}
+                            }]}
                         pagination={false}
                         dataSource={[...popDataList]} />
                 </Spin>

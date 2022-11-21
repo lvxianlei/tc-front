@@ -176,6 +176,11 @@
             "title": "处理后长度",
             "dataIndex": "processedLength",
             "width": 100
+        },
+        {
+            "title": "处理后宽度",
+            "dataIndex": "processedWidth",
+            "width": 100
         }
     ]
 }
