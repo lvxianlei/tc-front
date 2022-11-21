@@ -149,14 +149,9 @@ export default function ScheduleList(): React.ReactNode {
                     </Form.Item>
                 },
                 {
-                    name: 'productCategoryName',
-                    label: '塔型',
-                    children: <Input placeholder="请输入" />
-                },
-                {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号"  style={{ width: "350px" }} />
+                    children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型"  style={{ width: "350px" }} />
                 }
             ]}
         />
