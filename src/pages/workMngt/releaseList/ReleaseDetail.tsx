@@ -214,10 +214,7 @@ export default function ReleaseList(): React.ReactNode {
                     },
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
-                    console.log(res)
                     setConfirmLoading(false)
-                    pageForm.resetFields();
-                    setPageVisible(false)
                     resolve(true)
                     // return res.blob();
                 }).catch(e => {
@@ -253,10 +250,7 @@ export default function ReleaseList(): React.ReactNode {
                     },
                     body: JSON.stringify(res, jsonStringifyReplace)
                 }).then((res) => {
-                    console.log(res)
                     setConfirmLoading(false)
-                    form.resetFields();
-                    setVisible(false)
                     resolve(true)
                     // return res.blob();
                 }).catch(e => {

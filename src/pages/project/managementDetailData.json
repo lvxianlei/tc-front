@@ -361,11 +361,25 @@
         },
         {
             "title": "制单时间",
-            "dataIndex": "createTime"
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "下发日期",
+            "dataIndex": "issueTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "审批状态",
             "dataIndex": "taskReviewStatus"
+        },
+        {
+            "title": "审核完成日期",
+            "dataIndex": "approvalTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
         }
     ],
     "taskNoticeEditBaseInfo": [
