@@ -333,7 +333,7 @@ import AuthUtil from '@utils/AuthUtil';
                  setMaterialList([]);
                  setPopDataList([]);
                  setType(0)
-                 props?.handleCreate();
+                 props?.handleCreate({code:1});
                  
              }}
              maskClosable={false}
@@ -343,7 +343,7 @@ import AuthUtil from '@utils/AuthUtil';
                      setMaterialList([]);
                      setPopDataList([]);
                      setType(0)
-                     props?.handleCreate();
+                     props?.handleCreate({code:1});
                  }}>
                      取消
                  </Button>
@@ -351,7 +351,7 @@ import AuthUtil from '@utils/AuthUtil';
                  <Button key="back" onClick={() => {
                      setMaterialList([]);
                      setPopDataList([]);
-                     props?.handleCreate();
+                     props?.handleCreate({code:1});
                  }}>
                      取消
                  </Button>,

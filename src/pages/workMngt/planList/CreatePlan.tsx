@@ -35,7 +35,7 @@ export default function CreatePlan(props: any): JSX.Element {
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
         },0)
         const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
-            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
         },0)
         setNumData({
             totalNum,
@@ -101,8 +101,22 @@ export default function CreatePlan(props: any): JSX.Element {
 
     // 移除
     const handleRemove = (id: number) => {
+        console.log(id)
+        if(selectedKeys.includes(id)){
+            const totalNum = selectedRows.filter((item:any)=>{return !selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
+                return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
+            },0) 
+            const totalWeight = selectedRows.filter((item:any)=>{return !selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
+                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+            },0)
+            setNumData({
+                totalNum,
+                totalWeight
+            })
+        }
         setMaterialList(materialList.filter((item: any, index:number) => index !== id))
         setPopDataList(materialList.filter((item: any, index: number) => index !== id))
+        
     }
 
     const handleNumChange = (value: number, id: string) => {
@@ -126,7 +140,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
             },0) 
             const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
-                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
+                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
             },0)
             setNumData({
                 totalNum,
@@ -160,7 +174,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
             },0) 
             const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
-                return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
+                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
             },0)
             setNumData({
                 totalNum,
@@ -269,7 +283,7 @@ export default function CreatePlan(props: any): JSX.Element {
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
-                props?.handleCreate();
+                props?.handleCreate(1);
             }}
             maskClosable={false}
             width={1100}
@@ -277,7 +291,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate();
+                    props?.handleCreate(1);
                 }}>
                     关闭
                 </Button>,
@@ -443,8 +457,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setDataCopy(records);
                                 setVisibleNumber(true);
                             }}
-                            disabled={records.comparePriceId&&records.comparePriceId!==0}>复制</Button>
-                            <Button type="link" disabled={records.source === 1||(records.comparePriceId&&records.comparePriceId!==0)} onClick={() => handleRemove(index)}>移除</Button>
+                            disabled={(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))}>复制</Button>
+                            <Button type="link" disabled={records.source === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => handleRemove(index)}>移除</Button>
                         </>
                     }]}
                 pagination={false}
