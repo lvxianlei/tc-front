@@ -216,7 +216,7 @@ export default function IssuedDetail(): React.ReactNode {
                         resolve(true)
                         return res?.json();
                     }).then((res) => {
-                        message.success(res?.Msg)
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
@@ -257,7 +257,7 @@ export default function IssuedDetail(): React.ReactNode {
                         resolve(true)
                         return res?.json();
                     }).then((res) => {
-                        message.success(res?.Msg)
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
