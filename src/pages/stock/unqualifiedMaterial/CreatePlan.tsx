@@ -14,9 +14,10 @@ import moment from 'moment';
 import "./CreatePlan.less";
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 interface ReceiveStrokAttachProps {
-    id: string
+    id: string,
+    type: 'create'|'edit'
 }
-const ReceiveStrokAttach = forwardRef(({ id }: ReceiveStrokAttachProps, ref): JSX.Element => {
+const ReceiveStrokAttach = forwardRef(({ id, type }: ReceiveStrokAttachProps, ref): JSX.Element => {
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
@@ -52,7 +53,7 @@ const ReceiveStrokAttach = forwardRef(({ id }: ReceiveStrokAttachProps, ref): JS
     useImperativeHandle(ref, () => ({ onSubmit: saveRun }), [saveRun, attachRef.current.getDataSource])
 
     return <Spin spinning={loading}>
-        <Attachment dataSource={data} edit title="质保单" ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
+        <Attachment dataSource={data} edit={type === 'create'} title="质保单" ref={attachRef} style={{ margin: "0px" }} marginTop={false} />
     </Spin>
 })
 
@@ -434,7 +435,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     setDetailId("")
                     setVisible(false)
                 }}>
-                <ReceiveStrokAttach id={detailId} ref={receiveRef}  />
+                <ReceiveStrokAttach id={detailId} ref={receiveRef}  type={props.type}/>
             </Modal>
         </>
     )
