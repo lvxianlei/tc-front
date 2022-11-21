@@ -126,11 +126,7 @@ export default function ScheduleList(): React.ReactNode {
             requestData={{
                 status: location.state?.state
             }}
-            tableProps={{
-                pagination: {
-                    pageSize: 100
-                }
-            }}
+            pageSize={100}
             searchFormItems={[
                 {
                     name: 'statusUpdateTime',
