@@ -84,6 +84,8 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [addMaterialList, setAddMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
+    const [InReservoirArea, setInReservoirArea] = useState<any[]>([]);//入库库区数据
+    const [InLocation, setInLocation] = useState<any[]>([]);//入库库位数据
     const [warehouseId, setWarehouseId] = useState<string>("");
     const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
     const materialStandardEnum:any = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -140,12 +142,38 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         setPopDataList(materialList.filter((item: any) => item.id !== id))
     }
     
-    const handleBatchChange = (value: string, id: number) => {
+    const handleABatchChange = (value: string, id: number) => {
         const list = popDataList.map((item: any,index:number) => {
             if (index === id) {
                 return ({
                     ...item,
                     receiveBatchNumber: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleBBatchChange = (value: string, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
+                return ({
+                    ...item,
+                    furnaceBatchNumber: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleCBatchChange = (value: string, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
+                return ({
+                    ...item,
+                    warrantyNumber: value
                 })
             }
             return item
@@ -336,6 +364,48 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 message.error("请您选择入库明细!");
                 return false;
             }
+            let receiveBatchNumber = false;
+            let materialStandard = false;
+            let structureTexture = false;
+            let length = false;
+            let width = false;
+            for (let i = 0; i < popDataList.length; i += 1) {
+                if (!(popDataList[i].receiveBatchNumber)) {
+                    receiveBatchNumber = true;
+                }
+                if (!(popDataList[i].materialStandard)) {
+                    materialStandard = true;
+                }
+                if (!(popDataList[i].structureTexture)) {
+                    structureTexture = true;
+                }
+                if (!(popDataList[i].length)) {
+                    length = true;
+                }
+                if (!(popDataList[i].width)) {
+                    width = true;
+                }
+            }
+            if (receiveBatchNumber) {
+                message.error("请您填写收货批次！");
+                return false;
+            }
+            if (materialStandard) {
+                message.error("请您选择标准！");
+                return false;
+            }
+            if (structureTexture) {
+                message.error("请您选择材质！");
+                return false;
+            }
+            if (length) {
+                message.error("请您填写长度！");
+                return false;
+            }
+            if (width) {
+                message.error("请您填写宽度！");
+                return false;
+            }
             popDataList.forEach((item: any) => {
                 if (item.id && item.num && item.num > 0) {
                     item["materialStockId"] = item.id
@@ -397,6 +467,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
             // 盘点仓库修改后入库明细清空
+            getInWarehousing(fields.warehouseId,1)
             setMaterialList([])
             setPopDataList([])
             return;
@@ -478,6 +549,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             run();
             if (props?.isEdit) {
                 setWarehouseId((props?.warehouseId as any));
+                getInWarehousing(props?.warehouseId,1)
                 getDataRun();
             } else {
                 addCollectionForm.resetFields();
@@ -504,6 +576,52 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             reject(error)
         }
     }), { ready: !!warehouseId, refreshDeps: [warehouseId] })
+    // 获取仓库/库区/库位
+    const getInWarehousing = async (id?: any, type?: any) => {
+        const data: any = await RequestUtil.get(`/tower-storage/warehouse/tree`, {
+            id,
+            type,
+        });
+        switch (type) {
+            case 1:
+                setInReservoirArea(data)
+                break;
+            case 2:
+                setInLocation(data)
+                break;
+            default:
+                break;
+        }
+    }
+    const handleInReservoirChange = (value: string, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    reservoirId: InReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id,
+                    reservoirName: value,
+                })
+            }
+            return item
+        })
+        getInWarehousing(InReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id, 2)
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleInLocatorChange = (value: string, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    locatorId: InLocation.filter((itemOne:any)=>{return itemOne?.name===value})[0].id,
+                    locatorName: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
     return (
         <Modal
             title={props.isEdit ? "编辑盘点单" : "新建盘点单"}
@@ -511,7 +629,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
-                props?.handleCreate({ code: 0 });
+                props?.handleCreate({ code: 1 });
             }}
             destroyOnClose
             maskClosable={false}
@@ -520,7 +638,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate({ code: 0 });
+                    props?.handleCreate({ code: 1 });
                 }}>
                     关闭
                 </Button>,
@@ -601,7 +719,27 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 render: (value: number, records: any, key: number) => <Input
                                     defaultValue={value || undefined}
                                     style={{width: '150px'}}
-                                    onBlur={(e: any) => handleBatchChange(e.target.value, key)}
+                                    onBlur={(e: any) => handleABatchChange(e.target.value, key)}
+                                 />
+                            })
+                        }
+                        if (item.dataIndex === "furnaceBatchNumber") {
+                            return ({
+                                ...item,
+                                render: (value: number, records: any, key: number) => <Input
+                                    defaultValue={value || undefined}
+                                    style={{width: '150px'}}
+                                    onBlur={(e: any) => handleBBatchChange(e.target.value, key)}
+                                 />
+                            })
+                        }
+                        if (item.dataIndex === "warrantyNumber") {
+                            return ({
+                                ...item,
+                                render: (value: number, records: any, key: number) => <Input
+                                    defaultValue={value || undefined}
+                                    style={{width: '150px'}}
+                                    onBlur={(e: any) => handleCBatchChange(e.target.value, key)}
                                  />
                             })
                         }
@@ -625,18 +763,19 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                         label: popDataList[key]?.materialStandardName,
                                         value: popDataList[key]?.materialStandard
                                     } as any}
-                                    onChange={(e: string) => {
+                                    onChange={(e: any) => {
+                                        console.log(e)
                                         const newData = popDataList.map((item: any, index: number) => {
                                             if (index === key) {
                                                 return {
                                                     ...item,
-                                                    materialStandard: e.split(',')[0],
-                                                    materialStandardName: e.split(',')[1]
+                                                    materialStandard: e.value,
+                                                    materialStandardName: e.label
                                                 }
                                             }
                                             return item
                                         })
-                                        setPopDataList(newData)
+                                        setPopDataList(newData.slice(0))
                                     }}>
                                     {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                                 </Select>
@@ -649,18 +788,18 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                     style={{ width: '150px' }}
                                     labelInValue
                                     value={{ label: popDataList[key]?.structureTexture, value: popDataList[key]?.structureTextureId } as any}
-                                    onChange={(e: string) => {
+                                    onChange={(e: any) => {
                                         const newData = popDataList.map((item: any, index: number) => {
                                             if (index === key) {
                                                 return {
                                                     ...item,
-                                                    structureTextureId: e.split(',')[0],
-                                                    structureTexture: e.split(',')[1]
+                                                    structureTextureId: e.value,
+                                                    structureTexture: e.label
                                                 }
                                             }
                                             return item
                                         })
-                                        setPopDataList(newData)
+                                        setPopDataList(newData.slice(0))
                                     }}>
                                     {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id} key={index}>{item.name}</Select.Option>)}
                                 </Select>
@@ -670,6 +809,52 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <span>{`${records.profitAndLossNum}`}</span>
+                            })
+                        }
+                        if (item.dataIndex==="reservoirName") {
+                            return ({
+                                ...item,
+                                render: (value: string, records: any, key: number) => <Select
+                                            className="select"
+                                            style={{ width: "100%" }}
+                                            value={value ? value : '请选择'}
+                                            onChange={(val) => { handleInReservoirChange(val,records.id) }}
+                                        >
+                                            {
+                                                InReservoirArea.map((item, index) => {
+                                                    return (
+                                                        <Select.Option
+                                                            value={item.name}
+                                                        >
+                                                            {item.name}
+                                                        </Select.Option>
+                                                    )
+                                                })
+                                            }
+                                        </Select>
+                            })
+                        }
+                        if (item.dataIndex==='locatorName') {
+                            return ({
+                                ...item,
+                                render: (value: string, records: any, key: number) => <Select
+                                            className="select"
+                                            style={{ width: "100%" }}
+                                            value={value ? value : '请选择'}
+                                            onChange={(val) => { handleInLocatorChange(val,records.id) }}
+                                        >
+                                            {
+                                                InLocation.map((item, index) => {
+                                                    return (
+                                                        <Select.Option
+                                                            value={item.name}
+                                                        >
+                                                            {item.name}
+                                                        </Select.Option>
+                                                    )
+                                                })
+                                            }
+                                        </Select>
                             })
                         }
                         return item
