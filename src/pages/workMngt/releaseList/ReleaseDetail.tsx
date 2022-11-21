@@ -303,6 +303,7 @@ export default function ReleaseList(): React.ReactNode {
                 setPageVisible(false);
                 pageForm.resetFields()
             }}
+            confirmLoading={confirmLoading}
         >
             <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
                 <Form.Item label='打印机' name='printerName' rules={[{
@@ -366,6 +367,7 @@ export default function ReleaseList(): React.ReactNode {
                 setVisible(false);
                 form.resetFields()
             }}
+            confirmLoading={confirmLoading}
         >
             <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
                 <Form.Item label='打印机' name='printerName' rules={[{
