@@ -113,13 +113,14 @@ export default function PackingList(): React.ReactNode {
                         method: 'post',
                         headers: {
                             'Content-Type': 'application/json'
-                        }
+                        },
+                        body: JSON.stringify(res, jsonStringifyReplace)
                     }).then((res) => {
                         setConfirmLoading(false)
                         resolve(true)
                         return res?.json();
                     }).then((res) => {
-                        message.success(res?.Msg)
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
@@ -149,13 +150,14 @@ export default function PackingList(): React.ReactNode {
                         method: 'post',
                         headers: {
                             'Content-Type': 'application/json'
-                        }
+                        },
+                        body: JSON.stringify(res, jsonStringifyReplace)
                     }).then((res) => {
                         setConfirmLoading(false)
                         resolve(true)
                         return res?.json();
                     }).then((res) => {
-                        message.success(res?.Msg)
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
