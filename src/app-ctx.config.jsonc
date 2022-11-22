@@ -833,6 +833,11 @@
                         "label": "数据统计",
                         "path": "/planPanal/dataStatistics",
                         "authority": "tc_erp_aps_board_statistics"
+                    },
+                    {
+                        "label": "报表统计",
+                        "path": "/planPanal/reportStatistics",
+                        "authority": "tc_erp_aps_board_statistics"
                     }
                 ]
             },
