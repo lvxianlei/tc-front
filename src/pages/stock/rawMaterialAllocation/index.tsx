@@ -138,11 +138,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
-        if (value.createTime) {
-            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startCreateTime = `${formatDate[0]} 00:00:00`
-            value.endCreateTime = `${formatDate[1]} 23:59:59`
-            delete value.createTime
+        if (value.applyTime) {
+            const formatDate = value.applyTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startApplyTime = `${formatDate[0]} 00:00:00`
+            value.endApplyTime = `${formatDate[1]} 23:59:59`
+            delete value.applyTime
         }
         if (value.allocationTime) {
             const formatDate = value.allocationTime.map((item: any) => item.format("YYYY-MM-DD"))
@@ -197,7 +197,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 }
                 searchFormItems={[
                     {
-                        name: 'createTime',
+                        name: 'applyTime',
                         label: '申请日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
