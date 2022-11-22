@@ -368,6 +368,10 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             let materialStandard = false;
             let structureTexture = false;
             let length = false;
+            let locator = false;
+            let reservoir = false;
+            let furnaceBatchNumber = false;
+            let warrantyNumber = false;
             let width = false;
             for (let i = 0; i < popDataList.length; i += 1) {
                 if (!(popDataList[i].receiveBatchNumber)) {
@@ -382,7 +386,19 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 if (!(popDataList[i].length)) {
                     length = true;
                 }
-                if (!(popDataList[i].width)) {
+                if (!(popDataList[i].locatorName)) {
+                    locator = true;
+                }
+                if (!(popDataList[i].reservoirName)) {
+                    reservoir = true;
+                }
+                if (!(popDataList[i].furnaceBatchNumber)) {
+                    furnaceBatchNumber = true;
+                }
+                if (!(popDataList[i].warrantyNumber)) {
+                    warrantyNumber = true;
+                }
+                if (popDataList[i].width === undefined||popDataList[i].width === null) {
                     width = true;
                 }
             }
@@ -404,6 +420,22 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             }
             if (width) {
                 message.error("请您填写宽度！");
+                return false;
+            }
+            if (locator) {
+                message.error("请您选择区位！");
+                return false;
+            }
+            if (reservoir) {
+                message.error("请您选择库位！");
+                return false;
+            }
+            if (furnaceBatchNumber) {
+                message.error("请您填写炉批号！");
+                return false;
+            }
+            if (warrantyNumber) {
+                message.error("请您填写质保书号！");
                 return false;
             }
             popDataList.forEach((item: any) => {
@@ -920,7 +952,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                                 structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
                                 structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
-
+                                width: item.width?item.width:0,
 
                                 /**
                                  *  账面数量=当前收货批次下当前原材料的库存数量
@@ -1022,7 +1054,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                                 structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
                                 structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
-
+                                width: item.width?item.width:0,
 
                                 /**
                                  *  账面数量=当前收货批次下当前原材料的库存数量

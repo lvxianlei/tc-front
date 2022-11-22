@@ -231,7 +231,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     }
                     if (value.date) {
                         const formatDate = value.date.format("YYYY-MM-DD")
-                        value.balanceTime = `${formatDate} 00:00:00`
+                        value.balanceTime = `${formatDate} 23:59:59`
                         delete value.date
                     }
                     if (value.length) {
