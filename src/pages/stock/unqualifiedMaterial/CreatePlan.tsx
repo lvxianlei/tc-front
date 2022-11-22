@@ -135,10 +135,31 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleOptionChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
-                return ({
-                    ...item,
-                    purchaseDepartmentOpinion: value 
-                })
+                if(value===1||value===4){
+                    console.log(item?.structureSpec)
+                    return ({
+                        ...item,
+                        purchaseDepartmentOpinion: value,
+                        processedMaterialStandard: item?.materialStandard,
+                        processedStructureTexture: item?.structureTexture,
+                        processedStructureSpec: item?.structureSpec,
+                        processedTaxPrice: item?.taxPrice,
+                        processedLength: item?.length,
+                        processedWidth: item?.width
+                    })
+                }else{
+                    return ({
+                        ...item,
+                        purchaseDepartmentOpinion: value,
+                        processedMaterialStandard: '',
+                        processedStructureTexture: '',
+                        processedStructureSpec: '',
+                        processedTaxPrice: '',
+                        processedLength: '',
+                        processedWidth: '' 
+                    })
+                }
+                
             }
             return item
         })
@@ -188,8 +209,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 if (!(popDataList[i].processedLength)) {
                     processedLength = true;
                 }
-                if (!(popDataList[i].processedWidth)) {
-                    processedLength = true;
+                if (popDataList[i].processedWidth===undefined||popDataList[i].processedWidth===null) {
+                    processedWidth = true;
                 }
                 if (!(popDataList[i].processedTaxPrice)) {
                     processedTaxPrice = true;
@@ -389,7 +410,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 if (["processedStructureSpec"].includes(item.dataIndex)&&props.type==='create') {
                                     return ({
                                         ...item,
-                                        render: (value: number, records: any, key: number) => <Input defaultValue={value || undefined} onBlur={(e: any) => handleStructureSpecChange(e.target.value, records.id)} key={key}/>
+                                        render: (value: string, records: any, key: number) => <Input value={records?.processedStructureSpec} onChange={(e: any) => handleStructureSpecChange(e.target.value, records.id)} key={key}/>
                                     })
                                 }
                                 if (["processedTaxPrice"].includes(item.dataIndex)&&props.type==='create') {
@@ -407,7 +428,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 if (["processedWidth"].includes(item.dataIndex)&&props.type==='create') {
                                     return ({
                                         ...item,
-                                        render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
+                                        render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
                                     })
                                 }
                                 return item;
