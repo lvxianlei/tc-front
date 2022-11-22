@@ -1473,7 +1473,7 @@ export default function IngredientsList(): React.ReactNode {
                                         {
                                             AvailableInventoryData?.map((item: any) => {
                                                 return <Col span={12} style={{ marginBottom: 8 }}>
-                                                    <Checkbox value={item.length}>{item.length} 可用数量:{item?.available}</Checkbox>
+                                                    <Checkbox value={item.totalNum}>可用数量:{item?.totalNum}</Checkbox>
                                                 </Col>
                                             })
                                         }
