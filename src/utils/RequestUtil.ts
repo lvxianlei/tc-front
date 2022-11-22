@@ -49,6 +49,7 @@ export default abstract class RequestUtil {
      * @returns request 
      */
     private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void, changePath: boolean = true): Promise<T> {
+        
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
                 'Content-Type': 'application/json',

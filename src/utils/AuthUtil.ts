@@ -158,14 +158,12 @@ export default abstract class AuthUtil {
      * @param token 
      * @param [options] 
      */
-    public static setSinzetechAuth(token: string, refrenshToken: string): void {
-        Cookies.set(TOKEN_KEY, token)
+    public static setSinzetechAuth(token: string, refrenshToken: string, expires_in: number): void {
+        Cookies.set(TOKEN_KEY, token, {
+            expires: new Date((new Date().getTime() + (expires_in - 60) * 1000))
+        })
         sessionStorage.setItem(TOKEN_KEY, token)
         sessionStorage.setItem(REFRENSH_TOKEN, refrenshToken)
-        this.timer && clearInterval(this.timer)
-        this.timer = setTimeout(() => {
-            this.refrenshToken(this.getRefreshToken())
-        }, this.timeLength)
     }
 
     /**
@@ -252,7 +250,7 @@ export default abstract class AuthUtil {
      */
     public static async refrenshToken(token: string): Promise<void> {
         try {
-            const { access_token, refresh_token }: any = await RequestUtil.post('/sinzetech-auth/oauth/token', {
+            const { access_token, refresh_token, ...result }: any = await RequestUtil.post('/sinzetech-auth/oauth/token', {
                 grant_type: "refresh_token",
                 scope: "all",
                 refresh_token: token
@@ -261,7 +259,7 @@ export default abstract class AuthUtil {
                 'Authorization': `Basic ${this.getAuthorization()}`,
                 'Tenant-Id': this.getTenantId()
             })
-            this.setSinzetechAuth(access_token, refresh_token)
+            this.setSinzetechAuth(access_token, refresh_token, result.expires_in)
         } catch (error) {
             console.log("ERROR: refrenshToken", error)
         }
