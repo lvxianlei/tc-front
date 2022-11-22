@@ -251,7 +251,7 @@ import AuthUtil from '@utils/AuthUtil';
          if (props.visible) {
              getBatchingStrategy();
              addCollectionForm.setFieldsValue({
-                 allocationTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                 createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                  allocationUser: {
                     id: AuthUtil.getUserInfo().user_id,
                     value: AuthUtil.getUserInfo().username,
@@ -306,7 +306,7 @@ import AuthUtil from '@utils/AuthUtil';
                      id: result?.allocationUser,
                      value: result?.allocationUserName
                  },
-                 allocationTime: result?.allocationTime,
+                 createTime: result?.createTime,
                  allocationWarehouseOut: props.type==='view'? result?.allocationWarehouseOutName: result?.allocationWarehouseOut,
                  allocationWarehouseIn: props.type==='view'? result?.allocationWarehouseInName: result?.allocationWarehouseIn
              })
