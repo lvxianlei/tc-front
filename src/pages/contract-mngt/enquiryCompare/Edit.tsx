@@ -10,134 +10,23 @@ interface EditProps {
     id: string
     type: "new" | "edit"
 }
-interface PagenationProps {
-    current: number
-    pageSize: number
-}
 
-const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref) => {
-    const [form] = Form.useForm()
-    const [selectRows, setSelectRows] = useState<any[]>([])
-    const [pagenation, setPagenation] = useState<PagenationProps>({
-        current: 1,
-        pageSize: 10
-    })
-    const {
-        loading,
-        data,
-        run
-    } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get( `/tower-supply/materialPurchasePlan/infoList`, {
-                ...filterValue,
-                // planStatus: 1,
-                usePlanDetailIds: props?.usePlanDetailIds||'',
-                current: pagenation.current,
-                pageSize: pagenation.pageSize
-            })
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { refreshDeps: [pagenation.current] })
-
-    useImperativeHandle(ref, () => ({ selectRows }), [JSON.stringify(selectRows)])
-
-    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
-
-    return <>
-        <Form form={form} onFinish={(values) =>{ 
-            if (values.date) {
-                const formatDate = values.date.map((item: any) => item.format("YYYY-MM-DD"))
-                values.startCreateTime = formatDate[0] + " 00:00:00"
-                values.endCreateTime = formatDate[1] + " 23:59:59"
-                delete values.date
-            }
-            run({
-            ...values,
-            purchaserId: values.purchaserId?.value
-        })}}>
-            <Row gutter={[8, 8]}>
-                <Col><Form.Item label="采购类型" name="purchaseType">
-                    <Select style={{ width: 200 }}>
-                        <Select.Option value="1">配料采购</Select.Option>
-                        <Select.Option value="2">库存采购</Select.Option>
-                        <Select.Option value="3">缺料采购</Select.Option>
-                    </Select>
-                </Form.Item></Col>
-                {/* <Col><Form.Item label="采购人" name="purchaserId">
-                    <IntgSelect width={200} />
-                </Form.Item></Col> */}
-                <Col><Form.Item label="品名" name="materialName">
-                    <Input />
-                </Form.Item></Col>
-                <Col><Form.Item label="标准" name="materialStandard">
-                    <Select style={{ width: "160px" }} defaultValue={""}>
-                        <Select.Option value='' key={'aa'}>全部</Select.Option>
-                        {
-                            materialStandardOptions?.map((item: { id: string, name: string }) => <Select.Option
-                                value={item.id}
-                                key={item.id}>{item.name}</Select.Option>)
-                        }
-                    </Select>
-                </Form.Item></Col>
-                <Col><Form.Item label="材质" name="structureTexture">
-                    <Select style={{ width: "160px" }} defaultValue={""}>
-                        <Select.Option value='' key={'aa'}>全部</Select.Option>
-                        {
-                            materialTextureOptions?.map((item: { id: string, name: string }) => <Select.Option
-                                value={item.name}
-                                key={item.id}>{item.name}</Select.Option>)
-                        }
-                    </Select>
-                </Form.Item></Col>
-                <Col><Form.Item label="规格" name="structureSpec">
-                    <Input />
-                </Form.Item></Col>
-                <Col><Form.Item label="申购日期" name="date">
-                    <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
-                </Form.Item></Col>
-                <Col><Form.Item label="模糊查询" name="fuzzyQuery">
-                    <Input placeholder="输入采购计划编号/物料编码进行查询"/>
-                </Form.Item></Col>
-                <Col><Form.Item>
-                    <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
-                    <Button type="default" onClick={() => form.resetFields()} htmlType="button"
-                        style={{ marginLeft: 12 }}>重置</Button>
-                </Form.Item></Col>
-            </Row>
-        </Form>
-        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
-            rowSelection={{
-                type: "checkbox",
-                onChange: (_: any, selectedRows: any[]) => {
-                    setSelectRows(selectedRows)
-                }
-            }}
-            rowKey='purchasePlanDetailId'
-            pagination={{
-                size: "small",
-                pageSize: data?.pageSize,
-                onChange: paginationChange,
-                current: data?.current,
-                total: data?.total
-            }}
-        />
-    </>
-})
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const materialStandardEnum = materialStandardOptions?.map((item: {
+    const materialStandardEnum:any = materialStandardOptions?.map((item: {
         id: string,
         name: string
     }) => ({
         value: item.id,
         label: item.name
     }))
+    const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
+    
     const choosePlanRef = useRef<{ selectRows: any[] }>({ selectRows: [] })
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
+    const [materialPlanList, setMaterialPlanList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [form] = Form.useForm();
     const [purchasePlanId, setPurchasePlanId] = useState('');
@@ -230,8 +119,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }))
 
     const handleAddModalOk = () => {
-        const newMaterialList: any[] = []
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
+        setMaterialPlanList([...materialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
@@ -250,7 +138,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 num: item.num
             })
         }))])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any) => ({
+        setPopDataList([...materialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
@@ -287,9 +175,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     const handleChoosePlanOk = () => {
-        const chooseData = choosePlanRef.current?.selectRows;
+        const materials = [...materialPlanList]
         // setPurchasePlanId(chooseData[0].purchasePlanId);
-        setMaterialList(chooseData?.map((item: any) => ({
+        setMaterialList([...materials?.map((item: any) => ({
             ...item,
             num: item.num || "0",
             structureSpec: item.structureSpec,
@@ -303,8 +191,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             materialStandard: item.materialStandard,
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
-        })))
-        setPopDataList(chooseData?.map((item: any) => ({
+        }))])
+        setPopDataList([...materials?.map((item: any) => ({
             ...item,
             num: item.num || "0",
             structureSpec: item.structureSpec,
@@ -318,7 +206,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             materialStandard: item.materialStandard,
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
-        })))
+        }))])
         setChooseVisible(false)
     }
 
@@ -412,6 +300,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
     }
 
+
+  
+
     return <Spin spinning={loading}>
         <Modal
             width={addMaterial.width || 520}
@@ -454,7 +345,64 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         </Modal>
         <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
             onCancel={() => setChooseVisible(false)}>
-            <ChoosePlan ref={choosePlanRef} usePlanDetailIds={popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)}/>
+           <PopTableContent
+                data={{
+                    ...(choosePlanList as any),
+                    search: choosePlanList.search.map((res: any) => {
+                        if (res.dataIndex === 'materialStandard') {
+                            return ({
+                                ...res,
+                                enum: [{value:'',label:'全部'}, ...materialStandardEnum]
+                            })
+                        }
+                        if (res.dataIndex === 'structureTexture') {
+                            return ({
+                                ...res,
+                                enum: [{value:'',label:'全部'},...structureTextureEnum]
+                            })
+                        }
+                        if (res.dataIndex === 'purchaseType') {
+                            return ({
+                                ...res,
+                                enum: [
+                                    {value:'1',label:'配料采购'},
+                                    {value:'2',label:'库存采购'},
+                                    {value:'3',label:'缺料采购'}
+                                ]
+                            })
+                        }
+                        return res
+                    }),
+                    path :`${choosePlanList.path}?usePlanDetailIds = ${popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)||''}` ,
+                    columns: (choosePlanList as any).columns.map((item: any) => {
+                        if (item.dataIndex === "materialStandard") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: materialStandardEnum
+                            })
+                        }
+                        return item
+                    })
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => {
+                    setMaterialPlanList(fields.map((item: any) => ({
+                        ...item,
+                        structureSpec: item.structureSpec,
+                        source: item.source || 2,
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                        structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
+                        proportion: item.proportion == -1 ? 0 : item.proportion
+                    })))
+                }}
+            />
         </Modal>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit onChange={handGuaranteChange} />
