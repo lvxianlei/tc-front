@@ -1,7 +1,7 @@
 /**
  * 创建计划列表
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button, InputNumber, Select, message } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
@@ -273,7 +273,6 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }), { ready: props.type !== "create" && props.id && props.visible === true, refreshDeps: [props.visible, props.type, props.id] })
 
-
     return (
         <Modal
             title={'采购计划'}
@@ -281,7 +280,7 @@ export default function CreatePlan(props: any): JSX.Element {
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
-                props?.handleCreate(1);
+                props?.handleCreate({code:1});
             }}
             maskClosable={false}
             width={1100}
@@ -289,7 +288,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate(1);
+                    props?.handleCreate({code:1});
                 }}>
                     关闭
                 </Button>,
