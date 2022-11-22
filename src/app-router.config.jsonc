@@ -1370,6 +1370,13 @@
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower"
     },
+    { // 工作管理-工作目录-放样提料比对
+      "name": "放样提料比对",
+      "path": "/workMngt/setOutList/towerInformation/:id/comparison",
+      "module": "./pages/workMngt/setOut/Comparison",
+      "exact": true,
+      "authority": "tc_erp_rd_work_loft_tower"
+    },
     { // 工作管理-工作目录-放样
       "name": "放样",
       "path": "/workMngt/setOutList/towerInformation/:id/lofting/:productSegmentId",
