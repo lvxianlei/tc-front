@@ -43,6 +43,20 @@ export default function IssuedDetail(): React.ReactNode {
         resole(data || []);
     }), { manual: true })
 
+    const { data: printerDatas, run: printerRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        fetch(`http://127.0.0.1:2001/getprinters`, {
+            mode: 'cors',
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res: any) => {
+            return res.json();
+        }).then(data => {
+            resole(data.Data);
+        })
+    }), { manual: true })
+
     const columns = [
         {
             key: 'index',
@@ -184,34 +198,36 @@ export default function IssuedDetail(): React.ReactNode {
 
     const GeneratePDFPage = () => new Promise(async (resolve, reject) => {
         try {
-            setConfirmLoading(true)
-            RequestUtil.post<any>(`/tower-science/supplyBatch/structure/page/print`, {
-                ...pageForm?.getFieldsValue(true),
-                supplyBatchId: params?.id
-            }).then(res => {
-                fetch(`http://127.0.0.1:2001/print`, {
-                    mode: 'cors',
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(res, jsonStringifyReplace)
-                }).then((res) => {
-                    console.log(res)
-                    setConfirmLoading(false)
-                    setPageVisible(false)
-                    pageForm.resetFields();
-                    resolve(true);
-                    // return res.blob();
+            pageForm.validateFields().then(res => {
+                setConfirmLoading(true)
+                RequestUtil.post<any>(`/tower-science/supplyBatch/structure/page/print`, {
+                    ...pageForm?.getFieldsValue(true),
+                    supplyBatchId: params?.id
+                }).then(res => {
+                    fetch(`http://127.0.0.1:2001/print`, {
+                        mode: 'cors',
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(res, jsonStringifyReplace)
+                    }).then((res) => {
+                        setConfirmLoading(false)
+                        resolve(true)
+                        return res?.json();
+                    }).then((res) => {
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
+                        resolve(true)
+                    }).catch(e => {
+                        setConfirmLoading(false)
+                        console.log(e)
+                        reject(false)
+                    })
                 }).catch(e => {
                     setConfirmLoading(false)
                     console.log(e)
                     reject(false)
                 })
-            }).catch(e => {
-                setConfirmLoading(false)
-                console.log(e)
-                reject(false)
             })
         } catch (error) {
             setConfirmLoading(false)
@@ -222,36 +238,37 @@ export default function IssuedDetail(): React.ReactNode {
 
     const GeneratePDF = () => new Promise(async (resolve, reject) => {
         try {
-            setConfirmLoading(true)
-            RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`, {
-                ...form?.getFieldsValue(true),
-                supplyBatchId: params?.id
-            }).then(res => {
-                console.log(res)
-                fetch(`http://127.0.0.1:2001/print`, {
-                    mode: 'cors',
-                    method: 'post',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(res, jsonStringifyReplace)
-                }).then((res) => {
+            form.validateFields().then(res => {
+                setConfirmLoading(true)
+                RequestUtil.post<any>(`/tower-science/supplyBatch/structure/print`, {
+                    ...form?.getFieldsValue(true),
+                    supplyBatchId: params?.id
+                }).then(res => {
                     console.log(res)
-                    setConfirmLoading(false)
-                    form.resetFields();
-                    setVisible(false)
-                    resolve(true)
-                    // return res.blob();
+                    fetch(`http://127.0.0.1:2001/print`, {
+                        mode: 'cors',
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(res, jsonStringifyReplace)
+                    }).then((res) => {
+                        setConfirmLoading(false)
+                        resolve(true)
+                        return res?.json();
+                    }).then((res) => {
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
+                        resolve(true)
+                    }).catch(e => {
+                        setConfirmLoading(false)
+                        console.log(e)
+                        reject(false)
+                    })
                 }).catch(e => {
                     setConfirmLoading(false)
                     console.log(e)
                     reject(false)
                 })
-
-            }).catch(e => {
-                setConfirmLoading(false)
-                console.log(e)
-                reject(false)
             })
         } catch (error) {
             console.log(error)
@@ -271,6 +288,18 @@ export default function IssuedDetail(): React.ReactNode {
             confirmLoading={confirmLoading}
         >
             <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
+                <Form.Item label='打印机' name='printerName' rules={[{
+                    required: true,
+                    message: '请选择打印机'
+                }]}>
+                    <Select placeholder="请选择打印机">
+                        {printerDatas && printerDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
                 <Form.Item label='材料名称' name='materialNameList'>
                     <Select placeholder="请选择材料名称" mode='multiple' allowClear>
                         {materialDatas && materialDatas.map((item, index) => {
@@ -323,6 +352,18 @@ export default function IssuedDetail(): React.ReactNode {
             confirmLoading={confirmLoading}
         >
             <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+                <Form.Item label='打印机' name='printerName' rules={[{
+                    required: true,
+                    message: '请选择打印机'
+                }]}>
+                    <Select placeholder="请选择打印机">
+                        {printerDatas && printerDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
                 <Form.Item label='材料名称' name='materialNameList'>
                     <Select placeholder="请选择材料名称" mode='multiple' allowClear>
                         {materialDatas && materialDatas.map((item, index) => {
@@ -389,6 +430,7 @@ export default function IssuedDetail(): React.ReactNode {
                     textureRun();
                     materialRun();
                     setPageVisible(true);
+                    printerRun();
                 }} ghost>打印PDF-分页</Button>
                 <Button type="primary" onClick={() => {
                     specRun();
@@ -396,6 +438,7 @@ export default function IssuedDetail(): React.ReactNode {
                     textureRun();
                     materialRun();
                     setVisible(true);
+                    printerRun();
                 }} ghost>打印PDF-不分页</Button>
                 <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
             </Space>}

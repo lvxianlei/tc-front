@@ -5,7 +5,7 @@
 */
 
 import React, { useRef, useState } from 'react';
-import { Space, Button, Popconfirm, Spin, Modal, message } from 'antd';
+import { Space, Button, Popconfirm, Spin, Modal, message, Form, Select } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -17,6 +17,7 @@ import { IBundle, ICount, IPackingList } from './ISetOut';
 import { bundleColumns, columns } from './SetOutInformation.json';
 import ApplyPacking, { EditProps } from './ApplyPacking';
 import AuthUtil from '../../../utils/AuthUtil';
+import { useForm } from 'antd/lib/form/Form';
 
 export default function PackingList(): React.ReactNode {
     const history = useHistory();
@@ -29,6 +30,11 @@ export default function PackingList(): React.ReactNode {
     const editRef = useRef<EditProps>();
     const [visible, setVisible] = useState<boolean>(false);
     const userId = AuthUtil.getUserInfo().user_id;
+    const [form] = useForm();
+    const [pageForm] = useForm();
+    const [noPageVisible, setNoPageVisible] = useState<boolean>(false);
+    const [pageVisible, setPageVisible] = useState<boolean>(false);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
@@ -54,6 +60,20 @@ export default function PackingList(): React.ReactNode {
         }
     }), {})
     const detailData: any = data;
+
+    const { data: printerDatas, run: printerRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
+        fetch(`http://127.0.0.1:2001/getprinters`, {
+            mode: 'cors',
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((res: any) => {
+            return res.json();
+        }).then(data => {
+            resole(data.Data);
+        })
+    }), { manual: true })
 
     const { data: count } = useRequest<ICount>(() => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<ICount>(`/tower-science/packageStructure/count/${params.productId}`);
@@ -83,43 +103,139 @@ export default function PackingList(): React.ReactNode {
         }
     })
 
-    const GeneratePDFWeight = async () => {
-        RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/${params.productId}`).then(res => {
-            console.log(res)
-            fetch(`http://127.0.0.1:2001/print`, {
-                mode: 'cors',
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(res, jsonStringifyReplace)
-            }).then((res) => {
-                console.log(res)
-                // return res.blob();
+    const GeneratePDFWeight = () => new Promise(async (resolve, reject) => {
+        try {
+            pageForm.validateFields().then(res => {
+                setConfirmLoading(true)
+                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/${params.productId}?printerName=${pageForm.getFieldsValue(true)?.printerName}`).then(res => {
+                    fetch(`http://127.0.0.1:2001/print`, {
+                        mode: 'cors',
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(res, jsonStringifyReplace)
+                    }).then((res) => {
+                        setConfirmLoading(false)
+                        resolve(true)
+                        return res?.json();
+                    }).then((res) => {
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
+                        resolve(true)
+                    }).catch(e => {
+                        setConfirmLoading(false)
+                        console.log(e)
+                        reject(false)
+                    })
+                }).catch(e => {
+                    setConfirmLoading(false)
+                    console.log(e)
+                    reject(false)
+                })
+            })
+        } catch (error) {
+            setConfirmLoading(false)
+            console.log(error)
+            reject(false)
+        }
+    })
+
+    const GeneratePDF = () => new Promise(async (resolve, reject) => {
+        try {
+            form.validateFields().then(res => {
+                setConfirmLoading(true)
+                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/noWeight/${params.productId}?printerName=${form.getFieldsValue(true)?.printerName}`).then(res => {
+                    fetch(`http://127.0.0.1:2001/print`, {
+                        mode: 'cors',
+                        method: 'post',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(res, jsonStringifyReplace)
+                    }).then((res) => {
+                        setConfirmLoading(false)
+                        resolve(true)
+                        return res?.json();
+                    }).then((res) => {
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
+                        resolve(true)
+                    }).catch(e => {
+                        setConfirmLoading(false)
+                        console.log(e)
+                        reject(false)
+                    })
+
+                }).catch(e => {
+                    setConfirmLoading(false)
+                    console.log(e)
+                    reject(false)
+                })
             })
 
-        })
-    }
+        } catch (error) {
+            console.log(error)
+            reject(false)
+        }
+    })
 
-    const GeneratePDF = async () => {
-        RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/noWeight/${params.productId}`).then(res => {
-            console.log(res)
-            fetch(`http://127.0.0.1:2001/print`, {
-                mode: 'cors',
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(res, jsonStringifyReplace)
-            }).then((res) => {
-                console.log(res)
-                // return res.blob();
-            })
-
-        })
-    }
 
     return <>
+        <Modal
+            visible={pageVisible}
+            title="生成PDF-带重量"
+            onOk={GeneratePDFWeight}
+            onCancel={() => {
+                setPageVisible(false);
+                pageForm.resetFields()
+            }}
+            confirmLoading={confirmLoading}
+        >
+            <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
+                <Form.Item label='打印机' name='printerName' rules={[{
+                    required: true,
+                    message: '请选择打印机'
+                }]}>
+                    <Select placeholder="请选择打印机">
+                        {printerDatas && printerDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType="reset">重置</Button>
+                </Form.Item>
+            </Form>
+        </Modal>
+        <Modal
+            visible={noPageVisible}
+            title="生成PDF-不带重量"
+            onOk={GeneratePDF}
+            onCancel={() => {
+                setNoPageVisible(false);
+                form.resetFields()
+            }}
+            confirmLoading={confirmLoading}
+        >
+            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+                <Form.Item label='打印机' name='printerName' rules={[{
+                    required: true,
+                    message: '请选择打印机'
+                }]}>
+                    <Select placeholder="请选择打印机">
+                        {printerDatas && printerDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                </Form.Item>
+                <Form.Item>
+                    <Button htmlType="reset">重置</Button>
+                </Form.Item>
+            </Form>
+        </Modal>
         <Modal
             destroyOnClose
             visible={visible}
@@ -157,8 +273,14 @@ export default function PackingList(): React.ReactNode {
             </span>
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16}`}>
-            <Button type="primary" onClick={GeneratePDFWeight} ghost>生成PDF-带重量</Button>
-            <Button type="primary" onClick={GeneratePDF} ghost>生成PDF-不带重量</Button>
+            <Button type="primary" onClick={() => {
+                setNoPageVisible(true);
+                printerRun()
+            }} ghost>生成PDF-带重量</Button>
+            <Button type="primary" onClick={() => {
+                setPageVisible(true);
+                printerRun()
+            }} ghost>生成PDF-不带重量</Button>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             <Button type="primary" ghost onClick={() => setVisible(true)} disabled={!isShow}>套用包</Button>
             <Button type="primary" disabled={!isShow} onClick={() => {
