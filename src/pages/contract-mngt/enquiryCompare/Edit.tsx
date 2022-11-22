@@ -182,7 +182,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source:  1,
             weight: item.weight,
             length: item.length,
             totalWeight: item.totalWeight,
@@ -197,7 +196,6 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source:  1,
             weight: item.weight,
             length: item.length,
             totalWeight: item.totalWeight,
@@ -210,9 +208,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setChooseVisible(false)
     }
 
-    const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
-        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+    const handleRemove = (id: number) => {
+        setMaterialList(materialList.filter((item: any, index:number) => index !== id))
+        setPopDataList(materialList.filter((item: any, index: number) => index !== id))
     }
 
     const handleInputChange = (value: number, id: string) => {
@@ -394,7 +392,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     setMaterialPlanList(fields.map((item: any) => ({
                         ...item,
                         structureSpec: item.structureSpec,
-                        source: item.source || 2,
+                        source: item.source||1,
                         materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
                         materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
                         structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
@@ -485,7 +483,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 {
                     title: "操作",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                    render: (_: any, records: any, index:number) => <Button  type="link" onClick={() => handleRemove(index)}>移除</Button>
                 }]}
             dataSource={[...popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))]} />
     </Spin>
