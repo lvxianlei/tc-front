@@ -8,7 +8,10 @@ export default function SelectProductGroup(props: any): JSX.Element {
     const [select, setSelect] = useState<any[]>([])
     const [projectSelect, setProjectSelect] = useState<string[]>(props.select || [])
     const [projectSelectRows, setProjectSelectRows] = useState<any[]>([])
-
+    const [pagenation, setPagenation] = useState<{ [key: string]: any }>({
+        current: 1,
+        pageSize: 10
+    })
     useEffect(() => {
         setProjectSelect(props.select)
         setProjectSelectRows(projectSelectRows.filter((item: any) => props.select.includes(item.id)))
@@ -20,7 +23,8 @@ export default function SelectProductGroup(props: any): JSX.Element {
                 `/tower-market/contract`,
                 {
                     projectId: props.projectId === "undefined" ? undefined : props.projectId,
-                    size: 10000,
+                    size: pagenation.pageSize,
+                    current: pagenation.current,
                     ...params
                 }
             )
@@ -28,7 +32,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }))
+    }), { refreshDeps: [pagenation.current, pagenation.pageSize] })
 
     const { loading: productGroupLoading, data: productGroup, run: productGroupRun } = useRequest<any>(({ id }) => new Promise(async (resole, reject) => {
         try {
@@ -48,6 +52,12 @@ export default function SelectProductGroup(props: any): JSX.Element {
         setProjectSelect(selectedRowKeys)
         setProjectSelectRows(selectRows)
     }
+
+    const paginationChange = (page: number, pageSize: number) => setPagenation({
+        ...pagenation, current: page,
+        pageSize
+    })
+
     return <Modal title="选择确认明细" width={1011} {...props} destroyOnClose onOk={() => props.onOk && props.onOk(projectSelectRows)} >
         <Form
             style={{ marginBottom: 16 }}
@@ -89,6 +99,14 @@ export default function SelectProductGroup(props: any): JSX.Element {
             loading={loading}
             columns={contract}
             dataSource={data?.records}
+            scroll={{ y: 400 }}
+            pagination={{
+                size: "small",
+                pageSize: pagenation.pageSize,
+                onChange: paginationChange,
+                current: pagenation.current,
+                total: data?.total
+            }}
             rowSelection={{
                 selectedRowKeys: select,
                 type: "radio",
