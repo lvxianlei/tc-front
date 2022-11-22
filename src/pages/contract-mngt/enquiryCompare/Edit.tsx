@@ -208,9 +208,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         setChooseVisible(false)
     }
 
-    const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
-        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+    const handleRemove = (id: number) => {
+        setMaterialList(materialList.filter((item: any, index:number) => index !== id))
+        setPopDataList(materialList.filter((item: any, index: number) => index !== id))
     }
 
     const handleInputChange = (value: number, id: string) => {
@@ -483,7 +483,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 {
                     title: "操作",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                    render: (_: any, records: any, index:number) => <Button  type="link" onClick={() => handleRemove(index)}>移除</Button>
                 }]}
             dataSource={[...popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))]} />
     </Spin>
