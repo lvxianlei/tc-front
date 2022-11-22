@@ -1,24 +1,34 @@
 import React, { useState } from "react"
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useRouteMatch } from "react-router-dom"
 import { Button, Form, message, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, EditTable } from "../../common"
 import ManagementDetailTabsTitle from "../ManagementDetailTabsTitle"
 import { frameAgreementColumns, materialListColumns } from './frame.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
-import { TabTypes } from "../Detail"
 import { changeTwoDecimal_f } from '../../../utils/KeepDecimals';
-import { winBidTypeOptions } from "../../../configuration/DictionaryOptions"
+import { deliverywayOptions, winBidTypeOptions } from "../../../configuration/DictionaryOptions"
+const deliveryMethodEnum = deliverywayOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
+const winBidTypeEnum = winBidTypeOptions?.map((item: { id: string, name: string | number }) => ({
+    value: item.id,
+    label: item.name
+}))
+
 export default function FrameAgreementEdit(): JSX.Element {
     const history = useHistory()
-    const params = useParams<{ tab: TabTypes, id: string }>()
+    const match: any = useRouteMatch<{
+        type: "new" | "edit",
+        projectId: string
+    }>("/project/management/:type/frameAgreement/:projectId")
     const [when, setWhen] = useState<boolean>(true)
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
-    const bidType = winBidTypeOptions
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/frameAgreement/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/frameAgreement/${match.params.projectId}`)
             baseInfoForm.setFieldsValue({
                 ...result,
                 bidType: result.bidType === -1 ? null : result.bidType,
@@ -31,7 +41,8 @@ export default function FrameAgreementEdit(): JSX.Element {
         } catch (error) {
             reject(error)
         }
-    }))
+    }), { manual: match.params.type === "new" })
+
     const { loading: saveStatus, run } = useRequest<{ [key: string]: any }>((postData: {}) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/frameAgreement`, postData)
@@ -46,13 +57,17 @@ export default function FrameAgreementEdit(): JSX.Element {
             const baseInfoData = await baseInfoForm.validateFields()
             const contractCargoDtosData = await cargoDtoForm.validateFields()
             delete data?.contractCargoVos
-            const result = await run({
+            const postData = {
                 ...data,
                 ...baseInfoData,
-                projectId: params.id,
+                projectId: match.params.type === "new" ? match.params.projectId : data?.projectId,
                 ownerCompany: baseInfoData.ownerCompany.records ? baseInfoData.ownerCompany.records[0].name : baseInfoData.ownerCompany,
                 signCompany: baseInfoData.signCompany.records ? baseInfoData.signCompany.records[0].name : baseInfoData.signCompany,
                 contractCargoDtos: contractCargoDtosData.submit
+            }
+            const result = await run(match.params.type === "edit" ? postData : {
+                ...postData,
+                id: match.params.projectId
             })
             if (result) {
                 setWhen(false)
@@ -95,11 +110,23 @@ export default function FrameAgreementEdit(): JSX.Element {
             <Spin spinning={loading}>
                 <DetailTitle title="基本信息" />
                 <BaseInfo form={baseInfoForm}
-                    columns={frameAgreementColumns.map((item) => item.dataIndex === "bidType" ? ({
-                        ...item,
-                        type: "select",
-                        enum: bidType?.map((bid: any) => ({ value: bid.id, label: bid.name }))
-                    }) : item)}
+                    columns={frameAgreementColumns.map((item) => {
+                        if (item.dataIndex === "bidType") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: winBidTypeEnum
+                            })
+                        }
+                        if (item.dataIndex === "deliveryWay") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: deliveryMethodEnum
+                            })
+                        }
+                        return item
+                    })}
                     dataSource={
                         {
                             ...data,
