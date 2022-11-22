@@ -173,7 +173,7 @@ export default function Lofting(): React.ReactNode {
             title: '各孔径孔数',
             width: 80,
             dataIndex: 'apertureNumber',
-            sorter: (a: any, b: any) => a.apertureNumber.substring(0,1) - b.apertureNumber.substring(0,1),
+            sorter: (a: any, b: any) => a.apertureNumber.substring(0, 1) - b.apertureNumber.substring(0, 1),
             // editable: true,
             // render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
             //     <Form.Item name={['data', index, "apertureNumber"]} initialValue={_} rules={[{
@@ -917,7 +917,11 @@ export default function Lofting(): React.ReactNode {
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
-                }
+                },
+                onRow: (record: Record<string, any>) => ({
+                    className: record.specialCode === '1' ?
+                        styles.row_color_1 : undefined
+                })
             }}
             requestData={{ segmentId: params.productSegmentId === 'all' ? '' : params.productSegmentId, ...filterValue, productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
