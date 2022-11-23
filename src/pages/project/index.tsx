@@ -133,6 +133,11 @@ export default function Management(): React.ReactNode {
                 </Select>
             },
             {
+                name: 'createUserName',
+                label: '制单人',
+                children: <Input placeholder="制单人" style={{ width: 210 }} />
+            },
+            {
                 name: 'fuzzyQuery',
                 label: "模糊查询项",
                 children: <Input placeholder="项目名称/项目编码/项目负责人/批次号" style={{ width: 260 }} />

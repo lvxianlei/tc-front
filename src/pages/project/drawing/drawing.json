@@ -193,6 +193,95 @@
             "maxLength": 300
         }
     ],
+    "productGroupColumns": [
+        {
+            "title": "杆塔状态",
+            "dataIndex": "productStatus",
+            "width": 100,
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "未下发"
+                },
+                {
+                    "value": 1,
+                    "label": "已下发"
+                },
+                {
+                    "value": 2,
+                    "label": "审批中"
+                }
+            ]
+        },
+        {
+            "title": "杆塔号",
+            "dataIndex": "productNumber",
+            "width": 100
+        },
+        {
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "title": "线路名称",
+            "dataIndex": "lineName",
+            "width": 100
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 100
+        },
+        {
+            "title": "单重",
+            "dataIndex": "monomerWeight",
+            "width": 60
+        },
+        {
+            "title": "其他重量",
+            "dataIndex": "otherWeight",
+            "width": 100
+        },
+        {
+            "title": "总重量",
+            "dataIndex": "totalWeight",
+            "width": 70
+        },
+        {
+            "title": "呼高",
+            "dataIndex": "productHeight",
+            "width": 60
+        },
+        {
+            "title": "传递塔型钢印号",
+            "dataIndex": "steelProductShape",
+            "width": 140
+        },
+        {
+            "title": "结构",
+            "dataIndex": "structure",
+            "width": 100
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "deliveryTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "描述",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ],
     "connectContract": {
         "title": "相关合同",
         "dataIndex": "contractId",
