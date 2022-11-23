@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
+import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect } from "react"
 import { Button, Modal, Spin, Form, InputNumber, message, Select } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent } from "../common"
 import useRequest from '@ahooksjs/use-request'
@@ -16,6 +16,7 @@ import { contractBaseInfo, material, addMaterial, addResultMaterial } from "./co
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
 interface EditProps {
     id: string
+    visibleP: boolean
     type: "new" | "edit"
 }
 interface WeightParams {
@@ -115,7 +116,7 @@ export const calcFun = {
     }
 }
 
-export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
+export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [resultVisible, setResultVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -677,7 +678,18 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
         }
     }
-
+    useEffect(() => {
+        if(visibleP){
+            baseForm.setFieldsValue({
+                operatorName: AuthUtil.getRealName(),
+                signingTime: moment(),
+                invoiceCharacter: 1,
+                meteringMode: 2,
+                // deliveryMethod: deliveryMethodEnum?.[1]?.value,
+                settlementMode: settlementModeEnum?.[0]?.value
+            })
+        }
+    },[visibleP])
     return <Spin spinning={loading && taxLoading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
@@ -786,12 +798,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }
             })}
             dataSource={{
-                operatorName: AuthUtil.getRealName(),
-                signingTime: moment(),
-                invoiceCharacter: 1,
-                meteringMode: 2,
-                // deliveryMethod: deliveryMethodEnum?.[1]?.value,
-                settlementMode: settlementModeEnum?.[0]?.value,
+                // operatorName: AuthUtil.getRealName(),
+                // signingTime: moment(),
+                // invoiceCharacter: 1,
+                // meteringMode: 2,
+                // // deliveryMethod: deliveryMethodEnum?.[1]?.value,
+                // settlementMode: settlementModeEnum?.[0]?.value,
                 ...data
             }} edit />
         <DetailTitle title="运费信息" key="b" />
