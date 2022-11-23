@@ -59,6 +59,11 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
             "dataIndex": "productTypeName"
         },
         {
+            "key": "productTypeName",
+            "title": "文件类别",
+            "dataIndex": "productTypeName"
+        },
+        {
             "key": "repairNumber",
             "title": "工程名称",
             "dataIndex": "repairNumber"
@@ -107,6 +112,7 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
             productCategoryId: ''
         });
     }
+
     const planNumChange = async (e: any) => {
         const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
         setTowerSelects(data || [])
@@ -147,7 +153,6 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
     }
 
     useImperativeHandle(ref, () => ({ onSave, resetFields }), [ref, onSave, resetFields]);
-
 
     return <DetailContent>
         {
@@ -214,7 +219,17 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                                 <Input maxLength={10} />
                             </Form.Item>
                         </Descriptions.Item>
-                        <Descriptions.Item children></Descriptions.Item>
+                        <Descriptions.Item label="文件类别">
+                            <Form.Item name="trialAssemble">
+                                <Select placeholder="请选择文件类别">
+                                    {certificateTypeOptions && certificateTypeOptions.map(({ id, name }, index) => {
+                                        return <Select.Option key={index} value={id}>
+                                            {name}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
+                        </Descriptions.Item>
                         <Descriptions.Item label="工程名称">
                             <Form.Item name="planNumber">
                                 <Select
@@ -250,7 +265,6 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                         <Descriptions.Item label="塔型名称">
                             <Form.Item name="productCategoryId">
                                 <Select placeholder="请选择塔型名称" style={{ width: "150px" }} onChange={async (e) => {
-                                    console.log(e)
                                     const data: any = await RequestUtil.get(`/tower-science/trialAssembly/${e}`);
                                     form.setFieldsValue({
                                         voltageGradeName: data?.voltageGradeName,

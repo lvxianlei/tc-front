@@ -5,14 +5,13 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, message, Modal, InputNumber, Col, Select, Input, Popconfirm } from 'antd';
-import { CommonTable, Page } from '../../common';
+import { Space, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, message, Modal, Select, Input, Popconfirm } from 'antd';
+import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DataArchiving.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { useHistory, useParams } from 'react-router-dom';
-import { useForm } from 'antd/es/form/Form';
+import { useHistory } from 'react-router-dom';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import DataArchivingNew from './DataArchivingNew';
 

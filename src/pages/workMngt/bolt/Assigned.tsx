@@ -9,7 +9,6 @@ import { Form, Input } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import SelectUser from "../../common/SelectUser";
-import { type } from "os";
 
 export interface EditProps {
     onSubmit: () => void
@@ -18,14 +17,14 @@ export interface EditProps {
 interface QuotaEntriesProps {
     readonly id: string;
     readonly type: 'single' | 'batch';
- }
+}
 
-export default forwardRef(function Assigned({ id,type }: QuotaEntriesProps, ref) {
+export default forwardRef(function Assigned({ id, type }: QuotaEntriesProps, ref) {
     const [form] = Form.useForm();
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/boltRecord/assign`, postData);
+            const result = await RequestUtil.post(`/tower-science/boltRecord/assign/list`, postData);
             resole(result)
         } catch (error) {
             reject(error)
@@ -35,11 +34,10 @@ export default forwardRef(function Assigned({ id,type }: QuotaEntriesProps, ref)
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const data = form.getFieldsValue(true);
-            console.log(data)
             form.validateFields().then(async res => {
                 await saveRun({
                     ...data,
-                    id: id
+                    ids: type === 'single' ? [id] : id.split(',')
                 })
             })
             resolve(true);

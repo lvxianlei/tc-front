@@ -151,7 +151,10 @@ export default function List(): React.ReactNode {
                         <Button type="link">删除</Button>
                     </Popconfirm>
                     <Button type="link" onClick={() => { }}>下载</Button>
-                    <Button type="link" onClick={() => { }}>编辑</Button>
+                    <Button type="link" onClick={() => {
+                        setVisible(true);
+                        setRowData(record)
+                     }}>编辑</Button>
                 </Space>
             )
         }
@@ -242,10 +245,8 @@ export default function List(): React.ReactNode {
             <DataUpload getLoading={(loading) => setConfirmLoading(loading)} type={type} record={rowData} ref={newRef} />
         </Modal>
         <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFinish}>
-
             <Form.Item label='电压等级' name="status">
-
-                <Select placeholder="请选择电压等级">
+                <Select placeholder="请选择电压等级" style={{width: '120px'}}>
                     {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
@@ -255,8 +256,7 @@ export default function List(): React.ReactNode {
             </Form.Item>
 
             <Form.Item label='工程类型' name="status" initialValue={''}>
-
-                <Select placeholder="请选择工程类型">
+                <Select placeholder="请选择工程类型" style={{width: '120px'}}>
                     <Select.Option value={''} key="0">全部</Select.Option>
                     <Select.Option value={'国内'} key="1">国内</Select.Option>
                     <Select.Option value={'国外'} key="2">国外</Select.Option>
@@ -265,8 +265,7 @@ export default function List(): React.ReactNode {
             </Form.Item>
 
             <Form.Item label='产品类型' name="status" initialValue={''}>
-
-                <Select placeholder="请选择产品类型">
+                <Select placeholder="请选择产品类型" style={{width: '120px'}}>
                     <Select.Option value={''} key="0">全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
@@ -316,10 +315,8 @@ export default function List(): React.ReactNode {
             </Col>
             <Col>
                 <Form form={form} layout="inline" onFinish={onSearch}>
-
                     <Form.Item label='文件类型' name="status">
-
-                        <Select placeholder="文件类型">
+                        <Select placeholder="文件类型" style={{width: '120px'}}>
                             {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={index} value={id}>
                                     {name}
@@ -329,7 +326,7 @@ export default function List(): React.ReactNode {
                     </Form.Item>
                     <Form.Item label='计划号' name="status">
 
-                        <Select placeholder="计划号">
+                        <Select placeholder="计划号" style={{width: '120px'}}>
                             {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={index} value={id}>
                                     {name}
@@ -353,7 +350,6 @@ export default function List(): React.ReactNode {
                 }} ghost>上传</Button>
             </Col>
         </Row>
-
         <CommonTable
             haveIndex
             columns={detailColumns}
