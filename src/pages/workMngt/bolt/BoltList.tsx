@@ -128,6 +128,10 @@ export default function BoltList(): React.ReactNode {
                     {
                         record.boltStatus === 3 && record.boltChecker === userId ? <Link to={`/workMngt/boltList/boltCheck/${record.id}`}>校核</Link> : <Button type="link" disabled>校核</Button>
                     }
+                    <Button type='link' onClick={() => {
+                        setVisible(true);
+                        setRowId(record?.id)
+                    }}>定额条目</Button>
                     <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);
@@ -159,15 +163,21 @@ export default function BoltList(): React.ReactNode {
 
     const handleAssignModalOk = async () => {
         try {
-            const submitData = await form.validateFields();
-            submitData.id = drawTaskId;
-            await RequestUtil.post('/tower-science/boltRecord/assign', submitData).then(() => {
-                message.success('指派成功！')
-            }).then(() => {
-                setAssignVisible(false);
-                form.resetFields();
-            }).then(() => {
-                setRefresh(!refresh);
+            form.validateFields().then(async res => {
+                const data = form.getFieldsValue(true);
+                await RequestUtil.post('/tower-science/boltRecord/assign', {
+                    ...data,
+                    id: drawTaskId
+                }).then(() => {
+                    message.success('指派成功！')
+                }).then(() => {
+                    setAssignVisible(false);
+                    form.resetFields();
+                }).then(() => {
+                    setRefresh(!refresh);
+                })
+            }).catch(error => {
+                console.log('form error!')
             })
         } catch (error) {
             console.log(error)
@@ -242,50 +252,33 @@ export default function BoltList(): React.ReactNode {
             }}>
             <QuotaEntries id={rowId} ref={editRef} />
         </Modal>
-        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
+        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel}>
             <Form form={form} {...formItemLayout}>
-                作业员：
-                <Row>
-                    <Col span={12}>
-                        <Form.Item name="dept" label="部门" rules={[{ required: true, message: "请选择部门" }]}>
-                            <TreeSelect
-                                onChange={(value: any) => { onDepartmentChange(value, 'user') }}
-                            >
-                                {renderTreeNodes(wrapRole2DataNode(department))}
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item name="boltOperator" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
-                            <Select style={{ width: '100px' }}>
-                                {user && user.map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                校核员
-                <Row>
-                    <Col span={12}>
-                        <Form.Item name="deptNew" label="部门" rules={[{ required: true, message: "请选择部门" }]}>
-                            <TreeSelect
-                                onChange={(value: any) => { onDepartmentChange(value, 'check') }}
-                            >
-                                {renderTreeNodes(wrapRole2DataNode(department))}
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item name="boltChecker" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
-                            <Select style={{ width: '100px' }}>
-                                {checkPerson && checkPerson.map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
+                <Form.Item name="boltOperatorName" label="作业员：" rules={[{ required: true, message: "请选择人员" }]}>
+
+                    <Input size='small' disabled suffix={
+                        <SelectUser selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
+                            const list = selectedRows.map((res: any) => { return res?.userId })
+                            const nameList = selectedRows.map((res: any) => { return res?.name })
+                            form.setFieldsValue({
+                                boltOperator: list?.join(","),
+                                boltOperatorName: nameList?.join(",")
+                            })
+                        }} />
+                    } />
+                </Form.Item>
+                <Form.Item name="boltCheckerName" label="校核员" rules={[{ required: true, message: "请选择人员" }]}>
+                    <Input size='small' disabled suffix={
+                        <SelectUser selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
+                            const list = selectedRows.map((res: any) => { return res?.userId })
+                            const nameList = selectedRows.map((res: any) => { return res?.name })
+                            form.setFieldsValue({
+                                boltChecker: list?.join(","),
+                                boltCheckerName: nameList?.join(",")
+                            })
+                        }} />
+                    } />
+                </Form.Item>
             </Form>
         </Modal>
         <Page
