@@ -15,7 +15,7 @@ export default function Subsidiary({ id }: SubsidiaryProps) {
             columns={productGroupColumns as any}
             searchFormItems={[
                 {
-                    name: 'status',
+                    name: 'productStatus',
                     label: '杆塔明细状态',
                     children: <Select style={{ width: "150px" }} placeholder="杆塔明细状态">
                         <Select.Option value={0}>未下发</Select.Option>

@@ -65,7 +65,7 @@ export default function FrameAgreementEdit(): JSX.Element {
                 signCompany: baseInfoData.signCompany.records ? baseInfoData.signCompany.records[0].name : baseInfoData.signCompany,
                 contractCargoDtos: contractCargoDtosData.submit
             }
-            const result = await run(match.params.type === "edit" ? postData : {
+            const result = await run(match.params.type === "new" ? postData : {
                 ...postData,
                 id: match.params.projectId
             })
