@@ -19,8 +19,8 @@ export default function Subsidiary({ id }: SubsidiaryProps) {
                     label: '杆塔明细状态',
                     children: <Select style={{ width: "150px" }} placeholder="杆塔明细状态">
                         <Select.Option value={0}>未下发</Select.Option>
-                        <Select.Option value={1}>部分下发</Select.Option>
-                        <Select.Option value={2}>已下发</Select.Option>
+                        <Select.Option value={1}>已下发</Select.Option>
+                        <Select.Option value={2}>审批中</Select.Option>
                     </Select>
                 },
             ]}
