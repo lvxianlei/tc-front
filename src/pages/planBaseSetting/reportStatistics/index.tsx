@@ -243,6 +243,10 @@ export default () => {
                 title: "分配生产单元组批次/总批次",
                 dataIndex: "unitGroupNum"
             },
+            {
+                title: "分配生产单元下达单 已分配/总数",
+                dataIndex: "issueOrderNum"
+            },
         ]
         return <Table columns={columnTwo}
                       dataSource={levelTwoData}
@@ -279,11 +283,11 @@ export default () => {
             },
             {
                 title: "组焊生产单元分配量",
-                dataIndex: "cyclePlanRefStatus"
+                dataIndex: "weldAllocationUnitNum"
             },
             {
                 title: "周期计划引用状态",
-                dataIndex: "planNumber"
+                dataIndex: "cyclePlanRefStatus"
             },
             {
                 title: "下发mes状态",
