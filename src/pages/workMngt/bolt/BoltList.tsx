@@ -17,6 +17,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import QuotaEntries from './QuotaEntries';
 import SelectUser from '../../common/SelectUser';
+import Assigned from './Assigned';
 
 export interface EditProps {
     onSubmit: () => void
@@ -87,10 +88,10 @@ export default function BoltList(): React.ReactNode {
             dataIndex: 'boltLeaderName'
         },
         {
-            key: 'boltCheckerName',
+            key: 'boltPlanCheckUserName',
             title: '计划校核',
             width: 200,
-            dataIndex: 'boltCheckerName'
+            dataIndex: 'boltPlanCheckUserName'
         },
         {
             key: 'boltOperatorName',
@@ -135,6 +136,7 @@ export default function BoltList(): React.ReactNode {
                     <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         setAssignVisible(true);
+                        setAssignType('single')
                     }} disabled={record.boltStatus !== 1}>指派</Button>
                 </Space>
             )
@@ -160,47 +162,27 @@ export default function BoltList(): React.ReactNode {
     const editRef = useRef<EditProps>();
     const history = useHistory();
     const [rowId, setRowId] = useState<string>('');
+    const assignedRef = useRef<EditProps>();
+    const [assignType, setAssignType] = useState<'single' | 'batch'>('single');
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
-    const handleAssignModalOk = async () => {
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
+
+    const handleAssignModalOk = () => new Promise(async (resove, reject) => {
         try {
-            form.validateFields().then(async res => {
-                const data = form.getFieldsValue(true);
-                await RequestUtil.post('/tower-science/boltRecord/assign', {
-                    ...data,
-                    id: drawTaskId
-                }).then(() => {
-                    message.success('指派成功！')
-                }).then(() => {
-                    setAssignVisible(false);
-                    form.resetFields();
-                }).then(() => {
-                    setRefresh(!refresh);
-                })
-            }).catch(error => {
-                console.log('form error!')
-            })
+            await assignedRef.current?.onSubmit();
+            message.success('指派成功！');
+            setAssignVisible(false);
+            history.go(0);
+            resove(true);
         } catch (error) {
-            console.log(error)
+            reject(false)
         }
-    }
-
-    const handleAssignModalCancel = () => { setAssignVisible(false); form.resetFields(); };
-    const formItemLayout = {
-        labelCol: { span: 6 },
-        wrapperCol: { span: 16 }
-    };
-
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-        switch (title) {
-            case "check":
-                form.setFieldsValue({ 'boltChecker': '' })
-                return setCheckPerson(userData.records);
-            case "user":
-                form.setFieldsValue({ 'boltOperator': '' })
-                return setUser(userData.records);
-        }
-    }
+    })
 
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
@@ -252,34 +234,16 @@ export default function BoltList(): React.ReactNode {
             }}>
             <QuotaEntries id={rowId} ref={editRef} />
         </Modal>
-        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel}>
-            <Form form={form} {...formItemLayout}>
-                <Form.Item name="boltOperatorName" label="作业员：" rules={[{ required: true, message: "请选择人员" }]}>
-
-                    <Input size='small' disabled suffix={
-                        <SelectUser selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
-                            const list = selectedRows.map((res: any) => { return res?.userId })
-                            const nameList = selectedRows.map((res: any) => { return res?.name })
-                            form.setFieldsValue({
-                                boltOperator: list?.join(","),
-                                boltOperatorName: nameList?.join(",")
-                            })
-                        }} />
-                    } />
-                </Form.Item>
-                <Form.Item name="boltCheckerName" label="校核员" rules={[{ required: true, message: "请选择人员" }]}>
-                    <Input size='small' disabled suffix={
-                        <SelectUser selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
-                            const list = selectedRows.map((res: any) => { return res?.userId })
-                            const nameList = selectedRows.map((res: any) => { return res?.name })
-                            form.setFieldsValue({
-                                boltChecker: list?.join(","),
-                                boltCheckerName: nameList?.join(",")
-                            })
-                        }} />
-                    } />
-                </Form.Item>
-            </Form>
+        <Modal
+            destroyOnClose
+            visible={assignVisible}
+            title="指派"
+            onOk={handleAssignModalOk}
+            className={styles.tryAssemble}
+            onCancel={() => {
+                setAssignVisible(false);
+            }}>
+            <Assigned id={drawTaskId} type={assignType} ref={assignedRef} />
         </Modal>
         <Page
             path="/tower-science/boltRecord"
@@ -289,6 +253,11 @@ export default function BoltList(): React.ReactNode {
             exportPath={`/tower-science/boltRecord`}
             requestData={{ boltStatus: location.state?.state, weldingLeader: location.state?.userId }}
             filterValue={filterValue}
+            extraOperation={<Button type='primary' disabled={selectedKeys.length === 0} onClick={() => {
+                setDrawTaskId(selectedKeys.join(','));
+                setAssignVisible(true);
+                setAssignType('batch')
+            }} ghost>批量指派</Button>}
             searchFormItems={[
                 {
                     name: 'updateTime',
@@ -359,6 +328,15 @@ export default function BoltList(): React.ReactNode {
                 }
                 setFilterValue(values);
                 return values;
+            }}
+            tableProps={{
+                rowSelection: {
+                    selectedRowKeys: selectedKeys,
+                    onChange: SelectChange,
+                    getCheckboxProps: (record: Record<string, any>) => ({
+                        disabled: record?.boltStatus !== 1
+                    })
+                }
             }}
         />
     </>

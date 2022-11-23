@@ -77,10 +77,10 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'batchUpdateStatusTime'
         },
         {
-            key: 'batchUpdateStatusTime',
+            key: 'programmingLeaderName',
             title: '下达负责人',
             width: 120,
-            dataIndex: 'batchUpdateStatusTime'
+            dataIndex: 'programmingLeaderName'
         },
         {
             key: 'trialAssemble',

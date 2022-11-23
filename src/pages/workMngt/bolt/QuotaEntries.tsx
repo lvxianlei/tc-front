@@ -4,8 +4,8 @@
  * @description 工作管理-螺栓列表-定额条目
  */
 
-import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
-import { Spin, Form, Input, Descriptions, Radio, RadioChangeEvent, Select, Divider, Space, Button } from 'antd';
+import React, { useImperativeHandle, forwardRef } from "react";
+import { Spin, Form, Select } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -26,20 +26,10 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
 
     const { data: userDatas } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/productCategory/${id}`);
+            const result: any = await RequestUtil.get(`/tower-science/boltRecord/getBoltUser?id=${id}`);
             resole({
-                user: [
-                    {
-                        name: result.boltUserName,
-                        id: result.boltUser
-                    }
-                ],
-                check: [
-                    {
-                        name: result.boltCheckUserName,
-                        id: result.boltCheckUser
-                    }
-                ]
+                user: result?.boltUserList || [],
+                check: result?.boltCheckUserList || []
             })
         } catch (error) {
             reject(error)
@@ -55,20 +45,18 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'index',
+            key: 'segmentName',
             title: '段信息',
-            dataIndex: 'index'
+            dataIndex: 'segmentName'
         },
         {
-            key: 'index',
+            key: 'pattern',
             title: '螺栓定额条目',
-            dataIndex: 'index',
+            dataIndex: 'pattern',
 
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["data", index, ""]}>
+                <Form.Item name={["data", index, "pattern"]}>
                     <Select size="small">
-                        {/* <Select.Option value={1} key={1}>套用</Select.Option>
-<Select.Option value={2} key={2}>新放</Select.Option> */}
                         {
                             patternTypeOptions?.map((item: any, index: number) =>
                                 <Select.Option value={item.id} key={index}>
@@ -81,25 +69,25 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             )
         },
         {
-            key: 'index',
+            key: 'price',
             title: '单价',
-            dataIndex: 'index'
+            dataIndex: 'price'
         },
         {
-            key: 'index',
+            key: 'codeCount',
             title: '件号数',
-            dataIndex: 'index'
+            dataIndex: 'codeCount'
         },
         {
-            key: 'index',
+            key: 'boltUser',
             title: '螺栓清单',
-            dataIndex: 'index',
+            dataIndex: 'boltUser',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["data", index, ""]}>
+                <Form.Item name={["data", index, "boltUser"]}>
                     <Select size="small">
                         {
                             userDatas?.user.map((res: any) => {
-                                return <Select.Option value={res.id} key={res.id}>{res.name}</Select.Option>
+                                return <Select.Option value={res.userId} key={res.userId}>{res.userName}</Select.Option>
                             })
                         }
                     </Select>
@@ -107,15 +95,15 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             )
         },
         {
-            key: 'index',
+            key: 'boltCheckUser',
             title: '清单校核',
-            dataIndex: 'index',
+            dataIndex: 'boltCheckUser',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["data", index, ""]}>
+                <Form.Item name={["data", index, "boltCheckUser"]}>
                     <Select size="small">
                         {
                             userDatas?.check.map((res: any) => {
-                                return <Select.Option value={res.id} key={res.id}>{res.name}</Select.Option>
+                                return <Select.Option value={res.userId} key={res.userId}>{res.userName}</Select.Option>
                             })
                         }
                     </Select>
@@ -126,7 +114,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(``);
+            const result: any = await RequestUtil.get(`/tower-science/boltRecord/getBoltSegment?id=${id}`);
             resole(result)
         } catch (error) {
             reject(error)
@@ -135,7 +123,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/packageStructure/copy`, postData);
+            const result = await RequestUtil.post(`/tower-science/boltRecord/saveBoltSegment`, postData);
             resole(result)
         } catch (error) {
             reject(error)
@@ -144,8 +132,8 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const data = form.getFieldsValue(true);
-            await saveRun(data)
+            const data = form.getFieldsValue(true).data;
+            await saveRun({productSegmentSaveDTOList: data})
             resolve(true);
         } catch (error) {
             reject(false)
@@ -164,7 +152,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
                 <CommonTable
                     isPage={false}
                     columns={columns}
-                    dataSource={[{ id: 1 }]} />
+                    dataSource={data || []} />
             </Form>
         </DetailContent>
     </Spin >
