@@ -86,17 +86,17 @@ export default forwardRef(function ApplyOrDetail({ id }: modalProps, ref) {
             "title": "备注（修改后）",
             width: 80,
             dataIndex: "updateDescription",
-            render: (_: string, record: Record<string, any>): React.ReactNode => {
-                return record?.updateDescription ? <p className={styles?.red}>{record?.updateDescription || "-"}</p> : <p>{"-"}</p>
+            render: (record: Record<string, any>): React.ReactNode => {
+                return record?.updateDescription ? <p className={styles?.red}>{record?.updateDescription}</p> : <p>{"-"}</p>
             }
         }
     ]
     const selectedColumns = [
         {
-            "key": "changeTypeId",
+            "key": "changeTypeName",
             "title": "变更类型",
             width: 50,
-            dataIndex: "changeTypeId"
+            dataIndex: "changeTypeName"
         },
         {
             "key": "productNumber",
@@ -150,10 +150,10 @@ export default forwardRef(function ApplyOrDetail({ id }: modalProps, ref) {
             dataIndex: "voltageGradeName"
         },
         {
-            "key": "changeVoltageGrade",
+            "key": "changeVoltageGradeName",
             "title": "电压等级（修改后）",
             width: 80,
-            dataIndex: "changeVoltageGrade",
+            dataIndex: "changeVoltageGradeName",
             render: (_: any, record: Record<string, any>): React.ReactNode => (
                 _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
             )
@@ -165,10 +165,10 @@ export default forwardRef(function ApplyOrDetail({ id }: modalProps, ref) {
             dataIndex: "productTypeName"
         },
         {
-            "key": "changeProductType",
+            "key": "changeProductTypeName",
             "title": "产品类型（修改后）",
             width: 80,
-            dataIndex: "changeProductType",
+            dataIndex: "changeProductTypeName",
             render: (_: any, record: Record<string, any>): React.ReactNode => (
                 _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
             )

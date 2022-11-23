@@ -232,8 +232,11 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         newChangeData = newChangeData.filter((item: any) => res?.id !== item?.id)
                         return {
                             ...res,
+                            ...values,
+                            drawProductId: res?.id,
+                            productCategoryName: res?.productCategory,
                             productNumber: res?.name,
-                            ...values
+                            voltageGradeName: res?.voltageLevelName,
                         }
                     })
                     setSelectedData([...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData])
@@ -241,6 +244,8 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         data: [...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData]
                     })
                     setChangeData([...newChangeData])
+                    setSelectedKeys([]);
+                    setSelectedRows([]);
                     resove(true)
                 } catch (error) {
                     reject(error)
@@ -348,6 +353,10 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                 setChangeData(res || [])
                                                 setDetailData({
                                                     ...selectedRows[0],
+                                                    internalNumber: selectedRows[0]?.contractNum,
+                                                    productCategoryName: selectedRows[0]?.productCategory,
+                                                    productNumber: selectedRows[0]?.name,
+                                                    voltageGradeName: selectedRows[0]?.voltageLevelName,
                                                 })
                                                 form?.setFieldsValue({
                                                     ...selectedRows[0],
@@ -357,6 +366,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                     id: '',
                                                     drawTaskId: selectedRows[0]?.id,
                                                     drawTaskNum: selectedRows[0]?.taskNum,
+                                                    internalNumber: selectedRows[0]?.contractNum
                                                 })
                                                 setSelectedData([]);
                                                 selectedForm?.setFieldsValue({
@@ -393,7 +403,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                 })} col={5} />
 
             </Form>
-            <Button type="primary" className={styles.bottom16} onClick={bulkChanges} ghost>批量修改</Button>
+            <Button type="primary" className={styles.bottom16} disabled={selectedKeys.length === 0} onClick={bulkChanges} ghost>批量修改</Button>
             <CommonTable
                 haveIndex
                 columns={[
