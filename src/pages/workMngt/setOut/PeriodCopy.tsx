@@ -22,7 +22,6 @@ export interface EditProps {
 }
 
 export default forwardRef(function PeriodCopy({ id, segmentId }: ApplyPackingProps, ref) {
-    const [value, setValue] = useState(2);
     const [form] = Form.useForm();
     const [items, setItems] = useState<any>();
     const inputRef = useRef<any>(null);
@@ -40,7 +39,7 @@ export default forwardRef(function PeriodCopy({ id, segmentId }: ApplyPackingPro
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/packageStructure/copy`, postData);
+            const result = await RequestUtil.post(`/tower-science/productSegment/copy/segment`, postData);
             resole(result)
         } catch (error) {
             reject(error)
@@ -61,12 +60,7 @@ export default forwardRef(function PeriodCopy({ id, segmentId }: ApplyPackingPro
         form.resetFields();
     }
 
-    const onChange = (e: RadioChangeEvent) => {
-        setValue(e.target.value);
-    };
-
     const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.value)
         setName(event.target.value);
     };
 
@@ -86,16 +80,16 @@ export default forwardRef(function PeriodCopy({ id, segmentId }: ApplyPackingPro
             <Form form={form} >
                 <Descriptions bordered labelStyle={{ width: "40%" }} column={1}>
                     <Descriptions.Item label="从段名">
-                        <Form.Item name="q">
+                        <Form.Item name="segmentId">
                             <Select placeholder="请选择" style={{ width: '100%' }}>
                                 {data && data?.map((item: any) => {
-                                    return <Select.Option key={item.segmentName} value={item.segmentName}>{item.segmentName}</Select.Option>
+                                    return <Select.Option key={item.id} value={item.segmentName}>{item.segmentName}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="复制到段名">
-                        <Form.Item name="b">
+                        <Form.Item name="segmentNameCopy">
                             <Select placeholder="请选择" style={{ width: '100%' }}
                                 dropdownRender={menu => (
                                     <>
@@ -121,8 +115,8 @@ export default forwardRef(function PeriodCopy({ id, segmentId }: ApplyPackingPro
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="复制类型">
-                        <Form.Item name="c">
-                            <Radio.Group onChange={onChange} value={value}>
+                        <Form.Item name="copyType">
+                            <Radio.Group>
                                 <Radio value={1}>覆盖</Radio>
                                 <Radio value={2}>追加</Radio>
                             </Radio.Group>

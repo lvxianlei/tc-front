@@ -12,11 +12,6 @@ import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { ColumnType } from 'antd/lib/table';
-
-interface Column extends ColumnType<object> {
-    editable?: boolean;
-}
 
 export default function Comparison(): React.ReactNode {
 
@@ -55,7 +50,10 @@ export default function Comparison(): React.ReactNode {
             key: 'drawMaterialName',
             title: '提料材料',
             width: 120,
-            dataIndex: 'drawMaterialName'
+            dataIndex: 'drawMaterialName',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <p className={record?.drawMaterialError === 1 ? styles.brown : styles.normal}>{_ || '-'}</p>
+            )
         },
         {
             key: 'materialName',
@@ -137,25 +135,6 @@ export default function Comparison(): React.ReactNode {
         }
     ]
 
-
-    const checkColor = (record: Record<string, any>, dataIndex: string) => {
-        const red: number = record.redColumn.indexOf(dataIndex);
-        const green: number = record.greenColumn.indexOf(dataIndex);
-        const yellow: number = record.yellowColumn.indexOf(dataIndex);
-        const brown: string = record.specialCode;
-        if (red !== -1) {
-            return 'red';
-        } else if (green !== -1) {
-            return 'green';
-        } else if (yellow !== -1) {
-            return 'yellow';
-        } else if (brown === '1' && dataIndex === 'specialCode') {
-            return 'brown';
-        } else {
-            return 'normal'
-        }
-    }
-
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
@@ -176,11 +155,10 @@ export default function Comparison(): React.ReactNode {
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>
                 <Form layout="inline" onFinish={(value: Record<string, any>) => {
-                    console.log(value)
                     setFilterValue(value)
                     setRefresh(!refresh);
                 }}>
-                    <Form.Item label='长度误差mm' name='length' rules={[
+                    <Form.Item label='长度误差mm' name='length' initialValue={0} rules={[
                         {
                             "required": true,
                             "message": "请输入长度误差"
@@ -188,7 +166,7 @@ export default function Comparison(): React.ReactNode {
                     ]}>
                         <InputNumber min={0} max={9999} />
                     </Form.Item>
-                    <Form.Item label='宽度误差mm' name='width' rules={[
+                    <Form.Item label='宽度误差mm' name='width' initialValue={0} rules={[
                         {
                             "required": true,
                             "message": "请输入宽度误差"
@@ -196,7 +174,7 @@ export default function Comparison(): React.ReactNode {
                     ]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item label='单重误差kg' name='basicsWeight' rules={[
+                    <Form.Item label='单重误差kg' name='basicsWeight' initialValue={0} rules={[
                         {
                             "required": true,
                             "message": "请输入单重误差"

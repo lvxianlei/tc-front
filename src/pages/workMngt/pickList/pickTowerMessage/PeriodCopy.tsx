@@ -48,7 +48,13 @@ export default forwardRef(function PeriodCopy({ id }: ApplyPackingProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const data = form.getFieldsValue(true);
-            await saveRun(data)
+            console.log(data)
+            await saveRun({
+                ...data,
+                productCategory: id,
+                segmentId: data?.segmentName?.split(',')[1],
+                segmentName: data?.segmentName?.split(',')[0]
+            })
             resolve(true);
         } catch (error) {
             reject(false)
@@ -83,7 +89,7 @@ export default forwardRef(function PeriodCopy({ id }: ApplyPackingProps, ref) {
                         <Form.Item name="segmentName">
                             <Select placeholder="请选择" style={{ width: '100%' }}>
                                 {data && data?.map((item: any) => {
-                                    return <Select.Option key={item.segmentName} value={item.segmentName}>{item.segmentName}</Select.Option>
+                                    return <Select.Option key={item.segmentName} value={item.segmentName + ',' + item.id}>{item.segmentName}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
