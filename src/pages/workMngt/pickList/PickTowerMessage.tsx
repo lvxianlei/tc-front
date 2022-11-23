@@ -357,7 +357,7 @@ export default function Lofting(): React.ReactNode {
             if (tip.findIndex(value => value === false) !== -1) {
                 message.warning('仅提料中状态可进行完成提料！')
             } else {
-                await RequestUtil.post(``).then(() => {
+                await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting`, selectedKeys).then(() => {
                     message.success('完成提料成功！')
                 }).then(() => {
                     history.go(0);
@@ -383,7 +383,7 @@ export default function Lofting(): React.ReactNode {
             if (tip.findIndex(value => value === false) !== -1) {
                 message.warning('仅校核中状态可进行完成校核！')
             } else {
-                await RequestUtil.post(``).then(() => {
+                await RequestUtil.post(`/tower-science/drawProductSegment/completed/check`, selectedKeys).then(() => {
                     message.success('完成校核成功！')
                 }).then(() => {
                     history.go(0);

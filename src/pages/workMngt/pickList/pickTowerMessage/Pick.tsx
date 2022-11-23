@@ -468,7 +468,7 @@ export default function Lofting(): React.ReactNode {
                 setCopyVisible(false);
                 editRef.current?.resetFields();
             }}>
-            <PeriodCopy id={''} ref={editRef} />
+            <PeriodCopy id={params?.id} ref={editRef} />
         </Modal>
         <Modal
             visible={visible}
