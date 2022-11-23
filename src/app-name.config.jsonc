@@ -5,7 +5,8 @@
         "description": "标书购买、报价等", //描述
         "iconFont": "icon-yingxiaozhongxinicon", // iconfont
         "color": "#FF8C00", // iconfont的颜色
-        "path": "",
+        "path": "http://tc-sc-dev.dhwy.cn",
+        "corsWeb": true,
         "appName": "CRM" //应用name
     },
     {
