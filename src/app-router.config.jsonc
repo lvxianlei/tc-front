@@ -3209,6 +3209,20 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // RD-资料管理-工程资料管理
+      "name": "工程资料管理",
+      "path": "/dataMngt/EngineeringData",
+      "module": "./pages/dataMngt/engineeringData/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-资料管理-资料存档管理
+      "name": "资料存档管理",
+      "path": "/dataMngt/dataArchiving",
+      "module": "./pages/dataMngt/dataArchiving/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // WO-工单设置-模板类型
       "name": "模板类型",
       "path": "/worksheetSetting/templateType",
