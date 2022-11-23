@@ -48,15 +48,32 @@ export default abstract class RequestUtil {
      * @param [init] 
      * @returns request 
      */
-    private static request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void, changePath: boolean = true): Promise<T> {
-        
+    private static async request<T>(path: string, init?: RequestInit, cancel?: (abort: AbortController) => void, changePath: boolean = true): Promise<T> {
+        const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
+        const tokenExpires: string = AuthUtil.getTokenExpires()
+        if ((new Date(tokenExpires).getTime() - new Date().getTime()) < 3600000) {
+            const refrenshToken: any = await fetch(`${process.env.REQUEST_API_PATH_PREFIX}/sinzetech-auth/oauth/token`, {
+                method: 'POST',
+                body: stringify({
+                    grant_type: "refresh_token",
+                    scope: "all",
+                    refresh_token: AuthUtil.getRefreshToken()
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                    'Tenant-Id': AuthUtil.getTenantId()
+                },
+                referrerPolicy: 'no-referrer-when-downgrade',
+            })
+            AuthUtil.setSinzetechAuth(refrenshToken.access_token, refrenshToken.refresh_token, refrenshToken.expires_in)
+        }
         return new Promise<T>((resolve: (data: T) => void, reject: (res: IResponse<T>) => void): void => {
             let headers: HeadersInit = {
                 'Content-Type': 'application/json',
                 'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                'Tenant-Id': AuthUtil.getTenantId()
-            };
-            const sinzetechAuth: string = AuthUtil.getSinzetechAuth();
+                'Tenant-Id': AuthUtil.getTenantId(),
+            }
             if (![undefined, "undefined", ""].includes(sinzetechAuth)) {
                 headers['Sinzetech-Auth'] = sinzetechAuth;
             }

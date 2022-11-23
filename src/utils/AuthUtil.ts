@@ -9,6 +9,7 @@ import ctxConfig from "../app-ctx.config.jsonc"
 import RequestUtil from './RequestUtil'
 const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
+const TOKEN_EXPIRES: string = 'SINZETECH_TOKEN_EXPIRES'
 const REFRENSH_TOKEN: string = 'SINZETECH_REFRENSH_TOKEN'
 const USER_INFO: string = 'USER_INFO'
 const TENANT_NAME: string = 'SINZETECH_TENANT_NAME'
@@ -83,8 +84,8 @@ export default abstract class AuthUtil {
      * @param tenantName
      * @param [options] 
      */
-    public static setTenantName(tenantName: string, options?: CookieAttributes): void {
-        Cookies.set(TENANT_NAME, tenantName, options)
+    public static setTenantName(tenantName: string): void {
+        Cookies.set(TENANT_NAME, tenantName)
     }
     /**
      * @static
@@ -93,6 +94,10 @@ export default abstract class AuthUtil {
      */
     public static getTenantName(): string {
         return Cookies.get(TENANT_NAME) || ''
+    }
+
+    public static getTokenExpires(): string {
+        return Cookies.get(TOKEN_EXPIRES) || ''
     }
 
     /**
@@ -159,9 +164,9 @@ export default abstract class AuthUtil {
      * @param [options] 
      */
     public static setSinzetechAuth(token: string, refrenshToken: string, expires_in: number): void {
-        Cookies.set(TOKEN_KEY, token, {
-            expires: new Date((new Date().getTime() + (expires_in - 60) * 1000))
-        })
+        const expiresInDate = new Date((new Date().getTime() + expires_in * 1000))
+        Cookies.set(TOKEN_KEY, token, expiresInDate)
+        Cookies.set(TOKEN_EXPIRES, expiresInDate)
         sessionStorage.setItem(TOKEN_KEY, token)
         sessionStorage.setItem(REFRENSH_TOKEN, refrenshToken)
     }
