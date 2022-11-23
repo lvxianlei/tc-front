@@ -472,7 +472,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                             message: '请选择变更类型'
                                         }
                                     ]}>
-                                        <Select style={{ width: "100%" }} allowClear>
+                                        <Select style={{ width: "120px" }} allowClear>
                                             {typeOfChangeOptions && typeOfChangeOptions.map(({ id, name }, index) => {
                                                 return <Select.Option key={index} value={id}>
                                                     {name}
