@@ -366,6 +366,9 @@ export default function (): JSX.Element {
                                         if (res.appName === "MC") {
                                             herf = res.path + AuthUtil.getUserInfo().user_id
                                         }
+                                        if (res.appName === "CRM") {
+                                            herf = process.env.CRM_BREACK_URL
+                                        }
                                         window.location.href = herf
                                         return
                                     }
