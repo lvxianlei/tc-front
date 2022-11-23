@@ -29,6 +29,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [numData, setNumData] = useState<any>({});
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        console.log(selectedRows)
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
         const totalNum = selectedRows.reduce((pre: any,cur: { planPurchaseNum: any; })=>{
@@ -117,11 +118,12 @@ export default function CreatePlan(props: any): JSX.Element {
         setSelectedRows(selectedRows.filter((item:any)=>{return  item.index!==id}))
     }
 
-    const handleNumChange = (value: number, id: string) => {
-        const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+    const handleNumChange = (value: number, id: number) => {
+        const list = popDataList.map((item: any,index:number) => {
+            if (index === id) {
                 return ({
                     ...item,
+                    index,
                     planPurchaseNum: value,
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
@@ -131,13 +133,18 @@ export default function CreatePlan(props: any): JSX.Element {
                             : (Number(item?.proportion || 1) * value / 1000).toFixed(3)
                 })
             }
-            return item
+            return { 
+                ...item,
+                index
+            }
         })
+        console.log(selectedKeys)
+        console.log(list.filter((item:any)=>{return selectedKeys.includes(item?.index)}))
         if(selectedKeys.includes(id)){
-            const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
+            const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
                 return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum&&cur.planPurchaseNum!==null?cur.planPurchaseNum:0) 
             },0) 
-            const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
+            const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalWeight: any; })=>{
                 return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
             },0)
             setNumData({
@@ -156,6 +163,7 @@ export default function CreatePlan(props: any): JSX.Element {
             if (index === id) {
                 return ({
                     ...item,
+                    index,
                     length: value,
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * value) / 1000 / 1000).toFixed(3)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * value * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
@@ -165,13 +173,16 @@ export default function CreatePlan(props: any): JSX.Element {
                             : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
                 })
             }
-            return item
+            return {
+                ...item,
+                index,
+            }
         })
         if(selectedKeys.includes(id)){
-            const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
+            const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { planPurchaseNum: any; })=>{
                 return parseFloat(pre!==null?pre:0) + parseFloat(cur.planPurchaseNum&&cur.planPurchaseNum!==null?cur.planPurchaseNum:0) ||0
             },0) 
-            const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.id)}).reduce((pre: any,cur: { totalWeight: any; })=>{
+            const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalWeight: any; })=>{
                 return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) ||0
             },0)
             setNumData({
@@ -188,6 +199,7 @@ export default function CreatePlan(props: any): JSX.Element {
             if (index === id) {
                 return ({
                     ...item,
+                    index,
                     width: value,
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * value / 1000 / 1000 / 1000).toFixed(3)
@@ -197,7 +209,10 @@ export default function CreatePlan(props: any): JSX.Element {
                             : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
                 })
             }
-            return item
+            return {
+                ...item,
+                index
+            }
         })
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
@@ -347,7 +362,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 重量合计(吨)：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.totalWeight||0}</span>
             </span>
             <CommonTable
-                rowKey={"id"}
+                rowKey={"index"}
                 style={{ padding: "0" }}
                 columns={[{
                         key: 'index',
@@ -370,7 +385,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                     min={1}
                                     precision={0}
                                     value={value || undefined}
-                                    onChange={(value: number) => handleNumChange(value, records.id)}
+                                    onChange={(value: number) => handleNumChange(value, key)}
                                     key={key}
                                 />
                             })
