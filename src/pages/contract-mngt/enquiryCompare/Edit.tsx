@@ -210,7 +210,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handleRemove = (id: number) => {
         setMaterialList(materialList.filter((item: any, index:number) => index !== id))
-        setPopDataList(materialList.filter((item: any, index: number) => index !== id))
+        setPopDataList(popDataList.filter((item: any, index: number) => index !== id))
     }
 
     const handleInputChange = (value: number, id: string) => {
@@ -341,7 +341,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }}
             />
         </Modal>
-        <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
+        <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk} destroyOnClose
             onCancel={() => setChooseVisible(false)}>
            <PopTableContent
                 data={{
