@@ -90,39 +90,7 @@ export default function TemplateList() {
                             record?.uploadDrawType !== 3
                                 ?
                                 <Space direction="horizontal" size="small">
-                                    <Button type="link" onClick={() => {
-                                        Modal.confirm({
-                                            title: '编辑',
-                                            icon: false,
-                                            content: <Form form={form}>
-                                                {
-                                                    record?.uploadDrawType === 1 ?
-                                                        <Form.Item name="structureNumber" label="数量" rules={[{ required: true, message: '请输入数量' }]}>
-                                                            <InputNumber min={1} max={9999} precision={0} style={{ width: '100%' }} />
-                                                        </Form.Item>
-                                                        :
-                                                        <Form.Item name="structureNumber" label="数量">
-                                                            <InputNumber min={1} max={9999} precision={0} style={{ width: '100%' }} />
-                                                        </Form.Item>
-                                                }
-                                            </Form>,
-                                            onOk: () => new Promise((resolve, reject) => {
-                                                try {
-                                                    form.validateFields().then(async res => {
-                                                        const value = form?.getFieldsValue(true);
-                                                        console.log(value)
-                                                        resolve(true);
-                                                    })
-                                                } catch (error) {
-                                                    reject(false)
-                                                }
-                                            }),
-                                            onCancel: () => {
-                                                form.resetFields();
-                                            }
-                                        })
-                                    }}>编辑</Button>
-                                    <Button type='link' onClick={() => { history.push(`/workMngt/templateList/detail/${record.id}/${record.productCategoryId}`) }}>查看</Button>
+                                    <Button type='link' onClick={() => { history.push(`/workMngt/templateList/detail/${record.id}/${record.productCategoryId}/${record?.uploadDrawType}`) }}>查看</Button>
                                 </Space>
                                 :
                                 <>

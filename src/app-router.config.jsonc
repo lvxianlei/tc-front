@@ -1246,7 +1246,7 @@
     },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
-      "path": "/workMngt/templateList/detail/:id/:productCategoryId",
+      "path": "/workMngt/templateList/detail/:id/:productCategoryId/:uploadDrawType",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
       "authority": "tc_erp_rd_work_template_select"
