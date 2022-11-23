@@ -78,10 +78,9 @@ export default () => {
         }
     })
     // 三层表格数据
-    const { data:threeLevelTableData,run:getThreeLevelTableData } = useRequest<any[]>((issueOrderNumber: string,planNumber: string,productCategoryNumber:string) => new Promise(async (resole, reject) => {
+    const { data:threeLevelTableData,run:getThreeLevelTableData } = useRequest<any[]>((planNumber: string,productCategoryNumber:string) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-aps/productReport/getIssueOrderStatistics`,{
-                    issueOrderNumber,
                     planNumber,
                     productCategoryNumber
             })
@@ -181,7 +180,7 @@ export default () => {
             if(expanded){
                 if(record?.id){
                     // productCategoryNumber
-                    getThreeLevelTableData(record?.issueOrderNum,record?.planNumber,record?.productCategory)
+                    getThreeLevelTableData(record?.planNumber,record?.productCategory)
                     setTwoLevelRowKeys([record?.key])
                     setLevelFourData([])
                     setThreeLevelRowKeys([])
