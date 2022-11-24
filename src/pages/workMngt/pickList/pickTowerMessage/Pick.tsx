@@ -198,8 +198,8 @@ export default function Lofting(): React.ReactNode {
                         required: true,
                         message: '请输入规格'
                     }, {
-                        pattern: /^[0-9-*L∠]*$/,
-                        message: '仅可输入数字/-/*/L/∠',
+                        pattern: /^[0-9-*L∠φ\/]*$/,
+                        message: '仅可输入数字/-/*/L/∠/φ',
                     }]}
                 >
                     <Input size="small" onChange={() => rowChange(index)} maxLength={10} />
@@ -918,8 +918,8 @@ export default function Lofting(): React.ReactNode {
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "structureSpec"]} initialValue={_} rules={[{ required: true, message: '请输入规格' }, {
 
-                                    pattern: /^[0-9-∠L*]*$/,
-                                    message: '仅可输入数字/-/*/L/∠',
+                                    pattern: /^[0-9-∠L*φ\/]*$/,
+                                    message: '仅可输入数字/-/*/L/∠/φ',
 
                                 }]}>
                                     <Input size="small" maxLength={10} />
@@ -1150,8 +1150,8 @@ export default function Lofting(): React.ReactNode {
                             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                 <Form.Item name={['dataV', index, "structureSpec"]} initialValue={_} rules={[{ required: true, message: '请输入规格' }, {
 
-                                    pattern: /^[0-9-∠L*]*$/,
-                                    message: '仅可输入数字/-/*/L/∠',
+                                    pattern: /^[0-9-∠L*φ\/]*$/,
+                                    message: '仅可输入数字/-/*/L/∠/φ',
 
                                 }]}>
                                     <Input size="small" maxLength={10} />

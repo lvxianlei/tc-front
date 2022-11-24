@@ -958,6 +958,7 @@ export default function Lofting(): React.ReactNode {
                     onConfirm={del}
                     okText="确认"
                     cancelText="取消"
+                    disabled={!isShow}
                 >
                     <Button type="primary" ghost disabled={!isShow}>删除</Button>
                 </Popconfirm>

@@ -139,7 +139,7 @@ export default (): React.ReactNode => {
             <BaseInfo form={form} col={2} edit
                 columns={setting.map((item: any) => {
                     if (editRow && editRow !== "new") {
-                        if (!["safetyStockWeight", "warningStockWeight"].includes(item.dataIndex)) {
+                        if (!["safetyStockWeight", "warningStockWeight","storageAge"].includes(item.dataIndex)) {
                             item = { ...item, disabled: true }
                         }
                     }

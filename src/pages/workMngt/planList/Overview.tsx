@@ -11,7 +11,7 @@ import { materialStandardOptions, materialTextureOptions } from "../../../config
 export default function Edit() {
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const history = useHistory()
-    const params = useParams<{ id: string, purchaseType: string }>()
+    const params = useParams<{ id: string, purchaseType: string, status: string }>()
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [isExport, setIsExportStoreList] = useState(false)
@@ -19,17 +19,16 @@ export default function Edit() {
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
+    const [list, setList] = useState<any[]>([])
     const { loading, data: dataTable } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`, {
-                current: 1,
-                size: 1000
-            })
-            setPopDataList(result.records.map(((item: any, index: number) => ({
+            const result: any[] = await RequestUtil.get(`/tower-supply/materialPurchasePlan/list/${params.id}`)
+            setPopDataList(result.map(((item: any, index: number) => ({
                 ...item,
                 source: 1,
                 rowKey: `${item.materialName}-${index}`
             }))))
+            setList(result)
             resole(result)
         } catch (error) {
             reject(error)
@@ -188,15 +187,16 @@ export default function Edit() {
                 {isEdit && <Button key="add" type="primary" style={{ margin: "0px 16px" }} onClick={() => setVisible(true)}>添加</Button>}
             </>}
                 operation={[
-                    <Fragment key="edit">{!isEdit && <Button key="edit" type="primary" style={{ marginRight: 16 }} onClick={() => setIsEdit(true)}>编辑</Button>}</Fragment>,
-                    <Button key="cancel" loading={cancelPlanLoading} type="primary" style={{ marginRight: 16 }} onClick={handleCancelPlan}>取消计划</Button>,
-                    <Fragment key="save">{isEdit && <Button key="save" loading={saveLoading} type="primary" style={{ marginRight: 16 }} onClick={handleSave}>保存</Button>}</Fragment>,
+                    // <Fragment key="edit">{!isEdit && <Button key="edit" type="primary" style={{ marginRight: 16 }} onClick={() => setIsEdit(true)}>编辑</Button>}</Fragment>,
+                    <Fragment key="save">{params.status ==='1'&&<Button key="cancel" loading={cancelPlanLoading} type="primary" style={{ marginRight: 16 }} onClick={handleCancelPlan}>取消计划</Button>}</Fragment>,
+                    // <Fragment key="save">{isEdit && <Button key="save" loading={saveLoading} type="primary" style={{ marginRight: 16 }} onClick={handleSave}>保存</Button>}</Fragment>,
                     <Button key="goback" type="ghost" onClick={() => history.goBack()}>返回</Button>
                 ]}>
                 {!isEdit && <CommonTable
                     loading={loading}
                     columns={PurchaseListDetail}
-                    dataSource={dataTable?.records || []}
+                    dataSource={list || []}
+                    pagination={false}
                 />}
                 {isEdit && <CommonTable
                     style={{ padding: "0" }}
@@ -206,7 +206,7 @@ export default function Edit() {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => {
-                                        const minNum = records.source === 1 ? dataTable?.records.find((item: any) => item.id === records.id)?.planPurchaseNum : 1
+                                        const minNum = records.source === 1 ? list.find((item: any) => item.id === records.id)?.planPurchaseNum : 1
                                         return <InputNumber
                                             min={minNum} value={value}
                                             onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
@@ -370,8 +370,8 @@ export default function Edit() {
                     return keys
                 }}
                 current={1}
-                size={dataTable?.records.length || 10}
-                total={dataTable?.records.length || 0}
+                size={list.length || 10}
+                total={list.length || 0}
                 url={`/tower-supply/materialPurchasePlan/list/${params.id}`}
                 serchObj={{}}
                 closeExportList={() => { setIsExportStoreList(false) }}
