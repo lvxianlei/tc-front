@@ -97,10 +97,14 @@
         "readOnly": true,
         "search": [
             {
-                "title": "查询",
+                "title": "规格",
                 "type": "string",
-                "dataIndex": "fuzzyQuery",
-                "placeholder": "品名/规格/编号"
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "品名",
+                "type": "string",
+                "dataIndex": "materialName"
             }
         ],
         "columns": [

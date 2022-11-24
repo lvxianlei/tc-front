@@ -346,6 +346,24 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     num: item.num
                 }))).toFixed(5), 0)
             // 结算重量
+            console.log(calcObj.weight({
+                length: result.length,
+                width: result.width,
+                weightAlgorithm: result.weightAlgorithm,
+                proportion: result.proportion,
+            }))
+            console.log(calcObj.balanceTotalWeight(
+                meteringMode,
+                calcObj.weight({
+                    length: result.length,
+                    width: result.width,
+                    weightAlgorithm: result.weightAlgorithm,
+                    proportion: result.proportion,
+                }),
+                result.num,
+                totalPonderationWeight,
+                allTotalWeight
+            ))
             const balanceTotalWeight = calcObj.balanceTotalWeight(
                 meteringMode,
                 calcObj.weight({

@@ -794,14 +794,14 @@
       "path": "/bulletin/contract",
       "module": "./pages/cockpit/contract/index",
       "exact": true,
-      "authority": "tc_erp_sw_cockpit_contract"
+      "authority": "tc_erp_sw_cockpit_contract_list"
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
       "path": "/bulletin/contract/overView/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
-      "authority": "sw_cockpit_contract_kanban_details"
+      "authority": "tc_erp_sw_cockpit_contract_detail"
     },
     { //询价任务
       "name": "工程报价任务",
@@ -963,6 +963,13 @@
       "module": "./pages/stock/angleSteel/index",
       "exact": true,
       "authority": "tc_erp_sw_config_list_angle"
+    },
+    { // 配置管理-质检策略配置
+      "name": "质检策略配置",
+      "path": "/config/configList/qualityInspection",
+      "module": "./pages/stock/qualityInspection/QualityInspection",
+      "exact": true,
+      "authority": "tc_erp_sw_config_list_else"
     },
     { // 配置管理-其他参数配置
       "name": "其他参数配置",
@@ -1141,7 +1148,7 @@
     },
     { // 工作管理-计划列表-采购清单
       "name": "采购清单",
-      "path": "/ingredients/planList/purchaseList/:id/:purchaseType",
+      "path": "/ingredients/planList/purchaseList/:id/:purchaseType/:status",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
       "authority": "tc_erp_sw_work_plan_detail"
@@ -3272,12 +3279,47 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // 质量检验流程-原材料送检单
+      "name": "原材料送检单",
+      "path": "/rawMaterialInspection/inspection",
+      "module": "./pages/stock/rawMaterialInspection/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_list"
+    },
+    { // 质量检验流程-原材料送检单-明细
+      "name": "明细",
+      "path": "/rawMaterialInspection/inspection/detail/:id",
+      "module": "./pages/stock/rawMaterialInspection/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_list"
+    },
+    { // 质量检验流程-原材料送检单-明细
+      "name": "明细",
+      "path": "/rawMaterialInspection/inspection/reviewDetail/:id",
+      "module": "./pages/stock/rawMaterialInspection/detail/detailReview",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_list"
+    },
+    { // 不合格处置流程-原材料不合格处置单-列表
+      "name": "原材料不合格处置单",
+      "path": "/unqualifiedMaterial/disposal",
+      "module": "./pages/stock/unqualifiedMaterial/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_in_list"
+    },
     { // 数据门户
       "name": "数据门户",
       "path": "/data/door",
       "module": "./pages/system-mngt/dataDoor/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 库存管理-原材料调拨单
+      "name": "原材料调拨单",
+      "path": "/stock/rawMaterialAllocation",
+      "module": "./pages/stock/rawMaterialAllocation/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_list"
     }
   ]
 }
