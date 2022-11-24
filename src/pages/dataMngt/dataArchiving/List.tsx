@@ -21,7 +21,7 @@ export interface ILofting {
 }
 
 export interface EditRefProps {
-    onSubmit: () => void
+    onSave: () => void
     resetFields: () => void
 }
 
@@ -48,7 +48,7 @@ export default function List(): React.ReactNode {
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
-            await newRef.current?.onSubmit()
+            await newRef.current?.onSave()
             message.success("保存成功！")
             setVisible(false)
             history.go(0)
@@ -65,19 +65,23 @@ export default function List(): React.ReactNode {
             visible={visible}
             width="50%"
             title={type === 'new' ? '上传' : type === 'edit' ? '编辑' : '查看'}
-            onOk={handleOk}
             confirmLoading={confirmLoading}
-            onCancel={() => {
-                setVisible(false);
-                newRef.current?.resetFields();
-            }}>
+            footer={
+                <Space>
+                    {type === 'detail' ? null : <Button type='primary' onClick={handleOk}>保存</Button>}
+                    <Button onClick={() => {
+                        setVisible(false);
+                        newRef.current?.resetFields();
+                    }}>关闭</Button>
+                </Space>
+            }
+        >
             <DataArchivingNew getLoading={(loading) => setConfirmLoading(loading)} type={type} record={rowData} ref={newRef} />
         </Modal>
         <Page
             path="/tower-science/data/backup"
             filterValue={filterValue}
             columns={[
-
                 {
                     key: 'index',
                     title: '序号',

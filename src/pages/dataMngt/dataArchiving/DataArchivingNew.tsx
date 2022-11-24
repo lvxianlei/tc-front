@@ -10,7 +10,7 @@ import { BaseInfo, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './DataArchiving.module.less';
-import { certificateTypeOptions } from "../../../configuration/DictionaryOptions";
+import { documentTypeOptions, drawingDataTypeOptions, productTypeOptions, referenceRoomOptions, voltageGradeOptions } from "../../../configuration/DictionaryOptions";
 import { detailColumns } from './dataArchiving.json'
 
 interface modalProps {
@@ -61,14 +61,14 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
             const value = await form.validateFields();
-            console.log(value)
             getLoading(true)
             await saveRun({
-                ...value
+                ...value,
+                id: data?.id
             })
             resolve(true);
         } catch (error) {
-            reject(false)
+            reject(error)
         }
     })
 
@@ -102,16 +102,16 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                     <Form form={form}>
                         <Descriptions bordered column={3} size="small" className={styles.description}>
                             <Descriptions.Item label="状态">
-                                <Form.Item name="status" initialValue={0} rules={[
+                                <Form.Item name="status" initialValue={1} rules={[
                                     {
                                         "required": true,
                                         "message": "请选择状态"
                                     }
                                 ]}>
                                     <Select placeholder="请选择状态">
-                                        <Select.Option value={0} key={0}>正常</Select.Option>
-                                        <Select.Option value={1} key={1}>变更</Select.Option>
-                                        <Select.Option value={2} key={2}>无效</Select.Option>
+                                        <Select.Option value={1} key={1}>正常</Select.Option>
+                                        <Select.Option value={2} key={2}>变更</Select.Option>
+                                        <Select.Option value={3} key={3}>无效</Select.Option>
                                     </Select>
                                 </Form.Item>
                             </Descriptions.Item>
@@ -123,7 +123,7 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                                     }
                                 ]}>
                                     <Select placeholder="请选择资料室">
-                                        {certificateTypeOptions && certificateTypeOptions.map(({ id, name }, index) => {
+                                        {referenceRoomOptions && referenceRoomOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
                                                 {name}
                                             </Select.Option>
@@ -139,7 +139,7 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                                     }
                                 ]}>
                                     <Select placeholder="请选择资料类型">
-                                        {certificateTypeOptions && certificateTypeOptions.map(({ id, name }, index) => {
+                                        {drawingDataTypeOptions && drawingDataTypeOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
                                                 {name}
                                             </Select.Option>
@@ -160,7 +160,7 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                             <Descriptions.Item label="文件类别">
                                 <Form.Item name="fileCategory">
                                     <Select placeholder="请选择文件类别">
-                                        {certificateTypeOptions && certificateTypeOptions.map(({ id, name }, index) => {
+                                        {documentTypeOptions && documentTypeOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
                                                 {name}
                                             </Select.Option>
@@ -219,7 +219,7 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                             <Descriptions.Item label="电压等级">
                                 <Form.Item name="voltageGrade">
                                     <Select placeholder="请选择电压等级">
-                                        {certificateTypeOptions && certificateTypeOptions.map(({ id, name }, index) => {
+                                        {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
                                                 {name}
                                             </Select.Option>
@@ -229,8 +229,8 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                             </Descriptions.Item>
                             <Descriptions.Item label="产品类型">
                                 <Form.Item name="productType">
-                                    <Select placeholder="请选择电压等级">
-                                        {certificateTypeOptions && certificateTypeOptions.map(({ id, name }, index) => {
+                                    <Select placeholder="请选择产品类型">
+                                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                             return <Select.Option key={index} value={id}>
                                                 {name}
                                             </Select.Option>
