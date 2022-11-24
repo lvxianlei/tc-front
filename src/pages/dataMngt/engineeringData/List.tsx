@@ -28,52 +28,46 @@ export interface EditRefProps {
 export default function List(): React.ReactNode {
     const columns = [
         {
-            key: 'productTypeName',
+            key: 'contractNumber',
             title: '内部合同编号',
             width: 50,
-            dataIndex: 'productTypeName'
+            dataIndex: 'contractNumber'
         },
         {
-            key: 'projectEntries',
+            key: 'projectName',
             title: '项目名称',
-            dataIndex: 'projectEntries',
+            dataIndex: 'projectName',
             width: 80
         },
         {
-            key: 'voltageGradePriceFirst',
+            key: 'orderProjectName',
             title: '工程名称',
             width: 100,
-            dataIndex: 'voltageGradePriceFirst'
+            dataIndex: 'orderProjectName'
         },
         {
-            key: 'voltageGradePriceSecond',
+            key: 'customerCompany',
             title: '客户名称',
             width: 100,
-            dataIndex: 'voltageGradePriceSecond'
+            dataIndex: 'customerCompany'
         },
         {
-            key: 'voltageGradePriceThird',
+            key: 'voltageGradeName',
             title: '电压等级',
             width: 80,
-            dataIndex: 'voltageGradePriceThird'
+            dataIndex: 'voltageGradeName'
         },
         {
-            key: 'specialPrice',
+            key: 'productTypeName',
             title: '产品类型',
             width: 80,
-            dataIndex: 'specialPrice'
+            dataIndex: 'productTypeName'
         },
         {
-            key: 'specialPrice',
+            key: 'planNumber',
             title: '计划号',
             width: 80,
-            dataIndex: 'specialPrice'
-        },
-        {
-            key: 'specialPrice',
-            title: '备注',
-            width: 80,
-            dataIndex: 'specialPrice'
+            dataIndex: 'planNumber'
         }
     ]
 
@@ -185,10 +179,10 @@ export default function List(): React.ReactNode {
 
 
     const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig, filter?: Record<string, any>) => new Promise(async (resole, reject) => {
-        const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list`, { current: pagenation?.current || 1, size: pagenation?.size || 15, category: status, ...filter });
+        const result = await RequestUtil.get<any>(`/tower-science/projectData`, { current: pagenation?.current || 1, size: pagenation?.size || 20, category: status, ...filter });
         setPage({ ...result })
         resole(result?.records || [])
-    }), { refreshDeps: [status] })
+    }), {})
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -245,7 +239,7 @@ export default function List(): React.ReactNode {
             <DataUpload getLoading={(loading) => setConfirmLoading(loading)} type={type} record={rowData} ref={newRef} />
         </Modal>
         <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFinish}>
-            <Form.Item label='电压等级' name="status">
+            <Form.Item label='电压等级' name="voltageGrade">
                 <Select placeholder="请选择电压等级" style={{width: '120px'}}>
                     {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
@@ -255,7 +249,7 @@ export default function List(): React.ReactNode {
                 </Select>
             </Form.Item>
 
-            <Form.Item label='工程类型' name="status" initialValue={''}>
+            <Form.Item label='工程类型' name="address" initialValue={''}>
                 <Select placeholder="请选择工程类型" style={{width: '120px'}}>
                     <Select.Option value={''} key="0">全部</Select.Option>
                     <Select.Option value={'国内'} key="1">国内</Select.Option>
@@ -264,7 +258,7 @@ export default function List(): React.ReactNode {
                 </Select>
             </Form.Item>
 
-            <Form.Item label='产品类型' name="status" initialValue={''}>
+            <Form.Item label='产品类型' name="productType" initialValue={''}>
                 <Select placeholder="请选择产品类型" style={{width: '120px'}}>
                     <Select.Option value={''} key="0">全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
