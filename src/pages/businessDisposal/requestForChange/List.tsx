@@ -80,9 +80,6 @@ export default function List(): React.ReactNode {
         run({ current: current, size: pageSize }, { ...filterValues })
     }
 
-
-
-
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await addRef.current?.onSave()
@@ -148,8 +145,8 @@ export default function List(): React.ReactNode {
 
 
     const onFilterSubmit = (values: Record<string, any>) => {
-        if (values?.selectTime) {
-            const formatDate = values?.selectTime?.map((item: any) => item.format("YYYY-MM-DD"));
+        if (values?.updateStatusTime) {
+            const formatDate = values?.updateStatusTime?.map((item: any) => item.format("YYYY-MM-DD"));
             values.updateStatusTimeStart = formatDate[0] + " 00:00:00";
             values.updateStatusTimeEnd = formatDate[1] + " 23:59:59";
         }

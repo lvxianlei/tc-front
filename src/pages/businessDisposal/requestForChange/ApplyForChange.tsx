@@ -358,6 +358,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                     productCategoryName: selectedRows[0]?.productCategory,
                                                     productNumber: selectedRows[0]?.name,
                                                     voltageGradeName: selectedRows[0]?.voltageLevelName,
+                                                    description: selectedRows[0]?.assignorDescription
                                                 })
                                                 form?.setFieldsValue({
                                                     ...selectedRows[0],
@@ -367,7 +368,8 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                     id: '',
                                                     drawTaskId: selectedRows[0]?.id,
                                                     drawTaskNum: selectedRows[0]?.taskNum,
-                                                    internalNumber: selectedRows[0]?.contractNum
+                                                    internalNumber: selectedRows[0]?.contractNum,
+                                                    description: selectedRows[0]?.assignorDescription
                                                 })
                                                 setSelectedData([]);
                                                 selectedForm?.setFieldsValue({
