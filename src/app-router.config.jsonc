@@ -1134,7 +1134,7 @@
     },
     { // 工作管理-计划列表-采购清单
       "name": "采购清单",
-      "path": "/ingredients/planList/purchaseList/:id/:purchaseType",
+      "path": "/ingredients/planList/purchaseList/:id/:purchaseType/:status",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
       "authority": "tc_erp_sw_work_plan_detail"

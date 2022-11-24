@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useState, useRef } from "react"
+import React, { forwardRef, useImperativeHandle, useState, useRef, useEffect } from "react"
 import { Button, Modal, Spin, Form, InputNumber, message, Select } from "antd"
 import { BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent } from "../common"
 import useRequest from '@ahooksjs/use-request'
@@ -16,6 +16,7 @@ import { contractBaseInfo, material, addMaterial, addResultMaterial } from "./co
 import { freightInformation, HandlingChargesInformation } from "./Edit.json";
 interface EditProps {
     id: string
+    visibleP: boolean
     type: "new" | "edit"
 }
 interface WeightParams {
@@ -115,7 +116,7 @@ export const calcFun = {
     }
 }
 
-export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
+export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [resultVisible, setResultVisible] = useState<boolean>(false)
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -125,7 +126,31 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const [stevedoringForm] = Form.useForm()
     const [supplierId, setSupplierId] = useState('')
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
-
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [numData, setNumData] = useState<any>({});
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows);
+        const totalNum = selectedRows.reduce((pre: any,cur: { num: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.num!==null?cur.num:1) 
+        },0)
+        const totalWeight = selectedRows.reduce((pre: any,cur: { totalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
+        },0)
+        const taxPrice = selectedRows.reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+        },0)
+        const unTaxPrice = selectedRows.reduce((pre: any,cur: { totalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+        },0) 
+        setNumData({
+            totalNum,
+            totalWeight,
+            taxPrice,
+            unTaxPrice
+        })
+    }
     const [colunmnBase, setColunmnBase] = useState<any[]>(contractBaseInfo);
     // 运费的数组
     const [newfreightInformation, setNewfreightInformation] = useState<any>(oneFreight); // 运费信息
@@ -355,6 +380,28 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     const handleRemove = (id: string) => {
         setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
         setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+        const totalNum = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { num: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.num&&cur.num!==null?cur.num:0) 
+        },0) 
+        const totalWeight = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { totalWeight: any; })=>{
+            return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+        },0) 
+        const taxPrice = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+        },0)
+        const unTaxPrice = selectedRows.filter((item:any)=>{return item?.materialCode!==id}).reduce((pre: any,cur: { totalAmount: any; })=>{
+            return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+        },0)
+        setNumData({
+            totalNum,
+            totalWeight,
+            taxPrice,
+            unTaxPrice
+        })
+        setSelectedRows(selectedRows.filter((item:any)=>{return item?.materialCode!==id}))
+        setSelectedKeys(selectedRows.filter((item:any)=>{return item?.materialCode!==id}).map((item:any)=>{
+            return  item.index
+        }))
     }
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, materialList])
@@ -459,8 +506,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }
                 return ({
                     ...item,
-                    taxTotalAmount: (allData.num * allData.taxPrice * allData.weight).toFixed(2),
-                    totalAmount: (allData.num * allData.price * allData.weight).toFixed(2),
+                    index: itemIndex,
+                    taxTotalAmount: (value * allData.taxPrice).toFixed(2),
+                    totalAmount: (value * allData.price).toFixed(2),
                     price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                     // totalWeight: calcFun.totalWeight({
                     //     length: item.length,
@@ -476,8 +524,32 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     [dataIndex]: value
                 })
             }
-            return item
+            return {
+                ...item,
+                index: itemIndex,
+            }
         })
+        if(selectedKeys.includes(index)){
+            const totalNum = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { num: any; })=>{
+                return parseFloat(pre!==null?pre:0) + parseFloat(cur.num&&cur.num!==null?cur.num:0) 
+            },0) 
+            const totalWeight = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalWeight: any; })=>{
+                return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+            },0) 
+            const taxPrice = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+            },0)
+            const unTaxPrice = newData.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+            },0)
+            setNumData({
+                totalNum,
+                totalWeight,
+                taxPrice,
+                unTaxPrice
+            })
+        }
+        
         setMaterialList(newData.slice(0));
         setPopDataList(newData.slice(0))
     }
@@ -487,6 +559,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             if (index === id) {
                 return ({
                     ...item,
+                    index,
                     [type]: value,
                     weight: calcFun.weight({
                         weightAlgorithm: item.weightAlgorithm,
@@ -505,8 +578,31 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     }),
                 })
             }
-            return item
+            return {
+                ...item,
+                index
+            }
         })
+        if(selectedKeys.includes(id)){
+            const totalNum = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { num: any; })=>{
+                return parseFloat(pre!==null?pre:0) + parseFloat(cur.num&&cur.num!==null?cur.num:0) 
+            },0) 
+            const totalWeight = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalWeight: any; })=>{
+                return (parseFloat(pre&&pre!==null?pre:0) + parseFloat(cur.totalWeight&&cur.totalWeight!==null?cur.totalWeight:0) ).toFixed(5) 
+            },0) 
+            const taxPrice = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { taxTotalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxTotalAmount!==null?cur.taxTotalAmount:0 )).toFixed(2)
+            },0)
+            const unTaxPrice = list.filter((item:any)=>{return selectedKeys.includes(item?.index)}).reduce((pre: any,cur: { totalAmount: any; })=>{
+                return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalAmount!==null?cur.totalAmount:0)).toFixed(2)
+            },0)
+            setNumData({
+                totalNum,
+                totalWeight,
+                taxPrice,
+                unTaxPrice
+            })
+        }
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
@@ -582,7 +678,18 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             })
         }
     }
-
+    useEffect(() => {
+        if(visibleP){
+            baseForm.setFieldsValue({
+                operatorName: AuthUtil.getRealName(),
+                signingTime: moment(),
+                invoiceCharacter: 1,
+                meteringMode: 2,
+                // deliveryMethod: deliveryMethodEnum?.[1]?.value,
+                settlementMode: settlementModeEnum?.[0]?.value
+            })
+        }
+    },[visibleP])
     return <Spin spinning={loading && taxLoading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
             onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
@@ -691,12 +798,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }
             })}
             dataSource={{
-                operatorName: AuthUtil.getRealName(),
-                signingTime: moment(),
-                invoiceCharacter: 1,
-                meteringMode: 2,
-                // deliveryMethod: deliveryMethodEnum?.[1]?.value,
-                settlementMode: settlementModeEnum?.[0]?.value,
+                // operatorName: AuthUtil.getRealName(),
+                // signingTime: moment(),
+                // invoiceCharacter: 1,
+                // meteringMode: 2,
+                // // deliveryMethod: deliveryMethodEnum?.[1]?.value,
+                // settlementMode: settlementModeEnum?.[0]?.value,
                 ...data
             }} edit />
         <DetailTitle title="运费信息" key="b" />
@@ -763,10 +870,30 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     }
             }}>选择比价结果</Button>
         ]} />
+        
+        <span style={{ marginLeft: "20px" }}>
+            数量合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.totalNum||0}</span>
+            重量合计(吨)：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.totalWeight||0}</span>
+            含税金额合计(元)：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.taxPrice||0}</span>
+            不合计金额合计（元）：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ numData?.unTaxPrice ||0}</span>
+        </span>
         <CommonTable
             style={{ padding: "0" }}
-            rowKey="key"
+            rowKey="index"
             columns={[
+                {
+                    key: 'index',
+                    title: '序号',
+                    dataIndex: 'index',
+                    width: '5%',
+                    render: (_a: any, _b: any, index: number): React.ReactNode => {
+                        return (
+                            <span>
+                                {index + 1}
+                            </span>
+                        )
+                    }
+                },
                 ...material.map((item: any) => {
                     if (item.dataIndex === "num") {
                         return ({
@@ -857,7 +984,18 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                     render: (_: any, records: any) => <Button type="link" disabled={records.source === 1} onClick={() => handleRemove(records.materialCode)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={[...popDataList]} />
+            dataSource={[...popDataList].map((item:any,index:number)=>{
+                return {
+                    ...item,
+                    index
+                }
+            })}
+            rowSelection={{
+                selectedRowKeys: selectedKeys,
+                type: "checkbox",
+                onChange: SelectChange,
+            }}
+            />
         <Attachment dataSource={data?.materialContractAttachInfoVos || []} edit ref={attchsRef} />
     </Spin>
 })

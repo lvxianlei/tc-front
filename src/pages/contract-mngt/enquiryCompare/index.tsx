@@ -120,13 +120,13 @@ export default function ContractMngt() {
                         width: 270,
                         render: (_: any, records: any) => <>
                             <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1 } type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
                             }}>取消</Button>
                             <Popconfirm
                                 title="确定删除吗？"
-                                disabled={records.comparisonStatus !== 1}
+                                disabled={  records.isRelate!==0 }
                                 onConfirm={async () => {
                                     await deleteRun(records?.id)
                                     message.success("删除成功...")
@@ -139,7 +139,7 @@ export default function ContractMngt() {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
-                                    disabled={records.comparisonStatus !== 1}
+                                    disabled={records.isRelate!==0}
                                 >删除</Button>
                             </Popconfirm>
                             <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {

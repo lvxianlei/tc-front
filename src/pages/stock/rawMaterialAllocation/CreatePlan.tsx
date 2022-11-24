@@ -251,7 +251,7 @@ import AuthUtil from '@utils/AuthUtil';
          if (props.visible) {
              getBatchingStrategy();
              addCollectionForm.setFieldsValue({
-                 allocationTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                 applyTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                  allocationUser: {
                     id: AuthUtil.getUserInfo().user_id,
                     value: AuthUtil.getUserInfo().username,
@@ -306,7 +306,7 @@ import AuthUtil from '@utils/AuthUtil';
                      id: result?.allocationUser,
                      value: result?.allocationUserName
                  },
-                 allocationTime: result?.allocationTime,
+                 applyTime: result?.applyTime,
                  allocationWarehouseOut: props.type==='view'? result?.allocationWarehouseOutName: result?.allocationWarehouseOut,
                  allocationWarehouseIn: props.type==='view'? result?.allocationWarehouseInName: result?.allocationWarehouseIn
              })
@@ -333,7 +333,7 @@ import AuthUtil from '@utils/AuthUtil';
                  setMaterialList([]);
                  setPopDataList([]);
                  setType(0)
-                 props?.handleCreate();
+                 props?.handleCreate({code:1});
                  
              }}
              maskClosable={false}
@@ -343,7 +343,7 @@ import AuthUtil from '@utils/AuthUtil';
                      setMaterialList([]);
                      setPopDataList([]);
                      setType(0)
-                     props?.handleCreate();
+                     props?.handleCreate({code:1});
                  }}>
                      取消
                  </Button>
@@ -351,7 +351,7 @@ import AuthUtil from '@utils/AuthUtil';
                  <Button key="back" onClick={() => {
                      setMaterialList([]);
                      setPopDataList([]);
-                     props?.handleCreate();
+                     props?.handleCreate({code:1});
                  }}>
                      取消
                  </Button>,
@@ -543,10 +543,10 @@ import AuthUtil from '@utils/AuthUtil';
                          setMaterialList(fields.map((item: any) => ({
                              ...item,
                              materialStockId: item.id,
-                             allocationReservoirOutName: item?.reservoirName,
-                             allocationReservoirOut: item?.reservoirId,
-                             allocationLocatorOut: item?.locatorId,
-                             allocationLocatorOutName: item?.locatorName,
+                             allocationReservoirOutName: item?.allocationReservoirOutName?item?.allocationReservoirOutName:item?.reservoirName,
+                             allocationReservoirOut: item?.allocationReservoirOut?item?.allocationReservoirOut:item?.reservoirId,
+                             allocationLocatorOut: item?.allocationLocatorOut?item?.allocationLocatorOut:item?.locatorId,
+                             allocationLocatorOutName: item?.allocationLocatorOutName?item?.allocationLocatorOutName:item?.locatorName,
                              weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                  : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                                      : (Number(item?.proportion || 1) / 1000).toFixed(5),

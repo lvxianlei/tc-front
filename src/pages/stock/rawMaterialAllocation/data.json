@@ -24,7 +24,7 @@
         },
         {
             "title": "申请日期",
-            "dataIndex": "createTime",
+            "dataIndex": "applyTime",
             "type": "date",
             "format": "YYYY-MM-DD",
             "width": 80

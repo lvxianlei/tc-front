@@ -10,6 +10,14 @@
             "dataIndex": "purchasePlanNumber"
         },
         {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "审批状态",
+            "dataIndex": "approvalName"
+        },
+        {
             "title": "合同状态",
             "dataIndex": "contractStatusName"
         },
