@@ -218,7 +218,7 @@ export default forwardRef(function WorkOrderTemplateNew({ type, rowId, getLoadin
             width: 100,
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['node', index, 'parentUrl']}>
-                    <Select disabled={type === 'detail'} mode="multiple" placeholder={'请选择'}>
+                    <Select disabled={type === 'detail'} placeholder={'请选择'}>
                         {
                             urlList && urlList?.map((res: any, ind: number) => {
                                 return <Select.Option value={res?.apiUrl} key={ind}>{res?.apiName}</Select.Option>
