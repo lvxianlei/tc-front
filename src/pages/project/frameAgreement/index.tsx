@@ -11,7 +11,7 @@ export default function Index() {
     const [selectedKeys, setSelectedKeys] = useState<string[]>([])
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((ids: string[]) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/frameAgreement`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/frameAgreement?ids=${ids}`,)
             resole(result)
         } catch (error) {
             reject(error)
@@ -22,10 +22,15 @@ export default function Index() {
         Modal.confirm({
             title: "删除",
             content: "确定删除吗？",
-            onOk: () => new Promise(async (resolve) => {
-                await deleteRun({ ids: selectedKeys })
-                await message.success("删除成功")
-                resolve(true)
+            onOk: () => new Promise(async (resolve, reject) => {
+                try {
+                    await deleteRun(selectedKeys)
+                    await message.success("删除成功")
+                    resolve(true)
+                    history.go(0)
+                } catch (error) {
+                    reject(false)
+                }
             })
         })
     }
