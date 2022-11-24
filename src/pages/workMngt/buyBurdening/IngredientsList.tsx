@@ -279,20 +279,22 @@ export default function IngredientsList(): React.ReactNode {
         setGloballyStoredData(v)
     };
     const onCheckAllChangeStock = (e: CheckboxChangeEvent) => {
+        console.log(e)
         const list = [];
         for (let i = 0; i < AvailableInventoryData?.length; i += 1) {
             list.push(AvailableInventoryData?.[i].length)
         }
         serarchForm.setFieldsValue({
-            idealRepertoryLengthList: e.target.checked ? list : []
+            available: e.target.checked ? list : []
         })
-        setIndeterminate(false);
-        setCheckAll(e.target.checked);
+        setIndeterminateStock(false);
+        setCheckAllStock(e.target.checked);
     };
 
     const onCheckChangeStock = (list: CheckboxValueType[]) => {
-        setIndeterminate(!!list.length && list.length < AvailableInventoryData?.length);
-        setCheckAll(list.length === AvailableInventoryData?.length);
+        console.log(list)
+        setIndeterminateStock(!!list.length && list.length < AvailableInventoryData?.length);
+        setCheckAllStock(list.length === AvailableInventoryData?.length);
     };
     // 移除
     const remove = (targetKey: string) => {
@@ -322,6 +324,11 @@ export default function IngredientsList(): React.ReactNode {
     // 库存单选改变
     const onRaioChange = (e: any) => {
         setValue(e.target.value);
+        if(e.target.value==='2'){
+            setIndeterminateStock(false);
+        }else{
+            setIndeterminate(false);
+        }
     }
 
     // 构建明细多选触发
@@ -536,17 +543,30 @@ export default function IngredientsList(): React.ReactNode {
         // 修改当前的配料策略
         const baseData = await serarchForm.validateFields();
         setNowIngre({
-            ...baseData
+            ...baseData,
+            idealRepertoryLengthList: value === "1" ? baseData.available : baseData.idealRepertoryLengthList
         });
         // 调整整个配料策略数据
         let result = angleConfigStrategy;
         const v = activeSort.split("_")[1].split("∠")[1].split("*")[0];
         const index = angleConfigStrategy.findIndex((item: any) => v > item?.width.split("~")[0] && v < item?.width.split("~")[1]);
-        result[index] = {
-            ...result[index],
-            ...baseData,
-            idealRepertoryLengthList: baseData.idealRepertoryLengthList
+        if (value === "1") {
+            result[index] = {
+                ...result[index],
+                ...baseData
+            }
+        } else {
+            result[index] = {
+                ...result[index],
+                ...baseData,
+                idealRepertoryLengthList: baseData.idealRepertoryLengthList
+            }
         }
+        // result[index] = {
+        //     ...result[index],
+        //     ...baseData,
+        //     idealRepertoryLengthList: baseData.idealRepertoryLengthList
+        // }
         setAngleConfigStrategy(result.slice(0));
         setAngleConfigVisible(false)
     }
@@ -768,12 +788,14 @@ export default function IngredientsList(): React.ReactNode {
             if ((key >= result[0] * 1) && (key <= result[1] * 1)) {
                 setNowIngre({
                     ...options[i],
+                    available: miter,
                     edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
                     clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
                 });
                 serarchForm.setFieldsValue({
                     ...options[i],
+                    available: miter,
                     edgeLoss: spec.includes("420") ? 0 : options[i].edgeLoss, // 刀口
                     clampLoss: spec.includes("420") ? 0 : options[i].clampLoss, // 端口
                     utilizationRate: options[i]?.utilizationRate || 96.5
