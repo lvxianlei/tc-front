@@ -3120,7 +3120,7 @@
     },
     { // RD-放样过程管理-补件下达列表-补件下达
       "name": "补件下达",
-      "path": "/workMngt/patchIssuedList/patchIssued",
+      "path": "/workMngt/patchIssuedList/patchIssued/:id/:supplyNumber",
       "module": "./pages/workMngt/patchIssued/PatchIssued",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"

@@ -115,6 +115,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/boltRecord/getBoltSegment?id=${id}`);
+            form.setFieldsValue({ data: result })
             resole(result)
         } catch (error) {
             reject(error)
@@ -133,7 +134,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const data = form.getFieldsValue(true).data;
-            await saveRun({productSegmentSaveDTOList: data})
+            await saveRun(data)
             resolve(true);
         } catch (error) {
             reject(false)
@@ -152,7 +153,9 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
                 <CommonTable
                     isPage={false}
                     columns={columns}
-                    dataSource={data || []} />
+                    dataSource={data || []}
+                    pagination={false}
+                />
             </Form>
         </DetailContent>
     </Spin >
