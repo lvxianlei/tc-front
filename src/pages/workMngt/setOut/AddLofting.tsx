@@ -37,8 +37,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     required: true,
                     message: '请输入段名'
                 }, {
-                    pattern: /^[0-9a-zA-Z-\u4e00-\u9fa5]*$/,
-                    message: '仅可输入数字/字母/-/汉字',
+                    pattern: /^[0-9a-zA-Z-.\u4e00-\u9fa5]*$/,
+                    message: '仅可输入数字/字母/-/汉字/.',
                 }]}>
                     <Input size="small" maxLength={10} />
                 </Form.Item>

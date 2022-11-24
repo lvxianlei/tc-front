@@ -287,6 +287,9 @@ export default forwardRef(function Dispatching({ rowId, type, getLoading }: moda
                         <Col span={2}>
                             {res?.node}
                         </Col>
+                        <Col span={2}>
+                            {res?.processingName}
+                        </Col>
                         <Col span={6}>
                             <Form.Item name={['data', index, 'recipientUserName']} initialValue={res?.recipientUserName} rules={[{
                                 required: true,
@@ -315,7 +318,7 @@ export default forwardRef(function Dispatching({ rowId, type, getLoading }: moda
                                 } />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col span={7}>
                             <Form.Item label="预计开始时间" name={['data', index, 'planStartTime']} initialValue={res?.planStartTime} rules={[{
                                 required: true,
                                 message: '请选择预计开始时间'
@@ -329,7 +332,7 @@ export default forwardRef(function Dispatching({ rowId, type, getLoading }: moda
                                 />
                             </Form.Item>
                         </Col>
-                        <Col span={8}>
+                        <Col span={7}>
                             <Form.Item label="预计结束时间" name={['data', index, 'planEndTime']} initialValue={res?.planEndTime} rules={[{
                                 required: true,
                                 message: '请选择预计结束时间'

@@ -1,12 +1,22 @@
 [ //应用列表
     {
-        "authority": "tc_erp_sc",         //权限
-        "title": "营销中心",      //应用展示名称
-        "description": "包含客户、合同、订单等",//描述
+        "authority": "tc_erp_sc", //权限
+        "title": "CRM中心", //应用展示名称
+        "description": "标书购买、报价等", //描述
+        "iconFont": "icon-yingxiaozhongxinicon", // iconfont
+        "color": "#FF8C00", // iconfont的颜色
+        "path": "http://tc-sc-dev.dhwy.cn",
+        "corsWeb": true,
+        "appName": "CRM" //应用name
+    },
+    {
+        "authority": "tc_erp_sc", //权限
+        "title": "营销中心", //应用展示名称
+        "description": "包含客户、合同、订单等", //描述
         "iconFont": "icon-yingxiaozhongxin2", // iconfont
         "color": "#0CC971", // iconfont的颜色
-        "path": "/workBenchSC/sc",     //应用首页
-        "appName": "SC"           //应用name
+        "path": "/workBenchSC/sc", //应用首页
+        "appName": "SC" //应用name
     },
     {
         "authority": "tc_erp_aps",
@@ -50,7 +60,7 @@
         "description": "生产过程管理相关功能",
         "iconFont": "icon-shengchanzhongxin3", // iconfont
         "color": "#FF8C00", // iconfont的颜色
-        "path": "http://120.48.143.153:9070/othersystem?saasid=",
+        "path": "/othersystem",
         "corsWeb": true,
         "appName": "MC"
     },
