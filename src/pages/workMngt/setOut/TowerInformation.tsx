@@ -625,7 +625,7 @@ export default function TowerInformation(): React.ReactNode {
                     <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                         <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
                         <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>
-                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/comparison` }}><Button type="primary" ghost>放样塔型对比</Button></Link>
+                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/comparison` }}><Button type="primary" ghost>放样提料比对</Button></Link>
                         <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
                         <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
                         <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' disabled={detail?.loftingStatus === 1} ghost>放样</Button> </Link>

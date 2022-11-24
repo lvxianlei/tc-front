@@ -582,8 +582,22 @@ export default function Lofting(): React.ReactNode {
                 exportPath="/tower-science/drawProductSegment"
                 extraOperation={
                     <Space>
-                        <Button type='primary' onClick={batchPick} ghost>完成提料</Button>
-                        <Button type='primary' onClick={batchCheck} ghost>完成校核</Button>
+                        <Popconfirm
+                            title="确认批量完成提料?"
+                            onConfirm={batchPick}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type='primary' ghost>完成提料</Button>
+                        </Popconfirm>
+                        <Popconfirm
+                            title="确认批量完成校核?"
+                            onConfirm={batchCheck}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type='primary' ghost>完成校核</Button>
+                        </Popconfirm>
                         <Button type="primary" ghost onClick={async () => {
                             if (editorLock === '编辑') {
                                 setColumns(columns);
@@ -622,12 +636,13 @@ export default function Lofting(): React.ReactNode {
 
                             }
                         }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        {(user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([params?.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ?
-                            <Button type="primary" ghost onClick={
-                                () => history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
-                            } disabled={params.status === '1'}>提料</Button>
-                            : null}
-                        {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
+                        {
+                            (user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([params?.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ?
+                                <Button type="primary" ghost onClick={
+                                    () => history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
+                                } disabled={params.status === '1'}>提料</Button>
+                                : null
+                        }
                         {
                             (materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1)
                                 ?

@@ -130,6 +130,7 @@ export default forwardRef(function PeriodCopy({ id }: ApplyPackingProps, ref) {
                     </Descriptions.Item>
                 </Descriptions>
             </Form>
+            <Divider style={{ margin: '8px 0' }} children={'覆盖：覆盖后，整段覆盖替换；追加：存在相同件号时，提醒，不允许复制。'} />
         </DetailContent>
     </Spin >
 })

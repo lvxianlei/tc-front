@@ -83,7 +83,7 @@ export default forwardRef(function PeriodCopy({ id, segmentId }: ApplyPackingPro
                         <Form.Item name="segmentId">
                             <Select placeholder="请选择" style={{ width: '100%' }}>
                                 {data && data?.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.segmentName}>{item.segmentName}</Select.Option>
+                                    return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item>
@@ -115,7 +115,7 @@ export default forwardRef(function PeriodCopy({ id, segmentId }: ApplyPackingPro
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label="复制类型">
-                        <Form.Item name="copyType">
+                        <Form.Item name="copyType" initialValue={2}>
                             <Radio.Group>
                                 <Radio value={1}>覆盖</Radio>
                                 <Radio value={2}>追加</Radio>

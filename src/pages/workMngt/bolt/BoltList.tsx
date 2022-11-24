@@ -226,6 +226,7 @@ export default function BoltList(): React.ReactNode {
             destroyOnClose
             visible={visible}
             title="定额条目"
+            okText="保存并关闭"
             onOk={handleModalOk}
             width="70%"
             className={styles.tryAssemble}
