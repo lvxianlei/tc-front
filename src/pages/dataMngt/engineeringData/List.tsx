@@ -29,7 +29,7 @@ export default function List(): React.ReactNode {
     const columns = [
         {
             key: 'productTypeName',
-            title: '合同编号',
+            title: '内部合同编号',
             width: 50,
             dataIndex: 'productTypeName'
         },
@@ -275,7 +275,7 @@ export default function List(): React.ReactNode {
                 </Select>
             </Form.Item>
             <Form.Item label='模糊查询项' name="fuzzyMsg">
-                <Input style={{ width: '400px' }} placeholder="合同编号/项目名称/工程名称/客户名称/计划号" />
+                <Input style={{ width: '400px' }} placeholder="内部合同编号/项目名称/工程名称/客户名称/计划号" />
             </Form.Item>
             <Form.Item>
                 <Space direction="horizontal">
