@@ -1,0 +1,271 @@
+{
+    "baseColumn": [
+        {
+            "title": "结论",
+            "dataIndex": "totalConclusion",
+            "width": 80
+        },
+        {
+            "title": "力学结论",
+            "dataIndex": "mechanicalConclusion",
+            "width": 120
+        },
+        {
+            "title": "化学结论",
+            "dataIndex": "chemicalConclusion",
+            "width": 120
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "width": 80
+        },
+        {
+            "title": "检验方案",
+            "dataIndex": "inspectionSchemeName",
+            "width": 120
+        },
+        {
+            "title": "检验分类名称",
+            "dataIndex": "inspectionTypeName",
+            "width": 120
+        },
+        {
+            "title": "是否加急",
+            "dataIndex": "isUrgentName",
+            "width": 120
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "receiveNumber",
+            "width": 120
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 120
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 120
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 120
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 120
+        },
+        {
+            "title": "取样数量",
+            "dataIndex": "inspectionNum",
+            "width": 160
+        },
+        {
+            "title": "类型",
+            "dataIndex": "typeName",
+            "width": 160
+        },
+        {
+            "title": "取样人",
+            "dataIndex": "samplerName",
+            "width": 160
+        },
+        {
+            "title": "机加数量",
+            "dataIndex": "machiningNum",
+            "width": 120
+        },
+        {
+            "title": "机加人",
+            "dataIndex": "machiningUserName",
+            "width": 160
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "width": 160
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "width": 120
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 120
+        },
+        {
+            "title": "重量",
+            "dataIndex": "totalWeight",
+            "width": 120
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "width": 120
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "width": 120
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "width": 120
+        },
+        {
+            "title": "合同号",
+            "dataIndex": "contractNumber",
+            "width": 120
+        }
+    ],
+    "reviewColumn": [
+        {
+            "title": "结论",
+            "dataIndex": "totalConclusion",
+            "width": 80
+        },
+        {
+            "title": "力学结论",
+            "dataIndex": "mechanicalConclusion",
+            "width": 100
+        },
+        {
+            "title": "化学结论",
+            "dataIndex": "chemicalConclusion",
+            "width": 100
+        },
+        {
+            "title": "初检结论",
+            "dataIndex": "initialTotalConclusion",
+            "width": 100
+        },
+        {
+            "title": "初检力学结论",
+            "dataIndex": "initialMechanicalConclusion",
+            "width": 110
+        },
+        {
+            "title": "初检化学结论",
+            "dataIndex": "initialChemicalConclusion",
+            "width": 120
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "width": 80
+        },
+        {
+            "title": "检验方案",
+            "dataIndex": "inspectionSchemeName",
+            "width": 120
+        },
+        {
+            "title": "检验分类名称",
+            "dataIndex": "inspectionTypeName",
+            "width": 120
+        },
+        {
+            "title": "是否加急",
+            "dataIndex": "isUrgentName",
+            "width": 120
+        },
+        {
+            "title": "关联收货单",
+            "dataIndex": "receiveNumber",
+            "width": 120
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 120
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 120
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 120
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 120
+        },
+        {
+            "title": "取样数量",
+            "dataIndex": "inspectionNum",
+            "width": 160
+        },
+        {
+            "title": "类型",
+            "dataIndex": "typeName",
+            "width": 160
+        },
+        {
+            "title": "取样人",
+            "dataIndex": "samplerName",
+            "width": 160
+        },
+        {
+            "title": "机加数量",
+            "dataIndex": "machiningNum",
+            "width": 120
+        },
+        {
+            "title": "机加人",
+            "dataIndex": "machiningUserName",
+            "width": 160
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "width": 160
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width",
+            "width": 120
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 120
+        },
+        {
+            "title": "重量",
+            "dataIndex": "totalWeight",
+            "width": 120
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "width": 120
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "width": 120
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "width": 120
+        },
+        {
+            "title": "合同号",
+            "dataIndex": "contractNumber",
+            "width": 120
+        }
+    ]
+}

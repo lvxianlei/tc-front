@@ -6,6 +6,18 @@
             "width": 80
         },
         {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber",
+            "width": 80
+        },
+        {
+            "title": "入库日期",
+            "dataIndex": "createTime",
+            "type":"date",
+            "format":"YYYY-MM-DD",
+            "width": 80
+        },
+        {
             "title": "收货批次",
             "dataIndex": "receiveBatchNumber",
             "width": 140
@@ -19,6 +31,11 @@
             "title": "区位",
             "dataIndex": "locatorName",
             "width": 60
+        },
+        {
+            "title": "库龄（天）",
+            "dataIndex": "storageAge",
+            "width": 80
         },
         {
             "title": "供应商",
