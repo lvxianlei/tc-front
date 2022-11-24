@@ -4,16 +4,13 @@
  * @description 放样过程管理-补件下达列表-补件下达
  */
 
-import React, { useRef, useState } from 'react';
-import { Spin, Button, Space, Form, Input, Descriptions, Row, Col, Modal, message, Select, Radio } from 'antd';
+import React, { useState } from 'react';
+import { Spin, Button, Space, Form, Input, Row, Col, Radio } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { BaseInfo, CommonTable, DetailContent, DetailTitle, Page } from '../../common';
+import { BaseInfo, CommonTable, DetailContent, DetailTitle } from '../../common';
 import { baseColums, tableColumns } from "./patchIssued.json"
-import { productTypeOptions, supplyTypeOptions } from '../../../configuration/DictionaryOptions';
-import { patchEntryColumns } from "./patchIssued.json"
-import { FixedType } from 'rc-table/lib/interface';
 
 interface IPatchIssued {
     supplyBatchEntryVO: any;
@@ -26,14 +23,12 @@ export interface modalProps {
 
 export default function PatchIssued(): React.ReactNode {
     const [form] = Form.useForm();
-    const [visible, setVisible] = useState<boolean>(false);
     const params = useParams<{ id: string, supplyNumber: string }>()
 
     const history = useHistory();
 
     const { loading, data: selectData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         let data = await RequestUtil.get<IPatchIssued>(`/tower-science/supplyBatch/getBatchDetail?id=${params?.id}`);
-        setVisible(false)
         form.setFieldsValue({
             machiningDemand: data?.supplyBatchEntryVO?.machiningDemand,
             weldingDemand: data?.supplyBatchEntryVO?.weldingDemand,
@@ -68,7 +63,6 @@ export default function PatchIssued(): React.ReactNode {
                 <Button key="cancel" type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ]}>
-            <DetailTitle title="补件条目" key={1} />
             <DetailTitle title="塔型工程信息" key={2} />
             <BaseInfo layout="vertical" columns={baseColums} dataSource={selectData?.supplyBatchEntryVO || {}} col={6} />
             <DetailTitle title="下达信息" key={3} />
