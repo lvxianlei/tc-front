@@ -343,6 +343,14 @@ export default function List(): React.ReactNode {
                 <Page
                     path="/tower-science/supplyBatch/getEntryPage"
                     columns={[
+                        {
+                            key: 'index',
+                            title: '序号',
+                            dataIndex: 'index',
+                            width: 50,
+                            fixed: 'left' as FixedType,
+                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                        },
                         ...patchEntryColumns,
                         {
                             key: 'operation',
@@ -351,8 +359,9 @@ export default function List(): React.ReactNode {
                             fixed: 'right' as FixedType,
                             width: 50,
                             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                                // <Button type='link' disabled={record?.batchStatus === 1} onClick={() => selectRun(record)}>选择</Button>
-                                <Link to={`/workMngt/patchIssuedList/patchIssued/${record?.id}/${record?.supplyNumber}`}>选择</Link>
+                                <Link to={`/workMngt/patchIssuedList/patchIssued/${record?.id}/${record?.supplyNumber}`}>
+                                    <Button type='link' disabled={record?.batchStatus === 1}>选择</Button>
+                                </Link>
                             )
                         }]}
                     headTabs={[]}
