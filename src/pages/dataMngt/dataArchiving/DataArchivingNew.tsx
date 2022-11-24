@@ -38,20 +38,21 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
 
 
     const { data: ProjectNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/listAll`);
+        const nums: any = await RequestUtil.get(`/tower-science/loftingTask/projectNameList`);
         resole(nums)
     }), {})
 
     const ProjectNameChange = async (e: any) => {
-        const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
+        const data: any = await RequestUtil.get(`/tower-science/loftingTask/planNumberList?projectName=${e}`);
         setPlanNums(data || [])
         form.setFieldsValue({
-            productCategoryId: ''
+            productCategoryId: '',
+            planNumber: ''
         });
     }
 
     const planNumChange = async (e: any) => {
-        const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
+        const data: any = await RequestUtil.get(`/tower-science/productCategory/product/category/list?planNumber=${e}`);
         setTowerSelects(data || [])
         form.setFieldsValue({
             productCategoryId: ''
@@ -203,11 +204,13 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                             <Descriptions.Item label="塔型名称">
                                 <Form.Item name="productCategoryId">
                                     <Select placeholder="请选择塔型名称" style={{ width: "150px" }} onChange={async (e) => {
-                                        const data: any = await RequestUtil.get(`/tower-science/trialAssembly/${e}`);
+                                        const data: any = towerSelects?.find((res: any) => res?.productCategoryId === e) || {}
                                         form.setFieldsValue({
-                                            voltageGradeName: data?.voltageGradeName,
-                                            productTypeName: data?.productTypeName,
-                                            // 客户名称
+                                            voltageGrade: data?.voltageGrade,
+                                            customerCompany: data?.customerCompany,
+                                            productType: data?.productType,
+                                            productCategoryId: data?.productCategoryName,
+                                            productCategoryName: data?.productCategoryName,
                                         })
                                     }}>
                                         {towerSelects && towerSelects?.map((item: any) => {

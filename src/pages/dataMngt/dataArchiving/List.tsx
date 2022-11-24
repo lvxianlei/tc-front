@@ -75,6 +75,10 @@ export default function List(): React.ReactNode {
                     }}>关闭</Button>
                 </Space>
             }
+            onCancel={() => {
+                setVisible(false);
+                newRef.current?.resetFields();
+            }}
         >
             <DataArchivingNew getLoading={(loading) => setConfirmLoading(loading)} type={type} record={rowData} ref={newRef} />
         </Modal>

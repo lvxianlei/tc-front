@@ -13,15 +13,16 @@ import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { useHistory, useParams } from 'react-router-dom';
 import { useForm } from 'antd/es/form/Form';
-import { productTypeOptions, supplyTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { documentTypeOptions, fileTypeOptions, productTypeOptions, supplyTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import DataUpload from './DataUpload';
+import record from '../../asm/clock/record';
 
 export interface ILofting {
     readonly id?: string;
 }
 
 export interface EditRefProps {
-    onSubmit: () => void
+    onSave: () => void
     resetFields: () => void
 }
 
@@ -73,46 +74,46 @@ export default function List(): React.ReactNode {
 
     const detailColumns = [
         {
-            key: 'productTypeName',
+            key: 'fileName',
             title: '文件名',
             width: 50,
-            dataIndex: 'productTypeName'
+            dataIndex: 'fileName'
         },
         {
-            key: 'projectEntries',
+            key: 'fileTypeName',
             title: '文件类型',
-            dataIndex: 'projectEntries',
+            dataIndex: 'fileTypeName',
             width: 80
         },
         {
-            key: 'voltageGradePriceFirst',
+            key: 'planNumber',
             title: '应用计划',
             width: 100,
-            dataIndex: 'voltageGradePriceFirst'
+            dataIndex: 'planNumber'
         },
         {
-            key: 'voltageGradePriceSecond',
+            key: 'fileSuffix',
             title: '文件后缀',
             width: 100,
-            dataIndex: 'voltageGradePriceSecond'
+            dataIndex: 'fileSuffix'
         },
         {
-            key: 'voltageGradePriceThird',
+            key: 'updateUserName',
             title: '上传人',
             width: 80,
-            dataIndex: 'voltageGradePriceThird'
+            dataIndex: 'updateUserName'
         },
         {
-            key: 'specialPrice',
+            key: 'updateTime',
             title: '上传时间',
             width: 80,
-            dataIndex: 'specialPrice'
+            dataIndex: 'updateTime'
         },
         {
-            key: 'specialPrice',
+            key: 'description',
             title: '备注',
             width: 80,
-            dataIndex: 'specialPrice'
+            dataIndex: 'description'
         },
         {
             key: 'operation',
@@ -122,19 +123,23 @@ export default function List(): React.ReactNode {
             width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" onClick={() => {
-                        Modal.confirm({
-                            title: "查看",
-                            icon: null,
-                            content: <Image src={record?.url || ''} />,
-                            cancelText: "关闭",
-                            okButtonProps: { style: { display: 'none' } }
-                        })
+                    <Button type="link" disabled={!(record?.fileSuffix === 'jpg' || record?.fileSuffix === 'pdf')} onClick={() => {
+                        if (record?.fileSuffix === 'jpg') {
+                            Modal.confirm({
+                                title: "查看",
+                                icon: null,
+                                content: <Image src={record?.fileVo?.downloadUrl || ''} />,
+                                cancelText: "关闭",
+                                okButtonProps: { style: { display: 'none' } }
+                            })
+                        } else {
+                            window.open(record?.fileVo?.downloadUrl)
+                        }
                     }}>查看</Button>
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
-                            RequestUtil.delete(``).then(res => {
+                            RequestUtil.post(`/tower-science/projectData/delete`, [record?.id]).then(res => {
                                 message.success('删除成功');
                                 history.go(0)
                             });
@@ -144,11 +149,14 @@ export default function List(): React.ReactNode {
                     >
                         <Button type="link">删除</Button>
                     </Popconfirm>
-                    <Button type="link" onClick={() => { }}>下载</Button>
+                    <Button type="link" onClick={() => {
+                        window.open(record?.fileVo?.downloadUrl)
+                    }}>下载</Button>
                     <Button type="link" onClick={() => {
                         setVisible(true);
-                        setRowData(record)
-                     }}>编辑</Button>
+                        setFileListId(record?.id);
+                        setType('edit')
+                    }}>编辑</Button>
                 </Space>
             )
         }
@@ -156,7 +164,7 @@ export default function List(): React.ReactNode {
 
     const [page, setPage] = useState({
         current: 1,
-        size: 15,
+        size: 20,
         total: 0
     })
 
@@ -171,7 +179,8 @@ export default function List(): React.ReactNode {
     const [rowData, setRowData] = useState<any>();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-
+    const [fileListId, setFileListId] = useState<string>('');
+    const [filters, setFilters] = useState<Record<string, any>>();
 
     useEffect(() => {
         setConfirmLoading(confirmLoading);
@@ -180,13 +189,18 @@ export default function List(): React.ReactNode {
 
     const { loading, data, run } = useRequest<ILofting[]>((pagenation?: TablePaginationConfig, filter?: Record<string, any>) => new Promise(async (resole, reject) => {
         const result = await RequestUtil.get<any>(`/tower-science/projectData`, { current: pagenation?.current || 1, size: pagenation?.size || 20, category: status, ...filter });
+        result?.records.length > 0 && detailRun(result?.records[0]?.id)
         setPage({ ...result })
+        result?.records.length > 0 && setRowData(result?.records[0])
         resole(result?.records || [])
     }), {})
 
-    const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
+    const { run: detailRun } = useRequest<any>((id: string, filters: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get(`/tower-science/performance/product/segment/${id}`);
+            const result = await RequestUtil.get(`/tower-science/projectData/file`, {
+                projectBackupId: id,
+                ...filters
+            });
             setDetailData(result);
             resole(result)
         } catch (error) {
@@ -196,12 +210,12 @@ export default function List(): React.ReactNode {
 
     const handleChangePage = (current: number, pageSize: number) => {
         setPage({ ...page, current: current, size: pageSize });
-        run({ current: current, size: pageSize })
+        run({ current: current, size: pageSize }, filterValues)
     }
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
-            await newRef.current?.onSubmit()
+            await newRef.current?.onSave()
             message.success("保存成功！")
             setVisible(false)
             history.go(0)
@@ -217,7 +231,11 @@ export default function List(): React.ReactNode {
     }
 
     const onSearch = (values: Record<string, any>) => {
-        detailRun(rowData?.id)
+        detailRun(rowData?.id, {
+            ...values,
+            fileCategory: status
+        });
+        setFilters(values)
     }
 
     const onFinish = (values: Record<string, any>) => {
@@ -236,11 +254,11 @@ export default function List(): React.ReactNode {
             onOk={handleOk}
             confirmLoading={confirmLoading}
             onCancel={() => setVisible(false)}>
-            <DataUpload getLoading={(loading) => setConfirmLoading(loading)} type={type} record={rowData} ref={newRef} />
+            <DataUpload getLoading={(loading) => setConfirmLoading(loading)} projectBackupId={rowData?.id} id={fileListId} type={type} ref={newRef} />
         </Modal>
         <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFinish}>
             <Form.Item label='电压等级' name="voltageGrade">
-                <Select placeholder="请选择电压等级" style={{width: '120px'}}>
+                <Select placeholder="请选择电压等级" style={{ width: '120px' }}>
                     {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
                             {name}
@@ -250,7 +268,7 @@ export default function List(): React.ReactNode {
             </Form.Item>
 
             <Form.Item label='工程类型' name="address" initialValue={''}>
-                <Select placeholder="请选择工程类型" style={{width: '120px'}}>
+                <Select placeholder="请选择工程类型" style={{ width: '120px' }}>
                     <Select.Option value={''} key="0">全部</Select.Option>
                     <Select.Option value={'国内'} key="1">国内</Select.Option>
                     <Select.Option value={'国外'} key="2">国外</Select.Option>
@@ -259,7 +277,7 @@ export default function List(): React.ReactNode {
             </Form.Item>
 
             <Form.Item label='产品类型' name="productType" initialValue={''}>
-                <Select placeholder="请选择产品类型" style={{width: '120px'}}>
+                <Select placeholder="请选择产品类型" style={{ width: '120px' }}>
                     <Select.Option value={''} key="0">全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                         return <Select.Option key={index} value={id}>
@@ -298,10 +316,13 @@ export default function List(): React.ReactNode {
             <Col>
                 <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
                     setStatus(event.target.value);
-                    run();
+                    detailRun(rowData?.id, {
+                        ...filters,
+                        fileCategory: event.target.value
+                    })
                 }}>
                     <Radio.Button value={''} key="0">全部</Radio.Button>
-                    {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                    {documentTypeOptions && documentTypeOptions.map(({ id, name }, index) => {
                         return <Radio.Button value={id} key={id}>{name}</Radio.Button>
                     })}
                 </Radio.Group>
@@ -309,21 +330,20 @@ export default function List(): React.ReactNode {
             </Col>
             <Col>
                 <Form form={form} layout="inline" onFinish={onSearch}>
-                    <Form.Item label='文件类型' name="status">
-                        <Select placeholder="文件类型" style={{width: '120px'}}>
-                            {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
+                    <Form.Item label='文件类型' name="fileType">
+                        <Select placeholder="文件类型" style={{ width: '120px' }}>
+                            {fileTypeOptions && fileTypeOptions.map(({ id, name }, index) => {
                                 return <Select.Option key={index} value={id}>
                                     {name}
                                 </Select.Option>
                             })}
                         </Select>
                     </Form.Item>
-                    <Form.Item label='计划号' name="status">
-
-                        <Select placeholder="计划号" style={{width: '120px'}}>
-                            {voltageGradeOptions && voltageGradeOptions.map(({ id, name }, index) => {
-                                return <Select.Option key={index} value={id}>
-                                    {name}
+                    <Form.Item label='计划号' name="fuzzyMsg">
+                        <Select placeholder="计划号" style={{ width: '120px' }}>
+                            {rowData?.planNumber && rowData?.planNumber?.split(',').map((item: any, index: number) => {
+                                return <Select.Option key={index} value={item}>
+                                    {item}
                                 </Select.Option>
                             })}
                         </Select>
@@ -338,7 +358,7 @@ export default function List(): React.ReactNode {
                 </Form>
             </Col>
             <Col>
-                <Button type='primary' onClick={() => {
+                <Button type='primary' disabled={record.length > 0} onClick={() => {
                     setVisible(true);
                     setType('new');
                 }} ghost>上传</Button>
@@ -347,7 +367,7 @@ export default function List(): React.ReactNode {
         <CommonTable
             haveIndex
             columns={detailColumns}
-            dataSource={data}
+            dataSource={detailData}
             pagination={false}
         />
     </Spin>
