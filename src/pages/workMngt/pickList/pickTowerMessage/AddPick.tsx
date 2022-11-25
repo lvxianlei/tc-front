@@ -16,16 +16,27 @@ import TextArea from "antd/lib/input/TextArea";
 
 interface modalProps {
     id: string;
-    productSegmentId: string;
     type: 'new' | 'edit';
     rowData?: any[];
 }
 
-export default forwardRef(function AddPick({ id, productSegmentId, type, rowData }: modalProps, ref) {
+export default forwardRef(function AddPick({ id, type, rowData }: modalProps, ref) {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<any>([])
     const [isBig, setIsBig] = useState<boolean>(true);
     const [isAuto, setIsAuto] = useState<boolean>(false);
+
+    
+    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
+        try {
+            setTableData([...rowData || []])
+            form.setFieldsValue({ data: [...rowData || []] })
+            resole([])
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: type === 'new', refreshDeps: [id, type, rowData] })
+
 
     const column = [
         {
@@ -45,13 +56,12 @@ export default forwardRef(function AddPick({ id, productSegmentId, type, rowData
                 </Select> */}
                     <Input size="small" maxLength={10} onBlur={() => {
                         if (isBig) {
-                            const value = form.getFieldsValue(true).data.map((item: any) => {
+                            const value = form.getFieldsValue(true)?.data.map((item: any) => {
                                 return {
                                     ...item,
-                                    segmentName: item?.segmentName.toUpperCase()
+                                    segmentName: item?.segmentName?.toUpperCase()
                                 }
                             })
-                            console.log(value)
                             setTableData([...value])
                             form.setFieldsValue({ data: value })
                         }
@@ -72,12 +82,12 @@ export default forwardRef(function AddPick({ id, productSegmentId, type, rowData
                     <Input size="small" maxLength={50} onBlur={() => {
                         if (isBig) {
                             const value = form.getFieldsValue(true).data.map((item: any) => {
+                                console.log(item?.code?.toUpperCase())
                                 return {
                                     ...item,
-                                    code: item?.code.toUpperCase()
+                                    code: item?.code?.toUpperCase()
                                 }
                             })
-                            console.log(value)
                             setTableData([...value])
                             form.setFieldsValue({ data: value })
                         }
@@ -114,7 +124,7 @@ export default forwardRef(function AddPick({ id, productSegmentId, type, rowData
                             const value = form.getFieldsValue(true).data.map((item: any) => {
                                 return {
                                     ...item,
-                                    structureTexture: item?.structureTexture.toUpperCase()
+                                    structureTexture: item?.structureTexture?.toUpperCase()
                                 }
                             })
                             setTableData([...value])
@@ -271,32 +281,13 @@ export default forwardRef(function AddPick({ id, productSegmentId, type, rowData
         }
     ]
 
-    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
-        try {
-            const newData = rowData?.map(res => {
-                let list = res?.apertureNumber?.split(',');
-                let num: number = 0;
-                list?.forEach((item: any) => {
-                    num += item.split('*')[0] ? Number(item.split('*')[1] || 1) : 0
-                })
-                return {
-                    ...res,
-                    holesNum: num
-                }
-            })
-            setTableData([...newData || []])
-            form.setFieldsValue({ data: [...newData || []] })
-            resole([])
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: type === 'new', refreshDeps: [id, productSegmentId, type, rowData] })
-
-
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/productStructure/save`, [...postData]);
-            resole(result)
+            RequestUtil.post(`/tower-science/drawProductStructure/submit`, postData).then(res => {
+                resole(true)
+            }).catch(e => {
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -304,20 +295,20 @@ export default forwardRef(function AddPick({ id, productSegmentId, type, rowData
 
     const onSubmit = () => new Promise((resolve, reject) => {
         try {
-            form.validateFields().then(async res => {
-                const values = form.getFieldsValue(true).data || [];
-                await saveRun(values?.map((res: any) => {
+            form.validateFields().then(async () => {
+                const values = form.getFieldsValue(true).data.map((item: any) => {
                     return {
-                        ...res,
-                        productCategoryId: id,
-                        segmentId: productSegmentId === 'all' ? '' : productSegmentId,
-                        type: res?.type?.split(',')[1],
-                        typeDictId: res?.type?.split(',')[0]
+                        ...item,
+                        productCategory:id,
                     }
-                }))
-                resolve(true);
+                })
+                const submitData = {
+                    productCategoryId: id,
+                    drawProductStructureSaveDTOS: [...values]
+                }
+                await saveRun(submitData);
+                resolve(true)
             })
-
         } catch (error) {
             reject(false)
         }
@@ -339,6 +330,8 @@ export default forwardRef(function AddPick({ id, productSegmentId, type, rowData
 
     const resetFields = () => {
         form.resetFields();
+        setIsAuto(false)
+        setIsBig(true)
     }
 
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
@@ -352,9 +345,9 @@ export default forwardRef(function AddPick({ id, productSegmentId, type, rowData
                     const value = form.getFieldsValue(true).data.map((item: any) => {
                         return {
                             ...item,
-                            structureTexture: item?.structureTexture.toUpperCase(),
-                            segmentName: item?.segmentName.toUpperCase(),
-                            code: item?.code.toUpperCase(),
+                            structureTexture: item?.structureTexture?.toUpperCase(),
+                            segmentName: item?.segmentName?.toUpperCase(),
+                            code: item?.code?.toUpperCase(),
                         }
                     })
                     setTableData([...value])

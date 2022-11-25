@@ -670,67 +670,6 @@ export default function Lofting(): React.ReactNode {
                     </Space>
                 }
                 searchFormItems={[]}
-            // searchFormItems={[
-            //     {
-            //         name: 'statusUpdateTime',
-            //         label: '最新状态变更时间',
-            //         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-            //     },
-            //     {
-            //         name: 'status',
-            //         label: '提料状态',
-            //         children: <Select style={{width:'100px'}}>
-            //             <Select.Option value={''} key ={''}>全部</Select.Option>
-            //             <Select.Option value={1} key={1}>提料中</Select.Option>
-            //             <Select.Option value={2} key={2}>校核中</Select.Option>
-            //             <Select.Option value={3} key={3}>已完成</Select.Option>
-            //             {/* <Select.Option value={4} key={4}>已提交</Select.Option> */}
-            //         </Select>
-            //     },
-            //     {
-            //         name: 'materialLeaderDepartment',
-            //         label: '提料人',
-            //         children:  <TreeSelect style={{width:'200px'}}
-            //                         allowClear
-            //                         onChange={ (value: any) => { onDepartmentChange(value, '提料') }  }
-            //                     >
-            //                         {renderTreeNodes(wrapRole2DataNode( department ))}
-            //                     </TreeSelect>
-            //     },
-            //     {
-            //         name: 'materialLeader',
-            //         label:'',
-            //         children:   <Select style={{width:'100px'}} allowClear>
-            //                         { pickLeader && pickLeader.map((item:any)=>{
-            //                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-            //                         }) }
-            //                     </Select>
-            //     },
-            //     {
-            //         name: 'materialCheckLeaderDepartment',
-            //         label: '校核人',
-            //         children:  <TreeSelect style={{width:'200px'}}
-            //                         allowClear
-            //                         onChange={ (value: any) => { onDepartmentChange(value, '校核') }  }
-            //                     >
-            //                         {renderTreeNodes(wrapRole2DataNode( department ))}
-            //                     </TreeSelect>
-            //     },
-            //     {
-            //         name: 'materialCheckLeader',
-            //         label:'',
-            //         children:   <Select style={{width:'100px'}} allowClear>
-            //                         { checkLeader && checkLeader.map((item:any)=>{
-            //                             return <Select.Option key={item.id} value={item.userId}>{item.name}</Select.Option>
-            //                         }) }
-            //                     </Select>
-            //     },
-            // {
-            //     name: 'fuzzyMsg',
-            //     label: '模糊查询项',
-            //     children: <Input placeholder="请输入..." maxLength={200} />
-            // },
-            // ]}
             />
         </Form>
 
