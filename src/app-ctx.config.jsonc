@@ -342,6 +342,34 @@
                 ]
             },
             {
+                "label": "原材料送检单",
+                "icon": "gongying-hetongguanli_hetongguanli",
+                "path": "/rawMaterialInspection",
+                "appName": "SW",
+                "authority": "tc_erp_sw_contract",
+                "items": [
+                    {
+                        "label": "原材料送检单",
+                        "path": "/rawMaterialInspection/inspection",
+                        "authority": "tc_erp_sw_contract_material"
+                    }
+                ]
+            },
+            {
+                "label": "原材料不合格处置单",
+                "icon": "gongying-hetongguanli_hetongguanli",
+                "path": "/unqualifiedMaterial",
+                "appName": "SW",
+                "authority": "tc_erp_sw_contract",
+                "items": [
+                    {
+                        "label": "原材料不合格处置单",
+                        "path": "/unqualifiedMaterial/disposal",
+                        "authority": "tc_erp_sw_contract_material"
+                    }
+                ]
+            },
+            {
                 "label": "辅材采购管理",
                 "icon": "gongying-caigourenwu_caigourenwu",
                 "path": "/buyAuxiliaryMaterial",
@@ -380,6 +408,11 @@
                     {
                         "label": "原材料库存",
                         "path": "/stock/rawMaterialStock",
+                        "authority": "tc_erp_sw_stock_material"
+                    },
+                    {
+                        "label": "原材料调拨单",
+                        "path": "/stock/rawMaterialAllocation",
                         "authority": "tc_erp_sw_stock_material"
                     },
                     {

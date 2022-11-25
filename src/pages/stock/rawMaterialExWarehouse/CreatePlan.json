@@ -137,7 +137,7 @@
             "title": "领料日期",
             "dataIndex": "pickingTime",
             "type": "date",
-            "format": "YYYY-MM-DD",
+            "format": "YYYY-MM-DD HH:mm:ss",
             "rules": [
                 {
                     "required": true,

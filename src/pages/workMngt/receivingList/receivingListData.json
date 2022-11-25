@@ -11,6 +11,11 @@
             "width": 180
         },
         {
+            "title": "送检状态",
+            "dataIndex": "isInspectName",
+            "width": 80
+        },
+        {
             "title": "状态",
             "dataIndex": "receiveStatusName",
             "width": 60
@@ -52,12 +57,12 @@
         },
         {
             "title": "运费含税金额合计（元）",
-            "dataIndex": "transportPriceCount",
+            "dataIndex": "transportTaxPriceCount",
             "width": 150
         },
         {
             "title": "装卸费含税金额合计（元）",
-            "dataIndex": "unloadPriceCount",
+            "dataIndex": "unloadTaxPriceCount",
             "width": 160
         },
         {
@@ -290,6 +295,11 @@
             "width": 70
         },
         {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "width": 70
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName",
             "width": 80,
@@ -421,13 +431,19 @@
     ],
     "editCargoDetails": [
         {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "type": "string",
+            "required": true,
+            "maxLength":50
+        },
+        {
             "title": "合同编号",
             "dataIndex": "materialContractNumber",
             "type": "string",
             "fixed":true,
             "disabled": true,
             "width":150
-            
         },
         {
             "title": "理算单重",
@@ -570,6 +586,12 @@
             "maxLength": 30
         },
         {
+            "title": "出厂日期",
+            "dataIndex": "manufactureTime",
+            "type": "date",
+            "format":"YYYY-MM-DD"
+        },
+        {
             "title": "肢宽",
             "dataIndex": "limbWidth",
             "maxLength": 50
@@ -583,6 +605,10 @@
             "title": "管径",
             "dataIndex": "caliber",
             "maxLength": 50
+        },
+        {
+            "title": "测量长度",
+            "dataIndex": "gageLength"
         },
         {
             "title": "外观检验结果",
