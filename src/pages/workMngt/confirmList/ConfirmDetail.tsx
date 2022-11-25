@@ -38,7 +38,6 @@ export default function ConfirmDetail(): React.ReactNode {
         description: '',
     }]);
     const [form] = Form.useForm();
-    const location = useLocation<{ state: {} }>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
@@ -219,7 +218,7 @@ export default function ConfirmDetail(): React.ReactNode {
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const params = useParams<{ id: string, status: string, confirmId: string }>()
     const userId = AuthUtil.getUserInfo().user_id;
-    const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawProductDetail/getDetailListById?drawTaskId=${params.id}`)
         setTableDataSource(data?.drawProductDetailList.map((item: any, index: number) => {
             return {
@@ -685,6 +684,9 @@ export default function ConfirmDetail(): React.ReactNode {
                 <Space>
                     <span>总基数：{tableDataSource.length}基</span>
                     <span>总重量：{weight}kg</span>
+                    <span>图纸/工程名称：{data?.projectName || '-'}</span>
+                    <span>计划号：{data?.planNumber || '-'}</span>
+                    <span>合同名称：{data?.contractName || '-'}</span>
                 </Space>
                 <Space>
                     {params.status === '3' ?

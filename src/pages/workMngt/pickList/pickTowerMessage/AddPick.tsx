@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, InputNumber, Input, Button, Select, Checkbox } from 'antd';
+import { Spin, Form, InputNumber, Input, Button, Select, Checkbox, Divider } from 'antd';
 import { DetailContent } from '../../../common';
 import RequestUtil from '../../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -13,6 +13,7 @@ import styles from './Pick.module.less';
 import CommonTable from "../../../common/CommonTable";
 import { FixedType } from 'rc-table/lib/interface';
 import TextArea from "antd/lib/input/TextArea";
+import { materialShortcutKeys, quickConversion, structureTextureShortcutKeys } from "@utils/quickConversion";
 
 interface modalProps {
     id: string;
@@ -25,8 +26,8 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
     const [tableData, setTableData] = useState<any>([])
     const [isBig, setIsBig] = useState<boolean>(true);
     const [isAuto, setIsAuto] = useState<boolean>(false);
+    const [isQuick, setIsQuick] = useState<boolean>(true);
 
-    
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
             setTableData([...rowData || []])
@@ -105,7 +106,18 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                     pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]*$/,
                     message: '仅可输入汉字/数字/字母',
                 }]}>
-                    <Input size="small" maxLength={10} />
+                    <Input size="small" maxLength={10} onBlur={async (e) => {
+                        const values = form.getFieldsValue(true)?.data || [];
+                        if (isQuick) {
+                            const newValue = await quickConversion(e.target.value, materialShortcutKeys);
+                            values[index] = {
+                                ...values[index],
+                                materialName: newValue
+                            }
+                            setTableData([...values])
+                            form.setFieldsValue({ data: values })
+                        }
+                    }}/>
                 </Form.Item>
             )
         },
@@ -119,9 +131,10 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                     pattern: /^[0-9a-zA-Z-]*$/,
                     message: '仅可输入数字/字母/-',
                 }]}>
-                    <Input size="small" maxLength={10} onBlur={() => {
+                    <Input size="small" maxLength={10} onBlur={async (e) => {
+                        const values = form.getFieldsValue(true)?.data || [];
                         if (isBig) {
-                            const value = form.getFieldsValue(true).data.map((item: any) => {
+                            const value = values.map((item: any) => {
                                 return {
                                     ...item,
                                     structureTexture: item?.structureTexture?.toUpperCase()
@@ -129,6 +142,15 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                             })
                             setTableData([...value])
                             form.setFieldsValue({ data: value })
+                        }
+                        if (isQuick) {
+                            const newValue = await quickConversion(e.target.value, structureTextureShortcutKeys);
+                            values[index] = {
+                                ...values[index],
+                                structureTexture: newValue
+                            }
+                            setTableData([...values])
+                            form.setFieldsValue({ data: values })
                         }
                     }} />
                 </Form.Item>
@@ -299,7 +321,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                 const values = form.getFieldsValue(true).data.map((item: any) => {
                     return {
                         ...item,
-                        productCategory:id,
+                        productCategory: id,
                     }
                 })
                 const submitData = {
@@ -337,35 +359,46 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     return <DetailContent key='AddPick'>
-        {type === 'new' ? <Button type="primary" onClick={addRow} ghost>添加一行</Button> : null}
-        <Form form={form} className={styles.descripForm}>
-            <Checkbox onChange={(e) => {
-                setIsBig(e.target.checked)
-                if (e.target.checked) {
-                    const value = form.getFieldsValue(true).data.map((item: any) => {
-                        return {
-                            ...item,
-                            structureTexture: item?.structureTexture?.toUpperCase(),
-                            segmentName: item?.segmentName?.toUpperCase(),
-                            code: item?.code?.toUpperCase(),
-                        }
-                    })
-                    setTableData([...value])
-                    form.setFieldsValue({ data: value })
-                }
-            }} checked={isBig}>件号字母自动转换成大写</Checkbox>
-            <Checkbox onChange={(e) => {
-                setIsAuto(e.target.checked)
+        {type === 'new' ? <Button type="primary" onClick={addRow} style={{ marginRight: '16px' }} ghost>添加一行</Button> : null}
+        <Checkbox onChange={(e) => {
+            setIsBig(e.target.checked)
+            if (e.target.checked) {
                 const value = form.getFieldsValue(true).data.map((item: any) => {
                     return {
                         ...item,
-                        basicsWeight: '',
-                        totalWeight: ''
+                        structureTexture: item?.structureTexture?.toUpperCase(),
+                        segmentName: item?.segmentName?.toUpperCase(),
+                        code: item?.code?.toUpperCase(),
                     }
                 })
                 setTableData([...value])
                 form.setFieldsValue({ data: value })
-            }} checked={isAuto}>保存时自动计算重量</Checkbox>
+            }
+        }} checked={isBig}>件号字母自动转换成大写</Checkbox>
+        <Checkbox onChange={(e) => {
+            setIsAuto(e.target.checked)
+            const value = form.getFieldsValue(true).data.map((item: any) => {
+                return {
+                    ...item,
+                    basicsWeight: '',
+                    totalWeight: ''
+                }
+            })
+            setTableData([...value])
+            form.setFieldsValue({ data: value })
+        }} checked={isAuto}>保存时自动计算重量</Checkbox>
+        <Checkbox onChange={(e) => { setIsQuick(e.target.checked) }} checked={isQuick}>是否快捷输入</Checkbox>
+        <Divider orientation="left" plain>材质快捷键：{
+            structureTextureShortcutKeys?.map(res => {
+                return <span className={styles.key}>{res?.label}({res?.value})</span>
+            })
+        }</Divider>
+        <Divider orientation="left" plain>材料快捷键：{
+            materialShortcutKeys?.map(res => {
+                return <span className={styles.key}>{res?.label}({res?.value})</span>
+            })
+        }</Divider>
+        <Form form={form} className={styles.descripForm}>
             <CommonTable
                 haveIndex
                 scroll={{ x: 1200 }}
