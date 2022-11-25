@@ -1,0 +1,386 @@
+/**
+ * @author zyc
+ * @copyright © 2022 
+ * @description 工作管理-提料列表-塔型信息-提料-添加构件
+ */
+
+import React, { useImperativeHandle, forwardRef, useState } from "react";
+import { Spin, Form, InputNumber, Input, Button, Select, Checkbox } from 'antd';
+import { DetailContent } from '../../../common';
+import RequestUtil from '../../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
+import styles from './Pick.module.less';
+import CommonTable from "../../../common/CommonTable";
+import { FixedType } from 'rc-table/lib/interface';
+import TextArea from "antd/lib/input/TextArea";
+
+interface modalProps {
+    id: string;
+    productSegmentId: string;
+    type: 'new' | 'edit';
+    rowData?: any[];
+}
+
+export default forwardRef(function AddPick({ id, productSegmentId, type, rowData }: modalProps, ref) {
+    const [form] = Form.useForm();
+    const [tableData, setTableData] = useState<any>([])
+    const [isBig, setIsBig] = useState<boolean>(true);
+    const [isAuto, setIsAuto] = useState<boolean>(false);
+
+    const column = [
+        {
+            title: '段号',
+            dataIndex: 'segmentName',
+            key: 'segmentName',
+            width: 120,
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "segmentName"]} initialValue={_a} rules={[{ required: true, message: '请填写段号' }, {
+                    pattern: /^[0-9a-zA-Z-]*$/,
+                    message: '仅可输入数字/字母/-',
+                }]}>
+                    {/* <Select>
+                    { paragraphList.map((item: any) => {
+                        return <Select.Option key={ item.id } value={ item.id }>{ item.segmentName }</Select.Option>
+                    }) }
+                </Select> */}
+                    <Input size="small" maxLength={10} onBlur={() => {
+                        if (isBig) {
+                            const value = form.getFieldsValue(true).data.map((item: any) => {
+                                return {
+                                    ...item,
+                                    segmentName: item?.segmentName.toUpperCase()
+                                }
+                            })
+                            console.log(value)
+                            setTableData([...value])
+                            form.setFieldsValue({ data: value })
+                        }
+                    }} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '构件编号',
+            dataIndex: 'code',
+            width: 120,
+            key: 'code',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "code"]} initialValue={_} rules={[{ required: true, message: '请填写构件编号' }, {
+                    pattern: /^[0-9a-zA-Z-]*$/,
+                    message: '仅可输入数字/字母/-',
+                }]}>
+                    <Input size="small" maxLength={50} onBlur={() => {
+                        if (isBig) {
+                            const value = form.getFieldsValue(true).data.map((item: any) => {
+                                return {
+                                    ...item,
+                                    code: item?.code.toUpperCase()
+                                }
+                            })
+                            console.log(value)
+                            setTableData([...value])
+                            form.setFieldsValue({ data: value })
+                        }
+                    }} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '材料名称',
+            dataIndex: 'materialName',
+            width: 120,
+            key: 'materialName',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "materialName"]} initialValue={_} rules={[{ required: true, message: '请输入材料名称' }, {
+                    pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]*$/,
+                    message: '仅可输入汉字/数字/字母',
+                }]}>
+                    <Input size="small" maxLength={10} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '材质',
+            dataIndex: 'structureTexture',
+            key: 'structureTexture',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "structureTexture"]} initialValue={_} rules={[{ required: true, message: '请输入材质' }, {
+                    pattern: /^[0-9a-zA-Z-]*$/,
+                    message: '仅可输入数字/字母/-',
+                }]}>
+                    <Input size="small" maxLength={10} onBlur={() => {
+                        if (isBig) {
+                            const value = form.getFieldsValue(true).data.map((item: any) => {
+                                return {
+                                    ...item,
+                                    structureTexture: item?.structureTexture.toUpperCase()
+                                }
+                            })
+                            setTableData([...value])
+                            form.setFieldsValue({ data: value })
+                        }
+                    }} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '规格',
+            dataIndex: 'structureSpec',
+            key: 'structureSpec',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "structureSpec"]} initialValue={_} rules={[{ required: true, message: '请输入规格' }, {
+
+                    pattern: /^[0-9-∠L*φ\/]*$/,
+                    message: '仅可输入数字/-/*/L/∠/φ',
+
+                }]}>
+                    <Input size="small" maxLength={10} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '长度（mm）',
+            dataIndex: 'length',
+            key: 'length',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "length"]} rules={[{ required: true, message: '请输入长度' }]}>
+                    <InputNumber size="small" min={1} precision={0} max={999999} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '宽度（mm）',
+            dataIndex: 'width',
+            key: 'width',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "width"]}>
+                    <InputNumber size="small" min={1} precision={0} max={999999} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '厚度（mm）',
+            dataIndex: 'thickness',
+            key: 'thickness',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "thickness"]}>
+                    <InputNumber size="small" min={1} precision={0} max={999999} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '大头',
+            dataIndex: 'bigHead',
+            key: 'bigHead',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "bigHead"]}>
+                    <InputNumber size="small" min={1} precision={0} max={999999} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '小头',
+            dataIndex: 'smallHead',
+            key: 'smallHead',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "smallHead"]}>
+                    <InputNumber size="small" min={1} precision={0} max={999999} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '单段件数',
+            dataIndex: 'basicsPartNum',
+            key: 'basicsPartNum',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "basicsPartNum"]} initialValue={_} rules={[{ required: true, message: '请输入单段件数' }]}>
+                    <InputNumber size="small" min={1} precision={0} max={9999} onChange={(e: any) => {
+                        const data = form.getFieldsValue(true).data;
+                        if (data[index].basicsWeight) {
+                            data[index] = {
+                                ...data[index],
+                                totalWeight: e * data[index].basicsWeight
+                            }
+                            form?.setFieldsValue({ data: data })
+                            setTableData(data)
+                        }
+                    }} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '单件重量（kg）',
+            dataIndex: 'basicsWeight',
+            key: 'basicsWeight',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_} rules={[{ required: !isAuto, message: '请输入单件重量' }]}>
+                    <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => {
+                        const data = form.getFieldsValue(true).data;
+                        if (data[index].basicsPartNum) {
+                            data[index] = {
+                                ...data[index],
+                                totalWeight: e * data[index].basicsPartNum
+                            }
+                            form?.setFieldsValue({ data: data })
+                            setTableData(data)
+                        }
+                    }} disabled={isAuto} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '小计重量（kg）',
+            dataIndex: 'totalWeight',
+            key: 'totalWeight',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "totalWeight"]}>
+                    <InputNumber size="small" min={0} precision={2} max={9999.99} disabled />
+                </Form.Item>
+            )
+        },
+        {
+            title: '备注',
+            dataIndex: 'description',
+            width: 200,
+            key: 'description',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "description"]} initialValue={_}>
+                    <TextArea showCount rows={1} maxLength={50} />
+                </Form.Item>
+            )
+        },
+        {
+            key: 'operation',
+            title: '操作',
+            dataIndex: 'operation',
+            fixed: 'right' as FixedType,
+            width: 80,
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <Button type='link' disabled={type === 'edit'} onClick={() => delRow(index)}>删除</Button>
+            )
+        }
+    ]
+
+    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
+        try {
+            const newData = rowData?.map(res => {
+                let list = res?.apertureNumber?.split(',');
+                let num: number = 0;
+                list?.forEach((item: any) => {
+                    num += item.split('*')[0] ? Number(item.split('*')[1] || 1) : 0
+                })
+                return {
+                    ...res,
+                    holesNum: num
+                }
+            })
+            setTableData([...newData || []])
+            form.setFieldsValue({ data: [...newData || []] })
+            resole([])
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: type === 'new', refreshDeps: [id, productSegmentId, type, rowData] })
+
+
+    const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+        try {
+            const result = await RequestUtil.post(`/tower-science/productStructure/save`, [...postData]);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const onSubmit = () => new Promise((resolve, reject) => {
+        try {
+            form.validateFields().then(async res => {
+                const values = form.getFieldsValue(true).data || [];
+                await saveRun(values?.map((res: any) => {
+                    return {
+                        ...res,
+                        productCategoryId: id,
+                        segmentId: productSegmentId === 'all' ? '' : productSegmentId,
+                        type: res?.type?.split(',')[1],
+                        typeDictId: res?.type?.split(',')[0]
+                    }
+                }))
+                resolve(true);
+            })
+
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const addRow = () => {
+        const values = form.getFieldsValue(true).data || [];
+        values.push({})
+        setTableData([...values])
+        form.setFieldsValue({ data: [...values] })
+    }
+
+    const delRow = (index: number) => {
+        const values = form.getFieldsValue(true).data || [];
+        values.splice(index, 1);
+        form.setFieldsValue({ data: [...values] });
+        setTableData([...values])
+    }
+
+    const resetFields = () => {
+        form.resetFields();
+    }
+
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
+
+    return <DetailContent key='AddPick'>
+        {type === 'new' ? <Button type="primary" onClick={addRow} ghost>添加一行</Button> : null}
+        <Form form={form} className={styles.descripForm}>
+            <Checkbox onChange={(e) => {
+                setIsBig(e.target.checked)
+                if (e.target.checked) {
+                    const value = form.getFieldsValue(true).data.map((item: any) => {
+                        return {
+                            ...item,
+                            structureTexture: item?.structureTexture.toUpperCase(),
+                            segmentName: item?.segmentName.toUpperCase(),
+                            code: item?.code.toUpperCase(),
+                        }
+                    })
+                    setTableData([...value])
+                    form.setFieldsValue({ data: value })
+                }
+            }} checked={isBig}>件号字母自动转换成大写</Checkbox>
+            <Checkbox onChange={(e) => {
+                setIsAuto(e.target.checked)
+                const value = form.getFieldsValue(true).data.map((item: any) => {
+                    return {
+                        ...item,
+                        basicsWeight: '',
+                        totalWeight: ''
+                    }
+                })
+                setTableData([...value])
+                form.setFieldsValue({ data: value })
+            }} checked={isAuto}>保存时自动计算重量</Checkbox>
+            <CommonTable
+                haveIndex
+                scroll={{ x: 1200 }}
+                columns={column}
+                pagination={false}
+                dataSource={[...tableData]}
+            />
+        </Form>
+    </DetailContent>
+})
+
