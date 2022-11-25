@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, useParams, Link } from 'react-router-dom';
-import { Button, Popconfirm, message, Input, Upload, Typography } from 'antd';
+import { Button, Popconfirm, message, Input, Upload, Typography, Row, Space } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { IContract } from "../../IContract";
 import RequestUtil from "../../../utils/RequestUtil";
@@ -8,12 +8,22 @@ import { IResponseData } from "../../common/Page";
 import MiddleModal from '../../../components/MiddleModal';
 import AuthUtil from '../../../utils/AuthUtil';
 const { Text } = Typography
+
+const calcContractTotal = (records: any[]) => {
+  return records.reduce((result: { weight: string, amount: string }, item: any) => ({
+    weight: (parseFloat(result.weight) + parseFloat(item.contractTotalWeight || "0.00")).toFixed(2),
+    amount: (parseFloat(result.amount) + parseFloat(item.contractAmount || "0.00")).toFixed(2)
+  }), { weight: "0.00", amount: "0.00" })
+}
+
 export default function ContractList(): JSX.Element {
   const history = useHistory();
   const [refresh, setRefresh] = useState<boolean>(false);
+  const [selectedRows, setSelectedRows] = useState<any[]>([])
   const params = useParams<{ id: string }>();
   const entryPath = params.id ? "management" : "contract"
   const [filterValue, setFilterValue] = useState({ projectId: params.id });
+  const total: any = calcContractTotal(selectedRows)
   const onFilterSubmit = (value: any) => {
     value["projectId"] = params.id;
     setFilterValue({ projectId: params.id, ...value })
@@ -174,6 +184,15 @@ export default function ContractList(): JSX.Element {
             <span style={{ marginLeft: "20px" }}>
               合同重量合计：{data?.contractTotalWeight || 0.00}吨&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;合同金额合计：{data?.contractTotalAmount || 0.00}元
             </span>
+            {
+              selectedRows.length > 0 && <Row style={{ width: 1200 }}>
+                <Row style={{ color: "#FF8C00", fontWeight: 600,fontSize:14 }}>合计：</Row>
+                <Space>
+                  <div>合同重量：<span style={{ color: "#FF8C00" }}>{total.weight}吨</span></div>
+                  <div>合同金额：<span style={{ color: "#FF8C00" }}>{total.amount}元</span></div>
+                </Space>
+              </Row>
+            }
           </>)
         }}
         columns={[
@@ -262,6 +281,15 @@ export default function ContractList(): JSX.Element {
             children: <Input placeholder="内部合同号/合同名称/采购订单号/业主单位" style={{ width: 210 }} />
           }
         ]}
+        tableProps={{
+          rowSelection: {
+            type: "checkbox",
+            selectedRowKeys: selectedRows?.map((item: any) => item.id),
+            onChange: (_: string[], selectedRows: any[]) => {
+              setSelectedRows(selectedRows)
+            },
+          }
+        }}
       />
     </>
   )
