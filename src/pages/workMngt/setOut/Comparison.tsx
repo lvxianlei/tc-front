@@ -27,15 +27,18 @@ export default function Comparison(): React.ReactNode {
     const { loading, data: param } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/productStructure/comparison/param/${params.id}`);
+            console.log(result?.id)
             run({}, {
                 length: result?.length || 0,
                 width: result?.width || 0,
-                basicsWeight: result?.basicsWeight || 0
+                basicsWeight: result?.basicsWeight || 0,
+                id: result?.id || ''
             })
             form.setFieldsValue({
                 length: result?.length || 0,
                 width: result?.width || 0,
-                basicsWeight: result?.basicsWeight || 0
+                basicsWeight: result?.basicsWeight || 0,
+                id: result?.id || ''
             })
             resole(result)
         } catch (error) {
@@ -229,6 +232,7 @@ export default function Comparison(): React.ReactNode {
             <Form form={form} layout="inline" onFinish={(value: Record<string, any>) => {
                 RequestUtil.post<any>(`/tower-science/productStructure/comparison/param`, {
                     ...value,
+                    id: param?.id,
                     productCategoryId: params?.id
                 }).then(res => {
                     history.go(0)
