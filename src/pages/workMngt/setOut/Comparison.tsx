@@ -27,7 +27,6 @@ export default function Comparison(): React.ReactNode {
     const { loading, data: param } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/productStructure/comparison/param/${params.id}`);
-            console.log(result?.id)
             run({}, {
                 length: result?.length || 0,
                 width: result?.width || 0,
