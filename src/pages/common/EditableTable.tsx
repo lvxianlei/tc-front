@@ -58,7 +58,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
     })
     haveIndex && newColumns.unshift({
         title: '序号',
-        width: "60px",
+        width: 50,
         fixed: "left",
         dataIndex: 'index',
         render: (_: any, $: any, index: number): React.ReactNode => index + 1
@@ -159,7 +159,12 @@ export default function EditableTable({
                     lock: true,
                     width: 40,
                     code: "opration",
-                    render: (_: undefined, record: any) => <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => removeItem(record.id)}>删除</Button>
+                    render: (_: undefined, record: any) => <Button
+                        style={{ paddingLeft: 0 }}
+                        size="small"
+                        type="link"
+                        onClick={() => removeItem(record.id)}
+                    >删除</Button>
                 }
             ] : eidtableColumns}
             dataSource={editableDataSource}

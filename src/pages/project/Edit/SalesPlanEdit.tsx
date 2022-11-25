@@ -286,7 +286,9 @@ export default function SalesPlanEdit() {
             onOk={handleModalOk}
             destroyOnClose>
             <Spin spinning={modalLoading}>
-                <CommonTable columns={productAssist} dataSource={(modalData as any[]) || []}
+                <CommonTable
+                    columns={productAssist}
+                    dataSource={(modalData as any[]) || []}
                     rowSelection={{
                         selectedRowKeys: select,
                         type: "checkbox",
@@ -294,7 +296,8 @@ export default function SalesPlanEdit() {
                             disabled: productDetails.map(item => item.id).includes(records.id)
                         }),
                         onChange: onRowsChange,
-                    }} />
+                    }}
+                />
             </Spin>
         </Modal>
         <Spin spinning={loading}>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Col, message, Modal, Row, Select } from "antd";
 import { useHistory } from "react-router-dom";
 import { SearchTable } from "../../common";
@@ -13,6 +13,7 @@ const changeTypeEnum: { [key in 1 | 2 | 3]: string } = {
 }
 export default function Index() {
     const history = useHistory()
+    const editRef = useRef<any>()
     const [visible, setVisible] = useState<boolean>(false)
     const [editVisible, setEditVisible] = useState<boolean>(false)
     const [planChangeType, setPlanChangeType] = useState<1 | 2 | 3>(1)
@@ -69,8 +70,8 @@ export default function Index() {
         })
     }
 
-    const handleFilterSubmit = (value: any) => {
-        return value
+    const handleEditOk = async () => {
+        editRef.current?.handleSubmit()
     }
 
     return <>
@@ -78,6 +79,7 @@ export default function Index() {
             title="新增计划变更类型"
             visible={visible}
             maskClosable={false}
+            destroyOnClose
             onCancel={() => setVisible(false)}
             onOk={() => {
                 setVisible(false)
@@ -107,15 +109,21 @@ export default function Index() {
             title={changeTypeEnum[planChangeType]}
             width={1101}
             visible={editVisible}
+            destroyOnClose
+            onCancel={() => setEditVisible(false)}
+            onOk={handleEditOk}
         >
-            <Edit id={editId} type={planChangeType} />
+            <Edit id={editId} type={planChangeType} ref={editRef} />
         </Modal>
         <SearchTable
-            path={`/tower-market/taskNotice`}
+            path={`/tower-market/editNotice`}
             extraOperation={<>
                 <Button
                     type="primary"
-                    onClick={() => setVisible(true)}>新增</Button>
+                    onClick={() => {
+                        setEditId("create")
+                        setVisible(true)
+                    }}>新增</Button>
                 <Button
                     type="primary"
                     disabled={selectedKeys.length <= 0}
@@ -133,16 +141,29 @@ export default function Index() {
                     fixed: "right",
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" size="small" className='btn-operation-link' onClick={() => { }}>查看</Button>
-                            <Button type="link" size="small" className='btn-operation-link'>编辑</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                className='btn-operation-link'
+                                onClick={() => {
+                                    setEditId(record?.id)
+                                    // setVisible(true)
+                                }}
+                            >查看</Button>
+                            <Button
+                                type="link" size="small"
+                                className='btn-operation-link'
+                                onClick={() => {
+                                    setEditId(record?.id)
+                                    setVisible(true)
+                                }}
+                            >编辑</Button>
                         </>
                     }
                 }
             ]}
-            searchFormItems={[
-
-            ]}
-            onFilterSubmit={handleFilterSubmit}
+            searchFormItems={[]}
+            onFilterSubmit={(value: any) => value}
             tableProps={{
                 rowSelection: {
                     type: "checkbox",
