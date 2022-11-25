@@ -234,6 +234,13 @@
             "enum": []
         },
         {
+            "title": "计划回款日期",
+            "dataIndex": "returnedTime",
+            "width": 100,
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
             "title": "计划回款占比(%)",
             "dataIndex": "returnedRate",
             "width": 70,
