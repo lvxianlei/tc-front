@@ -50,12 +50,11 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             dataIndex: 'segmentName'
         },
         {
-            key: 'pattern',
+            key: 'projectEntries',
             title: '螺栓定额条目',
-            dataIndex: 'pattern',
-
+            dataIndex: 'projectEntries',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["data", index, "pattern"]}>
+                <Form.Item name={["data", index, "projectEntries"]}>
                     <Select size="small">
                         {
                             patternTypeOptions?.map((item: any, index: number) =>
@@ -69,9 +68,14 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             )
         },
         {
-            key: 'price',
-            title: '单价',
-            dataIndex: 'price'
+            key: 'boltPrice',
+            title: '螺栓单价',
+            dataIndex: 'boltPrice'
+        },
+        {
+            key: 'boltCheckPrice',
+            title: '校核单价',
+            dataIndex: 'boltCheckPrice'
         },
         {
             key: 'codeCount',
