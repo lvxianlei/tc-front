@@ -229,7 +229,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="请输入提料任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号进行查询" maxLength={200} />
+                        children: <Input placeholder="提料任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号/工程名称" style={{width: "450px"}} maxLength={200} />
                     },
                 ]}
             />
