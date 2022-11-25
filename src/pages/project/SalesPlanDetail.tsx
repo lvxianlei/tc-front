@@ -37,7 +37,15 @@ export default function SalesPlanEdit() {
                 dataSource={data || {}} />
             <DetailTitle title="产品信息" />
             <CommonTable
-                columns={salesAssist}
+                columns={[
+                    {
+                        title: '序号',
+                        dataIndex: 'index',
+                        fixed: "left",
+                        width: 50,
+                        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                    },
+                    , ...salesAssist as any]}
                 scroll={{ x: true }}
                 dataSource={data?.productInfos} />
             <DetailTitle title={<nav>
