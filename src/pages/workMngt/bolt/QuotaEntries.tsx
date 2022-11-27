@@ -4,7 +4,7 @@
  * @description 工作管理-螺栓列表-定额条目
  */
 
-import React, { useImperativeHandle, forwardRef } from "react";
+import React, { useImperativeHandle, forwardRef, useState } from "react";
 import { Spin, Form, Select } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -23,6 +23,7 @@ interface QuotaEntriesProps {
 
 export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) {
     const [form] = Form.useForm();
+    const [detailData, setDetailData] = useState<any>([])
 
     const { data: userDatas } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -50,12 +51,36 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             dataIndex: 'segmentName'
         },
         {
-            key: 'boltProjectEntries',
+            key: 'boltPattern',
             title: '螺栓定额条目',
-            dataIndex: 'boltProjectEntries',
+            dataIndex: 'boltPattern',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["data", index, "boltProjectEntries"]}>
-                    <Select size="small">
+                <Form.Item name={["data", index, "boltPattern"]}>
+                    <Select size="small" onChange={(e) => {
+                        const selectName = patternTypeOptions?.filter(res => res?.id === e)[0]?.name;
+                        const values = form?.getFieldsValue(true)?.data;
+                        if(selectName === '新放') {
+                            values[index] = {
+                                ...values[index],
+                                boltPrice: record?.projectPriceVO?.boltCheck,
+                                boltCheckPrice: record?.projectPriceVO?.boltProofread
+                            }
+                            form?.setFieldsValue({
+                                data: [...values]
+                            })
+                            setDetailData([...values])
+                        } else {
+                            values[index] = {
+                                ...values[index],
+                                boltPrice: record?.projectPriceVO?.boltCheckApply,
+                                boltCheckPrice: record?.projectPriceVO?.boltCheckProofread
+                            }
+                            form?.setFieldsValue({
+                                data: [...values]
+                            })
+                            setDetailData([...values])
+                        }
+                    }}>
                         {
                             patternTypeOptions?.map((item: any, index: number) =>
                                 <Select.Option value={item.id} key={index}>
@@ -120,6 +145,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
         try {
             const result: any = await RequestUtil.get(`/tower-science/boltRecord/getBoltSegment?id=${id}`);
             form.setFieldsValue({ data: result })
+            setDetailData(result || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -157,7 +183,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
                 <CommonTable
                     isPage={false}
                     columns={columns}
-                    dataSource={data || []}
+                    dataSource={detailData || []}
                     pagination={false}
                 />
             </Form>
