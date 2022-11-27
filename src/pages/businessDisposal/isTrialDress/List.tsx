@@ -159,7 +159,7 @@ export default function List(): React.ReactNode {
                             >
                                 <Button disabled={!(record.status === 1 || record.status === 5)} type="link">发起</Button>
                             </Popconfirm>
-                            {/* <Popconfirm
+                            <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
                                     RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/withdraw/${record.id}`).then(res => {
@@ -172,8 +172,7 @@ export default function List(): React.ReactNode {
                                 disabled={record.status !== 2}
                             >
                                 <Button disabled={record.status !== 2} type="link">撤回</Button>
-                            </Popconfirm> */}
-                            {/* 和补件申请撤回一样，先隐藏 */}
+                            </Popconfirm>
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {

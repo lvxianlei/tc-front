@@ -162,7 +162,7 @@ export default function List(): React.ReactNode {
                             >
                                 <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>发起</Button>
                             </Popconfirm>
-                            {/* <Popconfirm
+                            <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
                                     RequestUtil.post(`/tower-science/supplyEntry/cancel/${record.id}`).then(res => {
@@ -172,11 +172,10 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={record.status === 2}
+                                disabled={record.status !== 2}
                             >
-                                <Button type="link" disabled={record.status === 2}>撤回</Button>
-                            </Popconfirm> */}
-                            {/* 张运刚说撤回功能青岛没有提供接口，并没有实现，先隐藏 */}
+                                <Button type="link" disabled={record.status !== 2}>撤回</Button>
+                            </Popconfirm>
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
