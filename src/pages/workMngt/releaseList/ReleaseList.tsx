@@ -313,7 +313,7 @@ export default function ReleaseList(): React.ReactNode {
         // },
         {
             key: 'description',
-            title: '取消说明',
+            title: '备注',
             width: 200,
             dataIndex: 'description'
         },
