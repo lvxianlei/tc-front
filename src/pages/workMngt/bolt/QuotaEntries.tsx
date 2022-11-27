@@ -105,7 +105,8 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
         {
             key: 'codeCount',
             title: '件号数',
-            dataIndex: 'codeCount'
+            dataIndex: 'codeCount',
+            type: 'number'
         },
         {
             key: 'boltUser',
