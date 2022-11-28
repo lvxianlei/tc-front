@@ -24,13 +24,7 @@ export interface EditRefProps {
 }
 
 export default function List(): React.ReactNode {
-    const [page, setPage] = useState({
-        current: 1,
-        size: 15,
-        total: 0
-    })
-
-    const [status, setStatus] = useState<string>('1');
+    const [status, setStatus] = useState<any>('');
     const history = useHistory();
     const newRef = useRef<EditRefProps>();
     const [visible, setVisible] = useState<boolean>(false);
@@ -83,6 +77,9 @@ export default function List(): React.ReactNode {
         <Page
             path="/tower-science/data/backup"
             filterValue={filterValue}
+            requestData={{
+                status: status
+            }}
             columns={[
                 {
                     key: 'index',

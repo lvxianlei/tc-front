@@ -682,7 +682,7 @@ export default function ScheduleView(): React.ReactNode {
                             ncUser:resData.ncUser?resData.ncUser:'0',
                             packageUser:resData.packageUser?resData.packageUser:'0',
                             productPartUser:resData.productPartUser?resData.productPartUser:'0',
-                            boltCheckUser:resData.boltCheckUser&&resData.boltCheckUse?.split(','),
+                            boltCheckUser:resData.boltCheckUser&&resData.boltCheckUser?.split(','),
                             boltPlanCheckUser:resData.boltPlanCheckUser?resData.boltPlanCheckUser:'0',
                             boltUser:resData.boltUser&&resData.boltUser?.split(','),
                             deliveryDrawLeader:resData.deliveryDrawLeader?resData.deliveryDrawLeader:'0',
