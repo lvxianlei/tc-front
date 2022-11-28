@@ -546,7 +546,7 @@ export default function Lofting(): React.ReactNode {
                             <Popconfirm
                                 title="确认完成提料?"
                                 onConfirm={async () => {
-                                    await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting/${record?.id}`).then(() => {
+                                    await RequestUtil.post(`/tower-science/drawProductSegment/completedLofting`, [record?.id]).then(() => {
                                         message.success('提料成功！')
                                     }).then(() => {
                                         history.go(0)
@@ -561,117 +561,117 @@ export default function Lofting(): React.ReactNode {
                             <Popconfirm
                                 title="确认完成校核?"
                                 onConfirm={async () => {
-                                    await RequestUtil.post(`/tower-science/drawProductSegment/completed/check/${record?.id}`).then(() => {
-                                        message.success('校核成功！')
-                                    }).then(() => {
-                                        history.go(0)
-                                    })
+                                    await RequestUtil.post(`/tower-science/drawProductSegment/completed/check`, [record?.id]).then(() => {
+                                message.success('校核成功！')
+                            }).then(() => {
+                                history.go(0)
+                            })
                                 }}
-                                okText="确认"
-                                cancelText="取消"
-                                disabled={record.status !== 2}
+                            okText="确认"
+                            cancelText="取消"
+                            disabled={record.status !== 2}
                             >
-                                <Button type="link" ghost disabled={record.status !== 2}>完成校核</Button>
-                            </Popconfirm>
+                            <Button type="link" ghost disabled={record.status !== 2}>完成校核</Button>
+                        </Popconfirm>
                         </Space>
-                    )
+        )
                 }]}
-                refresh={refresh}
-                filterValue={filterValue}
-                requestData={{ productCategory: params.id }}
-                exportPath="/tower-science/drawProductSegment"
-                extraOperation={
-                    <Space>
-                        <Popconfirm
-                            title="确认批量完成提料?"
-                            onConfirm={batchPick}
-                            okText="确认"
-                            cancelText="取消"
-                        >
-                            <Button type='primary' ghost>完成提料</Button>
-                        </Popconfirm>
-                        <Popconfirm
-                            title="确认批量完成校核?"
-                            onConfirm={batchCheck}
-                            okText="确认"
-                            cancelText="取消"
-                        >
-                            <Button type='primary' ghost>完成校核</Button>
-                        </Popconfirm>
-                        <Button type="primary" ghost onClick={async () => {
-                            if (editorLock === '编辑') {
-                                setColumns(columns);
-                                setEditorLock('锁定');
-                            } else {
-                                const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
-                                await formRef.validateFields();
-                                let values = formRef.getFieldsValue(true).data;
-                                if (values && values.length > 0 && newRowChangeList.length > 0) {
-                                    let changeValues = values.filter((item: any, index: number) => {
-                                        return newRowChangeList.indexOf(index) !== -1;
-                                    }).map((item: any) => {
-                                        return {
-                                            ...item,
-                                            completeStatusTime: item?.completeStatusTime ? moment(item?.completeStatusTime).format('YYYY-MM-DD HH:mm:ss') : '',
-                                            productCategory: params.id,
-                                            productCategoryName: detailTop?.productCategoryName,
-                                            // segmentGroupId: params.productSegmentId
-                                        }
-                                    })
-                                    RequestUtil.post(`/tower-science/drawProductSegment/update/segment`, [...changeValues]).then(res => {
-                                        setColumns(columnsSetting);
-                                        setEditorLock('编辑');
-                                        formRef.resetFields()
-                                        setRowChangeList([]);
-                                        setRefresh(!refresh);
-                                        history.go(0)
-                                    });
-                                } else {
-                                    setColumns(columnsSetting);
-                                    setEditorLock('编辑');
-                                    formRef.resetFields()
-                                    setRowChangeList([]);
-                                    setRefresh(!refresh);
+        refresh={refresh}
+        filterValue={filterValue}
+        requestData={{ productCategory: params.id }}
+        exportPath="/tower-science/drawProductSegment"
+        extraOperation={
+            <Space>
+                <Popconfirm
+                    title="确认批量完成提料?"
+                    onConfirm={batchPick}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type='primary' ghost>完成提料</Button>
+                </Popconfirm>
+                <Popconfirm
+                    title="确认批量完成校核?"
+                    onConfirm={batchCheck}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type='primary' ghost>完成校核</Button>
+                </Popconfirm>
+                <Button type="primary" ghost onClick={async () => {
+                    if (editorLock === '编辑') {
+                        setColumns(columns);
+                        setEditorLock('锁定');
+                    } else {
+                        const newRowChangeList: number[] = Array.from(new Set(rowChangeList));
+                        await formRef.validateFields();
+                        let values = formRef.getFieldsValue(true).data;
+                        if (values && values.length > 0 && newRowChangeList.length > 0) {
+                            let changeValues = values.filter((item: any, index: number) => {
+                                return newRowChangeList.indexOf(index) !== -1;
+                            }).map((item: any) => {
+                                return {
+                                    ...item,
+                                    completeStatusTime: item?.completeStatusTime ? moment(item?.completeStatusTime).format('YYYY-MM-DD HH:mm:ss') : '',
+                                    productCategory: params.id,
+                                    productCategoryName: detailTop?.productCategoryName,
+                                    // segmentGroupId: params.productSegmentId
                                 }
+                            })
+                            RequestUtil.post(`/tower-science/drawProductSegment/update/segment`, [...changeValues]).then(res => {
+                                setColumns(columnsSetting);
+                                setEditorLock('编辑');
+                                formRef.resetFields()
+                                setRowChangeList([]);
+                                setRefresh(!refresh);
+                                history.go(0)
+                            });
+                        } else {
+                            setColumns(columnsSetting);
+                            setEditorLock('编辑');
+                            formRef.resetFields()
+                            setRowChangeList([]);
+                            setRefresh(!refresh);
+                        }
 
-                            }
-                        }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
-                        {
-                            (user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([params?.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ?
-                                <Button type="primary" ghost onClick={
-                                    () => history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
-                                } disabled={params.status === '1'}>提料</Button>
-                                : null
-                        }
-                        {
-                            (materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1)
-                                ?
-                                <Popconfirm
-                                    title="确认提交?"
-                                    onConfirm={async () => {
-                                        await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(() => {
-                                            message.success('提交成功！')
-                                        }).then(() => {
-                                            history.push('/workMngt/pickList');
-                                        })
-                                    }}
-                                    okText="确认"
-                                    cancelText="取消"
-                                >
-                                    <Button type="primary" ghost>提交</Button>
-                                </Popconfirm>
-                                : null
-                        }
-                        {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
-                        <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
-                        <span>塔型：{detailTop?.productCategoryName}</span>
-                        <span>计划号：{detailTop?.planNumber}</span>
-                        <span>模式：{detailTop?.patternName}</span>
-                    </Space>
+                    }
+                }} disabled={formRef.getFieldsValue(true).data && formRef.getFieldsValue(true).data?.length === 0}>{editorLock}</Button>
+                {
+                    (user && user.length > 0 && user.map((item: any) => { return item.userId }).concat([params?.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1) ?
+                        <Button type="primary" ghost onClick={
+                            () => history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/all`)
+                        } disabled={params.status === '1'}>提料</Button>
+                        : null
                 }
-                searchFormItems={[]}
+                {
+                    (materialCheckLeaders.length > 0 && materialCheckLeaders.map((item: any) => { return item.userId }).concat([params.materialLeader]).indexOf(AuthUtil.getUserInfo().user_id) > -1)
+                        ?
+                        <Popconfirm
+                            title="确认提交?"
+                            onConfirm={async () => {
+                                await RequestUtil.post(`/tower-science/drawProductSegment/submit/${params.id}`).then(() => {
+                                    message.success('提交成功！')
+                                }).then(() => {
+                                    history.push('/workMngt/pickList');
+                                })
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type="primary" ghost>提交</Button>
+                        </Popconfirm>
+                        : null
+                }
+                {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
+                <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
+                <span>塔型：{detailTop?.productCategoryName}</span>
+                <span>计划号：{detailTop?.planNumber}</span>
+                <span>模式：{detailTop?.patternName}</span>
+            </Space>
+        }
+        searchFormItems={[]}
             />
-        </Form>
+    </Form>
 
     </>
 }

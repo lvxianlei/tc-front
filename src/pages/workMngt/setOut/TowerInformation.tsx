@@ -355,7 +355,9 @@ export default function TowerInformation(): React.ReactNode {
                         onConfirm={() => {
                             RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
                                 if (res) {
-                                    RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
+                                    RequestUtil.post(`/tower-science/productSegment/complete`, {
+                                        productSegmentIds: record.id
+                                    }).then(res => {
                                         onRefresh();
                                         message.success('放样完成！')
                                     })
@@ -386,7 +388,9 @@ export default function TowerInformation(): React.ReactNode {
                     <Popconfirm
                         title="确认完成校核?"
                         disabled={record.status !== 2}
-                        onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check?productSegmentId=${record.id}`).then(res => {
+                        onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check`, {
+                            productSegmentIds: record.id
+                        }).then(res => {
                             onRefresh();
                             message.success('校核成功！')
                         })}
