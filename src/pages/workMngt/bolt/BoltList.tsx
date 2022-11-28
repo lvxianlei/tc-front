@@ -149,12 +149,9 @@ export default function BoltList(): React.ReactNode {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
         setDepartment(departmentData);
     }), {})
-    const [user, setUser] = useState<any[] | undefined>([]);
-    const [checkPerson, setCheckPerson] = useState<any | undefined>([]);
     const [department, setDepartment] = useState<any | undefined>([]);
     const [assignVisible, setAssignVisible] = useState<boolean>(false);
     const [drawTaskId, setDrawTaskId] = useState<string>('');
-    const [form] = Form.useForm();
     const [refresh, setRefresh] = useState(false);
     const [checkUser, setCheckUser] = useState([]);
     const [filterValue, setFilterValue] = useState<any>();
@@ -176,6 +173,7 @@ export default function BoltList(): React.ReactNode {
         try {
             await assignedRef.current?.onSubmit();
             message.success('指派成功！');
+            history.go(0);
             setAssignVisible(false);
             resove(true);
         } catch (error) {
