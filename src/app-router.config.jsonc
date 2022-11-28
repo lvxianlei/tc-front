@@ -1813,6 +1813,13 @@
       "exact": true,
       "authority": "tc_erp_rd_workbench_work"
     },
+    { // 数字门户-个人
+      "name": "数字门户-个人",
+      "path": "/workBench/gatewayPersonal",
+      "module": "./pages/workBench/rd/GatewayPersonal",
+      "exact": true,
+      "authority": "tc_erp_rd_workbench_work"
+    },
     { // 工作台-供应
       "name": "供应工作台",
       "path": "/supply/sw",

@@ -206,6 +206,11 @@
                 "authority": "tc_erp_rd_workbench",
                 "items": [
                     {
+                        "label": "数字门户-个人",
+                        "path": "/workBench/gatewayPersonal",
+                        "authority": "tc_erp_rd_workbench_work"
+                    },
+                    {
                         "label": "工作台",
                         "path": "/workBench/workBenchMngt",
                         "authority": "tc_erp_rd_workbench_work"
