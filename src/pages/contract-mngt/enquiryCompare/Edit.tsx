@@ -1,5 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle, useRef } from "react"
-import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message } from "antd"
+import { Button, Modal, Select, Input, Form, Row, Col, Spin, InputNumber, message, DatePicker } from "antd"
 import { BaseInfo, CommonTable, DetailTitle, IntgSelect, PopTableContent } from "../../common"
 import { editBaseInfo, materialColumnsSaveOrUpdate, addMaterial, choosePlanList } from "./enquiry.json"
 import useRequest from '@ahooksjs/use-request'
@@ -10,96 +10,23 @@ interface EditProps {
     id: string
     type: "new" | "edit"
 }
-interface PagenationProps {
-    current: number
-    pageSize: number
-}
 
-const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref) => {
-    const [form] = Form.useForm()
-    const [selectRows, setSelectRows] = useState<any[]>([])
-    const [pagenation, setPagenation] = useState<PagenationProps>({
-        current: 1,
-        pageSize: 10
-    })
-    const {
-        loading,
-        data,
-        run
-    } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
-        try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan`, {
-                ...filterValue,
-                planStatus: 1,
-                current: pagenation.current,
-                pageSize: pagenation.pageSize
-            })
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { refreshDeps: [pagenation.current] })
-
-    useImperativeHandle(ref, () => ({ selectRows }), [JSON.stringify(selectRows)])
-
-    const paginationChange = (page: number, pageSize: number) => setPagenation({ ...pagenation, current: page, pageSize })
-
-    return <>
-        <Form form={form} onFinish={(values) => run({
-            ...values,
-            purchaserId: values.purchaserId?.value
-        })}>
-            <Row gutter={[8, 8]}>
-                <Col><Form.Item label="采购类型" name="purchaseType">
-                    <Select style={{ width: 200 }}>
-                        <Select.Option value="1">外部</Select.Option>
-                        <Select.Option value="2">内部</Select.Option>
-                        <Select.Option value="3">缺料</Select.Option>
-                    </Select>
-                </Form.Item></Col>
-                <Col><Form.Item label="采购人" name="purchaserId">
-                    <IntgSelect width={200} />
-                </Form.Item></Col>
-                <Col><Form.Item label="采购计划编号" name="purchasePlanCode">
-                    <Input />
-                </Form.Item></Col>
-                <Col><Form.Item>
-                    <Button type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
-                    <Button type="default" onClick={() => form.resetFields()} htmlType="button"
-                        style={{ marginLeft: 12 }}>重置</Button>
-                </Form.Item></Col>
-            </Row>
-        </Form>
-        <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
-            rowSelection={{
-                type: "radio",
-                onChange: (_: any, selectedRows: any[]) => {
-                    setSelectRows(selectedRows)
-                }
-            }}
-            pagination={{
-                size: "small",
-                pageSize: data?.pageSize,
-                onChange: paginationChange,
-                current: data?.current,
-                total: data?.total
-            }}
-        />
-    </>
-})
 
 export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
-    const materialStandardEnum = materialStandardOptions?.map((item: {
+    const materialStandardEnum:any = materialStandardOptions?.map((item: {
         id: string,
         name: string
     }) => ({
         value: item.id,
         label: item.name
     }))
+    const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
+    
     const choosePlanRef = useRef<{ selectRows: any[] }>({ selectRows: [] })
     const [visible, setVisible] = useState<boolean>(false)
     const [chooseVisible, setChooseVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
+    const [materialPlanList, setMaterialPlanList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [form] = Form.useForm();
     const [purchasePlanId, setPurchasePlanId] = useState('');
@@ -192,8 +119,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }))
 
     const handleAddModalOk = () => {
-        const newMaterialList: any[] = []
-        setMaterialList([...materialList, ...newMaterialList.map((item: any) => ({
+        setMaterialPlanList([...materialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
@@ -212,7 +138,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 num: item.num
             })
         }))])
-        setPopDataList([...materialList, ...newMaterialList.map((item: any) => ({
+        setPopDataList([...materialList.map((item: any) => ({
             ...item,
             num: item.num || "0",
             width: formatSpec(item.spec).width,
@@ -249,42 +175,42 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
     }
 
     const handleChoosePlanOk = () => {
-        const chooseData = choosePlanRef.current?.selectRows;
-        setPurchasePlanId(chooseData[0].id);
-        setMaterialList(chooseData[0]?.materials?.map((item: any) => ({
+        const materials = [...materialPlanList]
+        // setPurchasePlanId(chooseData[0].purchasePlanId);
+        setMaterialList([...materials?.map((item: any) => ({
             ...item,
-            num: item.planPurchaseNum || "0",
+            num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source: item.source || 1,
             weight: item.weight,
+            length: item.length,
             totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
-        })))
-        setPopDataList(chooseData[0]?.materials?.map((item: any) => ({
+        }))])
+        setPopDataList([...materials?.map((item: any) => ({
             ...item,
-            num: item.planPurchaseNum || "0",
+            num: item.num || "0",
             structureSpec: item.structureSpec,
             thickness: formatSpec(item.spec).thickness,
-            source: item.source || 1,
             weight: item.weight,
+            length: item.length,
             totalWeight: item.totalWeight,
             structureTextureId: item.structureTextureId,
             structureTexture: item.structureTexture,
             materialStandard: item.materialStandard,
             materialStandardName: item.materialStandardName,
             materialCode: item.materialCode
-        })))
+        }))])
         setChooseVisible(false)
     }
 
-    const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.materialCode !== id))
-        setPopDataList(materialList.filter((item: any) => item.materialCode !== id))
+    const handleRemove = (id: number) => {
+        setMaterialList(materialList.filter((item: any, index:number) => index !== id))
+        setPopDataList(popDataList.filter((item: any, index: number) => index !== id))
     }
 
     const handleInputChange = (value: number, id: string) => {
@@ -293,12 +219,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(3)
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(5)
                 })
             }
             return item
@@ -308,12 +234,12 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(3)
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * Number(value) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * Number(value) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * Number(value) / 1000).toFixed(5)
                 })
             }
             return item
@@ -372,6 +298,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
         }
     }
 
+
+  
+
     return <Spin spinning={loading}>
         <Modal
             width={addMaterial.width || 520}
@@ -412,13 +341,70 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 }}
             />
         </Modal>
-        <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk}
+        <Modal width={1011} title="选择计划" visible={chooseVisible} onOk={handleChoosePlanOk} destroyOnClose
             onCancel={() => setChooseVisible(false)}>
-            <ChoosePlan ref={choosePlanRef} />
+           <PopTableContent
+                data={{
+                    ...(choosePlanList as any),
+                    search: choosePlanList.search.map((res: any) => {
+                        if (res.dataIndex === 'materialStandard') {
+                            return ({
+                                ...res,
+                                enum: [{value:'',label:'全部'}, ...materialStandardEnum]
+                            })
+                        }
+                        if (res.dataIndex === 'structureTexture') {
+                            return ({
+                                ...res,
+                                enum: [{value:'',label:'全部'},...structureTextureEnum]
+                            })
+                        }
+                        if (res.dataIndex === 'purchaseType') {
+                            return ({
+                                ...res,
+                                enum: [
+                                    {value:'1',label:'配料采购'},
+                                    {value:'2',label:'库存采购'},
+                                    {value:'3',label:'缺料采购'}
+                                ]
+                            })
+                        }
+                        return res
+                    }),
+                    path :`${choosePlanList.path}?usePlanDetailIds = ${popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)||''}` ,
+                    columns: (choosePlanList as any).columns.map((item: any) => {
+                        if (item.dataIndex === "materialStandard") {
+                            return ({
+                                ...item,
+                                type: "select",
+                                enum: materialStandardEnum
+                            })
+                        }
+                        return item
+                    })
+                }}
+                value={{
+                    id: "",
+                    records: popDataList,
+                    value: ""
+                }}
+                onChange={(fields: any[]) => {
+                    setMaterialPlanList(fields.map((item: any) => ({
+                        ...item,
+                        structureSpec: item.structureSpec,
+                        source: item.source||1,
+                        materialStandardName: item?.materialStandardName ? item?.materialStandardName : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.name : "",
+                        materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
+                        structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
+                        structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
+                        proportion: item.proportion == -1 ? 0 : item.proportion
+                    })))
+                }}
+            />
         </Modal>
         <DetailTitle title="询比价基本信息" />
         <BaseInfo form={form} col={2} columns={editBaseInfo} dataSource={{}} edit onChange={handGuaranteChange} />
-        <DetailTitle title="询价原材料 *" operation={[
+        <DetailTitle title="询比价材料明细 *" operation={[
             <Button type="primary" ghost key="add" style={{ marginRight: 16 }}
                 onClick={() => setVisible(true)}>添加询价原材料</Button>,
             <Button type="primary" ghost key="choose" onClick={() => setChooseVisible(true)}>选择计划</Button>
@@ -427,6 +413,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
             haveIndex
             style={{ padding: "0" }}
             rowKey="key"
+            pagination={false}
             columns={[
                 ...materialColumnsSaveOrUpdate.map((item: any) => {
                     if (item.dataIndex === "num") {
@@ -451,7 +438,9 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         return ({
                             ...item,
                             render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select style={{ width: '150px' }} value={materialList[key]?.materialStandard && materialList[key]?.materialStandard + ',' + materialList[key]?.materialStandardName} onChange={(e: string) => {
+                                
                                 const newData = materialList.map((item: any, index: number) => {
+                                    
                                     if (index === key) {
                                         return {
                                             ...item,
@@ -461,7 +450,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                     }
                                     return item
                                 })
-                                setMaterialList(newData)
+                                setMaterialList(newData.slice(0))
+                                setPopDataList(newData.slice(0))
                             }}>
                                 {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
@@ -481,7 +471,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                                     }
                                     return item
                                 })
-                                setMaterialList(newData)
+                                setMaterialList(newData.slice(0))
+                                setPopDataList(newData.slice(0))
                             }}>
                                 {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                             </Select>
@@ -492,8 +483,8 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                 {
                     title: "操作",
                     dataIndex: "opration",
-                    render: (_: any, records: any) => <Button disabled={records.source === 1} type="link" onClick={() => handleRemove(records.materialCode)}>移除</Button>
+                    render: (_: any, records: any, index:number) => <Button  type="link" onClick={() => handleRemove(index)}>移除</Button>
                 }]}
-            dataSource={popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))} />
+            dataSource={[...popDataList?.map((item: any, index: number) => ({ ...item, key: `${item.materialCode}-${index}` }))]} />
     </Spin>
 })
