@@ -44,6 +44,11 @@
             "title": "告警库存数量(吨)",
             "dataIndex": "warningStockWeight",
             "width": 120
+        },
+        {
+            "title": "库龄(天)",
+            "dataIndex": "storageAge",
+            "width": 100
         }
     ],
     "setting": [
@@ -142,6 +147,13 @@
         {
             "title": "告警库存（吨）",
             "dataIndex": "warningStockWeight",
+            "required": true,
+            "type": "number",
+            "min": 0
+        },
+        {
+            "title": "库龄（天）",
+            "dataIndex": "storageAge",
             "required": true,
             "type": "number",
             "min": 0

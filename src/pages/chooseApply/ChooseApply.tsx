@@ -13,7 +13,7 @@ export default function ChooseApply(): JSX.Element {
     const history = useHistory()
     const authorities = useAuthorities()
     return <nav style={{ overflowY: "auto" }}>
-        <Row style={{ width: "100%", padding: 30 }} gutter={[20, 20]}>
+        <Row style={{ width: "100%", padding: 20 }} gutter={[12, 12]}>
             <Col span={8}>
                 <DetailTitle title="项目统计" />
                 <div className={styles.content}>
@@ -40,6 +40,9 @@ export default function ChooseApply(): JSX.Element {
                                             }
                                             if (res.appName === "MC") {
                                                 herf = `${process.env.MES_BASE_URL}${res.path}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
+                                            }
+                                            if (res.appName === "CRM") {
+                                                herf = process.env.CRM_BREACK_URL
                                             }
                                             window.location.href = herf
                                             return

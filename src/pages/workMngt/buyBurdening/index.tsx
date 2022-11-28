@@ -53,7 +53,7 @@ export default function EnquiryList(): React.ReactNode {
                     dataIndex: 'operation',
                     render: (_: any, records: any) => {
                         return <>
-                            <Button type="link" className='btn-operation-link' disabled={records.batcheTaskStatus === 3} >
+                            <Button type="link" className='btn-operation-link'  >
                                 <Link to={`/ingredients/buyBurdening/ingredientsList/${records.id}/${records.batcheTaskStatus}/${records.batchNumber}/${records.productCategoryName}/${records.materialStandardName || "--"}`}>配料</Link>
                             </Button>
                             <Button type="link" className='btn-operation-link'>

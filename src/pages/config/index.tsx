@@ -30,6 +30,7 @@ export default function Stock() {
                 { name: "角钢配置策略", path: "/config/configList/angleSteel", id: "angleSteel" },
                 { name: "安全库存配置", path: "/config/configList/securitySetting", id: "securitySetting" },
                 { name: "税率参数配置", path: "/config/configList/taxRate", id: "taxRate" },
+                { name: "质检策略配置", path: "/config/configList/qualityInspection", id: "qualityInspection" },
                 { name: "其他参数配置", path: "/config/configList/otherParameters", id: "otherParameters" }
             ]} />
     </DetailContent>
