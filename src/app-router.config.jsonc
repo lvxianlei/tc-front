@@ -2069,7 +2069,7 @@
     },
     { // 计划排产-分配车间
       "name": "手动分配生产单元",
-      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
+      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory/:status",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "tc_erp_aps_plan_unit_distribution_manual"
