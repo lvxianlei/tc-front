@@ -271,7 +271,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
             ...changeData || [],
             ...newList || []
         ])
-        selectedForm?.setFieldsValue({data: []})
+        selectedForm?.setFieldsValue({ data: [] })
         setSelectedData([])
     }
 
