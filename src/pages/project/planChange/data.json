@@ -337,7 +337,8 @@
             },
             {
                 "title": "变更前内容",
-                "dataIndex": "editBefore"
+                "dataIndex": "editBefore",
+                "edit": false
             },
             {
                 "title": "变更后内容",
