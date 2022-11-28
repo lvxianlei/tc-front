@@ -29,6 +29,7 @@ export default function AnnouncementNew(): React.ReactNode {
                 userNames: data.staffList?.map((res: IStaffList) => { return res.userName }).join(','),
                 staffList: data.staffList?.map((res: IStaffList) => {
                     return {
+                        signState: res.signState,
                         name: res.userName,
                         id: res.userId
                     }
@@ -36,6 +37,7 @@ export default function AnnouncementNew(): React.ReactNode {
             });
             setStaffList(data.staffList?.map((res: IStaffList) => {
                 return {
+                    signState: res.signState,
                     name: res.userName,
                     id: res.userId
                 }
@@ -46,10 +48,10 @@ export default function AnnouncementNew(): React.ReactNode {
             resole({});
         }
     }), {})
-    const  handleChange = (editorState:any) => {
+    const handleChange = (editorState: any) => {
         setEditorState(editorState.toHTML())
         // const result = await saveEditorContent(htmlContent)
-      }
+    }
     if (loading) {
         return <Spin spinning={loading}>
             <div style={{ width: '100%', height: '300px' }}></div>
@@ -61,14 +63,18 @@ export default function AnnouncementNew(): React.ReactNode {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
                 if (location.state.type === 'new') {
-                    if(editorState =='<p></p>'){
+                    if (editorState == '<p></p>') {
                         return message.error('内容不可为空！')
                     }
                     RequestUtil.post<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList.map((res: any) => { return res?.id }),
+                        staffList: staffList.map((res: any) => ({
+                            userId: res?.id,
+                            userName: res?.name,
+                            signState: res?.signState
+                        })),
                         state: state,
                         content: editorState
 
@@ -76,14 +82,18 @@ export default function AnnouncementNew(): React.ReactNode {
                         history.goBack();
                     });
                 } else {
-                    if(editorState==='<p></p>'){
+                    if (editorState === '<p></p>') {
                         return message.error('内容不可为空！')
                     }
                     RequestUtil.put<IAnnouncement>(`/tower-system/notice`, {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList.map((res: any) => { return res?.id }),
+                        staffList: staffList.map((res: any) => ({
+                            userId: res?.id,
+                            userName: res?.name,
+                            signState: res?.signState
+                        })),
                         state: state,
                         content: editorState
                     }).then(res => {
@@ -135,27 +145,28 @@ export default function AnnouncementNew(): React.ReactNode {
                             setStaffList(selectRows.map(res => {
                                 return {
                                     id: res?.id,
-                                    name: res?.name
+                                    name: res?.name,
+                                    signState: 2,
                                 }
                             }));
                             setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
                         }} staffData={detailData?.staffList} />
                         <SelectGroup onSelect={(selectRows: any[]) => {
-                            console.log(selectRows)
                             const userNames = selectRows.map(res => { return res.employeeName }).join(',');
                             form.setFieldsValue({ userNames: userNames, staffList: staffList });
-                            const value:any[] = selectRows.map(res => {
+                            const value: any[] = selectRows.map(res => {
                                 return {
                                     id: res?.employeeId,
-                                    name: res?.employeeName
+                                    name: res?.employeeName,
+                                    signState: res?.signState || 2,
                                 }
                             })
                             setStaffList(value);
                             setDetailData({ ...detailData, userNames: userNames, staffList: value })
                         }} selectedKey={detailData?.staffList} />
-                    </>} disabled   suffix={
-                        <Button type='primary' onClick={()=>history.push(`/announcement/user`)}>设置分组</Button>
-                      }/>
+                    </>} disabled suffix={
+                        <Button type='primary' onClick={() => history.push(`/announcement/user`)}>设置分组</Button>
+                    } />
                 </Form.Item>
             </Form>
             <Attachment ref={attachRef} dataSource={detailData.attachInfoVos} edit />
