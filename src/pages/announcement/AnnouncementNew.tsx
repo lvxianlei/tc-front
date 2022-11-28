@@ -59,6 +59,7 @@ export default function AnnouncementNew(): React.ReactNode {
     }
 
     const save = (state: number) => {
+        console.log(staffList)
         if (form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
@@ -70,11 +71,12 @@ export default function AnnouncementNew(): React.ReactNode {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList.map((res: any) => ({
+                        noticeStaffDTOS: staffList.map((res: any) => ({
                             userId: res?.id,
                             userName: res?.name,
                             signState: res?.signState
                         })),
+                        staffList: staffList?.map((item: any) => item.id),
                         state: state,
                         content: editorState
 
@@ -89,11 +91,12 @@ export default function AnnouncementNew(): React.ReactNode {
                         id: detailData.id,
                         ...value,
                         fileIds: attachRef.current?.getDataSource().map(item => item.id),
-                        staffList: staffList.map((res: any) => ({
+                        noticeStaffDTOS: staffList.map((res: any) => ({
                             userId: res?.id,
                             userName: res?.name,
                             signState: res?.signState
                         })),
+                        staffList: staffList?.map((item: any) => item.id),
                         state: state,
                         content: editorState
                     }).then(res => {
@@ -139,14 +142,14 @@ export default function AnnouncementNew(): React.ReactNode {
                     "message": "请选择分组"
                 }]}>
                     <Input addonBefore={<>
-                        <SelectUserTransfer save={(selectRows: IStaff[]) => {
+                        <SelectUserTransfer save={(selectRows: any[]) => {
                             const userNames = selectRows.map(res => { return res.name }).join(',');
                             form.setFieldsValue({ userNames: userNames, staffList: staffList });
                             setStaffList(selectRows.map(res => {
                                 return {
                                     id: res?.id,
                                     name: res?.name,
-                                    signState: 2,
+                                    signState: res?.signState || 2,
                                 }
                             }));
                             setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })

@@ -176,7 +176,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                         />
                     </Col>
                     <Col className={styles.right} span={11}>
-                        <Table rowKey='id' dataSource={[...(this.state.rightData || [])]} pagination={false} showHeader={false} columns={[
+                        <Table rowKey='id' dataSource={[...(this.state.rightData || [])]} pagination={false} columns={[
                             {
                                 key: 'name',
                                 title: '姓名',
@@ -192,7 +192,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                     size="small"
                                     checked={value === 1}
                                     onChange={(checked: boolean) => {
-                                        const rightData: any[] = this.state.rightData || [];
+                                        const rightData: any[] = [...this.state.rightData || []];
                                         rightData[index].signState = checked ? 1 : 2
                                         this.setState({
                                             rightData: rightData,
