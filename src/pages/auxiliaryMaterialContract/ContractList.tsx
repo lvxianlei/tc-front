@@ -47,6 +47,12 @@ export default function ContractMngt(): JSX.Element {
             value.signStartTime = formatDate[0] + " 00:00:00"
             value.signEndTime = formatDate[1] + " 23:59:59"
         }
+        if (value.time) {
+            const formatDate = value.time.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCreateTime = formatDate[0] + " 00:00:00"
+            value.endCreateTime = formatDate[1] + " 23:59:59"
+            delete value.time
+        }
         if (value.operatorId) {
             value.operatorId = value.operatorId?.value
         }
@@ -163,6 +169,11 @@ export default function ContractMngt(): JSX.Element {
                     {
                         name: 'signStartTimeOrder',
                         label: '签订时间',
+                        children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'time',
+                        label: '创建时间',
                         children: <DatePicker.RangePicker style={{ width: "200px" }} format="YYYY-MM-DD" />
                     },
                     {

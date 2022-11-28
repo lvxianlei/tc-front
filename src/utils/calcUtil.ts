@@ -47,7 +47,7 @@ export const balanceTotalWeight = (
     totalWeight?: any
 ) => {
     //当前理重
-    const currentWeight: any = totalWeight === undefined ? (weight * num).toFixed(4) : totalWeight
+    const currentWeight: any = totalWeight === undefined ? (weight * num).toFixed(5) : totalWeight
     if (meteringMode === 1) {
         return currentWeight
     }

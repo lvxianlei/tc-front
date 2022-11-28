@@ -243,7 +243,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             }
             return item;
         })
-        setPopDataList(newData)
+        setPopDataList(newData.slice(0))
     }
 
     // 获取所有的仓库
@@ -386,7 +386,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                     render: (value: any, records: any, key: number) => {
                                         if (records?.purchasePlanId) {
                                             return <InputNumber
-                                                value={value || 13}
+                                                value={value!==null||value!==undefined?value: 13}
                                                 onChange={(value: number) => handleMaterailChange(value, key, "tax")}
                                             />
                                         }
