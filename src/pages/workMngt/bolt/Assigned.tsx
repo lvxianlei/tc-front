@@ -24,8 +24,11 @@ export default forwardRef(function Assigned({ id, type }: QuotaEntriesProps, ref
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post(`/tower-science/boltRecord/assign/list`, postData);
-            resole(result)
+            await RequestUtil.post(`/tower-science/boltRecord/assign/list`, postData).then(res => {
+                resole(true)
+            }).catch(e => {
+                reject(e)
+            })
         } catch (error) {
             reject(error)
         }
@@ -39,8 +42,8 @@ export default forwardRef(function Assigned({ id, type }: QuotaEntriesProps, ref
                     ...data,
                     ids: type === 'single' ? [id] : id.split(',')
                 })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
