@@ -120,6 +120,19 @@ export default function OverView(props: DetailInterface): JSX.Element {
                                 }
                             })
                         }
+                        if (item.dataIndex === "materialStandard") {
+                            return ({
+                                title: item.title,
+                                dataIndex: item.dataIndex,
+                                width: 50,
+                                render: (_: any, record: any): React.ReactNode => {
+                                    return (
+                                        <span>
+                                            {record.materialStandardName }
+                                        </span>)
+                                }
+                            })
+                        }
                         return item;
                     })
                 ]}

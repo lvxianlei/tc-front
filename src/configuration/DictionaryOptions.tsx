@@ -52,6 +52,7 @@ export enum DictionaryEnums {
     TOWER_STRUCTURE = 109,
     SUPPLY_TYPE = 1010,
     TYPE_OF_CHANGE = 1011,
+    TEST_TYPE = 130
 }
 
 let productType: IDict[] | undefined = [];
@@ -104,6 +105,7 @@ let planName: IDict[] | undefined = [];
 let towerStructure: IDict[] | undefined = [];
 let supplyType: IDict[] | undefined = [];
 let typeOfChange: IDict[] | undefined = [];
+let testType: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -155,6 +157,7 @@ if (dictionary) {
     towerStructure = dictionary[DictionaryEnums.TOWER_STRUCTURE];
     supplyType = dictionary[DictionaryEnums.SUPPLY_TYPE];
     typeOfChange = dictionary[DictionaryEnums.TYPE_OF_CHANGE];
+    testType = dictionary[DictionaryEnums.TEST_TYPE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -205,3 +208,4 @@ export const planNameOptions = planName; // 计划名称
 export const towerStructureOptions = towerStructure; // 铁塔结构
 export const supplyTypeOptions = supplyType; // 补件类型
 export const typeOfChangeOptions = typeOfChange; // 变更类型
+export const testTypeOptions = testType; //检验类型

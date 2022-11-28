@@ -1,0 +1,149 @@
+{
+    "baseInfoColumn": [
+        {
+            "title": "送检单号",
+            "dataIndex": "inspectionNumber"
+        },
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber"
+        },
+        {
+            "title": "检验部门",
+            "dataIndex": "inspectionDeptName"
+        },
+        {
+            "title": "检验员",
+            "dataIndex": "inspectionUserName"
+        },
+        {
+            "title": "检验批次",
+            "dataIndex": "inspectionBatchName"
+        },
+        {
+            "title": "检验日期",
+            "dataIndex": "inspectionTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
+        }
+       
+    ],
+    "material": [
+        {
+            "title": "状态",
+            "dataIndex": "processStatusName"
+        },
+        {
+            "title": "不合格项目分类",
+            "dataIndex": "nonconformityItemType",
+            "width": 120
+        },
+        {
+            "title": "不合格类型",
+            "dataIndex": "nonconformityType",
+            "width": 100
+        },
+        {
+            "title": "到货日期",
+            "dataIndex": "receiveTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer"
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber"
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "长度（mm）",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度（mm）",
+            "dataIndex": "width"
+        },
+        {
+            "title": "不合格数量",
+            "dataIndex": "nonconformityNum"
+        },
+        {
+            "title": "不合格重量（吨）",
+            "dataIndex": "nonconformityWeight"
+        },
+        {
+            "title": "单价",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "不合格情况描述",
+            "dataIndex": "nonconformityDescribe"
+        },
+        {
+            "title": "质检部意见",
+            "dataIndex": "qualityInspectionOpinion"
+        },
+        {
+            "title": "采购部处理意见",
+            "dataIndex": "purchaseDepartmentOpinion"
+        },
+        {
+            "title": "处理数量",
+            "dataIndex": "processNum"
+        },
+        {
+            "title": "处理重量（吨）",
+            "dataIndex": "processWeight"
+        },
+        {
+            "title": "处理后标准",
+            "dataIndex": "processedMaterialStandard"
+        },
+        {
+            "title": "处理后材质",
+            "dataIndex": "processedStructureTexture"
+        },
+        {
+            "title": "处理后规格",
+            "dataIndex": "processedStructureSpec"
+        },
+        {
+            "title": "处理后单价",
+            "dataIndex": "processedTaxPrice"
+        },
+        {
+            "title": "处理后长度",
+            "dataIndex": "processedLength"
+        },
+        {
+            "title": "处理后宽度",
+            "dataIndex": "processedWidth"
+        }
+    ]
+}
