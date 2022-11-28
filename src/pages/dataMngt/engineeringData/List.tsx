@@ -41,6 +41,12 @@ export default function List(): React.ReactNode {
             width: 80
         },
         {
+            key: 'projectTypeName',
+            title: '工程类型',
+            dataIndex: 'projectTypeName',
+            width: 80
+        },
+        {
             key: 'orderProjectName',
             title: '工程名称',
             width: 100,
@@ -69,6 +75,12 @@ export default function List(): React.ReactNode {
             title: '计划号',
             width: 80,
             dataIndex: 'planNumber'
+        },
+        {
+            key: 'description',
+            title: '备注',
+            width: 80,
+            dataIndex: 'description'
         }
     ]
 
