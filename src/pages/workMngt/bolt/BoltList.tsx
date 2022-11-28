@@ -177,7 +177,6 @@ export default function BoltList(): React.ReactNode {
             await assignedRef.current?.onSubmit();
             message.success('指派成功！');
             setAssignVisible(false);
-            history.go(0);
             resove(true);
         } catch (error) {
             reject(false)
