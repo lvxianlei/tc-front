@@ -61,13 +61,16 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            getLoading(true)
-            await saveRun({
-                ...value,
-                id: data?.id
+            form?.validateFields().then(async res => {
+                const value = form.getFieldsValue(true);
+                getLoading(true)
+                await saveRun({
+                    ...value,
+                    id: data?.id
+                })
+                resolve(true);
             })
-            resolve(true);
+
         } catch (error) {
             reject(error)
         }
@@ -204,12 +207,12 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                             <Descriptions.Item label="塔型名称">
                                 <Form.Item name="productCategoryId">
                                     <Select placeholder="请选择塔型名称" style={{ width: "150px" }} onChange={async (e) => {
-                                        const data: any = towerSelects?.find((res: any) => res?.productCategoryId === e) || {}
+                                        const data: any = towerSelects?.filter((res: any) => res?.productCategoryId === e)[0] || {}
                                         form.setFieldsValue({
                                             voltageGrade: data?.voltageGrade,
                                             customerCompany: data?.customerCompany,
                                             productType: data?.productType,
-                                            productCategoryId: data?.productCategoryName,
+                                            productCategoryId: data?.productCategoryId,
                                             productCategoryName: data?.productCategoryName,
                                         })
                                     }}>
