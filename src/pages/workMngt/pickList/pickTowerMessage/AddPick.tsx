@@ -27,6 +27,8 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
     const [isBig, setIsBig] = useState<boolean>(true);
     const [isAuto, setIsAuto] = useState<boolean>(false);
     const [isQuick, setIsQuick] = useState<boolean>(true);
+    const [algorithm, setAlgorithm] = useState<number>(); //算法
+    const [proportion, setProportion] = useState<number>(); // 比重
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         try {
@@ -38,6 +40,79 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         }
     }), { manual: type === 'new', refreshDeps: [id, type, rowData] })
 
+    /**
+     * weightAlgorithm 
+     * 3 比重（法兰类）
+     * 2 比重*面积（钢板类）
+     * 1 比重*长度（角钢类）
+    */
+    const weightCalculation = async (e: string, dataIndex: string, index: number) => {
+        const data = await RequestUtil.get<any>(`/tower-system/material?current=1&size=10000&fuzzyQuery=${e}`);
+        let values = form.getFieldsValue(true)?.data;
+        if (dataIndex === 'materialName') {
+            // structureSpec
+            const list = data?.records?.filter((res: any) => res?.materialName === e);
+            const newData = list?.filter((res: any) => res?.structureSpec === values[index]?.structureSpec)[0];
+            setAlgorithm(newData?.weightAlgorithm)
+            setProportion(Number(newData?.proportion))
+            const weight = newData?.weightAlgorithm === 3 ?
+                Number(newData?.proportion) :
+                newData?.weightAlgorithm === 2 ?
+                    Number(newData?.proportion) * Number(values[index]?.width || 0) * Number(values[index]?.length || 0) :
+                    Number(newData?.proportion) * Number(values[index]?.length || 0)
+            values[index] = {
+                ...values[index],
+                basicsWeight: weight
+            }
+            form.setFieldsValue({
+                data: [...values]
+            })
+            setTableData([...values])
+            calculateTotalWeight(weight, index)
+        } else {
+            // materialName
+            const list = data?.records?.filter((res: any) => res?.structureSpec === e);
+            const newData = list?.filter((res: any) => res?.materialName === values[index]?.materialName)[0];
+            setAlgorithm(newData?.weightAlgorithm)
+            setProportion(Number(newData?.proportion))
+            const weight = newData?.weightAlgorithm === 3 ?
+                Number(newData?.proportion) :
+                newData?.weightAlgorithm === 2 ?
+                    Number(newData?.proportion) * Number(values[index]?.width || 0) * Number(values[index]?.length || 0) :
+                    Number(newData?.proportion) * Number(values[index]?.length || 0)
+            values[index] = {
+                ...values[index],
+                basicsWeight: weight
+            }
+            form.setFieldsValue({
+                data: [...values]
+            })
+            setTableData([...values])
+            calculateTotalWeight(weight, index)
+        }
+    }
+
+    const getProportion = async (materialName: string, structureSpec: string) => {
+        const data = await RequestUtil.get<any>(`/tower-system/material?current=1&size=10000&fuzzyQuery=${materialName}`);
+        const list = data?.records?.filter((res: any) => res?.materialName === materialName);
+        const newData = list?.filter((res: any) => res?.structureSpec === structureSpec)[0];
+        setAlgorithm(newData?.weightAlgorithm)
+        setProportion(Number(newData?.proportion))
+        return {
+            algorithm: newData?.weightAlgorithm,
+            proportion: Number(newData?.proportion)
+        }
+    }
+
+    const calculateTotalWeight = (e: number, index: number) => {
+        const data = form.getFieldsValue(true).data;
+        data[index] = {
+            ...data[index],
+            totalWeight: Number(e || 0) * Number(data[index].basicsPartNum || 0)
+        }
+        setTableData([...data])
+        form.setFieldsValue({ data: [...data] })
+    }
 
     const column = [
         {
@@ -116,8 +191,10 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                             }
                             setTableData([...values])
                             form.setFieldsValue({ data: values })
+                            weightCalculation(newValue, 'materialName', index)
                         }
-                    }}/>
+                        weightCalculation(e.target.value, 'materialName', index)
+                    }} />
                 </Form.Item>
             )
         },
@@ -168,7 +245,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                     message: '仅可输入数字/-/*/L/∠/φ',
 
                 }]}>
-                    <Input size="small" maxLength={10} />
+                    <Input size="small" maxLength={10} onBlur={(e) => weightCalculation(e.target.value, 'structureSpec', index)} />
                 </Form.Item>
             )
         },
@@ -179,7 +256,42 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             width: 120,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "length"]} rules={[{ required: true, message: '请输入长度' }]}>
-                    <InputNumber size="small" min={1} precision={0} max={999999} />
+                    <InputNumber size="small" min={1} precision={0} max={999999} onBlur={async (e) => {
+                        const values = form.getFieldsValue(true)?.data;
+                        if (!proportion && values[index]?.materialName && values[index]?.structureSpec) {
+                            const getData: any = await getProportion(values[index]?.materialName, values[index]?.structureSpec)
+                            const weight = getData?.algorithm === 3 ?
+                                getData?.proportion || 0 :
+                                getData?.algorithm === 2 ?
+                                    Number(getData?.proportion) * Number(values[index]?.width || 0) * Number(e.target?.value || 0) :
+                                    Number(getData?.proportion) * Number(e.target?.value || 0)
+                            values[index] = {
+                                ...values[index],
+                                basicsWeight: weight
+                            }
+                            form.setFieldsValue({
+                                data: [...values]
+                            })
+                            setTableData([...values])
+                            calculateTotalWeight(weight, index)
+                        } else {
+                            const weight = algorithm === 3 ?
+                                proportion || 0 :
+                                algorithm === 2 ?
+                                    Number(proportion) * Number(values[index]?.width || 0) * Number(e.target?.value || 0) :
+                                    Number(proportion) * Number(e.target?.value || 0)
+                            values[index] = {
+                                ...values[index],
+                                basicsWeight: weight
+                            }
+                            form.setFieldsValue({
+                                data: [...values]
+                            })
+                            setTableData([...values])
+                            calculateTotalWeight(weight, index)
+                        }
+
+                    }} />
                 </Form.Item>
             )
         },
@@ -190,7 +302,37 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             width: 120,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "width"]}>
-                    <InputNumber size="small" min={1} precision={0} max={999999} />
+                    <InputNumber size="small" min={1} precision={0} max={999999} onBlur={async (e) => {
+                        const values = form.getFieldsValue(true)?.data;
+                        if (!proportion && values[index]?.materialName && values[index]?.structureSpec) {
+                            const getData: any = await getProportion(values[index]?.materialName, values[index]?.structureSpec)
+                            if (getData?.algorithm == 2) {
+                                const weight = Number(getData?.proportion) * Number(values[index]?.length || 0) * Number(e.target?.value || 0)
+                                values[index] = {
+                                    ...values[index],
+                                    basicsWeight: weight
+                                }
+                                form.setFieldsValue({
+                                    data: [...values]
+                                })
+                                setTableData([...values])
+                                calculateTotalWeight(weight, index)
+                            }
+                        } else {
+                            if (algorithm == 2) {
+                                const weight = Number(proportion) * Number(values[index]?.length || 0) * Number(e.target?.value || 0)
+                                values[index] = {
+                                    ...values[index],
+                                    basicsWeight: weight
+                                }
+                                form.setFieldsValue({
+                                    data: [...values]
+                                })
+                                setTableData([...values])
+                                calculateTotalWeight(weight, index)
+                            }
+                        }
+                    }} />
                 </Form.Item>
             )
         },
@@ -255,17 +397,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             width: 120,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "basicsWeight"]} initialValue={_} rules={[{ required: !isAuto, message: '请输入单件重量' }]}>
-                    <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => {
-                        const data = form.getFieldsValue(true).data;
-                        if (data[index].basicsPartNum) {
-                            data[index] = {
-                                ...data[index],
-                                totalWeight: e * data[index].basicsPartNum
-                            }
-                            form?.setFieldsValue({ data: data })
-                            setTableData(data)
-                        }
-                    }} disabled={isAuto} />
+                    <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => calculateTotalWeight(e, index)} disabled={isAuto} />
                 </Form.Item>
             )
         },
