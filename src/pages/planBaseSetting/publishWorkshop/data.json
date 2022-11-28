@@ -56,7 +56,8 @@
         },
         {
             "title": "产品类型",
-            "dataIndex": "productTypeName"
+            "dataIndex": "productTypeName",
+            "width":130
         },
         {
             "title": "组焊单元",
@@ -68,7 +69,8 @@
         },
         {
             "title": "试组装类型",
-            "dataIndex": "trialAssemble"
+            "dataIndex": "trialAssemble",
+            "width":130
         },
         {
             "title": "执行状态",
@@ -83,6 +85,30 @@
                 {
                     "value": 2,
                     "label": "取消"
+                }
+            ]
+        },
+        {
+            "title": "下达单状态",
+            "dataIndex": "status",
+            "type": "select",
+            "width":150,
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "未分配"
+                },
+                {
+                    "value": 2,
+                    "label": "部分分配"
+                },
+                {
+                    "value": 3,
+                    "label": "全部分配"
+                },
+                {
+                    "value": 4,
+                    "label": "下发mes"
                 }
             ]
         },
