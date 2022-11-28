@@ -1013,13 +1013,7 @@
         {
             "title": "总金额",
             "dataIndex": "sumMoney",
-            "type": "number",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入总金额..."
-                }
-            ]
+            "type": "number"
         },
         {
             "title": "业务经理",

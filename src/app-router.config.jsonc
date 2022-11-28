@@ -614,7 +614,21 @@
       "authority": "tc_erp_sc_project_view_bid_base_edit"
     },
     { // 项目管理框架协议编辑
-      "name": "框架协议编辑",
+      "name": "新增框架协议",
+      "path": "/project/management/new/frameAgreement/:id",
+      "module": "./pages/project/frameAgreement/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_frame_edit"
+    },
+    { // 项目管理框架协议编辑
+      "name": "编辑框架协议",
+      "path": "/project/management/detail/frameAgreement/detail/:id",
+      "module": "./pages/project/frameAgreement/Overview",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_frame_edit"
+    },
+    { // 项目管理框架协议编辑
+      "name": "编辑框架协议",
       "path": "/project/management/edit/frameAgreement/:id",
       "module": "./pages/project/frameAgreement/Edit",
       "exact": true,
@@ -2041,7 +2055,7 @@
     },
     { // 计划排产-分配车间
       "name": "手动分配生产单元",
-      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
+      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory/:status",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "tc_erp_aps_plan_unit_distribution_manual"

@@ -354,7 +354,7 @@ export default function ReleaseList(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={0}>
+                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={1}>
                     <Radio.Group>
                         <Radio value={1}>是</Radio>
                         <Radio value={0}>否</Radio>
@@ -424,7 +424,7 @@ export default function ReleaseList(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={0}>
+                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={1}>
                     <Radio.Group>
                         <Radio value={1}>是</Radio>
                         <Radio value={0}>否</Radio>
