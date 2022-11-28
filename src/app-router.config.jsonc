@@ -2109,6 +2109,13 @@
       "exact": true,
       "authority": "tc_erp_aps_board_statistics_list"
     },
+    { // 计划排产-数据追踪统计
+    "name": "数据追踪统计",
+    "path": "/planPanal/reportStatistics",
+    "module": "./pages/planBaseSetting/reportStatistics/index",
+    "exact": true,
+    "authority": "tc_erp_aps_track_statistics_list"
+    },
     { // 计划排产-试装计划
       "name": "试装计划",
       "path": "/planProd/planTrial",
