@@ -2055,7 +2055,7 @@
     },
     { // 计划排产-分配车间
       "name": "手动分配生产单元",
-      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
+      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory/:status",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "tc_erp_aps_plan_unit_distribution_manual"
@@ -2122,6 +2122,13 @@
       "module": "./pages/planBaseSetting/dataStatistics/index",
       "exact": true,
       "authority": "tc_erp_aps_board_statistics_list"
+    },
+    { // 计划排产-数据追踪统计
+    "name": "数据追踪统计",
+    "path": "/planPanal/reportStatistics",
+    "module": "./pages/planBaseSetting/reportStatistics/index",
+    "exact": true,
+    "authority": "tc_erp_aps_track_statistics_list"
     },
     { // 计划排产-试装计划
       "name": "试装计划",

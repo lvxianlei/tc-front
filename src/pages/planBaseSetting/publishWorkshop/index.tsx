@@ -19,6 +19,7 @@ export default () => {
         setSelectedRows(selectedRows)
     }
     const [status, setStatus] = useState<number>(1)
+    const [handleAutoStatus,setHandleAutoStatus] = useState<boolean>( false);
     const tableColumns = [
         {
             title: '零件号',
@@ -63,8 +64,10 @@ export default () => {
             form.setFieldsValue({
                 dataList: result?.needUpdateList||[]
             })
+            setHandleAutoStatus(false);
             resole(result)
         } catch (error) {
+            setHandleAutoStatus(false);
             reject(error)
         }
     }), { manual: true })
@@ -88,10 +91,9 @@ export default () => {
     }), { manual: true })
 
     const handleAuto = async () => {
+        setHandleAutoStatus(true);
         const result = await run(selectedRowKeys)
-        console.log(result, "----") 
         if((result&&result?.needUpdateList&&result?.needUpdateList.length>0)||(result&&result?.notMatchList&&result?.notMatchList.length>0)){
-
             Modal.warn({
                 title: "分配生产单元提示",
                 icon: null,
@@ -137,13 +139,14 @@ export default () => {
                     else{
                         history.go(0)
                     }
-                    
+
                 }
             })
         }else{
             await message.success("快速分配单元完成")
             history.go(0)
         }
+
     }
 
     // const handleWeldingClick = async () => {
@@ -203,7 +206,7 @@ export default () => {
                 fixed: "right",
                 dataIndex: "opration",
                 render: (_, record: any) => <Link
-                    to={`/planProd/publishWorkshop/manual/${record.id}/${record.issuedNumber}/${record.productCategory}`}
+                    to={`/planProd/publishWorkshop/manual/${record.id}/${record.issuedNumber}/${record.productCategory}/${record.status}`}
                  ><Button type='link' disabled={record?.executeStatus===2}>手动分配生产单元</Button></Link>
             }]}
         extraOperation={
@@ -220,7 +223,7 @@ export default () => {
                 </Radio.Group>
                 {status === 1 && <>
                     {/* <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleWeldingClick}>电焊分配车间</Button> */}
-                    <Button type="primary" disabled={selectedRowKeys.length <= 0 || selectedRows.findIndex((item:any)=> item.executeStatus===2)!==-1} onClick={handleAuto}>快速分配单元</Button>
+                    <Button type="primary" loading={handleAutoStatus} disabled={selectedRowKeys.length <= 0 || selectedRows.findIndex((item:any)=> item.executeStatus===2)!==-1} onClick={handleAuto}>快速分配单元</Button>
                 </>}
             </>
         }
@@ -259,7 +262,7 @@ export default () => {
                 label: '生产下达日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
-            
+
         ]}
         tableProps={status === 1 ? {
             rowSelection: {
