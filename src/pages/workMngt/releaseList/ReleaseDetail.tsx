@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message, Modal, Select, Space } from 'antd';
+import { Button, Form, Input, message, Modal, Radio, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
@@ -273,7 +273,7 @@ export default function ReleaseList(): React.ReactNode {
                         resolve(true)
                         return res?.json();
                     }).then((res) => {
-                        res?.Msg=== '' ? message.success('打印成功') : message.success(res?.Msg)
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
@@ -305,7 +305,7 @@ export default function ReleaseList(): React.ReactNode {
             }}
             confirmLoading={confirmLoading}
         >
-            <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
+            <Form form={pageForm} layout='horizontal' labelCol={{ span: 6 }}>
                 <Form.Item label='打印机' name='printerName' rules={[{
                     required: true,
                     message: '请选择打印机'
@@ -353,6 +353,12 @@ export default function ReleaseList(): React.ReactNode {
                             </Select.Option>
                         })}
                     </Select>
+                </Form.Item>
+                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={1}>
+                    <Radio.Group>
+                        <Radio value={1}>是</Radio>
+                        <Radio value={0}>否</Radio>
+                    </Radio.Group>
                 </Form.Item>
                 <Form.Item>
                     <Button htmlType="reset">重置</Button>
@@ -369,7 +375,7 @@ export default function ReleaseList(): React.ReactNode {
             }}
             confirmLoading={confirmLoading}
         >
-            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+            <Form form={form} layout='horizontal' labelCol={{ span: 6 }}>
                 <Form.Item label='打印机' name='printerName' rules={[{
                     required: true,
                     message: '请选择打印机'
@@ -417,6 +423,12 @@ export default function ReleaseList(): React.ReactNode {
                             </Select.Option>
                         })}
                     </Select>
+                </Form.Item>
+                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={1}>
+                    <Radio.Group>
+                        <Radio value={1}>是</Radio>
+                        <Radio value={0}>否</Radio>
+                    </Radio.Group>
                 </Form.Item>
                 <Form.Item>
                     <Button htmlType="reset">重置</Button>
