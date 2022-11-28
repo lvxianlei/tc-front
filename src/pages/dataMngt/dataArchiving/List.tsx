@@ -134,10 +134,10 @@ export default function List(): React.ReactNode {
                         status: event.target.value
                     })
                 }}>
-                    <Radio.Button value={'1'} key="1">全部</Radio.Button>
-                    <Radio.Button value={'2'} key="2">正常</Radio.Button>
-                    <Radio.Button value={'3'} key="3">变更</Radio.Button>
-                    <Radio.Button value={'4'} key="4">无效</Radio.Button>
+                    <Radio.Button value={''} key="1">全部</Radio.Button>
+                    <Radio.Button value={1} key="2">正常</Radio.Button>
+                    <Radio.Button value={2} key="3">变更</Radio.Button>
+                    <Radio.Button value={3} key="4">无效</Radio.Button>
                 </Radio.Group>
                 <Button type="primary" onClick={() => {
                     setVisible(true);
