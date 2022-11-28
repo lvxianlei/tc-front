@@ -5,14 +5,12 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, message, Modal, Select, Input, Popconfirm } from 'antd';
+import { Space, Spin, Button, Radio, RadioChangeEvent, message, Modal, Select, Input, Popconfirm } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './DataArchiving.module.less';
-import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { useHistory } from 'react-router-dom';
-import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
+import { drawingDataTypeOptions, productTypeOptions, referenceRoomOptions } from '../../../configuration/DictionaryOptions';
 import DataArchivingNew from './DataArchivingNew';
 import { columns } from './dataArchiving.json'
 
@@ -136,10 +134,10 @@ export default function List(): React.ReactNode {
                         status: event.target.value
                     })
                 }}>
-                    <Radio.Button value={'1'} key="1">全部</Radio.Button>
-                    <Radio.Button value={'2'} key="2">正常</Radio.Button>
-                    <Radio.Button value={'3'} key="3">变更</Radio.Button>
-                    <Radio.Button value={'4'} key="4">无效</Radio.Button>
+                    <Radio.Button value={''} key="1">全部</Radio.Button>
+                    <Radio.Button value={1} key="2">正常</Radio.Button>
+                    <Radio.Button value={2} key="3">变更</Radio.Button>
+                    <Radio.Button value={3} key="4">无效</Radio.Button>
                 </Radio.Group>
                 <Button type="primary" onClick={() => {
                     setVisible(true);
@@ -152,7 +150,7 @@ export default function List(): React.ReactNode {
                     label: '资料室',
                     children: <Select placeholder="请选择" style={{ width: 200 }} defaultValue={''}>
                         <Select.Option value="" key={0}>全部</Select.Option>
-                        {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
+                        {referenceRoomOptions && referenceRoomOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
@@ -164,7 +162,7 @@ export default function List(): React.ReactNode {
                     label: "资料类型",
                     children: <Select placeholder="请选择" style={{ width: 200 }} defaultValue={''}>
                         <Select.Option value="" key={0}>全部</Select.Option>
-                        {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
+                        {drawingDataTypeOptions && drawingDataTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
@@ -176,7 +174,7 @@ export default function List(): React.ReactNode {
                     label: "产品类型",
                     children: <Select placeholder="请选择" style={{ width: 200 }} defaultValue={''}>
                         <Select.Option value="" key={0}>全部</Select.Option>
-                        {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
+                        {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
                             </Select.Option>
