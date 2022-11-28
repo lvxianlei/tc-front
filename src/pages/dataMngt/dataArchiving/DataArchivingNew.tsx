@@ -30,6 +30,8 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
             form.setFieldsValue({
                 ...result
             })
+            ProjectNameChange(result?.projectName);
+            planNumChange(result?.planNumber)
             resole(result)
         } catch (error) {
             reject(error)
@@ -45,18 +47,11 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
     const ProjectNameChange = async (e: any) => {
         const data: any = await RequestUtil.get(`/tower-science/loftingTask/planNumberList?projectName=${e}`);
         setPlanNums(data || [])
-        form.setFieldsValue({
-            productCategoryId: '',
-            planNumber: ''
-        });
     }
 
     const planNumChange = async (e: any) => {
         const data: any = await RequestUtil.get(`/tower-science/productCategory/product/category/list?planNumber=${e}`);
         setTowerSelects(data || [])
-        form.setFieldsValue({
-            productCategoryId: ''
-        });
     }
 
     const onSave = () => new Promise(async (resolve, reject) => {
@@ -181,7 +176,13 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                                         filterOption={(input, option) =>
                                             (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                         }
-                                        onChange={(e) => ProjectNameChange(e)}>
+                                        onChange={(e) => {
+                                            ProjectNameChange(e)
+                                            form.setFieldsValue({
+                                                productCategoryId: '',
+                                                planNumber: ''
+                                            });
+                                        }}>
                                         {ProjectNames && ProjectNames?.map((item: any, index: number) => {
                                             return <Select.Option key={index} value={item}>{item}</Select.Option>
                                         })}
@@ -197,7 +198,12 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
                                         filterOption={(input, option) =>
                                             (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                         }
-                                        onChange={(e) => planNumChange(e)}>
+                                        onChange={(e) => {
+                                            planNumChange(e)
+                                            form.setFieldsValue({
+                                                productCategoryId: ''
+                                            });
+                                        }}>
                                         {planNums && planNums?.map((item: any, index: number) => {
                                             return <Select.Option key={index} value={item}>{item}</Select.Option>
                                         })}
