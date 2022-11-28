@@ -223,7 +223,7 @@ export default function (): JSX.Element {
         Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
         Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
         Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
-        AuthUtil.setSinzetechAuth(access_token, refresh_token)
+        AuthUtil.setSinzetechAuth(access_token, refresh_token, result.expires_in)
         AuthUtil.setTenantId(tenant_id, { expires: 7 })
         AuthUtil.setTenantName(tenantInfo.name)
         AuthUtil.setTenants(tenants)

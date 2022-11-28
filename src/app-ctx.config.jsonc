@@ -890,6 +890,11 @@
                         "label": "数据统计",
                         "path": "/planPanal/dataStatistics",
                         "authority": "tc_erp_aps_board_statistics"
+                    },
+                    {
+                        "label": "数据追踪统计",
+                        "path": "/planPanal/reportStatistics",
+                        "authority": "tc_erp_aps_track_statistics_list"
                     }
                 ]
             },
@@ -1620,6 +1625,11 @@
                     {
                         "label": "字段同步",
                         "path": "/worksheetSetting/fieldSynchronous",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "自动同步",
+                        "path": "/worksheetSetting/selfSynchronizing",
                         "authority": "tc_erp_sc_workbench_list"
                     }
                 ]

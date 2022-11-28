@@ -2137,6 +2137,13 @@
       "exact": true,
       "authority": "tc_erp_aps_board_statistics_list"
     },
+    { // 计划排产-数据追踪统计
+    "name": "数据追踪统计",
+    "path": "/planPanal/reportStatistics",
+    "module": "./pages/planBaseSetting/reportStatistics/index",
+    "exact": true,
+    "authority": "tc_erp_aps_track_statistics_list"
+    },
     { // 计划排产-试装计划
       "name": "试装计划",
       "path": "/planProd/planTrial",
@@ -3283,6 +3290,13 @@
       "name": "字段同步",
       "path": "/worksheetSetting/fieldSynchronous",
       "module": "./pages/worksheetSetting/fieldSynchronous/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-自动同步
+      "name": "自动同步",
+      "path": "/worksheetSetting/selfSynchronizing",
+      "module": "./pages/worksheetSetting/selfSynchronizing/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
