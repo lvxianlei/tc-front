@@ -205,8 +205,7 @@
             "dataIndex": "updateDescription"
         }
     ],
-
-    "changeColumns":[
+    "changeColumns": [
         {
             "key": "name",
             "title": "杆塔号",

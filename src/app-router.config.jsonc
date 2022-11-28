@@ -3363,6 +3363,13 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // RD-业务处置管理-明细变更申请
+      "name": "明细变更申请",
+      "path": "/businessDisposal/requestForChange",
+      "module": "./pages/businessDisposal/requestForChange/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // 库存管理-原材料调拨单
       "name": "原材料调拨单",
       "path": "/stock/rawMaterialAllocation",
