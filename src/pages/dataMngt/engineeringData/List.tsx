@@ -207,11 +207,11 @@ export default function List(): React.ReactNode {
         resole(result?.records || [])
     }), {})
 
-    const { run: detailRun } = useRequest<any>((id: string, filters: any) => new Promise(async (resole, reject) => {
+    const { run: detailRun } = useRequest<any>((id: string, filter: any) => new Promise(async (resole, reject) => {
         try {
             const result = await RequestUtil.get(`/tower-science/projectData/file`, {
                 projectBackupId: id,
-                ...filters
+                ...filter
             });
             setDetailData(result);
             resole(result)
@@ -238,7 +238,10 @@ export default function List(): React.ReactNode {
     })
 
     const onRowChange = async (record: Record<string, any>) => {
-        detailRun(record.id);
+        detailRun(record.id, {
+            ...filters,
+            fileCategory: status
+        });
         setRowData(record)
     }
 
