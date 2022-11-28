@@ -52,6 +52,10 @@ export enum DictionaryEnums {
     TOWER_STRUCTURE = 109,
     SUPPLY_TYPE = 1010,
     TYPE_OF_CHANGE = 1011,
+    REFERENCE_ROOM = 1012,
+    DRAWING_DATA_TYPE = 1013,
+    DOCUMENT_TYPE = 1014,
+    FILE_TYPE = 1015,
     TEST_TYPE = 130
 }
 
@@ -105,6 +109,10 @@ let planName: IDict[] | undefined = [];
 let towerStructure: IDict[] | undefined = [];
 let supplyType: IDict[] | undefined = [];
 let typeOfChange: IDict[] | undefined = [];
+let referenceRoom: IDict[] | undefined = [];
+let drawingDataType: IDict[] | undefined = [];
+let documentType: IDict[] | undefined = [];
+let fileType: IDict[] | undefined = [];
 let testType: IDict[] | undefined = [];
 
 if (dictionary) {
@@ -157,6 +165,10 @@ if (dictionary) {
     towerStructure = dictionary[DictionaryEnums.TOWER_STRUCTURE];
     supplyType = dictionary[DictionaryEnums.SUPPLY_TYPE];
     typeOfChange = dictionary[DictionaryEnums.TYPE_OF_CHANGE];
+    referenceRoom = dictionary[DictionaryEnums.REFERENCE_ROOM];
+    drawingDataType = dictionary[DictionaryEnums.DRAWING_DATA_TYPE];
+    documentType = dictionary[DictionaryEnums.DOCUMENT_TYPE];
+    fileType = dictionary[DictionaryEnums.FILE_TYPE];
     testType = dictionary[DictionaryEnums.TEST_TYPE];
 }
 
@@ -208,4 +220,8 @@ export const planNameOptions = planName; // 计划名称
 export const towerStructureOptions = towerStructure; // 铁塔结构
 export const supplyTypeOptions = supplyType; // 补件类型
 export const typeOfChangeOptions = typeOfChange; // 变更类型
+export const referenceRoomOptions = referenceRoom; // 资料室
+export const drawingDataTypeOptions = drawingDataType; // 资料类型
+export const documentTypeOptions = documentType; // 文件类别
+export const fileTypeOptions = fileType; // 文件类型
 export const testTypeOptions = testType; //检验类型

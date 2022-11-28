@@ -32,7 +32,7 @@ export default function List(): React.ReactNode {
     const [user, setUser] = useState<any[] | undefined>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>();
-    const [type, setType] = useState<'new' | 'detail'>('new');
+    const [type, setType] = useState<'new' | 'detail' | 'edit'>('new');
     const [rowId, setRowId] = useState<string>();
     const { data: departmentData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/department`);
@@ -94,19 +94,15 @@ export default function List(): React.ReactNode {
             destroyOnClose
             key='ApplyTrial'
             visible={visible}
-            title={type === 'new' ? '试装/免试装申请' : '详情'}
+            title={type === 'new' ? '试装/免试装申请' : type === 'edit' ? '编辑' : '详情'}
             footer={<Space direction="horizontal" size="small">
-                {type === 'new' ?
+                {type === 'detail' ?
+                    null
+                    :
                     <>
                         <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
                         <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
                     </>
-                    :
-                    null
-                    // <>
-                    //     <Button>拒绝</Button>
-                    //     <Button>通过</Button>
-                    // </>
                 }
                 <Button onClick={() => {
                     setVisible(false);
@@ -140,6 +136,11 @@ export default function List(): React.ReactNode {
                     width: 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
+                            <Button type='link' disabled={!(record.status === 1 || record.status === 5 || record.status === 0)} onClick={() => {
+                                setRowId(record?.id);
+                                setVisible(true);
+                                setType('edit');
+                            }}>编辑</Button>
                             <Button type='link' onClick={() => {
                                 setRowId(record?.id);
                                 setVisible(true);
@@ -155,11 +156,11 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5)}
+                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
                             >
-                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">发起</Button>
+                                <Button disabled={!(record.status === 1 || record.status === 5 || record.status === 0)} type="link">发起</Button>
                             </Popconfirm>
-                            {/* <Popconfirm
+                            <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
                                     RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/withdraw/${record.id}`).then(res => {
@@ -172,8 +173,7 @@ export default function List(): React.ReactNode {
                                 disabled={record.status !== 2}
                             >
                                 <Button disabled={record.status !== 2} type="link">撤回</Button>
-                            </Popconfirm> */}
-                            {/* 和补件申请撤回一样，先隐藏 */}
+                            </Popconfirm>
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
@@ -184,9 +184,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5)}
+                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
                             >
-                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">删除</Button>
+                                <Button disabled={!(record.status === 1 || record.status === 5 || record.status === 0)} type="link">删除</Button>
                             </Popconfirm>
                         </Space>
                     )

@@ -354,7 +354,6 @@ export default function TowerInformation(): React.ReactNode {
                         disabled={record.status !== 1}
                         onConfirm={() => {
                             RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
-                                console.log(res)
                                 if (res) {
                                     RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
                                         onRefresh();
@@ -491,6 +490,8 @@ export default function TowerInformation(): React.ReactNode {
     const [editorLock, setEditorLock] = useState('编辑');
     const [tableColumns, setTableColumns] = useState(columnsSetting);
     const [filterValue, setFilterValue] = useState({});
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
@@ -500,6 +501,79 @@ export default function TowerInformation(): React.ReactNode {
             reject(error)
         }
     }), {})
+
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
+
+    const batchPick = async () => {
+        if (selectedKeys.length > 0) {
+            const tip: boolean[] = []
+            selectedRows.forEach((res: any) => {
+                if (res.status !== 1) {
+                    tip.push(false)
+                } else {
+                    tip.push(true)
+                }
+            })
+            if (tip.findIndex(value => value === false) !== -1) {
+                message.warning('仅提料中状态可进行完成放样！')
+            } else {
+                await RequestUtil.post(`/tower-science/productSegment/complete`, {
+                    productSegmentIds: selectedKeys
+                }).then(() => {
+                    message.success('完成放样成功！')
+                }).then(() => {
+                    history.go(0);
+                    setSelectedKeys([]);
+                    setSelectedRows([]);
+                })
+            }
+        } else {
+            message.warning('请选择需要完成放样的数据！')
+        }
+    }
+
+    const batchCheck = async () => {
+        if (selectedKeys.length > 0) {
+            const tip: boolean[] = []
+            selectedRows.forEach((res: any) => {
+                if (res.status !== 2) {
+                    tip.push(false)
+                } else {
+                    tip.push(true)
+                }
+            })
+            if (tip.findIndex(value => value === false) !== -1) {
+                message.warning('仅校核中状态可进行完成校核！')
+            } else {
+                await RequestUtil.post(`/tower-science/productSegment/completed/check`, {
+                    productSegmentIds: selectedKeys
+                }).then(() => {
+                    message.success('完成校核成功！')
+                }).then(() => {
+                    history.go(0);
+                    setSelectedKeys([]);
+                    setSelectedRows([]);
+                })
+            }
+        } else {
+            message.warning('请选择需要完成校核的数据！')
+        }
+    }
+
+    const comparison = () => {
+        RequestUtil.get(`/tower-science/productStructure/check/contrast/structure`, {
+            productCategoryId: params.id,
+        }).then((res) => {
+            if (res) {
+                history.push({ pathname: `/workMngt/setOutList/towerInformation/${params.id}/comparison` })
+            } else {
+                message.warning('暂无提料信息，无法进行比对！')
+            }
+        })
+    }
 
     return <>
         <Modal
@@ -556,46 +630,55 @@ export default function TowerInformation(): React.ReactNode {
                 refresh={refresh}
                 exportPath={`/tower-science/productSegment`}
                 requestData={{ productCategoryId: params.id, ...filterValue }}
-                extraOperation={<>
-                    <span>塔型：<span>{detail?.productCategoryName}</span></span>
-                    <span>计划号：<span>{detail?.planNumber}</span></span>
-                    <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
-                        <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
-                        <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
-                        <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' disabled={detail?.loftingStatus === 1} ghost>放样</Button> </Link>
-                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type="primary" ghost>模型</Button></Link>
-                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
-                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type="primary" ghost>NC程序</Button></Link>
-                        {
-                            loftingUser === userId ?
-                                <>
-                                    <Popconfirm
-                                        title="确认提交?"
-                                        onConfirm={() => {
-                                            setLoading1(true);
-                                            RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
-                                                message.success('提交成功');
-                                                history.goBack();
-                                            }).catch(error => {
-                                                setLoading1(false);
-                                            });
-                                        }}
-                                        okText="提交"
-                                        cancelText="取消"
-                                        disabled={!(detail?.loftingStatus < 3)}
-                                    >
-                                        <Button type="primary" loading={loading1} disabled={!(detail?.loftingStatus < 3)} ghost>提交</Button>
-                                    </Popconfirm>
-                                    <TowerLoftingAssign id={params.id} update={onRefresh} type="edit" />
-                                </>
-                                : null
-                        }
-                        <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
-                    </Space>
-                </>}
+                extraOperation={
+                    <>
+                        <span>塔型：<span>{detail?.productCategoryName}</span></span>
+                        <span>计划号：<span>{detail?.planNumber}</span></span>
+                        <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
+                            <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
+                            <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>
+                            <Button type="primary" onClick={comparison} ghost>放样提料比对</Button>
+                            <Button type='primary' onClick={() => setVisible(true)} ghost>挑料清单</Button>
+                            <Button type="primary" onClick={closeOrEdit} ghost>{editorLock}</Button>
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}><Button type='primary' disabled={detail?.loftingStatus === 1} ghost>放样</Button> </Link>
+                            <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type="primary" ghost>模型</Button></Link>
+                            <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type="primary" ghost>大样图工艺卡</Button></Link>
+                            <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type="primary" ghost>NC程序</Button></Link>
+                            {
+                                loftingUser === userId ?
+                                    <>
+                                        <Popconfirm
+                                            title="确认提交?"
+                                            onConfirm={() => {
+                                                setLoading1(true);
+                                                RequestUtil.post(`/tower-science/productCategory/submit`, { productCategoryId: params.id }).then(res => {
+                                                    message.success('提交成功');
+                                                    history.goBack();
+                                                }).catch(error => {
+                                                    setLoading1(false);
+                                                });
+                                            }}
+                                            okText="提交"
+                                            cancelText="取消"
+                                            disabled={!(detail?.loftingStatus < 3)}
+                                        >
+                                            <Button type="primary" loading={loading1} disabled={!(detail?.loftingStatus < 3)} ghost>提交</Button>
+                                        </Popconfirm>
+                                        <TowerLoftingAssign id={params.id} update={onRefresh} type="edit" />
+                                    </>
+                                    : null
+                            }
+                            <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
+                        </Space>
+                    </>
+                }
                 searchFormItems={[]}
                 tableProps={{
-                    pagination: false
+                    pagination: false,
+                    rowSelection: {
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange
+                    }
                 }}
             />
         </Form>

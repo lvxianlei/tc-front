@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, InputNumber, Input, Button, Select } from 'antd';
+import { Spin, Form, InputNumber, Input, Button, Select, Divider, Checkbox } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -13,6 +13,7 @@ import styles from './TowerLoftingAssign.module.less';
 import CommonTable from "../../common/CommonTable";
 import { FixedType } from 'rc-table/lib/interface';
 import { componentTypeOptions } from "../../../configuration/DictionaryOptions";
+import { materialShortcutKeys, quickConversion, structureTextureShortcutKeys } from "@utils/quickConversion";
 
 interface modalProps {
     id: string;
@@ -24,6 +25,7 @@ interface modalProps {
 export default forwardRef(function AddLofting({ id, productSegmentId, type, rowData }: modalProps, ref) {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<any>([])
+    const [isQuick, setIsQuick] = useState<boolean>(true);
 
     const colunm = [
         {
@@ -73,7 +75,18 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     required: true,
                     message: '请输入材质'
                 }]}>
-                    <Input size="small" maxLength={20} />
+                    <Input size="small" maxLength={20} onBlur={async (e) => {
+                        const values = form.getFieldsValue(true)?.data || [];
+                        if (isQuick) {
+                            const newValue = await quickConversion(e.target.value, structureTextureShortcutKeys);
+                            values[index] = {
+                                ...values[index],
+                                structureTexture: newValue
+                            }
+                            setTableData([...values])
+                            form.setFieldsValue({ data: values })
+                        }
+                    }} />
                 </Form.Item>
             )
         },
@@ -91,7 +104,18 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     pattern: /^[0-9a-zA-Z\u4e00-\u9fa5]*$/,
                     message: '仅可输入数字/字母/汉字',
                 }]}>
-                    <Input size="small" maxLength={20} />
+                    <Input size="small" maxLength={20} onBlur={async (e) => {
+                        const values = form.getFieldsValue(true)?.data || [];
+                        if (isQuick) {
+                            const newValue = await quickConversion(e.target.value, materialShortcutKeys);
+                            values[index] = {
+                                ...values[index],
+                                materialName: newValue
+                            }
+                            setTableData([...values])
+                            form.setFieldsValue({ data: values })
+                        }
+                    }} />
                 </Form.Item>
             )
         },
@@ -682,7 +706,18 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     return <DetailContent key='AddLofting'>
-        {type === 'new' ? <Button type="primary" onClick={addRow} ghost>添加一行</Button> : null}
+        {type === 'new' ? <Button type="primary" onClick={addRow} style={{ marginRight: '16px' }} ghost>添加一行</Button> : null}
+        <Checkbox onChange={(e) => { setIsQuick(e.target.checked) }} checked={isQuick}>是否快捷输入</Checkbox>
+        <Divider orientation="left" plain>材质快捷键：{
+            structureTextureShortcutKeys?.map(res => {
+                return <span className={styles.key}>{res?.label}({res?.value})</span>
+            })
+        }</Divider>
+        <Divider orientation="left" plain>材料快捷键：{
+            materialShortcutKeys?.map(res => {
+                return <span className={styles.key}>{res?.label}({res?.value})</span>
+            })
+        }</Divider>
         <Form form={form} className={styles.descripForm}>
             <CommonTable
                 haveIndex

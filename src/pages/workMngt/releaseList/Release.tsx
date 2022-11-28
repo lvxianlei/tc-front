@@ -355,6 +355,11 @@ export default function Release(): React.ReactNode {
                                 </Select>
                             </Form.Item>
                         </Col>
+                        <Col span={12}>
+                            <Form.Item name="description" label="备注">
+                                <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
+                            </Form.Item>
+                        </Col>
                     </Row>
                     <Row>
                         <Col span={12}>

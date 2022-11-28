@@ -1,0 +1,192 @@
+{
+    "columns": [
+        {
+            "key": "status",
+            "title": "状态",
+            "width": 50,
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                { 
+                    "value": 1, 
+                    "label": "正常" 
+                },
+                { 
+                    "value": 2, 
+                    "label": "变更"
+                },
+                { 
+                    "value": 3, 
+                    "label": "无效"
+                }
+            ]
+        },
+        {
+            "key": "resourceCenterName",
+            "title": "资料室",
+            "dataIndex": "resourceCenterName",
+            "width": 80
+        },
+        {
+            "key": "resourceTypeName",
+            "title": "资料类型",
+            "width": 100,
+            "dataIndex": "resourceTypeName"
+        },
+        {
+            "key": "fileCategoryName",
+            "title": "文件类别",
+            "width": 100,
+            "dataIndex": "fileCategoryName"
+        },
+        {
+            "key": "cabinetNo",
+            "title": "柜号",
+            "width": 80,
+            "dataIndex": "cabinetNo"
+        },
+        {
+            "key": "caseNo",
+            "title": "箱号",
+            "width": 80,
+            "dataIndex": "caseNo"
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "width": 80,
+            "dataIndex": "productTypeName"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "width": 80,
+            "dataIndex": "projectName"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "width": 80,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "width": 80,
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "customerCompany",
+            "title": "客户名称",
+            "width": 80,
+            "dataIndex": "customerCompany"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 80,
+            "dataIndex": "description"
+        },
+        {
+            "key": "createTime",
+            "title": "存档时间",
+            "width": 80,
+            "dataIndex": "createTime"
+        },
+        {
+            "key": "createUserName",
+            "title": "存档人",
+            "width": 80,
+            "dataIndex": "createUserName"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "status",
+            "title": "状态",
+            "dataIndex": "status",
+            "type": "select",
+            "enum": [
+                { 
+                    "value": 1, 
+                    "label": "正常" 
+                },
+                { 
+                    "value": 2, 
+                    "label": "变更"
+                },
+                { 
+                    "value": 3, 
+                    "label": "无效"
+                }
+            ]
+        },
+        {
+            "key": "resourceCenterName",
+            "title": "资料室",
+            "dataIndex": "resourceCenterName"
+        },
+        {
+            "key": "resourceTypeName",
+            "title": "资料类型",
+            "dataIndex": "resourceTypeName"
+        },
+        {
+            "key": "cabinetNo",
+            "title": "柜号",
+            "dataIndex": "cabinetNo"
+        },
+        {
+            "key": "caseNo",
+            "title": "箱号",
+            "dataIndex": "caseNo"
+        },
+        {
+            "key": "fileCategoryName",
+            "title": "文件类别",
+            "dataIndex": "fileCategoryName"
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName"
+        },
+        {
+            "key": "customerCompany",
+            "title": "客户名称",
+            "dataIndex": "customerCompany"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ]
+
+}
