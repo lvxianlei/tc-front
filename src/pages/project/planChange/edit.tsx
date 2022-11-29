@@ -23,6 +23,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     const { loading, data: planData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/editNotice/detail?id=${id}`)
+            setProductGroupDetails(result?.editNoticeProductVOList || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -40,10 +41,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
 
     const { loading: modalLoading, data: modalData, run: modalRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productAssist/getProductBySaleOrderId`, {
-                saleOrderId: id
-            })
-            resole(result)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${id}`)
+            resole(result?.productInfos)
         } catch (error) {
             reject(error)
         }
@@ -51,7 +50,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
 
     const handleEditChange = (fields: any) => {
         if (fields.taskNoticeId) {
-            setTaskNoticeId(fields.taskNoticeId?.records[0]?.saleOrderId)
+            setTaskNoticeId(fields.taskNoticeId?.id)
             const taskNotice = fields.taskNoticeId.records[0]
             editForm.setFieldsValue({
                 internalNumber: taskNotice.internalNumber,
@@ -71,11 +70,19 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
         await saveRun({
             editType: type,
             taskNoticeId: postData.taskNoticeId?.id,
-            editNoticeInfoDTOList: contentFormData?.submit.map((item: any) => ({
+            editNoticeInfoDTOList: contentFormData?.submit?.map((item: any) => ({
                 description: item.description,
                 editAfter: item.editAfter,
                 editBefore: item.editBefore,
                 field: item.field
+            })) || [],
+            editNoticeProductDTOList: suspendFormData?.submit?.map((item: any) => ({
+                description: item.description,
+                editNoticeId: item.editNoticeId,
+                isIssuedWorkshop: item.isIssuedWorkshop,
+                processedWeight: item.processedWeight,
+                productId: item.id,
+                productionStatus: item.productionStatus
             })) || []
         })
     }
@@ -85,7 +92,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     const handleModalOk = async () => {
         setProductGroupDetails([
             ...selectRows,
-            ...productDetails.filter((pro: any) => !select.includes(pro.id))])
+            ...productGroupDetails.filter((pro: any) => !select.includes(pro.id))])
         setVisible(false)
     }
 
@@ -105,7 +112,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                         selectedRowKeys: select,
                         type: "checkbox",
                         getCheckboxProps: (records: any) => ({
-                            disabled: productDetails.map(item => item.id).includes(records.id)
+                            // disabled: productDetails.map(item => item.id).includes(records.id)
                         }),
                         onChange: (selectedRowKeys: string[], rows: any[]) => {
                             setSelect(selectedRowKeys)
@@ -126,7 +133,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                     onChange={handleEditChange}
                     dataSource={planData || {}}
                 />
-                {type === 1 && <EditableTable form={contentForm} columns={edit.content} dataSource={[]} />}
+                {type === 1 && <EditableTable
+                    form={contentForm}
+                    columns={edit.content}
+                    dataSource={planData?.editNoticeInfoVOList || []}
+                />}
                 {[2, 3].includes(type) && <>
                     <Row>
                         <Button

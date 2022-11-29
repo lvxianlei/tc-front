@@ -1,20 +1,36 @@
 import React from "react"
 import { Spin } from "antd"
-import { BaseInfo, DetailContent, DetailTitle, EditableTable } from "../../common"
+import { BaseInfo, CommonTable, DetailContent, DetailTitle, EditableTable } from "../../common"
 import { edit } from "./data.json"
+import useRequest from "@ahooksjs/use-request"
+import RequestUtil from "@utils/RequestUtil"
 interface EditProps {
     id: string
     type: 1 | 2 | 3
 }
 
-export default function Edit({ id, type }: EditProps) {
-
-    return <Spin spinning={false}>
+export default function Detail({ id, type }: EditProps) {
+    const { loading, data: planData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/editNotice/detail?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: id === "create" })
+    return <Spin spinning={loading}>
         <DetailContent>
             <DetailTitle title="基础信息" />
-            <BaseInfo col={4} edit columns={edit.base} dataSource={{}} />
-            {type === 1 && <EditableTable columns={edit.content} dataSource={[]} />}
-            {[2, 3].includes(type) && <EditableTable columns={edit.suspend} dataSource={[]} />}
+            <BaseInfo col={4} columns={edit.base} dataSource={planData || {}} />
+            {type === 1 && <CommonTable
+                columns={edit.content}
+                dataSource={planData?.editNoticeInfoVOList || []}
+            />}
+            {[2, 3].includes(type) && <>
+                <CommonTable
+                    columns={edit.suspend}
+                    dataSource={planData?.editNoticeProductVOList || []} />
+            </>}
         </DetailContent>
     </Spin>
 }
