@@ -60,7 +60,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                 packDemand: taskNotice.packDemand,
                 galvanizeDemand: taskNotice.galvanizeDemand,
                 payAsk: taskNotice.payAsk,
-                peculiarDescription: taskNotice.peculiarDescription
+                peculiarDescription: taskNotice.peculiarDescription,
+
             })
             editForm.setFieldsValue({
                 internalNumber: taskNotice.internalNumber,
@@ -68,7 +69,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                 editBaseNum: taskNotice.editBaseNum,
                 editWeight: taskNotice.editWeight,
                 ascriptionName: taskNotice.ascriptionName,
-                region: taskNotice.region
+                region: taskNotice.region,
+                customerCompany: taskNotice.customerCompany
             })
         }
     }
@@ -160,7 +162,26 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                     form={editForm}
                     columns={edit.base}
                     onChange={handleEditChange}
-                    dataSource={planData || {}}
+                    dataSource={{
+                        ...planData,
+                        taskNoticeId: {
+                            id: planData?.taskNoticeId,
+                            value: planData?.planNumber,
+                            records: [
+                                {
+                                    id: planData?.taskNoticeId,
+                                    planNumber: planData?.planNumber,
+                                    internalNumber: planData?.internalNumber,
+                                    orderProjectName: planData?.orderProjectName,
+                                    editBaseNum: planData?.editBaseNum,
+                                    editWeight: planData?.editWeight,
+                                    ascriptionName: planData?.ascriptionName,
+                                    region: planData?.region,
+                                    customerCompany: planData?.customerCompany
+                                }
+                            ]
+                        }
+                    }}
                 />
                 {type === 1 && <EditableTable
                     form={contentForm}
