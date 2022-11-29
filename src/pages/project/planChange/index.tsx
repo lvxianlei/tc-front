@@ -189,6 +189,7 @@ export default function Index() {
                                 className='btn-operation-link'
                                 onClick={() => {
                                     setEditId(record?.id)
+                                    setPlanChangeType(record?.editType)
                                     setDetailVisible(true)
                                 }}
                             >查看</Button>
