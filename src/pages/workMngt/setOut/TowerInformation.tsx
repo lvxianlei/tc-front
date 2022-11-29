@@ -366,7 +366,9 @@ export default function TowerInformation(): React.ReactNode {
                                         title: "当前存在未上传的大样图或工艺卡，是否完成放样？",
                                         onOk: async () => new Promise(async (resove, reject) => {
                                             try {
-                                                RequestUtil.post(`/tower-science/productSegment/complete?productSegmentId=${record.id}`).then(res => {
+                                                RequestUtil.post(`/tower-science/productSegment/complete`, {
+                                                    productSegmentIds: [record.id]
+                                                }).then(res => {
                                                     message.success('放样完成！');
                                                     onRefresh();
                                                 })
