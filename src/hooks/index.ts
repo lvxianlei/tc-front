@@ -14,12 +14,13 @@ export function useDictionary() {
 
 export function useAuthorities() {
     const [state, setState] = useState(catchDic)
-   
+
     useEffect(() => {
         setState(catchDic)
     }, [catchDic])
-    
+
     useAuthorities.prototype.setState = setState
+    useAuthorities.prototype.state = state
 
     return state.authorities
 }
@@ -32,6 +33,10 @@ export function setAuthorities(authorities?: string[]) {
 export function setDictionary(dictionary?: any[]) {
     dictionary && (catchDic = ({ ...catchDic, dictionary }))
     dictionary && useDictionary.prototype.setState?.({ ...catchDic, dictionary })
+}
+
+export function getDictionary() {
+    return useDictionary.prototype.state
 }
 
 export function hasAuthority(authority: string): boolean {

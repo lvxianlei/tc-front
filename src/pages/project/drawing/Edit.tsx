@@ -66,6 +66,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         projectName: fields.internalNumber.records?.[0]?.contractName
       })
     }
+    if (fields.serviceManager) {
+      baseForm.setFieldsValue({
+        serviceManagerTel: fields.serviceManager.records?.[0]?.phone
+      })
+    }
   }
   useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
   return <Spin spinning={loading}>

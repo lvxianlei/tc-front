@@ -1,4 +1,70 @@
 {
+    "table": [
+        {
+            "title": "协议名称",
+            "dataIndex": "frameAgreementName"
+        },
+        {
+            "title": "项目名称",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "预估总重（吨）",
+            "dataIndex": "contractWeight"
+        },
+        {
+            "title": "预估单价（元）",
+            "dataIndex": "contractMoney"
+        },
+        {
+            "title": "预估总价（元）",
+            "dataIndex": "contractMoneyCount"
+        },
+        {
+            "title": "执行重量（吨）",
+            "dataIndex": "implementWeight"
+        },
+        {
+            "title": "执行金额（元）",
+            "dataIndex": "implementMoney"
+        },
+        {
+            "title": "执行重量百分比",
+            "dataIndex": "implementWeightPro"
+        },
+        {
+            "title": "执行金额百分比",
+            "dataIndex": "implementMoneyPro"
+        },
+        {
+            "title": "签订日期",
+            "dataIndex": "signDate"
+        },
+        {
+            "title": "签订人",
+            "dataIndex": "signUser"
+        },
+        {
+            "title": "交货日期",
+            "dataIndex": "deliveryDate"
+        },
+        {
+            "title": "合同接管人",
+            "dataIndex": "takeOverUser"
+        },
+        {
+            "title": "合同接管日期",
+            "dataIndex": "takeOverTime"
+        },
+        {
+            "title": "是否接收原件",
+            "dataIndex": "isReceivedContract"
+        },
+        {
+            "title": "销售员",
+            "dataIndex": "saleUser"
+        }
+    ],
     "frameAgreementColumns": [
         {
             "title": "协议编号",
@@ -217,13 +283,7 @@
             "title": "交货日期",
             "dataIndex": "deliveryDate",
             "type": "date",
-            "format": "YYYY-MM-DD",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择交货日期..."
-                }
-            ]
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "有无技术协议",
@@ -284,8 +344,44 @@
             ]
         },
         {
+            "title": "内部合同号",
+            "dataIndex": "internalNumber"
+        },
+        {
+            "title": "外部合同号",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "title": "订单编号",
+            "dataIndex": "saleOrderNumber"
+        },
+        {
+            "title": "ECP合同编号",
+            "dataIndex": "ecpContractNumber"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltageGrade"
+        },
+        {
+            "title": "页数",
+            "dataIndex": "pageNumber",
+            "type": "number"
+        },
+        {
+            "title": "份数",
+            "dataIndex": "fraction",
+            "type": "number"
+        },
+        {
+            "title": "交货方式",
+            "dataIndex": "deliveryWay",
+            "type": "select"
+        },
+        {
             "title": "备注",
-            "dataIndex": "description"
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "materialListColumns": [

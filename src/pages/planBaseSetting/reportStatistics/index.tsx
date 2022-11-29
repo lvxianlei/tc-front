@@ -220,32 +220,40 @@ export default () => {
             },
             {
                 title: "基数",
-                dataIndex: "productNum"
+                dataIndex: "productNum",
+                width:100,
             },
             {
                 title: "重量",
-                dataIndex: "weight"
+                dataIndex: "weight",
+                width:100,
             },
             {
                 title: "杆塔号",
                 dataIndex: "productNumber",
+                width:350,
+                ellipsis:true,
                 render: (text:string) => <a>{text}</a>,
             },
             {
                 title: "放样下发状态",
-                dataIndex: "loftingStatus"
+                dataIndex: "loftingStatus",
+                width:150,
             },
             {
                 title: "拆分批次杆塔数",
-                dataIndex: "branchNum"
+                dataIndex: "branchNum",
+                width:150,
             },
             {
                 title: "分配生产单元组批次/总批次",
-                dataIndex: "unitGroupNum"
+                dataIndex: "unitGroupNum",
+                width:220,
             },
             {
                 title: "分配生产单元下达单 已分配/总数",
-                dataIndex: "issueOrderNum"
+                dataIndex: "issueOrderNum",
+                width:220,
             },
         ]
         return <Table columns={columnTwo}
@@ -271,27 +279,30 @@ export default () => {
             {
                 title: "杆塔号",
                 dataIndex: "productNumber",
+                width:380,
+                ellipsis:true,
                 render: (text:string) => <a>{text}</a>,
             },
             {
                 title: "重量",
-                dataIndex: "weight"
+                dataIndex: "weight",
+                width:140,
             },
             {
                 title: "构件生产单元分配量",
-                dataIndex: "partAllocationUnitNum"
+                dataIndex: "partAllocationUnitNum",
             },
             {
                 title: "组焊生产单元分配量",
-                dataIndex: "weldAllocationUnitNum"
+                dataIndex: "weldAllocationUnitNum",
             },
             {
                 title: "周期计划引用状态",
-                dataIndex: "cyclePlanRefStatus"
+                dataIndex: "cyclePlanRefStatus",
             },
             {
                 title: "下发mes状态",
-                dataIndex: "sendMesStatus"
+                dataIndex: "sendMesStatus",
             },
         ]
         return <Table columns={columnThree}
@@ -359,7 +370,7 @@ export default () => {
                 <Input placeholder="下达单号" />
             </Form.Item>
             <Form.Item >
-                <Button type="primary" onClick={()=>getData()}>
+                <Button type="primary" onClick={()=>getData(1)}>
                     查询
                 </Button>
             </Form.Item>
