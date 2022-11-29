@@ -7,7 +7,7 @@ import RequestUtil from "@utils/RequestUtil"
 import { productAssist } from "../managementDetailData.json"
 interface EditProps {
     id: string
-    type: 1 | 2 | 3
+    type: 1 | 2 | 3 | 4
 }
 
 export default forwardRef(function Edit({ id, type }: EditProps, ref) {
@@ -15,7 +15,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     const [contentForm] = Form.useForm()
     const [suspendForm] = Form.useForm()
     const [planDataSource, setPlanDataSource] = useState<{ [key: string]: any }>({})
-    const [contentDetails, setContentDetails] = useState<any[]>([])
     const [select, setSelect] = useState<string[]>([])
     const [selectRows, setSelectRows] = useState<any[]>([])
     const [taskNoticeId, setTaskNoticeId] = useState<string>("")
@@ -110,15 +109,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     const handleContentChange = (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
             const result = allFields.submit[fields.submit.length - 1]
-            // console.log(result, allFields, planDataSource, planDataSource[result.field], allFields.submit.map((item: any) => {
-            //     if (item.id === result.id) {
-            //         return ({
-            //             ...item,
-            //             editBefore: planDataSource[result.field]
-            //         })
-            //     }
-            //     return item
-            // }))
             if (result.field) {
                 contentForm.setFieldsValue({
                     submit: allFields.submit.map((item: any) => {
@@ -178,7 +168,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                     onChange={handleContentChange}
                     dataSource={planData?.editNoticeInfoVOList || []}
                 />}
-                {[2, 3].includes(type) && <>
+                {[2, 3, 4].includes(type) && <>
                     <Row>
                         <Button
                             type="primary"
