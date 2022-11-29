@@ -226,7 +226,6 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
-                            <Select.Option value={1} key="1">待开始</Select.Option>
                             <Select.Option value={2} key="2">组焊中</Select.Option>
                             <Select.Option value={3} key="3">已完成</Select.Option>
                         </Select>

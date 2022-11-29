@@ -18,11 +18,11 @@ export default function Comparison(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [form] = useForm();
-    const page = {
+    const [page, setPage] = useState({
         current: 1,
         pageSize: 100,
         total: 0
-    };
+    });
 
     const { loading, data: param } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -49,12 +49,17 @@ export default function Comparison(): React.ReactNode {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/productStructure/contrast/structure`, {
                 current: pagination?.current || 1,
-                pageSize: pagination?.pageSize || 100,
+                size: pagination?.pageSize || 100,
                 productCategoryId: params.id,
                 length: errors?.length || 0,
                 width: errors?.width || 0,
                 basicsWeight: errors?.basicsWeight || 0
             });
+            setPage({
+                pageSize: result?.size,
+                total: result?.total,
+                current: result?.current
+            })
             resole(result?.records)
         } catch (error) {
             reject(error)
