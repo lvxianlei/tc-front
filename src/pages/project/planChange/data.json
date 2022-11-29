@@ -396,6 +396,42 @@
                 "title": "已加工重量",
                 "dataIndex": "processedWeight"
             }
+        ],
+        "revertSuspend": [
+            {
+                "title": "塔形",
+                "dataIndex": "productCategoryName",
+                "edit": false
+            },
+            {
+                "title": "呼高",
+                "dataIndex": "productHeight",
+                "edit": false
+            },
+            {
+                "title": "杆塔号",
+                "dataIndex": "productNumber",
+                "edit": false
+            },
+            {
+                "title": "基数",
+                "dataIndex": "number",
+                "edit": false
+            },
+            {
+                "title": "单重（吨）",
+                "dataIndex": "monomerWeight",
+                "edit": false
+            },
+            {
+                "title": "总重（吨）",
+                "dataIndex": "totalWeight",
+                "edit": false
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description"
+            }
         ]
     }
 }

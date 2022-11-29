@@ -182,7 +182,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                     <EditableTable
                         haveNewButton={false}
                         form={suspendForm}
-                        columns={edit.suspend}
+                        columns={type === 4 ? edit.revertSuspend : edit.suspend}
                         dataSource={productGroupDetails} />
                 </>}
             </DetailContent>
