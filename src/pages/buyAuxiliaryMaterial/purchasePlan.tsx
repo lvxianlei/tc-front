@@ -76,6 +76,8 @@ export default function PurchasePlan() {
             // planPurchaseNum
 
             await editRef.current?.onSubmit();
+            setIsModalVisible(false);
+            history.go(0)
         }} key='submit'>提交</Button>,
         <Button type="primary"  onClick={async () =>{
             console.log(generateIds)
@@ -87,6 +89,8 @@ export default function PurchasePlan() {
             // planPurchaseNum
 
             await editRef.current?.onSubmitApproval();
+            setIsModalVisible(false);
+            history.go(0)
         }} key='submit'>保存并提交审批</Button>
     ]
     const buttonsEdit: {} | null | undefined = [
@@ -101,6 +105,8 @@ export default function PurchasePlan() {
             // planPurchaseNum
 
             await editRef.current?.onSubmit();
+            setIsModalVisible(false);
+            history.go(0)
         }} key='submit'>提交</Button>,
         <Button type="primary"  onClick={async () =>{
             console.log(generateIds)
@@ -109,6 +115,8 @@ export default function PurchasePlan() {
                 return
             }
             await editRef.current?.onSubmitApproval();
+            setIsModalVisible(false);
+            history.go(0)
         }} key='submit'>保存并提交审批</Button>,
         <Button type="primary"  onClick={async () =>{
             console.log(generateIds)
@@ -116,6 +124,8 @@ export default function PurchasePlan() {
             // planPurchaseNum
 
             await editRef.current?.onSubmitCancel();
+            setIsModalVisible(false);
+            history.go(0)
         }} key='submit'>撤销审批</Button>
     ]
     const onFilterSubmit = (value: any) => {
