@@ -764,6 +764,25 @@
                     }
                 ]
             },
+            {  
+                "label": "资料管理",
+                "icon": "customer",
+                "path": "/dataMngt",
+                "appName": "RD",
+                "authority": "tc_erp_rd_problem",
+                "items": [
+                    {
+                        "label": "工程资料管理",
+                        "path": "/dataMngt/EngineeringData",
+                        "authority": "tc_erp_rd_problem"
+                    },
+                    {
+                        "label": "资料存档管理",
+                        "path": "/dataMngt/dataArchiving",
+                        "authority": "tc_erp_rd_problem"
+                    }
+                ]
+            },
             {
                 "label": "问题单",
                 "icon": "RD_wentidanwentidan",
