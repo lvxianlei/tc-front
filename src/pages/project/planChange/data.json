@@ -337,7 +337,8 @@
             },
             {
                 "title": "变更前内容",
-                "dataIndex": "editBefore"
+                "dataIndex": "editBefore",
+                "disabled": true
             },
             {
                 "title": "变更后内容",
@@ -351,32 +352,32 @@
         "suspend": [
             {
                 "title": "塔形",
-                "dataIndex": "",
+                "dataIndex": "productCategoryName",
                 "edit": false
             },
             {
                 "title": "呼高",
-                "dataIndex": "",
+                "dataIndex": "productHeight",
                 "edit": false
             },
             {
                 "title": "杆塔号",
-                "dataIndex": "",
+                "dataIndex": "productNumber",
                 "edit": false
             },
             {
                 "title": "基数",
-                "dataIndex": "",
+                "dataIndex": "number",
                 "edit": false
             },
             {
                 "title": "单重（吨）",
-                "dataIndex": "",
+                "dataIndex": "monomerWeight",
                 "edit": false
             },
             {
                 "title": "总重（吨）",
-                "dataIndex": "",
+                "dataIndex": "totalWeight",
                 "edit": false
             },
             {

@@ -6,6 +6,7 @@ import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
 import { table } from "./data.json"
 import Edit from "./edit";
+import Detail from "./detail";
 const changeTypeEnum: { [key in 1 | 2 | 3]: string } = {
     1: "内容变更",
     2: "计划暂停",
@@ -15,6 +16,7 @@ export default function Index() {
     const history = useHistory()
     const editRef = useRef<any>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [editVisible, setEditVisible] = useState<boolean>(false)
     const [planChangeType, setPlanChangeType] = useState<1 | 2 | 3>(1)
     const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -76,7 +78,7 @@ export default function Index() {
 
     return <>
         <Modal
-            title="新增计划变更类型"
+            title="选择计划变更类型"
             visible={visible}
             maskClosable={false}
             destroyOnClose
@@ -106,7 +108,7 @@ export default function Index() {
             </Row>
         </Modal>
         <Modal
-            title={changeTypeEnum[planChangeType]}
+            title={`${editId === "create" ? "新增" : "编辑"}${changeTypeEnum[planChangeType]}`}
             width={1101}
             visible={editVisible}
             destroyOnClose
@@ -114,6 +116,16 @@ export default function Index() {
             onOk={handleEditOk}
         >
             <Edit id={editId} type={planChangeType} ref={editRef} />
+        </Modal>
+        <Modal
+            title={`${changeTypeEnum[planChangeType]}详情`}
+            width={1101}
+            visible={detailVisible}
+            destroyOnClose
+            onCancel={() => setDetailVisible(false)}
+            onOk={() => setDetailVisible(false)}
+        >
+            <Detail id={editId} type={planChangeType} />
         </Modal>
         <SearchTable
             path={`/tower-market/editNotice`}
@@ -147,7 +159,7 @@ export default function Index() {
                                 className='btn-operation-link'
                                 onClick={() => {
                                     setEditId(record?.id)
-                                    // setVisible(true)
+                                    setDetailVisible(true)
                                 }}
                             >查看</Button>
                             <Button
@@ -155,7 +167,8 @@ export default function Index() {
                                 className='btn-operation-link'
                                 onClick={() => {
                                     setEditId(record?.id)
-                                    setVisible(true)
+                                    setPlanChangeType(record?.editType)
+                                    setEditVisible(true)
                                 }}
                             >编辑</Button>
                         </>
