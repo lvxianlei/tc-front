@@ -6,7 +6,7 @@ import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 interface EditProps {
     id: string
-    type: 1 | 2 | 3
+    type: 1 | 2 | 3 | 4
 }
 
 export default function Detail({ id, type }: EditProps) {
@@ -26,7 +26,7 @@ export default function Detail({ id, type }: EditProps) {
                 columns={edit.content}
                 dataSource={planData?.editNoticeInfoVOList || []}
             />}
-            {[2, 3].includes(type) && <>
+            {[2, 3, 4].includes(type) && <>
                 <CommonTable
                     columns={edit.suspend}
                     dataSource={planData?.editNoticeProductVOList || []} />
