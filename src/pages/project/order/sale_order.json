@@ -90,7 +90,7 @@
             "disabled": true
         },
         {
-            "title": "合同要求交货日期",
+            "title": "订单要求交货日期",
             "dataIndex": "deliveryTime",
             "type": "date",
             "format": "YYYY-MM-DD"
@@ -153,8 +153,7 @@
             "title": "不含税单价",
             "dataIndex": "price",
             "type": "number",
-            "disabled": true,
-            "precision": 4
+            "disabled": true
         },
         {
             "title": "税率",
