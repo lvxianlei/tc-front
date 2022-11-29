@@ -439,7 +439,12 @@ export default function Apply(): React.ReactNode {
                                                                 })
                                                                 setPatchList([...newList])
                                                             }
-                                                        }>
+                                                        }
+                                                            onDropdownVisibleChange={async (open) => {
+                                                                let newData: any = {}
+                                                                newData[index] = await productNumbers(record?.productCategoryId)
+                                                                setNumbers(newData)
+                                                            }}>
                                                             {numbers && numbers[index]?.map((item: any) => {
                                                                 return <Select.Option key={item.id} value={item.productNumber}>{item.productNumber}</Select.Option>
                                                             })}
