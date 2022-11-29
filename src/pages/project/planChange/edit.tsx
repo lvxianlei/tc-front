@@ -14,12 +14,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     const [editForm] = Form.useForm()
     const [contentForm] = Form.useForm()
     const [suspendForm] = Form.useForm()
+    const [planDataSource, setPlanDataSource] = useState<{ [key: string]: any }>({})
+    const [contentDetails, setContentDetails] = useState<any[]>([])
     const [select, setSelect] = useState<string[]>([])
     const [selectRows, setSelectRows] = useState<any[]>([])
     const [taskNoticeId, setTaskNoticeId] = useState<string>("")
     const [productGroupDetails, setProductGroupDetails] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
-    const [productDetails, setProductDetails] = useState<any[]>([])
+    // const [productDetails, setProductDetails] = useState<any[]>([])
     const { loading, data: planData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/editNotice/detail?id=${id}`)
@@ -52,6 +54,15 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
         if (fields.taskNoticeId) {
             setTaskNoticeId(fields.taskNoticeId?.id)
             const taskNotice = fields.taskNoticeId.records[0]
+            setPlanDataSource({
+                materialStandard: taskNotice.materialStandard,
+                materialDemand: taskNotice.materialDemand,
+                weldingDemand: taskNotice.weldingDemand,
+                packDemand: taskNotice.packDemand,
+                galvanizeDemand: taskNotice.galvanizeDemand,
+                payAsk: taskNotice.payAsk,
+                peculiarDescription: taskNotice.peculiarDescription
+            })
             editForm.setFieldsValue({
                 internalNumber: taskNotice.internalNumber,
                 orderProjectName: taskNotice.orderProjectName,
@@ -96,6 +107,34 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
         setVisible(false)
     }
 
+    const handleContentChange = (fields: any, allFields: any) => {
+        if (fields.submit.length - 1 >= 0) {
+            const result = allFields.submit[fields.submit.length - 1]
+            // console.log(result, allFields, planDataSource, planDataSource[result.field], allFields.submit.map((item: any) => {
+            //     if (item.id === result.id) {
+            //         return ({
+            //             ...item,
+            //             editBefore: planDataSource[result.field]
+            //         })
+            //     }
+            //     return item
+            // }))
+            if (result.field) {
+                contentForm.setFieldsValue({
+                    submit: allFields.submit.map((item: any) => {
+                        if (item.id === result.id) {
+                            return ({
+                                ...item,
+                                editBefore: planDataSource[result.field]
+                            })
+                        }
+                        return item
+                    })
+                })
+            }
+        }
+    }
+
     return <>
         <Modal
             title="选择杆塔"
@@ -136,6 +175,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                 {type === 1 && <EditableTable
                     form={contentForm}
                     columns={edit.content}
+                    onChange={handleContentChange}
                     dataSource={planData?.editNoticeInfoVOList || []}
                 />}
                 {[2, 3].includes(type) && <>

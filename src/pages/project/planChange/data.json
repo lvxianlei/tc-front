@@ -338,7 +338,7 @@
             {
                 "title": "变更前内容",
                 "dataIndex": "editBefore",
-                "edit": false
+                "disabled": true
             },
             {
                 "title": "变更后内容",
