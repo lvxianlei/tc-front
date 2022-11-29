@@ -120,18 +120,21 @@ export default function Edit() {
         (Number(item.returnedAmount || 0) + Number(totalReturnedAmount || 0)).toString()
       ).toFixed(2)
     }), { totalReturnedRate: 0, totalReturnedAmount: 0 })
-    if ((editformData.submit || []).length <= 0) {
-      message.error('回款计划无数据，需新增！');
-      return
+    // if ((editformData.submit || []).length <= 0) {
+    //   message.error('回款计划无数据，需新增！');
+    //   return
+    // }
+    if (editformData.submit?.length > 0) {
+      if (planType === 0 && (totalReturnedRate !== "100.00")) {
+        message.error('计划回款总占比必须等于100');
+        return
+      }
+      if (planType === 1 && (totalReturnedAmount !== parseFloat(baseInfo.contractAmount).toFixed(2))) {
+        message.error('计划回款总金额必须等于合同总价');
+        return
+      }
     }
-    if (planType === 0 && (totalReturnedRate !== "100.00")) {
-      message.error('计划回款总占比必须等于100');
-      return
-    }
-    if (planType === 1 && (totalReturnedAmount !== parseFloat(baseInfo.contractAmount).toFixed(2))) {
-      message.error('计划回款总金额必须等于合同总价');
-      return
-    }
+
     const result = await saveRun({
       ...baseInfo,
       signCustomerName: baseInfo.signCustomer.value,
@@ -166,7 +169,7 @@ export default function Edit() {
   const handleBaseInfoChange = (fields: { [key: string]: any }, allFields: any) => {
     const { contractAmount, contractTotalWeight, customerCompany } = allFields
     if (fields.contractTotalWeight || fields.contractAmount) {
-      const contractPrice = ((contractAmount || "0") / (contractTotalWeight || "1")).toFixed(2)
+      const contractPrice = ((contractAmount || "0") / (contractTotalWeight || "1")).toFixed(6)
       form.setFieldsValue({ contractPrice: contractPrice || "0.00" })
       if (fields.contractAmount) {
         const editFormData = editform.getFieldsValue()
