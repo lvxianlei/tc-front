@@ -44,6 +44,7 @@ export default function ContractMngt(): JSX.Element {
             resove(true)
             type==='save'&&history.go(0)
             type==='approvalSave'&&history.go(0)
+            type==='cancelSave'&&history.go(0)
         } catch (error) {
             reject(false)
         }
