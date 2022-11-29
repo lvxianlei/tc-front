@@ -524,7 +524,7 @@ export default function TowerInformation(): React.ReactNode {
                 }
             })
             if (tip.findIndex(value => value === false) !== -1) {
-                message.warning('仅提料中状态可进行完成放样！')
+                message.warning('仅放样中状态可进行完成放样！')
             } else {
                 await RequestUtil.post(`/tower-science/productSegment/complete`, {
                     productSegmentIds: selectedKeys
