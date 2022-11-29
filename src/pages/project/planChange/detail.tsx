@@ -28,7 +28,7 @@ export default function Detail({ id, type }: EditProps) {
             />}
             {[2, 3, 4].includes(type) && <>
                 <CommonTable
-                    columns={edit.suspend}
+                     columns={type === 4 ? edit.revertSuspend : edit.suspend}
                     dataSource={planData?.editNoticeProductVOList || []} />
             </>}
         </DetailContent>
