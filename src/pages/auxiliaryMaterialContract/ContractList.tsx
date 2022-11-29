@@ -84,7 +84,7 @@ export default function ContractMngt(): JSX.Element {
                     }}>取消</Button>
                     <Button type='primary' onClick={()=>handleEditModalOk('save')}>保存</Button>
                     <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')}>保存并发起审批</Button>
-                    <Button type='primary' onClick={()=>handleEditModalOk('cancelSave')}>撤销</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('cancelSave')}>撤销审批</Button>
                 </Space>:<Space>
                     <Button onClick={() => {
                         editRef.current?.resetFields()
@@ -147,7 +147,7 @@ export default function ContractMngt(): JSX.Element {
                         dataIndex: "opration",
                         fixed: "right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" className="btn-operation-link" disabled={records.contractStatus === 3 || records.contractStatus === 4 || records.contractStatus === 5 ||records.approval===1}
+                            <Button type="link" className="btn-operation-link" disabled={records.contractStatus === 3 || records.contractStatus === 4 || records.contractStatus === 5 }
                                     onClick={() => {
                                         setOprationType("edit")
                                         setDetailId(records.id)

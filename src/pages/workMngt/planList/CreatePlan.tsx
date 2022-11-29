@@ -328,7 +328,14 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     关闭
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick('save')}>
+                <Button key="create" type="primary" onClick={() => {
+                    if([0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                        handleCreateClick('save')
+                    }
+                    else{
+                        message.error("当前正在审批中，请撤销审批后再进行修改！")
+                    }
+                }}>
                     保存
                 </Button>,
                 <Button key="create" type="primary" onClick={() => {
