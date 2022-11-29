@@ -46,7 +46,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleAddModalOkNumber = async () => {
         const baseData = await addCollectionNumberForm.validateFields();
         let ix = count,
-        materialListCopy = materialList
+        materialListCopy = popDataList
         // popDataListCopy = popDataList;
         for (let i = 0; i < baseData.name; i+=1) {
             const result = {
