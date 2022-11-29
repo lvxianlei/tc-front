@@ -626,6 +626,11 @@
             "width": 100
         },
         {
+            "title": "合同名称",
+            "dataIndex": "contractName",
+            "width": 100
+        },
+        {
             "title": "工程名称",
             "dataIndex": "projectName",
             "width": 100
