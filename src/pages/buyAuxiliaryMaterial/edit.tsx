@@ -196,7 +196,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             }
             else{
                 await message.error("不可撤销...")
-                resove(true)
+                throw new Error('不可撤销')
             }
         } catch (error) {
             reject(false)
