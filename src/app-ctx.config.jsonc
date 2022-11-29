@@ -743,6 +743,11 @@
                 "authority": "tc_erp_rd_business",
                 "items": [
                     {
+                        "label": "明细变更申请",
+                        "path": "/businessDisposal/requestForChange",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
                         "label": "补件申请",
                         "path": "/businessDisposal/patchApplication",
                         "authority": "tc_erp_rd_order_adjustment"
@@ -766,6 +771,25 @@
                         "label": "不合格处置单",
                         "path": "/businessDisposal/unqualifiedDisposal",
                         "authority": "tc_erp_rd_order_adjustment"
+                    }
+                ]
+            },
+            {  
+                "label": "资料管理",
+                "icon": "customer",
+                "path": "/dataMngt",
+                "appName": "RD",
+                "authority": "tc_erp_rd_problem",
+                "items": [
+                    {
+                        "label": "工程资料管理",
+                        "path": "/dataMngt/EngineeringData",
+                        "authority": "tc_erp_rd_problem"
+                    },
+                    {
+                        "label": "资料存档管理",
+                        "path": "/dataMngt/dataArchiving",
+                        "authority": "tc_erp_rd_problem"
                     }
                 ]
             },
