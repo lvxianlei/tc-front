@@ -468,7 +468,7 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
     })
     const onSubmitApproval = () => new Promise(async (resove, reject) => {
         try {
-            if([0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+            if([undefined,0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
                 const baseInfo = await baseForm.validateFields()
                 const freightInfo = await freightForm.validateFields()
                 const stevedoringInfo = await stevedoringForm.validateFields()
