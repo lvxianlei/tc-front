@@ -10,8 +10,7 @@
         },
         {
             "title": "合同编号",
-            "dataIndex": "contractNumber",
-            "required": true
+            "dataIndex": "contractNumber"
         },
         {
             "title": "内部合同编号",
@@ -34,10 +33,6 @@
             "title": "合同单价(元/吨)",
             "dataIndex": "contractPrice",
             "disabled": true,
-            "min": "0.01",
-            "max": "10000000000.00",
-            "step": "0.01",
-            "precision": 2,
             "prefix": "￥"
         },
         {
@@ -45,11 +40,7 @@
             "dataIndex": "contractAmount",
             "type": "number",
             "required": true,
-            "min": "0.01",
-            "max": "10000000000.00",
-            "step": "0.01",
             "stringMode": false,
-            "precision": 2,
             "prefix": "￥"
         },
         {
@@ -191,20 +182,17 @@
             "title": "合同签订日期",
             "dataIndex": "signContractTime",
             "type": "date",
-            "format": "YYYY-MM-DD",
-            "required": true
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "签订人",
-            "dataIndex": "signUserName",
-            "required": true
+            "dataIndex": "signUserName"
         },
         {
             "title": "要求交货日期",
             "dataIndex": "deliveryTime",
             "type": "date",
-            "format": "YYYY-MM-DD",
-            "required": true
+            "format": "YYYY-MM-DD"
         },
         {
             "title": "有无技术协议",
@@ -291,14 +279,12 @@
         {
             "title": "合同份数",
             "dataIndex": "contractFraction",
-            "type": "number",
-            "required": true
+            "type": "number"
         },
         {
             "title": "合同页数",
             "dataIndex": "contractPage",
-            "type": "number",
-            "required": true
+            "type": "number"
         },
         {
             "title": "合同计划状态",

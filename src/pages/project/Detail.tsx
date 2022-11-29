@@ -8,7 +8,7 @@ import Base from "./baseInfo/Overview"
 import BidDoc from "./bidDoc/Overview"
 import QualificationReview from "./qualificationReview/Overview"
 import BidResult from "./bidResult/Overview"
-import FrameAgreement from './frameAgreement/Overview'
+import FrameAgreement from './frameAgreement'
 import ProductGroup from './productGroup'
 import SalesPlan from './salesPlan'
 // 合同列表
@@ -36,7 +36,7 @@ export default function ManagementDetail(): React.ReactNode {
         tab_bidDoc: <BidDoc id={params.id} />,
         tab_qualificationReview: <QualificationReview id={params.id} />,
         tab_bidResult: <BidResult id={params.id} />,
-        tab_frameAgreement: <FrameAgreement id={params.id} />,
+        tab_frameAgreement: <FrameAgreement />,
         tab_contract: <>
             <div style={{ paddingTop: 16 }}>
                 <Radio.Group defaultValue={"contract"} onChange={operationChange}>

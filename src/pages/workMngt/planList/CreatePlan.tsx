@@ -46,7 +46,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleAddModalOkNumber = async () => {
         const baseData = await addCollectionNumberForm.validateFields();
         let ix = count,
-        materialListCopy = materialList
+        materialListCopy = popDataList
         // popDataListCopy = popDataList;
         for (let i = 0; i < baseData.name; i+=1) {
             const result = {
@@ -236,20 +236,20 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写长度、宽度、数量！");
                 return false;
             }
-            let find = false;
-            for (var i = 0; i < materialList.length; i++) {
-                for (var j = i + 1; j < materialList.length; j++) {
-                    if (materialList[i].materialName === materialList[j].materialName && materialList[i].structureSpec===materialList[j].structureSpec&& materialList[i].structureTexture===materialList[j].structureTexture&& materialList[i].length===materialList[j].length&& materialList[i].width===materialList[j].width) { 
-                        find = true; 
-                        break;
-                    }
-                }
-                if (find) break;
-            }
-            if (find) {
-                message.error("存在重复数据，请修改！");
-                return false;
-            }
+            // let find = false;
+            // for (var i = 0; i < materialList.length; i++) {
+            //     for (var j = i + 1; j < materialList.length; j++) {
+            //         if (materialList[i].materialName === materialList[j].materialName && materialList[i].structureSpec===materialList[j].structureSpec&& materialList[i].structureTexture===materialList[j].structureTexture&& materialList[i].length===materialList[j].length&& materialList[i].width===materialList[j].width) { 
+            //             find = true; 
+            //             break;
+            //         }
+            //     }
+            //     if (find) break;
+            // }
+            // if (find) {
+            //     message.error("存在重复数据，请修改！");
+            //     return false;
+            // }
             saveRun({
                 purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",

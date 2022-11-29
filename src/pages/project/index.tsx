@@ -132,6 +132,11 @@ export default function Management(): React.ReactNode {
                     <Select.Option value={4}>项目结束</Select.Option>
                 </Select>
             },
+            // {
+            //     name: 'createUserName',
+            //     label: '制单人',
+            //     children: <Input placeholder="制单人" style={{ width: 210 }} />
+            // },
             {
                 name: 'fuzzyQuery',
                 label: "模糊查询项",
