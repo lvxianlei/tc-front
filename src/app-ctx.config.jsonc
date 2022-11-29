@@ -738,6 +738,11 @@
                 "authority": "tc_erp_rd_business",
                 "items": [
                     {
+                        "label": "明细变更申请",
+                        "path": "/businessDisposal/requestForChange",
+                        "authority": "tc_erp_rd_order_adjustment"
+                    },
+                    {
                         "label": "补件申请",
                         "path": "/businessDisposal/patchApplication",
                         "authority": "tc_erp_rd_order_adjustment"
