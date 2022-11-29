@@ -14,7 +14,7 @@ import TowerLoftingAssign from './TowerLoftingAssign';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
-import { towerStructureOptions } from '../../../configuration/DictionaryOptions';
+import { patternTypeOptions, towerStructureOptions } from '../../../configuration/DictionaryOptions';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
@@ -136,7 +136,20 @@ export default function TowerInformation(): React.ReactNode {
             title: '段模式',
             width: 80,
             dataIndex: 'patternName',
-            editable: false
+            editable: true,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "pattern"]} initialValue={record?.pattern}>
+                    <Select style={{ width: '120px' }} placeholder="请选择段模式" onChange={() => rowChange(index)} allowClear>
+                        {
+                            patternTypeOptions?.map((item: any, index: number) =>
+                                <Select.Option value={item.id} key={index}>
+                                    {item.name}
+                                </Select.Option>
+                            )
+                        }
+                    </Select>
+                </Form.Item>
+            )
         },
         {
             key: 'trialAssembleName',
