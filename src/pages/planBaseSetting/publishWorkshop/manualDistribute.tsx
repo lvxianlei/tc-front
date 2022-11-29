@@ -1,10 +1,10 @@
 import React, { Key, ReactElement, useState, useCallback } from "react"
-import { welding, structure } from "./data.json"
+import {welding, structure, componentdetails} from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../../utils/RequestUtil"
 import { useHistory, useParams } from "react-router"
 import { Button, Col, Form, Input, message, Modal, Pagination, Radio, Row, Select, Space } from "antd"
-import { CommonAliTable } from "../../common"
+import {CommonAliTable, CommonTable, DetailTitle} from "../../common"
 import styles from "../../common/CommonTable.module.less"
 interface CountProps {
     totalNumber: number
@@ -16,7 +16,7 @@ interface CountProps {
 
 export default function ManualDistribute(): ReactElement {
     const history = useHistory()
-    const params = useParams<{ id: string, issuedNumber: string, productCategory: string }>()
+    const params = useParams<{ id: string, issuedNumber: string, productCategory: string,status:string }>()
     const [pagenation, setPagenation] = useState<any>({ current: 1, pageSize: 10 })
     const [form] = Form.useForm()
     const [workshopForm] = Form.useForm()
@@ -29,7 +29,28 @@ export default function ManualDistribute(): ReactElement {
         totalHolesNum: 0
     })
     const [status, setStatus] = useState<number>(1)
-
+    const  componentdetails = [
+        {
+            "title": "下达单",
+            "dataIndex": "issuedNumber"
+        },
+        {
+            "title": "零件号",
+            "dataIndex": "code"
+        },
+        {
+            "title": "材料",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "工艺",
+            "dataIndex": "craft"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        }
+    ]
     const { data: listData } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-aps/productionUnit?size=10000`);
@@ -98,6 +119,19 @@ export default function ManualDistribute(): ReactElement {
         }
     }), { refreshDeps: [pagenation.current, pagenation.pageSize, status] })
 
+    const { data:autoDistributeData,run:autoDistributeDataRun } = useRequest<any>((params: string[]) => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.post(`/tower-aps/workshopOrder/autoDistribute`, params);
+            form.setFieldsValue({
+                dataList: result?.needUpdateList||[]
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+
     const onSelectChange = (_: Key, selectedRowKeys: any[]) => {
         if (status === 1) {
             setSelectedRowKeys(selectedRowKeys)
@@ -153,6 +187,41 @@ export default function ManualDistribute(): ReactElement {
                 }
             }),
             onCancel: () => workshopForm.resetFields()
+        })
+    }
+
+    const handleAutoClick = () => {
+        Modal.confirm({
+            title: "自动分配生产单元",
+            icon: null,
+            content: "确定重新自动分配生产单元？",
+            onOk: async () => new Promise(async (resove, reject) => {
+                const result =    await  autoDistributeDataRun([params.id])
+                if((result&&result?.needUpdateList&&result?.needUpdateList.length>0)||(result&&result?.notMatchList&&result?.notMatchList.length>0)){
+
+                    Modal.warn({
+                        title: "分配生产单元提示",
+                        icon: null,
+                        okText: "确定",
+                        width:'80%',
+                        content: <>
+                            {result&&result?.notMatchList&&result?.notMatchList.length>0&&<>
+                                <DetailTitle  title='构件未匹配到生产单元，请配置分配规则'/>
+                                <CommonTable columns={componentdetails} dataSource={result?.notMatchList|| []} pagination={false}/>
+                            </>}
+                        </>,
+                        onOk: async () => {
+                            history.go(0)
+                        }
+                    })
+                }else{
+                    await message.success("快速分配单元完成")
+                    history.go(0)
+                }
+            }),
+            onCancel: () => {
+
+            }
         })
     }
 
@@ -214,6 +283,7 @@ export default function ManualDistribute(): ReactElement {
                 <Radio.Button value={2}>组焊明细</Radio.Button>
             </Radio.Group>
             <Button type="primary" disabled={selectedRowKeys.length <= 0} onClick={handleClick}>手动分配单元</Button>
+            <Button type="primary" disabled={params.status=="3"||params.status==="4"}  onClick={handleAutoClick}>自动分配单元</Button>
         </Space>
         <Row style={{ paddingLeft: 20 }}>
             <Space>

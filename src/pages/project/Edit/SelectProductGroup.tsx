@@ -81,7 +81,7 @@ export default function SelectProductGroup(props: any): JSX.Element {
                 <Col style={{ height: 32 }}>
                     <Form.Item
                         name="contractName"
-                        label="工程名称"
+                        label="项目工程名称"
                         style={{ height: 32, fontSize: 12 }}
                     >
                         <Input />
