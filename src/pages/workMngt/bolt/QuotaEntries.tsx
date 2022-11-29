@@ -52,11 +52,11 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             dataIndex: 'segmentName'
         },
         {
-            key: 'boltPattern',
+            key: 'boltPatternName',
             title: '螺栓定额条目',
-            dataIndex: 'boltPattern',
+            dataIndex: 'boltPatternName',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={["data", index, "boltPattern"]}>
+                <Form.Item name={["data", index, "boltPatternName"]}>
                     <Select size="small" onChange={(e) => {
                         const values = form?.getFieldsValue(true)?.data;
                         if (e === '新放') {
@@ -158,7 +158,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [] })
+    }), { refreshDeps: [id] })
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
