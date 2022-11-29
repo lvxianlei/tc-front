@@ -5,13 +5,14 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, Select } from 'antd';
+import { Spin, Form, Select, Input } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './BoltList.module.less';
 import { FixedType } from 'rc-table/lib/interface';
 import { patternTypeOptions } from "../../../configuration/DictionaryOptions";
+import SelectUser from "../../common/SelectUser";
 
 export interface EditProps {
     onSubmit: () => void
@@ -59,7 +60,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
                     <Select size="small" onChange={(e) => {
                         const selectName = patternTypeOptions?.filter(res => res?.id === e)[0]?.name;
                         const values = form?.getFieldsValue(true)?.data;
-                        if(selectName === '新放') {
+                        if (selectName === '新放') {
                             values[index] = {
                                 ...values[index],
                                 boltPrice: record?.projectPriceVO?.boltCheck,
@@ -114,7 +115,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             dataIndex: 'boltUser',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={["data", index, "boltUser"]}>
-                    <Select size="small">
+                    <Select size="small" mode="multiple">
                         {
                             userDatas?.user.map((res: any) => {
                                 return <Select.Option value={res.userId} key={res.userId}>{res.userName}</Select.Option>
@@ -130,7 +131,7 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             dataIndex: 'boltCheckUser',
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={["data", index, "boltCheckUser"]}>
-                    <Select size="small">
+                    <Select size="small" mode="multiple">
                         {
                             userDatas?.check.map((res: any) => {
                                 return <Select.Option value={res.userId} key={res.userId}>{res.userName}</Select.Option>
@@ -145,8 +146,20 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/boltRecord/getBoltSegment?id=${id}`);
-            form.setFieldsValue({ data: result })
-            setDetailData(result || [])
+            form.setFieldsValue({ data: result.map((res: any) => {
+                return {
+                    ...res,
+                    boltUser: res?.boltUser?.split(','),
+                    boltCheckUser: res?.boltCheckUser?.split(',') 
+                }
+            }) })
+            setDetailData(result.map((res: any) => {
+                return {
+                    ...res,
+                    boltUser: res?.boltUser?.split(','),
+                    boltCheckUser: res?.boltCheckUser?.split(',') 
+                }
+            }) || [])
             resole(result)
         } catch (error) {
             reject(error)
@@ -165,7 +178,13 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const data = form.getFieldsValue(true).data;
-            await saveRun(data)
+            await saveRun(data.map((res: any) => {
+                return {
+                    ...res,
+                    boltUser: res?.boltUser?.join(','),
+                    boltCheckUser: res?.boltCheckUser?.join(',')
+                }
+            }))
             resolve(true);
         } catch (error) {
             reject(false)
