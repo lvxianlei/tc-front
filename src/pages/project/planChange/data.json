@@ -21,13 +21,13 @@
             "width": 100
         },
         {
-            "title": "合同名称--",
-            "dataIndex": "",
+            "title": "订单工程名称",
+            "dataIndex": "orderProjectName",
             "width": 100
         },
         {
-            "title": "客户名称--",
-            "dataIndex": "",
+            "title": "客户名称",
+            "dataIndex": "customerCompany",
             "width": 100
         },
         {
@@ -260,8 +260,204 @@
                 "disabled": true
             },
             {
-                "title": "客户名称--",
-                "dataIndex": "",
+                "title": "客户名称",
+                "dataIndex": "customerCompany",
+                "disabled": true
+            },
+            {
+                "title": "变更基数",
+                "dataIndex": "editBaseNum",
+                "disabled": true
+            },
+            {
+                "title": "总重量",
+                "dataIndex": "editWeight",
+                "disabled": true
+            },
+            {
+                "title": "业务经理",
+                "dataIndex": "ascriptionName",
+                "disabled": true
+            },
+            {
+                "title": "归属区域",
+                "dataIndex": "region",
+                "disabled": true
+            },
+            {
+                "title": "修改说明",
+                "dataIndex": "editRemark",
+                "type": "textarea"
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description",
+                "type": "textarea"
+            }
+        ],
+        "content": [
+            {
+                "title": "变更内容",
+                "dataIndex": "field",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "原材料标准",
+                        "value": "materialStandard"
+                    },
+                    {
+                        "label": "原材料要求",
+                        "value": "materialDemand"
+                    },
+                    {
+                        "label": "焊接要求",
+                        "value": "weldingDemand"
+                    },
+                    {
+                        "label": "包装要求",
+                        "value": "packDemand"
+                    },
+                    {
+                        "label": "镀锌要求",
+                        "value": "galvanizeDemand"
+                    },
+                    {
+                        "label": "结算要求",
+                        "value": "payAsk"
+                    },
+                    {
+                        "label": "备注",
+                        "value": "peculiarDescription"
+                    },
+                    {
+                        "label": "确认备注",
+                        "value": "rdDescription"
+                    }
+                ]
+            },
+            {
+                "title": "变更前内容",
+                "dataIndex": "editBefore",
+                "disabled": true
+            },
+            {
+                "title": "变更后内容",
+                "dataIndex": "editAfter"
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description"
+            }
+        ],
+        "suspend": [
+            {
+                "title": "塔形",
+                "dataIndex": "productCategoryName",
+                "edit": false
+            },
+            {
+                "title": "呼高",
+                "dataIndex": "productHeight",
+                "edit": false
+            },
+            {
+                "title": "杆塔号",
+                "dataIndex": "productNumber",
+                "edit": false
+            },
+            {
+                "title": "基数",
+                "dataIndex": "number",
+                "edit": false
+            },
+            {
+                "title": "单重（吨）",
+                "dataIndex": "monomerWeight",
+                "edit": false
+            },
+            {
+                "title": "总重（吨）",
+                "dataIndex": "totalWeight",
+                "edit": false
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description"
+            },
+            {
+                "title": "是否下发车间",
+                "dataIndex": "isIssuedWorkshop"
+            },
+            {
+                "title": "生产状态",
+                "dataIndex": "productionStatus"
+            },
+            {
+                "title": "已加工重量",
+                "dataIndex": "processedWeight"
+            }
+        ],
+        "revertSuspend": [
+            {
+                "title": "塔形",
+                "dataIndex": "productCategoryName",
+                "edit": false
+            },
+            {
+                "title": "呼高",
+                "dataIndex": "productHeight",
+                "edit": false
+            },
+            {
+                "title": "杆塔号",
+                "dataIndex": "productNumber",
+                "edit": false
+            },
+            {
+                "title": "基数",
+                "dataIndex": "number",
+                "edit": false
+            },
+            {
+                "title": "单重（吨）",
+                "dataIndex": "monomerWeight",
+                "edit": false
+            },
+            {
+                "title": "总重（吨）",
+                "dataIndex": "totalWeight",
+                "edit": false
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description"
+            }
+        ]
+    },
+    "detail": {
+        "base": [
+            {
+                "title": "变更单据号",
+                "dataIndex": "editNumber",
+                "disabled": true
+            },
+            {
+                "title": "销售计划号",
+                "dataIndex": "planNumber"
+            },
+            {
+                "title": "内部合同号",
+                "dataIndex": "internalNumber",
+                "disabled": true
+            },
+            {
+                "title": "工程名称",
+                "dataIndex": "orderProjectName",
+                "disabled": true
+            },
+            {
+                "title": "客户名称",
+                "dataIndex": "customerCompany",
                 "disabled": true
             },
             {
