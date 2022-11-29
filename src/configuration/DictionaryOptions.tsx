@@ -56,7 +56,7 @@ export enum DictionaryEnums {
     REFERENCE_ROOM = 1012,
     DRAWING_DATA_TYPE = 1013,
     DOCUMENT_TYPE = 1014,
-    FILE_TYPE = 1015
+    FILE_TYPE = 1015,
 }
 
 let productType: IDict[] | undefined = [];
