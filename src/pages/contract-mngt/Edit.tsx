@@ -410,40 +410,45 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
 
     const onSubmit = () => new Promise(async (resove, reject) => {
         try {
-            const baseInfo = await baseForm.validateFields()
-            const freightInfo = await freightForm.validateFields()
-            const stevedoringInfo = await stevedoringForm.validateFields()
-            const values = {
-                ...baseInfo,
-                fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorId: AuthUtil.getUserInfo().user_id,
-                supplierId: baseInfo.supplier.id,
-                supplierName: baseInfo.supplier.value,transportBearDto: {
-                    ...freightInfo,
-                    transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
-                    transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
-                },
-                unloadBearDto: {
-                    ...stevedoringInfo,
-                    unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
-                    unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
-                },
-                materialContractDetailDtos: materialList.map((item: any) => {
-                    delete item.id
-                    return ({
-                        ...item,
-                        taxPrice: item.taxPrice,
-                        price: item.price,
-                        taxTotalAmount: item.taxTotalAmount,
-                        totalAmount: item.totalAmount,
-                        structureTexture: item.structureTexture,
-                        structureTextureId: item.structureTextureId,
+            if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseInfo = await baseForm.validateFields()
+                const freightInfo = await freightForm.validateFields()
+                const stevedoringInfo = await stevedoringForm.validateFields()
+                const values = {
+                    ...baseInfo,
+                    fileIds: attchsRef.current.getDataSource().map(item => item.id),
+                    operatorId: AuthUtil.getUserInfo().user_id,
+                    supplierId: baseInfo.supplier.id,
+                    supplierName: baseInfo.supplier.value,transportBearDto: {
+                        ...freightInfo,
+                        transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
+                        transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
+                    },
+                    unloadBearDto: {
+                        ...stevedoringInfo,
+                        unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
+                        unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
+                    },
+                    materialContractDetailDtos: materialList.map((item: any) => {
+                        delete item.id
+                        return ({
+                            ...item,
+                            taxPrice: item.taxPrice,
+                            price: item.price,
+                            taxTotalAmount: item.taxTotalAmount,
+                            totalAmount: item.totalAmount,
+                            structureTexture: item.structureTexture,
+                            structureTextureId: item.structureTextureId,
+                        })
                     })
-                })
+                }
+                await saveRun(values)
+                message.success("保存成功...")
+                resove(true)
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
             }
-            await saveRun(values)
-            message.success("保存成功...")
-            resove(true)
         } catch (error) {
             reject(false)
         }

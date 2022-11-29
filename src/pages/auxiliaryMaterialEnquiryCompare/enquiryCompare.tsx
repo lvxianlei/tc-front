@@ -142,7 +142,7 @@ export default function EnquiryCompare() {
                                     disabled={records.comparisonStatus !== 1 || records.isRelate !== 0}
                                 >删除</Button>
                             </Popconfirm>
-                            <Button disabled={records.comparisonStatus !== 1 || records.isRelate !== 0 ||records.approval===1} type="link" className="btn-operation-link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1 || records.isRelate !== 0 } type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)

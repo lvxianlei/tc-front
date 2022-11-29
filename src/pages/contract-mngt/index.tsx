@@ -158,7 +158,7 @@ export default function ContractMngt(): JSX.Element {
                         dataIndex: "opration",
                         fixed: "right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" className="btn-operation-link" disabled={records.isReceiptRef === 1||records.approval===1}
+                            <Button type="link" className="btn-operation-link" disabled={records.isReceiptRef === 1}
                                 onClick={() => {
                                     setOprationType("edit")
                                     setDetailId(records.id)

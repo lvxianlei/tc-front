@@ -119,7 +119,7 @@ export default function ContractMngt() {
                         fixed: "right",
                         width: 270,
                         render: (_: any, records: any) => <>
-                            <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}/${records?.approval}`}>询价信息</Link>
+                            <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}/${records.approval}`}>询价信息</Link>
                             <Button disabled={records.comparisonStatus !== 1 } type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
@@ -142,7 +142,7 @@ export default function ContractMngt() {
                                     disabled={records.isRelate!==0}
                                 >删除</Button>
                             </Popconfirm>
-                            <Button disabled={records.comparisonStatus !== 1||records.approval===1} type="link" className="btn-operation-link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)

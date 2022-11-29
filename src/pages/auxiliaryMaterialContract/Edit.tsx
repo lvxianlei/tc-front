@@ -407,60 +407,64 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
         setDisabled(false)
     }
     const onSubmit = () => new Promise(async (resove, reject) => {
-
         try {
-            const baseInfo = await baseForm.validateFields()
-            const freightInfo = await freightForm.validateFields()
-            const stevedoringInfo = await stevedoringForm.validateFields()
-            // 再次更新计算价格
-            // console.log(popDataList)
-            // console.log(materialList)
-            // debugger
-            let list = updataAllPrice(materialList)
-            setMaterialList(list)
-            setPopDataList(list)
-            // console.log(list)
-            const values = {
-                ...baseInfo,
-                isApproval: false,
-                fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorId: AuthUtil.getUserInfo().user_id,
-                supplierId: baseInfo.supplier.id,
-                supplierName: baseInfo.supplier.value,
-                tax: baseInfo.taxRate,
-                transportBear: {
-                    ...freightInfo,
-                    transportTaxPrice:freightInfo.transportBear == 2 ? freightInfo.transportTaxPrice:0,
-                    transportPrice:freightInfo.transportBear == 2 ? freightInfo.transportPrice:0,
-                    transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
-                    transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
-                },
-                unloadBear: {
-                    ...stevedoringInfo,
-                    unloadTaxPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadTaxPrice:0,
-                    unloadPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadPrice:0,
-                    unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
-                    unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
-                },
-                materialAuxiliaryContractDetails: list.map((item: any) => {
-                    let obj = {
-                        ...item,
-                        taxPrice: Number(item.taxOffer).toFixed(6),
-                        price: Number(item.offer).toFixed(6),
-                        totalTaxAmount: Number(item.totalTaxAmount).toFixed(6),
-                        totalAmount: Number(item.totalAmount).toFixed(6),
-                        // taxTotalAmount: item.taxTotalAmount,
-                        // totalAmount: item.totalAmount,
-                        comparisonPriceId: item.comparisonPriceId,
-                        // comparisonPriceDetailId:item.id,
-                        // comparisonPriceNumber:'0123456789'
-                    }
-                    return (obj)
-                })
+            if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseInfo = await baseForm.validateFields()
+                const freightInfo = await freightForm.validateFields()
+                const stevedoringInfo = await stevedoringForm.validateFields()
+                // 再次更新计算价格
+                // console.log(popDataList)
+                // console.log(materialList)
+                // debugger
+                let list = updataAllPrice(materialList)
+                setMaterialList(list)
+                setPopDataList(list)
+                // console.log(list)
+                const values = {
+                    ...baseInfo,
+                    isApproval: false,
+                    fileIds: attchsRef.current.getDataSource().map(item => item.id),
+                    operatorId: AuthUtil.getUserInfo().user_id,
+                    supplierId: baseInfo.supplier.id,
+                    supplierName: baseInfo.supplier.value,
+                    tax: baseInfo.taxRate,
+                    transportBear: {
+                        ...freightInfo,
+                        transportTaxPrice:freightInfo.transportBear == 2 ? freightInfo.transportTaxPrice:0,
+                        transportPrice:freightInfo.transportBear == 2 ? freightInfo.transportPrice:0,
+                        transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
+                        transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
+                    },
+                    unloadBear: {
+                        ...stevedoringInfo,
+                        unloadTaxPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadTaxPrice:0,
+                        unloadPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadPrice:0,
+                        unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
+                        unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
+                    },
+                    materialAuxiliaryContractDetails: list.map((item: any) => {
+                        let obj = {
+                            ...item,
+                            taxPrice: Number(item.taxOffer).toFixed(6),
+                            price: Number(item.offer).toFixed(6),
+                            totalTaxAmount: Number(item.totalTaxAmount).toFixed(6),
+                            totalAmount: Number(item.totalAmount).toFixed(6),
+                            // taxTotalAmount: item.taxTotalAmount,
+                            // totalAmount: item.totalAmount,
+                            comparisonPriceId: item.comparisonPriceId,
+                            // comparisonPriceDetailId:item.id,
+                            // comparisonPriceNumber:'0123456789'
+                        }
+                        return (obj)
+                    })
+                }
+                await saveRun(values)
+                message.success("保存成功...")
+                resove(true)
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
             }
-            await saveRun(values)
-            message.success("保存成功...")
-            resove(true)
         } catch (error) {
             console.log(error)
             reject(false)

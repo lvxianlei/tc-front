@@ -216,7 +216,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         <Modal
             width={1011}
             visible={visible}
-            title="选择辅财明细"
+            title="选择辅材明细"
             onCancel={() => {
                 modalRef.current?.resetFields()
                 setVisible(false)
