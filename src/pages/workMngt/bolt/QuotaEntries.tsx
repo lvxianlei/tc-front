@@ -58,9 +58,8 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
             render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={["data", index, "boltPattern"]}>
                     <Select size="small" onChange={(e) => {
-                        const selectName = patternTypeOptions?.filter(res => res?.id === e)[0]?.name;
                         const values = form?.getFieldsValue(true)?.data;
-                        if (selectName === '新放') {
+                        if (e === '新放') {
                             values[index] = {
                                 ...values[index],
                                 boltPrice: record?.projectPriceVO?.boltCheck,
@@ -82,13 +81,8 @@ export default forwardRef(function QuotaEntries({ id }: QuotaEntriesProps, ref) 
                             setDetailData([...values])
                         }
                     }}>
-                        {
-                            patternTypeOptions?.map((item: any, index: number) =>
-                                <Select.Option value={item.id} key={index}>
-                                    {item.name}
-                                </Select.Option>
-                            )
-                        }
+                        <Select.Option value={'新放'} key={0}>新放</Select.Option>
+                        <Select.Option value={'套用'} key={1}>套用</Select.Option>
                     </Select>
                 </Form.Item>
             )
