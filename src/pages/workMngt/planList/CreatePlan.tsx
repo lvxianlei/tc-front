@@ -21,7 +21,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [addMaterialList, setAddMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
-
+    const [detail,setDetail] =  useState<any>({})
     let [count, setCount] = useState<number>(0);
     let [indexNumber, setIndexNumber] = useState<number>(0);
     let [dataCopy, setDataCopy] = useState<any[]>([]);
@@ -46,7 +46,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleAddModalOkNumber = async () => {
         const baseData = await addCollectionNumberForm.validateFields();
         let ix = count,
-        materialListCopy = materialList
+        materialListCopy = popDataList
         // popDataListCopy = popDataList;
         for (let i = 0; i < baseData.name; i+=1) {
             const result = {
@@ -218,7 +218,7 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList(list.slice(0))
     }
 
-    const handleCreateClick = async () => {
+    const handleCreateClick = async (type:'save'|'approvalSave') => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
             if (materialList.length < 1) {
@@ -236,23 +236,29 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写长度、宽度、数量！");
                 return false;
             }
-            let find = false;
-            for (var i = 0; i < materialList.length; i++) {
-                for (var j = i + 1; j < materialList.length; j++) {
-                    if (materialList[i].materialName === materialList[j].materialName && materialList[i].structureSpec===materialList[j].structureSpec&& materialList[i].structureTexture===materialList[j].structureTexture&& materialList[i].length===materialList[j].length&& materialList[i].width===materialList[j].width) { 
-                        find = true; 
-                        break;
-                    }
-                }
-                if (find) break;
-            }
-            if (find) {
-                message.error("存在重复数据，请修改！");
-                return false;
-            }
-            saveRun({
+            // let find = false;
+            // for (var i = 0; i < materialList.length; i++) {
+            //     for (var j = i + 1; j < materialList.length; j++) {
+            //         if (materialList[i].materialName === materialList[j].materialName && materialList[i].structureSpec===materialList[j].structureSpec&& materialList[i].structureTexture===materialList[j].structureTexture&& materialList[i].length===materialList[j].length&& materialList[i].width===materialList[j].width) { 
+            //             find = true; 
+            //             break;
+            //         }
+            //     }
+            //     if (find) break;
+            // }
+            // if (find) {
+            //     message.error("存在重复数据，请修改！");
+            //     return false;
+            // }
+            type==='save'&&saveRun({
                 purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",
+                ...baseInfo
+            });
+            type==='approvalSave'&&saveRun({
+                purchasePlanDetailDTOS: materialList,
+                purchaserTaskTowerIds: "",
+                isApproval: 1,
                 ...baseInfo
             });
         } catch (error) {
@@ -278,6 +284,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/detail/${props.id}`)
+            setDetail(result)
             setPopDataList(result?.materials)
             setMaterialList(result?.materials)
             resole({
@@ -299,7 +306,7 @@ export default function CreatePlan(props: any): JSX.Element {
             }}
             maskClosable={false}
             width={1100}
-            footer={[
+            footer={props.type === "create"?[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
@@ -307,8 +314,44 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     关闭
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick('save')}>
                     保存
+                </Button>,
+                <Button key="create" type="primary" onClick={() => handleCreateClick('approvalSave')}>
+                    保存并发起审批
+                </Button>
+            ]:[
+                <Button key="back" onClick={() => {
+                    setMaterialList([]);
+                    setPopDataList([]);
+                    props?.handleCreate({code:1});
+                }}>
+                    关闭
+                </Button>,
+                <Button key="create" type="primary" onClick={() => handleCreateClick('save')}>
+                    保存
+                </Button>,
+                <Button key="create" type="primary" onClick={() => {
+                    if([0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                        handleCreateClick('approvalSave')
+                    }
+                    else{
+                        message.error("当前不可发起审批！")
+                    }
+                }}>
+                    保存并发起审批
+                </Button>,
+                <Button key="create" type="primary" onClick={async () => {
+                    if([1,'1'].includes(detail?.approval)){
+                        await RequestUtil.get(`/tower-supply/materialPurchasePlan/workflow/cancel/${props.id}`)
+                        message.success("撤销成功！");
+                        props?.handleCreate({ code: 1 })
+                    }
+                    else{
+                        message.error("不可撤销！")
+                    }
+                }}>
+                    撤销审批
                 </Button>
             ]}
         >

@@ -32,7 +32,7 @@ export default function Overview(): JSX.Element {
     const history = useHistory()
     const addPriceRef = useRef<AddPriceRef>({ onSubmit: () => { }, resetFields: () => { } })
     const addBatchPriceRef = useRef<AddPriceRef>({ onSubmit: () => { }, resetFields: () => { } })
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, approvalStatus: string }>()
     const [visible, setVisible] = useState<boolean>(false)
     const [batchVisible, setBatchVisible] = useState<boolean>(false)
     const [attchVisible, setAttchVisible] = useState<boolean>(false)
@@ -268,7 +268,35 @@ export default function Overview(): JSX.Element {
                     } else {
                         message.warning('请选择要批量中标的数据');
                     }
-                }}>批量中标选择</Button>
+                }}>批量中标选择</Button>,
+            <Button
+                type="primary"
+                style={{ marginRight: 16 }}
+                ghost
+                key="select"
+                // disabled={data?.comparisonStatus !== 1}
+                onClick={async () => {
+                    if([0,'0',2,'2',3,'3',4,'4'].includes(params?.approvalStatus)){
+                        await RequestUtil.get(`/tower-supply/auxiliaryComparisonPrice/workflow/start/${params.id}`)
+                        message.success('审批发起成功！')
+                    }else{
+                        message.error("当前不可发起审批！")
+                    }
+                }}>发起审批</Button>,
+            <Button
+                type="primary"
+                style={{ marginRight: 16 }}
+                ghost
+                key="select"
+                // disabled={data?.comparisonStatus !== 1}
+                onClick={async () => {
+                    if([1,'1'].includes(params?.approvalStatus)){
+                        await RequestUtil.get(`/tower-supply/auxiliaryComparisonPrice/workflow/cancel/${params.id}`)
+                        message.success('撤销成功！')
+                    }else{
+                        message.error("不可撤销！")
+                    }
+                }}>撤销审批</Button>
         ]}
                        operation={[
                            <Button key="back" onClick={() => history.goBack()}>返回</Button>

@@ -119,7 +119,7 @@ export default function ContractMngt() {
                         fixed: "right",
                         width: 270,
                         render: (_: any, records: any) => <>
-                            <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}`}>询价信息</Link>
+                            <Link className="btn-operation-link" to={`/contract-mngt/enquiryCompare/enquiry/${records.id}/${records?.approval}`}>询价信息</Link>
                             <Button disabled={records.comparisonStatus !== 1 } type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setCancelVisible(true)
@@ -142,7 +142,7 @@ export default function ContractMngt() {
                                     disabled={records.isRelate!==0}
                                 >删除</Button>
                             </Popconfirm>
-                            <Button disabled={records.comparisonStatus !== 1} type="link" className="btn-operation-link" onClick={() => {
+                            <Button disabled={records.comparisonStatus !== 1||records.approval===1} type="link" className="btn-operation-link" onClick={() => {
                                 setDetailId(records.id)
                                 setOprationType("edit")
                                 setVisible(true)
@@ -182,6 +182,17 @@ export default function ContractMngt() {
                         name: 'comparisonPersonId',
                         label: '询价人',
                         children: <IntgSelect width={200} />
+                    },
+                    {
+                        name: 'approval',
+                        label: '审批状态',
+                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="0">待发起</Select.Option>
+                            <Select.Option value="1">审批中</Select.Option>
+                            <Select.Option value="2">审批通过</Select.Option>
+                            <Select.Option value="3">审批驳回</Select.Option>
+                            <Select.Option value="4">已撤销</Select.Option>
+                        </Select>
                     },
                     {
                         name: 'fuzzyQuery',
