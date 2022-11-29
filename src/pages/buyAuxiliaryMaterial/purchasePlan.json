@@ -1,6 +1,11 @@
 {
   "purchasePlan": [
     {
+      "title": "审批状态",
+      "dataIndex": "approvalName",
+      "width": 100
+    },
+    {
       "title": "采购计划编号",
       "width": 140,
       "dataIndex": "purchasePlanNumber"
