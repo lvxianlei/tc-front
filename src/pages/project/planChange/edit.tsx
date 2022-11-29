@@ -9,6 +9,12 @@ interface EditProps {
     id: string
     type: 1 | 2 | 3 | 4
 }
+const calcContractTotal = (records: any[]) => {
+    return records.reduce((result: { weight: string, amount: string }, item: any) => ({
+        weight: (parseFloat(result.weight) + parseFloat(item.totalWeight || "0.00")).toFixed(2),
+        amount: (parseFloat(result.amount) + parseFloat(item.number || "0")).toFixed(0)
+    }), { weight: "0.00", amount: "0" })
+}
 
 export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     const [editForm] = Form.useForm()
@@ -20,11 +26,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     const [taskNoticeId, setTaskNoticeId] = useState<string>("")
     const [productGroupDetails, setProductGroupDetails] = useState<any[]>([])
     const [visible, setVisible] = useState<boolean>(false)
-    // const [productDetails, setProductDetails] = useState<any[]>([])
     const { loading, data: planData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/editNotice/detail?id=${id}`)
             setProductGroupDetails(result?.editNoticeProductVOList || [])
+            setSelect((result?.editNoticeProductVOList || []).map((item: any) => item.productId))
+            setTaskNoticeId(result.taskNoticeId)
             resole(result)
         } catch (error) {
             reject(error)
@@ -66,8 +73,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
             editForm.setFieldsValue({
                 internalNumber: taskNotice.internalNumber,
                 orderProjectName: taskNotice.orderProjectName,
-                editBaseNum: taskNotice.editBaseNum,
-                editWeight: taskNotice.editWeight,
+                editBaseNum: taskNotice.productNumber,
+                editWeight: taskNotice.totalWeight,
                 ascriptionName: taskNotice.ascriptionName,
                 region: taskNotice.region,
                 customerCompany: taskNotice.customerCompany
@@ -102,9 +109,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
     useImperativeHandle(ref, () => ({ handleSubmit }), [])
 
     const handleModalOk = async () => {
-        setProductGroupDetails([
-            ...selectRows,
-            ...productGroupDetails.filter((pro: any) => !select.includes(pro.id))])
+        const total = calcContractTotal(selectRows)
+        setProductGroupDetails(selectRows)
+        editForm.setFieldsValue({
+            editBaseNum: total.amount,
+            editWeight: total.weight
+        })
         setVisible(false)
     }
 
@@ -124,6 +134,16 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                     })
                 })
             }
+        }
+    }
+
+    const handleProductChange = (fields: any, allFields: any) => {
+        if (fields.type === "remove") {
+            const total = calcContractTotal(allFields.submit)
+            editForm.setFieldsValue({
+                editBaseNum: total.amount,
+                editWeight: total.weight
+            })
         }
     }
 
@@ -202,6 +222,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                     </Row>
                     <EditableTable
                         haveNewButton={false}
+                        onChange={handleProductChange}
                         form={suspendForm}
                         columns={type === 4 ? edit.revertSuspend : edit.suspend}
                         dataSource={productGroupDetails} />
