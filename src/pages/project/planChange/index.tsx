@@ -101,9 +101,12 @@ export default function Index() {
         })
     }
 
-    const handleEditOk = async () => {
-        editRef.current?.handleSubmit()
-    }
+    const handleEditOk = () => new Promise(async (resove) => {
+        await editRef.current?.handleSubmit()
+        await message.success("保存成功")
+        resove(true)
+        history.go(0)
+    })
 
     return <>
         <Modal
