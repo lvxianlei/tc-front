@@ -409,7 +409,7 @@ export default forwardRef(function ({id, type, visibleP}: EditProps, ref): JSX.E
     }
     const onSubmit = () => new Promise(async (resove, reject) => {
         try {
-            if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+            if([undefined, 0,'0',3,'3',4,'4'].includes(detail?.approval)){
                 const baseInfo = await baseForm.validateFields()
                 const freightInfo = await freightForm.validateFields()
                 const stevedoringInfo = await stevedoringForm.validateFields()
@@ -462,6 +462,9 @@ export default forwardRef(function ({id, type, visibleP}: EditProps, ref): JSX.E
                 await saveRun(values)
                 message.success("保存成功...")
                 resove(true)
+            }else if([2,'2'].includes(detail?.approval)){
+                message.error("当前数据已审批，修改后请重新发起审批！")
+                throw new Error('审批通过数据，修改后只能重新发起审批！！')
             }else{
                 message.error("当前正在审批中，请撤销审批后再进行修改！")
                 throw new Error('当前正在审批，不可修改！')
