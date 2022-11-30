@@ -59,7 +59,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             setDetail(result)
             form.setFieldsValue({...result})
             editForm.setFieldsValue({...result?.auxiliaryPurchasePlanListVOS})
-            setCargoData(result?.auxiliaryPurchasePlanListVOS.map((item: any) => ({
+            setPopDataList(result?.auxiliaryPurchasePlanListVOS.map((item: any) => ({
                 ...item,
                 num: item.num ? item.num : 1
             })) || [])
@@ -94,7 +94,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
 
     const handleModalOk = () => {
         // 保留输入的数量以及选择的部门信息
-        cargoData.map(el=>{
+        popDataList.map(el=>{
             popDataList.forEach(item=>{
                 if(el.id == item.id){
                     item.planPurchaseNum = el.planPurchaseNum || 1
@@ -104,16 +104,16 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 }
             })
         })
-        setCargoData(popDataList)
+        setPopDataList(popDataList)
         setVisible(false);
     }
 
     const onSubmit = () => new Promise(async (resole, reject) => {
-        if (!cargoData.length) {
+        if (!popDataList.length) {
             message.warning("请先选择辅材...")
             return
         }
-        let flag:boolean = cargoData.every(item=>{
+        let flag:boolean = popDataList.every(item=>{
             console.log(item.deptName,item.deptId)
             return item.deptName && item.deptId
         })
@@ -127,7 +127,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 await editForm.validateFields()
                 const result = {
                     ...baseFormData,
-                    auxiliaryPurchasePlanListDTOS: cargoData.map((item: any) => {
+                    auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
                         return {
                             ...item,
                             planPurchaseNum:item.planPurchaseNum || 1
@@ -148,11 +148,11 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         }
     })
     const onSubmitApproval = () => new Promise(async (resole, reject) => {
-        if (!cargoData.length) {
+        if (!popDataList.length) {
             message.warning("请先选择辅材...")
             return
         }
-        let flag:boolean = cargoData.every(item=>{
+        let flag:boolean = popDataList.every(item=>{
             console.log(item.deptName,item.deptId)
             return item.deptName && item.deptId
         })
@@ -167,7 +167,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 const result = {
                     ...baseFormData,
                     isApproval:1,
-                    auxiliaryPurchasePlanListDTOS: cargoData.map((item: any) => {
+                    auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
                         return {
                             ...item,
                             planPurchaseNum:item.planPurchaseNum || 1
@@ -205,16 +205,15 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
     const resetFields = () => {
         form.resetFields()
         editForm.resetFields()
-        setCargoData([])
         setDetail({})
         setPopDataList([])
     }
     const remove = async (purchaseId: any) => {
-        setCargoData(cargoData.filter((item: any) => item.id !== purchaseId))
-        console.log(cargoData)
+        setPopDataList(popDataList.filter((item: any) => item.id !== purchaseId))
+        console.log(popDataList)
     }
     const amountChange = (value: any, id: string, keys: string) => {
-        const list = cargoData.map((item: any) => {
+        const list = popDataList.map((item: any) => {
             if (item.id === id) {
                 item[keys] = value
                 return item;
@@ -222,9 +221,9 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             return item
         })
         console.log(list, "修改后的数据========>>>")
-        setCargoData([...list]);
+        setPopDataList([...list]);
     }
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields, onSubmitApproval, onSubmitCancel }), [ref, cargoData, onSubmit, resetFields, onSubmitApproval, onSubmitCancel])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields, onSubmitApproval, onSubmitCancel }), [ref, popDataList, onSubmit, resetFields, onSubmitApproval, onSubmitCancel])
 
     const handleBaseInfoChange = async (fields: any) => {
         console.log(fields)
@@ -311,13 +310,13 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     type="primary"
                     key="clear"
                     ghost
-                    disabled={!cargoData.length}
+                    disabled={!popDataList.length}
                     onClick={() => {
                         Modal.confirm({
                             title: "清空",
                             content: "确定清空辅材明细吗？",
                             onOk: () => {
-                               setCargoData([])
+                               setPopDataList([])
                                message.success("清空成功...")
                             }
                         })
@@ -329,6 +328,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             haveIndex={false}
             form={editForm}
             rowKey="key"
+            pagination={false}
             haveOpration={false}
             onChange={handleEditableChange}
             haveNewButton={false}
@@ -377,7 +377,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     </>
                 }
             ]}
-            dataSource={[...cargoData].map((item: any, index: number) => ({
+            dataSource={[...popDataList].map((item: any, index: number) => ({
                 ...item,
                 planPurchaseNum:item.planPurchaseNum || 1,
                 key: item.id || `item-${index}`
