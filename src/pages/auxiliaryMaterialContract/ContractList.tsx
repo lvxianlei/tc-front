@@ -100,7 +100,7 @@ export default function ContractMngt(): JSX.Element {
                     setDetailId("")
                     setEditVisible(false)
                 }}>
-                <Edit id={detailId} type={oprationType} ref={editRef} />
+                <Edit id={detailId} type={oprationType} ref={editRef} visibleP={editVisible}/>
             </Modal>
             <Modal
                 destroyOnClose
