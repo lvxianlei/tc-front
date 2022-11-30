@@ -171,7 +171,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     */
     public render(): React.ReactNode {
         return <>
-            <Button type="link" disabled={this.props.disabled} onClick={() => this.modalShow()}>塔型放样分派</Button>
+            <Button type="text" disabled={this.props.disabled} onClick={() => this.modalShow()}>塔型放样分派</Button>
             <Modal
                 visible={this.state.visible}
                 width="80%"
