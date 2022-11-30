@@ -1,6 +1,12 @@
 {
     "baseInfo": [
         {
+            "title": "执行状态",
+            "dataIndex": "executingStatusName",
+            "width": 100,
+            "type": "string"
+        },
+        {
             "title": "批次号",
             "dataIndex": "batchNumber",
             "width": 150,
