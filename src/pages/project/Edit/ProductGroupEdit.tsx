@@ -167,6 +167,12 @@ export default function ProductGroupEdit() {
                     render: (_: any, records: any) => <>
                         <Button type="link" disabled={!["0", 0, null].includes(records.taskNoticeId)} onClick={() => deleteProject(records.id)}>删除</Button>
                     </>
+                }, {
+                    title: '序号',
+                    dataIndex: 'index',
+                    fixed: "left",
+                    width: 50,
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                 }, ...productAssist]}
                 dataSource={select}
                 pagination={false}
