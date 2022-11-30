@@ -357,14 +357,12 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                     internalNumber: selectedRows[0]?.contractNum,
                                                     productCategoryName: selectedRows[0]?.productCategory,
                                                     productNumber: selectedRows[0]?.name,
-                                                    voltageGradeName: selectedRows[0]?.voltageLevelName,
                                                     description: selectedRows[0]?.assignorDescription
                                                 })
                                                 form?.setFieldsValue({
                                                     ...selectedRows[0],
                                                     productCategoryName: selectedRows[0]?.productCategory,
                                                     productNumber: selectedRows[0]?.name,
-                                                    voltageGradeName: selectedRows[0]?.voltageLevelName,
                                                     id: '',
                                                     drawTaskId: selectedRows[0]?.id,
                                                     drawTaskNum: selectedRows[0]?.taskNum,
@@ -430,6 +428,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                             productCategoryName: record?.productCategory,
                                             productNumber: record?.name,
                                             voltageGradeName: record?.voltageLevelName,
+                                            voltageGrade: record?.voltageLevel,
                                         }
                                     ]
                                 })
@@ -442,6 +441,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                         productCategoryName: record?.productCategory,
                                         productNumber: record?.name,
                                         voltageGradeName: record?.voltageLevelName,
+                                        voltageGrade: record?.voltageLevel,
                                     }
                                 ])
                                 changeData.splice(index, 1);
