@@ -210,10 +210,10 @@ export default function List(): React.ReactNode {
                 }}>重置</Button>
             </Form.Item>
         </Form>
-        {/* <Button type="primary" className={styles.bottom16} onClick={() => {
+        <Button type="primary" className={styles.bottom16} onClick={() => {
             setType("new");
             setVisible(true)
-        }} ghost>申请</Button> */}
+        }} ghost>申请</Button>
         <CommonTable
             className={styles.bottom16}
             haveIndex
