@@ -478,7 +478,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                             }
                                             return item
                                         })
-                                        setPopDataList(newData)
+                                        setMaterialList(newData.slice(0));
+                                        setPopDataList(newData.slice(0))
                                     }}>
                                     {materialStandardOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                                 </Select>
@@ -501,7 +502,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                             }
                                             return item
                                         })
-                                        setPopDataList(newData)
+                                        setMaterialList(newData.slice(0));
+                                        setPopDataList(newData.slice(0))
                                     }}>
                                     {materialTextureOptions?.map((item: any, index: number) => <Select.Option value={item.id + ',' + item.name} key={index}>{item.name}</Select.Option>)}
                                 </Select>
