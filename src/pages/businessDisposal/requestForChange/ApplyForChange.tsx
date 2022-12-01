@@ -237,6 +237,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                             productCategoryName: res?.productCategory,
                             productNumber: res?.name,
                             voltageGradeName: res?.voltageLevelName,
+                            voltageGrade: res?.voltageLevel,
                         }
                     })
                     setSelectedData([...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData])
