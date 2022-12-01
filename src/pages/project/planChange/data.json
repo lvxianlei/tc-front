@@ -326,7 +326,7 @@
                 "enum": [
                     {
                         "label": "原材料标准",
-                        "value": "materialStandard"
+                        "value": "materialStandardName"
                     },
                     {
                         "label": "原材料要求",
@@ -522,7 +522,7 @@
                 "enum": [
                     {
                         "label": "原材料标准",
-                        "value": "materialStandard"
+                        "value": "materialStandardName"
                     },
                     {
                         "label": "原材料要求",
