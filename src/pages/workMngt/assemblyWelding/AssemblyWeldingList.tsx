@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Modal, Row, Col, TreeSelect, message } from 'antd';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -234,28 +234,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 {
                     name: 'personnel',
                     label: '人员',
-                    children: <Row>
-                        <Col>
-                            <Form.Item name="dept">
-                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value: any) => {
-                                    const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-                                    setCheckUser(userData.records)
-                                }}>
-                                    {renderTreeNodes(wrapRole2DataNode(department))}
-                                </TreeSelect>
-                            </Form.Item>
-                        </Col>
-                        <Col>
-                            <Form.Item name="personnel">
-                                <Select placeholder="请选择" style={{ width: "150px" }}>
-                                    <Select.Option value="" key="6">全部</Select.Option>
-                                    {checkUser && checkUser.map((item: any) => {
-                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'plannedTime',

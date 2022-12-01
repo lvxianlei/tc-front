@@ -1,6 +1,6 @@
 import React, { useState, } from "react"
 import { Input, DatePicker, Select, Form, Spin, Button, Space, message, Popconfirm, Modal, InputNumber, } from 'antd'
-import { CommonTable, Page } from '../../common'
+import { CommonTable, IntgSelect, Page } from '../../common'
 import { Link, useHistory, useLocation } from "react-router-dom"
 import { FixedType } from 'rc-table/lib/interface';
 import useRequest from "@ahooksjs/use-request"
@@ -15,7 +15,6 @@ export default function TemplateList() {
     const [refresh, setRefresh] = useState<boolean>(false);
     const location = useLocation<{ state?: number, userId?: string }>();
     const history = useHistory();
-    const [form] = useForm();
 
     const columns: any[] = [
         {
@@ -138,74 +137,58 @@ export default function TemplateList() {
         return value
     }
 
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
-        resole(data?.records);
-    }), {})
-    const checkUser: any = data || [];
-
     return (
-        <Spin spinning={loading}>
-            <Page
-                path="/tower-science/loftingTemplate"
-                filterValue={filterValue}
-                columns={columns}
-                refresh={refresh}
-                extraOperation={<TaskNew freshF={setRefresh} fresh={refresh} />}
-                exportPath={`/tower-science/loftingTemplate`}
-                onFilterSubmit={onFilterSubmit}
-                requestData={{ status: location.state?.state, drawLeader: location.state?.userId }}
-                searchFormItems={[
-                    {
-                        name: 'drawType',
-                        label: '工作类型',
-                        children: (
-                            <Select style={{ width: 200 }} placeholder="请选择" defaultValue={""}>
+        <Page
+            path="/tower-science/loftingTemplate"
+            filterValue={filterValue}
+            columns={columns}
+            refresh={refresh}
+            extraOperation={<TaskNew freshF={setRefresh} fresh={refresh} />}
+            exportPath={`/tower-science/loftingTemplate`}
+            onFilterSubmit={onFilterSubmit}
+            requestData={{ status: location.state?.state, drawLeader: location.state?.userId }}
+            searchFormItems={[
+                {
+                    name: 'drawType',
+                    label: '工作类型',
+                    children: (
+                        <Select style={{ width: 200 }} placeholder="请选择" defaultValue={""}>
+                            <Select.Option value="">全部</Select.Option>
+                            <Select.Option value="1">组装图纸</Select.Option>
+                            <Select.Option value="2">发货图纸</Select.Option>
+                            <Select.Option value="3">样板打印</Select.Option>
+                        </Select>
+                    )
+                },
+                {
+                    name: 'status',
+                    label: '状态',
+                    children: (
+                        <Form.Item name="status" initialValue={location.state?.state || ""}>
+                            <Select style={{ width: 200 }} placeholder="请选择">
                                 <Select.Option value="">全部</Select.Option>
-                                <Select.Option value="1">组装图纸</Select.Option>
-                                <Select.Option value="2">发货图纸</Select.Option>
-                                <Select.Option value="3">样板打印</Select.Option>
-                            </Select>
-                        )
-                    },
-                    {
-                        name: 'status',
-                        label: '状态',
-                        children: (
-                            <Form.Item name="status" initialValue={location.state?.state || ""}>
-                                <Select style={{ width: 200 }} placeholder="请选择">
-                                    <Select.Option value="">全部</Select.Option>
-                                    <Select.Option value={1}>待完成</Select.Option>
-                                    <Select.Option value={2}>已完成</Select.Option>
-                                </Select>
-                            </Form.Item>
-                        )
-                    },
-                    {
-                        name: 'updateStatusTimeStart',
-                        label: '日期选择',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
-                    },
-                    {
-                        name: 'drawLeader',
-                        label: '样板负责人',
-                        children: <Form.Item name="drawLeader" initialValue={location.state?.userId || ""}>
-                            <Select placeholder="请选择" style={{ width: "150px" }}>
-                                <Select.Option value="" key="6">全部</Select.Option>
-                                {checkUser && checkUser.map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
+                                <Select.Option value={1}>待完成</Select.Option>
+                                <Select.Option value={2}>已完成</Select.Option>
                             </Select>
                         </Form.Item>
-                    },
-                    {
-                        name: 'fuzzyMsg',
-                        label: "模糊查询项",
-                        children: <Input placeholder="放样任务编号/内部合同编号/计划号/塔型" style={{ width: 300 }} />
-                    }
-                ]}
-            />
-
-        </Spin>
+                    )
+                },
+                {
+                    name: 'updateStatusTimeStart',
+                    label: '日期选择',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'drawLeader',
+                    label: '样板负责人',
+                    children: <IntgSelect width={200} />
+                },
+                {
+                    name: 'fuzzyMsg',
+                    label: "模糊查询项",
+                    children: <Input placeholder="放样任务编号/内部合同编号/计划号/塔型" style={{ width: 300 }} />
+                }
+            ]}
+        />
     )
 }
