@@ -5,11 +5,11 @@
 */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, DatePicker, Select, Button, Row, Col, Form, TreeSelect, Spin, message } from 'antd';
-import { Page } from '../../common';
+import { Space, DatePicker, Select, Button, Spin, message } from 'antd';
+import { IntgSelect, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { Link, useHistory, useLocation, useParams } from 'react-router-dom';
+import { Link, useHistory, useParams } from 'react-router-dom';
 import WithSectionModal from './WithSectionModal';
 import { TreeNode } from 'antd/lib/tree-select';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -142,12 +142,6 @@ export default function PoleInformation(): React.ReactNode {
     const [refresh, setRefresh] = useState(false);
     const [buttonName, setButtonName] = useState('');
     const [tipVisible, setTipVisible] = useState<boolean>(false)
-    const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<SelectDataNode[]>(`/tower-system/department`);
-        resole(data);
-    }), {})
-    const departmentData: any = data || [];
-    const [materialUser, setMaterialUser] = useState([]);
     const userId = AuthUtil.getUserInfo().user_id;
     const [allotVisible, setAllotVisible] = useState<boolean>(false);
     const editRef = useRef<allotModalProps>();
@@ -156,7 +150,7 @@ export default function PoleInformation(): React.ReactNode {
     const [loftingStatus, setLoftingStatus] = useState<number>(0);
     const [visible, setVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-    
+
     useEffect(() => {
         setConfirmLoading(confirmLoading);
     }, [confirmLoading])
@@ -170,36 +164,6 @@ export default function PoleInformation(): React.ReactNode {
             reject(error)
         }
     }), {})
-
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles && roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
-
-    const renderTreeNodes = (data: any) => data.map((item: any) => {
-        if (item.children) {
-            return (<TreeNode key={item.id} title={item.name} value={item.id} className={styles.node} >
-                {renderTreeNodes(item.children)}
-            </TreeNode>);
-        }
-        return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
-    });
-
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-        switch (title) {
-            case "materialUser":
-                return setMaterialUser(userData.records);
-        };
-    }
 
     const onTip = () => new Promise(async (resolve, reject) => {
         try {
@@ -249,12 +213,6 @@ export default function PoleInformation(): React.ReactNode {
             reject(false)
         }
     })
-
-    if (loading) {
-        return <Spin spinning={loading}>
-            <div style={{ width: '100%', height: '300px' }}></div>
-        </Spin>
-    }
 
     return <>
         <Modal
@@ -343,24 +301,7 @@ export default function PoleInformation(): React.ReactNode {
                 {
                     name: 'productCategory',
                     label: '配段人',
-                    children: <Row>
-                        <Col>
-                            <Form.Item name="materialUserDepartment">
-                                <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'materialUser') }} style={{ width: "150px" }}>
-                                    {renderTreeNodes(wrapRole2DataNode(departmentData))}
-                                </TreeSelect>
-                            </Form.Item>
-                        </Col>
-                        <Col>
-                            <Form.Item name="loftingUser">
-                                <Select placeholder="请选择" style={{ width: "150px" }}>
-                                    {materialUser && materialUser.map((item: any) => {
-                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                    children: <IntgSelect width={200} />
                 }
             ]}
             onFilterSubmit={(values: Record<string, any>) => {

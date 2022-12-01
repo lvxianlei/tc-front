@@ -3,7 +3,6 @@ import { Button, Modal, Form, Input, message } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { Page } from '../../common';
 
-
 export default function Plan({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
 
     const [ visible, setVisible ] = useState<boolean>(false);

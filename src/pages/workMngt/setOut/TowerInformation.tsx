@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu } from 'antd';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -19,6 +19,7 @@ import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
 import { DownOutlined } from '@ant-design/icons';
+import SelectUser from '../../common/SelectUser';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -505,6 +506,7 @@ export default function TowerInformation(): React.ReactNode {
     const userId = AuthUtil.getUserInfo().user_id;
     const [visible, setVisible] = useState(false);
     const [editForm] = useForm();
+    const [form] = useForm();
     const [loading1, setLoading1] = useState(false);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     const [editorLock, setEditorLock] = useState('编辑');
@@ -512,15 +514,6 @@ export default function TowerInformation(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
-
-    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
-        try {
-            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
-            result.indexOf(userId) === -1 ? resole(false) : resole(true)
-        } catch (error) {
-            reject(error)
-        }
-    }), {})
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
@@ -608,7 +601,7 @@ export default function TowerInformation(): React.ReactNode {
             }}>
             <ChooseMaterials id={params.id} name={detail?.productCategoryName || ''} planNumber={detail?.planNumber || ''} />
         </Modal>
-        <Form layout="inline" onFinish={(value: Record<string, any>) => {
+        <Form layout="inline" form={form} onFinish={(value: Record<string, any>) => {
             if (value.updateStatusTime) {
                 const formatDate = value.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
@@ -629,11 +622,7 @@ export default function TowerInformation(): React.ReactNode {
                 </Select>
             </Form.Item>
             <Form.Item label='人员' name='personnel'>
-                <Select placeholder="请选择" style={{ width: "150px" }}>
-                    {userList && userList.map((item: any) => {
-                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                    })}
-                </Select>
+                <IntgSelect width={200} />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">查询</Button>
@@ -664,11 +653,11 @@ export default function TowerInformation(): React.ReactNode {
                                     </Menu.Item>
                                     <Menu.Item key={2}>
                                         <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/all`}>
-                                            <Button type='link' disabled={detail?.loftingStatus === 1}>放样</Button>
+                                            <Button type='text' disabled={detail?.loftingStatus === 1}>放样</Button>
                                         </Link>
                                     </Menu.Item>
                                     <Menu.Item key={3}>
-                                        <Button type="link" onClick={closeOrEdit}>{editorLock}</Button>
+                                        <Button type="text" onClick={closeOrEdit}>{editorLock}</Button>
                                     </Menu.Item>
                                 </Menu>
                             }>
@@ -679,10 +668,10 @@ export default function TowerInformation(): React.ReactNode {
                             <Dropdown trigger={['click']} overlay={
                                 <Menu>
                                     <Menu.Item key={1}>
-                                        <Button type="link" onClick={comparison}>放样提料比对</Button>
+                                        <Button type="text" onClick={comparison}>放样提料比对</Button>
                                     </Menu.Item>
                                     <Menu.Item key={2}>
-                                        <Button type='link' onClick={() => setVisible(true)}>挑料清单</Button>
+                                        <Button type='text' onClick={() => setVisible(true)}>挑料清单</Button>
                                     </Menu.Item>
                                 </Menu>
                             }>
@@ -693,13 +682,13 @@ export default function TowerInformation(): React.ReactNode {
                             <Dropdown trigger={['click']} overlay={
                                 <Menu>
                                     <Menu.Item key={1}>
-                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type='link'>模型</Button></Link>
+                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type='text'>模型</Button></Link>
                                     </Menu.Item>
                                     <Menu.Item key={2}>
-                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type='link'>大样图工艺卡</Button></Link>
+                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type='text'>大样图工艺卡</Button></Link>
                                     </Menu.Item>
                                     <Menu.Item key={3}>
-                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type='link'>NC程序</Button></Link>
+                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type='text'>NC程序</Button></Link>
                                     </Menu.Item>
                                 </Menu>
                             }>
