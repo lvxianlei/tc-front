@@ -40,7 +40,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
 
     const { run: saveRun } = useRequest((postData) => new Promise(async (resolve, reject) => {
         try {
-            const result: any = await RequestUtil[id === "create" ? "post" : "put"]("/tower-market/editNotice", postData)
+            const result: any = await RequestUtil[id === "create" ? "post" : "put"]("/tower-market/editNotice", id === "create" ? postData : ({
+                ...postData,
+                id: planData?.id
+            }))
             resolve(result)
         } catch (error) {
             reject(error)
@@ -61,14 +64,13 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
             setTaskNoticeId(fields.taskNoticeId?.id)
             const taskNotice = fields.taskNoticeId.records[0]
             setPlanDataSource({
-                materialStandard: taskNotice.materialStandard,
+                materialStandardName: taskNotice.materialStandardName,
                 materialDemand: taskNotice.materialDemand,
                 weldingDemand: taskNotice.weldingDemand,
                 packDemand: taskNotice.packDemand,
                 galvanizeDemand: taskNotice.galvanizeDemand,
                 payAsk: taskNotice.payAsk,
                 peculiarDescription: taskNotice.peculiarDescription,
-
             })
             editForm.setFieldsValue({
                 internalNumber: taskNotice.internalNumber,
@@ -88,6 +90,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
         const suspendFormData = await suspendForm.validateFields()
         await saveRun({
             editType: type,
+            editRemark: postData.editRemark,
+            description: postData.description,
             taskNoticeId: postData.taskNoticeId?.id,
             editNoticeInfoDTOList: contentFormData?.submit?.map((item: any) => ({
                 description: item.description,
