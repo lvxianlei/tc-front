@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, Select, message, InputNumber } from 'antd';
+import { Button, Space, Modal, Input, Descriptions, Form, FormInstance, DatePicker, Select, message, InputNumber, Row, Col, Checkbox } from 'antd';
 import { DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import styles from './TowerLoftingAssign.module.less';
@@ -13,6 +13,7 @@ import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
 import moment from 'moment';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import SelectUser from '../../common/SelectUser';
 
 export interface TowerLoftingAssignProps { }
 export interface ITowerLoftingAssignRouteProps extends RouteComponentProps<TowerLoftingAssignProps>, WithTranslation {
@@ -31,8 +32,6 @@ export interface TowerLoftingAssignState {
     readonly selectKey?: number;
     readonly user?: any[];
     readonly checkUser?: any[];
-    readonly fyhs?: boolean;
-    readonly zhqd?: boolean;
 }
 
 interface IAppointed {
@@ -41,26 +40,29 @@ interface IAppointed {
     readonly pattern?: string | number;
     readonly sectionNum?: number;
     readonly name?: string;
-    readonly loftingUserDepartment?: string;
-    readonly loftingUser?: string;
-    readonly checkUserDepartment?: string;
+    readonly loftingUser?: any;
     readonly checkUser?: string;
-    readonly loftingUserDepartmentName?: string;
     readonly loftingUserName?: string;
-    readonly checkUserDepartmentName?: string;
     readonly checkUserName?: string;
     readonly loftingDeliverTime?: string | moment.Moment;
     readonly programmingDeliverTime?: string | moment.Moment;
     readonly patternName?: string;
     readonly trialAssemble?: number | string
     readonly assignPlanId?: string;
-    readonly loftingMutualReview?: string;
+    readonly loftingMutualReview?: any;
+    readonly loftingMutualReviewName?: string;
     readonly ncUser?: string;
-    readonly weldingUser?: string;
+    readonly ncUserName?: string;
+    readonly weldingUser?: any;
+    readonly weldingUserName?: string;
     readonly productPartUser?: string;
+    readonly productPartUserName?: string;
     readonly packageUser?: string;
+    readonly packageUserName?: string;
     readonly legProgrammingUser?: string;
+    readonly legProgrammingUserName?: string;
     readonly programmingLeader?: string;
+    readonly programmingLeaderName?: string;
 }
 
 class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, TowerLoftingAssignState> {
@@ -80,9 +82,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         visible: false,
         repeatModal: false,
         user: [],
-        checkUser: [],
-        fyhs: false,
-        zhqd: false
+        checkUser: []
     }
 
     private modalCancel(): void {
@@ -104,18 +104,24 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 ...data,
                 loftingDeliverTime: data?.loftingDeliverTime ? moment(data?.loftingDeliverTime) : '',
                 programmingDeliverTime: data?.programmingDeliverTime ? moment(data?.programmingDeliverTime) : '',
-                loftingMutualReview: data?.loftingMutualReview ? data.loftingMutualReview?.split(',') : ['0'],
+                loftingMutualReview: data?.loftingMutualReview ? data.loftingMutualReview?.split(',') : '0',
+                loftingMutualReviewName: data?.loftingMutualReview ? data?.loftingMutualReviewName : '同上',
                 ncUser: data?.ncUser ? data.ncUser : '0',
-                weldingUser: data?.weldingUser ? data.weldingUser?.split(',') : ['0'],
+                ncUserName: data?.ncUser ? data.ncUserName : '同上',
+                weldingUser: data?.weldingUser ? data.weldingUser?.split(',') : '0',
+                weldingUserName: data?.weldingUser ? data.weldingUserName : '同上',
                 productPartUser: data?.productPartUser ? data.productPartUser : '0',
+                productPartUserName: data?.productPartUser ? data.productPartUserName : '同上',
                 packageUser: data?.packageUser ? data.packageUser : '0',
+                packageUserName: data?.packageUser ? data.packageUserName : '同上',
                 legProgrammingUser: data?.legProgrammingUser ? data.legProgrammingUser : '0',
+                legProgrammingUserName: data?.legProgrammingUser ? data.legProgrammingUserName : '同上',
                 loftingUser: data?.loftingUser && data?.loftingUser?.split(',')
             }
-            this.getForm()?.setFieldsValue
-                ({
-                    ...detailData
-                });
+            this.getForm()?.setFieldsValue({ ...detailData });
+            this.setState({
+                appointed: { ...detailData }
+            })
         }
     }
 
@@ -220,190 +226,503 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                 </Form.Item>
                             </Descriptions.Item>
                             <Descriptions.Item label="放样员">
-                                <Form.Item name="loftingUser"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} mode="multiple" allowClear>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="loftingDeliverTime"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择完成时间'
-                                    }]} style={{ width: '200px', display: 'inline-block', marginLeft: '0.8%' }}>
-                                    <DatePicker showTime />
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="loftingUserName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'loftingUser'} selectType="checkbox" selectedKey={this.form?.current?.getFieldsValue(true)?.loftingUser} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        loftingUser: selectedRows.map((res: any) => res?.userId),
+                                                        loftingUserName: selectedRows.map((res: any) => res?.name)?.join(',')
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            loftingUser: selectedRows.map((res: any) => res?.userId),
+                                                            loftingUserName: selectedRows.map((res: any) => res?.name)?.join(',')
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Form.Item name="loftingDeliverTime"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择完成时间'
+                                            }]}>
+                                            <DatePicker showTime />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item label="编程负责人(生产下达)">
-                                <Form.Item name="programmingLeader"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="programmingDeliverTime"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择完成时间'
-                                    }]} style={{ width: '200px', display: 'inline-block', marginLeft: '0.8%' }}>
-                                    <DatePicker showTime />
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="programmingLeaderName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'programmingLeader'} selectedKey={[this.form?.current?.getFieldsValue(true)?.programmingLeader]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        programmingLeader: selectedRows[0]?.userId,
+                                                        programmingLeaderName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            programmingLeader: selectedRows[0]?.userId,
+                                                            programmingLeaderName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Form.Item name="programmingDeliverTime"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择完成时间'
+                                            }]}>
+                                            <DatePicker showTime />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item children={[]} />
                             <Descriptions.Item label="放样互审">
-                                <Form.Item name="loftingMutualReview"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} mode="multiple" allowClear onChange={(e: any) => {
-                                        if (e.length > 0 && e?.indexOf('0') !== -1) {
-                                            this.form.current?.setFieldsValue({ loftingMutualReview: ['0'] })
-                                            this.setState({
-                                                fyhs: true
-                                            })
-                                        } else {
-                                            this.setState({
-                                                fyhs: false
-                                            })
-                                        }
-                                    }}>
-                                        <Select.Option key={0} value={'0'}>同上</Select.Option>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} disabled={this.state.fyhs} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="loftingMutualReviewName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'loftingMutualReview'} selectType="checkbox" selectedKey={this.form?.current?.getFieldsValue(true)?.loftingMutualReview} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        loftingMutualReview: selectedRows.map((res: any) => res?.userId),
+                                                        loftingMutualReviewName: selectedRows.map((res: any) => res?.name)?.join(',')
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            loftingMutualReview: selectedRows.map((res: any) => res?.userId),
+                                                            loftingMutualReviewName: selectedRows.map((res: any) => res?.name)?.join(',')
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Checkbox onChange={(check) => {
+                                            if (check.target.checked) {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        loftingMutualReview: '0'
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    loftingMutualReview: '0',
+                                                    loftingMutualReviewName: '同上'
+                                                })
+                                            } else {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        loftingMutualReview: ''
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    loftingMutualReview: '',
+                                                    loftingMutualReviewName: ''
+                                                })
+                                            }
+                                        }} checked={this?.state?.appointed?.loftingMutualReview === '0'}>
+                                            同上
+                                        </Checkbox>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item label="NC程序">
-                                <Form.Item name="ncUser"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        <Select.Option key={0} value={'0'}>同上</Select.Option>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="ncUserName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'ncUser'} selectedKey={[this.form?.current?.getFieldsValue(true)?.ncUser]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        ncUser: selectedRows[0]?.userId,
+                                                        ncUserName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            ncUser: selectedRows[0]?.userId,
+                                                            ncUserName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Checkbox onChange={(check) => {
+                                            if (check.target.checked) {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        ncUser: '0'
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    ncUser: '0',
+                                                    ncUserName: '同上'
+                                                })
+                                            } else {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        ncUser: ''
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    ncUser: '',
+                                                    ncUserName: ''
+                                                })
+                                            }
+                                        }} checked={this?.state?.appointed?.ncUser === '0'}>
+                                            同上
+                                        </Checkbox>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item children={[]} />
                             <Descriptions.Item label="组焊清单">
-                                <Form.Item name="weldingUser"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} mode="multiple" allowClear onChange={(e: any) => {
-                                        if (e.length > 0 && e?.indexOf('0') !== -1) {
-                                            this.form.current?.setFieldsValue({ weldingUser: ['0'] })
-                                            this.setState({
-                                                zhqd: true
-                                            })
-                                        } else {
-                                            this.setState({
-                                                zhqd: false
-                                            })
-                                        }
-                                    }}>
-                                        <Select.Option key={0} value={'0'}>同上</Select.Option>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} disabled={this.state.zhqd} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="weldingUserName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'weldingUser'} selectType='checkbox' selectedKey={this.form?.current?.getFieldsValue(true)?.weldingUser} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        weldingUser: selectedRows.map((res: any) => res?.userId),
+                                                        weldingUserName: selectedRows.map((res: any) => res?.name)?.join(',')
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            weldingUser: selectedRows.map((res: any) => res?.userId),
+                                                            weldingUserName: selectedRows.map((res: any) => res?.name)?.join(',')
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Checkbox onChange={(check) => {
+                                            if (check.target.checked) {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        weldingUser: '0'
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    weldingUser: '0',
+                                                    weldingUserName: '同上'
+                                                })
+                                            } else {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        weldingUser: ''
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    weldingUser: '',
+                                                    weldingUserName: ''
+                                                })
+                                            }
+                                        }} checked={this?.state?.appointed?.weldingUser === '0'}>
+                                            同上
+                                        </Checkbox>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item label="杆塔配段">
-                                <Form.Item name="productPartUser"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        <Select.Option key={0} value={'0'}>同上</Select.Option>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="productPartUserName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'productPartUser'} selectedKey={[this.form?.current?.getFieldsValue(true)?.productPartUser]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        productPartUser: selectedRows[0]?.userId,
+                                                        productPartUserName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            productPartUser: selectedRows[0]?.userId,
+                                                            productPartUserName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Checkbox onChange={(check) => {
+                                            if (check.target.checked) {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        productPartUser: '0'
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    productPartUser: '0',
+                                                    productPartUserName: '同上'
+                                                })
+                                            } else {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        productPartUser: ''
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    productPartUser: '',
+                                                    productPartUserName: ''
+                                                })
+                                            }
+                                        }} checked={this?.state?.appointed?.productPartUser === '0'}>
+                                            同上
+                                        </Checkbox>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item children={[]} />
                             <Descriptions.Item label="高低腿配置编制">
-                                <Form.Item name="legConfigurationUser" style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="legConfigurationNum" style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
-                                    <Input disabled placeholder="自动计算" />
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="legConfigurationUserName">
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'legConfigurationUser'} selectedKey={[this.form?.current?.getFieldsValue(true)?.legConfigurationUser]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        legConfigurationUser: selectedRows[0]?.userId,
+                                                        legConfigurationUserName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            legConfigurationUser: selectedRows[0]?.userId,
+                                                            legConfigurationUserName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Form.Item name="legConfigurationNum">
+                                            <Input disabled placeholder="自动计算" />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item label="包装清单">
-                                <Form.Item name="packageUser"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择人员'
-                                    }]} style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        <Select.Option key={0} value={'0'}>同上</Select.Option>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="packageUserName"
+                                            rules={[{
+                                                required: true,
+                                                message: '请选择人员'
+                                            }]}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'packageUser'} selectedKey={[this.form?.current?.getFieldsValue(true)?.packageUser]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        packageUser: selectedRows[0]?.userId,
+                                                        packageUserName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            packageUser: selectedRows[0]?.userId,
+                                                            packageUserName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Checkbox onChange={(check) => {
+                                            if (check.target.checked) {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        packageUser: '0'
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    packageUser: '0',
+                                                    packageUserName: '同上'
+                                                })
+                                            } else {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        packageUser: ''
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    packageUser: '',
+                                                    packageUserName: ''
+                                                })
+                                            }
+                                        }} checked={this?.state?.appointed?.packageUser === '0'}>
+                                            同上
+                                        </Checkbox>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item children={[]} />
                             <Descriptions.Item label="高低腿配置校核">
-                                <Form.Item name="legConfigurationCheckUser" style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="legConfigurationCheckNum" style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
-                                    <Input disabled placeholder="自动获取" />
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="legConfigurationCheckUserName">
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'legConfigurationCheckUser'} selectedKey={[this.form?.current?.getFieldsValue(true)?.legConfigurationCheckUser]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        legConfigurationCheckUser: selectedRows[0]?.userId,
+                                                        legConfigurationCheckUserName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            legConfigurationCheckUser: selectedRows[0]?.userId,
+                                                            legConfigurationCheckUserName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Form.Item name="legConfigurationCheckNum">
+                                            <Input disabled placeholder="自动获取" />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item label="编程高低腿">
-                                <Form.Item name="legProgrammingUser" style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        <Select.Option key={0} value={'0'}>同上</Select.Option>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="legProgrammingNum" style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
-                                    <Input disabled placeholder="自动获取" />
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+                                        <Form.Item name="legProgrammingUserName">
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'legProgrammingUser'} selectedKey={[this.form?.current?.getFieldsValue(true)?.legProgrammingUser]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        legProgrammingUser: selectedRows[0]?.userId,
+                                                        legProgrammingUserName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            legProgrammingUser: selectedRows[0]?.userId,
+                                                            legProgrammingUserName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={5}>
+                                        <Checkbox onChange={(check) => {
+                                            if (check.target.checked) {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        legProgrammingUser: '0'
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    legProgrammingUser: '0',
+                                                    legProgrammingUserName: '同上'
+                                                })
+                                            } else {
+                                                this.setState({
+                                                    appointed: {
+                                                        ...this.state.appointed,
+                                                        legProgrammingUser: ''
+                                                    }
+                                                })
+                                                this.form?.current?.setFieldsValue({
+                                                    legProgrammingUser: '',
+                                                    legProgrammingUserName: ''
+                                                })
+                                            }
+                                        }} checked={this?.state?.appointed?.legProgrammingUser === '0'}>
+                                            同上
+                                        </Checkbox>
+                                    </Col>
+                                    <Col span={5}>
+                                        <Form.Item name="legProgrammingNum">
+                                            <Input disabled placeholder="自动获取" />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item children={[]} />
                             <Descriptions.Item label="挂线板校核">
-                                <Form.Item name="hangLineBoardCheckUser" style={{ width: '50%', display: 'inline-block' }}>
-                                    <Select placeholder="请选择" style={{ width: '100%' }} allowClear>
-                                        {this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item name="hangLineBoardCheckNum" style={{ width: '49%', display: 'inline-block', marginLeft: '0.8%' }}>
-                                    <InputNumber min={1} max={9999} style={{ width: '100%' }} placeholder="请输入数量" />
-                                </Form.Item>
+                                <Row gutter={12}>
+                                    <Col span={14}>
+
+                                        <Form.Item name="hangLineBoardCheckUserName">
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser key={'hangLineBoardCheckUser'} selectedKey={[this.form?.current?.getFieldsValue(true)?.hangLineBoardCheckUser]} onSelect={(selectedRows: Record<string, any>) => {
+                                                    this.form?.current?.setFieldsValue({
+                                                        hangLineBoardCheckUser: selectedRows[0]?.userId,
+                                                        hangLineBoardCheckUserName: selectedRows[0]?.name
+                                                    })
+                                                    this.setState({
+                                                        appointed: {
+                                                            ...this.form?.current?.getFieldsValue(true),
+                                                            hangLineBoardCheckUser: selectedRows[0]?.userId,
+                                                            hangLineBoardCheckUserName: selectedRows[0]?.name
+                                                        }
+                                                    })
+                                                }} />
+                                            } />
+                                        </Form.Item>
+                                    </Col>
+                                    <Col span={10}>
+                                        <Form.Item name="hangLineBoardCheckNum">
+                                            <InputNumber min={1} max={9999} style={{ width: '100%' }} placeholder="请输入数量" />
+                                        </Form.Item>
+                                    </Col>
+                                </Row>
                             </Descriptions.Item>
                             <Descriptions.Item children={[]} />
                             <Descriptions.Item children={[]} />
