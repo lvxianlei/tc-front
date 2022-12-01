@@ -244,7 +244,23 @@ export default function Edit() {
                 onChange={handleInvoiceChange}
                 dataSource={data?.invoicingInfoVo || {}} edit />
             <DetailTitle title="开票明细" />
-            <EditTable onChange={handleEditTableChange} form={billingForm} columns={billingHead} dataSource={data?.invoicingDetailDtos || []} />
+            <EditTable
+                onChange={handleEditTableChange}
+                form={billingForm}
+                columns={billingHead.map((item: any) => {
+                    if (item.dataIndex === "devName") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: productTypeOptions?.map((product: any) => ({
+                                value: product.id,
+                                label: product.name
+                            }))
+                        })
+                    }
+                    return item
+                })}
+                dataSource={data?.invoicingDetailDtos || []} />
             <Attachment title="附件" ref={attchRef} edit dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>
