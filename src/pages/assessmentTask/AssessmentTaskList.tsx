@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Row, Col } from 'antd';
-import { Link, useLocation } from 'react-router-dom';
-import { Page } from '../common';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
+import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Modal, message } from 'antd';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { IntgSelect, Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import AssessmentInformation from './AssessmentInformation';
 import styles from './AssessmentTask.module.less';
-import Assign from './Assign';
 import RequestUtil from '../../utils/RequestUtil';
-import { TreeNode } from 'rc-tree-select';
-import useRequest from '@ahooksjs/use-request';
+import SelectUser from '../common/SelectUser';
+import moment from 'moment';
 
 
 export default function AssessmentTaskList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
+    const [assignVisible, setAssignVisible] = useState<boolean>(false);
+    const [form] = Form.useForm();
+    const [taskId, setTaskId] = useState<string>('');
+    const history = useHistory();
 
     const columns = [
         {
@@ -86,7 +88,13 @@ export default function AssessmentTaskList(): React.ReactNode {
                     <Link to={`/taskMngt/assessmentTaskList/assessmentTaskDetail/${record.id}`}>任务详情</Link>
                     {
                         record.status === 2
-                            ? <Assign id={record.id} updataList={() => { setRefresh(!refresh); }} />
+                            ? <Button type='link' onClick={async () => {
+                                setTaskId(record.id);
+                                form.setFieldsValue({
+                                    expectDeliverTime: record.expectDeliverTime ? moment(record.expectDeliverTime) : ''
+                                })
+                                setAssignVisible(true);
+                            }}>指派</Button>
                             : <Button type="link" disabled>指派</Button>
                     }
                     {
@@ -112,48 +120,60 @@ export default function AssessmentTaskList(): React.ReactNode {
         }
     ]
 
-    // const { loading, data } = useRequest<SelectDataNode[]>(() => new Promise(async (resole, reject) => {
-    // const data = await RequestUtil.get<SelectDataNode[]>(`/sinzetech-user/department/tree`);
-    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
-        resole(data);
-    }), {})
-    const startRelease: any = data?.records || [];
-    // const departmentData: any = data || [];
+    const formItemLayout = {
+        labelCol: { span: 6 },
+        wrapperCol: { span: 16 }
+    };
 
-    // const [startRelease, setStartRelease] = useState([]);
+    const handleAssignModalOk = async () => {
+        try {
+            form.validateFields().then(async res => {
+                const submitData = await form.getFieldsValue(true);
+                submitData.expectDeliverTime = moment(submitData.expectDeliverTime).format("YYYY-MM-DD HH:ss:mm");
+                await RequestUtil.put('/tower-science/assessTask/assign', {
+                    ...submitData,
+                    id: taskId
+                }).then(() => {
+                    message.success('指派成功！')
+                }).then(() => {
+                    setAssignVisible(false);
+                    form.resetFields();
+                }).then(() => {
+                    setRefresh(!refresh);
+                    history.go(0)
+                })
+            })
 
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles && roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            }
-        });
-        return roles;
-    }
-
-    const renderTreeNodes = (data: any) => data.map((item: any) => {
-        if (item.children) {
-            item.disabled = true;
-            return (<TreeNode key={item.id} title={item.title} value={item.id} disabled={item.disabled} className={styles.node} >
-                {renderTreeNodes(item.children)}
-            </TreeNode>);
+        } catch (error) {
+            console.log(error)
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
-    });
-
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/sinzetech-user/user?departmentId=${value}&size=1000`);
-        switch (title) {
-            case "startReleaseDepartment":
-            // return setStartRelease(userData.records);
-        };
     }
+
+    const handleAssignModalCancel = () => {
+        setAssignVisible(false);
+        form.resetFields();
+    };
+
 
     return (
         <div className={styles.list}>
+            <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel}>
+                <Form form={form} {...formItemLayout} layout="horizontal">
+                    <Form.Item name="assessUserName" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
+                        <Input size="small" disabled suffix={
+                            <SelectUser key={'assessUser'} selectedKey={[form?.getFieldsValue(true)?.assessUserName]} onSelect={(selectedRows: Record<string, any>) => {
+                                form.setFieldsValue({
+                                    assessUser: selectedRows[0]?.userId,
+                                    assessUserName: selectedRows[0]?.name,
+                                })
+                            }} />
+                        } />
+                    </Form.Item>
+                    <Form.Item name="expectDeliverTime" label="计划交付时间" rules={[{ required: true, message: "请选择计划交付时间" }]}>
+                        <DatePicker style={{ width: '100%' }} showTime />
+                    </Form.Item>
+                </Form>
+            </Modal>
             <Page
                 path="/tower-science/assessTask"
                 columns={columns}
@@ -183,27 +203,9 @@ export default function AssessmentTaskList(): React.ReactNode {
                         </Form.Item>
                     },
                     {
-                        // name: 'startReleaseDate',
                         name: 'assessUser',
                         label: '评估人',
-                        children: <Row>
-                            {/* <Col>
-                                <Form.Item name="assessUserDept">
-                                    <TreeSelect placeholder="请选择" onChange={(value: any) => { onDepartmentChange(value, 'startReleaseDepartment') }} style={{ width: "150px" }}>
-                                        {renderTreeNodes(wrapRole2DataNode(departmentData))}
-                                    </TreeSelect>
-                                </Form.Item>
-                            </Col> */}
-                            <Col>
-                                <Form.Item name="assessUser" initialValue={location.state?.userId || ''}>
-                                    <Select placeholder="请选择" style={{ width: "150px" }}>
-                                        {startRelease && startRelease.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyMsg',
