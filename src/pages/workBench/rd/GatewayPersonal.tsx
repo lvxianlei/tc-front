@@ -13,7 +13,7 @@ export default function GatewayPersonal(): React.ReactNode {
     return <DetailContent>
         <iframe
             style={{ width: "100%", minHeight: 800 }}
-            src={`http://tc-data-view.dhwy.cn/view/1588865679567208450?token=${AuthUtil.getSinzetechAuth()}&tenant_id=${AuthUtil.getTenantId()}`}
+            src={`http://tc-data-view.dhwy.cn/view/1585833889277464577?tenant_id=${AuthUtil.getTenantId()}`}
         />
     </DetailContent>
 }
