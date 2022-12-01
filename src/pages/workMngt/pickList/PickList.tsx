@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useLocation } from 'react-router-dom';
-import { CommonTable, Page } from '../../common';
+import { CommonTable, IntgSelect, Page } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
@@ -206,14 +206,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'materialLeader',
                         label: '提料负责人',
-                        children: <Form.Item name="materialLeader" initialValue={ location.state?.userId || '' }>
-                            <Select style={{width:'100px'}}>
-                                <Select.Option key={''} value={''}>全部</Select.Option>
-                                {user && user.map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'pattern',
@@ -229,7 +222,7 @@ export default function PickList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="提料任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号/工程名称" style={{width: "450px"}} maxLength={200} />
+                        children: <Input style={{ width: '300px' }} placeholder="提料任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号" maxLength={200} />
                     },
                 ]}
             />
