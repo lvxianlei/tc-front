@@ -33,7 +33,7 @@
         "description": "包含提料、放样等",
         "iconFont": "icon-yanfazhongxin2", // iconfont
         "color": "#FF8C00", // iconfont的颜色
-        "path": "/workBench/workBenchMngt",
+        "path": "/workBench/gatewayPersonal",
         "appName": "RD"
     },
     {
