@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Form, Button } from 'antd';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './Evaluation.module.less';
 import EvaluationInformation from './EvaluationInformation';
@@ -132,13 +132,7 @@ export default function EvaluationList(): React.ReactNode {
             {
                 name: 'assessUser',
                 label: '评估人',
-                children: <Form.Item name="assessUser" initialValue={location.state?.userId || ''}>
-                    <Select placeholder="请选择" style={{ width: "150px" }}>
-                        {programLeader && programLeader.map((item: any) => {
-                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                        })}
-                    </Select>
-                </Form.Item>
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'fuzzyMsg',

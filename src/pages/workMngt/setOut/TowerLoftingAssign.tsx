@@ -30,8 +30,6 @@ export interface TowerLoftingAssignState {
     readonly repeatModal: boolean;
     readonly repeatNum?: number;
     readonly selectKey?: number;
-    readonly user?: any[];
-    readonly checkUser?: any[];
 }
 
 interface IAppointed {
@@ -80,9 +78,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
 
     public state: TowerLoftingAssignState = {
         visible: false,
-        repeatModal: false,
-        user: [],
-        checkUser: []
+        repeatModal: false
     }
 
     private modalCancel(): void {
@@ -93,7 +89,6 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
     }
 
     private async modalShow(): Promise<void> {
-        this.getUserList();
         const data = await RequestUtil.get<IAppointed>(`/tower-science/productCategory/${this.props.id}`);
         this.setState({
             visible: true,
@@ -123,13 +118,6 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                 appointed: { ...detailData }
             })
         }
-    }
-
-    private async getUserList(): Promise<void> {
-        const data = await RequestUtil.get<any>(`/tower-system/employee?deptName=技术部&size=1000`);
-        this.setState({
-            user: data?.records
-        })
     }
 
     /**

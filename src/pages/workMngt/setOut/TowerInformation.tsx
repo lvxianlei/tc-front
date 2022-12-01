@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu } from 'antd';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -19,6 +19,7 @@ import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
 import { DownOutlined } from '@ant-design/icons';
+import SelectUser from '../../common/SelectUser';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -505,6 +506,7 @@ export default function TowerInformation(): React.ReactNode {
     const userId = AuthUtil.getUserInfo().user_id;
     const [visible, setVisible] = useState(false);
     const [editForm] = useForm();
+    const [form] = useForm();
     const [loading1, setLoading1] = useState(false);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     const [editorLock, setEditorLock] = useState('编辑');
@@ -512,15 +514,6 @@ export default function TowerInformation(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
-
-    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
-        try {
-            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
-            result.indexOf(userId) === -1 ? resole(false) : resole(true)
-        } catch (error) {
-            reject(error)
-        }
-    }), {})
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
@@ -608,7 +601,7 @@ export default function TowerInformation(): React.ReactNode {
             }}>
             <ChooseMaterials id={params.id} name={detail?.productCategoryName || ''} planNumber={detail?.planNumber || ''} />
         </Modal>
-        <Form layout="inline" onFinish={(value: Record<string, any>) => {
+        <Form layout="inline" form={form} onFinish={(value: Record<string, any>) => {
             if (value.updateStatusTime) {
                 const formatDate = value.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
@@ -629,11 +622,7 @@ export default function TowerInformation(): React.ReactNode {
                 </Select>
             </Form.Item>
             <Form.Item label='人员' name='personnel'>
-                <Select placeholder="请选择" style={{ width: "150px" }}>
-                    {userList && userList.map((item: any) => {
-                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                    })}
-                </Select>
+                <IntgSelect width={200} />
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">查询</Button>
