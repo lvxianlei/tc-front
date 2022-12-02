@@ -18,6 +18,12 @@
       "type": "date",
       "format": "YYYY-MM-DD"
     }
+    ,
+    {
+      "title": "使用部门",
+      "dataIndex": "dept",
+      "width": 240
+    }
   ],
   "editCargoDetails": [
     {
@@ -42,6 +48,11 @@
       "title": "单位",
       "dataIndex": "unit",
       "type": "select",
+      "edit": false
+    },
+    {
+      "title": "库存数量",
+      "dataIndex": "totalNumber",
       "edit": false
     },
     {

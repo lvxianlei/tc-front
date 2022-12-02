@@ -26,6 +26,11 @@
       "width": 80
     },
     {
+      "title": "品名",
+      "dataIndex": "materialName",
+      "width": 100
+    },
+    {
       "title": "购回日期",
       "dataIndex": "repurchaseTime",
       "width": 100
@@ -33,6 +38,11 @@
     {
       "title": "申请人",
       "dataIndex": "purchaserName",
+      "width": 100
+    },
+    {
+      "title": "使用部门",
+      "dataIndex": "deptName",
       "width": 100
     },
     {
