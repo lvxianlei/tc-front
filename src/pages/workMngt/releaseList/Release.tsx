@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber, Radio} from 'antd';
+import { Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber, Radio } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { CommonTable, DetailContent, DetailTitle, Page } from '../../common';
+import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
@@ -238,7 +238,8 @@ export default function Release(): React.ReactNode {
                             trialAssembleDemand: value.trialAssembleDemand,
                             voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
                             weldingDemand: value.weldingDemand,
-                            isPerforate:value.isPerforate,
+                            isPerforate: value.isPerforate,
+                            description: value.description,
                             trialAssembleSegments: trialValue,
                             loftingBatchProductDTOList: arr,
                             loftingBatchStatisticsDTOList: bTableDataSource.map((item: any) => {
@@ -364,9 +365,9 @@ export default function Release(): React.ReactNode {
                     <Row>
                         <Col span={12}>
                             <Form.Item name="isPerforate" label="是否钻孔特殊要求">
-                                <Radio.Group  style={{ paddingLeft:"12px", width: "100%" }}  defaultValue={0}>
-                                    <Radio  value={1}>是</Radio>
-                                    <Radio  value={0}>否</Radio>
+                                <Radio.Group style={{ paddingLeft: "12px", width: "100%" }} defaultValue={0}>
+                                    <Radio value={1}>是</Radio>
+                                    <Radio value={0}>否</Radio>
                                 </Radio.Group>
                             </Form.Item>
                         </Col>
