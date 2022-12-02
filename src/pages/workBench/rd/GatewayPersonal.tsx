@@ -6,12 +6,14 @@
 
 import React from 'react';
 import { DetailContent } from '../../common';
+import styles from './WorkBench.module.less';
 
 export default function GatewayPersonal(): React.ReactNode {
 
-    return <DetailContent>
+    return <DetailContent className={styles.gateway}>
         <iframe
-            style={{ width: "100%", minHeight: 800 }}
+            style={{ width: "100%", minHeight: 850 }}
+            scrolling="auto"
             src={`http://tc-data-view.dhwy.cn/view/1585833889277464577`}
         />
     </DetailContent>
