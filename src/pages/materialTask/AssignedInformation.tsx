@@ -133,14 +133,16 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            let baseData = await form.validateFields();
-            const value = {
-                ...baseData,
-                materialDeliverTime: baseData.materialDeliverTime.format('YYYY-MM-DD'),
-                id: data?.id
-            }
-            await saveRun(value)
-            resolve(true);
+            form.validateFields().then(async res => {
+                let baseData = await form.getFieldsValue(true);
+                const value = {
+                    ...baseData,
+                    materialDeliverTime: baseData.materialDeliverTime.format('YYYY-MM-DD'),
+                    id: data?.id
+                }
+                await saveRun(value)
+                resolve(true);
+            })
         } catch (error) {
             console.log(error)
             reject(false)

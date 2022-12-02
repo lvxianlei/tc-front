@@ -2957,6 +2957,13 @@
       "exact": true,
       "authority": ""
     },
+    { // RD-系统设置-杂项条目配置
+      "name": "杂项条目配置",
+      "path": "/baseSetting/miscellaneousItems",
+      "module": "./pages/baseSetting/MiscellaneousItems",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // RD-定额配置
       "name": "定额配置",
       "path": "/baseSetting/quotaConfig",
@@ -3255,6 +3262,13 @@
       "name": "详情",
       "path": "/businessDisposal/unqualifiedDisposal/detail/:id",
       "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-代料
+      "name": "代料",
+      "path": "/businessDisposal/generationOfMaterial",
+      "module": "./pages/businessDisposal/generationOfMaterial/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },

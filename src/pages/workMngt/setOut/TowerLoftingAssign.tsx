@@ -159,6 +159,32 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
         }
     };
 
+    private checkChange(checked: boolean, id: string, name: string): void {
+        if (checked) {
+            this.setState({
+                appointed: {
+                    ...this.state.appointed,
+                    [id]: '0'
+                }
+            })
+            this.form?.current?.setFieldsValue({
+                [id]: '0',
+                [name]: '同上'
+            })
+        } else {
+            this.setState({
+                appointed: {
+                    ...this.state.appointed,
+                    [id]: ''
+                }
+            })
+            this.form?.current?.setFieldsValue({
+                [id]: '',
+                [name]: ''
+            })
+        }
+    }
+
     /**
     * @description Renders AbstractDetailComponent
     * @returns render 
@@ -313,29 +339,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     </Col>
                                     <Col span={10}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        loftingMutualReview: '0'
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    loftingMutualReview: '0',
-                                                    loftingMutualReviewName: '同上'
-                                                })
-                                            } else {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        loftingMutualReview: ''
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    loftingMutualReview: '',
-                                                    loftingMutualReviewName: ''
-                                                })
-                                            }
+                                            this.checkChange(check.target.checked, 'loftingMutualReview', 'loftingMutualReviewName')
                                         }} checked={this?.state?.appointed?.loftingMutualReview === '0'}>
                                             同上
                                         </Checkbox>
@@ -369,29 +373,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     </Col>
                                     <Col span={10}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        ncUser: '0'
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    ncUser: '0',
-                                                    ncUserName: '同上'
-                                                })
-                                            } else {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        ncUser: ''
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    ncUser: '',
-                                                    ncUserName: ''
-                                                })
-                                            }
+                                            this.checkChange(check.target.checked, 'ncUser', 'ncUserName')
                                         }} checked={this?.state?.appointed?.ncUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -426,29 +408,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     </Col>
                                     <Col span={10}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        weldingUser: '0'
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    weldingUser: '0',
-                                                    weldingUserName: '同上'
-                                                })
-                                            } else {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        weldingUser: ''
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    weldingUser: '',
-                                                    weldingUserName: ''
-                                                })
-                                            }
+                                            this.checkChange(check.target.checked, 'weldingUser', 'weldingUserName')
                                         }} checked={this?.state?.appointed?.weldingUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -482,29 +442,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     </Col>
                                     <Col span={10}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        productPartUser: '0'
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    productPartUser: '0',
-                                                    productPartUserName: '同上'
-                                                })
-                                            } else {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        productPartUser: ''
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    productPartUser: '',
-                                                    productPartUserName: ''
-                                                })
-                                            }
+                                            this.checkChange(check.target.checked, 'productPartUser', 'productPartUserName')
                                         }} checked={this?.state?.appointed?.productPartUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -567,29 +505,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     </Col>
                                     <Col span={10}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        packageUser: '0'
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    packageUser: '0',
-                                                    packageUserName: '同上'
-                                                })
-                                            } else {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        packageUser: ''
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    packageUser: '',
-                                                    packageUserName: ''
-                                                })
-                                            }
+                                            this.checkChange(check.target.checked, 'packageUser', 'packageUserName')
                                         }} checked={this?.state?.appointed?.packageUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -648,29 +564,7 @@ class TowerLoftingAssign extends React.Component<ITowerLoftingAssignRouteProps, 
                                     </Col>
                                     <Col span={5}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        legProgrammingUser: '0'
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    legProgrammingUser: '0',
-                                                    legProgrammingUserName: '同上'
-                                                })
-                                            } else {
-                                                this.setState({
-                                                    appointed: {
-                                                        ...this.state.appointed,
-                                                        legProgrammingUser: ''
-                                                    }
-                                                })
-                                                this.form?.current?.setFieldsValue({
-                                                    legProgrammingUser: '',
-                                                    legProgrammingUserName: ''
-                                                })
-                                            }
+                                            this.checkChange(check.target.checked, 'legProgrammingUser', 'legProgrammingUserName')
                                         }} checked={this?.state?.appointed?.legProgrammingUser === '0'}>
                                             同上
                                         </Checkbox>

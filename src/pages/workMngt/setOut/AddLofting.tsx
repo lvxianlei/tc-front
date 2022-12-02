@@ -359,7 +359,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                         let list = e.target.value.split(',');
                         let num: number = 0;
                         list.forEach(res => {
-                            num += res.split('*')[0] ? Number(res.split('*')[1] || 1) : 0
+                            const newNums = res?.split('*')
+                            num += newNums[0] ? Number(newNums[newNums?.length - 1] || 1) : 0
                         })
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
