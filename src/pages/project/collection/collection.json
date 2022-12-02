@@ -5,6 +5,10 @@
             "dataIndex": "returnNum"
         },
         {
+            "title": "单据状态",
+            "dataIndex": "confirmStatusName"
+        },
+        {
             "title": "来款单位名称",
             "dataIndex": "payCompany"
         },
@@ -41,6 +45,14 @@
             "dataIndex": "returnBank"
         },
         {
+            "title": "累计确认金额",
+            "dataIndex": "totalSureMoney"
+        },
+        {
+            "title": "待确认金额",
+            "dataIndex": "waitSureMoney"
+        },
+        {
             "title": "确认人",
             "dataIndex": "updateUserName",
             "type": "string"
@@ -48,10 +60,6 @@
         {
             "title": "确认时间",
             "dataIndex": "updateTime"
-        },
-        {
-            "title": "状态",
-            "dataIndex": "confirmStatusName"
         },
         {
             "title": "备注",
@@ -227,18 +235,6 @@
             "width": "100%"
         },
         {
-            "title": "回款金额",
-            "dataIndex": "refundAmount",
-            "type": "number",
-            "width": "100%",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入回款金额..."
-                }
-            ]
-        },
-        {
             "title": "业务经理",
             "dataIndex": "salesman",
             "disabled": true,
@@ -299,6 +295,18 @@
             "dataIndex": "noPaymentReceived",
             "disabled": true,
             "width": "100%"
+        },
+        {
+            "title": "回款金额",
+            "dataIndex": "refundAmount",
+            "type": "number",
+            "width": "100%",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入回款金额..."
+                }
+            ]
         },
         {
             "title": "备注",
