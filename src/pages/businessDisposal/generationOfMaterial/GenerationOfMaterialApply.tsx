@@ -19,15 +19,14 @@ interface modalProps {
 }
 
 export default forwardRef(function GenerationOfMaterialApply({ id, type }: modalProps, ref) {
-    const [form] = Form.useForm();
-    const [detailForm] = Form.useForm();
     const [towerSelects, setTowerSelects] = useState([]);
     const [detailData, setDetailData] = useState<any>()
+    const [editForm] = Form.useForm();
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/substitute/material/${id}`)
-            form.setFieldsValue({
+            editForm.setFieldsValue({
                 ...result
             })
             planNumChange(result?.planNumber)
@@ -78,14 +77,14 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            form.validateFields().then(async res => {
-                const value = await form.getFieldsValue(true);
+            editForm.validateFields().then(async res => {
+                const value = await editForm.getFieldsValue(true);
                 await saveRun({
                     ...value
                 })
+                console.log(value)
                 resolve(true);
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -102,8 +101,8 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            form.validateFields().then(async res => {
-                const value = await form.getFieldsValue(true);
+            editForm.validateFields().then(async res => {
+                const value = await editForm.getFieldsValue(true);
                 await submitRun({
                     ...value
                 })
@@ -125,8 +124,15 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     }), { manual: true })
 
     const resetFields = () => {
-        form.resetFields();
-        detailForm.resetFields();
+        editForm.resetFields();
+        editForm.resetFields();
+    }
+
+    const onChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        console.log(fields, "====", allFields)
+        if (fields.bondProportion) {
+            
+        }
     }
 
     useImperativeHandle(ref, () => ({ onSubmit, onSave, resetFields }), [ref, onSubmit, onSave, resetFields]);
@@ -140,8 +146,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     col={2} />
                 :
                 <BaseInfo
+                onChange={onChange}
                     dataSource={detailData || {}}
-                    form={form}
+                    form={editForm}
                     columns={applyColumns.map((item: any) => {
                         switch (item.dataIndex) {
                             case "planNumber":
@@ -163,7 +170,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 }
                                                 onChange={(e) => {
                                                     planNumChange(e);
-                                                    form.setFieldsValue({
+                                                    editForm.setFieldsValue({
                                                         productCategoryId: '',
                                                         materialStandard: '',
                                                         materialStandardName: ''
@@ -204,14 +211,15 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                     const productCategoryName = options?.key?.split(',')[1] || '';
                                                     const materialStandard = options?.key?.split(',')[2] || '';
                                                     const materialStandardName = options?.key?.split(',')[3] || '';
-                                                    form.setFieldsValue({
+                                                    editForm.setFieldsValue({
+                                                        ...editForm?.getFieldsValue(true),
                                                         materialStandard: materialStandard,
                                                         materialStandardName: materialStandardName,
                                                         productCategoryId: productCategoryId,
                                                         productCategoryName: productCategoryName
                                                     })
                                                     setDetailData({
-                                                        ...form?.getFieldsValue(true),
+                                                        ...editForm?.getFieldsValue(true),
                                                         materialStandard: materialStandard,
                                                         materialStandardName: materialStandardName,
                                                         productCategoryId: productCategoryId,
