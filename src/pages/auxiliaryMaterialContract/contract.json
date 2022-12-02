@@ -1,6 +1,10 @@
 {
   "contract": [
     {
+      "title": "审批状态",
+      "dataIndex": "approvalName"
+    },
+    {
       "title": "合同编号",
       "dataIndex": "contractNumber",
       "width": 200
