@@ -5,13 +5,14 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, DatePicker, Button, message, Popconfirm, Modal } from 'antd';
+import { Space, Input, DatePicker, Button, message, Popconfirm, Modal, Select } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns } from "./generationOfMaterial.json"
 import GenerationOfMaterialApply from './GenerationOfMaterialApply';
+import useRequest from '@ahooksjs/use-request';
 
 interface EditRefProps {
     onSubmit: () => void;
@@ -26,6 +27,16 @@ export default function List(): React.ReactNode {
     const addRef = useRef<EditRefProps>();
     const [type, setType] = useState<'new' | 'detail' | 'edit'>('new');
     const [rowId, setRowId] = useState<string>();
+
+    const { data: types } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-system/materialCategory`)
+            const newResult = result?.filter((res: any) => res?.name === '原材料')[0];
+            resole(newResult?.children)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
@@ -60,13 +71,14 @@ export default function List(): React.ReactNode {
             visible={visible}
             title={type === 'new' ? '代料申请' : '详情'}
             footer={<Space direction="horizontal" size="small">
-                {type === 'detail' ?
-                    null
-                    :
-                    <>
-                        <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
-                        <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
-                    </>
+                {
+                    type === 'detail' ?
+                        null
+                        :
+                        <>
+                            <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
+                            <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
+                        </>
                 }
                 <Button onClick={() => {
                     setVisible(false);
@@ -170,7 +182,20 @@ export default function List(): React.ReactNode {
                 {
                     name: 'materialCategory',
                     label: '原材料类型',
-                    children: <Input />
+                    children: <Select
+                        placeholder="请选择原材料类型"
+                        style={{ width: "100%" }}
+                        showSearch
+                        filterOption={(input, option) =>
+                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                        }
+                    >
+                        {
+                            types && types?.map((item: any) => {
+                                return <Select.Option key={item?.id} value={item?.name}>{item?.name}</Select.Option>
+                            })
+                        }
+                    </Select>
                 },
                 {
                     name: 'fuzzyMsg',

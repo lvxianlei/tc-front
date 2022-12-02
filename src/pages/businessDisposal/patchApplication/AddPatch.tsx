@@ -11,6 +11,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { addColumns } from "./patchApplication.json";
 import { FixedType } from 'rc-table/lib/interface';
+import styles from './PatchApplication.module.less';
 
 interface modalProps {
     readonly record?: any;
@@ -62,7 +63,16 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                     width: 50,
                     fixed: "left" as FixedType,
                     render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-                }, ...addColumns]}
+                },
+                ...addColumns.map(res => {
+                    if (res.dataIndex === 'code') {
+                        return ({
+                            ...res,
+                            render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
+                        })
+                    }
+                    return res
+                })]}
             headTabs={[]}
             requestData={{ productCategoryId: record?.productCategoryId }}
             extraOperation={

@@ -25,15 +25,15 @@
             "width": 150
         },
         {
-            "key": "materialStandard",
+            "key": "materialStandardName",
             "title": "代料前标准",
-            "dataIndex": "materialStandard",
+            "dataIndex": "materialStandardName",
             "width": 100
         },
         {
-            "key": "changeMaterialStandard",
+            "key": "changeMaterialStandardName",
             "title": "代料后标准",
-            "dataIndex": "changeMaterialStandard",
+            "dataIndex": "changeMaterialStandardName",
             "width": 100
         },
         {
@@ -49,15 +49,15 @@
             "width": 100
         },
         {
-            "key": "structureTexture",
+            "key": "structureTextureName",
             "title": "代料前材质",
-            "dataIndex": "structureTexture",
+            "dataIndex": "structureTextureName",
             "width": 100
         },
         {
-            "key": "changeStructureTexture",
+            "key": "changeStructureTextureName",
             "title": "代料后材质",
-            "dataIndex": "changeStructureTexture",
+            "dataIndex": "changeStructureTextureName",
             "width": 100
         },
         {
@@ -189,6 +189,65 @@
                     "message": "请选择代料后材质"
                 }
             ]
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "maxLength": 800,
+            "type": "textarea"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "materialCategory",
+            "title": "原材料类型",
+            "dataIndex": "materialCategory"
+        },
+        {
+            "key": "materialName",
+            "title": "原材料品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "key": "materialStandardName",
+            "title": "代料前标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "key": "changeMaterialStandardName",
+            "title": "代料后标准",
+            "dataIndex": "changeMaterialStandardName"
+        },
+        {
+            "key": "structureSpec",
+            "title": "代料前规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "key": "changeStructureSpec",
+            "title": "代料后规格",
+            "dataIndex": "changeStructureSpec"
+        },
+        {
+            "key": "structureTextureName",
+            "title": "代料前材质",
+            "dataIndex": "structureTextureName"
+        },
+        {
+            "key": "changeStructureTextureName",
+            "title": "代料后材质",
+            "dataIndex": "changeStructureTextureName"
         },
         {
             "key": "description",
