@@ -38,6 +38,16 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         }
     }), { manual: type === 'new', refreshDeps: [id, type] })
 
+    const { data: types } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-system/materialCategory`)
+            const newResult = result?.filter((res: any) => res?.name === '原材料')[0];
+            resole(newResult?.children)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
     const { data: goodsName } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-system/material/getAllMaterialName?materialTypeName=原材料`)
@@ -127,31 +137,38 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                         return ({
                             ...item,
                             render: () => {
-                                return <Select
-                                    showSearch
-                                    placeholder="请选择计划号"
-                                    style={{ width: "100%" }}
-                                    filterOption={(input, option) =>
-                                        (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+                                return <Form.Item name={'productCategoryId'} rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择计划号"
                                     }
-                                    onChange={(e) => {
-                                        planNumChange(e);
-                                        form.setFieldsValue({
-                                            productCategoryId: '',
-                                            materialStandard: '',
-                                            materialStandardName: ''
-                                        })
-                                        setDetailData({
-                                            ...detailData,
-                                            productCategoryId: '',
-                                            materialStandard: '',
-                                            materialStandardName: ''
-                                        })
-                                    }}>
-                                    {planNums && planNums?.map((item: any, index: number) => {
-                                        return <Select.Option key={index} value={item}>{item}</Select.Option>
-                                    })}
-                                </Select>
+                                ]}>
+                                    <Select
+                                        showSearch
+                                        placeholder="请选择计划号"
+                                        style={{ width: "100%" }}
+                                        filterOption={(input, option) =>
+                                            (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
+                                        }
+                                        onChange={(e) => {
+                                            planNumChange(e);
+                                            form.setFieldsValue({
+                                                productCategoryId: '',
+                                                materialStandard: '',
+                                                materialStandardName: ''
+                                            })
+                                            setDetailData({
+                                                ...detailData,
+                                                productCategoryId: '',
+                                                materialStandard: '',
+                                                materialStandardName: ''
+                                            })
+                                        }}>
+                                        {planNums && planNums?.map((item: any, index: number) => {
+                                            return <Select.Option key={index} value={item}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
                             }
                         })
                     case "productCategoryId":
@@ -191,22 +208,54 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                 </Form.Item>
                             }
                         })
+                    case "materialCategory":
+                        return ({
+                            ...item,
+                            render: () => {
+                                return <Form.Item name={'materialCategory'} rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择原材料类型"
+                                    }
+                                ]}>
+                                    <Select
+                                        placeholder="请选择原材料类型"
+                                        style={{ width: "100%" }}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {types && types?.map((item: any) => {
+                                            return <Select.Option key={item?.id} value={item?.name}>{item?.name}</Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
+                            }
+                        })
                     case "materialName":
                         return ({
                             ...item,
                             render: () => {
-                                return <Select
-                                    placeholder="请选择原材料品名"
-                                    style={{ width: "100%" }}
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                        option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                return <Form.Item name={'materialName'} rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择原材料品名"
                                     }
-                                >
-                                    {goodsName && goodsName?.map((item: any) => {
-                                        return <Select.Option key={item} value={item}>{item}</Select.Option>
-                                    })}
-                                </Select>
+                                ]}>
+                                    <Select
+                                        placeholder="请选择原材料品名"
+                                        style={{ width: "100%" }}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {goodsName && goodsName?.map((item: any) => {
+                                            return <Select.Option key={item} value={item}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
                             }
                         })
                     case "materialStandard":
@@ -220,96 +269,131 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                         return ({
                             ...item,
                             render: () => {
-                                return <Select
-                                    style={{ width: "100%" }}
-                                    placeholder="请选择代料后标准"
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                        option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
-                                    }>
+                                return <Form.Item name={'materialName'} rules={[
                                     {
-                                        materialStandardOptions?.map((item: { id: string, name: string }) =>
-                                            <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)
+                                        "required": true,
+                                        "message": "请选择原材料品名"
                                     }
-                                </Select>
+                                ]}>
+                                    <Select
+                                        style={{ width: "100%" }}
+                                        placeholder="请选择代料后标准"
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                        }>
+                                        {
+                                            materialStandardOptions?.map((item: { id: string, name: string }) =>
+                                                <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>)
+                                        }
+                                    </Select>
+                                </Form.Item>
                             }
                         })
                     case "structureSpec":
                         return ({
                             ...item,
                             render: () => {
-                                return <Select
-                                    placeholder="请选择代料前规格"
-                                    style={{ width: "100%" }}
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                        option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                return <Form.Item name={'structureSpec'} rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择代料前规格"
                                     }
-                                >
-                                    {specifications && specifications?.map((item: any) => {
-                                        return <Select.Option key={item} value={item}>{item}</Select.Option>
-                                    })}
-                                </Select>
+                                ]}>
+                                    <Select
+                                        placeholder="请选择代料前规格"
+                                        style={{ width: "100%" }}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {specifications && specifications?.map((item: any) => {
+                                            return <Select.Option key={item} value={item}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
                             }
                         })
                     case "changeStructureSpec":
                         return ({
                             ...item,
                             render: () => {
-                                return <Select
-                                    placeholder="请选择代料后规格"
-                                    style={{ width: "100%" }}
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                        option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                return <Form.Item name={'changeStructureSpec'} rules={[
+                                    {
+                                        "required": true,
+                                        "message": "请选择代料后规格"
                                     }
-                                >
-                                    {specifications && specifications?.map((item: any) => {
-                                        return <Select.Option key={item} value={item}>{item}</Select.Option>
-                                    })}
-                                </Select>
+                                ]}>
+                                    <Select
+                                        placeholder="请选择代料后规格"
+                                        style={{ width: "100%" }}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {specifications && specifications?.map((item: any) => {
+                                            return <Select.Option key={item} value={item}>{item}</Select.Option>
+                                        })}
+                                    </Select>
+                                </Form.Item>
                             }
                         })
                     case "structureTexture":
                         return ({
                             ...item,
                             render: () => {
-                                return <Select
-                                    placeholder="请选择代料前材质"
-                                    style={{ width: "100%" }}
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                        option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
-                                    }
-                                >
+                                return <Form.Item name={'structureTexture'} rules={[
                                     {
-                                        materialTextureOptions && materialTextureOptions?.map((item: { id: string, name: string }) =>
-                                            <Select.Option value={item.name} key={item.id}>
-                                                {item.name}
-                                            </Select.Option>)
+                                        "required": true,
+                                        "message": "请选择代料前材质"
                                     }
-                                </Select>
+                                ]}>
+                                    <Select
+                                        placeholder="请选择代料前材质"
+                                        style={{ width: "100%" }}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {
+                                            materialTextureOptions && materialTextureOptions?.map((item: { id: string, name: string }) =>
+                                                <Select.Option value={item.name} key={item.id}>
+                                                    {item.name}
+                                                </Select.Option>)
+                                        }
+                                    </Select>
+                                </Form.Item>
                             }
                         })
                     case "changeStructureTexture":
                         return ({
                             ...item,
                             render: () => {
-                                return <Select
-                                    placeholder="请选择代料后材质"
-                                    style={{ width: "100%" }}
-                                    showSearch
-                                    filterOption={(input, option) =>
-                                        option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
-                                    }
-                                >
+                                return <Form.Item name={'changeStructureTexture'} rules={[
                                     {
-                                        materialTextureOptions && materialTextureOptions?.map((item: { id: string, name: string }) =>
-                                            <Select.Option value={item.name} key={item.id}>
-                                                {item.name}
-                                            </Select.Option>)
+                                        "required": true,
+                                        "message": "请选择代料后材质"
                                     }
-                                </Select>
+                                ]}>
+                                    <Select
+                                        placeholder="请选择代料后材质"
+                                        style={{ width: "100%" }}
+                                        showSearch
+                                        filterOption={(input, option) =>
+                                            option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                        }
+                                    >
+                                        {
+                                            materialTextureOptions && materialTextureOptions?.map((item: { id: string, name: string }) =>
+                                                <Select.Option value={item.name} key={item.id}>
+                                                    {item.name}
+                                                </Select.Option>)
+                                        }
+                                    </Select>
+                                </Form.Item>
                             }
                         })
                     default:
