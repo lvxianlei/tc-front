@@ -45,14 +45,6 @@
             "dataIndex": "returnBank"
         },
         {
-            "title": "累计确认金额",
-            "dataIndex": "totalSureMoney"
-        },
-        {
-            "title": "待确认金额",
-            "dataIndex": "waitSureMoney"
-        },
-        {
             "title": "确认人",
             "dataIndex": "updateUserName",
             "type": "string"
