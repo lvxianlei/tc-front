@@ -29,14 +29,6 @@ export default function List(): React.ReactNode {
 
     const columns = [
         {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            fixed: "left" as FixedType,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
             key: 'name',
             title: '杂项类别',
             width: 200,
@@ -77,7 +69,7 @@ export default function List(): React.ReactNode {
                                     <Button type="link" onClick={() => {
                                         typeForm.setFieldsValue({
                                             level: 1,
-                                            parentId: record?.name,
+                                            parentId: record?.parentId,
                                             name: record?.miscellaneousTypes,
                                             id: record?.id
                                         })
@@ -145,15 +137,20 @@ export default function List(): React.ReactNode {
                 if (item.sundryConfigVOList && item.sundryConfigVOList?.length > 0) {
                     return {
                         ...item,
-                        childLevel: 1,
+                        childLevel: 0,
                         children: item?.sundryConfigVOList?.map((items: any) => {
                             return {
                                 ...items,
-                                miscellaneousTypes: item.name,
-                                sundryConfigVOS: item?.sundryConfigVOS ? item?.sundryConfigVOS?.map(((res: any) => {
+                                miscellaneousTypes: items.name,
+                                parentId: item.name,
+                                name: '',
+                                childLevel: 1,
+                                children: items?.sundryConfigVOS ? items?.sundryConfigVOS?.map(((res: any) => {
                                     return {
                                         ...res,
                                         childLevel: 2,
+                                        name: '',
+                                        parentId: items.id,
                                         miscellaneousTypeEntries: res?.name,
                                         children: undefined
                                     }
@@ -165,6 +162,7 @@ export default function List(): React.ReactNode {
                     return { ...item, childLevel: 0, children: undefined }
                 }
             })
+            console.log(resData)
             resole(resData);
         } catch (error) {
             reject(error)
@@ -175,7 +173,7 @@ export default function List(): React.ReactNode {
         try {
             form.validateFields().then(res => {
                 const data = form.getFieldsValue(true);
-                RequestUtil.post(``, data).then(res => {
+                RequestUtil.post(`/tower-science/sundryConfig`, data).then(res => {
                     message.success('保存成功!');
                     history.go(0);
                     setItemVisible(false)
@@ -208,7 +206,7 @@ export default function List(): React.ReactNode {
         <Spin spinning={loading}>
             <Modal
                 visible={visible}
-                title={type === 'new'? "新增类型": "编辑类型"}
+                title={type === 'new' ? "新增类型" : "编辑类型"}
                 okText="保存"
                 onOk={addTypeOk}
                 onCancel={() => {
@@ -264,6 +262,7 @@ export default function List(): React.ReactNode {
                 columns={columns}
                 dataSource={data}
                 pagination={false}
+                rowKey="name"
             />
         </Spin>
     )
