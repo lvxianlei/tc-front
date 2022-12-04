@@ -5,8 +5,8 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Form, Input, Select } from 'antd';
-import { BaseInfo, DetailContent, DetailTitle, OperationRecord } from '../../common';
+import { Form, Select } from 'antd';
+import { BaseInfo, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { applyColumns, detailColumns } from "./generationOfMaterial.json";
@@ -78,11 +78,12 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
             editForm.validateFields().then(async res => {
-                const value = await editForm.getFieldsValue(true);
+                const value = editForm.getFieldsValue(true);
                 await saveRun({
-                    ...value
+                    ...value,
+                    id: id,
+                    productCategoryName: detailData?.productCategoryName
                 })
-                console.log(value)
                 resolve(true);
             })
         } catch (error) {
@@ -104,7 +105,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
             editForm.validateFields().then(async res => {
                 const value = await editForm.getFieldsValue(true);
                 await submitRun({
-                    ...value
+                    ...value,
+                    id: id,
+                    productCategoryName: detailData?.productCategoryName
                 })
                 resolve(true);
             })
@@ -128,13 +131,6 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         editForm.resetFields();
     }
 
-    const onChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        console.log(fields, "====", allFields)
-        if (fields.bondProportion) {
-            
-        }
-    }
-
     useImperativeHandle(ref, () => ({ onSubmit, onSave, resetFields }), [ref, onSubmit, onSave, resetFields]);
 
     return <DetailContent>
@@ -146,7 +142,6 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     col={2} />
                 :
                 <BaseInfo
-                onChange={onChange}
                     dataSource={detailData || {}}
                     form={editForm}
                     columns={applyColumns.map((item: any) => {
@@ -176,7 +171,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                         materialStandardName: ''
                                                     })
                                                     setDetailData({
-                                                        ...detailData,
+                                                        ...editForm?.getFieldsValue(true),
                                                         productCategoryId: '',
                                                         materialStandard: '',
                                                         materialStandardName: ''
@@ -212,7 +207,6 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                     const materialStandard = options?.key?.split(',')[2] || '';
                                                     const materialStandardName = options?.key?.split(',')[3] || '';
                                                     editForm.setFieldsValue({
-                                                        ...editForm?.getFieldsValue(true),
                                                         materialStandard: materialStandard,
                                                         materialStandardName: materialStandardName,
                                                         productCategoryId: productCategoryId,
