@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message, Modal, Radio, Select, Space } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
@@ -18,12 +18,18 @@ export default function ReleaseList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
-        console.log(value)
         setMaterialNames(value)
         resole(value);
+    }))
+
+    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get(`/tower-science/loftingBatch/batchDetailCount`, {
+            ...filterValue
+        });
+        resole(result);
     }))
 
     const { data: specDatas, run: specRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
@@ -203,6 +209,180 @@ export default function ReleaseList(): React.ReactNode {
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{_ === -1 ? undefined : _}</span>
             )
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "dataIndex": "electricWelding",
+            "width": 130
+        },
+        {
+            "key": "groove",
+            "title": "坡口",
+            "dataIndex": "groove",
+            "width": 130
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 130
+        },
+        {
+            "key": "openCloseAngle",
+            "title": "开合角",
+            "dataIndex": "openCloseAngle",
+            "width": 130
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 130
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 130
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 130
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 130
+        },
+        {
+            "key": "specialCode",
+            "title": "特殊件号",
+            "dataIndex": "specialCode",
+            "width": 130
+        },
+        {
+            "key": "suppress",
+            "title": "压制",
+            "dataIndex": "suppress",
+            "width": 130
+        },
+        {
+            "key": "grooveMeters",
+            "title": "坡口米数（米）",
+            "dataIndex": "grooveMeters",
+            "width": 130
+        },
+        {
+            "key": "spellNumber",
+            "title": "拼数",
+            "dataIndex": "spellNumber",
+            "width": 130
+        },
+        {
+            "key": "slottedForm",
+            "title": "开槽形式",
+            "dataIndex": "slottedForm",
+            "width": 130
+        },
+        {
+            "key": "intersectingLine",
+            "title": "相贯线",
+            "dataIndex": "intersectingLine",
+            "width": 130
+        },
+        {
+            "key": "type",
+            "title": "零件类型",
+            "dataIndex": "type",
+            "width": 130
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 130
+        },
+        {
+            "key": "arcContaining",
+            "title": "含弧",
+            "dataIndex": "arcContaining",
+            "width": 130
+        },
+        {
+            "key": "perforate",
+            "title": "钻孔",
+            "dataIndex": "perforate",
+            "width": 130
+        },
+        {
+            "key": "perforateNumber",
+            "title": "钻孔孔径孔数",
+            "dataIndex": "perforateNumber",
+            "width": 130
+        },
+        {
+            "key": "withReaming",
+            "title": "扩孔",
+            "dataIndex": "withReaming",
+            "width": 130
+        },
+        {
+            "key": "reamingNumber",
+            "title": "扩孔孔径孔数",
+            "dataIndex": "reamingNumber",
+            "width": 130
+        },
+        {
+            "key": "gasCutting",
+            "title": "气割孔（0/1）",
+            "dataIndex": "gasCutting",
+            "width": 130
+        },
+        {
+            "key": "gasCuttingNumber",
+            "title": "气割孔孔径孔数",
+            "dataIndex": "gasCuttingNumber",
+            "width": 130
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量（kg）",
+            "dataIndex": "basicsWeight",
+            "width": 130
+        },
+        {
+            "key": "totalWeight",
+            "title": "总重（kg）",
+            "dataIndex": "totalWeight",
+            "width": 130
+        },
+        {
+            "key": "craftName",
+            "title": "工艺列（核对）",
+            "dataIndex": "craftName",
+            "width": 130
+        },
+        {
+            "key": "sides",
+            "title": "边数",
+            "dataIndex": "sides",
+            "width": 130
+        },
+        {
+            "key": "perimeter",
+            "title": "周长",
+            "dataIndex": "perimeter",
+            "width": 130
+        },
+        {
+            "key": "surfaceArea",
+            "title": "表面积(m²)",
+            "dataIndex": "surfaceArea",
+            "width": 130
         }
     ]
 
@@ -444,6 +624,13 @@ export default function ReleaseList(): React.ReactNode {
             requestData={{ productCategoryId: params.productCategoryId, id: params.id }}
             exportPath="/tower-science/loftingBatch/batchDetail"
             extraOperation={<Space>
+                <Row gutter={12}>
+                    <Col>重量：<span>{data?.totalWeight}</span></Col>
+                    <Col>件号数：<span>{data?.totalNumberCount}</span></Col>
+                    <Col>件数：<span>{data?.totalCount}</span></Col>
+                    <Col>孔数：<span>{data?.totalHolesNum}</span></Col>
+                    <Col>切角数量：<span>{data?.totalChamfer}</span></Col>
+                </Row>
                 <Button type="primary" onClick={() => {
                     specRun();
                     craftRun();
@@ -486,10 +673,46 @@ export default function ReleaseList(): React.ReactNode {
                     </Select>
                 },
                 {
+                    name: 'materialName',
+                    label: '规格',
+                    children: <Select placeholder="请选择规格" allowClear defaultValue={''} >
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        {specDatas && specDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                },
+                {
+                    name: 'materialName',
+                    label: '材质',
+                    children: <Select style={{ width: "100px" }} defaultValue={''}>
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        {textureDatas && textureDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                },
+                {
+                    name: 'materialName',
+                    label: '工艺',
+                    children: <Select style={{ width: "100px" }} defaultValue={''}>
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        {craftDatas && craftDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                },
+                {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="" maxLength={200} />
-                },
+                }
             ]}
         />
     </>
