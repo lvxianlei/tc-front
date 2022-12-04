@@ -38,10 +38,10 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
-            key: 'reallyProjectName',
-            title: '项目名称',
+            key: 'projectName',
+            title: '工程名称',
             width: 150,
-            dataIndex: 'reallyProjectName'
+            dataIndex: 'projectName'
         },
         {
             key: 'internalNumber',
