@@ -73,9 +73,9 @@
             "width": 100
         },
         {
-            "key": "description",
+            "key": "createUserName",
             "title": "创建人",
-            "dataIndex": "description",
+            "dataIndex": "createUserName",
             "width": 100
         },
         {
