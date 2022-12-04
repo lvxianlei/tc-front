@@ -25,9 +25,11 @@ export default function ReleaseList(): React.ReactNode {
         resole(value);
     }))
 
-    const { data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { data, run: getCount } = useRequest<any>((filters: any) => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/loftingBatch/batchDetailCount`, {
-            ...filterValue
+            ...filters,
+            id: params?.id,
+            productCategoryId: params?.productCategoryId
         });
         resole(result);
     }))
@@ -388,6 +390,7 @@ export default function ReleaseList(): React.ReactNode {
 
     const onFilterSubmit = (value: any) => {
         setFilterValue(value)
+        getCount(value)
         return value
     }
 
@@ -440,7 +443,6 @@ export default function ReleaseList(): React.ReactNode {
                     ...form?.getFieldsValue(true),
                     batchIssuedId: params?.id
                 }).then(res => {
-                    console.log(res)
                     fetch(`http://127.0.0.1:2001/print`, {
                         mode: 'cors',
                         method: 'post',
@@ -457,20 +459,17 @@ export default function ReleaseList(): React.ReactNode {
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
-                        console.log(e)
                         reject(false)
                     })
 
                 }).catch(e => {
                     setConfirmLoading(false)
-                    console.log(e)
                     reject(false)
                 })
             })
 
         } catch (error) {
-            console.log(error)
-            reject(false)
+            reject(error)
         }
     })
 
