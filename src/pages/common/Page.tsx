@@ -31,6 +31,7 @@ export interface PageProps extends RouteComponentProps, WithTranslation {
     exportObject?: { [key: string]: any }, // 导出可能会包含的id等
     clearSearch?: boolean;
     pageSize?: number;  //条数
+    onGetDataSource?: (data: Record<string, any>) => Record<string, any>
 }
 export interface IResponseData {
     readonly current: number;
@@ -91,6 +92,11 @@ class Page extends AbstractMngtComponent<PageProps, PageState> {
                 ...filterValues,
             })
             let result = this.props.sourceKey ? this.getHierarchy(resData) : resData;
+            this.props.onGetDataSource && this.props.onGetDataSource(
+                this.props.sourceKey ? sourceDataKey.reduce((acc, key) => {
+                    return acc && key in acc ? acc[key] : null;
+                },
+                    (resData as any)) : resData.records || resData)
             this.setState({
                 ...filterValues,
                 resData,

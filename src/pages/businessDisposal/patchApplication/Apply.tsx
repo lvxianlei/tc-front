@@ -134,7 +134,7 @@ export default function Apply(): React.ReactNode {
             setVisible(false)
             resove(true)
         } catch (error) {
-            reject(false)
+            reject(error)
         }
     })
 

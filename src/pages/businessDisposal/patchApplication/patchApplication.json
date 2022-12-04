@@ -348,6 +348,12 @@
             "width": 100
         },
         {
+            "key": "basicsPartNum",
+            "title": "补件数量",
+            "dataIndex": "basicsPartNum",
+            "width": 100
+        },
+        {
             "key": "code",
             "title": "部件号",
             "dataIndex": "code",
@@ -393,12 +399,6 @@
             "key": "thickness",
             "title": "厚度mm",
             "dataIndex": "thickness",
-            "width": 100
-        },
-        {
-            "key": "basicsPartNum",
-            "title": "补件数量",
-            "dataIndex": "basicsPartNum",
             "width": 100
         },
         {
@@ -510,6 +510,12 @@
             "key": "segmentName",
             "title": "段名",
             "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "partNum",
+            "title": "补件数量",
+            "dataIndex": "partNum",
             "width": 100
         },
         {

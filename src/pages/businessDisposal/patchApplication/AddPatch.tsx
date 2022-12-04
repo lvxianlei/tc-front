@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Input, Radio, RadioChangeEvent, Select } from 'antd';
+import { Input, InputNumber, Radio, RadioChangeEvent, Select } from 'antd';
 import { Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -21,7 +21,8 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
     const [filterValue, setFilterValue] = useState({});
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
-    const [status, setStatus] = useState<1 | 2>(1)
+    const [status, setStatus] = useState<1 | 2>(1);
+    const [detailData, setDetailData] = useState<any>([])
 
     const { data: sectionsNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/productSegment/segmentList?productCategoryId=${record.productCategoryId}`);
@@ -30,18 +31,43 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            resolve(selectedRows.map(res => {
-                return {
-                    ...res,
-                    productCategoryId: record.productCategoryId,
-                    productCategoryName: record.productCategoryName,
-                    basicsPartNum: 0,
-                    totalWeight: 0,
-                    structureId: res.id
-                }
-            }));
+            const value = detailData.filter((res: any) => {
+                return selectedRowKeys.findIndex(item => item === res?.id) !== -1
+            })
+            if (status === 1) {
+                resolve(value.map((res: any) => {
+                    return {
+                        ...res,
+                        productCategoryId: record.productCategoryId,
+                        productCategoryName: record.productCategoryName,
+                        basicsPartNum: record.partNum,
+                        structureId: res.id
+                    }
+                }));
+            } else {
+                let newValue: any = []
+                value.forEach((element: any) => {
+                    newValue.push(element, ...(element?.child?.map((item: any) => {
+                        return {
+                            ...item,
+                            partNum: element?.partNum,
+                            totalWeight: (Number(item?.partNum) * Number(item?.basicsWeight || 0)).toFixed(2)
+                        }
+                    }) || []))
+                });
+                resolve(newValue.filter(Boolean)?.map((res: any) => {
+                    return {
+                        ...res,
+                        productCategoryId: record.productCategoryId,
+                        productCategoryName: record.productCategoryName,
+                        basicsPartNum: res.partNum,
+                        structureId: res.id,
+                        totalWeight: (Number(res?.partNum) * Number(res?.basicsWeight || 0) * Number(res?.singleNum || 0)).toFixed(2)
+                    }
+                }));
+            }
         } catch (error) {
-            reject(false)
+            reject(error)
         }
     })
 
@@ -54,7 +80,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
 
     return <>
         <Page
-            path={status === 1 ? "/tower-science/productStructure/supply/entry/list" : '/tower-science/trialAssembly'}
+            path={status === 1 ? "/tower-science/productStructure/supply/entry/list" : '/tower-science/productStructure/supply/weld/structure'}
             columns={[
                 {
                     key: 'index',
@@ -71,14 +97,52 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                             render: (_: number, record: any, key: number): React.ReactNode => (record.isMainPart === 1 ? <p className={styles.weldingGreen}>{_}</p> : <span>{_}</span>)
                         })
                     }
+                    if (res.dataIndex === 'partNum') {
+                        return {
+                            ...res,
+                            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
+                                <InputNumber disabled={record?.isMainPart === 0} min={0} max={9999} precision={0} size="small" defaultValue={0} onChange={(e) => {
+                                    const newList = detailData.map((res: any, ind: number) => {
+                                        if (ind === index) {
+                                            return {
+                                                ...res,
+                                                partNum: e
+                                            }
+                                        } else {
+                                            return res
+                                        }
+                                    })
+                                    setDetailData([...newList])
+                                }} />
+                            )
+                        }
+                    }
                     return res
                 })]}
+            onGetDataSource={(e) => {
+                const newData = e.map((res: any) => {
+                    return {
+                        ...res,
+                        child: [
+                            ...e.map((item: any) => {
+                                if (item?.weldSegmentId === res?.weldSegmentId && item?.isMainPart === 0) {
+                                    return item
+                                }
+                            })
+                        ].filter(Boolean)
+                    }
+                })
+                setDetailData(newData)
+                return e
+            }}
             headTabs={[]}
             requestData={{ productCategoryId: record?.productCategoryId }}
             extraOperation={
                 <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
                     setStatus(event.target.value);
                     setFilterValue({})
+                    setSelectedRowKeys([]);
+                    setSelectedRows([]);
                 }}>
                     <Radio.Button value={1} key="1">零件</Radio.Button>
                     <Radio.Button value={2} key="2">电焊件</Radio.Button>
@@ -122,13 +186,17 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
             ]}
             filterValue={filterValue}
             tableProps={{
-                pagination: status === 1 ? false : {
+                rowKey: 'id',
+                pagination: status === 1 ? {
                     pageSize: 50
-                },
+                } : false,
                 rowSelection: {
                     selectedRowKeys: selectedRowKeys,
                     onChange: onSelectChange,
                     type: "checkbox",
+                    getCheckboxProps: (record) => ({
+                        disabled: record?.isMainPart === 0
+                    }),
                 }
             }}
             onFilterSubmit={(values: Record<string, any>) => {
