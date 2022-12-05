@@ -1,0 +1,23 @@
+@import "../../../App.module.less";
+
+.tableRow {
+	padding: 0;
+	height: @tableRowHeight;
+	line-height: @tableRowHeight;
+	box-sizing: border-box;
+	border: none;
+
+	&:nth-child(odd){
+		background-color: #F8F8F8;
+	}
+}
+
+.search {
+	margin: 16px 0;
+}
+
+.upload_form {
+	:global(.ant-form-item) {
+		margin-bottom: 0;
+	} 
+}

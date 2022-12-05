@@ -35,13 +35,9 @@ const tableColumns = [
             switch (status) {
                 case 0:
                     return '已拒绝';
-                case 1:
-                    return '待开始';
                 case 2:
-                    return '待指派';
-                case 3:
                     return '组焊中';
-                case 4:
+                case 3:
                     return '已完成';
             }
         }

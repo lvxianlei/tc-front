@@ -13,19 +13,20 @@ import {useHistory} from "react-router-dom";
 interface EditProps {
     id: string,
     type: "new" | "edit",
+    visibleP: boolean,
 }
 interface ModalRef {
     dataSource: any[]
     resetFields: () => void
 }
 
-export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Element {
+export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): JSX.Element {
     //
     const history = useHistory();
     const modalRef = useRef<ModalRef>({ dataSource: [], resetFields: () => { } })
     const [visible, setVisible] = useState<boolean>(false)
     const [cargoData, setCargoData] = useState<any[]>([])
-
+    const [detail, setDetail] = useState<any>({})
     const [form] = Form.useForm()
     const [editForm] = Form.useForm()
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -52,31 +53,38 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
         }
     }))
 
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
-
-            setCargoData(result?.lists.map((item: any) => ({
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/detail/${id}`)
+            setDetail(result)
+            form.setFieldsValue({...result})
+            editForm.setFieldsValue({...result?.auxiliaryPurchasePlanListVOS})
+            setPopDataList(result?.auxiliaryPurchasePlanListVOS.map((item: any) => ({
                 ...item,
                 num: item.num ? item.num : 1
             })) || [])
-            resole({
-                ...formatData(BasicInformation, result),
-                unloadUsersName: {
-                    value: result.unloadUsersName,
-                    records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
-                }
+            resove({
+                ...result,
+                // unloadUsersName: {
+                //     value: result.unloadUsersName,
+                //     records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
+                // }
             })
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === "new" })
+    }),{
+        manual: type === "new", refreshDeps: [id]
+    })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](
                 `/tower-supply/auxiliaryMaterialPurchasePlan`,
-                data
+                type === "new" ? data : ({
+                    ...data,
+                    id
+                })
             )
             resole(result)
         } catch (error) {
@@ -86,7 +94,7 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
 
     const handleModalOk = () => {
         // 保留输入的数量以及选择的部门信息
-        cargoData.map(el=>{
+        popDataList.map(el=>{
             popDataList.forEach(item=>{
                 if(el.id == item.id){
                     item.planPurchaseNum = el.planPurchaseNum || 1
@@ -96,16 +104,16 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
                 }
             })
         })
-        setCargoData(popDataList)
+        setPopDataList(popDataList)
         setVisible(false);
     }
 
     const onSubmit = () => new Promise(async (resole, reject) => {
-        if (!cargoData.length) {
+        if (!popDataList.length) {
             message.warning("请先选择辅材...")
             return
         }
-        let flag:boolean = cargoData.every(item=>{
+        let flag:boolean = popDataList.every(item=>{
             console.log(item.deptName,item.deptId)
             return item.deptName && item.deptId
         })
@@ -113,39 +121,99 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
             return message.warn('请将数据补充完整')
         }
         try {
-            const baseFormData = await form.validateFields()
-            console.log(baseFormData)
-            await editForm.validateFields()
-            const result = {
-                ...baseFormData,
-                auxiliaryPurchasePlanListDTOS: cargoData.map((item: any) => {
-                    return {
-                        ...item,
-                        planPurchaseNum:item.planPurchaseNum || 1
-                    }
-                }),
+            if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseFormData = await form.validateFields()
+                console.log(baseFormData)
+                await editForm.validateFields()
+                const result = {
+                    ...baseFormData,
+                    auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
+                        return {
+                            ...item,
+                            planPurchaseNum:item.planPurchaseNum || 1
+                        }
+                    }),
+                }
+                // request
+                await saveRun(result)
+                message.success('操作成功...')
+                history.go(0)
+                resole(true)
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
             }
-            // request
-            await saveRun(result)
-            message.success('操作成功...')
-            history.go(0)
-            resole(true)
         } catch (error) {
             reject(false)
         }
     })
-
+    const onSubmitApproval = () => new Promise(async (resole, reject) => {
+        if (!popDataList.length) {
+            message.warning("请先选择辅材...")
+            return
+        }
+        let flag:boolean = popDataList.every(item=>{
+            console.log(item.deptName,item.deptId)
+            return item.deptName && item.deptId
+        })
+        if(!flag){
+            return message.warn('请将数据补充完整')
+        }
+        try {
+            if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseFormData = await form.validateFields()
+                console.log(baseFormData)
+                await editForm.validateFields()
+                const result = {
+                    ...baseFormData,
+                    isApproval:1,
+                    auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
+                        return {
+                            ...item,
+                            planPurchaseNum:item.planPurchaseNum || 1
+                        }
+                    }),
+                }
+                // request
+                await saveRun(result)
+                message.success('操作成功...')
+                history.go(0)
+                resole(true)
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
+            }
+        } catch (error) {
+            reject(false)
+        }
+    })
+    const onSubmitCancel = () => new Promise(async (resove, reject) => {
+        try {
+            if([1,'1'].includes(detail?.approval)){
+                await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/workflow/cancel/${id}`)
+                message.success("撤销成功...")
+                resove(true)
+            }
+            else{
+                await message.error("不可撤销...")
+                throw new Error('不可撤销')
+            }
+        } catch (error) {
+            reject(false)
+        }
+    })
     const resetFields = () => {
         form.resetFields()
         editForm.resetFields()
-        setCargoData([])
+        setDetail({})
+        setPopDataList([])
     }
     const remove = async (purchaseId: any) => {
-        setCargoData(cargoData.filter((item: any) => item.id !== purchaseId))
-        console.log(cargoData)
+        setPopDataList(popDataList.filter((item: any) => item.id !== purchaseId))
+        console.log(popDataList)
     }
     const amountChange = (value: any, id: string, keys: string) => {
-        const list = cargoData.map((item: any) => {
+        const list = popDataList.map((item: any) => {
             if (item.id === id) {
                 item[keys] = value
                 return item;
@@ -153,9 +221,9 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
             return item
         })
         console.log(list, "修改后的数据========>>>")
-        setCargoData([...list]);
+        setPopDataList([...list]);
     }
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, cargoData, onSubmit, resetFields])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields, onSubmitApproval, onSubmitCancel }), [ref, popDataList, onSubmit, resetFields, onSubmitApproval, onSubmitCancel])
 
     const handleBaseInfoChange = async (fields: any) => {
         console.log(fields)
@@ -168,7 +236,7 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
     }
 
 
-    return <Spin spinning={loading && warehouseLoading}>
+    return <Spin spinning={loading }>
         <Modal
             width={1011}
             visible={visible}
@@ -225,6 +293,7 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
             })}
             dataSource={{
                 ...data
+                // ...detail
             }} />
         <DetailTitle
             title="辅材明细"
@@ -241,13 +310,13 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
                     type="primary"
                     key="clear"
                     ghost
-                    disabled={!cargoData.length}
+                    disabled={!popDataList.length}
                     onClick={() => {
                         Modal.confirm({
                             title: "清空",
                             content: "确定清空辅材明细吗？",
                             onOk: () => {
-                               setCargoData([])
+                               setPopDataList([])
                                message.success("清空成功...")
                             }
                         })
@@ -259,6 +328,7 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
             haveIndex={false}
             form={editForm}
             rowKey="key"
+            pagination={false}
             haveOpration={false}
             onChange={handleEditableChange}
             haveNewButton={false}
@@ -307,11 +377,11 @@ export default forwardRef(function Edit({ id, type, }: EditProps, ref): JSX.Elem
                     </>
                 }
             ]}
-            dataSource={cargoData.map((item: any, index: number) => ({
+            dataSource={[...popDataList].map((item: any, index: number) => ({
                 ...item,
                 planPurchaseNum:item.planPurchaseNum || 1,
                 key: item.id || `item-${index}`
-            })) || []}
+            }))}
         />
     </Spin>
 })

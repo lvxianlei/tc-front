@@ -38,6 +38,12 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
+            key: 'reallyProjectName',
+            title: '项目名称',
+            width: 150,
+            dataIndex: 'reallyProjectName'
+        },
+        {
             key: 'internalNumber',
             title: '内部合同编号',
             dataIndex: 'internalNumber',
@@ -183,6 +189,26 @@ export default function SetOutList(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
+            },
+            {
+                name: 'taskNum',
+                label: '放样任务编号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'planNumber',
+                label: '计划号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'internalNumber',
+                label: '内部合同编号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'name',
+                label: '塔型',
+                children: <Input placeholder='请输入'/>
             },
             {
                 name: 'fuzzyMsg',

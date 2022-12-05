@@ -40,6 +40,18 @@ export default function ConfirmList() {
             dataIndex: 'contractName'
         },
         {
+            key: 'planNumber',
+            title: '计划号',
+            width: 100,
+            dataIndex: 'planNumber'
+        },
+        {
+            key: 'projectName',
+            title: '图纸/项目名称',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
             key: 'plannedDeliveryTime',
             title: '计划交付时间',
             width: 200,
