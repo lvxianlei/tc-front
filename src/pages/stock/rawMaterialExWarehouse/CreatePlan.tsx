@@ -18,6 +18,7 @@ import { materialStandardOptions, materialTextureOptions } from '../../../config
 
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
+    const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [type, setType] = useState<number>(0);
@@ -31,6 +32,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const [Location, setLocation] = useState<any[]>([]);//入库库位数据
     const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
     const materialStandardEnum:any = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+
     // 获取仓库/库区/库位
     const getWarehousing = async (id?: any, type?: any) => {
         const data: any = await RequestUtil.get(`/tower-storage/warehouse/tree`, {
@@ -110,9 +112,9 @@ export default function CreatePlan(props: any): JSX.Element {
         })])
         setDetailVisible(false)
     }
-    const handleBatchChange = async (value: string, id: string) => {
-        const isRepeat: boolean = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`)
-        if(isRepeat){
+    const handleBatchChange = async (value: any, id: string) => {
+        // const isRepeat: boolean = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`)
+        // if(isRepeat){
             const list = popDataList.map((item: any) => {
                 if (item.id === id) {
                     return ({
@@ -124,20 +126,21 @@ export default function CreatePlan(props: any): JSX.Element {
             })
             setMaterialList(list.slice(0));
             setPopDataList(list.slice(0))
-        }else{
-            message.error(`当前收货批次存在重复，请修改`)
-            const list = popDataList.map((item: any) => {
-                if (item.id === id) {
-                    return ({
-                        ...item,
-                        receiveBatchNumber: ''
-                    })
-                }
-                return item
-            })
-            setMaterialList(list.slice(0));
-            setPopDataList(list.slice(0))
-        }
+        // }else{
+        //     message.error(`当前收货批次存在重复，请修改`)
+        //     const list = popDataList.map((item: any) => {
+        //         if (item.id === id) {
+                    
+        //             return ({
+        //                 ...item,
+        //                 receiveBatchNumber: '' 
+        //             })
+        //         }
+        //         return item
+        //     });
+        //     setMaterialList(list.slice(0));
+        //     setPopDataList(list.slice(0))
+        // }
         
     }
     const handleNumChange = (value: number, id: string) => {
@@ -551,8 +554,10 @@ export default function CreatePlan(props: any): JSX.Element {
                         <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择库存</Button>
                         :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setDetailVisible(true)}>选择货物明细</Button>}
                 </div>
+                <Form form={form} className='descripForm'>
                 <CommonTable
                     style={{ padding: "0" }}
+                    className='descripForm'
                     columns={[
                         {
                             key: 'index',
@@ -573,8 +578,22 @@ export default function CreatePlan(props: any): JSX.Element {
                                 return ({
                                     ...item,
                                     width: 160,
-                                    render: (value: number, records: any, key: number) => <Input defaultValue={value || undefined} onBlur={(e: any) => handleBatchChange(e.target.value, records.id)} key={key} maxLength={30} />
-                                })
+                                    render: (value: string, records: any, key: number) => {return <Form.Item 
+                                        name={['list', key, 'receiveBatchNumber']}
+                                        rules={[{
+                                            required: true,
+                                            message:'请输入收货批次'
+                                        }, {
+                                            validator: async (rule: any, value: any, callback: (error?: string) => void) => {
+                                                const resData = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`);
+                                                if(!resData)
+                                                return Promise.reject('收货批次已存在');
+                                                else return Promise.resolve('收货批次可用');
+                                            }
+                                        }]}>
+                                            <Input defaultValue={value || undefined}   onBlur={(e:any)=> handleBatchChange(e.target.value,records.id)} maxLength={30} />
+                                        </Form.Item>
+                                }})
                             }
                             if (["num"].includes(item.dataIndex)&&type===0) {
                                 return ({
@@ -662,6 +681,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         }]}
                     pagination={false}
                     dataSource={popDataList} />
+                </Form>
             </Spin>
             <Modal width={1100} title={`选择库存`} destroyOnClose
                 visible={visible}
