@@ -22,6 +22,9 @@ export default function ReleaseList(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
         setMaterialNames(value)
+        specRun();
+        textureRun();
+        craftRun();
         resole(value);
     }))
 
