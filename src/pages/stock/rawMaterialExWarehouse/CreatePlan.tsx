@@ -110,18 +110,35 @@ export default function CreatePlan(props: any): JSX.Element {
         })])
         setDetailVisible(false)
     }
-    const handleBatchChange = (value: string, id: string) => {
-        const list = popDataList.map((item: any) => {
-            if (item.id === id) {
-                return ({
-                    ...item,
-                    receiveBatchNumber: value
-                })
-            }
-            return item
-        })
-        setMaterialList(list.slice(0));
-        setPopDataList(list.slice(0))
+    const handleBatchChange = async (value: string, id: string) => {
+        const isRepeat: boolean = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`)
+        if(isRepeat){
+            const list = popDataList.map((item: any) => {
+                if (item.id === id) {
+                    return ({
+                        ...item,
+                        receiveBatchNumber: value
+                    })
+                }
+                return item
+            })
+            setMaterialList(list.slice(0));
+            setPopDataList(list.slice(0))
+        }else{
+            message.error(`当前收货批次存在重复，请修改`)
+            const list = popDataList.map((item: any) => {
+                if (item.id === id) {
+                    return ({
+                        ...item,
+                        receiveBatchNumber: ''
+                    })
+                }
+                return item
+            })
+            setMaterialList(list.slice(0));
+            setPopDataList(list.slice(0))
+        }
+        
     }
     const handleNumChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
