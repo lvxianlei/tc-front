@@ -150,6 +150,8 @@ export default function Edit() {
       ...baseInfo,
       signCustomerName: baseInfo.signCustomer.value,
       signCustomerId: baseInfo.signCustomer.id,
+      frameAgreementName: baseInfo.frameAgreementId.value,
+      frameAgreementId: baseInfo.frameAgreementId.id,
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
@@ -287,87 +289,15 @@ export default function Edit() {
               return ({ ...item, enum: addressList })
             case "country":
               return ({ ...item, hidden: region !== "其他-国外" })
+            case "frameAgreementId":
+              return ({
+                ...item,
+                path: `${item.path}${params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ''}`
+              })
             default:
               return item
           }
         }),
-        ...(["2", "3"].includes(params.contractType) ? [{
-          "title": "框架合同",
-          "dataIndex": "",
-          "type": "popTable",
-          "width": 1101,
-          "path": `/tower-market/frameAgreement?projectId=${params.projectId}`,
-          "rowKey": "id",
-          "dependencies": true,
-          "required": true,
-          "search": false,
-          "columns": [
-            {
-              "title": "协议名称",
-              "dataIndex": "frameAgreementName"
-            },
-            {
-              "title": "项目名称",
-              "dataIndex": "projectName"
-            },
-            {
-              "title": "预估总重（吨）",
-              "dataIndex": "contractWeight"
-            },
-            {
-              "title": "预估单价（元）",
-              "dataIndex": "contractMoney"
-            },
-            {
-              "title": "预估总价（元）",
-              "dataIndex": "contractMoneyCount"
-            },
-            {
-              "title": "执行重量（吨）",
-              "dataIndex": "implementWeight"
-            },
-            {
-              "title": "执行金额（元）",
-              "dataIndex": "implementMoney"
-            },
-            {
-              "title": "执行重量百分比",
-              "dataIndex": "implementWeightPro"
-            },
-            {
-              "title": "执行金额百分比",
-              "dataIndex": "implementMoneyPro"
-            },
-            {
-              "title": "签订日期",
-              "dataIndex": "signDate"
-            },
-            {
-              "title": "签订人",
-              "dataIndex": "signUser"
-            },
-            {
-              "title": "交货日期",
-              "dataIndex": "deliveryDate"
-            },
-            {
-              "title": "合同接管人",
-              "dataIndex": "takeOverUser"
-            },
-            {
-              "title": "合同接管日期",
-              "dataIndex": "takeOverTime"
-            },
-            {
-              "title": "是否接收原件",
-              "dataIndex": "isReceivedContract"
-            },
-            {
-              "title": "销售员",
-              "dataIndex": "saleUser"
-            }
-          ]
-        }] : []),
         ...params.contractType === "2" ? [{
           "title": "变更原价格",
           "dataIndex": "changePrice",
