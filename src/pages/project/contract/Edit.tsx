@@ -70,6 +70,10 @@ export default function Edit() {
           value: result.signCustomerName,
           id: result.signCustomerId
         },
+        frameAgreementId: {
+          value: result.frameAgreementName,
+          id: result.frameAgreementId
+        },
         payCompany: {
           value: result.payCompanyName,
           id: result.payCompanyId
