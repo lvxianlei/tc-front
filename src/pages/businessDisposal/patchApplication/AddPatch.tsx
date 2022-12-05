@@ -35,13 +35,14 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                 return selectedRowKeys.findIndex(item => item === res?.id) !== -1
             })
             if (status === 1) {
-                resolve(value.map((res: any) => {
+                resolve(value?.map((res: any) => {
                     return {
                         ...res,
                         productCategoryId: record.productCategoryId,
                         productCategoryName: record.productCategoryName,
-                        basicsPartNum: record.partNum,
-                        structureId: res.id
+                        basicsPartNum: res.partNum,
+                        structureId: res.id,
+                        totalWeight: (Number(res?.partNum) * Number(res?.basicsWeight || 0)).toFixed(2)
                     }
                 }));
             } else {
@@ -55,7 +56,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                         }
                     }) || []))
                 });
-                resolve(newValue.filter(Boolean)?.map((res: any) => {
+                resolve(newValue?.filter(Boolean)?.map((res: any) => {
                     return {
                         ...res,
                         productCategoryId: record.productCategoryId,
