@@ -607,6 +607,9 @@ export default function TowerInformation(): React.ReactNode {
                 value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            if (value.personnel) {
+                value.personnel = value.personnel?.value;
+            }
             setFilterValue(value)
             setRefresh(!refresh);
         }}>

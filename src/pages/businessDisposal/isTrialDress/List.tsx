@@ -234,6 +234,9 @@ export default function List(): React.ReactNode {
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
                 }
+                if (values.loftingUser) {
+                    values.loftingUser = values.loftingUser?.value;
+                }
                 setFilterValues(values);
                 return values;
             }}

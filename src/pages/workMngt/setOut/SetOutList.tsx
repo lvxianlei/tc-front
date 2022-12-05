@@ -195,6 +195,9 @@ export default function SetOutList(): React.ReactNode {
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            if (values.loftingLeader) {
+                values.loftingLeader = values.loftingLeader?.value;
+            }
             setFilterValue(values)
             return values;
         }}
