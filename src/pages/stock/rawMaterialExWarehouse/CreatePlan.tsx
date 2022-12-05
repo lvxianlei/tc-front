@@ -556,7 +556,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 return ({
                                     ...item,
                                     width: 160,
-                                    render: (value: number, records: any, key: number) => <Input defaultValue={value || undefined} onBlur={(e: any) => handleBatchChange(e.target.value, records.id)} key={key} maxLength={30} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                    render: (value: number, records: any, key: number) => <Input defaultValue={value || undefined} onBlur={(e: any) => handleBatchChange(e.target.value, records.id)} key={key} maxLength={30} />
                                 })
                             }
                             if (["num"].includes(item.dataIndex)&&type===0) {
@@ -568,19 +568,19 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["num"].includes(item.dataIndex)&&type===2) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={ value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={ value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                                 })
                             }
                             if (["length"].includes(item.dataIndex)&&type===2) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleLengthChange(value, records.id)} key={key} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleLengthChange(value, records.id)} key={key} />
                                 })
                             }
                             if (["width"].includes(item.dataIndex)&&type===2) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
                                 })
                             }
                             if (["reservoirName"].includes(item.dataIndex)&&type===2) {
@@ -591,7 +591,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                                 style={{ width: "100%" }}
                                                 value={value ? value : '请选择'}
                                                 onChange={(val) => { handleReservoirChange(val,records.id) }}
-                                                disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
+                                                // disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
                                             >
                                                 {
                                                     ReservoirArea.map((item, index) => {
@@ -615,7 +615,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                                 style={{ width: "100%" }}
                                                 value={value ? value : '请选择'}
                                                 onChange={(val) => { handleLocatorChange(val,records.id) }}
-                                                disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
+                                                // disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
                                             >
                                                 {
                                                     Location.map((item, index) => {
@@ -640,7 +640,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             dataIndex: "opration",
                             render: (_: any, records: any) => <>
                                 {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
-                                <Button type="link" disabled={records.source === 1||(records?.outStockItemStatus&&records?.outStockItemStatus!==0)} onClick={() => handleRemove(records.id)}>移除</Button>
+                                <Button type="link" disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)} onClick={() => handleRemove(records.id)}>移除</Button>
                             </>
                         }]}
                     pagination={false}
