@@ -22,6 +22,9 @@ export default function ReleaseList(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
         setMaterialNames(value)
+        specRun();
+        textureRun();
+        craftRun();
         resole(value);
     }))
 
@@ -216,175 +219,175 @@ export default function ReleaseList(): React.ReactNode {
             "key": "electricWelding",
             "title": "电焊",
             "dataIndex": "electricWelding",
-            "width": 130
+            "width": 100
         },
         {
             "key": "groove",
             "title": "坡口",
             "dataIndex": "groove",
-            "width": 130
+            "width": 100
         },
         {
             "key": "chamfer",
             "title": "切角",
             "dataIndex": "chamfer",
-            "width": 130
+            "width": 100
         },
         {
             "key": "openCloseAngle",
             "title": "开合角",
             "dataIndex": "openCloseAngle",
-            "width": 130
+            "width": 100
         },
         {
             "key": "bend",
             "title": "火曲",
             "dataIndex": "bend",
-            "width": 130
+            "width": 100
         },
         {
             "key": "shovelBack",
             "title": "铲背",
             "dataIndex": "shovelBack",
-            "width": 130
+            "width": 100
         },
         {
             "key": "rootClear",
             "title": "清根",
             "dataIndex": "rootClear",
-            "width": 130
+            "width": 100
         },
         {
             "key": "squash",
             "title": "打扁",
             "dataIndex": "squash",
-            "width": 130
+            "width": 100
         },
         {
             "key": "specialCode",
             "title": "特殊件号",
             "dataIndex": "specialCode",
-            "width": 130
+            "width": 100
         },
         {
             "key": "suppress",
             "title": "压制",
             "dataIndex": "suppress",
-            "width": 130
+            "width": 100
         },
         {
             "key": "grooveMeters",
             "title": "坡口米数（米）",
             "dataIndex": "grooveMeters",
-            "width": 130
+            "width": 100
         },
         {
             "key": "spellNumber",
             "title": "拼数",
             "dataIndex": "spellNumber",
-            "width": 130
+            "width": 100
         },
         {
             "key": "slottedForm",
             "title": "开槽形式",
             "dataIndex": "slottedForm",
-            "width": 130
+            "width": 100
         },
         {
             "key": "intersectingLine",
             "title": "相贯线",
             "dataIndex": "intersectingLine",
-            "width": 130
+            "width": 100
         },
         {
             "key": "type",
             "title": "零件类型",
             "dataIndex": "type",
-            "width": 130
+            "width": 100
         },
         {
             "key": "description",
             "title": "备注",
             "dataIndex": "description",
-            "width": 130
+            "width": 150
         },
         {
             "key": "arcContaining",
             "title": "含弧",
             "dataIndex": "arcContaining",
-            "width": 130
+            "width": 100
         },
         {
             "key": "perforate",
             "title": "钻孔",
             "dataIndex": "perforate",
-            "width": 130
+            "width": 100
         },
         {
             "key": "perforateNumber",
             "title": "钻孔孔径孔数",
             "dataIndex": "perforateNumber",
-            "width": 130
+            "width": 100
         },
         {
             "key": "withReaming",
             "title": "扩孔",
             "dataIndex": "withReaming",
-            "width": 130
+            "width": 100
         },
         {
             "key": "reamingNumber",
             "title": "扩孔孔径孔数",
             "dataIndex": "reamingNumber",
-            "width": 130
+            "width": 100
         },
         {
             "key": "gasCutting",
             "title": "气割孔（0/1）",
             "dataIndex": "gasCutting",
-            "width": 130
+            "width": 100
         },
         {
             "key": "gasCuttingNumber",
             "title": "气割孔孔径孔数",
             "dataIndex": "gasCuttingNumber",
-            "width": 130
+            "width": 100
         },
         {
             "key": "basicsWeight",
             "title": "单件重量（kg）",
             "dataIndex": "basicsWeight",
-            "width": 130
+            "width": 100
         },
         {
             "key": "totalWeight",
             "title": "总重（kg）",
             "dataIndex": "totalWeight",
-            "width": 130
+            "width": 100
         },
         {
             "key": "craftName",
             "title": "工艺列（核对）",
             "dataIndex": "craftName",
-            "width": 130
+            "width": 100
         },
         {
             "key": "sides",
             "title": "边数",
             "dataIndex": "sides",
-            "width": 130
+            "width": 100
         },
         {
             "key": "perimeter",
             "title": "周长",
             "dataIndex": "perimeter",
-            "width": 130
+            "width": 100
         },
         {
             "key": "surfaceArea",
             "title": "表面积(m²)",
             "dataIndex": "surfaceArea",
-            "width": 130
+            "width": 100
         }
     ]
 
@@ -672,7 +675,7 @@ export default function ReleaseList(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'materialName',
+                    name: 'structureSpec',
                     label: '规格',
                     children: <Select placeholder="请选择规格" allowClear defaultValue={''} >
                         <Select.Option value={''} key={''}>全部</Select.Option>
@@ -684,7 +687,7 @@ export default function ReleaseList(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'materialName',
+                    name: 'structureTexture',
                     label: '材质',
                     children: <Select style={{ width: "100px" }} defaultValue={''}>
                         <Select.Option value={''} key={''}>全部</Select.Option>
@@ -696,7 +699,7 @@ export default function ReleaseList(): React.ReactNode {
                     </Select>
                 },
                 {
-                    name: 'materialName',
+                    name: 'craftName',
                     label: '工艺',
                     children: <Select style={{ width: "100px" }} defaultValue={''}>
                         <Select.Option value={''} key={''}>全部</Select.Option>

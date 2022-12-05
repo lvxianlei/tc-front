@@ -482,7 +482,7 @@ export default function ReleaseList(): React.ReactNode {
                         </Select>
                     },
                     {
-                        name: 'name ',
+                        name: 'name',
                         label: '塔型',
                         children: <Input placeholder='请输入' />
                     },
