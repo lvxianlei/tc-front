@@ -24,7 +24,7 @@ const planNameEnum = planNameOptions?.map((item: any) => ({ label: item.name, va
 export default function Edit() {
   const history = useHistory()
   const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/:entry/:type/contract")
-  const params = useParams<{ projectId: string, id: string }>()
+  const params = useParams<{ projectId: string, id: string, contractType: "1" | "2" | "3" }>()
   const [planType, setPlanType] = useState<0 | 1>(0)
   const [when, setWhen] = useState<boolean>(true)
   const [region, setRegion] = useState<string>()
@@ -139,6 +139,8 @@ export default function Edit() {
       ...baseInfo,
       signCustomerName: baseInfo.signCustomer.value,
       signCustomerId: baseInfo.signCustomer.id,
+      frameAgreementName: baseInfo.frameAgreementId.value,
+      frameAgreementId: baseInfo.frameAgreementId.id,
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
@@ -273,15 +275,41 @@ export default function Edit() {
               return ({ ...item, enum: addressList })
             case "country":
               return ({ ...item, hidden: region !== "其他-国外" })
+            case "frameAgreementId":
+              return ({
+                ...item,
+                path: `${item.path}${params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ''}`
+              })
             default:
               return item
           }
-        })]}
+        }),
+        ...params.contractType === "2" ? [{
+          "title": "变更原价格",
+          "dataIndex": "changePrice",
+          "type": "select",
+          "enum": [
+            {
+              "label": "是",
+              "value": 1
+            },
+            {
+              "label": "否",
+              "value": 2
+            }
+          ]
+        }] : [],
+        {
+          "title": "备注",
+          "dataIndex": "description",
+          "type": "textarea"
+        }]}
         form={form}
         dataSource={{
           bidBatch: projectData?.bidBatch,
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
           country: projectData?.country || "",
+          contractType: Number(params.contractType) || 1,
           ...data
         } || {
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),

@@ -67,6 +67,26 @@ export default function ContractList(): JSX.Element {
       dataIndex: "contractName",
     },
     {
+      title: "合同类型",
+      dataIndex: "contractType",
+      type: "select",
+      enum: [
+        {
+          label: "销售合同",
+          value: 1
+        },
+        {
+          label: "补充合同",
+          value: 2
+        },
+        {
+          label: "变更合同",
+          value: 3
+        }
+      ],
+      width: 100,
+    },
+    {
       title: "合同总重(吨)",
       width: 100,
       dataIndex: "contractTotalWeight",
@@ -137,7 +157,13 @@ export default function ContractList(): JSX.Element {
     },
     {
       title: "制单时间",
-      dataIndex: "createTime", width: 100,
+      dataIndex: "createTime",
+      width: 100,
+    },
+    {
+      title: "关联单据--",
+      dataIndex: "",
+      width: 100,
     }
   ]
 
@@ -186,7 +212,7 @@ export default function ContractList(): JSX.Element {
             </span>
             {
               selectedRows.length > 0 && <Row style={{ width: 1200 }}>
-                <Row style={{ color: "#FF8C00", fontWeight: 600,fontSize:14 }}>合计：</Row>
+                <Row style={{ color: "#FF8C00", fontWeight: 600, fontSize: 14 }}>合计：</Row>
                 <Space>
                   <div>合同重量：<span style={{ color: "#FF8C00" }}>{total.weight}吨</span></div>
                   <div>合同金额：<span style={{ color: "#FF8C00" }}>{total.amount}元</span></div>
@@ -203,17 +229,17 @@ export default function ContractList(): JSX.Element {
             width: 50,
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
           },
-          ...columns,
+          ...columns as any,
           {
             title: "操作",
             fixed: "right",
             dataIndex: "operation",
-            width: 300,
+            width: 400,
             render: (_: undefined, record: any): React.ReactNode => (
               <>
                 <Button type="link">
                   <Link
-                    to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}`}
+                    to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}/${record?.contractType}`}
                   >
                     编辑
                   </Link>
@@ -259,8 +285,22 @@ export default function ContractList(): JSX.Element {
                   }}
                   projectId={record?.projectId}
                   selectKey={record?.bidStatisticsId} />
+                <Button type="link">
+                  <Link
+                    to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}/2`}
+                  >
+                    补充合同
+                  </Link>
+                </Button>
+                <Button type="link">
+                  <Link
+                    to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}/3`}
+                  >
+                    变更合同
+                  </Link>
+                </Button>
               </>
-            ),
+            )
           },
         ]}
         refresh={refresh}

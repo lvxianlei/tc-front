@@ -467,14 +467,14 @@
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/management/edit/contract/:projectId/:id",
+      "path": "/project/management/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/contract/edit/contract/:projectId/:id",
+      "path": "/project/contract/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
