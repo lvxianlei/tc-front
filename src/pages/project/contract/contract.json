@@ -352,7 +352,20 @@
             "path": "/tower-market/frameAgreement",
             "rowKey": "id",
             "dependencies": true,
-            "search": false,
+            "search": [
+                {
+                    "title": "协议名称",
+                    "dataIndex": "frameAgreementName"
+                },
+                {
+                    "title": "协议编号",
+                    "dataIndex": "frameAgreementCode"
+                },
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                }
+            ],
             "columns": [
                 {
                     "title": "协议名称",
