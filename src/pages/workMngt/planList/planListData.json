@@ -1,6 +1,11 @@
 {
     "baseInfoList": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "width": 100
+        },
+        {
             "title": "采购计划编号",
             "dataIndex": "purchasePlanCode",
             "type": "string",

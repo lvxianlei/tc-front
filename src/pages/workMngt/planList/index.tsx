@@ -144,6 +144,17 @@ export default function Invoicing() {
                         children: <IntgSelect width={200} />
                     },
                     {
+                        name: 'approval',
+                        label: '审批状态',
+                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="0">待发起</Select.Option>
+                            <Select.Option value="1">审批中</Select.Option>
+                            <Select.Option value="2">审批通过</Select.Option>
+                            <Select.Option value="3">审批驳回</Select.Option>
+                            <Select.Option value="4">已撤销</Select.Option>
+                        </Select>
+                    },
+                    {
                         name: 'fuzzyQuery',
                         label: "模糊查询项",
                         children: <Input placeholder="采购计划编号" style={{ width: 300 }} />

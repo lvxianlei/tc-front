@@ -91,6 +91,16 @@ export default function EnquiryList(): React.ReactNode {
                     children: <IntgSelect width={200} />
                 },
                 {
+                    name: 'executingStatus',
+                    label: '执行状态',
+                    children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                        <Select.Option value="0">正常</Select.Option>
+                        <Select.Option value="1">取消</Select.Option>
+                        <Select.Option value="2">暂停</Select.Option>
+                        <Select.Option value="3">作废</Select.Option>
+                    </Select>
+                },
+                {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
                     children: <Input placeholder="批次号/塔型/计划号" maxLength={200} />

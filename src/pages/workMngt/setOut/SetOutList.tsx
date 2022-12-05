@@ -191,6 +191,26 @@ export default function SetOutList(): React.ReactNode {
                 </Form.Item>
             },
             {
+                name: 'taskNum',
+                label: '放样任务编号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'planNumber',
+                label: '计划号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'internalNumber',
+                label: '内部合同编号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'name',
+                label: '塔型',
+                children: <Input placeholder='请输入'/>
+            },
+            {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
                 children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型/塔型钢印号" />
