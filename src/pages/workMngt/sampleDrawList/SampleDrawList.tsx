@@ -131,6 +131,9 @@ export default function SampleDrawList(): React.ReactNode {
             value.smallSampleDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.planTime
         }
+        if (value.smallSampleLeader) {
+            value.smallSampleLeader = value.smallSampleLeader?.value;
+        }
         setFilterValue(value)
         return value
     }

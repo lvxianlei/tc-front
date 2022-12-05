@@ -219,6 +219,9 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
+        if (value.confirmId) {
+            value.confirmId = value.confirmId?.value;
+        }
         setFilterValue(value)
         return value
     }

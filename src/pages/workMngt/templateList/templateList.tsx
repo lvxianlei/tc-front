@@ -133,6 +133,9 @@ export default function TemplateList() {
             value.updateStatusTimeStart = `${formatDate[0]} 00:00:00`
             value.updateStatusTimeEnd = `${formatDate[1]} 23:59:59`
         }
+        if (value.drawLeader) {
+            value.drawLeader = value.drawLeader?.value;
+        }
         setFilterValue(value)
         return value
     }

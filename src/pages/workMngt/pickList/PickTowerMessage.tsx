@@ -282,6 +282,12 @@ export default function Lofting(): React.ReactNode {
             value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
+        if (value.materialLeader) {
+            value.materialLeader = value.materialLeader?.value;
+        }
+        if (value.materialCheckLeader) {
+            value.materialCheckLeader = value.materialCheckLeader?.value;
+        }
         setFilterValue(value)
 
         setRefresh(!refresh);

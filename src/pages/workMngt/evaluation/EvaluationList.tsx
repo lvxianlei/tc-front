@@ -147,6 +147,9 @@ export default function EvaluationList(): React.ReactNode {
                 values.expectDeliverTimeStart = formatDate[0] + ' 00:00:00';
                 values.expectDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             }
+            if (values.assessUser) {
+                values.assessUser = values.assessUser?.value;
+            }
             setFilterValue(values);
             return values;
         }}

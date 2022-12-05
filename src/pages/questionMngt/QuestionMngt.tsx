@@ -141,6 +141,12 @@ export default function QuestionMngt(): React.ReactNode {
             value.updateTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.updateTime
         }
+        if (value.recipient) {
+            value.recipient = value.recipient?.value;
+        }
+        if (value.createUser) {
+            value.createUser = value.createUser?.value;
+        }
         setFilterValue(value)
         return value
     }

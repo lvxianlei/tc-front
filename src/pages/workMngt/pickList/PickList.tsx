@@ -132,6 +132,9 @@ export default function PickList(): React.ReactNode {
             value.plannedDeliveryTimeEnd = formatDate[1]+ ' 23:59:59';
             delete value.planTime
         }
+        if (value.materialLeader) {
+            value.materialLeader = value.materialLeader?.value;
+        }
         setFilterValue(value)
         return value
     }
