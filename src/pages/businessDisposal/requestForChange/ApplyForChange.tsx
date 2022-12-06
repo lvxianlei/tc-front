@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Button, Form, Input, Select, Modal, Spin } from "antd";
+import { Button, Form, Input, Select, Modal, Spin, message } from "antd";
 import { BaseInfo, CommonTable, DetailContent } from "../../common";
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
@@ -227,28 +227,34 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     const values = changeForm.getFieldsValue(true);
-                    let newChangeData: any[] = changeData || []
-                    const newSelectedData = selectedRows?.map(res => {
-                        newChangeData = newChangeData.filter((item: any) => res?.id !== item?.id)
-                        return {
-                            ...res,
-                            ...values,
-                            id: '',
-                            drawProductId: res?.id,
-                            productCategoryName: res?.productCategory,
-                            productNumber: res?.name,
-                            voltageGradeName: res?.voltageLevelName,
-                            voltageGrade: res?.voltageLevel,
-                        }
-                    })
-                    setSelectedData([...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData])
-                    selectedForm?.setFieldsValue({
-                        data: [...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData]
-                    })
-                    setChangeData([...newChangeData])
-                    setSelectedKeys([]);
-                    setSelectedRows([]);
-                    resove(true)
+                    if (values?.changeProductCategoryName || values?.changeSteelProductShape || values?.changeVoltageGrade || values?.changeProductType || values?.changeTypeId) {
+
+                        let newChangeData: any[] = changeData || []
+                        const newSelectedData = selectedRows?.map(res => {
+                            newChangeData = newChangeData.filter((item: any) => res?.id !== item?.id)
+                            return {
+                                ...res,
+                                ...values,
+                                id: '',
+                                drawProductId: res?.id,
+                                productCategoryName: res?.productCategory,
+                                productNumber: res?.name,
+                                voltageGradeName: res?.voltageLevelName,
+                                voltageGrade: res?.voltageLevel,
+                            }
+                        })
+                        setSelectedData([...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData])
+                        selectedForm?.setFieldsValue({
+                            data: [...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData]
+                        })
+                        setChangeData([...newChangeData])
+                        setSelectedKeys([]);
+                        setSelectedRows([]);
+                        resove(true)
+                    } else {
+                        reject(false)
+                        message.warning('至少添加一项！')
+                    }
                 } catch (error) {
                     reject(error)
                 }
