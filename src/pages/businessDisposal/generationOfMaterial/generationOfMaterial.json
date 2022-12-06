@@ -89,46 +89,22 @@
         {
             "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "planNumber",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择计划号"
-                }
-            ]
+            "dataIndex": "planNumber"
         },
         {
             "key": "productCategoryId",
             "title": "塔型",
-            "dataIndex": "productCategoryId",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择塔型"
-                }
-            ]
+            "dataIndex": "productCategoryId"
         },
         {
             "key": "materialCategory",
             "title": "原材料类型",
-            "dataIndex": "materialCategory",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择原材料类型"
-                }
-            ]
+            "dataIndex": "materialCategory"
         },
         {
             "key": "materialName",
             "title": "原材料品名",
-            "dataIndex": "materialName",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择原材料品名"
-                }
-            ]
+            "dataIndex": "materialName"
         },
         {
             "key": "materialStandard",
@@ -138,57 +114,27 @@
         {
             "key": "changeMaterialStandard",
             "title": "代料后标准",
-            "dataIndex": "changeMaterialStandard",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择代料后标准"
-                }
-            ]
+            "dataIndex": "changeMaterialStandard"
         },
         {
             "key": "structureSpec",
             "title": "代料前规格",
-            "dataIndex": "structureSpec",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择代料前规格"
-                }
-            ]
+            "dataIndex": "structureSpec"
         },
         {
             "key": "changeStructureSpec",
             "title": "代料后规格",
-            "dataIndex": "changeStructureSpec",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择代料后规格"
-                }
-            ]
+            "dataIndex": "changeStructureSpec"
         },
         {
             "key": "structureTexture",
             "title": "代料前材质",
-            "dataIndex": "structureTexture",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择代料前材质"
-                }
-            ]
+            "dataIndex": "structureTexture"
         },
         {
             "key": "changeStructureTexture",
             "title": "代料后材质",
-            "dataIndex": "changeStructureTexture",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择代料后材质"
-                }
-            ]
+            "dataIndex": "changeStructureTexture"
         },
         {
             "key": "description",

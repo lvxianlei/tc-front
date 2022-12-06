@@ -271,6 +271,9 @@ export default function BoltList(): React.ReactNode {
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
                 }
+                if (values.personnel) {
+                    values.personnel = values.personnel?.value;
+                }
                 setFilterValue(values);
                 return values;
             }}

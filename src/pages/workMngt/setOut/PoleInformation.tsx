@@ -310,6 +310,9 @@ export default function PoleInformation(): React.ReactNode {
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
                 }
+                if (values.productCategory) {
+                    values.productCategory = values.productCategory?.value;
+                }
                 return values;
             }}
         />

@@ -269,6 +269,9 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';;
                     values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';;
                 }
+                if (values.personnel) {
+                    values.personnel = values.personnel?.value;
+                }
                 setFilterValue(values);
                 return values;
             }}

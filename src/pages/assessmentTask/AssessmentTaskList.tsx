@@ -225,6 +225,9 @@ export default function AssessmentTaskList(): React.ReactNode {
                         values.bidEndTimeStart = formatDate[0] + ' 00:00:00';
                         values.bidEndTimeEnd = formatDate[1] + ' 23:59:59';
                     }
+                    if (values.assessUser) {
+                        values.assessUser = values.assessUser?.value;
+                    }
                     setFilterValue(values);
                     return values;
                 }}

@@ -119,6 +119,9 @@ export default function ConfirmList() {
             value.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.planTime
         }
+        if (value.confirmId) {
+            value.confirmId = value.confirmId?.value;
+        }
         setFilterValue(value)
         return value
     }
