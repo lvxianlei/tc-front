@@ -233,6 +233,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         return {
                             ...res,
                             ...values,
+                            id: '',
                             drawProductId: res?.id,
                             productCategoryName: res?.productCategory,
                             productNumber: res?.name,
@@ -278,14 +279,16 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            const value = form.getFieldsValue(true);
-            const values = selectedForm?.getFieldsValue(true)?.data
-            getLoading(true)
-            await saveRun({
-                ...value,
-                productChangeDetailList: values
+            selectedForm.validateFields().then(async res => {
+                const value = form.getFieldsValue(true);
+                const values = selectedForm?.getFieldsValue(true)?.data
+                getLoading(true)
+                await saveRun({
+                    ...value,
+                    productChangeDetailList: values
+                })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -306,16 +309,18 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const value = form.getFieldsValue(true);
-            const values = selectedForm?.getFieldsValue(true)?.data
-            getLoading(true)
-            await submitRun({
-                ...value,
-                productChangeDetailList: values
+            selectedForm.validateFields().then(async res => {
+                const value = form.getFieldsValue(true);
+                const values = selectedForm?.getFieldsValue(true)?.data
+                getLoading(true)
+                await submitRun({
+                    ...value,
+                    productChangeDetailList: values
+                })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
-            reject(false)
+            reject(error)
         }
     })
 
