@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Page } from '../common';
+import { IntgSelect, Page } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
@@ -9,12 +9,11 @@ import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import styles from './confirm.module.less';
 import { FixedType } from 'rc-table/lib/interface';
+import SelectUser from '../common/SelectUser';
 
 export default function ConfirmTaskMngt(): React.ReactNode {
-    const [user, setUser] = useState<any[] | undefined>([]);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
-    const [department, setDepartment] = useState<any | undefined>([]);
     const [assignVisible, setVisible] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [drawTaskId, setDrawTaskId] = useState<string>('');
@@ -24,26 +23,24 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [assignType, setAssignType] = useState<'batch' | 'single'>('single');
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
-        setDepartment(departmentData);
-        resole(data)
-    }), {})
 
     const handleAssignModalOk = async () => {
         try {
-            const submitData = await form.validateFields();
-            submitData.drawTaskIds = assignType === 'single' ? [drawTaskId] : selectedKeys;
-            submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format("YYYY-MM-DD HH:ss:mm");
-            await RequestUtil.post('/tower-science/drawTask/batchAssignDrawTask', submitData).then(() => {
-                message.success('指派成功！')
-            }).then(() => {
-                setVisible(false);
-                form.resetFields();
-            }).then(() => {
-                setRefresh(!refresh);
-                history.go(0)
+            form.validateFields().then(async res => {
+                const submitData = await form.getFieldsValue(true);
+                submitData.drawTaskIds = assignType === 'single' ? [drawTaskId] : selectedKeys;
+                submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format("YYYY-MM-DD HH:ss:mm");
+                await RequestUtil.post('/tower-science/drawTask/batchAssignDrawTask', submitData).then(() => {
+                    message.success('指派成功！')
+                }).then(() => {
+                    setVisible(false);
+                    form.resetFields();
+                }).then(() => {
+                    setRefresh(!refresh);
+                    history.go(0)
+                })
             })
+
         } catch (error) {
             console.log(error)
         }
@@ -185,6 +182,21 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     >
                         <Button type='link' disabled={record.status !== 4}>提交任务</Button>
                     </Popconfirm>
+                    <Popconfirm
+                        title="确认撤回任务?"
+                        onConfirm={async () => {
+                            await RequestUtil.post(`/tower-science/drawTask/retract/${record.id}`).then(() => {
+                                message.success('撤回成功！');
+                            }).then(() => {
+                                setRefresh(!refresh)
+                            })
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                        disabled={record.status !== 4}
+                    >
+                        <Button type='link' disabled={record.status !== 4}>撤回</Button>
+                    </Popconfirm>
                 </Space>
             )
         }
@@ -200,46 +212,15 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         wrapperCol: { span: 16 }
     };
 
-    const onDepartmentChange = async (value: Record<string, any>, title?: string) => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-        switch (title) {
-            case "confirmDept":
-                return setConfirmLeader(userData.records);
-            case "user":
-                form.setFieldsValue({ 'assignorId': '' })
-                return setUser(userData.records);
-        }
-    }
-
-    const renderTreeNodes = (data: any) =>
-        data.map((item: any) => {
-            if (item.children) {
-                return (
-                    <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
-                        {renderTreeNodes(item.children)}
-                    </TreeNode>
-                );
-            }
-            return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
-        });
-
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            }
-        });
-        return roles;
-    }
-
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
             value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
+        }
+        if (value.confirmId) {
+            value.confirmId = value.confirmId?.value;
         }
         setFilterValue(value)
         return value
@@ -251,35 +232,21 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     }
 
     return <>
-        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel} width={800}>
-            <Form form={form} {...formItemLayout}>
-                <Row>
-                    <Col span={12}>
-                        <Form.Item name="dept" label="部门" rules={[{ required: true, message: "请选择部门" }]}>
-                            <TreeSelect
-                                onChange={(value: any) => { onDepartmentChange(value, 'user') }}
-                            >
-                                {renderTreeNodes(wrapRole2DataNode(department))}
-                            </TreeSelect>
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item name="assignorId" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
-                            <Select style={{ width: '100px' }}>
-                                {user && user.map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
-                        <Form.Item name="plannedDeliveryTime" label="计划交付时间" rules={[{ required: true, message: "请选择计划交付时间" }]}>
-                            <DatePicker style={{ width: '100%' }} showTime />
-                        </Form.Item>
-                    </Col>
-                </Row>
+        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel}>
+            <Form form={form} {...formItemLayout} layout="horizontal">
+                <Form.Item name="assignorName" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
+                    <Input size="small" disabled suffix={
+                        <SelectUser key={'assignorId'} selectedKey={[form?.getFieldsValue(true)?.assignorName]} onSelect={(selectedRows: Record<string, any>) => {
+                            form.setFieldsValue({
+                                assignorId: selectedRows[0]?.userId,
+                                assignorName: selectedRows[0]?.name,
+                            })
+                        }} />
+                    } />
+                </Form.Item>
+                <Form.Item name="plannedDeliveryTime" label="计划交付时间" rules={[{ required: true, message: "请选择计划交付时间" }]}>
+                    <DatePicker style={{ width: '100%' }} showTime />
+                </Form.Item>
             </Form>
         </Modal>
         <Page
@@ -322,22 +289,9 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     </Form.Item>
                 },
                 {
-                    name: 'confirmDept',
-                    label: '确认人',
-                    children: <TreeSelect style={{ width: '200px' }}
-                        onChange={(value: any) => { onDepartmentChange(value, 'confirmDept') }}
-                    >
-                        {renderTreeNodes(wrapRole2DataNode(department))}
-                    </TreeSelect>
-                },
-                {
                     name: 'confirmId',
-                    label: '',
-                    children: <Select style={{ width: '100px' }}>
-                        {confirmLeader && confirmLeader.map((item: any) => {
-                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                        })}
-                    </Select>
+                    label: '确认人',
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyMsg',
