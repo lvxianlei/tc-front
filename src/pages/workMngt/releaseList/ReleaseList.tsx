@@ -314,8 +314,14 @@ export default function ReleaseList(): React.ReactNode {
         //     }
         // },
         {
-            key: 'description',
+            key: 'cancelDescription',
             title: '取消说明',
+            width: 200,
+            dataIndex: 'cancelDescription'
+        },
+        {
+            key: 'description',
+            title: '备注',
             width: 200,
             dataIndex: 'description'
         },
