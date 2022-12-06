@@ -233,6 +233,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         return {
                             ...res,
                             ...values,
+                            id: '',
                             drawProductId: res?.id,
                             productCategoryName: res?.productCategory,
                             productNumber: res?.name,
