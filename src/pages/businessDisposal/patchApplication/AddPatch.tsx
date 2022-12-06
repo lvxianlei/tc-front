@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Input, InputNumber, Radio, RadioChangeEvent, Select } from 'antd';
+import { Input, InputNumber, message, Radio, RadioChangeEvent, Select } from 'antd';
 import { Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -35,7 +35,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                 return selectedRowKeys.findIndex(item => item === res?.id) !== -1
             })
             if (status === 1) {
-                resolve(value?.map((res: any) => {
+                const addData = value?.map((res: any) => {
                     return {
                         ...res,
                         productCategoryId: record.productCategoryId,
@@ -44,7 +44,21 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                         structureId: res.id,
                         totalWeight: (Number(res?.partNum) * Number(res?.basicsWeight || 0)).toFixed(2)
                     }
-                }));
+                })
+                const tip: Boolean[] = [];
+                addData.forEach((element: any) => {
+                    if (element.basicsPartNum > 0) {
+                        tip.push(true)
+                    } else {
+                        tip.push(false)
+                    }
+                });
+                if (tip.indexOf(false) === -1) {
+                    resolve(addData);
+                } else {
+                    reject(false)
+                    message.warning('已选择补件数量不可为0！')
+                }
             } else {
                 let newValue: any = []
                 value.forEach((element: any) => {
@@ -56,16 +70,30 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                         }
                     }) || []))
                 });
-                resolve(newValue?.filter(Boolean)?.map((res: any) => {
+                const addData = newValue?.filter(Boolean)?.map((res: any) => {
                     return {
                         ...res,
                         productCategoryId: record.productCategoryId,
                         productCategoryName: record.productCategoryName,
-                        basicsPartNum: res.partNum,
+                        basicsPartNum: Number(res?.partNum) * Number(res?.singleNum || 0),
                         structureId: res.id,
                         totalWeight: (Number(res?.partNum) * Number(res?.basicsWeight || 0) * Number(res?.singleNum || 0)).toFixed(2)
                     }
-                }));
+                })
+                const tip: Boolean[] = [];
+                addData.forEach((element: any) => {
+                    if (element.basicsPartNum > 0) {
+                        tip.push(true)
+                    } else {
+                        tip.push(false)
+                    }
+                });
+                if (tip.indexOf(false) === -1) {
+                    resolve(addData);
+                } else {
+                    reject(false)
+                    message.warning('已选择补件数量不可为0！')
+                }
             }
         } catch (error) {
             reject(error)
