@@ -250,9 +250,9 @@ export default function List(): React.ReactNode {
                                                 }}
                                                 okText="确认"
                                                 cancelText="取消"
-                                                disabled={record?.shipmentStatus === 1}
+                                                disabled={record?.shipmentStatus === 1 || record?.status === 2}
                                             >
-                                                <Button type="link" disabled={record?.shipmentStatus === 1}>入库</Button>
+                                                <Button type="link" disabled={record?.shipmentStatus === 1 || record?.status === 2}>入库</Button>
                                             </Popconfirm>
                                     }
                                     {
