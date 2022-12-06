@@ -349,6 +349,12 @@ export default function Overview() {
                 // }
             ]}
             extraOperation={<>
+                <Button type="primary" ghost onClick={async () => {
+                    const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/repeal/${params.id}`)
+                    message.success('撤销成功！')
+                    history.go(-1)
+                    
+                }} >撤销收货</Button>
                 <Button type="primary"
                     ghost
                     disabled={!(selectedRows.length > 0)}
