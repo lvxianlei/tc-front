@@ -31,7 +31,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         run
     } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/collect`, {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/infoList`, {
                 ...filterValue,
                 planStatus: 1,
                 collectType: 1,
@@ -55,8 +55,14 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
             purchaserId: values.purchaserId?.value
         })}>
             <Row gutter={[8, 8]}>
+                <Col><Form.Item label="品名" name="materialName">
+                    <Input />
+                </Form.Item></Col>
+                <Col><Form.Item label="规格" name="structureSpec">
+                    <Input />
+                </Form.Item></Col>
                 <Col><Form.Item label="查询" name="fuzzyQuery">
-                    <Input placeholder="输入汇总计划编号/申请人查询"/>
+                    <Input placeholder="输入汇总计划编号查询"/>
                 </Form.Item></Col>
                 <Col><Form.Item>
                     <Button type="primary" htmlType="submit" style={{marginLeft: 12}}>查询</Button>

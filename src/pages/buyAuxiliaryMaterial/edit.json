@@ -17,13 +17,32 @@
       "width": 240,
       "type": "date",
       "format": "YYYY-MM-DD"
-    }
-    ,
+    },
     {
       "title": "使用部门",
       "dataIndex": "dept",
-      "width": 240
-    }
+      "required": true,
+      "type": "popTable",
+      "width": 240,
+      "readOnly": true,
+      "dependencies": true,
+      "path": "/tower-system/department",
+      "columns": [
+          {
+              "title": "部门名称",
+              "dataIndex": "name"
+          }
+      ],
+      "search": [
+          {
+              "title": "查询",
+              "dataIndex": "name",
+              "width": 200,
+              "placeholder": "输入部门名称进行查询"
+          }
+          
+      ]
+  }
   ],
   "editCargoDetails": [
     {
