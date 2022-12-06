@@ -312,7 +312,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const { run: getUser, data: weightData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/detail/statistics`, {
-                ...filterValue
+                ...filterValue,
+                id:params.id
             })
             resole(result)
         } catch (error) {
@@ -374,14 +375,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.updateTime) {
             const formatDate = value.updateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateTimeStart = `${formatDate[0]} 00:00:00`
-            value.updateTimeEnd = `${formatDate[1]} 23:59:59`
+            value.startUpdateTime = `${formatDate[0]} 00:00:00`
+            value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.updateTime
         }
         if (value.outStockStaffId) {
             value.outStockStaffId = value.outStockStaffId.value
         }
-        setFilterValue({ ...filterValue, ...value })
+        setFilterValue({...value, id: params.id  })
         return value
     }
 

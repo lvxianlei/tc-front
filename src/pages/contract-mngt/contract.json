@@ -1,6 +1,10 @@
 {
     "contract": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName"
+        },
+        {
             "title": "合同编号",
             "dataIndex": "contractNumber",
             "width": 200
@@ -8,6 +12,10 @@
         {
             "title": "关联采购计划",
             "dataIndex": "purchasePlanNumber"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
         },
         {
             "title": "合同状态",
@@ -38,7 +46,7 @@
             "dataIndex": "totalTaxAmount"
         },
         {
-            "title": "不含税单价（元）合计",
+            "title": "不含税金额（元）合计",
             "dataIndex": "totalAmount"
         },
         {
@@ -93,8 +101,8 @@
             "dataIndex": "num"
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight"
+            "title": "总重量（吨）",
+            "dataIndex": "totalWeight"
         },
         {
             "title": "生产厂家",
@@ -147,8 +155,8 @@
             "dataIndex": "num"
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight"
+            "title": "总重量（吨）",
+            "dataIndex": "totalWeight"
         },
         {
             "title": "生产厂家",
@@ -183,74 +191,14 @@
             ]
         },
         {
-            "title": "询比价名称",
-            "dataIndex": "comparisonPriceNumber",
-            "type": "popTable",
-            "path": "/tower-supply/comparisonPrice?comparisonStatus=2",
-            "width": 1011,
-            "value": "comparisonPriceNumber",
-            "dependencies": true,
-            "readOnly": true,
-            "search": [
-                {
-                    "title": "查询",
-                    "dataIndex": "fuzzyQuery",
-                    "placeholder": "询比价编号"
-                }
-            ],
-            "columns": [
-                {
-                    "title": "询比价编号",
-                    "dataIndex": "comparisonPriceNumber"
-                },
-                {
-                    "title": "询比价状态",
-                    "dataIndex": "comparisonStatus",
-                    "type": "select",
-                    "enum": [
-                        {
-                            "label": "询价中",
-                            "value": 1
-                        },
-                        {
-                            "label": "已询价",
-                            "value": 2
-                        },
-                        {
-                            "label": "取消",
-                            "value": 3
-                        }
-                    ]
-                },
-                {
-                    "title": "询价人",
-                    "dataIndex": "comparisonPersonName"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择询比价信息..."
-                }
-            ]
-        },
-        {
-            "title": "关联采购计划",
-            "dataIndex": "purchasePlan",
-            "type": "popTable",
-            "disabled": true,
-            "required": true
-        },
-        {
             "title": "供应商",
             "dataIndex": "supplier",
             "type": "popTable",
-            "path": "/tower-supply/comparisonPrice/getComparisonPrice/",
+            "path": "/tower-supply/supplier",
             "width": 1011,
             "value": "supplierName",
             "dependencies": true,
             "readOnly": true,
-            "disabled": true,
             "search": [
                 {
                     "title": "查询",
@@ -431,16 +379,8 @@
             "disabled": true
         },
         {
-            "title": "关联采购计划",
-            "dataIndex": "purchasePlanNumber"
-        },
-        {
             "title": "供应商",
             "dataIndex": "supplierName"
-        },
-        {
-            "title": "询比价名称",
-            "dataIndex": "comparisonPriceNumber"
         },
         {
             "title": "经办人",
@@ -662,6 +602,72 @@
             {
                 "title": "规格",
                 "dataIndex": "structureSpec"
+            }
+        ]
+    },
+    "addResultMaterial": {
+        "title": "比价结果",
+        "type": "popTable",
+        "path": "/tower-supply/comparisonPrice/result",
+        "width": 1011,
+        "selectType": "checkbox",
+        "rowKey":"comparisonPriceDetailId",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": [
+            {
+                "title": "询比价编号",
+                "dataIndex": "comparisonPriceNumber",
+                "search": true
+            },
+            {
+                "title": "采购计划编号",
+                "dataIndex": "purchasePlanNumber",
+                "search": true
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName",
+                "search": true
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "structureTexture",
+                "search": true
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec",
+                "search": true
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "search": true
+            },
+            {
+                "title": "宽度",
+                "dataIndex": "width"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "availableNum"
+            },
+            {
+                "title": "重量（吨）",
+                "dataIndex": "totalWeight"
+            },
+            {
+                "title": "报价（元）",
+                "dataIndex": "taxOffer"
+            },
+            {
+                "title": "生产厂家",
+                "dataIndex": "manufacturer"
             }
         ]
     }

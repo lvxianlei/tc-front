@@ -204,7 +204,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                         if (["num"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <span>{-1}</span>
+                                render: (value: number, records: any, key: number) => <span>{value+''}</span>
                             })
                         }
                         return item

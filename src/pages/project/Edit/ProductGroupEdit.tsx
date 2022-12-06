@@ -1,13 +1,22 @@
 import React, { useState } from "react"
 import { useHistory, useRouteMatch } from "react-router-dom"
-import { Button, Form, message, Spin } from "antd"
+import { Button, Form, message, Row, Space, Spin } from "antd"
 import { DetailContent, BaseInfo, DetailTitle, CommonTable } from "../../common"
 import SelectProductGroup from "./SelectProductGroup"
 import { newProductGroup, productAssist } from '../managementDetailData.json'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
+
+const calcContractTotal = (records: any[]) => {
+    return records.reduce((result: { weight: string, amount: string }, item: any) => ({
+        weight: (parseFloat(result.weight) + parseFloat(item.totalWeight || "0.00")).toFixed(2),
+        amount: (parseFloat(result.amount) + parseFloat(item.number || "0.00")).toFixed(2)
+    }), { weight: "0.00", amount: "0.00" })
+}
+
 export default function ProductGroupEdit() {
     const history = useHistory()
+    const [selectedRows, setSelectedRows] = useState<any[]>([])
     const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/:entryPath/:type/productGroup/:projectId/:id")
     const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/:entryPath/:type/productGroup/:projectId")
     const match = editMatch || newMatch
@@ -18,6 +27,7 @@ export default function ProductGroupEdit() {
     const [saleOrderId, setSaleOrderId] = useState<string>("")
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
+    const total: any = calcContractTotal(selectedRows)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/productGroup/${match.params?.id}`)
@@ -139,15 +149,41 @@ export default function ProductGroupEdit() {
                 dataSource={data || {}}
                 edit />
             <DetailTitle title="明细" />
-            <CommonTable columns={[{
-                title: "操作",
-                dataIndex: "opration",
-                width: 30,
-                fixed: "left",
-                render: (_: any, records: any) => <>
-                    <Button type="link" disabled={!["0", 0, null].includes(records.taskNoticeId)} onClick={() => deleteProject(records.id)}>删除</Button>
-                </>
-            }, ...productAssist]} dataSource={select} />
+            {
+                selectedRows.length > 0 && <Row style={{ width: 1600 }}>
+                    <Row style={{ color: "#FF8C00", fontWeight: 600, fontSize: 14 }}>合计：</Row>
+                    <Space>
+                        <div>总基数：<span style={{ color: "#FF8C00" }}>{total.amount}基</span></div>
+                        <div>总重量：<span style={{ color: "#FF8C00" }}>{total.weight}吨</span></div>
+                    </Space>
+                </Row>
+            }
+            <CommonTable
+                columns={[{
+                    title: "操作",
+                    dataIndex: "opration",
+                    width: 30,
+                    fixed: "left",
+                    render: (_: any, records: any) => <>
+                        <Button type="link" disabled={!["0", 0, null].includes(records.taskNoticeId)} onClick={() => deleteProject(records.id)}>删除</Button>
+                    </>
+                }, {
+                    title: '序号',
+                    dataIndex: 'index',
+                    fixed: "left",
+                    width: 50,
+                    render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                }, ...productAssist]}
+                dataSource={select}
+                pagination={false}
+                rowSelection={{
+                    type: "checkbox",
+                    selectedRowKeys: selectedRows?.map((item: any) => item.id),
+                    onChange: (_: string[], selectedRows: any[]) => {
+                        setSelectedRows(selectedRows)
+                    },
+                }}
+            />
         </Spin>
     </DetailContent>
 }

@@ -19,7 +19,7 @@ import useRequest from "@ahooksjs/use-request";
 import RequestUtil from "@utils/RequestUtil";
 const IconFont = createFromIconfontCN({
     scriptUrl: [
-        "//at.alicdn.com/t/font_2771956_r1mkfqj4xwf.js"
+        "//at.alicdn.com/t/c/font_2771956_l4h41vl3n1a.js"
     ]
 })
 
@@ -223,7 +223,7 @@ export default function (): JSX.Element {
         Cookies.set('DHWY_TOKEN', access_token, { domain: '.dhwy.cn' })
         Cookies.set('ACCOUNT', result.account, { domain: '.dhwy.cn' })
         Cookies.set('DHWY_TOKEN', access_token, { domain: 'localhost' })
-        AuthUtil.setSinzetechAuth(access_token, refresh_token)
+        AuthUtil.setSinzetechAuth(access_token, refresh_token, result.expires_in)
         AuthUtil.setTenantId(tenant_id, { expires: 7 })
         AuthUtil.setTenantName(tenantInfo.name)
         AuthUtil.setTenants(tenants)
@@ -271,7 +271,7 @@ export default function (): JSX.Element {
         </Menu.Item>)}
     </Menu>)
 
-    return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
+    return <Layout  style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
                 className={styles.logoStyle}
@@ -366,6 +366,9 @@ export default function (): JSX.Element {
                                         if (res.appName === "MC") {
                                             herf = res.path + AuthUtil.getUserInfo().user_id
                                         }
+                                        if (res.appName === "CRM") {
+                                            herf = process.env.CRM_BREACK_URL
+                                        }
                                         window.location.href = herf
                                         return
                                     }
@@ -373,12 +376,20 @@ export default function (): JSX.Element {
                                     history.push(res.path)
                                 }}>
                                     <div className={styles.icon}>
-                                        <span style={{ display: "inline-block", width: 50, height: 50, background: res.color, borderRadius: 8, textAlign: "center", lineHeight: "50px" }}>
-                                            <span className={`iconfont ${res.iconFont}`} style={{
+                                        <span style={{
+                                            display: "inline-flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            width: 50,
+                                            height: 50,
+                                            background: res.color,
+                                            borderRadius: 8,
+                                        }}>
+                                            <IconFont type={res.iconFont} style={{
                                                 fontFamily: "font_family",
-                                                fontSize: res.fontSize || 28,
-                                                color: "#fff"
-                                            }}></span>
+                                                fontSize: res.fontSize || 30,
+                                                color: "#fff",
+                                            }} />
                                         </span>
                                     </div>
                                     <div className={styles.title}>{res.title}</div>
@@ -394,7 +405,14 @@ export default function (): JSX.Element {
                         <Sider
                             width={ctxConfig.layout.width}
                             theme="light"
-                            style={{ backgroundColor: ctxConfig.layout.theme }}
+                            className="sider-menu-content"
+                            style={{
+                                height: "100%",
+                                paddingBottom: 60,
+                                boxSizing: "border-box",
+                                backgroundColor: ctxConfig.layout.theme,
+                                overflowY: "auto"
+                            }}
                             collapsed={isOpend}
                             collapsible
                             onCollapse={value => setIsOpend(value)}

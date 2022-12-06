@@ -287,6 +287,7 @@ export default function SeeGuarantee(): JSX.Element {
                                 return ({
                                     ...item,
                                     path: `/tower-market/contract${params.projectId && params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ""}`,
+                                    disabled: orderData && orderData?.taskStatus !== 0,
                                     columns: item.columns.map((v: any) => {
                                         if (v.dataIndex === "saleTypeName") {
                                             return {
@@ -299,7 +300,6 @@ export default function SeeGuarantee(): JSX.Element {
                                         }
                                         return v
                                     })
-
                                 })
                             }
                             if (item.dataIndex === "currencyType") {

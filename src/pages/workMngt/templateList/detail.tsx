@@ -8,18 +8,18 @@ import { AttachmentRef, FileProps } from '../../common/Attachment';
 import useRequest from "@ahooksjs/use-request"
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
-  editing: boolean;
-  dataIndex: string;
-  title: any;
-  inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
-  enums?: object[];
-  record: any;
-  index: number;
-  children: React.ReactNode;
+    editing: boolean;
+    dataIndex: string;
+    title: any;
+    inputType: 'number' | 'text' | 'select' | 'edit' | 'textArea';
+    enums?: object[];
+    record: any;
+    index: number;
+    children: React.ReactNode;
 }
 export default function TemplateDetail() {
     const history = useHistory()
-    const params: any = useParams<{ id: string, productCategoryId: string }>()
+    const params: any = useParams<{ id: string, productCategoryId: string, uploadDrawType: string }>()
     const [isImgModal, setIsImgModal] = useState<boolean>(false);
     const [imgUrl, setImgUrl] = useState<string>('');
     const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
@@ -30,7 +30,7 @@ export default function TemplateDetail() {
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
-            setTableDataSource(result.map((item: any, index: number)=>{
+            setTableDataSource(result.map((item: any, index: number) => {
                 return {
                     ...item,
                 }
@@ -50,33 +50,27 @@ export default function TemplateDetail() {
         index,
         children,
         ...restProps
-      }) => {
-        const inputNode = inputType === 'number' ? <InputNumber style={{width:'100%'}} min={1} precision={0} max={9999}/> : <p/>;
-        
-          return (
+    }) => {
+        const inputNode = inputType === 'number' ? <InputNumber style={{ width: '100%' }} min={1} precision={0} max={9999} /> : <p />;
+
+        return (
             <td {...restProps}>
-              {editing ? (
-                <Form.Item
-                  name={dataIndex}
-                  style={{ margin: 0 }}
-                  rules={[
-                    {
-                      required: true,
-                      message: `请输入${title}!`,
-                    },
-                  ]}
-                >
-                  {inputNode}
-                </Form.Item>
-              ) : (
-                children
-              )}
+                {editing ? (
+                    <Form.Item
+                        name={dataIndex}
+                        style={{ margin: 0 }}
+                    >
+                        {inputNode}
+                    </Form.Item>
+                ) : (
+                    children
+                )}
             </td>
-          );
-       
-      };
+        );
+
+    };
     const edit = (record: Partial<any> & { key: React.Key }) => {
-        formRef.setFieldsValue({...record });
+        formRef.setFieldsValue({ ...record });
         setEditingKey(record.id);
     };
     const columns: any[] = [
@@ -109,9 +103,9 @@ export default function TemplateDetail() {
             dataIndex: 'pageNumber',
             align: 'pageNumber',
             editable: true,
-            type:'number',
-            render:(text: any)=>{
-                return <span>{text===null?'-':text}</span>
+            type: 'number',
+            render: (text: any) => {
+                return <span>{text === null ? '-' : text}</span>
             }
         },
         {
@@ -123,30 +117,46 @@ export default function TemplateDetail() {
             title: '操作',
             dataIndex: 'operation',
             align: 'center',
-            render: (text: string, item:any) => {
+            render: (text: string, item: any) => {
                 const editable = isEditing(item);
                 return editable ? (
                     <Space>
                         <span
                             hidden={item.isView === 2}
-                            style={{ cursor: 'pointer', color: '#FF8C00'}}
+                            style={{ cursor: 'pointer', color: '#FF8C00' }}
                             onClick={() => {
                                 seeFile(item.id)
                             }}
                         >查看</span>
-                        <a href="javascript:;" onClick={() =>{
-                            RequestUtil.post(`/tower-science/loftingTemplate/templateRecord/${item.id}`,{
-                                id: item.id,
-                                pageNumber: formRef.getFieldsValue().pageNumber
-                            }).then(async ()=>{
-                                message.success('保存成功！')
-                                setEditingKey('');
-                                const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
-                                setTableDataSource(result)
-                            })
+                        <Button type="link" onClick={() => {
+                            if (params.uploadDrawType === '1') {
+                                if (formRef.getFieldsValue().pageNumber) {
+                                    RequestUtil.post(`/tower-science/loftingTemplate/templateRecord/${item.id}`, {
+                                        id: item.id,
+                                        pageNumber: formRef.getFieldsValue().pageNumber
+                                    }).then(async () => {
+                                        message.success('保存成功！')
+                                        setEditingKey('');
+                                        const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
+                                        setTableDataSource(result)
+                                    })
+                                } else {
+                                    message.warning('请输入页数！')
+                                }
+                            } else {
+                                RequestUtil.post(`/tower-science/loftingTemplate/templateRecord/${item.id}`, {
+                                    id: item.id,
+                                    pageNumber: formRef.getFieldsValue().pageNumber
+                                }).then(async () => {
+                                    message.success('保存成功！')
+                                    setEditingKey('');
+                                    const result: any[] = await RequestUtil.get(`/tower-science/loftingTemplate/record/${params.id}`)
+                                    setTableDataSource(result)
+                                })
+                            }
                         }} >
                             保存
-                        </a>
+                        </Button>
                         <Popconfirm
                             placement="bottomRight"
                             title='确认删除？'
@@ -159,20 +169,20 @@ export default function TemplateDetail() {
                             <Button type="link">删除</Button>
                         </Popconfirm>
                         <span
-                                style={{ cursor: 'pointer', color: '#FF8C00' }}
-                                onClick={() => {
-                                    download(item.id)
-                                }}
+                            style={{ cursor: 'pointer', color: '#FF8C00' }}
+                            onClick={() => {
+                                download(item.id)
+                            }}
                         >下载</span>
                     </Space>
 
-                    
-                  ) : (
+
+                ) : (
                     <Space className='operation'>
-                        
+
                         <span
                             hidden={item.isView === 2}
-                            style={{ cursor: 'pointer', color: '#FF8C00'}}
+                            style={{ cursor: 'pointer', color: '#FF8C00' }}
                             onClick={() => {
                                 seeFile(item.id)
                             }}
@@ -202,22 +212,22 @@ export default function TemplateDetail() {
             }
         },
     ]
-    const mergedColumns = columns.map((col:any) => {
+    const mergedColumns = columns.map((col: any) => {
         if (!col.editable) {
-          return col;
+            return col;
         }
         return {
-          ...col,
-          onCell: (record: any) => ({
-            record,
-            inputType: col.type,
-            dataIndex: col.dataIndex,
-            enums: col.enums,
-            title: col.title,
-            editing: isEditing(record),
-          }),
+            ...col,
+            onCell: (record: any) => ({
+                record,
+                inputType: col.type,
+                dataIndex: col.dataIndex,
+                enums: col.enums,
+                title: col.title,
+                editing: isEditing(record),
+            }),
         };
-      });
+    });
     /**
      * 
      * @param id 
@@ -235,19 +245,19 @@ export default function TemplateDetail() {
         if (['jpg', 'jpeg', 'png', 'gif'].includes(data.fileSuffix)) {
             setIsImgModal(true)
             setImgUrl(data.downloadUrl)
-        } else if(data.fileSuffix === 'pdf'){
+        } else if (data.fileSuffix === 'pdf') {
             let response = await fetch(data.downloadUrl); // 内容转变成blob地址
             let blob = await response.blob();
             let blobNew = new Blob([blob], { type: 'application/pdf' });
-            let href =  window.URL.createObjectURL(blobNew)// 创建下载的链接
+            let href = window.URL.createObjectURL(blobNew)// 创建下载的链接
             // var a = document.createElement('a');
             // a.href = href;
             // document.body.appendChild(a);
             // a.click();
             // window.URL.revokeObjectURL(href);
             window.open(href)
-        } 
-        else{
+        }
+        else {
             message.error('暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...')
         }
     }
@@ -299,10 +309,10 @@ export default function TemplateDetail() {
                 </Space>
                 <Form form={formRef} component={false} >
                     <CommonTable columns={mergedColumns} dataSource={[...tableDataSource]} components={{
-                            body: {
-                                cell: EditableCell,
-                            },
-                        }}/>
+                        body: {
+                            cell: EditableCell,
+                        },
+                    }} />
                 </Form>
             </DetailContent>
             <Modal visible={isImgModal} onCancel={() => { cancelModal() }} footer={false}>

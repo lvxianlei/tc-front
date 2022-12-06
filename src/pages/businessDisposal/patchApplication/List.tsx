@@ -147,6 +147,9 @@ export default function List(): React.ReactNode {
                     width: 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
+                            <Link to={`/businessDisposal/patchApplication/edit/${record.id}`}>
+                                <Button type='link' disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>编辑</Button>
+                            </Link>
                             <Link to={`/businessDisposal/patchApplication/detail/${record.id}`}>详情</Link>
                             <Popconfirm
                                 title="确认发起?"
@@ -158,11 +161,11 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5)}
+                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
                             >
-                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>发起</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>发起</Button>
                             </Popconfirm>
-                            {/* <Popconfirm
+                            <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
                                     RequestUtil.post(`/tower-science/supplyEntry/cancel/${record.id}`).then(res => {
@@ -172,11 +175,10 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={record.status === 2}
+                                disabled={record.status !== 2}
                             >
-                                <Button type="link" disabled={record.status === 2}>撤回</Button>
-                            </Popconfirm> */}
-                            {/* 张运刚说撤回功能青岛没有提供接口，并没有实现，先隐藏 */}
+                                <Button type="link" disabled={record.status !== 2}>撤回</Button>
+                            </Popconfirm>
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
@@ -187,9 +189,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5)}
+                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
                             >
-                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>删除</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>删除</Button>
                             </Popconfirm>
                         </Space>
                     )
@@ -211,7 +213,84 @@ export default function List(): React.ReactNode {
             <Col span={8}>
                 <CommonTable
                     haveIndex
-                    columns={tableColumns}
+                    columns={[
+                        ...tableColumns,
+                        {
+                            key: 'operation',
+                            title: '操作',
+                            dataIndex: 'operation',
+                            fixed: 'right' as FixedType,
+                            width: 150,
+                            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                                <Space direction="horizontal" size="small">
+                                    {
+                                        record?.warehousingStatus === 1 ?
+                                            <Popconfirm
+                                                title={`确定取消入库？`}
+                                                onConfirm={() => {
+                                                    RequestUtil.post(`/tower-science/supplyEntry/cancel/warehousing/${record.id}`).then(res => {
+                                                        message.success('取消入库成功');
+                                                        history.go(0);
+                                                    })
+                                                }}
+                                                okText="确认"
+                                                cancelText="取消"
+                                                disabled={record?.shipmentStatus === 1}
+                                            >
+                                                <Button type="link" disabled={record?.shipmentStatus === 1}>取消入库</Button>
+                                            </Popconfirm>
+                                            :
+                                            <Popconfirm
+                                                title={`确定入库？`}
+                                                onConfirm={() => {
+                                                    RequestUtil.post(`/tower-science/supplyEntry/warehousing/${record.id}`).then(res => {
+                                                        message.success('入库成功');
+                                                        history.go(0);
+                                                    })
+                                                }}
+                                                okText="确认"
+                                                cancelText="取消"
+                                                disabled={record?.shipmentStatus === 1 || record?.status === 2}
+                                            >
+                                                <Button type="link" disabled={record?.shipmentStatus === 1 || record?.status === 2}>入库</Button>
+                                            </Popconfirm>
+                                    }
+                                    {
+                                        record?.shipmentStatus === 1 ?
+                                            <Popconfirm
+                                                title={`确定取消发货？`}
+                                                onConfirm={() => {
+                                                    RequestUtil.post(`/tower-science/supplyEntry/cancel/shipment/${record.id}`).then(res => {
+                                                        message.success('取消发货成功');
+                                                        history.go(0);
+                                                    })
+                                                }}
+                                                okText="确认"
+                                                cancelText="取消"
+                                            >
+                                                <Button type="link">取消发货</Button>
+                                            </Popconfirm>
+                                            :
+                                            <Popconfirm
+                                                title={`确定发货？`}
+                                                onConfirm={() => {
+                                                    RequestUtil.post(`/tower-science/supplyEntry/shipment/${record.id}`).then(res => {
+                                                        message.success('发货成功');
+                                                        history.go(0);
+                                                    })
+                                                }}
+                                                okText="确认"
+                                                cancelText="取消"
+                                                disabled={record?.warehousingStatus === 0}
+                                            >
+                                                <Button type="link" disabled={record?.warehousingStatus === 0}>发货</Button>
+                                            </Popconfirm>
+                                    }
+
+                                </Space>
+                            )
+                        }
+                    ]}
                     dataSource={detailData || []}
                     pagination={false}
                     onRow={(record: Record<string, any>) => ({

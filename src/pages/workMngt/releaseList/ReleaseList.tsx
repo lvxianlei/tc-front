@@ -1,22 +1,18 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Popconfirm, message, Modal, Row, Col } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Select, message, Modal, Row, Col } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { CommonTable, DetailTitle, Page } from '../../common';
+import { Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
 import { materialStandardOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 // import styles from './sample.module.less';
 
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [detailrefresh, setDetailRefresh] = useState<boolean>(false);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [filterValue, setFilterValue] = useState({});
     const [aFilterValue, setAFilterValue] = useState({});
-    const location = useLocation<{ state?: number, userId?: string }>();
     const [form] = Form.useForm();
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
@@ -75,6 +71,12 @@ export default function ReleaseList(): React.ReactNode {
             title: '最新状态变更时间',
             width: 150,
             dataIndex: 'batchUpdateStatusTime'
+        },
+        {
+            key: 'programmingLeaderName',
+            title: '下达负责人',
+            width: 120,
+            dataIndex: 'programmingLeaderName'
         },
         {
             key: 'trialAssemble',
@@ -415,7 +417,6 @@ export default function ReleaseList(): React.ReactNode {
                 columns={releaseColumns}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
-                refresh={refresh}
                 requestData={{ size: 10, whether: 1 }}
                 tableProps={{
                     pagination: {
@@ -481,10 +482,29 @@ export default function ReleaseList(): React.ReactNode {
                         </Select>
                     },
                     {
+                        name: 'name',
+                        label: '塔型',
+                        children: <Input placeholder='请输入' />
+                    },
+                    {
+                        name: 'planNumber',
+                        label: '计划号',
+                        children: <Input placeholder='请输入' />
+                    },
+                    {
+                        name: 'trialAssemble',
+                        label: '是否试装',
+                        children: <Select style={{ width: "100px" }} defaultValue={''}>
+                            <Select.Option value={''} key={'1'}>全部</Select.Option>
+                            <Select.Option value={'1'} key={'2'}>是</Select.Option>
+                            <Select.Option value={'0'} key={'3'}>否</Select.Option>
+                        </Select>
+                    },
+                    {
                         name: 'batchFuzzyMsg',
                         label: '模糊查询项',
                         children: <Input placeholder="" maxLength={200} />
-                    },
+                    }
                 ]}
             />
             <Page
@@ -492,7 +512,6 @@ export default function ReleaseList(): React.ReactNode {
                 columns={detailColumns}
                 onFilterSubmit={onFilterASubmit}
                 filterValue={aFilterValue}
-                refresh={detailrefresh}
                 requestData={{ size: 10 }}
                 exportPath="/tower-science/loftingBatch/batchResult"
                 sourceKey='loftingBatchResultVOS.records'
@@ -528,6 +547,26 @@ export default function ReleaseList(): React.ReactNode {
                         name: 'updateStatusTime',
                         label: '最新状态变更时间',
                         children: <DatePicker.RangePicker />
+                    },
+                    {
+                        name: 'issuedNumber',
+                        label: '下达单号',
+                        children: <Input placeholder='请输入' />
+                    },
+                    {
+                        name: 'planNumber',
+                        label: '计划号',
+                        children: <Input placeholder='请输入' />
+                    },
+                    {
+                        name: 'name',
+                        label: '塔型',
+                        children: <Input placeholder='请输入' />
+                    },
+                    {
+                        name: 'productionBatchNo',
+                        label: '批次号',
+                        children: <Input placeholder='请输入' />
                     },
                     {
                         name: 'fuzzyMsg',

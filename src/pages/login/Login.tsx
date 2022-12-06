@@ -8,25 +8,12 @@ import AuthUtil from '../../utils/AuthUtil'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import Cookies from 'js-cookie'
-import MD5 from 'crypto-js/md5'
+// import MD5 from 'crypto-js/md5'
 import { Base64 } from 'js-base64'
 import 'react-simple-verify/dist/react-simple-verify.css'
 import layoutStyles from '../../layout/Layout.module.less'
 import style from './Login.module.less'
 const ossUrl = "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/%E9%A6%96%E9%A1%B5%E5%9B%BE%E7%89%87"
-interface ITenant {
-    readonly tenantId: string;
-    readonly domain: string;
-    readonly tenantName: string;
-    readonly logo: string;
-}
-interface ICaptcha {
-    readonly image: string
-    readonly key: string
-}
-interface ILoginState {
-    readonly captcha: ICaptcha
-}
 
 export default function Login(): JSX.Element {
     const location = useLocation()
@@ -86,13 +73,13 @@ export default function Login(): JSX.Element {
                     domain: process.env.COOKIES_DOMAIN
                 })
             }
-            AuthUtil.setSinzetechAuth(access_token, refresh_token)
+            AuthUtil.setSinzetechAuth(access_token, refresh_token, result.expires_in)
             AuthUtil.setUserInfo({
                 user_id,
                 password: values.password,
                 username: values.username
             })
-            AuthUtil.setTenantId(tenant_id, { expires: 7 })
+            AuthUtil.setTenantId(tenant_id)
             AuthUtil.setTenantName(tenant_name)
             AuthUtil.setTenants(tenants)
             AuthUtil.setRealName(result.real_name)

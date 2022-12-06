@@ -68,7 +68,7 @@ export default forwardRef(function ({ id, type, materialLists, comparisonPriceId
                 inquiryQuotationOfferDtos: materialLists.map((item: any) => {
                     return ({
                         ...item,
-                        comparisonPriceDetailId: item.id,
+                        comparisonPriceDetailId: item.comparisonPriceDetailId?item.comparisonPriceDetailId:item.id,
                         taxOffer: formData.taxOffer,
                         offer: calcObj.unTaxPrice(formData.taxOffer, materialData?.taxVal)
                     })

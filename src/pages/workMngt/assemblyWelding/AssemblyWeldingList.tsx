@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Modal, Row, Col, TreeSelect, message } from 'antd';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -226,7 +226,6 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     children: <Form.Item name="status" initialValue={location.state?.state}>
                         <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
-                            <Select.Option value={1} key="1">待开始</Select.Option>
                             <Select.Option value={2} key="2">组焊中</Select.Option>
                             <Select.Option value={3} key="3">已完成</Select.Option>
                         </Select>
@@ -235,28 +234,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 {
                     name: 'personnel',
                     label: '人员',
-                    children: <Row>
-                        <Col>
-                            <Form.Item name="dept">
-                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value: any) => {
-                                    const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-                                    setCheckUser(userData.records)
-                                }}>
-                                    {renderTreeNodes(wrapRole2DataNode(department))}
-                                </TreeSelect>
-                            </Form.Item>
-                        </Col>
-                        <Col>
-                            <Form.Item name="personnel">
-                                <Select placeholder="请选择" style={{ width: "150px" }}>
-                                    <Select.Option value="" key="6">全部</Select.Option>
-                                    {checkUser && checkUser.map((item: any) => {
-                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'plannedTime',
@@ -290,6 +268,9 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     const formatDate = values.plannedTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.plannedDeliveryTimeStart = formatDate[0] + ' 00:00:00';;
                     values.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';;
+                }
+                if (values.personnel) {
+                    values.personnel = values.personnel?.value;
                 }
                 setFilterValue(values);
                 return values;

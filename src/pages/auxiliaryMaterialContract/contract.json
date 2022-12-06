@@ -1,6 +1,10 @@
 {
   "contract": [
     {
+      "title": "审批状态",
+      "dataIndex": "approvalName"
+    },
+    {
       "title": "合同编号",
       "dataIndex": "contractNumber",
       "width": 200
@@ -8,6 +12,14 @@
     {
       "title": "合同状态",
       "dataIndex": "contractStatusName"
+    },
+    {
+      "title": "创建时间",
+      "dataIndex": "createTime"
+    },
+    {
+        "title": "审批状态",
+        "dataIndex": "approvalName"
     },
     {
       "title": "供应商",
@@ -21,6 +33,7 @@
       "title": "交货时间",
       "dataIndex": "arrivalTime"
     },
+    
     {
       "title": "经办人",
       "dataIndex": "operatorIdName"

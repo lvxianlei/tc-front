@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Select, Form } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
-import { Page } from '../../common'
+import { IntgSelect, Page } from '../../common'
 import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -38,6 +38,18 @@ export default function ConfirmList() {
             title: '合同名称',
             width: 100,
             dataIndex: 'contractName'
+        },
+        {
+            key: 'planNumber',
+            title: '计划号',
+            width: 100,
+            dataIndex: 'planNumber'
+        },
+        {
+            key: 'projectName',
+            title: '图纸/项目名称',
+            width: 100,
+            dataIndex: 'projectName'
         },
         {
             key: 'plannedDeliveryTime',
@@ -107,6 +119,9 @@ export default function ConfirmList() {
             value.plannedDeliveryTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.planTime
         }
+        if (value.confirmId) {
+            value.confirmId = value.confirmId?.value;
+        }
         setFilterValue(value)
         return value
     }
@@ -140,13 +155,7 @@ export default function ConfirmList() {
                     name: 'confirmId',
                     // label: '',
                     label: '确认人',
-                    children: <Form.Item name="confirmId" initialValue={location.state?.userId}>
-                        <Select style={{ width: '100px' }} allowClear>
-                            {confirmLeader && confirmLeader.map((item: any) => {
-                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                            })}
-                        </Select>
-                    </Form.Item>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyMsg',
