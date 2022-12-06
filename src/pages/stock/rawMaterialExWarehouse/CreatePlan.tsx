@@ -13,7 +13,7 @@ import {
     addDetailMaterial
 } from "./CreatePlan.json";
 import moment from 'moment';
-import "./CreatePlan.less";
+import styles from "./CreatePlan.module.less";
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
 export default function CreatePlan(props: any): JSX.Element {
@@ -527,7 +527,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     edit
                     dataSource={data || {}}
                     col={2}
-                    classStyle="baseInfo"
+                    classStyle={styles.baseInfo}
                     columns={baseInfoColumn.map((item: any) => {
                         if(item.dataIndex==='issuedNumber'){
                             return ({
@@ -549,15 +549,14 @@ export default function CreatePlan(props: any): JSX.Element {
                     onChange={performanceBondChange}
                 />
                 <DetailTitle title="出库明细" />
-                <div className='btnWrapper'>
+                <div className={styles.btnWrapper}>
                     {type===0?
                         <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择库存</Button>
                         :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setDetailVisible(true)}>选择货物明细</Button>}
                 </div>
-                <Form form={form} className='descripForm'>
+                <Form form={form} className={styles.descripForm}>
                 <CommonTable
                     style={{ padding: "0" }}
-                    className='descripForm'
                     columns={[
                         {
                             key: 'index',
@@ -581,9 +580,6 @@ export default function CreatePlan(props: any): JSX.Element {
                                     render: (value: string, records: any, key: number) => {return <Form.Item 
                                         name={['list', key, 'receiveBatchNumber']}
                                         rules={[{
-                                            required: true,
-                                            message:'请输入收货批次'
-                                        }, {
                                             validator: async (rule: any, value: any, callback: (error?: string) => void) => {
                                                 const resData = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`);
                                                 if(!resData)
