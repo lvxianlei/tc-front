@@ -61,7 +61,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                         ...res,
                         productCategoryId: record.productCategoryId,
                         productCategoryName: record.productCategoryName,
-                        basicsPartNum: res.partNum,
+                        basicsPartNum: Number(res?.partNum) * Number(res?.singleNum || 0),
                         structureId: res.id,
                         totalWeight: (Number(res?.partNum) * Number(res?.basicsWeight || 0) * Number(res?.singleNum || 0)).toFixed(2)
                     }
