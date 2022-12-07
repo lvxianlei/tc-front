@@ -13,7 +13,7 @@ import { IResponseData } from '../../common/Page';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns, partsColumns } from "./patchApplication.json"
-import { CommonTable } from '../../common';
+import { CommonTable, IntgSelect } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 
 export default function List(): React.ReactNode {
@@ -80,6 +80,9 @@ export default function List(): React.ReactNode {
             values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
             values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
         }
+        if(values.applyUser) {
+            values.applyUser = values.applyUser?.value
+        }
         setFilterValues(values);
         run({}, { ...values });
     }
@@ -107,6 +110,12 @@ export default function List(): React.ReactNode {
                         </Select.Option>
                     })}
                 </Select>
+            </Form.Item>
+            <Form.Item label='申请人' name="applyUser">
+                <IntgSelect width={200} />
+            </Form.Item>
+            <Form.Item label='塔型名称' name="productCategoryName">
+                <Input placeholder="请输入" />
             </Form.Item>
             <Form.Item label='模糊查询项' name="fuzzyMsg">
                 <Input style={{ width: '400px' }} placeholder="补件编号/计划号/工程名称/说明" />

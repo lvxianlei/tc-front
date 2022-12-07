@@ -266,6 +266,12 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'angleTotalWeight'
         },
         {
+            key: 'weldTotalWeight',
+            title: '组焊总重量（kg）',
+            width: 200,
+            dataIndex: 'weldTotalWeight'
+        },
+        {
             key: 'machiningDemand',
             title: '加工说明',
             width: 200,

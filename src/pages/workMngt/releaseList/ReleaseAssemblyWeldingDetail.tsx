@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Modal, message } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Select, Modal, message, Row, Col } from 'antd';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { CommonTable } from '../../common';
+import { CommonTable, DetailContent } from '../../common';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from '../setOut/downloadTemplate';
@@ -55,14 +55,6 @@ export default function ReleaseList(): React.ReactNode {
 
     const columns = [
         {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
             key: 'segmentName',
             title: '段名',
             width: 100,
@@ -107,14 +99,6 @@ export default function ReleaseList(): React.ReactNode {
     ]
     const detailColumns = [
         {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            fixed: 'left' as FixedType,
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
             key: 'code',
             title: '零部件号',
             width: 150,
@@ -123,7 +107,7 @@ export default function ReleaseList(): React.ReactNode {
         {
             key: 'isMainPart',
             title: '是否主件',
-            width: 150,
+            width: 100,
             dataIndex: 'isMainPart',
             render: (number: any) => {
                 return number ? [0, '0'].includes(number) ? '否' : '是' : '-'
@@ -138,7 +122,7 @@ export default function ReleaseList(): React.ReactNode {
         {
             key: 'structureTexture',
             title: '材质',
-            width: 200,
+            width: 150,
             dataIndex: 'structureTexture'
         },
         {
@@ -150,19 +134,19 @@ export default function ReleaseList(): React.ReactNode {
         {
             key: 'length',
             title: '长度（mm）',
-            width: 150,
+            width: 120,
             dataIndex: 'length',
         },
         {
             key: 'width',
             title: '宽度（mm）',
-            width: 150,
+            width: 120,
             dataIndex: 'width',
         },
         {
             key: 'singleNum',
             title: '单组件数',
-            width: 150,
+            width: 120,
             dataIndex: 'singleNum',
         },
         {
@@ -210,7 +194,7 @@ export default function ReleaseList(): React.ReactNode {
     })
 
     return (
-        <>
+        <DetailContent>
             <Modal
                 visible={visible}
                 title="生成PDF"
@@ -240,7 +224,6 @@ export default function ReleaseList(): React.ReactNode {
                 </Form>
             </Modal>
             <Form layout="inline" style={{ margin: '20px' }} onFinish={async (values) => {
-                console.log(values)
                 setFilterValue(values)
                 await run({
                     ...values
@@ -256,23 +239,24 @@ export default function ReleaseList(): React.ReactNode {
                     <Button htmlType="reset">重置</Button>
                 </Form.Item>
             </Form>
-            {/* <Button  type="primary" onClick={() => setIsExport(true)} ghost>导出</Button> */}
-            <Button style={{ margin: '0px 10px 20px 20px' }} type="primary" onClick={() => {
-                downloadTemplate(`/tower-science/loftingBatch/downloadBatch`, '组焊', {
-                    id: params.id,
-                    fuzzyMsg: filterValue?.fuzzyMsg,
-                    weldingId: params.weldingId
-                }, false, 'array')
-            }}>导出</Button>
-            <Button type="primary" onClick={() => {
-                setVisible(true);
-                printerRun();
-            }} ghost>打印PDF</Button>
-            <Button style={{ margin: '0px 20px 0px 0px' }} onClick={() => history.goBack()} >返回</Button>
-            <div style={{ display: 'flex', width: '100%' }} >
-                <div style={{ width: '40%', padding: '0px 20px 20px 20px' }}>
+            <Space direction="horizontal" style={{ marginBottom: '16px' }}>
+                <Button type="primary" onClick={() => {
+                    downloadTemplate(`/tower-science/loftingBatch/downloadBatch`, '组焊', {
+                        id: params.id,
+                        fuzzyMsg: filterValue?.fuzzyMsg,
+                        weldingId: params.weldingId
+                    }, false, 'array')
+                }}>导出</Button>
+                <Button type="primary" onClick={() => {
+                    setVisible(true);
+                    printerRun();
+                }} ghost>打印PDF</Button>
+                <Button onClick={() => history.goBack()} >返回</Button>
+            </Space>
+            <Row gutter={12}>
+                <Col span={8}>
                     <CommonTable
-                        style={{ padding: "0" }}
+                        haveIndex
                         loading={loading}
                         columns={columns}
                         rowKey={(item: any) => `${item.id}`}
@@ -289,11 +273,11 @@ export default function ReleaseList(): React.ReactNode {
                         })}
                         dataSource={data as any || []}
                     />
-                </div>
-                <div style={{ width: '60%', paddingRight: '20px' }} >
-                    <CommonTable columns={detailColumns} dataSource={segmentDataSource} pagination={false} />
-                </div>
-            </div>
-        </>
+                </Col>
+                <Col span={16}>
+                    <CommonTable haveIndex columns={detailColumns} styles={{ maxLength: '800px', overFlowY: 'auto' }} dataSource={segmentDataSource} pagination={false} />
+                </Col>
+            </Row>
+        </DetailContent>
     )
 }
