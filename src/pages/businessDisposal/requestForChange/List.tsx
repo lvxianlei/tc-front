@@ -241,9 +241,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.examineStatus === 1 || record.examineStatus === 5 || record.examineStatus === 0)}
+                                disabled={!(record.examineStatus === 1 || record.examineStatus === 5)}
                             >
-                                <Button disabled={!(record.examineStatus === 1 || record.examineStatus === 5 || record.examineStatus === 0)} type="link">发起</Button>
+                                <Button disabled={!(record.examineStatus === 1 || record.examineStatus === 5)} type="link">发起</Button>
                             </Popconfirm>
                             <Popconfirm
                                 title="确认撤回?"
@@ -269,11 +269,11 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.examineStatus === 1 || record.examineStatus === 5 || record.examineStatus === 0)}
+                                disabled={!(record.examineStatus === 1 || record.examineStatus === 5)}
                             >
-                                <Button disabled={!(record.examineStatus === 1 || record.examineStatus === 5 || record.examineStatus === 0)} type="link">删除</Button>
+                                <Button disabled={!(record.examineStatus === 1 || record.examineStatus === 5)} type="link">删除</Button>
                             </Popconfirm>
-                            <Button type="link" disabled={!(record.examineStatus === 1 || record.examineStatus === 5 || record.examineStatus === 0)} onClick={() => {
+                            <Button type="link" disabled={!(record.examineStatus === 1 || record.examineStatus === 5)} onClick={() => {
                                 setRowId(record?.id);
                                 setVisible(true);
                                 setType("edit");
