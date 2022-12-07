@@ -25,6 +25,12 @@
             "width": 150
         },
         {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 120
+        },
+        {
             "key": "priorityName",
             "title": "优先级",
             "dataIndex": "priorityName",
