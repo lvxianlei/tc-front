@@ -96,7 +96,7 @@ export default function MaterialMngt(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Button type="link" onClick={async () => {
-                        const data = await RequestUtil.get<IMaterial[]>(`/tower-system/material/detail/${record.id}`);
+                        const data = await RequestUtil.get<any[]>(`/tower-system/material/detail/${record.id}`);
                         setVisible(true);
                         const list = materialType.filter((res: IMaterialType) => res.id === data[0].materialType);
                         setMaterialList(list[0]?.children);
@@ -104,10 +104,12 @@ export default function MaterialMngt(): React.ReactNode {
                             ...data[0],
                             materialType: data[0].materialType + ',' + data[0].materialTypeName,
                             materialCategory: data[0].materialCategory + ',' + data[0].materialCategoryName,
-                            materialCode: data[0].materialCode?.substring(4),
-                            proportion: data[0].proportion == -1 ? undefined : data[0].proportion
+                            // materialCode: data[0].materialCode?.substring(4),
+                            proportion: data[0].proportion == -1 ? undefined : data[0].proportion,
+                            structureSpec: data[0].ruleFront?data[0].structureSpec?.split(data[0].ruleFront)[1]:data[0].structureSpec
                         }
                         setCode(data[0].materialCode?.substring(0, 4) || '')
+                        setRuleFront(data[0].ruleFront)
                         setDetailData(newData);
                         form.setFieldsValue({ ...newData });
                         setTitle('编辑');
@@ -144,7 +146,8 @@ export default function MaterialMngt(): React.ReactNode {
                     materialTypeName: values.materialType.split(',')[1],
                     materialCategory: values.materialCategory.split(',')[0],
                     materialCategoryName: values.materialCategory.split(',')[1],
-                    materialCode: code + values.materialCode,
+                    // materialCode: code + values.materialCode,
+                    structureSpec: ruleFront?ruleFront + values.structureSpec:values.structureSpec,
                     materialDataType: 2
                 }
                 if (title === '新增') {
@@ -174,21 +177,21 @@ export default function MaterialMngt(): React.ReactNode {
         }
     }
 
-    /**
-     * @description 验证编号是否重复
-     */
-    const checkBatchSn = (value: string): Promise<void | any> => {
-        return new Promise(async (resolve, reject) => {  // 返回一个promise
-            const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
-                materialCode: code + value,
-                materialDataType: 2,
-                id: detailData.id
-            });
-            resolve(resData)
-        }).catch(error => {
-            Promise.reject(error)
-        })
-    }
+    // /**
+    //  * @description 验证编号是否重复
+    //  */
+    // const checkBatchSn = (value: string): Promise<void | any> => {
+    //     return new Promise(async (resolve, reject) => {  // 返回一个promise
+    //         const resData = await RequestUtil.get('/tower-system/material/checkMaterialCode', {
+    //             materialCode: code + value,
+    //             materialDataType: 2,
+    //             id: detailData.id
+    //         });
+    //         resolve(resData)
+    //     }).catch(error => {
+    //         Promise.reject(error)
+    //     })
+    // }
 
     const [materialList, setMaterialList] = useState([]);
     const [visible, setVisible] = useState(false);
@@ -198,6 +201,7 @@ export default function MaterialMngt(): React.ReactNode {
     const [form] = Form.useForm();
     const history = useHistory();
     const [code, setCode] = useState('');
+    const [ruleFront, setRuleFront] = useState('');
     const [filterValue, setFilterValue] = useState({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`);
@@ -282,8 +286,9 @@ export default function MaterialMngt(): React.ReactNode {
                         <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => {
                             const list = materialType.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
                             setMaterialList(list[0].children);
-                            form.setFieldsValue({ materialCategory: '' });
-                            setCode('');
+                            form.setFieldsValue({ materialCategory: '',materialCode:'' });
+                            // setCode('');
+                            setRuleFront('')
                         }}>
                             {materialType && materialType.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
@@ -296,7 +301,9 @@ export default function MaterialMngt(): React.ReactNode {
                     }]}>
                         <Select placeholder="请选择" style={{ width: "100%" }} onChange={(e: string) => {
                             const list: any = materialList.filter((res: IMaterialType) => res.id === e?.split(',')[0]);
-                            setCode(list[0].code);
+                            form.setFieldsValue({ materialCode:'' });
+                            // setCode(list[0].code);
+                            setRuleFront(list[0].ruleFront)
                         }}>
                             {materialList && materialList.map((item: any) => {
                                 return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
@@ -314,33 +321,36 @@ export default function MaterialMngt(): React.ReactNode {
                     }]}>
                         <Input maxLength={20} />
                     </Form.Item></Col>
-                    <Col span={11} offset={1}><Form.Item label="编号" name="materialCode" rules={[{
-                        required: true,
-                        message: '请输入编号'
-                    }, {
-                        pattern: /^[^\s]*$/,
-                        message: '禁止输入空格',
-                    }, {
-                        pattern: /^[0-9]*$/,
-                        message: '仅可输入非负数',
-                    }, {
-                        validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
-                            checkBatchSn(value).then(res => {
-                                if (res) {
-                                    callback()
-                                } else {
-                                    callback('物料编号重复');
-                                }
-                            })
-                        }
-                    }]}>
-                        <Input addonBefore={code} maxLength={4} />
+                    <Col span={11} offset={1}><Form.Item label="编号" name="materialCode" 
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请输入编号'
+                    // }, {
+                    //     pattern: /^[^\s]*$/,
+                    //     message: '禁止输入空格',
+                    // }, {
+                    //     pattern: /^[0-9]*$/,
+                    //     message: '仅可输入非负数',
+                    // }, {
+                    //     validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
+                    //         checkBatchSn(value).then(res => {
+                    //             if (res) {
+                    //                 callback()
+                    //             } else {
+                    //                 callback('物料编号重复');
+                    //             }
+                    //         })
+                    //     }
+                    // }]}
+                    >
+                        {/* <Input addonBefore={code} maxLength={4} /> */}
+                        <Input  disabled placeholder='自动生成'/>
                     </Form.Item></Col>
                 </Row>
                 <Row>
                     <Col span={11} offset={1}><Form.Item label="规格" name="structureSpec" rules={[{
                         required: true,
-                        message: '请输入编号'
+                        message: '请输入规格'
                     }, {
                         pattern: /^[^\s]*$/,
                         message: '禁止输入空格',
@@ -348,7 +358,7 @@ export default function MaterialMngt(): React.ReactNode {
                         pattern: /^[^\u4e00-\u9fa5]*$/,
                         message: '仅可输入数字/字母/特殊字符',
                     }]}>
-                        <Input maxLength={20} />
+                        <Input maxLength={20} addonBefore={ruleFront}/>
                     </Form.Item></Col>
                     <Col span={11} offset={1}><Form.Item label="比重" name="proportion" rules={[{
                         required: true,
