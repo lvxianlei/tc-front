@@ -49,26 +49,15 @@
         },
         {
             "title": "货币类型",
-            "dataIndex": "moneyType",
-            "type": "select",
-            "enum": []
+            "dataIndex": "currencyType"
         },
         {
-            "title": "合计金额",
-            "dataIndex": "totalMoney"
-        },
-        {
-            "title": "合计重量(吨)",
-            "dataIndex": "totalWeight"
-        },
-
-        {
-            "title": "合计金额(元)",
+            "title": "开票合计金额",
             "dataIndex": "ticketMoney",
             "type": "number"
         },
         {
-            "title": "合计重量(元/吨)",
+            "title": "开票合计重量",
             "dataIndex": "ticketWeight",
             "type": "number"
         },
@@ -289,6 +278,11 @@
             ]
         },
         {
+            "title": "合同ID",
+            "dataIndex": "contractId",
+            "hide":true
+        },
+        {
             "title": "合同单位",
             "dataIndex": "contractCompany",
             "disabled": true
@@ -322,14 +316,21 @@
         },
         {
             "title": "开票货币类型",
-            "dataIndex": "moneyType",
+            "dataIndex": "currencyType",
             "type": "select",
             "enum":[]
         },
         {
+            "title": "货币类型名称",
+            "dataIndex": "currencyName",
+            "hidden":true
+        },
+        {
             "title": "汇率",
             "dataIndex": "exchangeRate",
-            "type": "number"
+            "type": "number",
+            "max": 100,
+            "min": 0
         },
         {
             "title": "开票合计重量(吨)",
@@ -340,12 +341,12 @@
         {
             "title": "开票合计金额",
             "dataIndex": "ticketMoney",
-            "disabled": true,
-            "type": "text"
+            "disabled": false,
+            "type": "number"
         },
         {
             "title": "人民币金额",
-            "dataIndex": "rmbMoney",
+            "dataIndex": "rmb",
             "disabled": true,
             "type": "number"
         },
@@ -506,7 +507,7 @@
         },
         {
             "title": "开票内容与合同内容不符合原因",
-            "dataIndex": "content",
+            "dataIndex": "des",
             "type": "textarea"
         }
     ],
@@ -560,14 +561,24 @@
             "title": "发票备注栏",
             "dataIndex": "invoicingDes",
             "type": "textarea"
-        },
-        {
-            "title": "开票内容与合同内容不符原因",
-            "dataIndex": "content",
-            "type": "textarea"
         }
     ],
     "billingHead": [
+        {
+            "title": "keys",
+            "dataIndex": "keys",
+            "width": 0
+        },
+        {
+            "title": "数据来源",
+            "dataIndex": "dataSource",
+            "width": 0
+        },
+        {
+            "title": "服务ID",
+            "dataIndex": "savedId",
+            "width": 0
+        },
         {
             "title": "产品名称(票面)",
             "dataIndex": "productName"
@@ -602,9 +613,70 @@
         },
         {
             "title": "货币单位",
-            "dataIndex": "moneyType",
+            "dataIndex": "currencyType",
             "type": "select",
             "enum": []
+        },
+        {
+            "title": "货币单位名称",
+            "dataIndex": "currencyName",
+            "width": 0
+        },
+        {
+            "title": "金额",
+            "dataIndex": "moneyCount",
+            "type": "number",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入金额..."
+                }
+            ]
+        },
+        {
+            "title": "单价",
+            "dataIndex": "money",
+            "type": "number",
+            "disabled": true
+        }
+    ],
+    "billingHeadOverView": [
+        {
+            "title": "产品名称(票面)",
+            "dataIndex": "productName"
+        },
+        {
+            "title": "生产名称(实际)",
+            "dataIndex": "devName"
+        },
+        {
+            "title": "规格型号",
+            "dataIndex": "model"
+        },
+        {
+            "title": "基数",
+            "dataIndex": "baseNum"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "company"
+        },
+        {
+            "title": "重量",
+            "dataIndex": "weight",
+            "type": "number",
+            "required": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请输入重量..."
+                }
+            ]
+        },
+        {
+            "title": "货币单位",
+            "dataIndex": "currencyName"
         },
         {
             "title": "金额",
@@ -627,15 +699,31 @@
     ],
     "saleInvoice": [
         {
+            "title": "keys",
+            "dataIndex": "keys",
+            "width": 0
+        },
+        {
+            "title": "数据来源",
+            "dataIndex": "dataSource",
+            "width": 0
+        },
+        {
+            "title": "服务ID",
+            "dataIndex": "savedId",
+            "width": 0
+        },
+        {
             "title": "开票日期",
-            "dataIndex": "ticketTime",
+            "dataIndex": "invoicingTime",
             "type": "date",
             "format": "YYYY-MM-DD",
-            "width": 300
+            "width": 200
         },
         {
             "title": "发票号码",
-            "dataIndex": "invoiceNumber"
+            "dataIndex": "invoicingNum",
+            "width": 200
         },
         {
             "title": "发票类型",
@@ -650,54 +738,175 @@
                     "value": 2,
                     "label": "增值税专项发票"
                 }
-            ]
+            ],
+            "width": 200
         },
         {
             "title": "货物",
-            "dataIndex": "goodsName"
+            "dataIndex": "productName",
+            "width": 200
         },
         {
             "title": "规格型号",
-            "dataIndex": "model"
+            "dataIndex": "model",
+            "width": 200
         },
         {
             "title": "单位",
-            "dataIndex": "unit"
+            "dataIndex": "company",
+            "width": 200
         },
         {
             "title": "重量(吨)",
-            "dataIndex": "weight"
+            "dataIndex": "weight",
+            "width": 200
         },
         {
             "title": "货币类型",
-            "dataIndex": "moneyType",
-            "type": "select",
-            "enum":[]
+            "dataIndex": "currencyType",
+            "width": 200
+        },
+        {
+            "title": "货币类型名称",
+            "dataIndex": "currencyName",
+            "width": 0
         },
         {
             "title": "单价",
             "dataIndex": "money",
-            "type": "number"
+            "type": "number",
+            "width": 200
         },
         {
             "title": "金额",
-            "dataIndex": "money",
-            "type": "number"
+            "dataIndex": "moneyCount",
+            "type": "number",
+            "width": 200
         },
         {
             "title": "税率",
-            "dataIndex": "tax",
-            "type": "number"
+            "dataIndex": "taxRate",
+            "type": "number",
+            "width": 200
         },
         {
             "title": "税额",
-            "dataIndex": "tax",
+            "dataIndex": "taxAmount",
             "type": "number",
-            "disabled": true
+            "disabled": true,
+            "width": 200
         },
         {
             "title": "备注",
-            "dataIndex": "remark"
+            "dataIndex": "remark",
+            "width": 200
+        }
+    ],
+    "saleInvoiceOverView": [
+        {
+            "title": "开票日期",
+            "dataIndex": "invoicingTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 200
+        },
+        {
+            "title": "发票号码",
+            "dataIndex": "invoicingNum",
+            "width": 200
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "ticketType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "增值税普通发票"
+                },
+                {
+                    "value": 2,
+                    "label": "增值税专项发票"
+                }
+            ],
+            "width": 200
+        },
+        {
+            "title": "货物",
+            "dataIndex": "productName",
+            "width": 200
+        },
+        {
+            "title": "规格型号",
+            "dataIndex": "model",
+            "width": 200
+        },
+        {
+            "title": "单位",
+            "dataIndex": "company",
+            "width": 200
+        },
+        {
+            "title": "重量(吨)",
+            "dataIndex": "weight",
+            "width": 200
+        },
+        {
+            "title": "货币类型名称",
+            "dataIndex": "currencyName",
+            "width":200
+        },
+        {
+            "title": "单价",
+            "dataIndex": "money",
+            "type": "number",
+            "width": 200
+        },
+        {
+            "title": "金额",
+            "dataIndex": "moneyCount",
+            "type": "number",
+            "width": 200
+        },
+        {
+            "title": "税率",
+            "dataIndex": "taxRate",
+            "type": "number",
+            "width": 200
+        },
+        {
+            "title": "税额",
+            "dataIndex": "taxAmount",
+            "type": "number",
+            "disabled": true,
+            "width": 200
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 200
+        }
+    ],
+    "invoicingStatistics": [
+        {
+            "title": "产品名称(实际)",
+            "dataIndex": "devName"
+        },
+        {
+            "title": "累计开票重量",
+            "dataIndex": "weight"
+        },
+        {
+            "title": "单价",
+            "dataIndex": "money"
+        },
+        {
+            "title": "累计开票金额",
+            "dataIndex": "moneyCount"
+        },
+        {
+            "title": "累计开票基数",
+            "dataIndex": "baseNum"
         }
     ],
     "revisePlanHead": [
@@ -737,7 +946,7 @@
     "transferHead": [
         {
             "title": "移交人",
-            "dataIndex": "transferName"
+            "dataIndex": "transferUser"
         },
         {
             "title": "移交时间",

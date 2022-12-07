@@ -1,8 +1,8 @@
-import React from "react"
-import { Button, message, Spin } from 'antd'
+import React, {useState} from "react"
+import {Button, message, Radio, Spin} from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { baseInfoHead, invoiceHead, billingHead, batchHead } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHeadOverView, batchHead,saleInvoiceOverView,invoicingStatistics } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { productTypeOptions } from "../../../configuration/DictionaryOptions"
@@ -10,9 +10,13 @@ export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const productType: any = productTypeOptions
+    const [tab, setTab] = useState<string>("a")
+    const  handleRadioChange = (e:any)=>{
+        setTab(e.target.value)
+    }
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo/${params.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo?id=${params.id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -72,9 +76,20 @@ export default function Edit() {
             <DetailTitle title="发票信息" />
             <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />
 
-            <DetailTitle title="开票明细" />
-            <CommonTable columns={billingHead} dataSource={data?.invoicingDetailVos || []} />
+            <Radio.Group value={tab} onChange={handleRadioChange} style={{margin: "12px 0"}}>
+                <Radio.Button value="a">开票明细</Radio.Button>
+                <Radio.Button value="b">累计开票</Radio.Button>
+                <Radio.Button value="c">销售发票</Radio.Button>
+            </Radio.Group>
+            {
+                tab === "a" ?  <CommonTable columns={billingHeadOverView} dataSource={data?.invoicingDetailVos || []} /> :
+                    tab === "b" ? <CommonTable columns={invoicingStatistics} dataSource={data?.invoicingStatisticsVOS || []} /> :
+                tab === "c" ? <CommonTable columns={saleInvoiceOverView} dataSource={data?.invoicingSaleVOS || []} /> : <></>
+            }
+
+
             <Attachment dataSource={data?.attachInfoVos} />
+
             <DetailTitle title="审批记录" />
             <CommonTable columns={batchHead} dataSource={data?.invoicingBatchVos || []} />
         </DetailContent>
