@@ -82,7 +82,12 @@ export default function Edit() {
                 <Radio.Button value="c">销售发票</Radio.Button>
             </Radio.Group>
             {
-                tab === "a" ?  <CommonTable columns={billingHeadOverView} dataSource={data?.invoicingDetailVos || []} /> :
+                tab === "a" ?  <CommonTable columns={billingHeadOverView} dataSource={data?.invoicingDetailVos?.map((item:any)=>{
+                    return {
+                        ...item,
+                        devNameText:productType.find((el:any)=> el.id === item.devName)?.name
+                    }
+                    }) || []} /> :
                     tab === "b" ? <CommonTable columns={invoicingStatistics} dataSource={data?.invoicingStatisticsVOS || []} /> :
                 tab === "c" ? <CommonTable columns={saleInvoiceOverView} dataSource={data?.invoicingSaleVOS || []} /> : <></>
             }

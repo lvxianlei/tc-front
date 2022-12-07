@@ -280,7 +280,8 @@
         {
             "title": "合同ID",
             "dataIndex": "contractId",
-            "hide":true
+            "hide":true,
+            "hidden":true
         },
         {
             "title": "合同单位",
@@ -648,7 +649,7 @@
         },
         {
             "title": "生产名称(实际)",
-            "dataIndex": "devName"
+            "dataIndex": "devNameText"
         },
         {
             "title": "规格型号",
@@ -798,7 +799,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark",
+            "dataIndex": "description",
             "width": 200
         }
     ],
@@ -883,7 +884,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark",
+            "dataIndex": "description",
             "width": 200
         }
     ],
@@ -920,7 +921,7 @@
         },
         {
             "title": "订单号",
-            "dataIndex": "orderCode"
+            "dataIndex": "saleOrderNumber"
         },
         {
             "title": "销售计划号",
@@ -931,16 +932,8 @@
             "dataIndex": "planNumber"
         },
         {
-            "title": "基数",
-            "dataIndex": "baseNumber"
-        },
-        {
             "title": "总重量",
             "dataIndex": "totalWeight"
-        },
-        {
-            "title": "已完工数量",
-            "dataIndex": "finishNum"
         }
     ],
     "transferHead": [
