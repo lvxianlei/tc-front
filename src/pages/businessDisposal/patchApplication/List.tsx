@@ -9,7 +9,6 @@ import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Ro
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
 import { Link, useHistory } from 'react-router-dom';
-import { IResponseData } from '../../common/Page';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns, partsColumns } from "./patchApplication.json"
@@ -20,6 +19,7 @@ export default function List(): React.ReactNode {
     const history = useHistory();
     const [detailData, setDetailData] = useState<any>();
     const [partsData, setPartsData] = useState<any>();
+    const [rowId, setRowId] = useState<string>('')
     const [page, setPage] = useState({
         current: 1,
         size: 10,
@@ -29,10 +29,11 @@ export default function List(): React.ReactNode {
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        const data: any = await RequestUtil.get<any>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
         setPage({ ...data });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
+            setRowId(data.records[0]?.id)
         } else {
             setDetailData([]);
             setPartsData([]);
@@ -62,6 +63,7 @@ export default function List(): React.ReactNode {
     }), { manual: true })
 
     const onRowChange = async (record: Record<string, any>) => {
+        setRowId(record.id)
         detailRun(record.id)
     }
 
@@ -128,7 +130,7 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '6px 0' }} ghost>申请</Button></Link>
+        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '16px 0' }} ghost>申请</Button></Link>
         <CommonTable
             haveIndex
             columns={[
@@ -215,10 +217,10 @@ export default function List(): React.ReactNode {
             }}
             onRow={(record: Record<string, any>) => ({
                 onClick: () => onRowChange(record),
-                className: styles.tableRow
+                className: record?.id === rowId ? styles.selected : undefined
             })}
         />
-        <Row gutter={12} style={{ marginTop: '6px' }}>
+        <Row gutter={12} style={{ marginTop: '16px' }}>
             <Col span={8}>
                 <CommonTable
                     haveIndex
