@@ -9,17 +9,17 @@ import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Ro
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
 import { Link, useHistory } from 'react-router-dom';
-import { IResponseData } from '../../common/Page';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns, partsColumns } from "./patchApplication.json"
-import { CommonTable } from '../../common';
+import { CommonTable, IntgSelect } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 
 export default function List(): React.ReactNode {
     const history = useHistory();
     const [detailData, setDetailData] = useState<any>();
     const [partsData, setPartsData] = useState<any>();
+    const [rowId, setRowId] = useState<string>('')
     const [page, setPage] = useState({
         current: 1,
         size: 10,
@@ -29,10 +29,11 @@ export default function List(): React.ReactNode {
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        const data: any = await RequestUtil.get<any>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
         setPage({ ...data });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
+            setRowId(data.records[0]?.id)
         } else {
             setDetailData([]);
             setPartsData([]);
@@ -62,6 +63,7 @@ export default function List(): React.ReactNode {
     }), { manual: true })
 
     const onRowChange = async (record: Record<string, any>) => {
+        setRowId(record.id)
         detailRun(record.id)
     }
 
@@ -79,6 +81,9 @@ export default function List(): React.ReactNode {
             const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
             values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
             values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+        }
+        if(values.applyUser) {
+            values.applyUser = values.applyUser?.value
         }
         setFilterValues(values);
         run({}, { ...values });
@@ -108,6 +113,12 @@ export default function List(): React.ReactNode {
                     })}
                 </Select>
             </Form.Item>
+            <Form.Item label='申请人' name="applyUser">
+                <IntgSelect width={200} />
+            </Form.Item>
+            <Form.Item label='塔型名称' name="productCategoryName">
+                <Input placeholder="请输入" />
+            </Form.Item>
             <Form.Item label='模糊查询项' name="fuzzyMsg">
                 <Input style={{ width: '400px' }} placeholder="补件编号/计划号/工程名称/说明" />
             </Form.Item>
@@ -119,7 +130,7 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '6px 0' }} ghost>申请</Button></Link>
+        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '16px 0' }} ghost>申请</Button></Link>
         <CommonTable
             haveIndex
             columns={[
@@ -206,10 +217,10 @@ export default function List(): React.ReactNode {
             }}
             onRow={(record: Record<string, any>) => ({
                 onClick: () => onRowChange(record),
-                className: styles.tableRow
+                className: record?.id === rowId ? styles.selected : undefined
             })}
         />
-        <Row gutter={12} style={{ marginTop: '6px' }}>
+        <Row gutter={12} style={{ marginTop: '16px' }}>
             <Col span={8}>
                 <CommonTable
                     haveIndex

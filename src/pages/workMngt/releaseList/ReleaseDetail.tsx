@@ -306,12 +306,6 @@ export default function ReleaseList(): React.ReactNode {
             "width": 100
         },
         {
-            "key": "description",
-            "title": "备注",
-            "dataIndex": "description",
-            "width": 150
-        },
-        {
             "key": "arcContaining",
             "title": "含弧",
             "dataIndex": "arcContaining",
@@ -351,24 +345,6 @@ export default function ReleaseList(): React.ReactNode {
             "key": "gasCuttingNumber",
             "title": "气割孔孔径孔数",
             "dataIndex": "gasCuttingNumber",
-            "width": 100
-        },
-        {
-            "key": "basicsWeight",
-            "title": "单件重量（kg）",
-            "dataIndex": "basicsWeight",
-            "width": 100
-        },
-        {
-            "key": "totalWeight",
-            "title": "总重（kg）",
-            "dataIndex": "totalWeight",
-            "width": 100
-        },
-        {
-            "key": "craftName",
-            "title": "工艺列（核对）",
-            "dataIndex": "craftName",
             "width": 100
         },
         {
