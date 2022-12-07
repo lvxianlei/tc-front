@@ -159,7 +159,7 @@ export default function List(): React.ReactNode {
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
                             <Link to={`/businessDisposal/patchApplication/edit/${record.id}`}>
-                                <Button type='link' disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>编辑</Button>
+                                <Button type='link' disabled={!(record.status === 1 || record.status === 5)}>编辑</Button>
                             </Link>
                             <Link to={`/businessDisposal/patchApplication/detail/${record.id}`}>详情</Link>
                             <Popconfirm
@@ -172,9 +172,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link" disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>发起</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>发起</Button>
                             </Popconfirm>
                             <Popconfirm
                                 title="确认撤回?"
@@ -200,9 +200,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link" disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>删除</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>删除</Button>
                             </Popconfirm>
                             {
                                 record?.warehousingStatus === 1 ?
@@ -288,7 +288,7 @@ export default function List(): React.ReactNode {
                     styles.selected :
                     record?.warehousingStatus === 0 ?
                         styles.noDelivery :
-                        record?.shipmentStatus === 0 ?
+                        record?.shipmentStatusName === 0 ?
                             styles.noPutStorage :
                             undefined
             }
