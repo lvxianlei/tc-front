@@ -202,6 +202,27 @@ export default function ScheduleView(): React.ReactNode {
         return value
     }
 
+    const checkChange = (checked: boolean, id: string, name: string) => {
+        if (checked) {
+            setDetailData({
+                ...detailData,
+                [id]: '0'
+            })
+            form.setFieldsValue({
+                [id]: '0',
+                [name]: '同上'
+            })
+        } else {
+            setDetailData({
+                ...detailData,
+                [id]: ''
+            })
+            form.setFieldsValue({
+                [id]: '',
+                [name]: ''
+            })
+        }
+    }
 
     return (
         <>
@@ -280,7 +301,8 @@ export default function ScheduleView(): React.ReactNode {
                                                         });
                                                         form.setFieldsValue({
                                                             ...resData,
-                                                            programmingLeader: resData?.weldingLeader
+                                                            programmingLeader: resData?.weldingLeader,
+                                                            programmingLeaderName: resData?.weldingLeaderName
                                                         });
                                                         setLoad(false)
                                                     }
@@ -473,25 +495,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    ncUser: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    ncUser: '0',
-                                                    ncUserName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    ncUser: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    ncUser: '',
-                                                    ncUserName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'ncUser', 'ncUserName')
                                         }} checked={detailData?.ncUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -519,25 +523,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    boltPlanCheckUser: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    boltPlanCheckUser: '0',
-                                                    boltPlanCheckUserName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    boltPlanCheckUser: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    boltPlanCheckUser: '',
-                                                    boltPlanCheckUserName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'boltPlanCheckUser', 'boltPlanCheckUserName')
                                         }} checked={detailData?.boltPlanCheckUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -565,25 +551,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    deliveryDrawLeader: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    deliveryDrawLeader: '0',
-                                                    deliveryDrawLeaderName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    deliveryDrawLeader: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    deliveryDrawLeader: '',
-                                                    deliveryDrawLeaderName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'deliveryDrawLeader', 'deliveryDrawLeaderName')
                                         }} checked={detailData?.deliveryDrawLeader === '0'}>
                                             同上
                                         </Checkbox>
@@ -613,25 +581,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    loftingMutualReview: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    loftingMutualReview: '0',
-                                                    loftingMutualReviewName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    loftingMutualReview: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    loftingMutualReview: '',
-                                                    loftingMutualReviewName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'loftingMutualReview', 'loftingMutualReviewName')
                                         }} checked={detailData?.loftingMutualReview === '0'}>
                                             同上
                                         </Checkbox>
@@ -659,25 +609,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    productPartUser: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    productPartUser: '0',
-                                                    productPartUserName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    productPartUser: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    productPartUser: '',
-                                                    productPartUserName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'productPartUser', 'productPartUserName')
                                         }} checked={detailData?.productPartUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -705,25 +637,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    boltUser: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    boltUser: '0',
-                                                    boltUserName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    boltUser: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    boltUser: '',
-                                                    boltUserName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'boltUser', 'boltUserName')
                                         }} checked={detailData?.boltUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -762,25 +676,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    weldingUser: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    weldingUser: '0',
-                                                    weldingUserName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    weldingUser: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    weldingUser: '',
-                                                    weldingUserName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'weldingUser', 'weldingUserName')
                                         }} checked={detailData?.weldingUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -808,25 +704,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    packageUser: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    packageUser: '0',
-                                                    packageUserName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    packageUser: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    packageUser: '',
-                                                    packageUserName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'packageUser', 'packageUserName')
                                         }} checked={detailData?.packageUser === '0'}>
                                             同上
                                         </Checkbox>
@@ -854,25 +732,7 @@ export default function ScheduleView(): React.ReactNode {
                                     </Col>
                                     <Col span={6}>
                                         <Checkbox onChange={(check) => {
-                                            if (check.target.checked) {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    boltCheckUser: '0'
-                                                })
-                                                form.setFieldsValue({
-                                                    boltCheckUser: '0',
-                                                    boltCheckUserName: '同上'
-                                                })
-                                            } else {
-                                                setDetailData({
-                                                    ...detailData,
-                                                    boltCheckUser: ''
-                                                })
-                                                form.setFieldsValue({
-                                                    boltCheckUser: '',
-                                                    boltCheckUserName: ''
-                                                })
-                                            }
+                                            checkChange(check.target.checked, 'boltCheckUser', 'boltCheckUserName')
                                         }} checked={detailData?.boltCheckUser === '0'}>
                                             同上
                                         </Checkbox>

@@ -9,7 +9,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import moment from 'moment';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
-import SelectUserByPick from './SelectUserByPick';
+import SelectUser from '../../common/SelectUser';
 
 export interface TowerPickAssignProps { }
 export interface ITowerPickAssignRouteProps extends RouteComponentProps<TowerPickAssignProps>, WithTranslation {
@@ -170,77 +170,6 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
             })
         }
     };
-    // /**
-    //  * onDepartmentChange
-    //  */
-    // public onDepartmentChange = async (value: Record<string, any>, title: string) => {
-    //     const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${ value }&size=1000`);
-    //     let appointed = this.getForm()?.getFieldsValue(true);
-    //     if(title === '校对'){
-    //         this.setState({
-    //             materialCheckLeader: userData.records,
-    //             appointed: {
-    //                 ...appointed,
-    //                 materialCheckLeader: ''
-    //             }
-    //         })
-    //         this.getForm()?.setFieldsValue({ materialCheckLeader:'' })
-    //     }
-    //     else if(title === '提料'){
-    //         this.setState({
-    //             user: userData.records,
-    //             appointed: {
-    //                 ...appointed,
-    //                 materialLeader: ''
-    //             }
-    //         })
-    //         this.getForm()?.setFieldsValue({ materialLeader:'' })
-    //     }else if(title === '提料人'){
-    //         this.setState({
-    //             user: userData.records,
-    //         })
-    //         this.getForm()?.setFieldsValue({ ...appointed })
-    //     }if(title === '校核人'){
-    //         this.setState({
-    //             materialCheckLeader: userData.records,
-    //         })
-    //         this.getForm()?.setFieldsValue({ ...appointed })
-    //     }
-    // }
-
-    // public wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-    //     roles && roles.forEach((role: any & SelectDataNode): void => {
-    //         role.value = role.id;
-    //         role.isLeaf = false;
-    //         if (role.children && role.children.length > 0) {
-    //             this.wrapRole2DataNode(role.children);
-    //         } else {
-    //             role.children = []
-    //         }
-    //     });
-    //     return roles;
-    // }
-
-    // public renderTreeNodes = (data:any) => data.map((item:any) => {
-    //     if (item.children) {
-    //         return (
-    //             <TreeNode 
-    //                 key={ item.id } 
-    //                 title={ item.name } 
-    //                 value={ item.id } 
-    //                 className={ styles.node } 
-    //                 >
-    //                 { this.renderTreeNodes(item.children) }
-    //             </TreeNode>
-    //         );
-    //     }
-    //     return <TreeNode 
-    //                 { ...item } 
-    //                 key={ item.id } 
-    //                 title={ item.name } 
-    //                 value={ item.id }
-    //             />;
-    // });
 
     /**
     * @description Renders AbstractDetailComponent
@@ -350,108 +279,48 @@ class TowerPickAssign extends React.Component<ITowerPickAssignRouteProps, TowerP
                                     </Form.Item>
                                 </Descriptions.Item>
                                     <Descriptions.Item label="提料人">
-                                        {/* <Form.Item name="materialLeaderDepartment"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择部门'
-                                    }]} style={ { width: '50%', display: 'inline-block' } }>
-                                    <TreeSelect 
-                                        placeholder="请选择" 
-                                        style={{width:'120px'}} 
-                                        onChange={ 
-                                            (value: any) => { 
-                                                this.onDepartmentChange(value,'提料')
-                                            } 
-                                        } 
-                                        className={ styles.width200 }
-                                    >
-                                        { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
-                                    </TreeSelect>
-                                </Form.Item> */}
                                         <Form.Item name="materialLeaderName"
                                             rules={[{
                                                 required: true,
                                                 message: '请选择人员'
                                             }]}
-                                            style={{
-                                                width: '50%',
-                                                display: 'inline-block'
-                                            }}
                                         >
                                             <Input style={{ width: '120px' }} size="small" disabled suffix={[
-                                                <SelectUserByPick requests={{ deptName: '技术-提料组' }} key={0} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
-                                                    this.form.current?.setFieldsValue({
-                                                        materialLeader: selectedRows?.map((res: any) => res?.userId),
-                                                        materialLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
-                                                    })
-                                                }} />
+                                                <SelectUser
+                                                    requests={{ deptName: '技术-提料组' }}
+                                                    key={0}
+                                                    selectedKey={this.form?.current?.getFieldsValue(true)?.materialLeader}
+                                                    selectType="checkbox"
+                                                    onSelect={(selectedRows: Record<string, any>) => {
+                                                        this.form.current?.setFieldsValue({
+                                                            materialLeader: selectedRows?.map((res: any) => res?.userId),
+                                                            materialLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
+                                                        })
+                                                    }} />
                                             ]} />
-                                            {/* <Select placeholder="请选择" style={{width:'120px'}} mode='multiple'>
-                                        { this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option 
-                                                        key={ item.userId } 
-                                                        value={ item.userId }
-                                                    >
-                                                        { item.name }
-                                                    </Select.Option>
-                                        }) }
-                                    </Select> */}
                                         </Form.Item>
                                     </Descriptions.Item>
                                     <Descriptions.Item label="校核人">
-                                        {/* <Form.Item 
-                                    name="materialCheckLeaderDepartment"
-                                    rules={[{
-                                        required: true,
-                                        message: '请选择部门'
-                                    }]} 
-                                    style={ { 
-                                        width: '50%', 
-                                        display: 'inline-block' 
-                                    } }
-                                >
-                                    <TreeSelect 
-                                        placeholder="请选择" 
-                                        style={{width:'120px'}} 
-                                        onChange={ 
-                                            (value: any) => { 
-                                                this.onDepartmentChange(value, '校对') 
-                                            } 
-                                        } 
-                                        className={ styles.width200 }
-                                    >
-                                        { this.state.departmentData && this.renderTreeNodes(this.wrapRole2DataNode(this.state.departmentData)) }
-                                    </TreeSelect>
-                                </Form.Item> */}
                                         <Form.Item
                                             name="materialCheckLeaderName"
                                             rules={[{
                                                 required: true,
                                                 message: '请选择人员'
                                             }]}
-                                            style={{
-                                                width: '50%',
-                                                display: 'inline-block'
-                                            }}
                                         >
                                             <Input style={{ width: '120px' }} size="small" disabled suffix={[
-                                                <SelectUserByPick key={1} requests={{ deptName: '技术-提料组' }} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
-                                                    this.form.current?.setFieldsValue({
-                                                        materialCheckLeader: selectedRows?.map((res: any) => res?.userId),
-                                                        materialCheckLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
-                                                    })
-                                                }} />
+                                                <SelectUser
+                                                    key={1}
+                                                    requests={{ deptName: '技术-提料组' }}
+                                                    selectedKey={this.form?.current?.getFieldsValue(true)?.materialCheckLeader}
+                                                    selectType="checkbox"
+                                                    onSelect={(selectedRows: Record<string, any>) => {
+                                                        this.form.current?.setFieldsValue({
+                                                            materialCheckLeader: selectedRows?.map((res: any) => res?.userId),
+                                                            materialCheckLeaderName: selectedRows?.map((res: any) => res?.name).join(',')
+                                                        })
+                                                    }} />
                                             ]} />
-                                            {/* <Select placeholder="请选择" style={{width:'120px'}}  mode='multiple'>
-                                        { this.state?.user && this.state.user.map((item: any) => {
-                                            return <Select.Option 
-                                                        key={ item.userId } 
-                                                        value={ item.userId }
-                                                    >
-                                                        { item.name }
-                                                    </Select.Option>
-                                        }) }
-                                    </Select> */}
                                         </Form.Item>
                                     </Descriptions.Item>
                                     <Descriptions.Item label="交付时间">

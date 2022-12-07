@@ -24,7 +24,7 @@ export interface modalProps {
 export default function PatchIssued(): React.ReactNode {
     const [form] = Form.useForm();
     const params = useParams<{ id: string, supplyNumber: string }>()
-
+    const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const history = useHistory();
 
     const { loading, data: selectData } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -43,6 +43,7 @@ export default function PatchIssued(): React.ReactNode {
     const save = () => {
         if (form) {
             form.validateFields().then(res => {
+                setSaveLoading(true);
                 let value = form.getFieldsValue(true);
                 RequestUtil.post<any>(`/tower-science/supplyBatch/saveBatchDetail`, {
                     ...value,
@@ -50,7 +51,11 @@ export default function PatchIssued(): React.ReactNode {
                     supplyNumber: value?.supplyNumber,
                     isPerforate: value?.isPerforate || 0
                 }).then(res => {
+                    setSaveLoading(false);
                     history.goBack();
+                }).catch(e => {
+                    console.log(e);
+                    setSaveLoading(false);
                 });
             })
         }
@@ -59,7 +64,7 @@ export default function PatchIssued(): React.ReactNode {
     return <Spin spinning={loading}>
         <DetailContent operation={[
             <Space direction="horizontal" size="small">
-                <Button key="save" type="primary" onClick={save}>保存</Button>
+                <Button key="save" type="primary" loading={saveLoading} onClick={save}>保存</Button>
                 <Button key="cancel" type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ]}>

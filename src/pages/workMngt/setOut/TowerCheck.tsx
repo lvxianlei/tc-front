@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Input, Popconfirm, Select, Form } from 'antd';
+import { Space, Button, Input, Popconfirm, Select, Form, Row, Col } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -30,7 +30,7 @@ const columns = [
     {
         key: 'segmentName',
         title: '段名',
-        width: 150,
+        width: 80,
         dataIndex: 'segmentName',
         editable: false
     },
@@ -354,6 +354,7 @@ export default function TowerCheck(): React.ReactNode {
     const [title, setTitle] = useState('提交问题单');
     const [refresh, setRefresh] = useState(false);
     const [filterValue, setFilterValue] = useState({});
+    const [wordSize, setWordSize] = useState(1);
 
     const questionnaire = async (_: undefined, record: Record<string, any>, col: Record<string, any>, tip: string) => {
         setVisible(true);
@@ -405,7 +406,7 @@ export default function TowerCheck(): React.ReactNode {
         }
     }), {})
 
-    return <>
+    return <div className={wordSize == 2 ? styles?.check : wordSize == 3 ? styles?.checkXL : undefined}>
         <Page
             path="/tower-science/productStructure/list"
             columns={columnsSetting}
@@ -428,6 +429,12 @@ export default function TowerCheck(): React.ReactNode {
                 >
                     <Button type="primary" loading={loading1} ghost>完成校核</Button>
                 </Popconfirm> */}
+                <span>字号大小：</span>
+                <Select value={wordSize} style={{width: '150px'}} onChange={(e) => setWordSize(e)}>
+                    <Select.Option value={1} key={1}>正常</Select.Option>
+                    <Select.Option value={2} key={2}>大号</Select.Option>
+                    <Select.Option value={3} key={3}>特大</Select.Option>
+                </Select>
                 <Button type="ghost" onClick={() => history.goBack()} >返回</Button>
             </Space>}
             searchFormItems={[
@@ -460,5 +467,5 @@ export default function TowerCheck(): React.ReactNode {
             }}
         />
         <QuestionnaireModal visible={visible} record={record} title={title} modalCancel={() => { setVisible(false); setRefresh(!refresh); }} update={() => setRefresh(!refresh)} />
-    </>
+    </div>
 }
