@@ -2,7 +2,7 @@ import React, {useState} from "react"
 import {Button, message, Radio, Spin} from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { baseInfoHead, invoiceHead, billingHeadOverView, batchHead,saleInvoiceOverView,invoicingStatistics } from "./InvoicingData.json"
+import { baseInfoHeadOverView, invoiceHead, billingHeadOverView, batchHead,saleInvoiceOverView,invoicingStatistics } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { productTypeOptions } from "../../../configuration/DictionaryOptions"
@@ -54,7 +54,7 @@ export default function Edit() {
         ]}>
 
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={baseInfoHead.map((item: any) => {
+            <BaseInfo columns={baseInfoHeadOverView.map((item: any) => {
                 if (item.dataIndex === "productTypeId") {
                     return ({
                         ...item,
