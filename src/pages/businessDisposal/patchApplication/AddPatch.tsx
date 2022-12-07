@@ -130,7 +130,7 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                         return {
                             ...res,
                             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                <InputNumber disabled={record?.isMainPart === 0} min={0} max={9999} precision={0} size="small" defaultValue={0} onChange={(e) => {
+                                <InputNumber disabled={record?.isMainPart === 0} key={record?.id + status} min={0} max={9999} precision={0} size="small" defaultValue={0} onChange={(e) => {
                                     const newList = detailData.map((res: any, ind: number) => {
                                         if (ind === index) {
                                             return {
