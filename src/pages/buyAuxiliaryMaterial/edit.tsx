@@ -98,8 +98,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             select.forEach(item=>{
                 if(el.id == item.id){
                     item.planPurchaseNum = el.planPurchaseNum || 1
-                    item.deptName = el.deptName || null
-                    item.deptId = el.deptId || null
+                    // item.deptName = el.deptName || null
+                    // item.deptId = el.deptId || null
                     item.remark = el.remark || ""
                 }
             })
@@ -120,13 +120,13 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             message.warning("请先选择辅材...")
             return
         }
-        let flag:boolean = popDataList.every(item=>{
-            console.log(item.deptName,item.deptId)
-            return item.deptName && item.deptId
-        })
-        if(!flag){
-            return message.warn('请将数据补充完整')
-        }
+        // let flag:boolean = popDataList.every(item=>{
+        //     console.log(item.deptName,item.deptId)
+        //     return item.deptName && item.deptId
+        // })
+        // if(!flag){
+        //     return message.warn('请将数据补充完整')
+        // }
         try {
             if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
                 const baseFormData = await form.validateFields()
@@ -161,13 +161,13 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             message.warning("请先选择辅材...")
             return
         }
-        let flag:boolean = popDataList.every(item=>{
-            console.log(item.deptName,item.deptId)
-            return item.deptName && item.deptId
-        })
-        if(!flag){
-            return message.warn('请将数据补充完整')
-        }
+        // let flag:boolean = popDataList.every(item=>{
+        //     console.log(item.deptName,item.deptId)
+        //     return item.deptName && item.deptId
+        // })
+        // if(!flag){
+        //     return message.warn('请将数据补充完整')
+        // }
         try {
             if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
                 const baseFormData = await form.validateFields()
@@ -363,15 +363,15 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                             render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => amountChange(value, records.id, "planPurchaseNum")} key={key} />
                         })
                     }
-                    if (item.dataIndex === "deptName") {
-                        return ({
-                            ...item,
-                            render: (value: number, records: any, key: number) =><><Input value={records.deptName} style={{ width: 160 }} key={key} disabled addonAfter={ <Dept onSelect={(selectRows: any[]) => {
-                                amountChange(selectRows[0]?.name, records.id, "deptName")
-                                amountChange(selectRows[0]?.id, records.id, "deptId")
-                            }} selectedKey={[records?.deptId]||[]} />}/></>
-                        })
-                    }
+                    // if (item.dataIndex === "deptName") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (value: number, records: any, key: number) =><><Input value={records.deptName} style={{ width: 160 }} key={key} disabled addonAfter={ <Dept onSelect={(selectRows: any[]) => {
+                    //             amountChange(selectRows[0]?.name, records.id, "deptName")
+                    //             amountChange(selectRows[0]?.id, records.id, "deptId")
+                    //         }} selectedKey={[records?.deptId]||[]} />}/></>
+                    //     })
+                    // }
                     if (item.dataIndex === "remark") {
                         return ({
                             ...item,
