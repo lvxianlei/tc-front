@@ -32,12 +32,20 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
             setProductGroupDetails(result?.editNoticeProductVOList || [])
             setSelect((result?.editNoticeProductVOList || []).map((item: any) => item.productId))
             setTaskNoticeId(result.taskNoticeId)
-            resole(result)
+            resole({
+                ...result,
+                editNoticeInfoVOList: result?.editNoticeInfoVOList?.map((item: any) => ({
+                    ...item,
+                    field: item.field ? {
+                        value: item.field,
+                        label: item.fieldName
+                    } : null
+                })) || []
+            })
         } catch (error) {
             reject(error)
         }
     }), { manual: id === "create" })
-
     const { run: saveRun } = useRequest((postData) => new Promise(async (resolve, reject) => {
         try {
             const result: any = await RequestUtil[id === "create" ? "post" : "put"]("/tower-market/editNotice", id === "create" ? postData : ({
@@ -97,7 +105,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                 description: item.description,
                 editAfter: item.editAfter,
                 editBefore: item.editBefore,
-                field: item.field
+                field: item.field.value,
+                fieldName: item.field.label,
             })) || [],
             editNoticeProductDTOList: suspendFormData?.submit?.map((item: any) => ({
                 description: item.description,

@@ -323,6 +323,7 @@
                 "title": "变更内容",
                 "dataIndex": "field",
                 "type": "select",
+                "labelInValue": true,
                 "enum": [
                     {
                         "label": "原材料标准",
