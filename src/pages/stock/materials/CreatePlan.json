@@ -287,13 +287,11 @@
         "columns": [
             {
                 "title": "编号",
-                "dataIndex": "materialCode",
-                "search": true
+                "dataIndex": "materialCode"
             },
             {
                 "title": "类别",
-                "dataIndex": "materialTypeName",
-                "search": true
+                "dataIndex": "materialTypeName"
             },
             {
                 "title": "类型",
@@ -301,11 +299,13 @@
             },
             {
                 "title": "品名",
-                "dataIndex": "materialName"
+                "dataIndex": "materialName",
+                "search": true
             },
             {
                 "title": "规格",
-                "dataIndex": "structureSpec"
+                "dataIndex": "structureSpec",
+                "search": true
             }
         ]
     }

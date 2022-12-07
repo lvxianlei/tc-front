@@ -46,7 +46,7 @@ export default function PackingListNew(): React.ReactNode {
 
     useEffect(() => {
         setPackageWeight(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).map(item => { return Number(item.totalWeight) }).join('+'))?.toFixed(3) || 0)
-        setTotalWelds(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).filter(res => res.isMainPart === 1).map(item => { return Number(item.singleNum) }).join('+')) || 0)
+        setTotalWelds(eval((showParts ? [...packagingData] : dataShowParts([...packagingData])).filter(res => res.isMainPart === 1).map(item => { return Number(item.structureCount) / Number(item.singleNum) }).join('+')) || 0)
     }, [JSON.stringify([...packagingData])]
     )
 
@@ -752,7 +752,7 @@ export default function PackingListNew(): React.ReactNode {
                             <span className={styles.content}>{selectWeight}kg</span>
                         </Col>
                         <Col>电焊件：
-                            <span className={styles.content}>{eval(dataShowParts(selectedRow).filter(res => res.isMainPart === 1).map(item => { return Number(item.singleNum) }).join('+'))}</span>
+                            <span className={styles.content}>{eval(dataShowParts(selectedRow).filter(res => res.isMainPart === 1).map(item => { return Number(item.structureRemainingNum) / Number(item.singleNum) }).join('+'))}</span>
                         </Col>
                         <Col>
                             <Checkbox value="electricWelding" onChange={(e) => isShowParts(e.target.checked)} key="8">显示电焊件中的零件</Checkbox>

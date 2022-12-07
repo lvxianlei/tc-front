@@ -467,14 +467,14 @@
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/management/edit/contract/:projectId/:id",
+      "path": "/project/management/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/contract/edit/contract/:projectId/:id",
+      "path": "/project/contract/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
@@ -575,6 +575,13 @@
       "name": "销售计划",
       "path": "/project/salePlan",
       "module": "./pages/project/salesPlan/index",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_task_notice"
+    },
+    { // 计划变更
+      "label": "计划变更",
+      "path": "/project/planChange",
+      "module": "./pages/project/planChange/index",
       "exact": true,
       "authority": "tc_erp_sc_project_view_task_notice"
     },
@@ -840,7 +847,7 @@
     },
     { //合同管理-询比价-询价信息
       "name": "询价信息",
-      "path": "/contract-mngt/enquiryCompare/enquiry/:id",
+      "path": "/contract-mngt/enquiryCompare/enquiry/:id/:approvalStatus",
       "module": "./pages/contract-mngt/enquiryCompare/Overview",
       "exact": true,
       "authority": "tc_erp_sw_contract_comparison_details"
@@ -1351,7 +1358,7 @@
     },
     { //辅材采购管理-询比价-询价信息
       "name": "询价信息",
-      "path": "/buyAuxiliaryMaterial/enquiryCompare/:id",
+      "path": "/buyAuxiliaryMaterial/enquiryCompare/:id/:approvalStatus",
       "module": "./pages/auxiliaryMaterialEnquiryCompare/enquiryCompareInformation",
       "exact": true,
       "authority": "tc_erp_sw_contract_comparison_details"
@@ -1803,6 +1810,13 @@
       "name": "工作台",
       "path": "/workBench/workBenchMngt",
       "module": "./pages/workBench/rd/WorkBenchMngt",
+      "exact": true,
+      "authority": "tc_erp_rd_workbench_work"
+    },
+    { // 数字门户-个人
+      "name": "数字门户-个人",
+      "path": "/workBench/gatewayPersonal",
+      "module": "./pages/workBench/rd/GatewayPersonal",
       "exact": true,
       "authority": "tc_erp_rd_workbench_work"
     },
@@ -2943,6 +2957,13 @@
       "exact": true,
       "authority": ""
     },
+    { // RD-系统设置-杂项条目配置
+      "name": "杂项条目配置",
+      "path": "/baseSetting/miscellaneousItems",
+      "module": "./pages/baseSetting/MiscellaneousItems",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // RD-定额配置
       "name": "定额配置",
       "path": "/baseSetting/quotaConfig",
@@ -3244,6 +3265,13 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // RD-业务处置管理-代料
+      "name": "代料",
+      "path": "/businessDisposal/generationOfMaterial",
+      "module": "./pages/businessDisposal/generationOfMaterial/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // RD-资料管理-工程资料管理
       "name": "工程资料管理",
       "path": "/dataMngt/EngineeringData",
@@ -3283,6 +3311,13 @@
       "name": "字段同步",
       "path": "/worksheetSetting/fieldSynchronous",
       "module": "./pages/worksheetSetting/fieldSynchronous/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // WO-工单设置-自动同步
+      "name": "自动同步",
+      "path": "/worksheetSetting/selfSynchronizing",
+      "module": "./pages/worksheetSetting/selfSynchronizing/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },

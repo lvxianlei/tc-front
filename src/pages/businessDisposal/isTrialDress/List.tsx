@@ -17,6 +17,7 @@ import useRequest from '@ahooksjs/use-request';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import ApplyTrial from './ApplyTrial';
+import { IntgSelect } from '../../common';
 
 interface EditRefProps {
     onSubmit: () => void;
@@ -29,40 +30,10 @@ interface EditRefProps {
 export default function List(): React.ReactNode {
     const history = useHistory();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
-    const [user, setUser] = useState<any[] | undefined>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const addRef = useRef<EditRefProps>();
     const [type, setType] = useState<'new' | 'detail' | 'edit'>('new');
     const [rowId, setRowId] = useState<string>();
-    const { data: departmentData } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-system/department`);
-        resole(data)
-    }), {})
-
-    const renderTreeNodes = (data: any) =>
-        data.map((item: any) => {
-            if (item.children) {
-                return (
-                    <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
-                        {renderTreeNodes(item.children)}
-                    </TreeNode>
-                );
-            }
-            return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
-        });
-
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
@@ -218,28 +189,7 @@ export default function List(): React.ReactNode {
                 {
                     name: 'loftingUser',
                     label: '人员',
-                    children: <Row>
-                        <Col>
-                            <Form.Item name="dept">
-                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value: any) => {
-                                    const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-                                    setUser(userData.records)
-                                }}>
-                                    {renderTreeNodes(wrapRole2DataNode(departmentData))}
-                                </TreeSelect>
-                            </Form.Item>
-                        </Col>
-                        <Col>
-                            <Form.Item name="loftingUser">
-                                <Select placeholder="请选择" style={{ width: "150px" }}>
-                                    <Select.Option value="" key="6">全部</Select.Option>
-                                    {user && user.map((item: any) => {
-                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'trialAssemble',
@@ -283,6 +233,9 @@ export default function List(): React.ReactNode {
                     const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+                }
+                if (values.loftingUser) {
+                    values.loftingUser = values.loftingUser?.value;
                 }
                 setFilterValues(values);
                 return values;

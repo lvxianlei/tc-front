@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Input } from 'antd';
+import { Form, Input } from 'antd';
 import Page from "./Page";
 
 interface UserTableProps {
@@ -95,6 +95,13 @@ export default forwardRef(function UserTable({
         searchFormItems={[
             ...searchItems,
             {
+                name: 'deptName',
+                label: '部门',
+                children: <Form.Item name={'deptName'} initialValue={requests?.deptName || '技术部'}>
+                    <Input maxLength={50} placeholder="部门" />
+                </Form.Item>
+            },
+            {
                 name: 'fuzzyQuery',
                 label: '模糊查询项',
                 children: <Input maxLength={50} placeholder="账号/手机号/姓名" />
@@ -102,6 +109,7 @@ export default forwardRef(function UserTable({
         ]}
         filterValue={filterValue}
         onFilterSubmit={(values: Record<string, any>) => {
+            console.log(values)
             setFilterValue(values);
             return values;
         }}

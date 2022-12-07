@@ -233,10 +233,12 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         return {
                             ...res,
                             ...values,
+                            id: '',
                             drawProductId: res?.id,
                             productCategoryName: res?.productCategory,
                             productNumber: res?.name,
                             voltageGradeName: res?.voltageLevelName,
+                            voltageGrade: res?.voltageLevel,
                         }
                     })
                     setSelectedData([...selectedForm?.getFieldsValue(true)?.data || [], ...newSelectedData])
@@ -277,14 +279,16 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            const value = form.getFieldsValue(true);
-            const values = selectedForm?.getFieldsValue(true)?.data
-            getLoading(true)
-            await saveRun({
-                ...value,
-                productChangeDetailList: values
+            selectedForm.validateFields().then(async res => {
+                const value = form.getFieldsValue(true);
+                const values = selectedForm?.getFieldsValue(true)?.data
+                getLoading(true)
+                await saveRun({
+                    ...value,
+                    productChangeDetailList: values
+                })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -305,16 +309,18 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const value = form.getFieldsValue(true);
-            const values = selectedForm?.getFieldsValue(true)?.data
-            getLoading(true)
-            await submitRun({
-                ...value,
-                productChangeDetailList: values
+            selectedForm.validateFields().then(async res => {
+                const value = form.getFieldsValue(true);
+                const values = selectedForm?.getFieldsValue(true)?.data
+                getLoading(true)
+                await submitRun({
+                    ...value,
+                    productChangeDetailList: values
+                })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
-            reject(false)
+            reject(error)
         }
     })
 
@@ -357,14 +363,12 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                     internalNumber: selectedRows[0]?.contractNum,
                                                     productCategoryName: selectedRows[0]?.productCategory,
                                                     productNumber: selectedRows[0]?.name,
-                                                    voltageGradeName: selectedRows[0]?.voltageLevelName,
                                                     description: selectedRows[0]?.assignorDescription
                                                 })
                                                 form?.setFieldsValue({
                                                     ...selectedRows[0],
                                                     productCategoryName: selectedRows[0]?.productCategory,
                                                     productNumber: selectedRows[0]?.name,
-                                                    voltageGradeName: selectedRows[0]?.voltageLevelName,
                                                     id: '',
                                                     drawTaskId: selectedRows[0]?.id,
                                                     drawTaskNum: selectedRows[0]?.taskNum,
@@ -430,6 +434,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                             productCategoryName: record?.productCategory,
                                             productNumber: record?.name,
                                             voltageGradeName: record?.voltageLevelName,
+                                            voltageGrade: record?.voltageLevel,
                                         }
                                     ]
                                 })
@@ -442,6 +447,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                         productCategoryName: record?.productCategory,
                                         productNumber: record?.name,
                                         voltageGradeName: record?.voltageLevelName,
+                                        voltageGrade: record?.voltageLevel,
                                     }
                                 ])
                                 changeData.splice(index, 1);
