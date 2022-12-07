@@ -73,7 +73,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         </Form>
         <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
                      rowSelection={{
-                         type: "radio",
+                         type: "checkbox",
                          onChange: (_: any, selectedRows: any[]) => {
                              setSelectRows(selectedRows)
                          }
@@ -140,10 +140,12 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
 
     const {run: saveRun} = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const postData = type === "new" ? {...data, purchasePlanId: purchasePlanId} : ({
+            const postData = type === "new" ? {...data, 
+                // purchasePlanId: purchasePlanId
+            } : ({
                 ...data,
                 id,
-                purchasePlanId: purchasePlanId
+                // purchasePlanId: purchasePlanId
             })
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/auxiliaryComparisonPrice`, postData)
             resole(result)
@@ -170,7 +172,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
             await saveRun({
                 ...baseData,
                 supplyIdList: baseData?.supplyIdList.records.map((item: any) => item.id).join(","),
-                purchasePlanId: purchasePlanId,
+                // purchasePlanId: purchasePlanId,
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
@@ -271,10 +273,10 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
         const chooseData = choosePlanRef.current?.selectRows;
         console.log(chooseData)
         // 根据选择的汇总计划获取 辅材明细列表
-        let data = await getDatailList(chooseData[0].id)
-        console.log(data)
-        setPurchasePlanId(chooseData[0].id);
-        let list = data.records.map((item: any) => ({
+        // let data = await getDatailList(chooseData[0].id)
+        // console.log(data)
+        // setPurchasePlanId(chooseData[0].id);
+        let list =chooseData.map((item: any) => ({
             ...item,
             source: 2,
             num: item.planPurchaseNum,
