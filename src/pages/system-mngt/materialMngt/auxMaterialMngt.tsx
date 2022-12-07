@@ -105,9 +105,10 @@ export default function MaterialMngt(): React.ReactNode {
                                 value: data[0].directMaterialType,
                                 label: data[0].directMaterialTypeName
                             },
-                            materialCode: data[0].materialCode?.substring(4)
+                            // materialCode: data[0].materialCode
+                            // materialCode: data[0].materialCode?.substring(4)
                         }
-                        setCode(data[0].materialCode?.substring(0, 4) || '')
+                        // setCode(data[0].materialCode?.substring(0, 4) || '')
                         setDetailData(newData as any);
                         form.setFieldsValue({ ...newData });
                         setTitle('编辑');
@@ -146,7 +147,7 @@ export default function MaterialMngt(): React.ReactNode {
                     materialCategoryName: values.materialCategory.label,
                     directMaterialType: values.directMaterialType.value,
                     directMaterialTypeName: values.directMaterialType.label,
-                    materialCode: code + values.materialCode,
+                    // materialCode: code + values.materialCode,
                     materialDataType: 2
                 }
                 if (title === '新增') {
@@ -198,6 +199,7 @@ export default function MaterialMngt(): React.ReactNode {
     const [form] = Form.useForm();
     const history = useHistory();
     const [code, setCode] = useState('');
+    // const [ruleFront, setRuleFront] = useState('');
     const [filterValue, setFilterValue] = useState({ materialDataType: 2 });
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: IMaterialType[] = await RequestUtil.get<IMaterialType[]>(`/tower-system/materialCategory`, {
@@ -388,6 +390,7 @@ export default function MaterialMngt(): React.ReactNode {
                                         materialCode: ""
                                     });
                                     setCode('');
+                                    // setRuleFront(list[0]?.ruleFront)
                                 }}>
                                 {materialList && materialList.map((item: any) => {
                                     return <Select.Option
@@ -413,35 +416,41 @@ export default function MaterialMngt(): React.ReactNode {
                                 style={{ width: "100%" }}
                                 labelInValue
                                 onChange={(e: any) => {
-                                    const list: any = directMaterialTypeList.filter((res: IMaterialType) => res.id === e?.value);
-                                    setCode(list[0].code);
+                                    // const list: any = directMaterialTypeList.filter((res: IMaterialType) => res.id === e?.value);
+                                    // setCode(list[0].code);
+                                    form.setFieldsValue({
+                                        materialCode: ""
+                                    });
                                 }}>
                                 {directMaterialTypeList && directMaterialTypeList.map((item: any) => {
                                     return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                                 })}
                             </Select>
                         </Form.Item></Col>
-                    <Col span={11} offset={1}><Form.Item label="编号" name="materialCode" rules={[{
-                        required: true,
-                        message: '请输入编码'
-                    }, {
-                        pattern: /^[^\s]*$/,
-                        message: '禁止输入空格',
-                    }, {
-                        pattern: /^[0-9]*$/,
-                        message: '仅可输入非负数',
-                    }, {
-                        validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
-                            checkBatchSn(value).then(res => {
-                                if (res) {
-                                    callback()
-                                } else {
-                                    callback('物料编号重复');
-                                }
-                            })
-                        }
-                    }]}>
-                        <Input addonBefore={code} maxLength={3} />
+                    <Col span={11} offset={1}><Form.Item label="编号" name="materialCode" 
+                    // rules={[{
+                    //     required: true,
+                    //     message: '请输入编码'
+                    // }, {
+                    //     pattern: /^[^\s]*$/,
+                    //     message: '禁止输入空格',
+                    // }, {
+                    //     pattern: /^[0-9]*$/,
+                    //     message: '仅可输入非负数',
+                    // }, {
+                    //     validator: (rule: RuleObject, value: string, callback: (error?: string) => void) => {
+                    //         checkBatchSn(value).then(res => {
+                    //             if (res) {
+                    //                 callback()
+                    //             } else {
+                    //                 callback('物料编号重复');
+                    //             }
+                    //         })
+                    //     }
+                    // }]}
+                    >
+                        {/* <Input addonBefore={code} maxLength={3} /> */}
+                        <Input  disabled placeholder='自动生成'/>
                     </Form.Item></Col>
                 </Row>
                 <Row>
@@ -469,7 +478,7 @@ export default function MaterialMngt(): React.ReactNode {
                                 pattern: /^[^\s]*$/,
                                 message: '禁止输入空格',
                             }]}>
-                            <Input maxLength={20} />
+                            <Input maxLength={20}/>
                         </Form.Item>
                     </Col>
                 </Row>

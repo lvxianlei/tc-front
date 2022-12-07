@@ -150,7 +150,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                         onClick={() => this.showModal({
                             ...record,
                             firstCode: record.code?.slice(0, -2),
-                            code: record.level === 1 ? record.code : (record.level === 2 ? record.code?.substring(2, 4) : record.code?.substring(4, 6))
+                            // code: record.level === 1 ? record.code : (record.level === 2 ? record.code?.substring(2, 4) : record.code?.substring(4, 6))
                         }, record.level === 1 ? 1 : 3)}>
                         编辑
                     </Button>
@@ -333,26 +333,28 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                         <Form.Item
                             name="code"
                             label="编号"
-                            rules={[{
-                                required: true,
-                                message: '请输入编号！'
-                            },
-                            {
-                                pattern: /^[^\s]*$/,
-                                message: '禁止输入空格',
-                            },
-                            {
-                                pattern: /^[0-9]*$/,
-                                message: '仅可输入数字',
-                            }]}
+                            // rules={[{
+                            //     required: true,
+                            //     message: '请输入编号！'
+                            // },
+                            // {
+                            //     pattern: /^[^\s]*$/,
+                            //     message: '禁止输入空格',
+                            // },
+                            // {
+                            //     pattern: /^[0-9]*$/,
+                            //     message: '仅可输入数字',
+                            // }]}
                             initialValue={defaultData?.code}
                         >
                             {this.state.type === 2 || this.state.type === 3 ? <Input
                                 min={0}
                                 maxLength={2}
-                                addonBefore={defaultData.firstCode || 0}
+                                disabled
+                                placeholder="自动生成"
+                                // addonBefore={defaultData.firstCode || 0}
                                 style={{ width: "100%" }}
-                            /> : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
+                            /> : <Input maxLength={2} min={0} disabled placeholder="自动生成" style={{ width: "100%" }} />}
                         </Form.Item>
                         <Form.Item
                             name="name"

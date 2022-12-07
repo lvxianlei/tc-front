@@ -17,7 +17,32 @@
       "width": 240,
       "type": "date",
       "format": "YYYY-MM-DD"
-    }
+    },
+    {
+      "title": "使用部门",
+      "dataIndex": "dept",
+      "required": true,
+      "type": "popTable",
+      "width": 1101,
+      "readOnly": true,
+      "dependencies": true,
+      "path": "/tower-system/department",
+      "columns": [
+          {
+              "title": "部门名称",
+              "dataIndex": "name"
+          }
+      ],
+      "search": [
+          {
+              "title": "查询",
+              "dataIndex": "name",
+              "width": 200,
+              "placeholder": "输入部门名称进行查询"
+          }
+          
+      ]
+  }
   ],
   "editCargoDetails": [
     {
@@ -45,13 +70,14 @@
       "edit": false
     },
     {
-      "title": "备注",
-      "dataIndex": "remark",
+      "title": "库存数量",
+      "dataIndex": "stockNum",
       "edit": false
     },
     {
-      "title": "部门",
-      "dataIndex": "deptName"
+      "title": "备注",
+      "dataIndex": "remark",
+      "edit": false
     }
   ]
 }

@@ -57,7 +57,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/detail/${id}`)
             setDetail(result)
-            form.setFieldsValue({...result})
+            form.setFieldsValue({...result,dept:{id:result?.deptId,value:result?.deptName}})
             editForm.setFieldsValue({...result?.auxiliaryPurchasePlanListVOS})
             setPopDataList(result?.auxiliaryPurchasePlanListVOS.map((item: any) => ({
                 ...item,
@@ -92,19 +92,26 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         }
     }), { manual: true })
 
-    const handleModalOk = () => {
+    const handleModalOk = async () => {
         // 保留输入的数量以及选择的部门信息
-        popDataList.map(el=>{
-            popDataList.forEach(item=>{
+        select.map(el=>{
+            select.forEach(item=>{
                 if(el.id == item.id){
                     item.planPurchaseNum = el.planPurchaseNum || 1
-                    item.deptName = el.deptName || null
-                    item.deptId = el.deptId || null
+                    // item.deptName = el.deptName || null
+                    // item.deptId = el.deptId || null
                     item.remark = el.remark || ""
                 }
             })
         })
-        setPopDataList(popDataList)
+        const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getAuxiliaryStockNum`,select)
+        console.log(data)
+        setPopDataList(select.map((item:any)=>{
+            return {
+                ...item,
+                stockNum: data.filter((eve:any)=> item.id===eve.id)[0].stockNum
+            }
+        }))
         setVisible(false);
     }
 
@@ -113,13 +120,13 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             message.warning("请先选择辅材...")
             return
         }
-        let flag:boolean = popDataList.every(item=>{
-            console.log(item.deptName,item.deptId)
-            return item.deptName && item.deptId
-        })
-        if(!flag){
-            return message.warn('请将数据补充完整')
-        }
+        // let flag:boolean = popDataList.every(item=>{
+        //     console.log(item.deptName,item.deptId)
+        //     return item.deptName && item.deptId
+        // })
+        // if(!flag){
+        //     return message.warn('请将数据补充完整')
+        // }
         try {
             if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
                 const baseFormData = await form.validateFields()
@@ -127,6 +134,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 await editForm.validateFields()
                 const result = {
                     ...baseFormData,
+                    deptName: baseFormData.dept.value,
+                    deptId: baseFormData.dept.id,
                     auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
                         return {
                             ...item,
@@ -152,13 +161,13 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             message.warning("请先选择辅材...")
             return
         }
-        let flag:boolean = popDataList.every(item=>{
-            console.log(item.deptName,item.deptId)
-            return item.deptName && item.deptId
-        })
-        if(!flag){
-            return message.warn('请将数据补充完整')
-        }
+        // let flag:boolean = popDataList.every(item=>{
+        //     console.log(item.deptName,item.deptId)
+        //     return item.deptName && item.deptId
+        // })
+        // if(!flag){
+        //     return message.warn('请将数据补充完整')
+        // }
         try {
             if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
                 const baseFormData = await form.validateFields()
@@ -166,6 +175,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 await editForm.validateFields()
                 const result = {
                     ...baseFormData,
+                    deptName: baseFormData.dept.value,
+                    deptId: baseFormData.dept.id,
                     isApproval:1,
                     auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
                         return {
@@ -207,10 +218,11 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         editForm.resetFields()
         setDetail({})
         setPopDataList([])
+        setSelect([])
     }
     const remove = async (purchaseId: any) => {
-        setPopDataList(popDataList.filter((item: any) => item.id !== purchaseId))
-        console.log(popDataList)
+        setSelect(select.filter((item: any) => item.id !== purchaseId))
+        setPopDataList(select.filter((item: any) => item.id !== purchaseId))
     }
     const amountChange = (value: any, id: string, keys: string) => {
         const list = popDataList.map((item: any) => {
@@ -241,9 +253,10 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             width={1011}
             visible={visible}
             title="选择辅材明细"
+            destroyOnClose
             onCancel={() => {
                 // 重置表单输入
-                modalRef.current?.resetFields()
+                // modalRef.current?.resetFields()
                 // 关闭模态框
                 setVisible(false)
             }}
@@ -276,9 +289,10 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
-                    setPopDataList(fields.map((item: any) => ({
+                    console.log(fields)
+                    setSelect(fields.map((item: any) => ({
                         ...item
-                    }))|| [])
+                    })))
                 }}
             />
         </Modal>
@@ -349,15 +363,15 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                             render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => amountChange(value, records.id, "planPurchaseNum")} key={key} />
                         })
                     }
-                    if (item.dataIndex === "deptName") {
-                        return ({
-                            ...item,
-                            render: (value: number, records: any, key: number) =><><Input value={records.deptName} style={{ width: 160 }} key={key} disabled addonAfter={ <Dept onSelect={(selectRows: any[]) => {
-                                amountChange(selectRows[0]?.name, records.id, "deptName")
-                                amountChange(selectRows[0]?.id, records.id, "deptId")
-                            }} selectedKey={[records?.deptId]||[]} />}/></>
-                        })
-                    }
+                    // if (item.dataIndex === "deptName") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (value: number, records: any, key: number) =><><Input value={records.deptName} style={{ width: 160 }} key={key} disabled addonAfter={ <Dept onSelect={(selectRows: any[]) => {
+                    //             amountChange(selectRows[0]?.name, records.id, "deptName")
+                    //             amountChange(selectRows[0]?.id, records.id, "deptId")
+                    //         }} selectedKey={[records?.deptId]||[]} />}/></>
+                    //     })
+                    // }
                     if (item.dataIndex === "remark") {
                         return ({
                             ...item,
