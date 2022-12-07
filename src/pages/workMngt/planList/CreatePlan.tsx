@@ -434,13 +434,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setVisibleB(true);
                             } else {
                                 message.success('导入成功！');
-                                setPopDataList(info.file.response?.data?.purchasePlanDetailDTOS.map((item:any)=>{
-                                    return {
-                                        ...item,
-                                        materialStandard: item?.materialStandard+','+item?.materialStandardName,
-                                        structureTexture: item?.structureTextureId+','+item?.structureTexture
-                                    }
-                                }))
+                                setPopDataList(info.file.response?.data?.purchasePlanDetailDTOS)
                             }
                         }
                     }}
