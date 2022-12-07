@@ -37,6 +37,30 @@
             "width": 100
         },
         {
+            "key": "warehousingStatusName",
+            "title": "入库状态",
+            "dataIndex": "warehousingStatusName",
+            "width": 100
+        },
+        {
+            "key": "warehousingTime",
+            "title": "入库时间",
+            "dataIndex": "warehousingTime",
+            "width": 100
+        },
+        {
+            "key": "shipmentStatusName",
+            "title": "发货状态",
+            "dataIndex": "shipmentStatusName",
+            "width": 100
+        },
+        {
+            "key": "shipmentTime",
+            "title": "发货时间",
+            "dataIndex": "shipmentTime",
+            "width": 100
+        },
+        {
             "key": "applyUserDeptName",
             "title": "申请部门",
             "dataIndex": "applyUserDeptName",
@@ -153,30 +177,6 @@
             "key": "totalWeight",
             "title": "重量kg",
             "dataIndex": "totalWeight",
-            "width": 100
-        },
-        {
-            "key": "warehousingStatusName",
-            "title": "入库状态",
-            "dataIndex": "warehousingStatusName",
-            "width": 100
-        },
-        {
-            "key": "warehousingTime",
-            "title": "入库时间",
-            "dataIndex": "warehousingTime",
-            "width": 100
-        },
-        {
-            "key": "shipmentStatusName",
-            "title": "发货状态",
-            "dataIndex": "shipmentStatusName",
-            "width": 100
-        },
-        {
-            "key": "shipmentTime",
-            "title": "发货时间",
-            "dataIndex": "shipmentTime",
             "width": 100
         }
     ],
