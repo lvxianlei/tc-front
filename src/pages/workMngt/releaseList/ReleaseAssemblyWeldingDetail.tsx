@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Modal, message, Row, Col } from 'antd';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
-import { FixedType } from 'rc-table/lib/interface';
+import { Space, Input, Button, Form, Select, Modal, message, Row, Col } from 'antd';
+import { useHistory, useParams } from 'react-router-dom';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import { useForm } from 'antd/lib/form/Form';
+import styles from './release.module.less';
 
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
@@ -266,6 +266,7 @@ export default function ReleaseList(): React.ReactNode {
                             onChange: handleCHange
                         }}
                         onRow={(record: any) => ({
+                            className: styles.tableRow,
                             onClick: async (event: any) => {
                                 const data: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`, { segmentId: record.id });
                                 setSegmentDataSource([...data]);
