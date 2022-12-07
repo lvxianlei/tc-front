@@ -57,7 +57,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/detail/${id}`)
             setDetail(result)
-            form.setFieldsValue({...result})
+            form.setFieldsValue({...result,dept:{id:result?.deptId,value:result?.deptName}})
             editForm.setFieldsValue({...result?.auxiliaryPurchasePlanListVOS})
             setPopDataList(result?.auxiliaryPurchasePlanListVOS.map((item: any) => ({
                 ...item,
@@ -92,10 +92,10 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         }
     }), { manual: true })
 
-    const handleModalOk = () => {
+    const handleModalOk = async () => {
         // 保留输入的数量以及选择的部门信息
-        popDataList.map(el=>{
-            popDataList.forEach(item=>{
+        select.map(el=>{
+            select.forEach(item=>{
                 if(el.id == item.id){
                     item.planPurchaseNum = el.planPurchaseNum || 1
                     item.deptName = el.deptName || null
@@ -104,7 +104,14 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 }
             })
         })
-        setPopDataList(popDataList)
+        const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getAuxiliaryStockNum`,select)
+        console.log(data)
+        setPopDataList(select.map((item:any)=>{
+            return {
+                ...item,
+                stockNum: data.filter((eve:any)=> item.id===eve.id)[0].stockNum
+            }
+        }))
         setVisible(false);
     }
 
@@ -127,6 +134,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 await editForm.validateFields()
                 const result = {
                     ...baseFormData,
+                    deptName: baseFormData.dept.value,
+                    deptId: baseFormData.dept.id,
                     auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
                         return {
                             ...item,
@@ -166,6 +175,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 await editForm.validateFields()
                 const result = {
                     ...baseFormData,
+                    deptName: baseFormData.dept.value,
+                    deptId: baseFormData.dept.id,
                     isApproval:1,
                     auxiliaryPurchasePlanListDTOS: popDataList.map((item: any) => {
                         return {
@@ -207,10 +218,11 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         editForm.resetFields()
         setDetail({})
         setPopDataList([])
+        setSelect([])
     }
     const remove = async (purchaseId: any) => {
-        setPopDataList(popDataList.filter((item: any) => item.id !== purchaseId))
-        console.log(popDataList)
+        setSelect(select.filter((item: any) => item.id !== purchaseId))
+        setPopDataList(select.filter((item: any) => item.id !== purchaseId))
     }
     const amountChange = (value: any, id: string, keys: string) => {
         const list = popDataList.map((item: any) => {
@@ -241,9 +253,10 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             width={1011}
             visible={visible}
             title="选择辅材明细"
+            destroyOnClose
             onCancel={() => {
                 // 重置表单输入
-                modalRef.current?.resetFields()
+                // modalRef.current?.resetFields()
                 // 关闭模态框
                 setVisible(false)
             }}
@@ -276,9 +289,10 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
-                    setPopDataList(fields.map((item: any) => ({
+                    console.log(fields)
+                    setSelect(fields.map((item: any) => ({
                         ...item
-                    }))|| [])
+                    })))
                 }}
             />
         </Modal>

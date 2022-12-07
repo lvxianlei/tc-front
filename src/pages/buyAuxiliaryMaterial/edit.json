@@ -23,7 +23,7 @@
       "dataIndex": "dept",
       "required": true,
       "type": "popTable",
-      "width": 240,
+      "width": 1101,
       "readOnly": true,
       "dependencies": true,
       "path": "/tower-system/department",
@@ -71,7 +71,7 @@
     },
     {
       "title": "库存数量",
-      "dataIndex": "totalNumber",
+      "dataIndex": "stockNum",
       "edit": false
     },
     {
