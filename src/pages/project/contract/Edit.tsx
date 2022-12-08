@@ -90,10 +90,13 @@ export default function Edit() {
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
     try {
-
-      const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/contract`, {
+      let reqType: "post" | "put" = type === "new" ? "post" : "put";
+      reqType = ["2", "3"].includes(params.contractType) ? "post" : "put";
+      const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
-        id: type === "new" ? "" : params.id,
+        id: reqType === "post" ? "" : params.id,
+        relationId: data?.id,
+        relationInternalNumber: data?.internalNumber,
         projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
@@ -153,10 +156,13 @@ export default function Edit() {
         customerLinkman: baseInfo.customerLinkman,
         customerPhone: baseInfo.customerPhone
       },
-      paymentPlanDtos: editformData.submit?.map((item: any) => ({
-        ...item,
-        contractId: params.id
-      })),
+      paymentPlanDtos: editformData.submit?.map((item: any) => {
+        delete item.id
+        return ({
+          ...item,
+          contractId: data?.id
+        })
+      }),
       fileIds: attchs
     })
     if (result) {
