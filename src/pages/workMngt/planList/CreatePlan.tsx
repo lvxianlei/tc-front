@@ -434,7 +434,30 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setVisibleB(true);
                             } else {
                                 message.success('导入成功！');
-                                setPopDataList(info.file.response?.data?.purchasePlanDetailDTOS)
+                                setPopDataList(info.file.response?.data?.purchasePlanDetailDTOS.map((item:any)=>{
+                                    return{
+                                        ...item,
+                                        weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                                        totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
+                
+                                    }
+                                }))
+                                setMaterialList(info.file.response?.data?.purchasePlanDetailDTOS.map((item:any)=>{
+                                    return{
+                                        ...item,
+                                        weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                                        totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
+                
+                                    }
+                                }))
                             }
                         }
                     }}
