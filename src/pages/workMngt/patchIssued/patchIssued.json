@@ -323,8 +323,14 @@
             "width": 100
         },
         {
+            "key": "agreeTime",
+            "title": "产生时间",
+            "dataIndex": "agreeTime",
+            "width": 100
+        },
+        {
             "key": "batchStatusName",
-            "title": "状态",
+            "title": "补件下达状态",
             "dataIndex": "batchStatusName",
             "width": 100
         },
