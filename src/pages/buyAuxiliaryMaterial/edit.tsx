@@ -221,8 +221,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         setSelect([])
     }
     const remove = async (purchaseId: any) => {
-        setSelect(select.filter((item: any) => item.id !== purchaseId))
-        setPopDataList(select.filter((item: any) => item.id !== purchaseId))
+        setSelect(popDataList.filter((item: any,index:number) => index !== purchaseId))
+        setPopDataList(popDataList.filter((item: any,index:number) => index !== purchaseId))
     }
     const amountChange = (value: any, id: string, keys: string) => {
         const list = popDataList.map((item: any) => {
@@ -386,8 +386,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     fixed: "right",
                     width: 80,
                     edit: false,
-                    render: (_: any, records: any) => <>
-                        <Button type="link" className="btn-operation-link" onClick={() => { remove(records.id) }}>移除</Button>
+                    render: (_: any, records: any,index:number) => <>
+                        <Button type="link" className="btn-operation-link" onClick={() => { remove(index) }}>移除</Button>
                     </>
                 }
             ]}
