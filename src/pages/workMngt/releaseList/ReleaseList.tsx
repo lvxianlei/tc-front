@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select, message, Modal, Row, Col } from 'antd';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { materialStandardOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
-// import styles from './sample.module.less';
 
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [filterValue, setFilterValue] = useState({});
     const [aFilterValue, setAFilterValue] = useState({});
     const [form] = Form.useForm();
@@ -18,9 +16,6 @@ export default function ReleaseList(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data?.records);
     }), {})
-    const SelectChange = (selectedRowKeys: React.Key[]): void => {
-        setSelectedKeys(selectedRowKeys);
-    }
 
     const { run: cancelRun } = useRequest<any>((params: any) => new Promise(async (resole, reject) => {
         try {
@@ -266,6 +261,12 @@ export default function ReleaseList(): React.ReactNode {
             dataIndex: 'angleTotalWeight'
         },
         {
+            key: 'weldTotalWeight',
+            title: '组焊总重量（kg）',
+            width: 200,
+            dataIndex: 'weldTotalWeight'
+        },
+        {
             key: 'machiningDemand',
             title: '加工说明',
             width: 200,
@@ -314,8 +315,14 @@ export default function ReleaseList(): React.ReactNode {
         //     }
         // },
         {
-            key: 'description',
+            key: 'cancelDescription',
             title: '取消说明',
+            width: 200,
+            dataIndex: 'cancelDescription'
+        },
+        {
+            key: 'description',
+            title: '备注',
             width: 200,
             dataIndex: 'description'
         },

@@ -19,6 +19,18 @@
             "width": 100
         },
         {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
             "key": "updateStatusTime",
             "title": "最新状态变更时间",
             "dataIndex": "updateStatusTime",
@@ -28,6 +40,30 @@
             "key": "priorityName",
             "title": "优先级",
             "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
+            "key": "warehousingStatusName",
+            "title": "入库状态",
+            "dataIndex": "warehousingStatusName",
+            "width": 100
+        },
+        {
+            "key": "warehousingTime",
+            "title": "入库时间",
+            "dataIndex": "warehousingTime",
+            "width": 100
+        },
+        {
+            "key": "shipmentStatusName",
+            "title": "发货状态",
+            "dataIndex": "shipmentStatusName",
+            "width": 100
+        },
+        {
+            "key": "shipmentTime",
+            "title": "发货时间",
+            "dataIndex": "shipmentTime",
             "width": 100
         },
         {
@@ -43,22 +79,16 @@
             "width": 100
         },
         {
-            "key": "planNumber",
-            "title": "计划号",
-            "dataIndex": "planNumber",
-            "width": 100
-        },
-        {
-            "key": "projectName",
-            "title": "工程名称",
-            "dataIndex": "projectName",
-            "width": 100
-        },
-        {
             "key": "businessUserName",
             "title": "业务经理",
             "dataIndex": "businessUserName",
             "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 120
         },
         {
             "key": "planDeliveryTime",
@@ -130,6 +160,12 @@
                 { "value": 1, "label": "已下达" },
                 { "value": 2, "label": "未下达" }
             ]
+        },
+        {
+            "key": "supplyBatchNumber",
+            "title": "下达单号",
+            "dataIndex": "supplyBatchNumber",
+            "width": 100
         },
         {
             "key": "totalNumber",

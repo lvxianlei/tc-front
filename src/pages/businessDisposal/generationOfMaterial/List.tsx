@@ -116,7 +116,7 @@ export default function List(): React.ReactNode {
                                 setRowId(record?.id);
                                 setVisible(true);
                                 setType('edit');
-                            }}>编辑</Button>
+                            }} disabled={!(record.status === 1 || record.status === 5)}>编辑</Button>
                             <Button type='link' onClick={() => {
                                 setRowId(record?.id);
                                 setVisible(true);

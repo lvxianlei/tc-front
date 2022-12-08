@@ -107,7 +107,7 @@ export default function List(): React.ReactNode {
                     width: 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type='link' disabled={!(record.status === 1 || record.status === 5 || record.status === 0)} onClick={() => {
+                            <Button type='link' disabled={!(record.status === 1 || record.status === 5)} onClick={() => {
                                 setRowId(record?.id);
                                 setVisible(true);
                                 setType('edit');
@@ -127,9 +127,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button disabled={!(record.status === 1 || record.status === 5 || record.status === 0)} type="link">发起</Button>
+                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">发起</Button>
                             </Popconfirm>
                             <Popconfirm
                                 title="确认撤回?"
@@ -155,9 +155,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button disabled={!(record.status === 1 || record.status === 5 || record.status === 0)} type="link">删除</Button>
+                                <Button disabled={!(record.status === 1 || record.status === 5)} type="link">删除</Button>
                             </Popconfirm>
                         </Space>
                     )
