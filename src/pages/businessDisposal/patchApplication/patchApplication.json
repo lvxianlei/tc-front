@@ -19,16 +19,22 @@
             "width": 100
         },
         {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
             "key": "updateStatusTime",
             "title": "最新状态变更时间",
             "dataIndex": "updateStatusTime",
             "width": 150
-        },
-        {
-            "key": "productCategoryName",
-            "title": "塔型名称",
-            "dataIndex": "productCategoryName",
-            "width": 120
         },
         {
             "key": "priorityName",
@@ -73,22 +79,16 @@
             "width": 100
         },
         {
-            "key": "planNumber",
-            "title": "计划号",
-            "dataIndex": "planNumber",
-            "width": 100
-        },
-        {
-            "key": "projectName",
-            "title": "工程名称",
-            "dataIndex": "projectName",
-            "width": 100
-        },
-        {
             "key": "businessUserName",
             "title": "业务经理",
             "dataIndex": "businessUserName",
             "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 120
         },
         {
             "key": "planDeliveryTime",
