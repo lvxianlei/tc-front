@@ -1,20 +1,13 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker,  Button, Select, Form } from 'antd'
+import { Space, Input, DatePicker, Button, Select, Form } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Page } from '../common'
-import useRequest from '@ahooksjs/use-request';
-import RequestUtil from '../../utils/RequestUtil';
+import { IntgSelect, Page } from '../common'
 import styles from './question.module.less';
 
 export default function QuestionMngt(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, type?: string, userId?: string, createUserId?: string }>();
     const history = useHistory();
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/tower-system/employee?size=1000`);
-        resole(data?.records);
-    }), {})
-    const user:any = data||[];
     const columns = [
         {
             key: 'index',
@@ -131,7 +124,7 @@ export default function QuestionMngt(): React.ReactNode {
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: {recipient:record.recipient,createUser: record.createUser}})}>查看详情</Button>
+                    <Button type='link' onClick={() => history.push({ pathname: `/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`, state: { recipient: record.recipient, createUser: record.createUser } })}>查看详情</Button>
                     {/* {
                         record.type==='WTD-TL'||record.type==='WTD-FY'||record.type==='WTD-LS'? <Button type='link' onClick={()=>history.push({pathname:`/question/questionMngt/otherDetail/${record.id}/${record.type}/${record.status}`,state: record.recipient})}>查看详情</Button>:
                         record.type==='WTD-ZH'? <Button  type='link' onClick={()=>history.push({pathname:`/question/questionMngt/assemblyWeldDetail/${record.id}/${record.status}`,state: record.recipient})}>查看详情</Button>:
@@ -144,9 +137,15 @@ export default function QuestionMngt(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.updateTime) {
             const formatDate = value.updateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateTimeStart = formatDate[0]+ ' 00:00:00';
-            value.updateTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.updateTimeStart = formatDate[0] + ' 00:00:00';
+            value.updateTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.updateTime
+        }
+        if (value.recipient) {
+            value.recipient = value.recipient?.value;
+        }
+        if (value.createUser) {
+            value.createUser = value.createUser?.value;
         }
         setFilterValue(value)
         return value
@@ -159,19 +158,19 @@ export default function QuestionMngt(): React.ReactNode {
             // extraOperation={<Button type="primary">导出</Button>}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            requestData={ { status: location.state?.state, type: location.state?.type, recipient: location.state?.userId, createUser: location.state?.createUserId } }
+            requestData={{ status: location.state?.state, type: location.state?.type, recipient: location.state?.userId, createUser: location.state?.createUserId }}
             searchFormItems={[
                 {
                     name: 'updateTime',
-                    label:'状态时间',
-                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    label: '状态时间',
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'status',
                     label: '问题单状态',
-                    children:  <Form.Item name="status" initialValue={ location.state?.state || '' }>
-                        <Select style={{width:'100px'}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
+                    children: <Form.Item name="status" initialValue={location.state?.state || ''}>
+                        <Select style={{ width: '100px' }}>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待修改</Select.Option>
                             <Select.Option value={2} key={2}>已修改</Select.Option>
                             <Select.Option value={0} key={0}>已拒绝</Select.Option>
@@ -182,9 +181,9 @@ export default function QuestionMngt(): React.ReactNode {
                 {
                     name: 'type',
                     label: '问题单类型',
-                    children:  <Form.Item name="type" initialValue={ location.state?.type || '' }>
-                        <Select style={{width:'100px'}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
+                    children: <Form.Item name="type" initialValue={location.state?.type || ''}>
+                        <Select style={{ width: '100px' }}>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={'WTD-TL'} key={'WTD-TL'}>提料</Select.Option>
                             <Select.Option value={'WTD-FY'} key={'WTD-FY'}>放样</Select.Option>
                             <Select.Option value={'WTD-LS'} key={'WTD-LS'}>螺栓</Select.Option>
@@ -196,26 +195,12 @@ export default function QuestionMngt(): React.ReactNode {
                 {
                     name: 'recipient',
                     label: '接收人',
-                    children:  <Form.Item name="recipient" initialValue={ location.state?.userId || '' }>
-                            <Select style={{width:'100px'}}>
-                                <Select.Option key={''} value={''}>全部</Select.Option>
-                                {user && user.map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                    </Form.Item>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'createUser',
                     label: '创建人',
-                    children:  <Form.Item name="createUser" initialValue={ location.state?.createUserId || '' }>
-                            <Select style={{width:'100px'}}>
-                                <Select.Option key={''} value={''}>全部</Select.Option>
-                                {user && user.map((item: any) => {
-                                    return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                    </Form.Item>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyMsg',

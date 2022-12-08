@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Modal, Row, Col, TreeSelect, message } from 'antd';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './BoltList.module.less';
 import { Link, useHistory, useLocation } from 'react-router-dom';
@@ -16,7 +16,6 @@ import useRequest from '@ahooksjs/use-request';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import QuotaEntries from './QuotaEntries';
-import SelectUser from '../../common/SelectUser';
 import Assigned from './Assigned';
 
 export interface EditProps {
@@ -145,15 +144,9 @@ export default function BoltList(): React.ReactNode {
 
     const location = useLocation<{ state?: number, userId?: string, weldingOperator?: string }>();
     const userId = AuthUtil.getUserInfo().user_id;
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
-        setDepartment(departmentData);
-    }), {})
-    const [department, setDepartment] = useState<any | undefined>([]);
     const [assignVisible, setAssignVisible] = useState<boolean>(false);
     const [drawTaskId, setDrawTaskId] = useState<string>('');
     const [refresh, setRefresh] = useState(false);
-    const [checkUser, setCheckUser] = useState([]);
     const [filterValue, setFilterValue] = useState<any>();
     const [visible, setVisible] = useState<boolean>(false);
     const editRef = useRef<EditProps>();
@@ -180,31 +173,6 @@ export default function BoltList(): React.ReactNode {
             reject(false)
         }
     })
-
-    const renderTreeNodes = (data: any) =>
-        data.map((item: any) => {
-            if (item.children) {
-                return (
-                    <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
-                        {renderTreeNodes(item.children)}
-                    </TreeNode>
-                );
-            }
-            return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
-        });
-
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
 
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
@@ -278,28 +246,7 @@ export default function BoltList(): React.ReactNode {
                 {
                     name: 'personnel',
                     label: '人员',
-                    children: <Row>
-                        <Col>
-                            <Form.Item name="dept">
-                                <TreeSelect style={{ width: "150px" }} placeholder="请选择" onChange={async (value: any) => {
-                                    const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-                                    setCheckUser(userData.records)
-                                }}>
-                                    {renderTreeNodes(wrapRole2DataNode(department))}
-                                </TreeSelect>
-                            </Form.Item>
-                        </Col>
-                        <Col>
-                            <Form.Item name="personnel">
-                                <Select placeholder="请选择" style={{ width: "150px" }}>
-                                    <Select.Option value="" key="6">全部</Select.Option>
-                                    {checkUser && checkUser.map((item: any) => {
-                                        return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        </Col>
-                    </Row>
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'priority',
@@ -323,6 +270,9 @@ export default function BoltList(): React.ReactNode {
                     const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+                }
+                if (values.personnel) {
+                    values.personnel = values.personnel?.value;
                 }
                 setFilterValue(values);
                 return values;

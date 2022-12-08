@@ -14,6 +14,7 @@ import { IAssignedList } from "./IMaterialTask"
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { TreeNode } from "antd/lib/tree-select"
 import moment from "moment"
+import SelectUser from "../common/SelectUser"
 
 export interface EditProps {
     id: string;
@@ -132,14 +133,16 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            let baseData = await form.validateFields();
-            const value = {
-                ...baseData,
-                materialDeliverTime: baseData.materialDeliverTime.format('YYYY-MM-DD'),
-                id: data?.id
-            }
-            await saveRun(value)
-            resolve(true);
+            form.validateFields().then(async res => {
+                let baseData = await form.getFieldsValue(true);
+                const value = {
+                    ...baseData,
+                    materialDeliverTime: baseData.materialDeliverTime.format('YYYY-MM-DD'),
+                    id: data?.id
+                }
+                await saveRun(value)
+                resolve(true);
+            })
         } catch (error) {
             console.log(error)
             reject(false)
@@ -164,24 +167,18 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
                 </Descriptions.Item>
                 <Descriptions.Item label="提料负责人">
                     {status === 3 ? data?.materialLeaderName
-                        : <Row>
-                            <Col span={14}>
-                                <Form.Item name="materialLeaderDept">
-                                    <TreeSelect size="small" placeholder="请选择" onChange={(e) => deptChange(e)}>
-                                        {renderTreeNodes(wrapRole2DataNode(department))}
-                                    </TreeSelect>
-                                </Form.Item>
-                            </Col>
-                            <Col span={10}>
-                                <Form.Item name="materialLeader" rules={[{ required: true, message: "请选择人员" }]}>
-                                    <Select size="small" placeholder="请选择">
-                                        {userList && userList.map((item: any) => {
-                                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                        })}
-                                    </Select>
-                                </Form.Item>
-                            </Col>
-                        </Row>}
+                        :
+                        <Form.Item name="materialLeaderName" rules={[{ required: true, message: "请选择人员" }]}>
+                            <Input size="small" disabled suffix={
+                                <SelectUser key={'materialLeader'} selectedKey={[form?.getFieldsValue(true)?.materialLeader]} onSelect={(selectedRows: Record<string, any>) => {
+                                    form.setFieldsValue({
+                                        materialLeader: selectedRows[0]?.userId,
+                                        materialLeaderName: selectedRows[0]?.name,
+                                    })
+                                }} />
+                            } />
+                        </Form.Item>
+                    }
                 </Descriptions.Item>
                 <Descriptions.Item label="优先级">
                     {status === 3 ? data?.priorityName

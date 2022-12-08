@@ -541,7 +541,7 @@ export default function ConfirmDetail(): React.ReactNode {
             fixed: 'right' as FixedType,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Space direction="horizontal" size="small">
-                    <Button type="link" disabled={userId !== params.confirmId} onClick={() => {
+                    <Button type="link" disabled={userId !== params.confirmId || params.status !== '3'} onClick={() => {
                         setEdit('编辑')
                         setRowId(record?.id)
                         form.setFieldsValue({
@@ -591,9 +591,9 @@ export default function ConfirmDetail(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
-                        disabled={userId !== params.confirmId}
+                        disabled={userId !== params.confirmId || params.status !== '3'}
                     >
-                        <Button type="link" disabled={userId !== params.confirmId}>删除</Button>
+                        <Button type="link" disabled={userId !== params.confirmId || params.status !== '3'}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -739,17 +739,23 @@ export default function ConfirmDetail(): React.ReactNode {
                         >
                             <Button type="primary" disabled={userId !== params.confirmId} ghost >导入</Button>
                         </Upload> : null}
-                    {params.status === '3' ? <Button type='primary' ghost disabled={userId !== params.confirmId} onClick={() => {
-                        setEdit('添加')
-                        setVisible(true)
-                    }}>添加</Button> : null}
-                    <Button type='primary' disabled={selectedKeys.length <= 0 || userId !== params.confirmId} onClick={
-                        async () => {
-                            await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',')}`,)
-                            message.success('删除成功！')
-                            run()
-                        }
-                    } ghost>批量删除</Button>
+                    {
+                        params.status === '3' ? <Button type='primary' ghost disabled={userId !== params.confirmId} onClick={() => {
+                            setEdit('添加')
+                            setVisible(true)
+                        }}>添加</Button>
+                            : null
+                    }
+                    {
+                        params.status === '3' ? <Button type='primary' disabled={selectedKeys.length <= 0 || userId !== params.confirmId} onClick={
+                            async () => {
+                                await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',')}`,)
+                                message.success('删除成功！')
+                                run()
+                            }
+                        } ghost>批量删除</Button>
+                            : null
+                    }
                 </Space>
             </div>
             <Modal
@@ -774,7 +780,7 @@ export default function ConfirmDetail(): React.ReactNode {
                     setDescription(e.target.value)
                 }} disabled={params.status !== '3'} /> : null}
             </div>
-            <Attachment dataSource={attachInfo} multiple isBatchDel={userId !== params.confirmId ? false : true} edit={userId !== params.confirmId ? false : true} title="附件信息" ref={attchsRef}
+            <Attachment dataSource={attachInfo} multiple isBatchDel={userId !== params.confirmId || params.status !== '3' ? false : true} edit={userId !== params.confirmId || params.status !== '3' ? false : true} title="附件信息" ref={attchsRef}
                 onDoneChange={(dataInfo: FileProps[]) => {
                     setAttachInfo([...dataInfo])
                 }}
