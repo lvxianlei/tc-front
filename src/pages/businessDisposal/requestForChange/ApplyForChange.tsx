@@ -285,15 +285,17 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            selectedForm.validateFields().then(async res => {
-                const value = form.getFieldsValue(true);
-                const values = selectedForm?.getFieldsValue(true)?.data
-                getLoading(true)
-                await saveRun({
-                    ...value,
-                    productChangeDetailList: values
+            form.validateFields().then(e => {
+                selectedForm.validateFields().then(async res => {
+                    const value = form.getFieldsValue(true);
+                    const values = selectedForm?.getFieldsValue(true)?.data
+                    getLoading(true)
+                    await saveRun({
+                        ...value,
+                        productChangeDetailList: values
+                    })
+                    resolve(true);
                 })
-                resolve(true);
             })
         } catch (error) {
             reject(false)
@@ -315,15 +317,21 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            selectedForm.validateFields().then(async res => {
-                const value = form.getFieldsValue(true);
-                const values = selectedForm?.getFieldsValue(true)?.data
-                getLoading(true)
-                await submitRun({
-                    ...value,
-                    productChangeDetailList: values
-                })
-                resolve(true);
+            form.validateFields().then(e => {
+                if (selectedData.length > 0) {
+                    selectedForm.validateFields().then(async res => {
+                        const value = form.getFieldsValue(true);
+                        const values = selectedForm?.getFieldsValue(true)?.data
+                        getLoading(true)
+                        await submitRun({
+                            ...value,
+                            productChangeDetailList: values
+                        })
+                        resolve(true);
+                    })
+                } else {
+                    message.warning('请选择需要变更的数据！')
+                }
             })
         } catch (error) {
             reject(error)
@@ -359,7 +367,10 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         return ({
                             ...res,
                             render: (_: string, record: Record<string, any>, index: number) => (
-                                <Form.Item name={"drawTaskNum"}>
+                                <Form.Item name={"drawTaskNum"} rules={[{
+                                    required: true,
+                                    message: '请选择确认明细编号！'
+                                }]}>
                                     <Input size="small" disabled suffix={
                                         <SelectByTaskNum onSelect={(selectedRows: Record<string, any>) => {
                                             RequestUtil.get(`/tower-science/productChange/product/list/${selectedRows[0]?.id}`).then(res => {
