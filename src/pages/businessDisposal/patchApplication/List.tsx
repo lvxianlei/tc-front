@@ -288,7 +288,7 @@ export default function List(): React.ReactNode {
                     styles.selected :
                     record?.warehousingStatus === 0 ?
                         styles.noDelivery :
-                        record?.shipmentStatusName === 0 ?
+                        record?.shipmentStatus === 0 ?
                             styles.noPutStorage :
                             undefined
             }
