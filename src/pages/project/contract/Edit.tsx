@@ -94,9 +94,17 @@ export default function Edit() {
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
     try {
-      let reqType: "post" | "put" = type === "new" ? "post" : "put";
-      reqType = ["2", "3"].includes(params.contractType) ? "post" : "put";
-      data?.relationId && params.id && (reqType = "put")
+      let reqType: "post" | "put";
+      if (type === "new") {
+        reqType = "post"
+      } else {
+        console.log(params.contractType, data?.relationId)
+        if (["2", "3"].includes(params.contractType) && !data?.relationId) {
+          reqType = "post"
+        } else {
+          reqType = "put"
+        }
+      }
       const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
         id: reqType === "post" ? "" : params.id,
@@ -147,8 +155,8 @@ export default function Edit() {
       ...baseInfo,
       signCustomerName: baseInfo.signCustomer.value,
       signCustomerId: baseInfo.signCustomer.id,
-      frameAgreementName: baseInfo.frameAgreementId.value,
-      frameAgreementId: baseInfo.frameAgreementId.id,
+      frameAgreementName: baseInfo.frameAgreementId?.value,
+      frameAgreementId: baseInfo.frameAgreementId?.id,
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
