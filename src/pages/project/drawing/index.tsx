@@ -20,6 +20,7 @@ export default function Drawing(): React.ReactNode {
     })
     const [visible, setVisible] = useState<boolean>(false)
     const [subsidiary, setSubsidiary] = useState<boolean>(false)
+    const [saving, setSaving] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [connectVisible, setConnectVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
@@ -72,12 +73,15 @@ export default function Drawing(): React.ReactNode {
 
     const handleModalOk = (type: 1 | 2) => new Promise(async (resove, reject) => {
         try {
+            setSaving(true)
             await editRef.current?.onSubmit(type)
             message.success(`${type === 1 ? "保存" : "保存并提交"}成功...`)
+            setSaving(false)
             setVisible(false)
             resove(true)
             history.go(0)
         } catch (error) {
+            setSaving(false)
             reject(false)
         }
     })
@@ -130,8 +134,18 @@ export default function Drawing(): React.ReactNode {
                 setVisible(false)
             }}
             footer={[
-                <Button key="save" type="primary" ghost onClick={() => handleModalOk(1)}>保存</Button>,
-                <Button key="saveAndSubmit" type="primary" ghost onClick={() => handleModalOk(2)}>保存并发起</Button>
+                <Button
+                    key="save"
+                    type="primary"
+                    loading={saving}
+                    ghost
+                    onClick={() => handleModalOk(1)}>保存</Button>,
+                <Button
+                    key="saveAndSubmit"
+                    type="primary"
+                    loading={saving}
+                    ghost
+                    onClick={() => handleModalOk(2)}>保存并发起</Button>
             ]}>
             <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
