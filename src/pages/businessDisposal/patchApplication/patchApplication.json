@@ -1,12 +1,6 @@
 {
     "columns": [
         {
-            "key": "supplyNumber",
-            "title": "补件编号",
-            "dataIndex": "supplyNumber",
-            "width": 100
-        },
-        {
             "key": "supplyTypeName",
             "title": "补件类型",
             "dataIndex": "supplyTypeName",

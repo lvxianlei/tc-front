@@ -135,6 +135,13 @@ export default function List(): React.ReactNode {
         <CommonTable
             haveIndex
             columns={[
+                {
+                    "key": "supplyNumber",
+                    "title": "补件编号",
+                    "dataIndex": "supplyNumber",
+                    "width": 100,
+                    fixed: 'left' as FixedType,
+                },
                 ...columns.map(res => {
                     if (res.dataIndex === 'description') {
                         return {
