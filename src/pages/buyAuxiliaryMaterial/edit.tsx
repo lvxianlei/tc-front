@@ -59,9 +59,11 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
             setDetail(result)
             form.setFieldsValue({...result,dept:{id:result?.deptId,value:result?.deptName}})
             editForm.setFieldsValue({...result?.auxiliaryPurchasePlanListVOS})
+            const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getAuxiliaryStockNum`,result?.auxiliaryPurchasePlanListVOS)
             setPopDataList(result?.auxiliaryPurchasePlanListVOS.map((item: any) => ({
                 ...item,
-                num: item.num ? item.num : 1
+                num: item.num ? item.num : 1,
+                stockNum: data.filter((eve:any)=> item.id===eve.id)[0].stockNum
             })) || [])
             resove({
                 ...result,
