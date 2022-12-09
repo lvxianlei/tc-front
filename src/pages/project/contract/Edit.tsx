@@ -96,6 +96,7 @@ export default function Edit() {
     try {
       let reqType: "post" | "put" = type === "new" ? "post" : "put";
       reqType = ["2", "3"].includes(params.contractType) ? "post" : "put";
+      data?.relationId && params.id && (reqType = "put")
       const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
         id: reqType === "post" ? "" : params.id,
