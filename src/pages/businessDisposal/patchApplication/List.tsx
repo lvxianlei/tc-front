@@ -9,17 +9,17 @@ import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Ro
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
 import { Link, useHistory } from 'react-router-dom';
-import { IResponseData } from '../../common/Page';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns, partsColumns } from "./patchApplication.json"
-import { CommonTable } from '../../common';
+import { CommonTable, IntgSelect } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 
 export default function List(): React.ReactNode {
     const history = useHistory();
     const [detailData, setDetailData] = useState<any>();
     const [partsData, setPartsData] = useState<any>();
+    const [rowId, setRowId] = useState<string>('')
     const [page, setPage] = useState({
         current: 1,
         size: 10,
@@ -29,10 +29,11 @@ export default function List(): React.ReactNode {
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        const data: any = await RequestUtil.get<any>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
         setPage({ ...data });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
+            setRowId(data.records[0]?.id)
         } else {
             setDetailData([]);
             setPartsData([]);
@@ -62,6 +63,7 @@ export default function List(): React.ReactNode {
     }), { manual: true })
 
     const onRowChange = async (record: Record<string, any>) => {
+        setRowId(record.id)
         detailRun(record.id)
     }
 
@@ -79,6 +81,9 @@ export default function List(): React.ReactNode {
             const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
             values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
             values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+        }
+        if (values.applyUser) {
+            values.applyUser = values.applyUser?.value
         }
         setFilterValues(values);
         run({}, { ...values });
@@ -108,6 +113,12 @@ export default function List(): React.ReactNode {
                     })}
                 </Select>
             </Form.Item>
+            <Form.Item label='申请人' name="applyUser">
+                <IntgSelect width={200} />
+            </Form.Item>
+            <Form.Item label='塔型名称' name="productCategoryName">
+                <Input placeholder="请输入" />
+            </Form.Item>
             <Form.Item label='模糊查询项' name="fuzzyMsg">
                 <Input style={{ width: '400px' }} placeholder="补件编号/计划号/工程名称/说明" />
             </Form.Item>
@@ -119,7 +130,7 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '6px 0' }} ghost>申请</Button></Link>
+        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '16px 0' }} ghost>申请</Button></Link>
         <CommonTable
             haveIndex
             columns={[
@@ -148,7 +159,7 @@ export default function List(): React.ReactNode {
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
                             <Link to={`/businessDisposal/patchApplication/edit/${record.id}`}>
-                                <Button type='link' disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>编辑</Button>
+                                <Button type='link' disabled={!(record.status === 1 || record.status === 5)}>编辑</Button>
                             </Link>
                             <Link to={`/businessDisposal/patchApplication/detail/${record.id}`}>详情</Link>
                             <Popconfirm
@@ -161,9 +172,9 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link" disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>发起</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>发起</Button>
                             </Popconfirm>
                             <Popconfirm
                                 title="确认撤回?"
@@ -189,10 +200,73 @@ export default function List(): React.ReactNode {
                                 }}
                                 okText="确认"
                                 cancelText="取消"
-                                disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}
+                                disabled={!(record.status === 1 || record.status === 5)}
                             >
-                                <Button type="link" disabled={!(record.status === 1 || record.status === 5 || record.status === 0)}>删除</Button>
+                                <Button type="link" disabled={!(record.status === 1 || record.status === 5)}>删除</Button>
                             </Popconfirm>
+                            {
+                                record?.warehousingStatus === 1 ?
+                                    <Popconfirm
+                                        title={`确定取消入库？`}
+                                        onConfirm={() => {
+                                            RequestUtil.post(`/tower-science/supplyEntry/cancel/warehousing/${record.id}`).then(res => {
+                                                message.success('取消入库成功');
+                                                history.go(0);
+                                            })
+                                        }}
+                                        okText="确认"
+                                        cancelText="取消"
+                                        disabled={record?.shipmentStatus === 1}
+                                    >
+                                        <Button type="link" disabled={record?.shipmentStatus === 1}>取消入库</Button>
+                                    </Popconfirm>
+                                    :
+                                    <Popconfirm
+                                        title={`确定入库？`}
+                                        onConfirm={() => {
+                                            RequestUtil.post(`/tower-science/supplyEntry/warehousing/${record.id}`).then(res => {
+                                                message.success('入库成功');
+                                                history.go(0);
+                                            })
+                                        }}
+                                        okText="确认"
+                                        cancelText="取消"
+                                        disabled={!(record?.shipmentStatus === 0 && record?.isSupplyBatch === 1)}
+                                    >
+                                        <Button type="link" disabled={!(record?.shipmentStatus === 0 && record?.isSupplyBatch === 1)}>入库</Button>
+                                    </Popconfirm>
+                            }
+                            {
+                                record?.shipmentStatus === 1 ?
+                                    <Popconfirm
+                                        title={`确定取消发货？`}
+                                        onConfirm={() => {
+                                            RequestUtil.post(`/tower-science/supplyEntry/cancel/shipment/${record.id}`).then(res => {
+                                                message.success('取消发货成功');
+                                                history.go(0);
+                                            })
+                                        }}
+                                        okText="确认"
+                                        cancelText="取消"
+                                    >
+                                        <Button type="link">取消发货</Button>
+                                    </Popconfirm>
+                                    :
+                                    <Popconfirm
+                                        title={`确定发货？`}
+                                        onConfirm={() => {
+                                            RequestUtil.post(`/tower-science/supplyEntry/shipment/${record.id}`).then(res => {
+                                                message.success('发货成功');
+                                                history.go(0);
+                                            })
+                                        }}
+                                        okText="确认"
+                                        cancelText="取消"
+                                        disabled={!(record?.warehousingStatus === 1)}
+                                    >
+                                        <Button type="link" disabled={!(record?.warehousingStatus === 1)}>发货</Button>
+                                    </Popconfirm>
+                            }
                         </Space>
                     )
                 }]}
@@ -205,11 +279,21 @@ export default function List(): React.ReactNode {
                 onChange: handleChangePage
             }}
             onRow={(record: Record<string, any>) => ({
-                onClick: () => onRowChange(record),
-                className: styles.tableRow
+                onClick: () => onRowChange(record)
             })}
+            className={styles.patchList}
+            //未入库 未发货 颜色显示
+            rowClassName={(record: Record<string, any>) =>
+                record?.id === rowId ?
+                    styles.selected :
+                    record?.warehousingStatus === 0 ?
+                        styles.noDelivery :
+                        record?.shipmentStatus === 0 ?
+                            styles.noPutStorage :
+                            undefined
+            }
         />
-        <Row gutter={12} style={{ marginTop: '6px' }}>
+        <Row gutter={12} style={{ marginTop: '16px' }}>
             <Col span={8}>
                 <CommonTable
                     haveIndex

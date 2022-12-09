@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Spin } from 'antd';
-import { SearchTable as Page } from '../../common';
+import { IntgSelect, SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -38,10 +38,10 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
-            key: 'reallyProjectName',
-            title: '项目名称',
+            key: 'projectName',
+            title: '工程名称',
             width: 150,
-            dataIndex: 'reallyProjectName'
+            dataIndex: 'projectName'
         },
         {
             key: 'internalNumber',
@@ -181,14 +181,7 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'loftingLeader',
                 label: '放样负责人',
-                children: <Form.Item name="loftingLeader" initialValue={location.state?.userId || ""}>
-                    <Select placeholder="请选择" style={{ width: "150px" }}>
-                        <Select.Option value="" key="6">全部</Select.Option>
-                        {checkUser && checkUser.map((item: any) => {
-                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                        })}
-                    </Select>
-                </Form.Item>
+                children: <IntgSelect width={200} />
             },
             {
                 name: 'taskNum',
@@ -221,6 +214,9 @@ export default function SetOutList(): React.ReactNode {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+            }
+            if (values.loftingLeader) {
+                values.loftingLeader = values.loftingLeader?.value;
             }
             setFilterValue(values)
             return values;
