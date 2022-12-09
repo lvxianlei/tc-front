@@ -262,7 +262,7 @@ export default function List(): React.ReactNode {
                                                     <Input maxLength={100} />
                                                 </Form.Item>
                                                 <Form.Item name='freightPrice' label="运费">
-                                                    <InputNumber style={{width: '100%'}}/>
+                                                    <InputNumber style={{width: '100%'}} max={999999.99}/>
                                                 </Form.Item>
                                             </Form>,
                                             onOk: () => new Promise(async (resolve, reject) => {
