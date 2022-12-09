@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig, Tooltip } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig, Tooltip, Modal, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
 import { Link, useHistory } from 'react-router-dom';
@@ -27,6 +27,7 @@ export default function List(): React.ReactNode {
     })
     const [form] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
+    const [deliveryForm] = Form.useForm();
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
@@ -134,6 +135,13 @@ export default function List(): React.ReactNode {
         <CommonTable
             haveIndex
             columns={[
+                {
+                    "key": "supplyNumber",
+                    "title": "补件编号",
+                    "dataIndex": "supplyNumber",
+                    "width": 100,
+                    fixed: 'left' as FixedType,
+                },
                 ...columns.map(res => {
                     if (res.dataIndex === 'description') {
                         return {
@@ -252,20 +260,40 @@ export default function List(): React.ReactNode {
                                         <Button type="link">取消发货</Button>
                                     </Popconfirm>
                                     :
-                                    <Popconfirm
-                                        title={`确定发货？`}
-                                        onConfirm={() => {
-                                            RequestUtil.post(`/tower-science/supplyEntry/shipment/${record.id}`).then(res => {
-                                                message.success('发货成功');
-                                                history.go(0);
-                                            })
-                                        }}
-                                        okText="确认"
-                                        cancelText="取消"
-                                        disabled={!(record?.warehousingStatus === 1)}
-                                    >
-                                        <Button type="link" disabled={!(record?.warehousingStatus === 1)}>发货</Button>
-                                    </Popconfirm>
+                                    <Button type="link" onClick={() => {
+                                        Modal.confirm({
+                                            title: "发货",
+                                            icon: null,
+                                            content: <Form form={deliveryForm} labelCol={{ span: 4 }}>
+                                                <Form.Item name='logisticsOrderNo' label="物流单号">
+                                                    <Input maxLength={100} />
+                                                </Form.Item>
+                                                <Form.Item name='freightPrice' label="运费">
+                                                    <InputNumber style={{width: '100%'}} max={999999.99}/>
+                                                </Form.Item>
+                                            </Form>,
+                                            onOk: () => new Promise(async (resolve, reject) => {
+                                                try {
+                                                    const value = await deliveryForm.validateFields()
+                                                    RequestUtil.post<any>(`/tower-science/supplyEntry/shipment`, {
+                                                        ...value,
+                                                        supplyEntryId: record?.id
+                                                    }).then(res => {
+                                                        deliveryForm.resetFields();
+                                                        message.success('发货成功！')
+                                                        history.go(0)
+                                                        resolve(true)
+                                                    })
+
+                                                } catch (error) {
+                                                    reject(false)
+                                                }
+                                            }),
+                                            onCancel() {
+                                                deliveryForm.resetFields()
+                                            }
+                                        })
+                                    }} disabled={!(record?.warehousingStatus === 1)}>发货</Button>
                             }
                         </Space>
                     )

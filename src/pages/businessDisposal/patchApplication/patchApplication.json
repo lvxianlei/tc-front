@@ -1,21 +1,39 @@
 {
     "columns": [
         {
-            "key": "supplyNumber",
-            "title": "补件编号",
-            "dataIndex": "supplyNumber",
-            "width": 100
-        },
-        {
             "key": "supplyTypeName",
             "title": "补件类型",
             "dataIndex": "supplyTypeName",
             "width": 100
         },
         {
+            "key": "priorityName",
+            "title": "优先级",
+            "dataIndex": "priorityName",
+            "width": 100
+        },
+        {
             "key": "statusName",
             "title": "审批状态",
             "dataIndex": "statusName",
+            "width": 100
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态变更时间",
+            "dataIndex": "updateStatusTime",
+            "width": 150
+        },
+        {
+            "key": "applyUserDeptName",
+            "title": "申请部门",
+            "dataIndex": "applyUserDeptName",
+            "width": 100
+        },
+        {
+            "key": "applyUserName",
+            "title": "申请人",
+            "dataIndex": "applyUserName",
             "width": 100
         },
         {
@@ -31,16 +49,27 @@
             "width": 100
         },
         {
-            "key": "updateStatusTime",
-            "title": "最新状态变更时间",
-            "dataIndex": "updateStatusTime",
-            "width": 150
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 120
         },
         {
-            "key": "priorityName",
-            "title": "优先级",
-            "dataIndex": "priorityName",
+            "key": "totalNumber",
+            "title": "零件数量",
+            "dataIndex": "totalNumber",
             "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "零件重量",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "description",
+            "title": "说明",
+            "dataIndex": "description"
         },
         {
             "key": "warehousingStatusName",
@@ -67,15 +96,15 @@
             "width": 100
         },
         {
-            "key": "applyUserDeptName",
-            "title": "申请部门",
-            "dataIndex": "applyUserDeptName",
+            "key": "logisticsOrderNo",
+            "title": "物流单号",
+            "dataIndex": "logisticsOrderNo",
             "width": 100
         },
         {
-            "key": "applyUserName",
-            "title": "申请人",
-            "dataIndex": "applyUserName",
+            "key": "freightPrice",
+            "title": "运费",
+            "dataIndex": "freightPrice",
             "width": 100
         },
         {
@@ -83,12 +112,6 @@
             "title": "业务经理",
             "dataIndex": "businessUserName",
             "width": 100
-        },
-        {
-            "key": "productCategoryName",
-            "title": "塔型名称",
-            "dataIndex": "productCategoryName",
-            "width": 120
         },
         {
             "key": "planDeliveryTime",
@@ -103,18 +126,6 @@
             "width": 100
         },
         {
-            "key": "totalNumber",
-            "title": "零件数量",
-            "dataIndex": "totalNumber",
-            "width": 100
-        },
-        {
-            "key": "totalWeight",
-            "title": "零件重量",
-            "dataIndex": "totalWeight",
-            "width": 100
-        },
-        {
             "key": "isSettlement",
             "title": "是否结算",
             "dataIndex": "isSettlement",
@@ -124,11 +135,6 @@
                 { "value": 1, "label": "是" },
                 { "value": 0, "label": "否" }
             ]
-        },
-        {
-            "key": "description",
-            "title": "说明",
-            "dataIndex": "description"
         }
     ],
     "tableColumns": [
