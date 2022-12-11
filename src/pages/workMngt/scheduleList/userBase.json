@@ -7,252 +7,32 @@
         {
             "title": "放样负责人",
             "dataIndex": "lofting",
-            "required": true,
-            "type": "popTable",
             "width": 1101,
-            "readOnly": true,
-            "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/employee?deptName=技术部",
-            "rowKey": "userId",
-            "columns": [
-                {
-                    "title": "部门",
-                    "dataIndex": "deptName"
-                },
-                {
-                    "title": "姓名",
-                    "dataIndex": "name"
-                },
-                {
-                    "title": "账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "手机号",
-                    "dataIndex": "phone"
-                },
-                {
-                    "title": "角色",
-                    "dataIndex": "roleName"
-                },
-                {
-                    "title": "工号",
-                    "dataIndex": "number"
-                },
-                {
-                    "title": "邮箱",
-                    "dataIndex": "email"
-                }
-            ],
-            "search": [
-                {
-                    "title": "",
-                    "dataIndex": "fuzzyQuery",
-                    "width": 200,
-                    "placeholder": "账号/手机号/姓名/工号/邮箱"
-                }
-            ]
+            "value": "lofting"
         },
         {
             "title": "编程负责人",
             "dataIndex": "welding",
-            "required": true,
-            "type": "popTable",
             "width": 1101,
-            "readOnly": true,
-            "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/employee?deptName=技术部",
-            "rowKey": "userId",
-            "columns": [
-                {
-                    "title": "部门",
-                    "dataIndex": "deptName"
-                },
-                {
-                    "title": "姓名",
-                    "dataIndex": "name"
-                },
-                {
-                    "title": "账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "手机号",
-                    "dataIndex": "phone"
-                },
-                {
-                    "title": "角色",
-                    "dataIndex": "roleName"
-                },
-                {
-                    "title": "工号",
-                    "dataIndex": "number"
-                },
-                {
-                    "title": "邮箱",
-                    "dataIndex": "email"
-                }
-            ],
-            "search": [
-                {
-                    "title": "",
-                    "dataIndex": "fuzzyQuery",
-                    "width": 200,
-                    "placeholder": "账号/手机号/姓名/工号/邮箱"
-                }
-            ]
+            "value": "welding"
         },
         {
             "title": "小样图负责人",
             "dataIndex": "smallSample",
-            "required": true,
-            "type": "popTable",
             "width": 1101,
-            "readOnly": true,
-            "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/employee?deptName=技术部",
-            "rowKey": "userId",
-            "columns": [
-                {
-                    "title": "部门",
-                    "dataIndex": "deptName"
-                },
-                {
-                    "title": "姓名",
-                    "dataIndex": "name"
-                },
-                {
-                    "title": "账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "手机号",
-                    "dataIndex": "phone"
-                },
-                {
-                    "title": "角色",
-                    "dataIndex": "roleName"
-                },
-                {
-                    "title": "工号",
-                    "dataIndex": "number"
-                },
-                {
-                    "title": "邮箱",
-                    "dataIndex": "email"
-                }
-            ],
-            "search": [
-                {
-                    "title": "",
-                    "dataIndex": "fuzzyQuery",
-                    "width": 200,
-                    "placeholder": "账号/手机号/姓名/工号/邮箱"
-                }
-            ]
+            "value": "smallSample"
         },
         {
             "title": "螺栓清单负责人",
             "dataIndex": "bolt",
-            "required": true,
-            "type": "popTable",
-            "width": 1101,
-            "readOnly": true,
-            "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/employee?deptName=技术部",
-            "rowKey": "userId",
-            "columns": [
-                {
-                    "title": "部门",
-                    "dataIndex": "deptName"
-                },
-                {
-                    "title": "姓名",
-                    "dataIndex": "name"
-                },
-                {
-                    "title": "账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "手机号",
-                    "dataIndex": "phone"
-                },
-                {
-                    "title": "角色",
-                    "dataIndex": "roleName"
-                },
-                {
-                    "title": "工号",
-                    "dataIndex": "number"
-                },
-                {
-                    "title": "邮箱",
-                    "dataIndex": "email"
-                }
-            ],
-            "search": [
-                {
-                    "title": "",
-                    "dataIndex": "fuzzyQuery",
-                    "width": 200,
-                    "placeholder": "账号/手机号/姓名/工号/邮箱"
-                }
-            ]
+            "value": "bolt",
+            "width": 1101
         },
         {
             "title": "图纸上传负责人",
             "dataIndex": "draw",
-            "required": true,
-            "type": "popTable",
             "width": 1101,
-            "readOnly": true,
-            "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/employee?deptName=技术部",
-            "rowKey": "userId",
-            "columns": [
-                {
-                    "title": "部门",
-                    "dataIndex": "deptName"
-                },
-                {
-                    "title": "姓名",
-                    "dataIndex": "name"
-                },
-                {
-                    "title": "账号",
-                    "dataIndex": "account"
-                },
-                {
-                    "title": "手机号",
-                    "dataIndex": "phone"
-                },
-                {
-                    "title": "角色",
-                    "dataIndex": "roleName"
-                },
-                {
-                    "title": "工号",
-                    "dataIndex": "number"
-                },
-                {
-                    "title": "邮箱",
-                    "dataIndex": "email"
-                }
-            ],
-            "search": [
-                {
-                    "title": "",
-                    "dataIndex": "fuzzyQuery",
-                    "width": 200,
-                    "placeholder": "账号/手机号/姓名/工号/邮箱"
-                }
-            ]
+            "value": "draw"
         } 
     ],
     "tableColumns": [
