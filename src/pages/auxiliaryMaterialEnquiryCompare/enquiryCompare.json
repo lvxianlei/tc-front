@@ -115,6 +115,10 @@
       "dataIndex": "createUserName"
     },
     {
+      "title": "申请部门",
+      "dataIndex": "deptName"
+    },
+    {
       "title": "备注",
       "dataIndex": "remark"
     }

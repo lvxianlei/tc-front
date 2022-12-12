@@ -30,11 +30,14 @@
       "type": "number",
       "edit": true
     },
-
     {
       "title": "备注",
       "dataIndex": "remark",
       "edit": false
+    },
+    {
+      "title": "部门",
+      "dataIndex": "deptName"
     }
   ]
 }

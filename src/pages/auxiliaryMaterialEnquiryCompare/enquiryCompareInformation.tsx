@@ -347,7 +347,7 @@ export default function Overview(): JSX.Element {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,
                 }}
-                dataSource={materialLists}
+                dataSource={[...materialLists]}
             />
             <DetailTitle title="询价报价信息" />
             <CommonTable
