@@ -242,10 +242,23 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                 <Form.Item name={['data', index, "structureSpec"]} initialValue={_} rules={[{ required: true, message: '请输入规格' }, {
 
                     pattern: /^[0-9-∠L*φ\/]*$/,
-                    message: '仅可输入数字/-/*/L/∠/φ',
+                    message: '仅可输入数字/-/*/L/X/∠/φ',
 
                 }]}>
-                    <Input size="small" maxLength={10} onBlur={(e) => weightCalculation(e.target.value, 'structureSpec', index)} />
+                    <Input size="small" maxLength={10} onBlur={(e) => {
+                        let values = form.getFieldsValue(true)?.data;
+                        const data = e.target.value.replace(/L/g, "∠");
+                        const newStructureSpec = data.replace(/X/g, "*");
+                        values[index] = {
+                            ...values[index],
+                            structureSpec: newStructureSpec
+                        }
+                        form.setFieldsValue({
+                            data: [...values]
+                        })
+                        setTableData([...values])
+                        weightCalculation(newStructureSpec, 'structureSpec', index)
+                        }} />
                 </Form.Item>
             )
         },
