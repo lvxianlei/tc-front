@@ -121,7 +121,7 @@ export default forwardRef(function WorkOrderDetail({ rowId, rowData }: modalProp
     ]
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/${rowId}`);
+        const result: any = await RequestUtil.get<any>(`/tower-work/workOrder/getDetails/${rowId}`);
         resole(result);
     }), { refreshDeps: [rowId, rowData] })
 
@@ -155,7 +155,7 @@ export default forwardRef(function WorkOrderDetail({ rowId, rowData }: modalProp
                         </Row>
                         {
                             data?.workOrderNodeVOList?.map((res: any, index: number) => {
-                                return <Card title={res?.node} extra={<span>处理环节：{res?.processingName}</span>} style={{ marginBottom: '6px' }} key={index}>
+                                return <Card title={res?.node} extra={<span>处理标题：{res?.processingName}</span>} style={{ marginBottom: '6px' }} key={index}>
                                     {
                                         res?.workOrderNodeUserVOList?.map((item: any, ind: number) => {
                                             return <Card title={item?.recipientUserName} style={{ marginBottom: '6px' }} key={ind}>

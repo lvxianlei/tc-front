@@ -130,6 +130,11 @@
                         "authority": "tc_erp_sc_project_view_task_notice"
                     },
                     {
+                        "label": "计划变更",
+                        "path": "/project/planChange",
+                        "authority": "tc_erp_sc_project_view_task_notice"
+                    },
+                    {
                         "label": "开票申请",
                         "path": "/project/invoicing",
                         "authority": "tc_erp_sc_invoicing"
@@ -200,6 +205,11 @@
                 "appName": "RD",
                 "authority": "tc_erp_rd_workbench",
                 "items": [
+                    {
+                        "label": "数字门户-个人",
+                        "path": "/workBench/gatewayPersonal",
+                        "authority": "tc_erp_rd_workbench_work"
+                    },
                     {
                         "label": "工作台",
                         "path": "/workBench/workBenchMngt",
@@ -1635,6 +1645,11 @@
                     {
                         "label": "字段同步",
                         "path": "/worksheetSetting/fieldSynchronous",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "自动同步",
+                        "path": "/worksheetSetting/selfSynchronizing",
                         "authority": "tc_erp_sc_workbench_list"
                     }
                 ]
