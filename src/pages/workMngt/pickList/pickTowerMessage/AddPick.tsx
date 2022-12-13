@@ -58,11 +58,11 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             const weight = newData?.weightAlgorithm === 3 ?
                 Number(newData?.proportion) :
                 newData?.weightAlgorithm === 2 ?
-                    Number(newData?.proportion) * Number(values[index]?.width || 0) * Number(values[index]?.length || 0) :
-                    Number(newData?.proportion) * Number(values[index]?.length || 0)
+                    Number(newData?.proportion) * Number(values[index]?.width || 0) / 1000 * Number(values[index]?.length || 0) / 1000 :
+                    Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight
+                basicsWeight: weight.toFixed(4)
             }
             form.setFieldsValue({
                 data: [...values]
@@ -78,11 +78,11 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             const weight = newData?.weightAlgorithm === 3 ?
                 Number(newData?.proportion) :
                 newData?.weightAlgorithm === 2 ?
-                    Number(newData?.proportion) * Number(values[index]?.width || 0) * Number(values[index]?.length || 0) :
-                    Number(newData?.proportion) * Number(values[index]?.length || 0)
+                    Number(newData?.proportion) * Number(values[index]?.width || 0) / 1000 * Number(values[index]?.length || 0) / 1000 :
+                    Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight
+                basicsWeight: weight.toFixed(4)
             }
             form.setFieldsValue({
                 data: [...values]
@@ -108,7 +108,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         const data = form.getFieldsValue(true).data;
         data[index] = {
             ...data[index],
-            totalWeight: Number(e || 0) * Number(data[index].basicsPartNum || 0)
+            totalWeight: (Number(e || 0) * Number(data[index].basicsPartNum || 0)).toFixed(4)
         }
         setTableData([...data])
         form.setFieldsValue({ data: [...data] })
@@ -263,11 +263,11 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                             const weight = getData?.algorithm === 3 ?
                                 getData?.proportion || 0 :
                                 getData?.algorithm === 2 ?
-                                    Number(getData?.proportion) * Number(values[index]?.width || 0) * Number(e.target?.value || 0) :
-                                    Number(getData?.proportion) * Number(e.target?.value || 0)
+                                    Number(getData?.proportion) * Number(values[index]?.width || 0) / 1000 * Number(e.target?.value || 0) / 1000 :
+                                    Number(getData?.proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight
+                                basicsWeight: weight.toFixed(4)
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -278,11 +278,11 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                             const weight = algorithm === 3 ?
                                 proportion || 0 :
                                 algorithm === 2 ?
-                                    Number(proportion) * Number(values[index]?.width || 0) * Number(e.target?.value || 0) :
-                                    Number(proportion) * Number(e.target?.value || 0)
+                                    Number(proportion) * Number(values[index]?.width || 0) / 1000 * Number(e.target?.value || 0) / 1000 :
+                                    Number(proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight
+                                basicsWeight: weight.toFixed(4)
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -290,7 +290,6 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                             setTableData([...values])
                             calculateTotalWeight(weight, index)
                         }
-
                     }} />
                 </Form.Item>
             )
@@ -307,10 +306,10 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                         if (!proportion && values[index]?.materialName && values[index]?.structureSpec) {
                             const getData: any = await getProportion(values[index]?.materialName, values[index]?.structureSpec)
                             if (getData?.algorithm == 2) {
-                                const weight = Number(getData?.proportion) * Number(values[index]?.length || 0) * Number(e.target?.value || 0)
+                                const weight = Number(getData?.proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight
+                                    basicsWeight: weight.toFixed(4)
                                 }
                                 form.setFieldsValue({
                                     data: [...values]
@@ -320,10 +319,10 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                             }
                         } else {
                             if (algorithm == 2) {
-                                const weight = Number(proportion) * Number(values[index]?.length || 0) * Number(e.target?.value || 0)
+                                const weight = Number(proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight
+                                    basicsWeight: weight.toFixed(4)
                                 }
                                 form.setFieldsValue({
                                     data: [...values]

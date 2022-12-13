@@ -116,7 +116,7 @@ export default function List(): React.ReactNode {
                                 setRowId(record?.id);
                                 setVisible(true);
                                 setType('edit');
-                            }}>编辑</Button>
+                            }} disabled={!(record.status === 1 || record.status === 5)}>编辑</Button>
                             <Button type='link' onClick={() => {
                                 setRowId(record?.id);
                                 setVisible(true);
@@ -200,7 +200,7 @@ export default function List(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input style={{ width: '300px' }} placeholder="计划号/单号/塔型/工程名称/说明" />
+                    children: <Input style={{ width: '300px' }} placeholder="计划号/塔型" />
                 }
             ]}
             filterValue={filterValues}
