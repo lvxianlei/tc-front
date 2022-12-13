@@ -136,6 +136,7 @@
         {
             "title": "开户银行",
             "dataIndex": "bankDepositName",
+            "maxLength":50,
             "rules": [
                 {
                     "required": true,
