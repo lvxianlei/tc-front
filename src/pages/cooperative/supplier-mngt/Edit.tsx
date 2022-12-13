@@ -20,7 +20,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/${id}`)
             baseInfo.setFieldsValue({ ...result, supplyProducts: result.supplyProducts.split(",") })
-            supplierForm.setFieldsValue({ ...result, bankDepositId: result.bankDepositId + ',' + result.bankDepositName })
+            supplierForm.setFieldsValue({ ...result})
             resole(result)
         } catch (error) {
             reject(false)
@@ -43,9 +43,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             await saveRun({
                 ...baseData,
                 ...supplierFormData,
-                supplyProducts: baseData.supplyProducts.join(","),
-                bankDepositId: supplierFormData.bankDepositId.split(',')[0],
-                bankDepositName: supplierFormData.bankDepositId.split(',')[1]
+                supplyProducts: baseData.supplyProducts.join(",")
             })
             resove(true)
         } catch (error) {
@@ -87,25 +85,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             dataSource={{}}
             edit />
         <DetailTitle title="供应商账户信息" />
-        <BaseInfo col={2} form={supplierForm} columns={supplierFormHead.map((item: any) => {
-            switch (item.dataIndex) {
-                case "bankDepositId":
-                    return ({
-                        ...item, render: (data: any, props: any) => {
-                            return <Form.Item name="bankDepositId">
-                                <Select placeholder="请选择">
-                                    {bankTypeOptions && bankTypeOptions.map(({ id, name }, index) => {
-                                        return <Select.Option key={index} value={id + ',' + name}>
-                                            {name}
-                                        </Select.Option>
-                                    })}
-                                </Select>
-                            </Form.Item>
-                        }
-                    })
-                default:
-                    return item
-            }
-        })} dataSource={{}} edit />
+        <BaseInfo col={2} form={supplierForm} columns={supplierFormHead} dataSource={{}} edit />
     </Spin>
 })
