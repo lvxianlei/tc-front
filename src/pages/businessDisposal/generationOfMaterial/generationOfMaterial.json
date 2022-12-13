@@ -1,0 +1,206 @@
+{
+    "columns": [
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 100
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 100
+        },
+        {
+            "key": "materialCategory",
+            "title": "原材料类型",
+            "dataIndex": "materialCategory",
+            "width": 100
+        },
+        {
+            "key": "materialName",
+            "title": "原材料品名",
+            "dataIndex": "materialName",
+            "width": 150
+        },
+        {
+            "key": "materialStandardName",
+            "title": "代料前标准",
+            "dataIndex": "materialStandardName",
+            "width": 100
+        },
+        {
+            "key": "changeMaterialStandardName",
+            "title": "代料后标准",
+            "dataIndex": "changeMaterialStandardName",
+            "width": 100
+        },
+        {
+            "key": "structureSpec",
+            "title": "代料前规格",
+            "dataIndex": "structureSpec",
+            "width": 100
+        },
+        {
+            "key": "changeStructureSpec",
+            "title": "代料后规格",
+            "dataIndex": "changeStructureSpec",
+            "width": 100
+        },
+        {
+            "key": "structureTextureName",
+            "title": "代料前材质",
+            "dataIndex": "structureTextureName",
+            "width": 100
+        },
+        {
+            "key": "changeStructureTextureName",
+            "title": "代料后材质",
+            "dataIndex": "changeStructureTextureName",
+            "width": 100
+        },
+        {
+            "key": "statusName",
+            "title": "审批状态",
+            "dataIndex": "statusName",
+            "width": 100
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "最新状态时间",
+            "dataIndex": "updateStatusTime",
+            "width": 100
+        },
+        {
+            "key": "createUserName",
+            "title": "创建人",
+            "dataIndex": "createUserName",
+            "width": 100
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 100
+        }
+    ],
+    "applyColumns": [
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryId",
+            "title": "塔型",
+            "dataIndex": "productCategoryId"
+        },
+        {
+            "key": "materialCategory",
+            "title": "原材料类型",
+            "dataIndex": "materialCategory"
+        },
+        {
+            "key": "materialName",
+            "title": "原材料品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "key": "materialStandard",
+            "title": "代料前标准",
+            "dataIndex": "materialStandard"
+        },
+        {
+            "key": "changeMaterialStandard",
+            "title": "代料后标准",
+            "dataIndex": "changeMaterialStandard"
+        },
+        {
+            "key": "structureSpec",
+            "title": "代料前规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "key": "changeStructureSpec",
+            "title": "代料后规格",
+            "dataIndex": "changeStructureSpec"
+        },
+        {
+            "key": "structureTexture",
+            "title": "代料前材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "key": "changeStructureTexture",
+            "title": "代料后材质",
+            "dataIndex": "changeStructureTexture"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "maxLength": 800,
+            "type": "textarea"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "materialCategory",
+            "title": "原材料类型",
+            "dataIndex": "materialCategory"
+        },
+        {
+            "key": "materialName",
+            "title": "原材料品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "key": "materialStandardName",
+            "title": "代料前标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "key": "changeMaterialStandardName",
+            "title": "代料后标准",
+            "dataIndex": "changeMaterialStandardName"
+        },
+        {
+            "key": "structureSpec",
+            "title": "代料前规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "key": "changeStructureSpec",
+            "title": "代料后规格",
+            "dataIndex": "changeStructureSpec"
+        },
+        {
+            "key": "structureTextureName",
+            "title": "代料前材质",
+            "dataIndex": "structureTextureName"
+        },
+        {
+            "key": "changeStructureTextureName",
+            "title": "代料后材质",
+            "dataIndex": "changeStructureTextureName"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "maxLength": 800,
+            "type": "textarea"
+        }
+    ]
+}

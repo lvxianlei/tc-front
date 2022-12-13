@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
-import AuthUtil from '../../../utils/AuthUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './sample.module.less';
 
@@ -13,11 +12,6 @@ export default function SampleDrawList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number, userId?: string }>();
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        const data:any = await RequestUtil.get(`/tower-system/employee?size=1000`);
-        resole(data?.records);
-    }), {})
-    const user:any = data||[];
     const columns = [
         {
             key: 'index',
@@ -75,7 +69,7 @@ export default function SampleDrawList(): React.ReactNode {
             width: 100,
             dataIndex: 'smallSampleLeaderName'
         },
-        { 
+        {
             key: 'smallSampleStatusName',
             title: '小样图状态',
             width: 100,
@@ -94,9 +88,9 @@ export default function SampleDrawList(): React.ReactNode {
             width: 70,
             fixed: 'right' as FixedType,
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small"  className={styles.operationBtn}>
+                <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {/* <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDrawMessage/${record.loftingTask}`)}}>小样图信息</Button> */}
-                    <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}}>小样图</Button>
+                    <Button type="link" onClick={() => { history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`) }}>小样图</Button>
                     {/* {
                         record?.smallSampleStatus !== 1&& <Button type="link" onClick={()=>{history.push(`/workMngt/sampleDrawList/sampleDraw/${record.id}/${record.smallSampleStatus}`)}}>小样图</Button>
                     }
@@ -127,15 +121,18 @@ export default function SampleDrawList(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.statusUpdateTime) {
             const formatDate = value.statusUpdateTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.updateStatusTimeStart = formatDate[0]+ ' 00:00:00';
-            value.updateStatusTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+            value.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.statusUpdateTime
         }
         if (value.planTime) {
             const formatDate = value.planTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.smallSampleDeliverTimeStart = formatDate[0]+ ' 00:00:00';
-            value.smallSampleDeliverTimeEnd = formatDate[1]+ ' 23:59:59';
+            value.smallSampleDeliverTimeStart = formatDate[0] + ' 00:00:00';
+            value.smallSampleDeliverTimeEnd = formatDate[1] + ' 23:59:59';
             delete value.planTime
+        }
+        if (value.smallSampleLeader) {
+            value.smallSampleLeader = value.smallSampleLeader?.value;
         }
         setFilterValue(value)
         return value
@@ -147,7 +144,7 @@ export default function SampleDrawList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={ { smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId } }
+            requestData={{ smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId }}
             exportPath="/tower-science/smallSample"
             searchFormItems={[
                 {
@@ -157,43 +154,36 @@ export default function SampleDrawList(): React.ReactNode {
                 },
                 {
                     name: 'smallSampleStatus',
-                    label:'小样图状态',
-                    children:  <Form.Item name="smallSampleStatus" initialValue={ location.state?.state }>
-                        <Select style={{width:"100px"}}>
-                            <Select.Option value={''} key ={''}>全部</Select.Option>
+                    label: '小样图状态',
+                    children: <Form.Item name="smallSampleStatus" initialValue={location.state?.state}>
+                        <Select style={{ width: "100px" }}>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待完成</Select.Option>
                             {/* <Select.Option value={2} key={2}>进行中</Select.Option> */}
                             <Select.Option value={2} key={2}>已完成</Select.Option>
                         </Select>
-                    </Form.Item> 
+                    </Form.Item>
                 },
                 {
                     name: 'planTime',
                     label: '计划交付时间',
-                    children:  <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
                     name: 'priority',
-                    label:'优先级',
-                    children:   <Select style={{width:"100px"}}>
-                                    <Select.Option value={''} key ={''}>全部</Select.Option>
-                                    <Select.Option value={0} key={0}>紧急</Select.Option>
-                                    <Select.Option value={1} key={1}>高</Select.Option>
-                                    <Select.Option value={2} key={2}>中</Select.Option>
-                                    <Select.Option value={3} key={3}>低</Select.Option>
-                                </Select>
+                    label: '优先级',
+                    children: <Select style={{ width: "100px" }}>
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        <Select.Option value={0} key={0}>紧急</Select.Option>
+                        <Select.Option value={1} key={1}>高</Select.Option>
+                        <Select.Option value={2} key={2}>中</Select.Option>
+                        <Select.Option value={3} key={3}>低</Select.Option>
+                    </Select>
                 },
                 {
                     name: 'smallSampleLeader',
-                    label:'小样图负责人',
-                    children:   <Form.Item name="smallSampleLeader" initialValue={ location.state?.userId || '' }>
-                                    <Select style={{width:'100px'}}>
-                                        <Select.Option key={''} value={''}>全部</Select.Option>
-                                            {user && user.map((item: any) => {
-                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                            })}
-                                    </Select>
-                                </Form.Item>
+                    label: '小样图负责人',
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyMsg',

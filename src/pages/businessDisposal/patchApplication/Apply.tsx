@@ -38,6 +38,7 @@ export default function Apply(): React.ReactNode {
     const history = useHistory();
     const [numbers, setNumbers] = useState<any>([]);
     const params = useParams<{ id: string }>();
+    const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -134,7 +135,7 @@ export default function Apply(): React.ReactNode {
             setVisible(false)
             resove(true)
         } catch (error) {
-            reject(false)
+            reject(error)
         }
     })
 
@@ -168,6 +169,7 @@ export default function Apply(): React.ReactNode {
     const save = () => {
         if (form) {
             form.validateFields().then(res => {
+                setSaveLoading(true);
                 let value = form.getFieldsValue(true);
                 const tip: Boolean[] = [];
                 patchList.forEach((element: any) => {
@@ -183,9 +185,14 @@ export default function Apply(): React.ReactNode {
                         planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                         supplyStructureList: [...patchList]
                     }).then(res => {
+                        setSaveLoading(false);
                         history.goBack();
+                    }).catch(e => {
+                        console.log(e, 'error');
+                        setSaveLoading(false);
                     });
                 } else {
+                    setSaveLoading(false);
                     message.warning('补件数量不可为0！')
                 }
             })
@@ -195,6 +202,7 @@ export default function Apply(): React.ReactNode {
     const submit = () => {
         if (form) {
             form.validateFields().then(res => {
+                setSaveLoading(true);
                 if (patchList.length > 0) {
                     let value = form.getFieldsValue(true);
                     const tip: Boolean[] = [];
@@ -211,12 +219,18 @@ export default function Apply(): React.ReactNode {
                             planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                             supplyStructureList: [...patchList]
                         }).then(res => {
+                            setSaveLoading(false);
                             history.goBack();
+                        }).catch(e => {
+                            console.log(e)
+                            setSaveLoading(false);
                         });
                     } else {
+                        setSaveLoading(false);
                         message.warning('补件数量不可为0！')
                     }
                 } else {
+                    setSaveLoading(false);
                     message.warning('补件数据不可为空！')
                 }
 
@@ -243,8 +257,8 @@ export default function Apply(): React.ReactNode {
             </Modal>
             <DetailContent operation={[
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
-                    <Button key="save" type="primary" onClick={save}>保存并关闭</Button>
-                    <Button key="saveC" type="primary" onClick={submit}>保存并发起</Button>
+                    <Button key="save" type="primary" loading={saveLoading} onClick={save}>保存并关闭</Button>
+                    <Button key="saveC" type="primary" loading={saveLoading} onClick={submit}>保存并发起</Button>
                     <Button key="cancel" type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 </Space>
             ]}>

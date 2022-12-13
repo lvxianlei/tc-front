@@ -25,6 +25,7 @@ export interface IStaffList {
     readonly userId?: string;
     readonly name?: string;
     readonly userName?: string;
+    readonly signState?: 1 | 2;
 }
 
 export default function AnnouncementMngt(): React.ReactNode {

@@ -1,15 +1,15 @@
 {
     "columns": [
         {
-            "key": "supplyNumber",
-            "title": "补件编号",
-            "dataIndex": "supplyNumber",
-            "width": 100
-        },
-        {
             "key": "supplyTypeName",
             "title": "补件类型",
             "dataIndex": "supplyTypeName",
+            "width": 100
+        },
+        {
+            "key": "priorityName",
+            "title": "优先级",
+            "dataIndex": "priorityName",
             "width": 100
         },
         {
@@ -23,12 +23,6 @@
             "title": "最新状态变更时间",
             "dataIndex": "updateStatusTime",
             "width": 150
-        },
-        {
-            "key": "priorityName",
-            "title": "优先级",
-            "dataIndex": "priorityName",
-            "width": 100
         },
         {
             "key": "applyUserDeptName",
@@ -55,6 +49,65 @@
             "width": 100
         },
         {
+            "key": "productCategoryName",
+            "title": "塔型名称",
+            "dataIndex": "productCategoryName",
+            "width": 120
+        },
+        {
+            "key": "totalNumber",
+            "title": "零件数量",
+            "dataIndex": "totalNumber",
+            "width": 100
+        },
+        {
+            "key": "totalWeight",
+            "title": "零件重量",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "key": "description",
+            "title": "说明",
+            "dataIndex": "description"
+        },
+        {
+            "key": "warehousingStatusName",
+            "title": "入库状态",
+            "dataIndex": "warehousingStatusName",
+            "width": 100
+        },
+        {
+            "key": "warehousingTime",
+            "title": "入库时间",
+            "dataIndex": "warehousingTime",
+            "width": 100
+        },
+        {
+            "key": "shipmentStatusName",
+            "title": "发货状态",
+            "dataIndex": "shipmentStatusName",
+            "width": 100
+        },
+        {
+            "key": "shipmentTime",
+            "title": "发货时间",
+            "dataIndex": "shipmentTime",
+            "width": 100
+        },
+        {
+            "key": "logisticsOrderNo",
+            "title": "物流单号",
+            "dataIndex": "logisticsOrderNo",
+            "width": 100
+        },
+        {
+            "key": "freightPrice",
+            "title": "运费",
+            "dataIndex": "freightPrice",
+            "width": 100
+        },
+        {
             "key": "businessUserName",
             "title": "业务经理",
             "dataIndex": "businessUserName",
@@ -73,18 +126,6 @@
             "width": 100
         },
         {
-            "key": "totalNumber",
-            "title": "零件数量",
-            "dataIndex": "totalNumber",
-            "width": 100
-        },
-        {
-            "key": "totalWeight",
-            "title": "零件重量",
-            "dataIndex": "totalWeight",
-            "width": 100
-        },
-        {
             "key": "isSettlement",
             "title": "是否结算",
             "dataIndex": "isSettlement",
@@ -94,11 +135,6 @@
                 { "value": 1, "label": "是" },
                 { "value": 0, "label": "否" }
             ]
-        },
-        {
-            "key": "description",
-            "title": "说明",
-            "dataIndex": "description"
         }
     ],
     "tableColumns": [
@@ -130,6 +166,12 @@
                 { "value": 1, "label": "已下达" },
                 { "value": 2, "label": "未下达" }
             ]
+        },
+        {
+            "key": "supplyBatchNumber",
+            "title": "下达单号",
+            "dataIndex": "supplyBatchNumber",
+            "width": 100
         },
         {
             "key": "totalNumber",
@@ -348,6 +390,12 @@
             "width": 100
         },
         {
+            "key": "basicsPartNum",
+            "title": "补件数量",
+            "dataIndex": "basicsPartNum",
+            "width": 100
+        },
+        {
             "key": "code",
             "title": "部件号",
             "dataIndex": "code",
@@ -393,12 +441,6 @@
             "key": "thickness",
             "title": "厚度mm",
             "dataIndex": "thickness",
-            "width": 100
-        },
-        {
-            "key": "basicsPartNum",
-            "title": "补件数量",
-            "dataIndex": "basicsPartNum",
             "width": 100
         },
         {
@@ -510,6 +552,12 @@
             "key": "segmentName",
             "title": "段名",
             "dataIndex": "segmentName",
+            "width": 100
+        },
+        {
+            "key": "partNum",
+            "title": "补件数量",
+            "dataIndex": "partNum",
             "width": 100
         },
         {
