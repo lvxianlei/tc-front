@@ -94,10 +94,22 @@ export default function Edit() {
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
     try {
-
-      const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/contract`, {
+      let reqType: "post" | "put";
+      if (type === "new") {
+        reqType = "post"
+      } else {
+        console.log(params.contractType, data?.relationId)
+        if (["2", "3"].includes(params.contractType) && !data?.relationId) {
+          reqType = "post"
+        } else {
+          reqType = "put"
+        }
+      }
+      const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
-        id: type === "new" ? "" : params.id,
+        id: reqType === "post" ? "" : params.id,
+        relationId: data?.id,
+        relationInternalNumber: data?.internalNumber,
         projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
@@ -143,8 +155,8 @@ export default function Edit() {
       ...baseInfo,
       signCustomerName: baseInfo.signCustomer.value,
       signCustomerId: baseInfo.signCustomer.id,
-      frameAgreementName: baseInfo.frameAgreementId.value,
-      frameAgreementId: baseInfo.frameAgreementId.id,
+      frameAgreementName: baseInfo.frameAgreementId?.value,
+      frameAgreementId: baseInfo.frameAgreementId?.id,
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
@@ -159,10 +171,13 @@ export default function Edit() {
         customerLinkman: baseInfo.customerLinkman,
         customerPhone: baseInfo.customerPhone
       },
-      paymentPlanDtos: editformData.submit?.map((item: any) => ({
-        ...item,
-        contractId: params.id
-      })),
+      paymentPlanDtos: editformData.submit?.map((item: any) => {
+        delete item.id
+        return ({
+          ...item,
+          contractId: data?.id
+        })
+      }),
       fileIds: attchs
     })
     if (result) {
@@ -313,12 +328,13 @@ export default function Edit() {
           bidBatch: projectData?.bidBatch,
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
           country: projectData?.country || "",
+          ...data,
           contractType: Number(params.contractType) || 1,
-          ...data
         } || {
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
           country: projectData?.country || "",
-          ...data
+          ...data,
+          contractType: Number(params.contractType) || 1,
         }}
         edit />
       <DetailTitle title="回款计划" />

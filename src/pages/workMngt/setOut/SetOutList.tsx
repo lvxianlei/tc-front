@@ -121,7 +121,7 @@ export default function SetOutList(): React.ReactNode {
                         }}>杆塔配段</Link>
                     </Button>
                     {
-                        record.status === 5 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
+                        record.status === 5 || record.status === 6 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
                 </>
             )
@@ -163,7 +163,8 @@ export default function SetOutList(): React.ReactNode {
                         <Select.Option value={2} key="2">放样中</Select.Option>
                         <Select.Option value={3} key="3">组焊中</Select.Option>
                         <Select.Option value={4} key="4">配段中</Select.Option>
-                        <Select.Option value={5} key="5">已完成</Select.Option>
+                        <Select.Option value={5} key="5">部分完成</Select.Option>
+                        <Select.Option value={6} key="6">已完成</Select.Option>
                     </Select>
                 </Form.Item>
             },

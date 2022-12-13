@@ -108,12 +108,12 @@ let settlementMode: IDict[] | undefined = [];
 let planName: IDict[] | undefined = [];
 let towerStructure: IDict[] | undefined = [];
 let supplyType: IDict[] | undefined = [];
-let typeOfChange: IDict[] | undefined = [];
 let referenceRoom: IDict[] | undefined = [];
 let drawingDataType: IDict[] | undefined = [];
 let documentType: IDict[] | undefined = [];
 let fileType: IDict[] | undefined = [];
 let testType: IDict[] | undefined = [];
+let typeOfChange: IDict[] | undefined = [];
 
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
@@ -170,6 +170,7 @@ if (dictionary) {
     documentType = dictionary[DictionaryEnums.DOCUMENT_TYPE];
     fileType = dictionary[DictionaryEnums.FILE_TYPE];
     testType = dictionary[DictionaryEnums.TEST_TYPE];
+    typeOfChange = dictionary[DictionaryEnums.TYPE_OF_CHANGE];
 }
 
 export const productTypeOptions = productType;  //产品类型

@@ -161,8 +161,8 @@ export default function ContractList(): JSX.Element {
       width: 100,
     },
     {
-      title: "关联单据--",
-      dataIndex: "",
+      title: "关联单据",
+      dataIndex: "relationInternalNumber",
       width: 100,
     }
   ]
@@ -285,14 +285,14 @@ export default function ContractList(): JSX.Element {
                   }}
                   projectId={record?.projectId}
                   selectKey={record?.bidStatisticsId} />
-                <Button type="link">
+                <Button type="link" disabled={record?.contractType !== 1}>
                   <Link
                     to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}/2`}
                   >
                     补充合同
                   </Link>
                 </Button>
-                <Button type="link">
+                <Button type="link" disabled={record?.contractType !== 1}>
                   <Link
                     to={`/project/${entryPath}/edit/contract/${record?.projectId || "undefined"}/${record?.id}/3`}
                   >
