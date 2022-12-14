@@ -30,11 +30,6 @@ export default function Overview({ id }: OverviewProps) {
                         type: "select",
                         enum: supplierTypeEnum
                     })
-                case "supplyProducts":
-                    return ({
-                        ...item,
-                        dataIndex: "supplyProductsName"
-                    })
                 case "qualityAssurance":
                     return ({
                         ...item,
