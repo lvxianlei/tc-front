@@ -15,11 +15,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
     const [supplierForm] = Form.useForm()
     const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const supplyProductsEnum = supplyProductsOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    // const supplyProductsEnum = supplyProductsOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const { loading } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/supplier/${id}`)
-            baseInfo.setFieldsValue({ ...result, supplyProducts: result.supplyProducts.split(",") })
+            baseInfo.setFieldsValue({ ...result})
             supplierForm.setFieldsValue({ ...result})
             resole(result)
         } catch (error) {
@@ -43,7 +43,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             await saveRun({
                 ...baseData,
                 ...supplierFormData,
-                supplyProducts: baseData.supplyProducts.join(",")
+                // supplyProducts: baseData.supplyProducts.join(",")
             })
             resove(true)
         } catch (error) {
@@ -63,14 +63,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                             ...item,
                             type: "select",
                             enum: supplierTypeEnum
-                        })
-                    case "supplyProducts":
-                        return ({
-                            ...item,
-                            type: "select",
-                            mode: "multiple",
-                            enum: supplyProductsEnum,
-                            maxTagCount: 'responsive'
                         })
                     case "qualityAssurance":
                         return ({
