@@ -149,12 +149,12 @@ export default function Lofting(): React.ReactNode {
             dataIndex: 'projectEntries',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
-                    name={['data', index, "projectEntries"]}
+                    name={['data', index, "projectEntriesId"]}
                     initialValue={record.projectEntries}
                 >
                     <Select onChange={() => rowChange(index)} allowClear>
                         {list && list.map((item: any, index: number) => {
-                            return <Select.Option key={index} value={item?.projectEntries}>
+                            return <Select.Option key={index} value={item?.id + ',' + item?.projectEntries}>
                                 {item?.projectEntries}
                             </Select.Option>
                         })}
@@ -548,9 +548,12 @@ export default function Lofting(): React.ReactNode {
                                     }).map((item: any) => {
                                         return {
                                             ...item,
+                                            projectEntriesId: item?.projectEntriesId.split(',')[0],
+                                            projectEntries: item?.projectEntriesId.split(',')[1],
                                             completeStatusTime: item?.completeStatusTime ? moment(item?.completeStatusTime).format('YYYY-MM-DD HH:mm:ss') : '',
                                             productCategory: params.id,
                                             productCategoryName: detailTop?.productCategoryName,
+                                            
                                             // segmentGroupId: params.productSegmentId
                                         }
                                     })
