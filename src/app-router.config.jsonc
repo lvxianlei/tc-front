@@ -747,13 +747,6 @@
       "exact": true,
       "authority": "tc_erp_rd_work_load_list"
     },
-    { // 驾驶舱-人员工作信息
-      "name": "人员工作信息",
-      "path": "/cockpit/personnelInformation",
-      "module": "./pages/cockpit/personnelInformation/List",
-      "exact": true,
-      "authority": "tc_erp_rd_work_load_list"
-    },
     { // 驾驶舱-放样人员画像
       "name": "放样人员画像",
       "path": "/cockpit/personnelPortrait",

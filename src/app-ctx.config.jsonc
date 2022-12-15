@@ -244,11 +244,6 @@
                         "authority": "tc_erp_rd_work_load"
                     },
                     {
-                        "label": "人员工作信息",
-                        "path": "/cockpit/personnelInformation",
-                        "authority": "tc_erp_rd_config_system"
-                    },
-                    {
                         "label": "放样人员画像",
                         "path": "/cockpit/personnelPortrait",
                         "authority": "tc_erp_rd_work_load"
