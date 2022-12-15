@@ -244,6 +244,11 @@
                         "authority": "tc_erp_rd_work_load"
                     },
                     {
+                        "label": "人员工作信息",
+                        "path": "/cockpit/personnelInformation",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
                         "label": "放样人员画像",
                         "path": "/cockpit/personnelPortrait",
                         "authority": "tc_erp_rd_work_load"
@@ -719,13 +724,33 @@
                 "authority": "tc_erp_rd_system",
                 "items": [
                     {
+                        "label": "放样塔型绩效汇总",
+                        "path": "/performanceMngt/loftingpPerformanceSummary",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
                         "label": "放样计件",
                         "path": "/performanceMngt/loftingPiece",
                         "authority": "tc_erp_rd_config_system"
                     },
                     {
+                        "label": "绩效奖励明细",
+                        "path": "/performanceMngt/performanceDetail",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
+                        "label": "杂项绩效管理",
+                        "path": "/performanceMngt/miscellaneousPerformance",
+                        "authority": "tc_erp_rd_config_system"
+                    },
+                    {
                         "label": "不合格处置单考核",
                         "path": "/performanceMngt/unqualifiedCheck",
+                        "authority": "tc_erp_rd_trial_config"
+                    },
+                    {
+                        "label": "人员工资绩效",
+                        "path": "/performanceMngt/performanceSalary",
                         "authority": "tc_erp_rd_trial_config"
                     }
                 ]

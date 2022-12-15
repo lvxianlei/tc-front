@@ -747,6 +747,13 @@
       "exact": true,
       "authority": "tc_erp_rd_work_load_list"
     },
+    { // 驾驶舱-人员工作信息
+      "name": "人员工作信息",
+      "path": "/cockpit/personnelInformation",
+      "module": "./pages/cockpit/personnelInformation/List",
+      "exact": true,
+      "authority": "tc_erp_rd_work_load_list"
+    },
     { // 驾驶舱-放样人员画像
       "name": "放样人员画像",
       "path": "/cockpit/personnelPortrait",
@@ -3213,6 +3220,41 @@
       "name": "不合格处置单考核",
       "path": "/performanceMngt/unqualifiedCheck",
       "module": "./pages/performanceMngt/unqualifiedCheck/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-放样塔型绩效汇总
+      "name": "放样塔型绩效汇总",
+      "path": "/performanceMngt/loftingpPerformanceSummary",
+      "module": "./pages/performanceMngt/loftingpPerformanceSummary/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-绩效奖励明细
+      "name": "绩效奖励明细",
+      "path": "/performanceMngt/performanceDetail",
+      "module": "./pages/performanceMngt/performanceDetail/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-杂项绩效管理
+      "name": "杂项绩效管理",
+      "path": "/performanceMngt/miscellaneousPerformance",
+      "module": "./pages/performanceMngt/miscellaneousPerformance/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-杂项绩效管理
+      "name": "杂项绩效管理",
+      "path": "/performanceMngt/miscellaneousPerformance",
+      "module": "./pages/performanceMngt/miscellaneousPerformance/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-人员工资绩效
+      "name": "人员工资绩效",
+      "path": "/performanceMngt/performanceSalary",
+      "module": "./pages/performanceMngt/performanceSalary/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
