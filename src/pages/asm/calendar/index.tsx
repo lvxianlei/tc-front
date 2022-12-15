@@ -1,17 +1,14 @@
-import React, { useCallback, useState } from "react"
-import { Link, useHistory } from "react-router-dom"
-import { Button, DatePicker, Form, Input, message, Modal, Popconfirm, Select, Space } from "antd"
+import React, { useState } from "react"
+import { useHistory } from "react-router-dom"
+import { Button, DatePicker, Form, Input, message, Popconfirm, Select } from "antd"
 import { Page } from "../../common"
-import { productTypeOptions } from "../../../configuration/DictionaryOptions"
 import RequestUtil from "../../../utils/RequestUtil"
 import useRequest from "@ahooksjs/use-request"
 export default () => {
     const history = useHistory()
-    const [isAdd, setIsAdd] = useState<boolean>(false)
     const [refresh, setRefresh] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({});
-    const [form] = Form.useForm();
-    const [cyclePlanType,setCyclePlanType] = useState<any[]>([]);
+    const [cyclePlanType, setCyclePlanType] = useState<any[]>([]);
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
@@ -40,19 +37,19 @@ export default () => {
             title: "日期",
             width: 150,
             dataIndex: "calendar"
-        },{
+        }, {
             title: "星期",
             width: 150,
             dataIndex: "week"
-        },{
+        }, {
             title: "班次",
             width: 150,
             dataIndex: "shift"
-        },{
+        }, {
             title: "工作段",
             width: 150,
             dataIndex: "workTime"
-        },{
+        }, {
             title: "状态",
             width: 150,
             dataIndex: "status",
@@ -63,25 +60,25 @@ export default () => {
                     case 2:
                         return '休息';
                 }
-            } 
-        },{
+            }
+        }, {
             title: "公司",
             width: 150,
             dataIndex: "companyName"
-        },{
+        }, {
             title: "部门",
             width: 150,
             dataIndex: "deptName"
-        },{
+        }, {
             title: "创建人",
             width: 150,
             dataIndex: "createUserName"
-        },{
+        }, {
             title: "创建时间",
             width: 150,
             dataIndex: "createTime"
         }
-    ] 
+    ]
     return <>
         <Page
             path="/tower-as/calendar"
@@ -90,26 +87,26 @@ export default () => {
                 ...columns as any
             ]}
             tableProps={{
-                
                 rowSelection: {
-                    type:'radio',
+                    type: 'radio',
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
                 }
             }}
             extraOperation={[
-                <Button type='primary' onClick={()=>{
+                <Button type='primary' key="new" onClick={() => {
                     history.push(`/calendar/calendar/add`)
                 }}>新增</Button>,
-                <Button type='primary' onClick={async ()=>{
-                    await RequestUtil.put(`/tower-as/calendar`,{
+                <Button type='primary' key="second" onClick={async () => {
+                    await RequestUtil.put(`/tower-as/calendar`, {
                         id: selectedKeys[0],
-                        status: selectedRows[0].status===1?2:1
+                        status: selectedRows[0].status === 1 ? 2 : 1
                     })
                     message.success("调整成功！")
                     history.go(0)
-                }} disabled={!(selectedKeys.length>0)}>调整工作状态</Button>,
+                }} disabled={!(selectedKeys.length > 0)}>调整工作状态</Button>,
                 <Popconfirm
+                    key="delete"
                     title="确认删除?"
                     onConfirm={async () => {
                         await RequestUtil.delete(`/tower-as/calendar/${selectedKeys[0]}`).then(res => {
@@ -119,9 +116,9 @@ export default () => {
                     }}
                     okText="确认"
                     cancelText="取消"
-                    disabled={!(selectedKeys.length>0)}
+                    disabled={!(selectedKeys.length > 0)}
                 >
-                    <Button type="primary" disabled={!(selectedKeys.length>0)}>删除</Button>
+                    <Button type="primary" disabled={!(selectedKeys.length > 0)}>删除</Button>
                 </Popconfirm>
             ]}
             searchFormItems={[
@@ -133,13 +130,13 @@ export default () => {
                 {
                     name: "deptName",
                     label: '部门',
-                    children: <Input placeholder="请输入部门名称进行查询" style={{ width: 150 }}/>
+                    children: <Input placeholder="请输入部门名称进行查询" style={{ width: 150 }} />
                 },
                 {
                     name: "status",
                     label: "状态",
                     children: <Form.Item name='status' >
-                        <Select placeholder="请选择"  style={{ width: "150px" }}>
+                        <Select placeholder="请选择" style={{ width: "150px" }}>
                             {/* <Select.Option value='' key="">全部</Select.Option> */}
                             <Select.Option value={1}>工作</Select.Option>
                             <Select.Option value={2}>休息</Select.Option>

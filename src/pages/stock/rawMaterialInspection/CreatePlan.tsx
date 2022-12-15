@@ -21,9 +21,9 @@ export default function CreatePlan(props: any): JSX.Element {
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [userList, setUserList] = useState<any[]>([])
 
-    const handleInspectionSchemeChange = (value: number, id: string) => {
+    const handleInspectionSchemeChange = (value: number, receiveStockDetailId: string) => {
         const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
                 return ({
                     ...item,
                     inspectionScheme: value,
@@ -37,9 +37,22 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
-    const handleNumChange = (value: number, id: string) => {
+    const handleInspectionTypeNameChange = (value: number, receiveStockDetailId: string) => {
         const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
+                return ({
+                    ...item,
+                    inspectionTypeName: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
+    const handleNumChange = (value: number, receiveStockDetailId: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
                 return ({
                     ...item,
                     inspectionNum: value,
@@ -52,9 +65,9 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
-    const handleSamplerChange = (value: string, id: string) => {
+    const handleSamplerChange = (value: string, receiveStockDetailId: string) => {
         const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
                 return ({
                     ...item,
                     sampler: value
@@ -65,9 +78,9 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
-    const handleMachiningUserChange = (value: string, id: string) => {
+    const handleMachiningUserChange = (value: string, receiveStockDetailId: string) => {
         const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
                 return ({
                     ...item,
                     machiningUser: value
@@ -78,9 +91,9 @@ export default function CreatePlan(props: any): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
-    const handleMachiningNumChange = (value: number, id: string) => {
+    const handleMachiningNumChange = (value: number, receiveStockDetailId: string) => {
         const list = popDataList.map((item: any) => {
-            if (item.id === id) {
+            if (item.receiveStockDetailId === receiveStockDetailId) {
                 return ({
                     ...item,
                     machiningNum: value,
@@ -95,8 +108,8 @@ export default function CreatePlan(props: any): JSX.Element {
 
 
     const performanceBondChange = async (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.receiveNumber) {
-            const result = fields.receiveNumber.records[0];
+        if (fields.receiveId) {
+            const result = fields.receiveId.records[0];
             const list: any[] = await RequestUtil.get(`/tower-storage/receiveStock/quality/${result.id}`)
             const userData: any = await RequestUtil.get(`/tower-system/employee?size=10000`);
             setUserList(userData.records);
@@ -163,22 +176,23 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您选择检验方案！");
                 return false;
             }
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${baseInfo.receiveNumber?.records[0]?.id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${baseInfo.receiveId?.records[0]?.id}`)
             type==='save'&&saveRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
-                        receiveStockDetailId: item?.detailId,
-                        productionTime: item?.manufactureTime
+                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+                        receiveStockDetailId: item?.receiveStockDetailId,
+                        manufactureTime: item?.manufactureTime,
+                        contractNumber: item?.contractNumber?item?.contractNumber:item?.materialContractNumber,
                     }
                 }),
                 ...baseInfo,
-                receiveStockId: baseInfo.receiveNumber?.records[0]?.id,
+                receiveStockId: baseInfo.receiveId?.records[0]?.id,
                 supplierId: result?.supplierId,
                 supplierName:result?.supplierName,
-                productionTime: result?.productionTime,
-                receiveNumber: baseInfo.receiveNumber?.records[0]?.receiveNumber,
+                receiveTime: result?.receiveTime,
+                receiveNumber: baseInfo.receiveId?.records[0]?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1,
                 commit:0,
@@ -186,18 +200,19 @@ export default function CreatePlan(props: any): JSX.Element {
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
-                        receiveStockDetailId: item?.detailId,
-                        productionTime: item?.manufactureTime,
+                        receiveStockDetailId: item?.receiveStockDetailId,
+                        manufactureTime: item?.manufactureTime,
                         ...item,
-                        inspectionTypeName: item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+                        contractNumber: item?.contractNumber?item?.contractNumber:item?.materialContractNumber,
+                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
                     }
                 }),
                 ...baseInfo,
-                receiveStockId: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.id: result?.id,
+                receiveStockId: baseInfo.receiveId?.records?baseInfo.receiveId?.records[0]?.id: result?.id,
                 supplierId: result?.supplierId,
                 supplierName:result?.supplierName,
-                productionTime: result?.productionTime,
-                receiveNumber: baseInfo.receiveNumber?.records?baseInfo.receiveNumber?.records[0]?.receiveNumber:baseInfo?.receiveNumber,
+                receiveTime: result?.receiveTime,
+                receiveNumber: baseInfo.receiveId?.records?baseInfo.receiveId?.records[0]?.receiveNumber:baseInfo?.receiveNumber,
                 warehouseId:result?.warehouseId,
                 inspectionBatch:1,
                 commit:1
@@ -221,6 +236,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...tranferData,
                 id: props.id,
                 qualityInspectionNumber: data?.qualityInspectionNumber,
+                inspectionStatus: data?.inspectionStatus
             })
             message.success("保存成功！");
             props?.handleCreate({ code: 1 })
@@ -236,6 +252,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...tranferData,
                 id: props.id,
                 qualityInspectionNumber: data?.qualityInspectionNumber,
+                inspectionStatus: data?.inspectionStatus
             })
             message.success("提交成功！");
             props?.handleCreate({ code: 1 })
@@ -268,11 +285,13 @@ export default function CreatePlan(props: any): JSX.Element {
             }))
             resole({
                 ...result,
-                receiveNumber: {
+                receiveId: {
                     id: result?.receiveStockId,
                     value: result?.receiveNumber,
                     records:[{id: result?.receiveStockId,
-                    value: result?.receiveNumber}]
+                    value: result?.receiveNumber,
+                    receiveNumber: result?.receiveNumber,
+                }]
                 },
             })
         } catch (error) {
@@ -288,7 +307,7 @@ export default function CreatePlan(props: any): JSX.Element {
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
-                props?.handleCreate();
+                props?.handleCreate({code:1});
             }}
             maskClosable={false}
             width={1100}
@@ -296,7 +315,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate();
+                    props?.handleCreate({code:1});
                 }}>
                     取消
                 </Button>,
@@ -342,7 +361,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => 
-                                    <Select placeholder="请选择"  style={{ width: "150px" }} value={value} onChange={(value: number) => handleInspectionSchemeChange(value, records.id)} key={key}>
+                                    <Select placeholder="请选择"  style={{ width: "150px" }} value={value} onChange={(value: number) => handleInspectionSchemeChange(value, records.receiveStockDetailId)} key={key}>
                                         <Select.Option value={0} key="0">无</Select.Option>
                                         <Select.Option value={1} key="1">特高压</Select.Option>
                                         <Select.Option value={2} key="2">正常</Select.Option>
@@ -353,7 +372,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["inspectionTypeName"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <Select placeholder="请选择" value={value} style={{ width: "150px" }} mode='multiple' disabled={records?.inspectionScheme!==3}>
+                                    render: (value: number, records: any, key: number) => <Select placeholder="请选择" value={value} style={{ width: "150px" }} mode='multiple' disabled={records?.inspectionScheme!==3} onChange={(value: number) => handleInspectionTypeNameChange(value, records.receiveStockDetailId)}>
                                         {testTypeOptions && testTypeOptions.map(({  name }, index) => {
                                             return <Select.Option key={index} value={name}>
                                                 {name}
@@ -366,19 +385,19 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["inspectionNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={0} value={value===0?0:value || undefined } onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={0} value={value===0?0:value || undefined } onChange={(value: number) => handleNumChange(value, records.receiveStockDetailId)} key={key} />
                                 })
                             }
                             if (["machiningNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.id)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.receiveStockDetailId)} key={key} />
                                 })
                             }
                             if (["sampler"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: string, records: any, key: number) => <Select style={{width:160}} placeholder="请选择" showSearch allowClear value={value || undefined} onChange={(value: string) => handleSamplerChange(value, records.id)} key={key} >
+                                    render: (value: string, records: any, key: number) => <Select style={{width:160}} placeholder="请选择" showSearch allowClear value={value || undefined} onChange={(value: string) => handleSamplerChange(value, records.receiveStockDetailId)} key={key} >
                                         {userList && userList.map((item: any) => {
                                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                         })}
@@ -388,7 +407,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["machiningUser"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: string, records: any, key: number) =><Select style={{width:160}} placeholder="请选择" showSearch allowClear value={value || undefined} onChange={(value: string) => handleMachiningUserChange(value, records.id)} key={key} >
+                                    render: (value: string, records: any, key: number) =><Select style={{width:160}} placeholder="请选择" showSearch allowClear value={value || undefined} onChange={(value: string) => handleMachiningUserChange(value, records.receiveStockDetailId)} key={key} >
                                         {userList && userList.map((item: any) => {
                                             return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
                                         })}

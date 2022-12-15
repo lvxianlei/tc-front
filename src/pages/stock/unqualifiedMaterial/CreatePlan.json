@@ -2,7 +2,7 @@
     "baseInfoColumn": [
         {
             "title": "送检单号",
-            "dataIndex": "qualityInspectionNumber"
+            "dataIndex": "inspectionNumber"
         },
         {
             "title": "收货单号",
@@ -140,6 +140,10 @@
         {
             "title": "处理后长度",
             "dataIndex": "processedLength"
+        },
+        {
+            "title": "处理后宽度",
+            "dataIndex": "processedWidth"
         }
     ]
 }

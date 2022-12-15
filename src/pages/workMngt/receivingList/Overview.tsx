@@ -195,6 +195,7 @@ export default function Overview() {
     const [editId, setEditId] = useState<string>('');
     const [detailAttachId, setDetailAttachId] = useState<string>("")
     const [attachVisible, setAttachVisible] = useState<boolean>(false)
+    const [userData, setUserData] = useState<any>({})
     const handleCreate = (options: any) => {
         if (options?.code === 1) {
             history.go(0);
@@ -202,7 +203,7 @@ export default function Overview() {
         setIsOpenId(false);
     }
     // 统计数量
-    const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { data: numData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/detailStatistics`, {
                 receiveStockId: params.id,
@@ -255,6 +256,33 @@ export default function Overview() {
 
     const handleSelectChange = (ids: any, selectRows: any[]) => {
         setSelectedRows(ids)
+        const rWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
+        },0)
+        const receiveWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { balanceTotalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.balanceTotalWeight!==null?cur.balanceTotalWeight:0) 
+        },0)
+        const receivePrice = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+            console.log(cur.totalTaxPrice)
+            return parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )
+        },0)
+        const wWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { totalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)
+        },0)      
+        const waitWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { balanceTotalWeight: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.balanceTotalWeight!==null?cur.balanceTotalWeight:0)
+        },0)
+        const waitPrice = selectRows.filter((item:any)=>{return item?.receiveDetailStatus===0}).reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+            return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0)
+        },0)
+        setUserData({
+            rWeight,
+            wWeight,
+            receiveWeight,
+            receivePrice,
+            waitWeight,
+            waitPrice
+        })
         setReceiveStockId(selectRows[0]?.receiveStockId)
     }
 
@@ -262,6 +290,7 @@ export default function Overview() {
         <Modal
             destroyOnClose
             visible={visible}
+            width={attchType === 1 ? "30%" : '60%'}
             // title={attchType === 1 ? "质保单" : "质检单"}
             title={attchType === 1 ? "收货" : "拒绝收货"}
             confirmLoading={saveLoding}
@@ -330,6 +359,11 @@ export default function Overview() {
                     }}
                 >批量收货</Button>
                 <Button type="primary" ghost onClick={async () => {
+                    const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/repeal/${params.id}`)
+                    message.success('撤销成功！')
+                    history.go(-1)
+                }} >撤销收货</Button>
+                <Button type="primary" ghost onClick={async () => {
                     setEditId(params.id)
                     const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/quality/${params.id}`)
                     setIsOpenId(true)
@@ -337,10 +371,12 @@ export default function Overview() {
                 }} >申请送检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
-                    已收货：重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receiveWeight === -1 ? 0 : userData?.receiveWeight}</span>
-                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.receivePrice === -1 ? 0 : userData?.receivePrice}</span>
-                    待收货：重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight === -1 ? 0 : userData?.waitWeight}</span>
-                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice === -1 ? 0 : userData?.waitPrice}</span>
+                    已收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receiveWeight||0}</span>
+                    结算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receiveBalanceWeight||0}</span>
+                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.receivePrice||0}</span>
+                    待收货：理算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ userData?.wWeight ||0}</span>
+                    结算重量(吨)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}> {userData?.waitWeight||0}</span>
+                    含税金额(元)合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{userData?.waitPrice||0}</span>
                 </span>
             </>}
             tableProps={{

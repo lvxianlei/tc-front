@@ -14,7 +14,7 @@ import styles from './IsTrialDress.module.less';
 
 interface modalProps {
     readonly id?: any;
-    readonly type?: 'new' | 'detail';
+    readonly type?: 'new' | 'detail' | 'edit';
 }
 
 export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
@@ -26,6 +26,11 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/trialAssembly/getDetails?id=${id}`)
+            if (type === 'edit') {
+                planNumChange(result?.planNumber)
+                form.setFieldsValue({ ...result });
+                setProductCategoryData({ ...result });
+            }
             resole(result)
         } catch (error) {
             reject(error)
@@ -40,18 +45,14 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
     const planNumChange = async (e: any) => {
         const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
         setTowerSelects(data || [])
-        setProductCategoryData({})
-        form.setFieldsValue({
-            productCategoryId: ''
-        });
     }
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
             const value = await form.validateFields();
-            console.log(value)
             await saveRun({
-                ...value
+                ...value,
+                id: data?.id
             })
             resolve(true);
         } catch (error) {
@@ -72,7 +73,8 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
         try {
             const value = await form.validateFields();
             await submitRun({
-                ...value
+                ...value,
+                id: data?.id
             })
             resolve(true);
         } catch (error) {
@@ -173,7 +175,13 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
                                     filterOption={(input, option) =>
                                         (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                     }
-                                    onChange={(e) => planNumChange(e)}>
+                                    onChange={(e) => {
+                                        planNumChange(e);
+                                        setProductCategoryData({})
+                                        form.setFieldsValue({
+                                            productCategoryId: ''
+                                        });
+                                    }}>
                                     {planNums && planNums?.map((item: any, index: number) => {
                                         return <Select.Option key={index} value={item}>{item}</Select.Option>
                                     })}
@@ -181,14 +189,13 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="塔型名称">
-                            <Form.Item name="productCategoryId" rules={[
+                            <Form.Item name="productCategoryId" initialValue={data?.productCategoryId} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择塔型名称"
                                 }
                             ]}>
                                 <Select placeholder="请选择塔型名称" style={{ width: "150px" }} onChange={async (e) => {
-                                    console.log(e)
                                     const data: any = await RequestUtil.get(`/tower-science/trialAssembly/${e}`);
                                     setProductCategoryData(data);
                                 }}>

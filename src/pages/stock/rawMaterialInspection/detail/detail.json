@@ -22,12 +22,12 @@
         },
         {
             "title": "检验方案",
-            "dataIndex": "qualitySchemeName",
+            "dataIndex": "inspectionSchemeName",
             "width": 120
         },
         {
             "title": "检验分类名称",
-            "dataIndex": "qualityTypeName",
+            "dataIndex": "inspectionTypeName",
             "width": 120
         },
         {
@@ -118,11 +118,6 @@
         {
             "title": "质保书号",
             "dataIndex": "warrantyNumber",
-            "width": 120
-        },
-        {
-            "title": "质量证明书号",
-            "dataIndex": "qualityCertificateNumber",
             "width": 120
         },
         {
@@ -169,12 +164,12 @@
         },
         {
             "title": "检验方案",
-            "dataIndex": "qualitySchemeName",
+            "dataIndex": "inspectionSchemeName",
             "width": 120
         },
         {
             "title": "检验分类名称",
-            "dataIndex": "qualityTypeName",
+            "dataIndex": "inspectionTypeName",
             "width": 120
         },
         {
@@ -265,11 +260,6 @@
         {
             "title": "质保书号",
             "dataIndex": "warrantyNumber",
-            "width": 120
-        },
-        {
-            "title": "质量证明书号",
-            "dataIndex": "qualityCertificateNumber",
             "width": 120
         },
         {

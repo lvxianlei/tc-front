@@ -7,17 +7,20 @@ import useRequest from '@ahooksjs/use-request'
 import { drawing, connectContract } from './drawing.json'
 import Edit from "./Edit"
 import Overview from "./Overview"
+import Subsidiary from './subsidiary'
 
 interface EditRefProps {
     onSubmit: (type: 1 | 2) => void
 }
 export default function Drawing(): React.ReactNode {
     const history = useHistory()
-    const location = useLocation<{ auditStatus?: number }> ();
+    const location = useLocation<{ auditStatus?: number }>();
     const [filterValue, setFilterValue] = useState<any>({
         ...history.location.state as object
     })
     const [visible, setVisible] = useState<boolean>(false)
+    const [subsidiary, setSubsidiary] = useState<boolean>(false)
+    const [saving, setSaving] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [connectVisible, setConnectVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
@@ -70,12 +73,15 @@ export default function Drawing(): React.ReactNode {
 
     const handleModalOk = (type: 1 | 2) => new Promise(async (resove, reject) => {
         try {
+            setSaving(true)
             await editRef.current?.onSubmit(type)
             message.success(`${type === 1 ? "保存" : "保存并提交"}成功...`)
+            setSaving(false)
             setVisible(false)
             resove(true)
             history.go(0)
         } catch (error) {
+            setSaving(false)
             reject(false)
         }
     })
@@ -128,8 +134,18 @@ export default function Drawing(): React.ReactNode {
                 setVisible(false)
             }}
             footer={[
-                <Button key="save" type="primary" ghost onClick={() => handleModalOk(1)}>保存</Button>,
-                <Button key="saveAndSubmit" type="primary" ghost onClick={() => handleModalOk(2)}>保存并发起</Button>
+                <Button
+                    key="save"
+                    type="primary"
+                    loading={saving}
+                    ghost
+                    onClick={() => handleModalOk(1)}>保存</Button>,
+                <Button
+                    key="saveAndSubmit"
+                    type="primary"
+                    loading={saving}
+                    ghost
+                    onClick={() => handleModalOk(2)}>保存并发起</Button>
             ]}>
             <Edit type={type} ref={editRef} id={detailedId} />
         </Modal>
@@ -145,6 +161,18 @@ export default function Drawing(): React.ReactNode {
             }}>
             <Overview id={detailedId} />
         </Modal>
+        <Modal
+            title="明细"
+            visible={subsidiary}
+            width={1101}
+            destroyOnClose
+            onCancel={() => setSubsidiary(false)}
+            footer={
+                <Button type="primary" key="ok" onClick={() => setSubsidiary(false)}>确定</Button>
+            }
+        >
+            <Subsidiary id={detailedId} />
+        </Modal>
         <Page
             path="/tower-market/drawingConfirmation"
             columns={[
@@ -153,7 +181,7 @@ export default function Drawing(): React.ReactNode {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 190,
+                    width: 220,
                     render: (_: undefined, record: any) => <>
                         <Button
                             type="link"
@@ -182,6 +210,15 @@ export default function Drawing(): React.ReactNode {
                                 setDetailedId(record.id)
                                 setConnectVisible(true)
                             }}>关联合同</Button>
+                        <Button
+                            type="link"
+                            size="small"
+                            style={{ padding: 2 }}
+                            onClick={() => {
+                                setDetailedId(record.id)
+                                setSubsidiary(true)
+                            }}>明细</Button>
+
                         <Popconfirm
                             title="确定删除此任务吗？"
                             disabled={![0, 3].includes(record.auditStatus)}

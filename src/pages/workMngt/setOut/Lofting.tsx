@@ -22,6 +22,7 @@ import StructureTextureEdit from './StructureTextureEdit';
 import MissCheck from './MissCheck';
 import AddLofting from './AddLofting';
 import useRequest from '@ahooksjs/use-request';
+import PeriodCopy from './PeriodCopy';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -814,6 +815,7 @@ export default function Lofting(): React.ReactNode {
     const [type, setType] = useState<'new' | 'edit'>('new');
     const [rowData, setRowData] = useState<any>([])
     const userId = AuthUtil.getUserInfo().user_id;
+    const [copyVisible, setCopyVisible] = useState<boolean>(false);
 
     const { data: segmentNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -833,7 +835,32 @@ export default function Lofting(): React.ReactNode {
         }
     }), {})
 
+    const handleCopyModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('段明细复制成功！');
+            setCopyVisible(false);
+            history.go(0);
+            resove(true);
+            editRef.current?.resetFields();
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return <DetailContent>
+        <Modal
+            destroyOnClose
+            visible={copyVisible}
+            title="段明细复制"
+            onOk={handleCopyModalOk}
+            className={styles.tryAssemble}
+            onCancel={() => {
+                setCopyVisible(false);
+                editRef.current?.resetFields();
+            }}>
+            <PeriodCopy id={params.id} segmentId={params.productSegmentId === 'all' ? '' : params.productSegmentId} ref={editRef} />
+        </Modal>
         <Modal
             destroyOnClose
             key='StructureTextureAbbreviations'
@@ -931,9 +958,15 @@ export default function Lofting(): React.ReactNode {
                     onConfirm={del}
                     okText="确认"
                     cancelText="取消"
+                    disabled={!isShow}
                 >
                     <Button type="primary" ghost disabled={!isShow}>删除</Button>
                 </Popconfirm>
+                <Button type="primary" ghost
+                    onClick={() => {
+                        setCopyVisible(true)
+                    }}
+                >段明细复制</Button>
                 <Upload
                     action={() => {
                         const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;

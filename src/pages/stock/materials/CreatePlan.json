@@ -275,5 +275,38 @@
                 }
             ]
         }
-    ]
+    ],
+    "addNewMaterial": {
+        "title": "物料档案",
+        "type": "popTable",
+        "path": "/tower-system/material",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "columns": [
+            {
+                "title": "编号",
+                "dataIndex": "materialCode"
+            },
+            {
+                "title": "类别",
+                "dataIndex": "materialTypeName"
+            },
+            {
+                "title": "类型",
+                "dataIndex": "materialCategoryName"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName",
+                "search": true
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec",
+                "search": true
+            }
+        ]
+    }
 }

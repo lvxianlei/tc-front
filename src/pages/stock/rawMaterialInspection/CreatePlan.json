@@ -2,7 +2,7 @@
     "baseInfoColumn": [
         {
             "title": "收货单号",
-            "dataIndex": "receiveNumber",
+            "dataIndex": "receiveId",
             "required": true,
             "type": "popTable",
             "width": 1101,
@@ -117,7 +117,7 @@
         },
         {
             "title": "炉批号",
-            "dataIndex": "furnaceBatch"
+            "dataIndex": "furnaceBatchNumber"
         },
         {
             "title": "质保书号",
@@ -125,7 +125,7 @@
         },
         {
             "title": "轧制批号",
-            "dataIndex": "weight"
+            "dataIndex": "rollingNumber"
         },
         {
             "title": "出厂日期",
@@ -150,7 +150,7 @@
         },
         {
             "title": "测量长度",
-            "dataIndex": "caliber"
+            "dataIndex": "gageLength"
         },
         {
             "title": "外观检验结果",

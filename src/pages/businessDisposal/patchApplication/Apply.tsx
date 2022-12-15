@@ -10,16 +10,15 @@ import { FixedType } from 'rc-table/lib/interface';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { productTypeOptions, supplyTypeOptions } from '../../../configuration/DictionaryOptions';
+import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import styles from './PatchApplication.module.less';
 import { useForm } from 'antd/es/form/Form';
 import { towerTypeColumns, patchColumns } from "./patchApplication.json"
 import AddPatch from './AddPatch';
-import { useHistory } from 'react-router-dom';
-import { format } from 'path';
-import AuthUtil from '../../../utils/AuthUtil';
+import { useHistory, useParams } from 'react-router-dom';
+import moment from 'moment';
 
 export interface EditRefProps {
     onSubmit: () => void
@@ -38,9 +37,43 @@ export default function Apply(): React.ReactNode {
     const [towerSelects, setTowerSelects] = useState([]);
     const history = useHistory();
     const [numbers, setNumbers] = useState<any>([]);
+    const params = useParams<{ id: string }>();
+    const [saveLoading, setSaveLoading] = useState<boolean>(false);
+
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const data = await RequestUtil.get<any>(`/tower-science/supplyEntry/${params.id}`);
+            const productCategoryIds = data?.supplyStructureVOList?.map((res: any) => res?.productCategoryId)
+            const ids: any = new Set([...productCategoryIds])
+            form.setFieldsValue({
+                ...data,
+                planDeliveryTime: moment(data?.planDeliveryTime),
+                productCategoryIds: [...ids]
+            })
+            planNumChange(data?.planNumber);
+            setPatchList(data?.supplyStructureVOList);
+            // 获取塔型列表
+            const results: any = await RequestUtil.get(`/tower-science/productCategory/list/${data?.planNumber}`);
+            const newTowerSelects: any[] = [];
+            results.forEach((res: any) => {
+                if ([...ids]?.indexOf(res?.productCategoryId) !== -1) {
+                    newTowerSelects.push(res)
+                }
+            })
+            setTowerList(newTowerSelects);
+            let newData: any = {}
+            data?.supplyStructureVOList.forEach(async (element: any, index: number) => {
+                newData[index] = await productNumbers(element?.productCategoryId)
+            });
+            setNumbers(newData)
+            resole(data)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: !(params.id) })
 
     // 获取当前操作人信息
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { data: deptData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-system/personalCenter`);
             deptChange(result.dept)
@@ -92,11 +125,6 @@ export default function Apply(): React.ReactNode {
     const planNumChange = async (e: any) => {
         const data: any = await RequestUtil.get(`/tower-science/productCategory/list/${e}`);
         setTowerSelects(data || [])
-        form.setFieldsValue({
-            productCategoryIds: []
-        })
-        setTowerList([]);
-        setPatchList([]);
     }
 
     const handleOk = () => new Promise(async (resove, reject) => {
@@ -107,7 +135,7 @@ export default function Apply(): React.ReactNode {
             setVisible(false)
             resove(true)
         } catch (error) {
-            reject(false)
+            reject(error)
         }
     })
 
@@ -130,7 +158,7 @@ export default function Apply(): React.ReactNode {
 
     const productNumbers = async (productCategoryId: string) => {
         const data: any = await RequestUtil.get(`/tower-science/product/lofting?productCategoryId=${productCategoryId}&size=10000`);
-        setNumbers(data?.records)
+        return data?.records
     }
 
     const delRow = (index: number) => {
@@ -141,6 +169,7 @@ export default function Apply(): React.ReactNode {
     const save = () => {
         if (form) {
             form.validateFields().then(res => {
+                setSaveLoading(true);
                 let value = form.getFieldsValue(true);
                 const tip: Boolean[] = [];
                 patchList.forEach((element: any) => {
@@ -156,9 +185,14 @@ export default function Apply(): React.ReactNode {
                         planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                         supplyStructureList: [...patchList]
                     }).then(res => {
+                        setSaveLoading(false);
                         history.goBack();
+                    }).catch(e => {
+                        console.log(e, 'error');
+                        setSaveLoading(false);
                     });
                 } else {
+                    setSaveLoading(false);
                     message.warning('补件数量不可为0！')
                 }
             })
@@ -168,6 +202,7 @@ export default function Apply(): React.ReactNode {
     const submit = () => {
         if (form) {
             form.validateFields().then(res => {
+                setSaveLoading(true);
                 if (patchList.length > 0) {
                     let value = form.getFieldsValue(true);
                     const tip: Boolean[] = [];
@@ -184,12 +219,18 @@ export default function Apply(): React.ReactNode {
                             planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
                             supplyStructureList: [...patchList]
                         }).then(res => {
+                            setSaveLoading(false);
                             history.goBack();
+                        }).catch(e => {
+                            console.log(e)
+                            setSaveLoading(false);
                         });
                     } else {
+                        setSaveLoading(false);
                         message.warning('补件数量不可为0！')
                     }
                 } else {
+                    setSaveLoading(false);
                     message.warning('补件数据不可为空！')
                 }
 
@@ -216,8 +257,8 @@ export default function Apply(): React.ReactNode {
             </Modal>
             <DetailContent operation={[
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
-                    <Button key="save" type="primary" onClick={save}>保存并关闭</Button>
-                    <Button key="saveC" type="primary" onClick={submit}>保存并发起</Button>
+                    <Button key="save" type="primary" loading={saveLoading} onClick={save}>保存并关闭</Button>
+                    <Button key="saveC" type="primary" loading={saveLoading} onClick={submit}>保存并发起</Button>
                     <Button key="cancel" type="ghost" onClick={() => history.goBack()}>关闭</Button>
                 </Space>
             ]}>
@@ -255,7 +296,7 @@ export default function Apply(): React.ReactNode {
                             </Form.Item>
                         </Descriptions.Item>
                         <Descriptions.Item label="申请部门">
-                            <Form.Item name="applyUserDept" initialValue={data?.dept} rules={[
+                            <Form.Item name="applyUserDept" initialValue={deptData?.dept} rules={[
                                 {
                                     "required": true,
                                     "message": "请选择申请部门"
@@ -299,7 +340,14 @@ export default function Apply(): React.ReactNode {
                                     filterOption={(input, option) =>
                                         (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                     }
-                                    onChange={(e) => planNumChange(e)}>
+                                    onChange={(e) => {
+                                        planNumChange(e);
+                                        form.setFieldsValue({
+                                            productCategoryIds: []
+                                        })
+                                        setTowerList([]);
+                                        setPatchList([]);
+                                    }}>
                                     {planNums && planNums?.map((item: any, index: number) => {
                                         return <Select.Option key={index} value={item}>{item}</Select.Option>
                                     })}
@@ -393,7 +441,6 @@ export default function Apply(): React.ReactNode {
                                                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
                                                         <Select placeholder="请选择杆塔号" size='small' key={index} style={{ width: "150px" }} defaultValue={record.productNumber} onChange={
                                                             (e) => {
-
                                                                 const newList = (patchList || [])?.map((res: any, ind: number) => {
                                                                     if (ind === index) {
                                                                         return {
@@ -407,10 +454,12 @@ export default function Apply(): React.ReactNode {
                                                                 setPatchList([...newList])
                                                             }
                                                         }
-                                                            onDropdownVisibleChange={(open) => {
-                                                                productNumbers(record?.productCategoryId)
+                                                            onDropdownVisibleChange={async (open) => {
+                                                                let newData: any = {}
+                                                                newData[index] = await productNumbers(record?.productCategoryId)
+                                                                setNumbers(newData)
                                                             }}>
-                                                            {(numbers || [])?.map((item: any) => {
+                                                            {numbers && numbers[index]?.map((item: any) => {
                                                                 return <Select.Option key={item.id} value={item.productNumber}>{item.productNumber}</Select.Option>
                                                             })}
                                                         </Select>

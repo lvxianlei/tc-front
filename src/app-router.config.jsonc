@@ -614,7 +614,21 @@
       "authority": "tc_erp_sc_project_view_bid_base_edit"
     },
     { // 项目管理框架协议编辑
-      "name": "框架协议编辑",
+      "name": "新增框架协议",
+      "path": "/project/management/new/frameAgreement/:id",
+      "module": "./pages/project/frameAgreement/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_frame_edit"
+    },
+    { // 项目管理框架协议编辑
+      "name": "编辑框架协议",
+      "path": "/project/management/detail/frameAgreement/detail/:id",
+      "module": "./pages/project/frameAgreement/Overview",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_frame_edit"
+    },
+    { // 项目管理框架协议编辑
+      "name": "编辑框架协议",
       "path": "/project/management/edit/frameAgreement/:id",
       "module": "./pages/project/frameAgreement/Edit",
       "exact": true,
@@ -780,14 +794,14 @@
       "path": "/bulletin/contract",
       "module": "./pages/cockpit/contract/index",
       "exact": true,
-      "authority": "tc_erp_sw_cockpit_contract"
+      "authority": "tc_erp_sw_cockpit_contract_list"
     },
     { // 驾驶舱-合同看板-明细
       "name": "明细",
       "path": "/bulletin/contract/overView/:id",
       "module": "./pages/cockpit/contract/Overview",
       "exact": true,
-      "authority": "sw_cockpit_contract_kanban_details"
+      "authority": "tc_erp_sw_cockpit_contract_detail"
     },
     { //询价任务
       "name": "工程报价任务",
@@ -826,7 +840,7 @@
     },
     { //合同管理-询比价-询价信息
       "name": "询价信息",
-      "path": "/contract-mngt/enquiryCompare/enquiry/:id",
+      "path": "/contract-mngt/enquiryCompare/enquiry/:id/:approvalStatus",
       "module": "./pages/contract-mngt/enquiryCompare/Overview",
       "exact": true,
       "authority": "tc_erp_sw_contract_comparison_details"
@@ -949,6 +963,13 @@
       "module": "./pages/stock/angleSteel/index",
       "exact": true,
       "authority": "tc_erp_sw_config_list_angle"
+    },
+    { // 配置管理-质检策略配置
+      "name": "质检策略配置",
+      "path": "/config/configList/qualityInspection",
+      "module": "./pages/stock/qualityInspection/QualityInspection",
+      "exact": true,
+      "authority": "tc_erp_sw_config_list_else"
     },
     { // 配置管理-其他参数配置
       "name": "其他参数配置",
@@ -1127,7 +1148,7 @@
     },
     { // 工作管理-计划列表-采购清单
       "name": "采购清单",
-      "path": "/ingredients/planList/purchaseList/:id/:purchaseType",
+      "path": "/ingredients/planList/purchaseList/:id/:purchaseType/:status",
       "module": "./pages/workMngt/planList/Overview",
       "exact": true,
       "authority": "tc_erp_sw_work_plan_detail"
@@ -1246,7 +1267,7 @@
     },
     { // 工作管理-样板列表
       "name": "样板列表-详情",
-      "path": "/workMngt/templateList/detail/:id/:productCategoryId",
+      "path": "/workMngt/templateList/detail/:id/:productCategoryId/:uploadDrawType",
       "module": "./pages/workMngt/templateList/detail",
       "exact": true,
       "authority": "tc_erp_rd_work_template_select"
@@ -1330,7 +1351,7 @@
     },
     { //辅材采购管理-询比价-询价信息
       "name": "询价信息",
-      "path": "/buyAuxiliaryMaterial/enquiryCompare/:id",
+      "path": "/buyAuxiliaryMaterial/enquiryCompare/:id/:approvalStatus",
       "module": "./pages/auxiliaryMaterialEnquiryCompare/enquiryCompareInformation",
       "exact": true,
       "authority": "tc_erp_sw_contract_comparison_details"
@@ -1367,6 +1388,13 @@
       "name": "工作目录",
       "path": "/workMngt/setOutList/towerInformation/:id",
       "module": "./pages/workMngt/setOut/TowerInformation",
+      "exact": true,
+      "authority": "tc_erp_rd_work_loft_tower"
+    },
+    { // 工作管理-工作目录-放样提料比对
+      "name": "放样提料比对",
+      "path": "/workMngt/setOutList/towerInformation/:id/comparison",
+      "module": "./pages/workMngt/setOut/Comparison",
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower"
     },
@@ -2034,7 +2062,7 @@
     },
     { // 计划排产-分配车间
       "name": "手动分配生产单元",
-      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory",
+      "path": "/planProd/publishWorkshop/manual/:id/:issuedNumber/:productCategory/:status",
       "module": "./pages/planBaseSetting/publishWorkshop/manualDistribute",
       "exact": true,
       "authority": "tc_erp_aps_plan_unit_distribution_manual"
@@ -2101,6 +2129,13 @@
       "module": "./pages/planBaseSetting/dataStatistics/index",
       "exact": true,
       "authority": "tc_erp_aps_board_statistics_list"
+    },
+    { // 计划排产-数据追踪统计
+    "name": "数据追踪统计",
+    "path": "/planPanal/reportStatistics",
+    "module": "./pages/planBaseSetting/reportStatistics/index",
+    "exact": true,
+    "authority": "tc_erp_aps_track_statistics_list"
     },
     { // 计划排产-试装计划
       "name": "试装计划",
@@ -2908,6 +2943,13 @@
       "exact": true,
       "authority": ""
     },
+    { // RD-系统设置-杂项条目配置
+      "name": "杂项条目配置",
+      "path": "/baseSetting/miscellaneousItems",
+      "module": "./pages/baseSetting/MiscellaneousItems",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // RD-定额配置
       "name": "定额配置",
       "path": "/baseSetting/quotaConfig",
@@ -3113,7 +3155,7 @@
     },
     { // RD-放样过程管理-补件下达列表-补件下达
       "name": "补件下达",
-      "path": "/workMngt/patchIssuedList/patchIssued",
+      "path": "/workMngt/patchIssuedList/patchIssued/:id/:supplyNumber",
       "module": "./pages/workMngt/patchIssued/PatchIssued",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
@@ -3142,6 +3184,13 @@
     { // RD-业务处置管理-补件申请-申请
       "name": "申请",
       "path": "/businessDisposal/patchApplication/apply",
+      "module": "./pages/businessDisposal/patchApplication/Apply",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-补件申请-编辑
+      "name": "申请",
+      "path": "/businessDisposal/patchApplication/edit/:id",
       "module": "./pages/businessDisposal/patchApplication/Apply",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
@@ -3199,6 +3248,27 @@
       "name": "详情",
       "path": "/businessDisposal/unqualifiedDisposal/detail/:id",
       "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-代料
+      "name": "代料",
+      "path": "/businessDisposal/generationOfMaterial",
+      "module": "./pages/businessDisposal/generationOfMaterial/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-资料管理-工程资料管理
+      "name": "工程资料管理",
+      "path": "/dataMngt/EngineeringData",
+      "module": "./pages/dataMngt/engineeringData/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-资料管理-资料存档管理
+      "name": "资料存档管理",
+      "path": "/dataMngt/dataArchiving",
+      "module": "./pages/dataMngt/dataArchiving/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
@@ -3334,6 +3404,20 @@
       "module": "./pages/system-mngt/dataDoor/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-明细变更申请
+      "name": "明细变更申请",
+      "path": "/businessDisposal/requestForChange",
+      "module": "./pages/businessDisposal/requestForChange/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 库存管理-原材料调拨单
+      "name": "原材料调拨单",
+      "path": "/stock/rawMaterialAllocation",
+      "module": "./pages/stock/rawMaterialAllocation/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_list"
     }
   ]
 }

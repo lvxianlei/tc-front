@@ -1,6 +1,11 @@
 {
   "comparison": [
     {
+      "title": "审批状态",
+      "dataIndex": "approvalName",
+      "width": 100
+    },
+    {
       "title": "询比价编号",
       "dataIndex": "comparisonPriceNumber",
       "width": 200
@@ -180,12 +185,24 @@
       "type": "string"
     },
     {
-      "title": "计划状态",
-      "dataIndex": "purchasePlanStatusName"
+      "title": "品名",
+      "dataIndex": "materialName"
+    },
+    {
+      "title": "规格",
+      "dataIndex": "structureSpec"
+    },
+    {
+      "title": "数量",
+      "dataIndex": "planPurchaseNum"
     },
     {
       "title": "创建日期",
       "dataIndex": "createTime"
+    },
+    {
+      "title": "制单人",
+      "dataIndex": "createUserName"
     }
   ],
   "addMaterial": {

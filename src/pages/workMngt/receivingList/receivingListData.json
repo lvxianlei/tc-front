@@ -11,6 +11,11 @@
             "width": 180
         },
         {
+            "title": "送检状态",
+            "dataIndex": "isInspectName",
+            "width": 80
+        },
+        {
             "title": "状态",
             "dataIndex": "receiveStatusName",
             "width": 60
@@ -52,12 +57,12 @@
         },
         {
             "title": "运费含税金额合计（元）",
-            "dataIndex": "transportPriceCount",
+            "dataIndex": "transportTaxPriceCount",
             "width": 150
         },
         {
             "title": "装卸费含税金额合计（元）",
-            "dataIndex": "unloadPriceCount",
+            "dataIndex": "unloadTaxPriceCount",
             "width": 160
         },
         {
@@ -271,6 +276,74 @@
             "dataIndex": "totalPonderationWeight",
             "type": "number",
             "precision": 5
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "type": "textarea"
+        }
+    ],
+    "BasicInformationB": [
+        {
+            "title": "收货单号",
+            "dataIndex": "receiveNumber"
+        },
+        {
+            "title": "供应商",
+            "dataIndex": "supplierName"
+        },
+        {
+            "title": "联系人",
+            "dataIndex": "contactsUser"
+        },
+        {
+            "title": "联系电话",
+            "dataIndex": "contactsPhone"
+        },
+        {
+            "title": "到货时间",
+            "dataIndex": "receiveTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "车辆牌照",
+            "dataIndex": "carNumber"
+        },
+        {
+            "title": "卸车方式",
+            "dataIndex": "unloadModeName"
+        },
+        {
+            "title": "卸车人员",
+            "dataIndex": "unloadUsersName"
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringMode",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "理重",
+                    "value": 1
+                },
+                {
+                    "label": "过磅",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "结算方式",
+            "dataIndex": "settlementModeName"
+        },
+        {
+            "title": "到货去向",
+            "dataIndex": "warehouseName"
+        },
+        {
+            "title": "过磅重量(吨)",
+            "dataIndex": "totalPonderationWeight"
         },
         {
             "title": "备注",
@@ -608,6 +681,217 @@
         {
             "title": "外观检验结果",
             "dataIndex": "appearance",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "合格",
+                    "value": 1
+                },
+                {
+                    "label": "不合格",
+                    "value": 2
+                }
+            ]
+        }
+    ],
+    "editCargoDetailsB": [
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
+            "type": "string",
+            "required": true,
+            "disabled": true,
+            "maxLength":50
+        },
+        {
+            "title": "合同编号",
+            "dataIndex": "materialContractNumber",
+            "type": "string",
+            "fixed":true,
+            "disabled": true,
+            "width":150
+        },
+        {
+            "title": "理算单重",
+            "dataIndex": "weight",
+            "hidden": true
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "type": "string",
+            "disabled": true,
+            "fixed":true,
+            "width":100
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandard",
+            "type": "select",
+            "fixed":true,
+            "disabled": true,
+            "width":120
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "select",
+            "fixed":true,
+            "disabled": true,
+            "width":100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "disabled": true,
+            "fixed":true,
+            "width":100
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "disabled": true,
+            "type": "number",
+            "width":80
+        },
+        {
+            "title": "宽度(mm)",
+            "dataIndex": "width",
+            "disabled": true,
+            "type": "number",
+            "width":80
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "type": "number",
+            "disabled": true,
+            "width":100
+        },
+        
+        {
+            "title": "理算重量（吨）",
+            "dataIndex": "totalWeight",
+            "type": "number",
+            "precision": 5,
+            "disabled": true,
+            "width":100
+        },
+        {
+            "title": "结算重量（吨）",
+            "dataIndex": "balanceTotalWeight",
+            "type": "number",
+            "precision": 5,
+            "max": 99999.99999,
+            "disabled": true,
+            "required": true,
+            "width":120
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "maxLength": 30,
+            "required": true
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "required": true,
+            "maxLength": 30
+        },
+        {
+            "title": "轧制批号",
+            "dataIndex": "rollingNumber",
+            "disabled": true,
+            "maxLength": 30
+        },
+        {
+            "title": "计量方式",
+            "dataIndex": "meteringModeName",
+            "disabled": true,
+            "width":100
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "unTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税运费（元）",
+            "dataIndex": "totalTransportTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税运费（元）",
+            "dataIndex": "totalTransportPrice",
+            "disabled": true
+        },
+        {
+            "title": "含税装卸费（元）",
+            "dataIndex": "totalUnloadTaxPrice",
+            "disabled": true
+        },
+        {
+            "title": "不含税装卸费（元）",
+            "dataIndex": "totalUnloadPrice",
+            "disabled": true
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "disabled": true,
+            "maxLength": 30
+        },
+        {
+            "title": "出厂日期",
+            "dataIndex": "manufactureTime",
+            "disabled": true,
+            "type": "date",
+            "format":"YYYY-MM-DD"
+        },
+        {
+            "title": "肢宽",
+            "dataIndex": "limbWidth",
+            "disabled": true,
+            "maxLength": 50
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness",
+            "disabled": true,
+            "maxLength": 50
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber",
+            "disabled": true,
+            "maxLength": 50
+        },
+        {
+            "title": "测量长度",
+            "disabled": true,
+            "dataIndex": "gageLength"
+        },
+        {
+            "title": "外观检验结果",
+            "dataIndex": "appearance",
+            "disabled": true,
             "type": "select",
             "enum": [
                 {

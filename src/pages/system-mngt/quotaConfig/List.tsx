@@ -166,7 +166,7 @@ export default function List(): React.ReactNode {
         },
         {
             key: 'boltCheckProofread',
-            title: '螺栓清点校核',
+            title: '螺栓校核套用',
             width: 150,
             dataIndex: 'boltCheckProofread'
         },

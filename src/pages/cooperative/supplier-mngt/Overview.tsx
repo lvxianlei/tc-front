@@ -30,11 +30,6 @@ export default function Overview({ id }: OverviewProps) {
                         type: "select",
                         enum: supplierTypeEnum
                     })
-                case "supplyProducts":
-                    return ({
-                        ...item,
-                        dataIndex: "supplyProductsName"
-                    })
                 case "qualityAssurance":
                     return ({
                         ...item,
@@ -46,18 +41,7 @@ export default function Overview({ id }: OverviewProps) {
             }
         })} dataSource={data || {}} />
         <DetailTitle title="供应商账户信息" />
-        <BaseInfo columns={supplierFormHead.map((item: any) => {
-            switch (item.dataIndex) {
-                case "bankDepositId":
-                    return ({
-                        ...item,
-                        type: "select",
-                        enum: bankTypeOptionsEnum
-                    })
-                default:
-                    return item
-            }
-        })} dataSource={data || {}} />
+        <BaseInfo columns={supplierFormHead} dataSource={data || {}} />
         <OperationRecord serviceId={id} serviceName="tower-supply" />
     </Spin>
 }

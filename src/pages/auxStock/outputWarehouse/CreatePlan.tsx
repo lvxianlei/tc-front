@@ -99,6 +99,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             await saveRun({
                 outStockDetailDTOList: materialList,
                 ...baseInfo,
+                pickingTime: baseInfo.pickingTime+' 00:00:00',
                 pickingUserId: baseInfo?.pickingUserId.id
             });
             resove(true)
@@ -199,7 +200,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 form={addCollectionForm}
                 edit
                 dataSource={data || {
-                    pickingTime: moment(new Date()).format("YYYY-MM-DD")
+                    pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
                 }}
                 col={2}
                 classStyle="baseInfo"

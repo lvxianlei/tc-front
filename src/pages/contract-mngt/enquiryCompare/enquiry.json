@@ -1,6 +1,11 @@
 {
     "comparison": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "width": 100
+        },
+        {
             "title": "询比价编号",
             "dataIndex": "comparisonPriceNumber",
             "width": 200
@@ -224,84 +229,13 @@
             "type": "number"
         },
         {
-            "title": "重量（吨）",
-            "dataIndex": "weight",
+            "title": "总重（吨）",
+            "dataIndex": "totalWeight",
             "type": "number"
         },
         {
             "title": "含税报价（单价）",
             "dataIndex": "taxOffer"
-        }
-    ],
-    "choosePlanList": [
-        {
-            "title": "采购计划编号",
-            "dataIndex": "purchasePlanNumber",
-            "width": 150,
-            "type": "string"
-        },
-        {
-            "title": "采购类型",
-            "dataIndex": "purchaseTypeName",
-            "width": 80
-        },
-        {
-            "title": "申购日期",
-            "dataIndex": "createTime",
-            "width": 100,
-            "type": "date",
-            "format":"YYYY-MM-DD"
-        },
-        {
-            "title": "物料编码",
-            "dataIndex": "materialCode",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "品名",
-            "dataIndex": "materialName",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandardName",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "width": 100,
-            "type": "string"
-        },
-        {
-            "title": "宽度",
-            "dataIndex": "width",
-            "width": 100
-        },
-        {
-            "title": "数量",
-            "dataIndex": "num",
-            "width": 100
-        },
-        {
-            "title": "总重量（吨）",
-            "dataIndex": "totalWeight",
-            "width": 100
         }
     ],
     "addMaterial": {
@@ -347,6 +281,122 @@
             {
                 "title": "宽度",
                 "dataIndex": "width"
+            }
+        ]
+    },
+    "choosePlanList": {
+        "title": "计划",
+        "type": "popTable",
+        "path": "/tower-supply/materialPurchasePlan/infoList",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "rowKey":"purchasePlanDetailId",
+        "search": [
+            {
+                "title": "模糊查询",
+                "dataIndex": "fuzzyQuery",
+                "placeholder": "输入采购计划编号/物料编码进行查询"
+            },
+            {
+                "title": "申购日期",
+                "dataIndex": "createTime",
+                "type":"date"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "structureTexture",
+                "type": "select"
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialStandard",
+                "type": "select"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "采购类型",
+                "dataIndex": "purchaseType",
+                "type": "select"
+            }
+        ],
+        "columns": [
+            {
+                "title": "采购计划编号",
+                "dataIndex": "purchasePlanNumber",
+                "width": 150,
+                "type": "string"
+            },
+            {
+                "title": "采购类型",
+                "dataIndex": "purchaseTypeName",
+                "width": 80
+            },
+            {
+                "title": "申购日期",
+                "dataIndex": "createTime",
+                "width": 100,
+                "type": "date",
+                "format":"YYYY-MM-DD"
+            },
+            {
+                "title": "物料编码",
+                "dataIndex": "materialCode",
+                "width": 100,
+                "type": "string"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName",
+                "width": 100,
+                "type": "string"
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialStandardName",
+                "width": 100,
+                "type": "string"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "structureTexture",
+                "width": 100,
+                "type": "string"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec",
+                "width": 100,
+                "type": "string"
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length",
+                "width": 100,
+                "type": "string"
+            },
+            {
+                "title": "宽度",
+                "dataIndex": "width",
+                "width": 100
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num",
+                "width": 100
+            },
+            {
+                "title": "总重量（吨）",
+                "dataIndex": "totalWeight",
+                "width": 100
             }
         ]
     },

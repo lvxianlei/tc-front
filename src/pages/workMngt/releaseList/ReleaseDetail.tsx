@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, message, Modal, Select, Space } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import { Page } from '../../common';
@@ -18,12 +18,23 @@ export default function ReleaseList(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+    const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
         const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
-        console.log(value)
         setMaterialNames(value)
+        specRun();
+        textureRun();
+        craftRun();
         resole(value);
+    }))
+
+    const { data, run: getCount } = useRequest<any>((filters: any) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get(`/tower-science/loftingBatch/batchDetailCount`, {
+            ...filters,
+            id: params?.id,
+            productCategoryId: params?.productCategoryId
+        });
+        resole(result);
     }))
 
     const { data: specDatas, run: specRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
@@ -203,11 +214,162 @@ export default function ReleaseList(): React.ReactNode {
             render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
                 <span>{_ === -1 ? undefined : _}</span>
             )
+        },
+        {
+            "key": "electricWelding",
+            "title": "电焊",
+            "dataIndex": "electricWelding",
+            "width": 100
+        },
+        {
+            "key": "groove",
+            "title": "坡口",
+            "dataIndex": "groove",
+            "width": 100
+        },
+        {
+            "key": "chamfer",
+            "title": "切角",
+            "dataIndex": "chamfer",
+            "width": 100
+        },
+        {
+            "key": "openCloseAngle",
+            "title": "开合角",
+            "dataIndex": "openCloseAngle",
+            "width": 100
+        },
+        {
+            "key": "bend",
+            "title": "火曲",
+            "dataIndex": "bend",
+            "width": 100
+        },
+        {
+            "key": "shovelBack",
+            "title": "铲背",
+            "dataIndex": "shovelBack",
+            "width": 100
+        },
+        {
+            "key": "rootClear",
+            "title": "清根",
+            "dataIndex": "rootClear",
+            "width": 100
+        },
+        {
+            "key": "squash",
+            "title": "打扁",
+            "dataIndex": "squash",
+            "width": 100
+        },
+        {
+            "key": "specialCode",
+            "title": "特殊件号",
+            "dataIndex": "specialCode",
+            "width": 100
+        },
+        {
+            "key": "suppress",
+            "title": "压制",
+            "dataIndex": "suppress",
+            "width": 100
+        },
+        {
+            "key": "grooveMeters",
+            "title": "坡口米数（米）",
+            "dataIndex": "grooveMeters",
+            "width": 100
+        },
+        {
+            "key": "spellNumber",
+            "title": "拼数",
+            "dataIndex": "spellNumber",
+            "width": 100
+        },
+        {
+            "key": "slottedForm",
+            "title": "开槽形式",
+            "dataIndex": "slottedForm",
+            "width": 100
+        },
+        {
+            "key": "intersectingLine",
+            "title": "相贯线",
+            "dataIndex": "intersectingLine",
+            "width": 100
+        },
+        {
+            "key": "type",
+            "title": "零件类型",
+            "dataIndex": "type",
+            "width": 100
+        },
+        {
+            "key": "arcContaining",
+            "title": "含弧",
+            "dataIndex": "arcContaining",
+            "width": 100
+        },
+        {
+            "key": "perforate",
+            "title": "钻孔",
+            "dataIndex": "perforate",
+            "width": 100
+        },
+        {
+            "key": "perforateNumber",
+            "title": "钻孔孔径孔数",
+            "dataIndex": "perforateNumber",
+            "width": 100
+        },
+        {
+            "key": "withReaming",
+            "title": "扩孔",
+            "dataIndex": "withReaming",
+            "width": 100
+        },
+        {
+            "key": "reamingNumber",
+            "title": "扩孔孔径孔数",
+            "dataIndex": "reamingNumber",
+            "width": 100
+        },
+        {
+            "key": "gasCutting",
+            "title": "气割孔（0/1）",
+            "dataIndex": "gasCutting",
+            "width": 100
+        },
+        {
+            "key": "gasCuttingNumber",
+            "title": "气割孔孔径孔数",
+            "dataIndex": "gasCuttingNumber",
+            "width": 100
+        },
+        {
+            "key": "sides",
+            "title": "边数",
+            "dataIndex": "sides",
+            "width": 100
+        },
+        {
+            "key": "perimeter",
+            "title": "周长",
+            "dataIndex": "perimeter",
+            "width": 100
+        },
+        {
+            "key": "surfaceArea",
+            "title": "表面积(m²)",
+            "dataIndex": "surfaceArea",
+            "width": 100
         }
     ]
 
     const onFilterSubmit = (value: any) => {
         setFilterValue(value)
+        getCount(value)
         return value
     }
 
@@ -260,7 +422,6 @@ export default function ReleaseList(): React.ReactNode {
                     ...form?.getFieldsValue(true),
                     batchIssuedId: params?.id
                 }).then(res => {
-                    console.log(res)
                     fetch(`http://127.0.0.1:2001/print`, {
                         mode: 'cors',
                         method: 'post',
@@ -273,24 +434,21 @@ export default function ReleaseList(): React.ReactNode {
                         resolve(true)
                         return res?.json();
                     }).then((res) => {
-                        res?.Msg=== '' ? message.success('打印成功') : message.success(res?.Msg)
+                        res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
-                        console.log(e)
                         reject(false)
                     })
 
                 }).catch(e => {
                     setConfirmLoading(false)
-                    console.log(e)
                     reject(false)
                 })
             })
 
         } catch (error) {
-            console.log(error)
-            reject(false)
+            reject(error)
         }
     })
 
@@ -305,7 +463,7 @@ export default function ReleaseList(): React.ReactNode {
             }}
             confirmLoading={confirmLoading}
         >
-            <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
+            <Form form={pageForm} layout='horizontal' labelCol={{ span: 6 }}>
                 <Form.Item label='打印机' name='printerName' rules={[{
                     required: true,
                     message: '请选择打印机'
@@ -353,6 +511,12 @@ export default function ReleaseList(): React.ReactNode {
                             </Select.Option>
                         })}
                     </Select>
+                </Form.Item>
+                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={1}>
+                    <Radio.Group>
+                        <Radio value={1}>是</Radio>
+                        <Radio value={0}>否</Radio>
+                    </Radio.Group>
                 </Form.Item>
                 <Form.Item>
                     <Button htmlType="reset">重置</Button>
@@ -369,7 +533,7 @@ export default function ReleaseList(): React.ReactNode {
             }}
             confirmLoading={confirmLoading}
         >
-            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
+            <Form form={form} layout='horizontal' labelCol={{ span: 6 }}>
                 <Form.Item label='打印机' name='printerName' rules={[{
                     required: true,
                     message: '请选择打印机'
@@ -418,6 +582,12 @@ export default function ReleaseList(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
+                <Form.Item label='钢板件号汇总打印' name='summaryType' initialValue={1}>
+                    <Radio.Group>
+                        <Radio value={1}>是</Radio>
+                        <Radio value={0}>否</Radio>
+                    </Radio.Group>
+                </Form.Item>
                 <Form.Item>
                     <Button htmlType="reset">重置</Button>
                 </Form.Item>
@@ -432,6 +602,13 @@ export default function ReleaseList(): React.ReactNode {
             requestData={{ productCategoryId: params.productCategoryId, id: params.id }}
             exportPath="/tower-science/loftingBatch/batchDetail"
             extraOperation={<Space>
+                <Row gutter={12}>
+                    <Col>重量：<span>{data?.totalWeight}</span></Col>
+                    <Col>件号数：<span>{data?.totalNumberCount}</span></Col>
+                    <Col>件数：<span>{data?.totalCount}</span></Col>
+                    <Col>孔数：<span>{data?.totalHolesNum}</span></Col>
+                    <Col>切角数量：<span>{data?.totalChamfer}</span></Col>
+                </Row>
                 <Button type="primary" onClick={() => {
                     specRun();
                     craftRun();
@@ -474,10 +651,46 @@ export default function ReleaseList(): React.ReactNode {
                     </Select>
                 },
                 {
+                    name: 'structureSpec',
+                    label: '规格',
+                    children: <Select placeholder="请选择规格" allowClear defaultValue={''} >
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        {specDatas && specDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                },
+                {
+                    name: 'structureTexture',
+                    label: '材质',
+                    children: <Select style={{ width: "100px" }} defaultValue={''}>
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        {textureDatas && textureDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                },
+                {
+                    name: 'craftName',
+                    label: '工艺',
+                    children: <Select style={{ width: "100px" }} defaultValue={''}>
+                        <Select.Option value={''} key={''}>全部</Select.Option>
+                        {craftDatas && craftDatas.map((item, index) => {
+                            return <Select.Option key={index} value={item}>
+                                {item}
+                            </Select.Option>
+                        })}
+                    </Select>
+                },
+                {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input placeholder="" maxLength={200} />
-                },
+                }
             ]}
         />
     </>

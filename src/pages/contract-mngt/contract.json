@@ -1,6 +1,10 @@
 {
     "contract": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName"
+        },
+        {
             "title": "合同编号",
             "dataIndex": "contractNumber",
             "width": 200
@@ -8,6 +12,10 @@
         {
             "title": "关联采购计划",
             "dataIndex": "purchasePlanNumber"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
         },
         {
             "title": "合同状态",
@@ -38,7 +46,7 @@
             "dataIndex": "totalTaxAmount"
         },
         {
-            "title": "不含税单价（元）合计",
+            "title": "不含税金额（元）合计",
             "dataIndex": "totalAmount"
         },
         {
@@ -371,16 +379,8 @@
             "disabled": true
         },
         {
-            "title": "关联采购计划",
-            "dataIndex": "purchasePlanNumber"
-        },
-        {
             "title": "供应商",
             "dataIndex": "supplierName"
-        },
-        {
-            "title": "询比价名称",
-            "dataIndex": "comparisonPriceNumber"
         },
         {
             "title": "经办人",

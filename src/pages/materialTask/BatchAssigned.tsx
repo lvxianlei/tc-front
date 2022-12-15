@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react"
-import { Spin, Form, Select, DatePicker, Input, TreeSelect, Row, Col } from 'antd'
+import { Spin, Form, Select, DatePicker, Input, TreeSelect, Row, Col, Checkbox } from 'antd'
 import { CommonTable, DetailTitle } from '../common'
 import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
@@ -14,6 +14,7 @@ import { TreeNode } from "antd/lib/tree-select";
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import moment from "moment"
 import { IAssignedList } from "./IMaterialTask"
+import SelectUser from "../common/SelectUser"
 
 export interface EditProps {
     id: string;
@@ -26,37 +27,27 @@ export interface EditRefProps {
 
 export default forwardRef(function Edit({ id }: EditProps, ref) {
     const [form] = Form.useForm();
-    const [userList, setUserList] = useState<any>();
     const [detailData, setDetailData] = useState<any>();
 
     const { loading, data } = useRequest<IAssignedList[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: IAssignedList[] = await RequestUtil.get<IAssignedList[]>(`/tower-science/materialProductCategory/list?taskIds=${id}`)
             let newResult = result.map((res: IAssignedList, index: number) => {
-                res?.materialLeaderDept && deptChange(res?.materialLeaderDept, index, 'detail')
                 return {
                     ...res,
                     materialDeliverTime: res.materialDeliverTime && moment(res.materialDeliverTime),
-                    materialLeader: res.materialLeader ? res.materialLeader : index === 0 ? null : 0,
-                    priority: res.priority ? res.priority : index === 0 ? null : 0
+                    materialLeader: res.materialLeader ? res.materialLeader : index === 0 ? null : '0',
+                    materialLeaderName: res.materialLeader ? res.materialLeaderName : index === 0 ? null : '同上',
+                    priority: res.priority ? res.priority : index === 0 ? null : '0'
                 }
             })
             form.setFieldsValue({ assignedList: [...newResult || []] });
-            setDetailData(result);
+            setDetailData(newResult);
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), { refreshDeps: [id] })
-
-    const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const departmentData: any = await RequestUtil.get(`/tower-system/department`);
-            resole(departmentData)
-        } catch (error) {
-            reject(error)
-        }
-    }))
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
@@ -74,8 +65,8 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             const value = assignedList.map((res: any, index: number) => {
                 return {
                     ...res,
-                    materialLeader: res.materialLeader === 0 ? assignedList[assignedList.findIndex((item: any) => item.materialLeader === 0) - 1].materialLeader : res.materialLeader,
-                    priority: res.priority === 0 ? assignedList[assignedList.findIndex((item: any) => item.priority === 0) - 1].priority : res.priority,
+                    materialLeader: res.materialLeader === '0' ? assignedList[assignedList.findIndex((item: any) => item.materialLeader === '0') - 1].materialLeader : res.materialLeader,
+                    priority: res.priority === '0' ? assignedList[assignedList.findIndex((item: any) => item.priority === '0') - 1].priority : res.priority,
                     materialDeliverTime: res.materialDeliverTime.format('YYYY-MM-DD')
                 }
             })
@@ -88,44 +79,6 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
 
     const resetFields = () => {
         form.resetFields();
-    }
-
-    const renderTreeNodes = (data: any) =>
-        data.map((item: any) => {
-            if (item.children) {
-                return (
-                    <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
-                        {renderTreeNodes(item.children)}
-                    </TreeNode>
-                );
-            }
-            return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
-        });
-
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
-
-    const deptChange = async (value: any, index: number, type: 'change' | 'detail') => {
-        const userData: any = await RequestUtil.get(`/tower-system/employee?dept=${value}&size=1000`);
-        setUserList({ ...userList, [index]: userData.records });
-        if (type === 'change') {
-            form.getFieldsValue(true).assignedList[index] = {
-                ...form.getFieldsValue(true).assignedList[index],
-                materialLeader: ''
-            }
-        }
-        form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] })
-        setDetailData([...form.getFieldsValue(true).assignedList]);
     }
 
     const tableColumns = [
@@ -147,33 +100,60 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
             dataIndex: 'materialLeader',
             width: 220,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Row>
-                    <Col span={14}>
-                        <Form.Item name={["assignedList", index, "materialLeaderDept"]}>
-                            <TreeSelect size="small" placeholder="请选择" onChange={(e) => deptChange(e, index, 'change')}>
-                                {renderTreeNodes(wrapRole2DataNode(department))}
-                            </TreeSelect>
+                <Row gutter={12}>
+                    <Col span={18}>
+                        <Form.Item name={["assignedList", index, "materialLeaderName"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_}>
+                            <Input size="small" disabled suffix={
+                                <SelectUser key={'materialLeader'} selectedKey={[form?.getFieldsValue(true)?.assignedList[index].materialLeader]} onSelect={(selectedRows: Record<string, any>) => {
+                                    const values = form.getFieldsValue(true)?.assignedList
+                                    values[index] = {
+                                        ...values[index],
+                                        materialLeader: selectedRows[0]?.userId,
+                                        materialLeaderName: selectedRows[0]?.name,
+                                    }
+                                    form.setFieldsValue({
+                                        assignedList: [
+                                            ...values
+                                        ]
+                                    })
+                                    setDetailData([...values])
+                                }} />
+                            } />
                         </Form.Item>
                     </Col>
-                    <Col span={10}>
-                        <Form.Item name={["assignedList", index, "materialLeader"]} rules={[{ required: true, message: "请选择人员" }]} initialValue={_}>
-                            <Select size="small" placeholder="请选择" onChange={(e: any) => {
-                                if (e === 0) {
-                                    form.getFieldsValue(true).assignedList[index] = {
-                                        ...form.getFieldsValue(true).assignedList[index],
-                                        materialLeaderDept: '',
-                                        materialLeader: 0
-                                    }
-                                    form.setFieldsValue({ assignedList: [...form.getFieldsValue(true).assignedList] });
-                                    setUserList({ ...userList, [index]: [] });
+                    <Col span={6}>
+                        {index === 0 ? null : <Checkbox onChange={(check) => {
+                            const values = form.getFieldsValue(true)?.assignedList
+                            if (check.target.checked) {
+                                values[index] = {
+                                    ...values[index],
+                                    materialLeader: '0',
+                                    materialLeaderName: '同上'
+
                                 }
-                            }}>
-                                {index !== 0 ? <Select.Option value={0} key={0}>同上</Select.Option> : null}
-                                {userList && userList[index] && userList[index].map((item: any) => {
-                                    return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                })}
-                            </Select>
-                        </Form.Item>
+                                setDetailData([
+                                    ...values
+                                ])
+                                form.setFieldsValue({
+                                    assignedList: [...values]
+                                })
+                            } else {
+                                values[index] = {
+                                    ...values[index],
+                                    materialLeader: '',
+                                    materialLeaderName: ''
+
+                                }
+                                setDetailData([
+                                    ...values
+                                ])
+                                form.setFieldsValue({
+                                    assignedList: [...values]
+                                })
+                            }
+                        }} checked={detailData[index]?.materialLeader === '0'}>
+                            同上
+                        </Checkbox>}
                     </Col>
                 </Row>
             )
@@ -189,7 +169,7 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
                     "message": "请选择优先级"
                 }]}>
                     <Select style={{ width: '100px' }} placeholder="请选择" size="small">
-                        {index !== 0 ? <Select.Option value={0} key={0}>同上</Select.Option> : null}
+                        {index !== 0 ? <Select.Option value={'0'} key={0}>同上</Select.Option> : null}
                         <Select.Option value={1} key={1}>紧急</Select.Option>
                         <Select.Option value={2} key={2}>高</Select.Option>
                         <Select.Option value={3} key={3}>中</Select.Option>

@@ -1,6 +1,12 @@
 {
     "baseInfo": [
         {
+            "title": "执行状态",
+            "dataIndex": "executingStatusName",
+            "width": 100,
+            "type": "string"
+        },
+        {
             "title": "配料方案编号",
             "dataIndex": "schemeNumber",
             "width": 200,
