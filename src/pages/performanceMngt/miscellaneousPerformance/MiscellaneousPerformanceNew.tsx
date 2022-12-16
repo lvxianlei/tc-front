@@ -10,6 +10,7 @@ import { BaseInfo, DetailContent, DetailTitle, OperationRecord } from '../../com
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './GenerationOfMaterial.module.less';
+import {newColumns} from './miscellaneousPerformance.json'
 
 interface modalProps {
     readonly id?: any;
@@ -21,59 +22,6 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const [detailForm] = Form.useForm();
     const [towerSelects, setTowerSelects] = useState([]);
     const [productCategoryData, setProductCategoryData] = useState<any>({});
-    const [description, setDescription] = useState<string>('');
-
-    const newColumns= [
-       {
-           "key": "loftingTaskNumber",
-           "title": "放样环节",
-           "width": 120,
-           "dataIndex": "loftingTaskNumber"
-       },
-       {
-           "key": "productCategoryName",
-           "title": "杂项类别",
-           "dataIndex": "productCategoryName"
-       },
-       {
-           "key": "productTypeName",
-           "title": "杂项类型",
-           "dataIndex": "productTypeName"
-       },
-       {
-           "key": "wasteStructureNum",
-           "title": "杂项条目",
-           "dataIndex": "wasteStructureNum"
-       },
-       {
-           "key": "wasteNum",
-           "title": "计划号",
-           "dataIndex": "wasteNum"
-       },
-       {
-           "key": "wasteNum",
-           "title": "塔型",
-           "dataIndex": "wasteNum"
-       },
-       {
-           "key": "penaltyAmount",
-           "title": "工时",
-           "dataIndex": "penaltyAmount",
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "单价",
-           "dataIndex": "rejectWeight",
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "总金额",
-           "dataIndex": "rejectWeight",
-           "type": "number"
-       }
-   ]
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -141,54 +89,12 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         }
     }), { manual: true })
 
-    const onPass = () => new Promise(async (resolve, reject) => {
-        try {
-            const value = await form.validateFields();
-            await passRun({
-
-            })
-            resolve(true);
-        } catch (error) {
-            reject(false)
-        }
-    })
-
-    const { run: passRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
-        try {
-            const result: any = await RequestUtil.post(``, data)
-            resove(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
-    const onReject = () => new Promise(async (resolve, reject) => {
-        try {
-            const value = await form.validateFields();
-            await rejectRun({
-
-            })
-            resolve(true);
-        } catch (error) {
-            reject(false)
-        }
-    })
-
-    const { run: rejectRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
-        try {
-            const result: any = await RequestUtil.post(``, data)
-            resove(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
     const resetFields = () => {
         form.resetFields();
         detailForm.resetFields();
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, onSave,onPass,onReject, resetFields }), [ref, onSubmit, onSave,onPass,onReject, resetFields]);
+    useImperativeHandle(ref, () => ({ onSubmit, onSave, resetFields }), [ref, onSubmit, onSave, resetFields]);
 
 
     return <DetailContent>
@@ -254,18 +160,6 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         {
             type === 'detail' ?
                 <OperationRecord title="操作信息" serviceId={id} serviceName="tower-science" />
-                : null
-        }
-
-        {
-            type === 'detail' ?
-            <>
-            <DetailTitle title="回复信息"/>
-            <Input.TextArea maxLength={400} onChange={(e)=> {
-                           setDescription(e.target.value)
-                        }}/>
-            </>
-                        
                 : null
         }
     </DetailContent>

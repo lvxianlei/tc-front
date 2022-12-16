@@ -5,23 +5,19 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TreeSelect, Modal } from 'antd';
+import { Space, Input, DatePicker, Select, Button, message, Popconfirm, Modal } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './MiscellaneousPerformance.module.less';
 import { useHistory } from 'react-router-dom';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
-import useRequest from '@ahooksjs/use-request';
-import { TreeNode } from 'antd/lib/tree-select';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import MiscellaneousPerformanceNew from './MiscellaneousPerformanceNew';
+import {columns}from './miscellaneousPerformance.json'
 
 interface EditRefProps {
     onSubmit: () => void;
     resetFields: () => void;
     onSave: () => void;
-    onPass: () => void;
-    onReject: () => void;
 }
 
 export default function List(): React.ReactNode {
@@ -31,96 +27,6 @@ export default function List(): React.ReactNode {
     const addRef = useRef<EditRefProps>();
     const [type, setType] = useState<'new' | 'detail' | 'edit'>('new');
     const [rowId, setRowId] = useState<string>();
-
-    const columns= [
-       {
-           "key": "loftingTaskNumber",
-           "title": "放样任务编号",
-           "width": 120,
-           "dataIndex": "loftingTaskNumber"
-       },
-       {
-           "key": "productCategoryName",
-           "title": "项目名称",
-           "dataIndex": "productCategoryName",
-           "width": 80
-       },
-       {
-           "key": "productTypeName",
-           "title": "计划号",
-           "dataIndex": "productTypeName",
-           "width": 80
-       },
-       {
-           "key": "wasteStructureNum",
-           "title": "塔型",
-           "dataIndex": "wasteStructureNum",
-           "width": 120
-       },
-       {
-           "key": "wasteNum",
-           "title": "放样环节",
-           "dataIndex": "wasteNum",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "penaltyAmount",
-           "title": "杂项类型",
-           "dataIndex": "penaltyAmount",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "杂项类别",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "杂项条目",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "工时",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "单价",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "金额",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "审批状态",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "状态最新变更时间",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       }
-   ]
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
@@ -147,33 +53,6 @@ export default function List(): React.ReactNode {
             reject(false)
         }
     })
-    
-    const handlePass = () => new Promise(async (resove, reject) => {
-       try {
-           await addRef.current?.onPass()
-           message.success("通过成功！")
-           setVisible(false)
-           addRef.current?.resetFields();
-           history.go(0)
-           resove(true)
-       } catch (error) {
-           reject(false)
-       }
-   })
-
-   
-   const handleReject = () => new Promise(async (resove, reject) => {
-       try {
-           await addRef.current?.onReject()
-           message.success("拒绝成功！")
-           setVisible(false)
-           addRef.current?.resetFields();
-           history.go(0)
-           resove(true)
-       } catch (error) {
-           reject(false)
-       }
-   })
 
     return <>
         <Modal
@@ -183,11 +62,7 @@ export default function List(): React.ReactNode {
             title={type === 'new' ? '新增' : type === 'edit' ? '编辑' : '详情'}
             footer={<Space direction="horizontal" size="small">
                 {type === 'detail' ?
-                <>
-                
-                <Button onClick={handlePass} type="primary" ghost>通过</Button>
-                        <Button onClick={handleReject} type="primary" ghost>拒绝</Button>
-                </>
+                null
                     :
                     <>
                         <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>

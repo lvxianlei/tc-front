@@ -46,7 +46,6 @@
             "type": "number"
         }
     ],
-
     "detailColumns": [
         {
             "key": "planNumber",
@@ -74,7 +73,7 @@
         },
         {
             "key": "wasteStructureNum",
-            "title":"电压等级",
+            "title": "电压等级",
             "dataIndex": "wasteStructureNum",
             "width": 120
         },
@@ -103,7 +102,6 @@
             "width": 120
         }
     ],
-
     "itemColumns": [
         {
             "key": "loftingTaskNumber",
@@ -191,7 +189,6 @@
             "type": "number"
         }
     ],
-
     "otherColumns": [
         {
             "key": "loftingTaskNumber",
