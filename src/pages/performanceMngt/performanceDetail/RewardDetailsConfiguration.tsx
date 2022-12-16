@@ -12,131 +12,13 @@ import useRequest from '@ahooksjs/use-request';
 import styles from './GenerationOfMaterial.module.less';
 import { FixedType } from 'rc-table/lib/interface';
 import SelectUser from "../../common/SelectUser";
+import {itemColumns, otherColumns } from './performanceDetail.json'
 
-interface modalProps {
-
-}
-
-export default forwardRef(function RewardDetailsConfiguration({ }: modalProps, ref) {
+export default forwardRef(function RewardDetailsConfiguration({}, ref) {
     const [form] = Form.useForm();
     const [otherForm] = Form.useForm();
     const [detailData, setDetailData] = useState<any>([])
     const [otherData, setOtherData] = useState<any>([])
-
-    const columns= [
-       {
-           "key": "loftingTaskNumber",
-           "title": "奖励条目",
-           "width": 120,
-           "dataIndex": "loftingTaskNumber"
-       },
-       {
-           "key": "productCategoryName",
-           "title": "参数1",
-           "dataIndex": "productCategoryName",
-           "width": 80
-       },
-       {
-           "key": "productTypeName",
-           "title": "参数2",
-           "dataIndex": "productTypeName",
-           "width": 80
-       },
-       {
-           "key": "wasteStructureNum",
-           "title": "参数3",
-           "dataIndex": "wasteStructureNum",
-           "width": 120
-       },
-       {
-           "key": "wasteNum",
-           "title": "参数4",
-           "dataIndex": "wasteNum",
-           "width": 120
-       },
-       {
-           "key": "penaltyAmount",
-           "title": "参数5",
-           "dataIndex": "penaltyAmount",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "参数6",
-           "dataIndex": "rejectWeight",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "参数7",
-           "dataIndex": "rejectWeight",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "参数8",
-           "dataIndex": "rejectWeight",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "参数9",
-           "dataIndex": "rejectWeight",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "参数10",
-           "dataIndex": "rejectWeight",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "参数11",
-           "dataIndex": "rejectWeight",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "参数12",
-           "dataIndex": "rejectWeight",
-           "width": 120
-       },
-       {
-           "key": "rejectWeight",
-           "title": "奖励金额",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       }
-   ]
-
-   const otherColumns= [
-    {
-        "key": "loftingTaskNumber",
-        "title": "配置条目",
-        "width": 120,
-        "dataIndex": "loftingTaskNumber"
-    },
-    {
-        "key": "productCategoryName",
-        "title": "参数1",
-        "dataIndex": "productCategoryName",
-        "width": 80
-    },
-    {
-        "key": "productTypeName",
-        "title": "参数2",
-        "dataIndex": "productTypeName",
-        "width": 80
-    },
-    {
-        "key": "rejectWeight",
-        "title": "状态",
-        "dataIndex": "rejectWeight",
-        "width": 120
-    }
-]
 
     const { loading, data, run } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -209,7 +91,7 @@ export default forwardRef(function RewardDetailsConfiguration({ }: modalProps, r
        haveIndex
        dataSource={detailData}
        columns={[
-        ...columns, 
+        ...itemColumns, 
         {
             "key": "rejectWeight",
             "title": "状态",

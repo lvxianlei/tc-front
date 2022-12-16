@@ -1,0 +1,221 @@
+{
+    "columns": [
+        {
+            "key": "loftingTaskNumber",
+            "title": "奖励简称",
+            "width": 120,
+            "dataIndex": "loftingTaskNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "奖励条目",
+            "dataIndex": "productCategoryName",
+            "width": 200
+        },
+        {
+            "key": "productTypeName",
+            "title": "奖励金额",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "奖励人数",
+            "dataIndex": "wasteStructureNum",
+            "width": 50
+        },
+        {
+            "key": "wasteNum",
+            "title": "符合奖励人员",
+            "dataIndex": "wasteNum",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "奖励金额-总",
+            "dataIndex": "penaltyAmount",
+            "width": 120,
+            "type": "number"
+        },
+        {
+            "key": "rejectWeight",
+            "title": "备注",
+            "dataIndex": "rejectWeight",
+            "width": 120,
+            "type": "number"
+        }
+    ],
+
+    "detailColumns": [
+        {
+            "key": "planNumber",
+            "title": "姓名",
+            "width": 80,
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "loftingTaskNumber",
+            "title": "工程名称",
+            "width": 120,
+            "dataIndex": "loftingTaskNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "计划号",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "wasteStructureNum",
+            "title":"电压等级",
+            "dataIndex": "wasteStructureNum",
+            "width": 120
+        },
+        {
+            "key": "wasteNum",
+            "title": "塔型",
+            "dataIndex": "wasteNum",
+            "width": 120
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "段类型",
+            "dataIndex": "penaltyAmount",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "件号数",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectAmount",
+            "title": "正确率%",
+            "dataIndex": "rejectAmount",
+            "width": 120
+        }
+    ],
+
+    "itemColumns": [
+        {
+            "key": "loftingTaskNumber",
+            "title": "奖励条目",
+            "width": 120,
+            "dataIndex": "loftingTaskNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "参数1",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
+            "key": "productTypeName",
+            "title": "参数2",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "wasteStructureNum",
+            "title": "参数3",
+            "dataIndex": "wasteStructureNum",
+            "width": 120
+        },
+        {
+            "key": "wasteNum",
+            "title": "参数4",
+            "dataIndex": "wasteNum",
+            "width": 120
+        },
+        {
+            "key": "penaltyAmount",
+            "title": "参数5",
+            "dataIndex": "penaltyAmount",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "参数6",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "参数7",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "参数8",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "参数9",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "参数10",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "参数11",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "参数12",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        },
+        {
+            "key": "rejectWeight",
+            "title": "奖励金额",
+            "dataIndex": "rejectWeight",
+            "width": 120,
+            "type": "number"
+        }
+    ],
+
+    "otherColumns": [
+        {
+            "key": "loftingTaskNumber",
+            "title": "配置条目",
+            "width": 120,
+            "dataIndex": "loftingTaskNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "参数1",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
+            "key": "productTypeName",
+            "title": "参数2",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "rejectWeight",
+            "title": "状态",
+            "dataIndex": "rejectWeight",
+            "width": 120
+        }
+    ]
+}

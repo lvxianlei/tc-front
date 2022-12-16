@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, TablePaginationConfig, Modal, message, Row, Col } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Modal, message, Row, Col } from 'antd';
 import styles from './PerformanceDetail.module.less';
 import { IResponseData } from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -14,6 +14,7 @@ import useRequest from '@ahooksjs/use-request';
 import RewardDetailsConfiguration from './RewardDetailsConfiguration';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';
+import {columns,detailColumns} from './performanceDetail.json'
 
 export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
@@ -22,152 +23,6 @@ export default function List(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [description, setDescription] = useState<string>('');
     const history = useHistory();
-
-    const columns= [
-       {
-           "key": "loftingTaskNumber",
-           "title": "奖励简称",
-           "width": 120,
-           "dataIndex": "loftingTaskNumber"
-       },
-       {
-           "key": "productCategoryName",
-           "title": "奖励条目",
-           "dataIndex": "productCategoryName",
-           "width": 200
-       },
-       {
-           "key": "productTypeName",
-           "title": "奖励金额",
-           "dataIndex": "productTypeName",
-           "width": 80
-       },
-       {
-           "key": "wasteStructureNum",
-           "title": "奖励人数",
-           "dataIndex": "wasteStructureNum",
-           "width": 50
-       },
-       {
-           "key": "wasteNum",
-           "title": "符合奖励人员",
-           "dataIndex": "wasteNum",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "penaltyAmount",
-           "title": "奖励金额-总",
-           "dataIndex": "penaltyAmount",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "备注",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           key: 'operation',
-           title: '操作',
-           dataIndex: 'operation',
-           fixed: 'right' as FixedType,
-           width: 80,
-           render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-               <Button type="link" onClick={() => {
-                  Modal.confirm({
-                   title: "编辑",
-                   icon: null,
-                   okText: '保存',
-                           content: <Row>
-                           <Col span={4}>备注</Col>
-                           <Col span={20}>
-                           <Input.TextArea defaultValue={record?.description} onChange={(e) => {
-                               console.log(e)
-                               setDescription(e?.target.value)
-                           }} maxLength={300}/>
-                           </Col>
-                           </Row>,
-                                           onOk: () => new Promise(async (resolve, reject) => {
-                                               try {
-                                                   console.log(description)
-                                                   RequestUtil.post<any>(``).then(res => {
-                                                       message.success('编辑成功');
-                                                       history.go(0)
-                                                       resolve(true)
-                                                   })
-                                               } catch (error) {
-                                                   reject(false)
-                                               }
-                                           }),
-                                           onCancel() {
-                                               setDescription('')
-                                           }
-                                       })
-               }}>编辑</Button>
-           )
-       }
-   ]
-
-   const detailColumns= [
-       {
-           "key": "planNumber",
-           "title": "姓名",
-           "width": 80,
-           "dataIndex": "planNumber"
-       },
-       {
-           "key": "loftingTaskNumber",
-           "title": "工程名称",
-           "width": 120,
-           "dataIndex": "loftingTaskNumber"
-       },
-       {
-           "key": "productCategoryName",
-           "title": "计划号",
-           "dataIndex": "productCategoryName",
-           "width": 80
-       },
-       {
-           "key": "productTypeName",
-           "title": "产品类型",
-           "dataIndex": "productTypeName",
-           "width": 80
-       },
-       {
-           "key": "wasteStructureNum",
-           "title":"电压等级",
-           "dataIndex": "wasteStructureNum",
-           "width": 120
-       },
-       {
-           "key": "wasteNum",
-           "title": "塔型",
-           "dataIndex": "wasteNum",
-           "width": 120
-       },
-       {
-           "key": "penaltyAmount",
-           "title": "段类型",
-           "dataIndex": "penaltyAmount",
-           "width": 120,
-           "type": "number"
-       },
-       {
-           "key": "rejectWeight",
-           "title": "件号数",
-           "dataIndex": "rejectWeight",
-           "width": 120,
-       },
-       {
-           "key": "rejectAmount",
-           "title": "正确率%",
-           "dataIndex": "rejectAmount",
-           "width": 120
-       }
-   ]
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/wasteProductReceipt`, { ...filterValue });
@@ -195,11 +50,11 @@ export default function List(): React.ReactNode {
 
     const onSearch = (values: Record<string, any>) => {
         if (values.updateStatusTime) {
-            const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-            values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+            values.updateStatusTime = values.updateStatusTime.format("YYYY-MM");
         }
+        console.log(values.updateStatusTime,'...')
         setFilterValues(values);
+        console.log(filterValues)
         run({ ...values });
     }
 
@@ -213,16 +68,18 @@ export default function List(): React.ReactNode {
                 <Button onClick={() => {
                     setVisible(false);
                 }}>关闭</Button>}
-            width="90%"
+            width="95%"
             onCancel={() => {
                 setVisible(false);
             }}>
             <RewardDetailsConfiguration />
         </Modal>
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-            <Form form={form} layout="inline" onFinish={onSearch}>
+            <Form form={form} layout="inline" onFinish={onSearch} onReset={() => {
+                setFilterValues({})
+            }}>
                 <Form.Item label='日期' name="updateStatusTime">
-                    <DatePicker.RangePicker />
+                    <DatePicker  picker="month"/>
                 </Form.Item>
                 <Form.Item>
                     <Space direction="horizontal">
@@ -232,10 +89,52 @@ export default function List(): React.ReactNode {
                 </Form.Item>
             </Form>
             <Button type='primary' onClick={() => setVisible(true)} ghost>奖励条目配置</Button>
-            <p><span>**年**月</span>奖励明细</p>
+            <Space><span>{filterValues?.updateStatusTime?.split('-')[0] || '**'}年{filterValues?.updateStatusTime?.split('-')[1] || '**'}月</span>奖励明细</Space>
             <CommonTable
                 haveIndex
-                columns={columns}
+                columns={[
+                    ...columns,
+                    {
+                        key: 'operation',
+                        title: '操作',
+                        dataIndex: 'operation',
+                        fixed: 'right' as FixedType,
+                        width: 80,
+                        render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                            <Button type="link" onClick={() => {
+                               Modal.confirm({
+                                title: "编辑",
+                                icon: null,
+                                okText: '保存',
+                                        content: <Row>
+                                        <Col span={4}>备注</Col>
+                                        <Col span={20}>
+                                        <Input.TextArea defaultValue={record?.description} onChange={(e) => {
+                                            console.log(e)
+                                            setDescription(e?.target.value)
+                                        }} maxLength={300}/>
+                                        </Col>
+                                        </Row>,
+                                                        onOk: () => new Promise(async (resolve, reject) => {
+                                                            try {
+                                                                console.log(description)
+                                                                RequestUtil.post<any>(``).then(res => {
+                                                                    message.success('编辑成功');
+                                                                    history.go(0)
+                                                                    resolve(true)
+                                                                })
+                                                            } catch (error) {
+                                                                reject(false)
+                                                            }
+                                                        }),
+                                                        onCancel() {
+                                                            setDescription('')
+                                                        }
+                                                    })
+                            }}>编辑</Button>
+                        )
+                    }
+                ]}
                 dataSource={data}
                 pagination={false}
                 onRow={(record: Record<string, any>) => ({
@@ -243,7 +142,7 @@ export default function List(): React.ReactNode {
                     className: styles.tableRow
                 })}
             />
-            <p><span>奖励条目</span><span>奖励明细</span></p>
+            <Space><span>奖励条目</span><span>奖励明细</span></Space>
             <CommonTable
                 haveIndex
                 columns={detailColumns}
