@@ -15,6 +15,7 @@ import RewardDetailsConfiguration from './RewardDetailsConfiguration';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';
 import {columns,detailColumns} from './performanceDetail.json'
+import moment from 'moment';
 
 export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
@@ -25,12 +26,19 @@ export default function List(): React.ReactNode {
     const history = useHistory();
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/wasteProductReceipt`, { ...filterValue });
+        const lastMonth= new Date().getMonth() > 0 ? new Date().getFullYear()+'-'+new Date().getMonth() : (new Date().getFullYear()-1)+'-12'
+        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/wasteProductReceipt`, { updateStatusTime: lastMonth,...filterValue });
         if (data.records.length > 0 && data.records[0]?.id) {
             detailRun(data.records[0]?.id)
         } else {
             setDetailData([]);
         }
+        setFilterValues({
+            updateStatusTime: lastMonth
+        })
+        form.setFieldsValue({
+            updateStatusTime: moment(lastMonth)
+        })
         resole(data?.records);
     }), {})
 
