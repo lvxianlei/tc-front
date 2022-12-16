@@ -319,5 +319,306 @@
                 "dataIndex": "deliveryTime"
             }
         ]
-    }
+    },
+    "productGroupDetail": [
+        {
+            "title": "* 线路名称",
+            "dataIndex": "lineName",
+            "width": 80
+        },
+        {
+            "title": "* 产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
+            "title": "* 电压等级（kv）",
+            "dataIndex": "voltageLevelName",
+            "width": 120
+        },
+        {
+            "title": "* 塔型",
+            "dataIndex": "productCategory",
+            "width": 80
+        },
+        {
+            "title": "* 塔型钢印号",
+            "dataIndex": "steelProductShape",
+            "width": 100
+        },
+        {
+            "title": "* 杆塔号",
+            "dataIndex": "name",
+            "width": 80
+        },
+        {
+            "title": "* 呼高（m）",
+            "dataIndex": "basicHeight",
+            "width": 90
+        },
+        {
+            "title": "* 模式",
+            "dataIndex": "patternName",
+            "width": 90
+        },
+        {
+            "title": "结构",
+            "dataIndex": "structureName",
+            "width": 90
+        },
+        {
+            "title": "接腿配置A",
+            "dataIndex": "legConfigurationA",
+            "width": 80
+        },
+        {
+            "title": "接腿配置B",
+            "dataIndex": "legConfigurationB",
+            "width": 80
+        },
+        {
+            "title": "接腿配置C",
+            "dataIndex": "legConfigurationC",
+            "width": 80
+        },
+        {
+            "title": "接腿配置D",
+            "dataIndex": "legConfigurationD",
+            "width": 80
+        },
+        {
+            "title": "接腿重A（kg）",
+            "dataIndex": "legWeightA",
+            "width": 100
+        },
+        {
+            "title": "接腿重B（kg）",
+            "dataIndex": "legWeightB",
+            "width": 100
+        },
+        {
+            "title": "接腿重C（kg）",
+            "dataIndex": "legWeightC",
+            "width": 100
+        },
+        {
+            "title": "接腿重D（kg）",
+            "dataIndex": "legWeightD",
+            "width": 100
+        },
+        {
+            "title": "* 本体重量（kg）",
+            "dataIndex": "bodyWeight",
+            "width": 120
+        },
+        {
+            "title": "* 单重（kg）",
+            "dataIndex": "monomerWeight",
+            "width": 100
+        },
+        {
+            "title": "* 总重（kg）",
+            "dataIndex": "totalWeight",
+            "width": 100
+        },
+        {
+            "title": "其他增重-抱箍（kg）",
+            "dataIndex": "otherWeightBg",
+            "width": 200
+        },
+        {
+            "title": "其他增重-平台（kg）",
+            "dataIndex": "otherWeightPt",
+            "width": 200
+        },
+        {
+            "title": "其他增重-相序牌（kg）",
+            "dataIndex": "otherWeightXxp",
+            "width": 200
+        },
+        {
+            "title": "其他增重-爬梯（kg）",
+            "dataIndex": "otherWeightPat",
+            "width": 200
+        },
+        {
+            "title": "其他增重-防盗（kg）",
+            "dataIndex": "otherWeightFd",
+            "width": 200
+        },
+        {
+            "title": "其他增重-兜底绳施工孔板（kg）",
+            "dataIndex": "otherWeightDdssgkb",
+            "width": 200
+        },
+        {
+            "title": "其他增重-挂点修改（kg）",
+            "dataIndex": "otherWeightGdxg",
+            "width": 200
+        },
+        {
+            "title": "其他增重-修改（kg）",
+            "dataIndex": "otherWeightXg",
+            "width": 200
+        },
+        {
+            "title": "其他增重-全塔双帽（kg）",
+            "dataIndex": "otherWeightQtsm",
+            "width": 200
+        },
+        {
+            "title": "其他增重-螺栓（kg）",
+            "dataIndex": "otherWeightLs",
+            "width": 200
+        },
+        {
+            "title": "其他增重-电缆支架（kg）",
+            "dataIndex": "otherWeightDlzj",
+            "width": 200
+        },
+        {
+            "title": "其他增重-其他（kg）",
+            "dataIndex": "otherWeightOther",
+            "width": 200
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 250
+        }
+    ],
+    "productGroupRow": [
+        {
+            "title": "* 线路名称",
+            "dataIndex": "lineName"
+        },
+        {
+            "title": "* 产品类型",
+            "dataIndex": "productTypeName"
+        },
+        {
+            "title": "* 电压等级（kv）",
+            "dataIndex": "voltageLevelName"
+        },
+        {
+            "title": "* 塔型",
+            "dataIndex": "productCategory"
+        },
+        {
+            "title": "* 塔型钢印号",
+            "dataIndex": "steelProductShape"
+        },
+        {
+            "title": "* 杆塔号",
+            "dataIndex": "name"
+        },
+        {
+            "title": "* 呼高（m）",
+            "dataIndex": "basicHeight"
+        },
+        {
+            "title": "* 模式",
+            "dataIndex": "patternName"
+        },
+        {
+            "title": "结构",
+            "dataIndex": "structureName"
+        },
+        {
+            "title": "接腿配置A",
+            "dataIndex": "legConfigurationA"
+        },
+        {
+            "title": "接腿配置B",
+            "dataIndex": "legConfigurationB"
+        },
+        {
+            "title": "接腿配置C",
+            "dataIndex": "legConfigurationC"
+        },
+        {
+            "title": "接腿配置D",
+            "dataIndex": "legConfigurationD"
+        },
+        {
+            "title": "接腿重A（kg）",
+            "dataIndex": "legWeightA"
+        },
+        {
+            "title": "接腿重B（kg）",
+            "dataIndex": "legWeightB"
+        },
+        {
+            "title": "接腿重C（kg）",
+            "dataIndex": "legWeightC"
+        },
+        {
+            "title": "接腿重D（kg）",
+            "dataIndex": "legWeightD"
+        },
+        {
+            "title": "* 本体重量（kg）",
+            "dataIndex": "bodyWeight"
+        },
+        {
+            "title": "* 单重（kg）",
+            "dataIndex": "monomerWeight"
+        },
+        {
+            "title": "* 总重（kg）",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "其他增重-抱箍（kg）",
+            "dataIndex": "otherWeightBg"
+        },
+        {
+            "title": "其他增重-平台（kg）",
+            "dataIndex": "otherWeightPt"
+        },
+        {
+            "title": "其他增重-相序牌（kg）",
+            "dataIndex": "otherWeightXxp"
+        },
+        {
+            "title": "其他增重-爬梯（kg）",
+            "dataIndex": "otherWeightPat"
+        },
+        {
+            "title": "其他增重-防盗（kg）",
+            "dataIndex": "otherWeightFd"
+        },
+        {
+            "title": "其他增重-兜底绳施工孔板（kg）",
+            "dataIndex": "otherWeightDdssgkb"
+        },
+        {
+            "title": "其他增重-挂点修改（kg）",
+            "dataIndex": "otherWeightGdxg"
+        },
+        {
+            "title": "其他增重-修改（kg）",
+            "dataIndex": "otherWeightXg"
+        },
+        {
+            "title": "其他增重-全塔双帽（kg）",
+            "dataIndex": "otherWeightQtsm"
+        },
+        {
+            "title": "其他增重-螺栓（kg）",
+            "dataIndex": "otherWeightLs"
+        },
+        {
+            "title": "其他增重-电缆支架（kg）",
+            "dataIndex": "otherWeightDlzj"
+        },
+        {
+            "title": "其他增重-其他（kg）",
+            "dataIndex": "otherWeightOther"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ]
 }

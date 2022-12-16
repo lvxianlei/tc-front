@@ -18,15 +18,10 @@ export default function Drawing(): React.ReactNode {
     const [filterValue, setFilterValue] = useState<any>({
         ...history.location.state as object
     })
-    const [visible, setVisible] = useState<boolean>(false)
     const [subsidiary, setSubsidiary] = useState<boolean>(false)
-    const [saving, setSaving] = useState<boolean>(false)
-    const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [connectVisible, setConnectVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
-    const [type, setType] = useState<"new" | "edit">("new")
     const [conenctData, setConenctData] = useState<{ [key: string]: any }>({})
-    const editRef = useRef<EditRefProps>()
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation?id=${id}`)
@@ -71,21 +66,6 @@ export default function Drawing(): React.ReactNode {
         return value
     }
 
-    const handleModalOk = (type: 1 | 2) => new Promise(async (resove, reject) => {
-        try {
-            setSaving(true)
-            await editRef.current?.onSubmit(type)
-            message.success(`${type === 1 ? "保存" : "保存并提交"}成功...`)
-            setSaving(false)
-            setVisible(false)
-            resove(true)
-            history.go(0)
-        } catch (error) {
-            setSaving(false)
-            reject(false)
-        }
-    })
-
     const handleCancel = (id: string) => {
         Modal.confirm({
             title: "撤销",
@@ -125,43 +105,6 @@ export default function Drawing(): React.ReactNode {
             <PopTableContent data={connectContract as any} onChange={(records: any) => setConenctData(records[0])} />
         </Modal>
         <Modal
-            destroyOnClose
-            visible={visible}
-            width={1011}
-            title="图纸确认任务"
-            onCancel={() => {
-                setDetailedId("")
-                setVisible(false)
-            }}
-            footer={[
-                <Button
-                    key="save"
-                    type="primary"
-                    loading={saving}
-                    ghost
-                    onClick={() => handleModalOk(1)}>保存</Button>,
-                <Button
-                    key="saveAndSubmit"
-                    type="primary"
-                    loading={saving}
-                    ghost
-                    onClick={() => handleModalOk(2)}>保存并发起</Button>
-            ]}>
-            <Edit type={type} ref={editRef} id={detailedId} />
-        </Modal>
-        <Modal
-            destroyOnClose
-            visible={detailVisible}
-            width={1011}
-            footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
-            title="图纸确认任务"
-            onCancel={() => {
-                setDetailedId("")
-                setDetailVisible(false)
-            }}>
-            <Overview id={detailedId} />
-        </Modal>
-        <Modal
             title="明细"
             visible={subsidiary}
             width={1101}
@@ -189,7 +132,6 @@ export default function Drawing(): React.ReactNode {
                             style={{ padding: 2 }}
                             onClick={() => {
                                 setDetailedId(record.id)
-                                setDetailVisible(true)
                             }}>查看</Button>
                         <Button
                             type="link"
@@ -197,9 +139,7 @@ export default function Drawing(): React.ReactNode {
                             disabled={![0, 3].includes(record.auditStatus)}
                             style={{ padding: 2 }}
                             onClick={() => {
-                                setType("edit")
                                 setDetailedId(record.id)
-                                setVisible(true)
                             }}>编辑</Button>
                         <Button
                             type="link"
@@ -249,11 +189,7 @@ export default function Drawing(): React.ReactNode {
             filterValue={filterValue}
             extraOperation={<Button
                 type="primary"
-                onClick={() => {
-                    setType("new")
-                    setDetailedId("")
-                    setVisible(true)
-                }}>新增图纸任务</Button>}
+                onClick={() => history.push("/project/drawing/create/create")}>新增图纸任务</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

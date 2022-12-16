@@ -1,15 +1,14 @@
-import React, { useImperativeHandle, forwardRef, useRef } from "react"
+import React, { useRef } from "react"
 import { Spin, Form } from 'antd'
 import { BaseInfo, Attachment, AttachmentRef } from '../../common'
 import { setting } from "./drawing.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-interface EditProps {
-  type: "new" | "edit",
-  id: string
-}
+import { useParams } from "react-router-dom"
+import ConfirmDetail from "./confirmDetail"
 
-export default forwardRef(function Edit({ type, id }: EditProps, ref) {
+export default function Edit() {
+  const { id, type } = useParams<{ id: string, type: "create" | "edit" }>()
   const attchsRef = useRef<AttachmentRef>()
   const [baseForm] = Form.useForm()
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -27,12 +26,12 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     } catch (error) {
       reject(error)
     }
-  }), { manual: type === "new", refreshDeps: [id] })
+  }), { manual: type === "create", refreshDeps: [id] })
 
   const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
     try {
-      const submitData = type === "new" ? postData : { ...postData, id: id }
-      const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/drawingConfirmation`, submitData)
+      const submitData = type === "create" ? postData : { ...postData, id: id }
+      const result: { [key: string]: any } = await RequestUtil[type === "create" ? "post" : "put"](`/tower-market/drawingConfirmation`, submitData)
       resole(result)
     } catch (error) {
       console.log(error)
@@ -58,6 +57,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
       reject(false)
     }
   })
+
   const handleBaseInfoChange = (fields: any) => {
     if (fields.internalNumber) {
       baseForm.setFieldsValue({
@@ -72,7 +72,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
       })
     }
   }
-  useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit])
+
   return <Spin spinning={loading}>
     <BaseInfo
       form={baseForm}
@@ -81,6 +81,11 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
       col={3}
       dataSource={data || {}}
       edit />
-    <Attachment title="附件" ref={attchsRef} dataSource={data?.fileSources} edit />
+    <Attachment
+      title="附件"
+      ref={attchsRef}
+      dataSource={data?.fileSources}
+      edit />
+    <ConfirmDetail />
   </Spin>
-})
+}
