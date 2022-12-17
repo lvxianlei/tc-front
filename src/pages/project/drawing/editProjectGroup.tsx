@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { Button, Space, Modal, Form, message } from 'antd'
 import { CommonTable, DetailTitle, BaseInfo, UploadXLSX } from '../../common'
@@ -11,7 +11,7 @@ import {
     voltageGradeOptions
 } from '../../../configuration/DictionaryOptions';
 import { productGroupDetail, productGroupRow, productGroupXLSX } from "./drawing.json"
-import AuthUtil from '@utils/AuthUtil'
+
 import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate'
 
 const patternTypeEnum = patternTypeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
@@ -135,8 +135,9 @@ export default function ConfirmDetail() {
                 }}>添加</Button>
                 <Button type='primary' key="batchDelete" onClick={
                     async () => {
-                        await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',')}`,)
-                        message.success('删除成功！')
+                        await RequestUtil.delete(`/tower-market/drawingConfirmation/product`, selectedKeys)
+                        await message.success('删除成功！')
+                        history.go(0)
                     }
                 } ghost>批量删除</Button>
             </Space>

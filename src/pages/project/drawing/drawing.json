@@ -22,6 +22,21 @@
             "dataIndex": "serviceManager"
         },
         {
+            "title": "确认主体",
+            "dataIndex": "confirmType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "技术确认",
+                    "value": 1
+                },
+                {
+                    "label": "自主确认",
+                    "value": 2
+                }
+            ]
+        },
+        {
             "title": "确认人",
             "dataIndex": "confirmUserName"
         },
@@ -53,8 +68,47 @@
                 {
                     "value": 4,
                     "label": "已完成"
+                },
+                {
+                    "value": 5,
+                    "label": "已驳回"
                 }
             ]
+        },
+        {
+            "title": "计划状态",
+            "dataIndex": "planStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "待下计划"
+                },
+                {
+                    "value": 2,
+                    "label": "部分计划"
+                },
+                {
+                    "value": 3,
+                    "label": "下完计划"
+                }
+            ]
+        },
+        {
+            "title": "任务总重量",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "已下重量",
+            "dataIndex": "released"
+        },
+        {
+            "title": "差额重量",
+            "dataIndex": "notReleased"
+        },
+        {
+            "title": "已下计划号",
+            "dataIndex": "taskNumbers"
         },
         {
             "title": "制单人",
@@ -539,7 +593,7 @@
         },
         {
             "title": "杆塔号",
-            "dataIndex": "name",
+            "dataIndex": "productNumber",
             "required": true
         },
         {
@@ -684,7 +738,7 @@
         },
         {
             "title": "*杆塔号",
-            "dataIndex": "name",
+            "dataIndex": "productNumber",
             "required": true
         },
         {
