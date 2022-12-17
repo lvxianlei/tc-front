@@ -1,6 +1,8 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import { Button, Space, Modal, Form, message } from 'antd'
 import { CommonTable, DetailTitle, BaseInfo, UploadXLSX } from '../../common'
+import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import {
     patternTypeOptions,
@@ -9,58 +11,82 @@ import {
     voltageGradeOptions
 } from '../../../configuration/DictionaryOptions';
 import { productGroupDetail, productGroupRow, productGroupXLSX } from "./drawing.json"
+import AuthUtil from '@utils/AuthUtil'
 import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate'
 
 const patternTypeEnum = patternTypeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
 const productTypeEnum = productTypeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
 const towerStructureEnum = towerStructureOptions?.map((item: any) => ({ label: item.name, value: item.id }))
 const voltageGradeEnum = voltageGradeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
-interface ConfirmDetailProps {
-    id: string
-    type: "edit" | "create"
-}
-
-export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProps, ref) {
+export default function ConfirmDetail() {
+    const history = useHistory()
+    const { id: businessId } = useParams<{ id: string }>()
     const [visible, setVisible] = useState<boolean>(false);
-    const [rowId, setRowId] = useState<string>();
+    const [rowId, setRowId] = useState()
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
+    const [weight, setWeight] = useState<string>('0');
     const [form] = Form.useForm();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
     const [edit, setEdit] = useState('添加');
-    const rowData: any = tableDataSource.find((item: any) => item.key === rowId)
+    const rowData: any = tableDataSource.find((item: any) => item.id === rowId)
+    const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-market/drawingConfirmation/getDrawingAssist?id=${businessId}`)
+        setTableDataSource(data?.records || [])
+        resole(data);
+    }))
+
+    const { run: addnew } = useRequest<any>((bodyData: any[]) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.post(`/tower-market/drawingConfirmation/product`, bodyData?.map((item: any) => ({
+            ...item,
+            businessId
+        })))
+        resole(data);
+    }), { manual: true })
+
+    const { run: removeRun } = useRequest<any>((bodyData: any[]) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.delete(`/tower-market/drawingConfirmation/product`, bodyData?.map((item: any) => ({
+            ...item,
+            businessId
+        })))
+        resole(data);
+    }), { manual: true })
+
+    const { run: updateRow } = useRequest<any>((rowData: any[]) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.put(`/tower-market/drawingConfirmation/product`, rowData)
+        resole(data);
+    }), { manual: true })
+
     const handleModalOk = async () => {
         const rowData = await form.validateFields()
         if (rowId) {
-            setTableDataSource(tableDataSource.map((item: any) => {
-                if (item.key === rowId) {
-                    return ({
-                        ...rowData,
-                        productTypeId: rowData?.productTypeName?.value,
-                        productTypeName: rowData?.productTypeName?.label,
-                        voltageGradeId: rowData?.voltageGradeName?.value,
-                        voltageGradeName: rowData?.voltageGradeName?.label,
-                        structureId: rowData?.structureName?.value,
-                        structureName: rowData?.structureName?.label,
-                        pattern: rowData?.patternName?.value,
-                        patternName: rowData?.patternName?.label,
-                        key: rowId
-                    })
-                }
-                return item
-            }))
-        } else {
-            setTableDataSource([{
+            await updateRow({
                 ...rowData,
                 productTypeId: rowData?.productTypeName?.value,
                 productTypeName: rowData?.productTypeName?.label,
                 voltageGradeId: rowData?.voltageGradeName?.value,
                 voltageGradeName: rowData?.voltageGradeName?.label,
-                structureId: rowData?.structureName?.value,
-                structureName: rowData?.structureName?.label,
-                pattern: rowData?.patternName?.value,
+                structureId: rowData?.structure?.value,
+                structure: rowData?.structure?.label,
+                patternId: rowData?.patternName?.value,
                 patternName: rowData?.patternName?.label,
-                key: `${(Math.random() * 100000000000).toFixed(12)}-${tableDataSource.length}`
-            }, ...tableDataSource])
+                id: rowId
+            })
+            await message.success("编辑成功...")
+            history.go(0)
+        } else {
+            await addnew([{
+                ...rowData,
+                productTypeId: rowData?.productTypeName?.value,
+                productTypeName: rowData?.productTypeName?.label,
+                voltageGradeId: rowData?.voltageGradeName?.value,
+                voltageGradeName: rowData?.voltageGradeName?.label,
+                structureId: rowData?.structure?.value,
+                structure: rowData?.structure?.label,
+                patternId: rowData?.patternName?.value,
+                patternName: rowData?.patternName?.label,
+            }])
+            await message.success("新增成功...")
+            history.go(0)
         }
         setRowId(undefined)
         setVisible(false)
@@ -75,27 +101,10 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
         setSelectedKeys(selectedRowKeys)
     }
 
-    useImperativeHandle(ref, () => ({
-        getDataSource: () => tableDataSource
-    }))
-
-    const handleLoaded = (data: any) => {
-        setTableDataSource([...data.map((item: any, index: number) => ({
-            ...item,
-            // productTypeId: item?.productTypeName?.value,
-            // productTypeName: item?.productTypeName,
-            // voltageGradeId: item?.voltageGradeName?.value,
-            // voltageGradeName: item?.voltageGradeName?.label,
-            // structureId: item?.structureName?.value,
-            // structureName: item?.structureName?.label,
-            // pattern: item?.patternName?.value,
-            // patternName: item?.patternName?.label,
-            key: `${(Math.random() * 100000000000).toFixed(12)}-${index}`
-        })), ...tableDataSource])
-    }
-
-    const handleDelete = () => {
-        setTableDataSource(tableDataSource.filter((item: any) => !selectedKeys.includes(item)))
+    const handleLoaded = async (data: any) => {
+        await addnew(data)
+        await message.success("导入成功...")
+        history.go(0)
     }
 
     return <div>
@@ -103,7 +112,7 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <Space>
                 <span key="number">总基数：{tableDataSource.length}基</span>
-                <span key="weight">总重量：{ }kg</span>
+                <span key="weight">总重量：{weight}kg</span>
             </Space>
             <Space>
                 <UploadXLSX
@@ -124,25 +133,28 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
                     setEdit('添加')
                     setVisible(true)
                 }}>添加</Button>
-                <Button
-                    type='primary'
-                    key="batchDelete"
-                    onClick={handleDelete} ghost>批量删除</Button>
+                <Button type='primary' key="batchDelete" onClick={
+                    async () => {
+                        await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',')}`,)
+                        message.success('删除成功！')
+                    }
+                } ghost>批量删除</Button>
             </Space>
         </div>
         <CommonTable
+            loading={loading}
             columns={[...productGroupDetail, {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
                 render: (_: any, record: any) => <Space>
                     <Button type="link" size="small" onClick={() => {
-                        setRowId(record.key)
+                        setRowId(record.id)
                         setVisible(true)
                     }}>编辑</Button>
                 </Space>
             }]}
-            rowKey="key"
+            rowKey="id"
             dataSource={[...tableDataSource]}
             pagination={false}
             rowSelection={{
@@ -163,32 +175,28 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
                     if (item.dataIndex === "productTypeName") {
                         return ({
                             ...item,
-                            type: "select",
-                            labelInValue: true,
+                            type: "select", labelInValue: true,
                             enum: productTypeEnum || []
                         })
                     }
                     if (item.dataIndex === "voltageGradeName") {
                         return ({
                             ...item,
-                            type: "select",
-                            labelInValue: true,
+                            type: "select", labelInValue: true,
                             enum: voltageGradeEnum || []
                         })
                     }
-                    if (item.dataIndex === "structureName") {
+                    if (item.dataIndex === "structure") {
                         return ({
                             ...item,
-                            type: "select",
-                            labelInValue: true,
+                            type: "select", labelInValue: true,
                             enum: towerStructureEnum || []
                         })
                     }
                     if (item.dataIndex === "patternName") {
                         return ({
                             ...item,
-                            type: "select",
-                            labelInValue: true,
+                            type: "select", labelInValue: true,
                             enum: patternTypeEnum || []
                         })
                     }
@@ -204,12 +212,12 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
                         value: rowData?.voltageGradeId,
                         label: rowData?.voltageGradeName
                     } : undefined,
-                    structureName: rowData ? {
+                    structure: rowData ? {
                         value: rowData?.structureId,
-                        label: rowData?.structureName
+                        label: rowData?.structure
                     } : undefined,
                     patternName: rowData ? {
-                        value: rowData?.pattern,
+                        value: rowData?.patternId,
                         label: rowData?.patternName
                     } : undefined,
                 } || {}}
@@ -217,4 +225,3 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
         </Modal>
     </div>
 }
-)

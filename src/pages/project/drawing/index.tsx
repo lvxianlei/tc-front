@@ -35,6 +35,15 @@ export default function Drawing(): React.ReactNode {
         }
     }), { manual: true })
 
+    const { run: recallRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation/reject?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const { loading: connectLoading, run: connectRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/drawingConfirmation/relationContract`, {
@@ -68,7 +77,23 @@ export default function Drawing(): React.ReactNode {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await cancelRun(id))
-                    message.success("撤销成功...")
+                    await message.success("撤销成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const handleRecall = (id: string) => {
+        Modal.confirm({
+            title: "驳回",
+            content: "确定驳回此任务吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await recallRun(id))
+                    await message.success("驳回成功...")
                     history.go(0)
                 } catch (error) {
                     reject(error)
@@ -133,7 +158,7 @@ export default function Drawing(): React.ReactNode {
                             disabled={![0, 3].includes(record.auditStatus)}
                             style={{ padding: 2 }}
                             onClick={() => history.push(`/project/drawing/edit/${record.id}`)}
-                        >编辑</Button>
+                        >编辑信息</Button>
                         <Button
                             type="link"
                             size="small"
@@ -147,10 +172,8 @@ export default function Drawing(): React.ReactNode {
                             type="link"
                             size="small"
                             style={{ padding: 2 }}
-                            onClick={() => {
-                                setDetailedId(record.id)
-                                setSubsidiary(true)
-                            }}>明细</Button>
+                            onClick={() => history.push(`/project/drawing/projectGroup/${record.id}`)}
+                        >编辑明细</Button>
                         <Popconfirm
                             title="确定删除此任务吗？"
                             disabled={![0, 3].includes(record.auditStatus)}
@@ -176,6 +199,13 @@ export default function Drawing(): React.ReactNode {
                             disabled={record.auditStatus !== 1}
                             onClick={() => handleCancel(record.id)}
                         >撤回</Button>
+                        <Button
+                            type="link"
+                            size="small"
+                            style={{ padding: 2 }}
+                            // disabled={record.isReject !== 1}
+                            onClick={() => handleRecall(record.id)}
+                        >驳回</Button>
                     </>
                 }]}
             filterValue={filterValue}

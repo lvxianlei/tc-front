@@ -97,11 +97,19 @@ export default function Edit() {
       <BaseInfo
         form={baseForm}
         onChange={handleBaseInfoChange}
-        columns={setting}
+        columns={setting.map((item: any) => {
+          if (item.dataIndex === "confirmType") {
+            return ({
+              ...item,
+              disabled: type === "edit"
+            })
+          }
+          return item
+        })}
         col={3}
         dataSource={{ ...data, confirmType: data?.confirmType || 1 }}
         edit />
-      {confirmType === 2 && <ConfirmDetail ref={confirmRef} id={id} type={type} />}
+      {confirmType === 2 && type === "create" && <ConfirmDetail ref={confirmRef} id={id} type={type} />}
       <Attachment
         title="附件"
         ref={attchsRef}
