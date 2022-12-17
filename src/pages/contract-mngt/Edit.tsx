@@ -291,6 +291,9 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -306,14 +309,17 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -327,8 +333,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setVisible(false)
@@ -340,6 +346,9 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -352,14 +361,17 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -372,8 +384,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setResultVisible(false)
@@ -577,8 +589,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 return ({
                     ...item,
                     index: itemIndex,
-                    taxTotalAmount: (value * allData.taxPrice).toFixed(2),
-                    totalAmount: (value * allData.price).toFixed(2),
+                    taxTotalAmount: (allData.totalWeight * allData.taxPrice).toFixed(2),
+                    totalAmount: (allData.totalWeight  * allData.price).toFixed(2),
                     price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                     // totalWeight: calcFun.totalWeight({
                     //     length: item.length,
