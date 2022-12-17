@@ -1,17 +1,12 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { SearchTable as Page, PopTableContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { drawing, connectContract } from './drawing.json'
-import Edit from "./Edit"
-import Overview from "./Overview"
 import Subsidiary from './subsidiary'
 
-interface EditRefProps {
-    onSubmit: (type: 1 | 2) => void
-}
 export default function Drawing(): React.ReactNode {
     const history = useHistory()
     const location = useLocation<{ auditStatus?: number }>();
@@ -130,17 +125,15 @@ export default function Drawing(): React.ReactNode {
                             type="link"
                             size="small"
                             style={{ padding: 2 }}
-                            onClick={() => {
-                                setDetailedId(record.id)
-                            }}>查看</Button>
+                            onClick={() => history.push(`/project/drawing/detail/${record.id}`)}
+                        >查看</Button>
                         <Button
                             type="link"
                             size="small"
                             disabled={![0, 3].includes(record.auditStatus)}
                             style={{ padding: 2 }}
-                            onClick={() => {
-                                setDetailedId(record.id)
-                            }}>编辑</Button>
+                            onClick={() => history.push(`/project/drawing/edit/${record.id}`)}
+                        >编辑</Button>
                         <Button
                             type="link"
                             size="small"
@@ -158,7 +151,6 @@ export default function Drawing(): React.ReactNode {
                                 setDetailedId(record.id)
                                 setSubsidiary(true)
                             }}>明细</Button>
-
                         <Popconfirm
                             title="确定删除此任务吗？"
                             disabled={![0, 3].includes(record.auditStatus)}

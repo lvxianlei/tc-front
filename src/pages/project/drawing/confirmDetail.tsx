@@ -1,13 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useImperativeHandle, forwardRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Space, Modal, Form, Upload, message } from 'antd'
-import { CommonTable, DetailTitle, BaseInfo } from '../../common'
+import { CommonTable, DetailTitle, BaseInfo, UploadXLSX } from '../../common'
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import AuthUtil from '../../../utils/AuthUtil'
-import { patternTypeOptions, productTypeOptions, towerStructureOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
-import { productGroupDetail, productGroupRow } from "./drawing.json"
-export default function ConfirmDetail() {
+import {
+    patternTypeOptions,
+    productTypeOptions,
+    towerStructureOptions,
+    voltageGradeOptions
+} from '../../../configuration/DictionaryOptions';
+import { productGroupDetail, productGroupRow, productGroupXLSX } from "./drawing.json"
+import AuthUtil from '@utils/AuthUtil'
+import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate'
+
+const patternTypeEnum = patternTypeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
+const productTypeEnum = productTypeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
+const towerStructureEnum = towerStructureOptions?.map((item: any) => ({ label: item.name, value: item.id }))
+const voltageGradeEnum = voltageGradeOptions?.map((item: any) => ({ label: item.name, value: item.id }))
+interface ConfirmDetailProps {
+    id: string
+    type: "edit" | "create"
+}
+export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProps, ref) {
     const [visible, setVisible] = useState<boolean>(false);
     const [rowId, setRowId] = useState('');
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
@@ -18,7 +33,10 @@ export default function ConfirmDetail() {
 
     const handleModalOk = async () => {
         const rowData = await form.validateFields()
-        setTableDataSource([{ ...rowData, key: Math.random() * 1000000000 }, ...tableDataSource])
+        setTableDataSource([{
+            ...rowData,
+            key: Math.random() * 1000000000
+        }, ...tableDataSource])
         setVisible(false)
     }
 
@@ -27,18 +45,24 @@ export default function ConfirmDetail() {
         form.resetFields();
     }
 
-    const params = useParams<{ id: string, status: string, confirmId: string }>()
-
     const { loading, data, run } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-market/drawingConfirmation/getDrawingAssist?id=${params.id}`)
+        const data: any = await RequestUtil.get(`/tower-market/drawingConfirmation/getDrawingAssist?id=${id}`)
         setTableDataSource(data?.records || [])
         resole(data);
     }), {
-        manual: true
+        manual: type === "create"
     })
 
     const SelectChange = (selectedRowKeys: React.Key[]): void => {
         setSelectedKeys(selectedRowKeys)
+    }
+
+    useImperativeHandle(ref, () => ({
+        getDataSource: () => tableDataSource
+    }))
+
+    const handleLoaded = (data: any) => {
+        console.log(data, "--------")
     }
 
     return <div>
@@ -49,34 +73,20 @@ export default function ConfirmDetail() {
                 <span key="weight">总重量：{weight}kg</span>
             </Space>
             <Space>
-                {/* <Upload
-                    key="import"
-                    action={() => {
-                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
-                        return baseUrl + '/tower-science/drawProductDetail/import'
-                    }}
-                    headers={
-                        {
-                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
-                            'Tenant-Id': AuthUtil.getTenantId(),
-                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
-                        }
-                    }
-                    data={{ drawTaskId: params.id }}
-                    showUploadList={false}
-                    onChange={async (info) => {
-                        if (info.file.response && !info.file.response?.success) {
-                            message.warning(info.file.response?.msg)
-                        }
-                        if (info.file.response && info.file.response?.success) {
-                            if (info.file.response && info.file.response?.success) {
-
-                            }
-                        }
-                    }}
+                <UploadXLSX
+                    onLoaded={handleLoaded}
+                    columns={productGroupXLSX}
                 >
-                    <Button type="primary" disabled={userId !== params.confirmId} ghost >导入</Button>
-                </Upload> */}
+                    <Button type="primary" ghost>导入</Button>
+                </UploadXLSX>
+                <Button
+                    type="primary"
+                    ghost
+                    onClick={() => downloadTemplate(
+                        '/tower-science/drawProductDetail/importTemplate',
+                        '杆塔明细模板'
+                    )}
+                >模版下载</Button>
                 <Button type='primary' key="add" ghost onClick={() => {
                     setEdit('添加')
                     setVisible(true)
@@ -104,14 +114,45 @@ export default function ConfirmDetail() {
             title={edit}
             onOk={handleModalOk}
             onCancel={handleModalCancel}
-            width={1101}>
+            width={"80%"}>
             <BaseInfo
                 form={form}
                 edit
-                col={3}
-                columns={productGroupRow}
+                col={6}
+                columns={productGroupRow.map((item: any) => {
+                    if (item.dataIndex === "productTypeName") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: productTypeEnum || []
+                        })
+                    }
+                    if (item.dataIndex === "voltageLevelName") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: voltageGradeEnum || []
+                        })
+                    }
+                    if (item.dataIndex === "structureName") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: towerStructureEnum || []
+                        })
+                    }
+                    if (item.dataIndex === "patternName") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: patternTypeEnum || []
+                        })
+                    }
+                    return item
+                })}
                 dataSource={{}}
             />
         </Modal>
     </div>
 }
+)
