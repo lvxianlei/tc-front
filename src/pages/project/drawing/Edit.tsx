@@ -1,4 +1,4 @@
-import React, { useRef } from "react"
+import React, { useRef, useState } from "react"
 import { Spin, Form } from 'antd'
 import { BaseInfo, Attachment, AttachmentRef } from '../../common'
 import { setting } from "./drawing.json"
@@ -11,6 +11,7 @@ export default function Edit() {
   const { id, type } = useParams<{ id: string, type: "create" | "edit" }>()
   const attchsRef = useRef<AttachmentRef>()
   const [baseForm] = Form.useForm()
+  const [confirmType, setConfirmType] = useState<number>(1)
   const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
     try {
       const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/drawingConfirmation/${id}`)
@@ -71,6 +72,9 @@ export default function Edit() {
         serviceManagerTel: fields.serviceManager.records?.[0]?.phone
       })
     }
+    if (fields.confirmType) {
+      setConfirmType(fields.confirmType)
+    }
   }
 
   return <Spin spinning={loading}>
@@ -81,11 +85,11 @@ export default function Edit() {
       col={3}
       dataSource={data || {}}
       edit />
+    {confirmType === 1 && <ConfirmDetail />}
     <Attachment
       title="附件"
       ref={attchsRef}
       dataSource={data?.fileSources}
       edit />
-    <ConfirmDetail />
   </Spin>
 }

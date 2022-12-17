@@ -181,6 +181,21 @@
             "type": "phone"
         },
         {
+            "title": "确认主体",
+            "dataIndex": "confirmType",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "技术确认",
+                    "value": 1
+                },
+                {
+                    "label": "自主确认",
+                    "value": 2
+                }
+            ]
+        },
+        {
             "title": "备注",
             "dataIndex": "description",
             "type": "textarea",
@@ -489,36 +504,44 @@
     ],
     "productGroupRow": [
         {
-            "title": "* 线路名称",
-            "dataIndex": "lineName"
+            "title": "线路名称",
+            "dataIndex": "lineName",
+            "required": true
         },
         {
-            "title": "* 产品类型",
-            "dataIndex": "productTypeName"
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "required": true
         },
         {
-            "title": "* 电压等级（kv）",
-            "dataIndex": "voltageLevelName"
+            "title": "电压等级（kv）",
+            "dataIndex": "voltageLevelName",
+            "required": true
         },
         {
-            "title": "* 塔型",
-            "dataIndex": "productCategory"
+            "title": "塔型",
+            "dataIndex": "productCategory",
+            "required": true
         },
         {
-            "title": "* 塔型钢印号",
-            "dataIndex": "steelProductShape"
+            "title": "塔型钢印号",
+            "dataIndex": "steelProductShape",
+            "required": true
         },
         {
-            "title": "* 杆塔号",
-            "dataIndex": "name"
+            "title": "杆塔号",
+            "dataIndex": "name",
+            "required": true
         },
         {
-            "title": "* 呼高（m）",
-            "dataIndex": "basicHeight"
+            "title": "呼高（m）",
+            "dataIndex": "basicHeight",
+            "required": true
         },
         {
-            "title": "* 模式",
-            "dataIndex": "patternName"
+            "title": "模式",
+            "dataIndex": "patternName",
+            "required": true
         },
         {
             "title": "结构",
@@ -557,16 +580,19 @@
             "dataIndex": "legWeightD"
         },
         {
-            "title": "* 本体重量（kg）",
-            "dataIndex": "bodyWeight"
+            "title": "本体重量（kg）",
+            "dataIndex": "bodyWeight",
+            "required": true
         },
         {
-            "title": "* 单重（kg）",
-            "dataIndex": "monomerWeight"
+            "title": "单重（kg）",
+            "dataIndex": "monomerWeight",
+            "required": true
         },
         {
-            "title": "* 总重（kg）",
-            "dataIndex": "totalWeight"
+            "title": "总重（kg）",
+            "dataIndex": "totalWeight",
+            "required": true
         },
         {
             "title": "其他增重-抱箍（kg）",
