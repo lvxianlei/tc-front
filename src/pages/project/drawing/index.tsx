@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form } from 'antd'
+import React, { Fragment, useState } from 'react'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form, Typography } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { SearchTable as Page, PopTableContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { drawing, connectContract } from './drawing.json'
-import Subsidiary from './subsidiary'
-
+const { Text, Link } = Typography
 export default function Drawing(): React.ReactNode {
     const history = useHistory()
     const location = useLocation<{ auditStatus?: number }>();
     const [filterValue, setFilterValue] = useState<any>({
         ...history.location.state as object
     })
-    const [subsidiary, setSubsidiary] = useState<boolean>(false)
     const [connectVisible, setConnectVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
     const [conenctData, setConenctData] = useState<{ [key: string]: any }>({})
@@ -124,22 +122,30 @@ export default function Drawing(): React.ReactNode {
         >
             <PopTableContent data={connectContract as any} onChange={(records: any) => setConenctData(records[0])} />
         </Modal>
-        <Modal
-            title="明细"
-            visible={subsidiary}
-            width={1101}
-            destroyOnClose
-            onCancel={() => setSubsidiary(false)}
-            footer={
-                <Button type="primary" key="ok" onClick={() => setSubsidiary(false)}>确定</Button>
-            }
-        >
-            <Subsidiary id={detailedId} />
-        </Modal>
         <Page
             path="/tower-market/drawingConfirmation"
             columns={[
-                ...(drawing as any),
+                ...drawing.map((item: any) => {
+                    if (item.dataIndex === "taskNumbers") {
+                        return ({
+                            ...item,
+                            render: (value: string, records: any) => {
+                                const values = value?.split(",")
+                                const paths = records?.taskNoticeIds?.split(",")
+                                return <Text
+                                    style={{ width: "100%" }}
+                                    ellipsis={{
+                                        tooltip: value && !["-1", -1].includes(value) ? value : "-"
+                                    }}>
+                                    {values?.map((item: any, index: number) => <Fragment key={`${item}-${index}`}><Link
+                                        onClick={() => history.push(`/project/salePlan/cat/salesPlan/undefined/${paths[index]}`)}
+                                    >{item}</Link>,</Fragment>)}
+                                </Text>
+                            }
+                        })
+                    }
+                    return item
+                }),
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -172,6 +178,7 @@ export default function Drawing(): React.ReactNode {
                             type="link"
                             size="small"
                             style={{ padding: 2 }}
+                            disabled={(record.confirmType !== 2) || (![0, 3].includes(record.auditStatus))}
                             onClick={() => history.push(`/project/drawing/projectGroup/${record.id}`)}
                         >编辑明细</Button>
                         <Popconfirm
@@ -203,7 +210,7 @@ export default function Drawing(): React.ReactNode {
                             type="link"
                             size="small"
                             style={{ padding: 2 }}
-                            // disabled={record.isReject !== 1}
+                            disabled={record.isReject !== 1}
                             onClick={() => handleRecall(record.id)}
                         >驳回</Button>
                     </>
