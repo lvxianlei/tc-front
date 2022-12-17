@@ -348,12 +348,12 @@
         },
         {
             "title": "* 电压等级（kv）",
-            "dataIndex": "voltageLevelName",
+            "dataIndex": "voltageGradeName",
             "width": 120
         },
         {
             "title": "* 塔型",
-            "dataIndex": "productCategory",
+            "dataIndex": "productCategoryName",
             "width": 80
         },
         {
@@ -363,12 +363,12 @@
         },
         {
             "title": "* 杆塔号",
-            "dataIndex": "name",
+            "dataIndex": "productNumber",
             "width": 80
         },
         {
             "title": "* 呼高（m）",
-            "dataIndex": "basicHeight",
+            "dataIndex": "productHeight",
             "width": 90
         },
         {
@@ -378,7 +378,7 @@
         },
         {
             "title": "结构",
-            "dataIndex": "structureName",
+            "dataIndex": "structure",
             "width": 90
         },
         {
@@ -504,47 +504,47 @@
     ],
     "productGroupRow": [
         {
-            "title": "*线路名称",
+            "title": "线路名称",
             "dataIndex": "lineName",
             "required": true
         },
         {
-            "title": "*塔型",
-            "dataIndex": "productCategory",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
             "required": true
         },
         {
-            "title": "*塔型钢印号",
+            "title": "塔型钢印号",
             "dataIndex": "steelProductShape",
             "required": true
         },
         {
-            "title": "*产品类型",
+            "title": "产品类型",
             "dataIndex": "productTypeName",
             "required": true
         },
         {
-            "title": "*电压等级（kV）",
-            "dataIndex": "voltageLevelName",
+            "title": "电压等级（kV）",
+            "dataIndex": "voltageGradeName",
             "required": true
         },
         {
             "title": "结构",
-            "dataIndex": "structureName"
+            "dataIndex": "structure"
         },
         {
-            "title": "*模式",
+            "title": "模式",
             "dataIndex": "patternName",
             "required": true
         },
         {
-            "title": "*杆塔号",
+            "title": "杆塔号",
             "dataIndex": "name",
             "required": true
         },
         {
-            "title": "*呼高（m）",
-            "dataIndex": "basicHeight",
+            "title": "呼高（m）",
+            "dataIndex": "productHeight",
             "required": true
         },
         {
@@ -655,7 +655,7 @@
         },
         {
             "title": "*塔型",
-            "dataIndex": "productCategory",
+            "dataIndex": "productCategoryName",
             "required": true
         },
         {
@@ -670,12 +670,12 @@
         },
         {
             "title": "*电压等级（kV）",
-            "dataIndex": "voltageLevelName",
+            "dataIndex": "voltageGradeName",
             "required": true
         },
         {
             "title": "结构",
-            "dataIndex": "structureName"
+            "dataIndex": "structure"
         },
         {
             "title": "*模式",
@@ -689,7 +689,7 @@
         },
         {
             "title": "*呼高（m）",
-            "dataIndex": "basicHeight",
+            "dataIndex": "productHeight",
             "required": true
         },
         {

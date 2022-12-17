@@ -445,11 +445,11 @@
       "exact": true,
       "authority": "tc_erp_sc_drawing_list"
     },
-    // 编辑图纸确认
+    // 编辑杆塔明细
     {
-      "name": "编辑图纸确认",
-      "path": "/project/drawing/:type/:id",
-      "module": "./pages/project/drawing/Edit",
+      "name": "编辑杆塔明细",
+      "path": "/project/drawing/projectGroup/:id",
+      "module": "./pages/project/drawing/editProjectGroup",
       "exact": true,
       "authority": "tc_erp_sc_drawing_list"
     },
@@ -458,6 +458,14 @@
       "name": "图纸确认详情",
       "path": "/project/drawing/detail/:id",
       "module": "./pages/project/drawing/Overview",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
+    // 编辑图纸确认
+    {
+      "name": "编辑图纸确认",
+      "path": "/project/drawing/:type/:id",
+      "module": "./pages/project/drawing/Edit",
       "exact": true,
       "authority": "tc_erp_sc_drawing_list"
     },
