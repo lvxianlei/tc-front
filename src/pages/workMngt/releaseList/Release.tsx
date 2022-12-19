@@ -375,7 +375,7 @@ export default function Release(): React.ReactNode {
                         </Col>
                         <Col span={12}>
                             <Form.Item name="implementStandardName" label="执行标准">
-                                <Input.TextArea maxLength={800} showCount rows={1} disabled/>
+                                <Input.TextArea maxLength={800} showCount rows={1} disabled />
                             </Form.Item>
                         </Col>
                     </Row>
