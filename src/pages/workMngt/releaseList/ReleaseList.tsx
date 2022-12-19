@@ -315,6 +315,12 @@ export default function ReleaseList(): React.ReactNode {
         //     }
         // },
         {
+            key: 'implementStandardName',
+            title: '执行标准',
+            width: 200,
+            dataIndex: 'implementStandardName'
+        },
+        {
             key: 'cancelDescription',
             title: '取消说明',
             width: 200,
