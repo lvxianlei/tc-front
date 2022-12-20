@@ -507,7 +507,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber
+                                render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" :<InputNumber
                                     min={0}
                                     precision={0}
                                     value={value || 0}
@@ -552,7 +552,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "structureTexture") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records.source === 1 ? records.materialTexture : <Select
+                                render: (value: number, records: any, key: number) => records.source === 1 ? records.structureTexture : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
                                     onChange={(e: string) => {
