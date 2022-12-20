@@ -496,7 +496,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <InputNumber
-                                    min={1}
+                                    min={records.source === 1 ? value : 1}
                                     precision={0}
                                     value={value || undefined}
                                     onChange={(value: number) => handleNumChange(value, key)}
