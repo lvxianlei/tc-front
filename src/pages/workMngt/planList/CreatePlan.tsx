@@ -388,6 +388,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         "dataIndex": "purchaseType",
                         "title": "采购类型",
                         "type": "select",
+                        "disabled": props.type !== "create",
                         "rules": [
                             {
                                 "required": true,
