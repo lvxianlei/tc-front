@@ -496,7 +496,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <InputNumber
-                                    min={records.source === 1 ? value : 1}
+                                    min={data?.purchaseType === 1 ? value : 1}
                                     precision={0}
                                     value={value || undefined}
                                     onChange={(value: number) => handleNumChange(value, key)}
@@ -507,7 +507,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" :<InputNumber
+                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? value || "0" :<InputNumber
                                     min={0}
                                     precision={0}
                                     value={value || 0}
@@ -517,7 +517,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "width") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records.source === 1 ? value || "0" : <InputNumber
+                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? value || "0" : <InputNumber
                                     min={0}
                                     max={99999}
                                     value={value}
@@ -528,7 +528,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "materialStandard") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records.source === 1 ? records.materialStandardName : <Select
+                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? records.materialStandardName : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.materialStandard && popDataList[key]?.materialStandard + ',' + popDataList[key]?.materialStandardName}
                                     onChange={(e: string) => {
@@ -552,7 +552,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "structureTexture") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records.source === 1 ? records.structureTexture : <Select
+                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? records.structureTexture : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
                                     onChange={(e: string) => {
@@ -586,7 +586,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setVisibleNumber(true);
                             }}
                             disabled={(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))}>复制</Button>
-                            <Button type="link" disabled={records.source === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
+                            <Button type="link" disabled={data?.purchaseType === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
                                 handleRemove(index)
                                
                             }}>移除</Button>
