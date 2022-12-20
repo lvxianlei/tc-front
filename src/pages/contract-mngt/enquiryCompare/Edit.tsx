@@ -371,7 +371,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         }
                         return res
                     }),
-                    path :`${choosePlanList.path}?usePlanDetailIds = ${popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)||''}&approval=2` ,
+                    path :`${choosePlanList.path}?usePlanDetailIds = ${popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)||''}` ,
                     columns: (choosePlanList as any).columns.map((item: any) => {
                         if (item.dataIndex === "materialStandard") {
                             return ({
