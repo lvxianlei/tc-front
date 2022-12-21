@@ -109,7 +109,7 @@ export default function Edit() {
         ...saveData,
         id: reqType === "post" ? "" : params.id,
         relationId: data?.id,
-        relationInternalNumber: data?.internalNumber,
+        relationInternalNumber:  data?.relationInternalNumber,
         projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
