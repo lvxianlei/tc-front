@@ -210,10 +210,10 @@ export default function List(): React.ReactNode {
                 }}>重置</Button>
             </Form.Item>
         </Form>
-        {/* <Button type="primary" className={styles.bottom16} onClick={() => {
+        <Button type="primary" className={styles.bottom16} onClick={() => {
             setType("new");
             setVisible(true)
-        }} ghost>申请</Button> */}
+        }} ghost>申请</Button>
         <CommonTable
             className={styles.bottom16}
             haveIndex
@@ -296,8 +296,51 @@ export default function List(): React.ReactNode {
             })}
         />
         <CommonTable
+            className={styles.changeForm}
             haveIndex
-            columns={detailColumns}
+            columns={detailColumns.map(res => {
+                if (res.dataIndex === 'changeProductNumber') {
+                    return {
+                        ...res,
+                        render: (_: any, record: Record<string, any>): React.ReactNode => (
+                            _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+                        )
+                    }
+                }
+                if (res.dataIndex === 'changeProductCategoryName') {
+                    return {
+                        ...res,
+                        render: (_: any, record: Record<string, any>): React.ReactNode => (
+                            _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+                        )
+                    }
+                }
+                if (res.dataIndex === 'changeSteelProductShape') {
+                    return {
+                        ...res,
+                        render: (_: any, record: Record<string, any>): React.ReactNode => (
+                            _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+                        )
+                    }
+                }
+                if (res.dataIndex === 'changeVoltageGradeName') {
+                    return {
+                        ...res,
+                        render: (_: any, record: Record<string, any>): React.ReactNode => (
+                            _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+                        )
+                    }
+                }
+                if (res.dataIndex === 'changeProductTypeName') {
+                    return {
+                        ...res,
+                        render: (_: any, record: Record<string, any>): React.ReactNode => (
+                            _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+                        )
+                    }
+                }
+                return res
+            })}
             dataSource={detailData || []}
             pagination={false} />
     </Spin>
