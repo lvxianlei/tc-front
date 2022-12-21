@@ -9,6 +9,10 @@
             "dataIndex": "productCategory"
         },
         {
+            "title": "钢印号",
+            "dataIndex": "steelProductShape"
+        },
+        {
             "title": "计划号",
             "dataIndex": "planNum"
         },
@@ -49,6 +53,10 @@
         {
             "title": "塔型",
             "dataIndex": "productCategory"
+        },
+        {
+            "title": "钢印号",
+            "dataIndex": "steelProductShape"
         },
         {
             "title": "计划号",
