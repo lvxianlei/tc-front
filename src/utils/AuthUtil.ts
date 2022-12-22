@@ -18,7 +18,6 @@ const TENANT_LISTS: string = 'SINZETECH_TENANTS'
 const REAL_NAME: string = 'REAL_NAME';
 const APP_Name: string = 'CURRENT_APP_NAME';
 const ACCOUNT: string = "ACCOUNT";
-const MES_BASE_INFO:string = "MES_BASE_INFO";
 export default abstract class AuthUtil {
 
     static timeLength = 50 * 60 * 1000
@@ -278,27 +277,6 @@ export default abstract class AuthUtil {
     public static removeSinzetechToken(): void {
         Cookies.remove('DHWY_TDM_TOKEN', { domain: '.dhwy.cn' });
         Cookies.remove('DHWY_TDM_TOKEN', { domain: 'localhost' });
-    }
-
-    /**
-     * 设置第三方应用配置（mes）
-     */
-    public static async setMesBaseInfo(){
-            const { ...result }: any = await RequestUtil.get('/tower-system/appDeploy/detail/mes',undefined, {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'Authorization': `Basic ${this.getAuthorization()}`,
-                'Tenant-Id': this.getTenantId()
-            })
-        sessionStorage.setItem(MES_BASE_INFO, JSON.stringify(result))
-    }
-
-    /**
-     * 获取第三方应用配置信息（mes）
-     */
-    public static getMesBaseInfo():any{
-        const  mesBaseInfo  = sessionStorage.getItem(MES_BASE_INFO);
-        console.log(mesBaseInfo)
-        return mesBaseInfo ? JSON.parse(mesBaseInfo) : {};
     }
 }
 

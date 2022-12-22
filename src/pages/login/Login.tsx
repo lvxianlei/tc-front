@@ -84,8 +84,6 @@ export default function Login(): JSX.Element {
             AuthUtil.setTenants(tenants)
             AuthUtil.setRealName(result.real_name)
             AuthUtil.setAccout(result.account)
-            //设置第三方配置信息（Mes）
-            AuthUtil.setMesBaseInfo();
             if (redirectURL) {
                 window.location.assign(redirectURL)
             } else {
