@@ -8,6 +8,7 @@ import { Col, Row, Tabs } from "antd";
 import { useAuthorities } from "../../hooks";
 import Charts from "./Charts"
 import Lines from "./Lines";
+import ThirdPartyUtil from "@utils/ThirdPartyUtil";
 const baseUrl = process.env.IFRAME_BASE_URL;
 export default function ChooseApply(): JSX.Element {
     const history = useHistory()
@@ -39,7 +40,7 @@ export default function ChooseApply(): JSX.Element {
                                                     herf = res.path
                                             }
                                             if (res.appName === "MC") {
-                                                herf = `${AuthUtil.getMesBaseInfo().skipUrl}${res.path}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo().skipUrl}${res.path}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
                                             }
                                             if (res.appName === "CRM") {
                                                 herf = process.env.CRM_BREACK_URL
