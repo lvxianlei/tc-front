@@ -229,6 +229,7 @@ export default function (): JSX.Element {
         AuthUtil.setTenants(tenants)
         AuthUtil.setRealName(result.real_name)
         AuthUtil.setAccout(result.account)
+        AuthUtil.setMesBaseInfo();
         window.location.assign(window.location.origin + ctxConfig.home || '/')
     }
 
