@@ -171,9 +171,14 @@ export default function SetOutTaskList(): React.ReactNode {
                 </Form.Item>
             },
             {
+                name: 'productCategoryName',
+                label: '塔型名称',
+                children: <Input placeholder="请输入" />
+            },
+            {
                 name: 'fuzzyMsg',
                 label: '模糊查询项',
-                children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号" />
+                children: <Input style={{ width: '300px' }} placeholder="放样任务编号/计划号/订单编号/内部合同编号" />
             }
         ]}
         filterValue={filterValue}
