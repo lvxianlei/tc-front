@@ -753,7 +753,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'surfaceArea',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "surfaceArea"]} initialValue={_}>
-                    <InputNumber size="small" min={0} max={9999.99} />
+                    <InputNumber size="small" min={0} max={99999999.99} />
                 </Form.Item>
             )
         },
