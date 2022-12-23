@@ -89,7 +89,7 @@ export default function Edit() {
         type="primary"
         key="saveOrSubmit"
         loading={saving}
-        onClick={() => onSubmit(1)}
+        onClick={() => onSubmit(2)}
       >保存并发起</Button>
       <Button onClick={() => history.go(-1)}>取消</Button>
     </Space>
