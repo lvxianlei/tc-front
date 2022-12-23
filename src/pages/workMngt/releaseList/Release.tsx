@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import {Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber, Radio} from 'antd';
+import { Space, Input, Button, Form, Select, message, Modal, Row, Col, Spin, InputNumber, Radio } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { CommonTable, DetailContent, DetailTitle, Page } from '../../common';
+import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
@@ -230,6 +230,8 @@ export default function Release(): React.ReactNode {
                         const submitValue = {
                             galvanizeDemand: value.galvanizeDemand,
                             machiningDemand: value.machiningDemand,
+                            implementStandardName: value.implementStandardName,
+                            implementStandard: value.implementStandard,
                             packDemand: value.packDemand,
                             cancelIssuedNumber: value.cancelIssuedNumber ? value.cancelIssuedNumber.join(',') : "",
                             planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
@@ -238,7 +240,8 @@ export default function Release(): React.ReactNode {
                             trialAssembleDemand: value.trialAssembleDemand,
                             voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
                             weldingDemand: value.weldingDemand,
-                            isPerforate:value.isPerforate,
+                            isPerforate: value.isPerforate,
+                            description: value.description,
                             trialAssembleSegments: trialValue,
                             loftingBatchProductDTOList: arr,
                             loftingBatchStatisticsDTOList: bTableDataSource.map((item: any) => {
@@ -355,14 +358,24 @@ export default function Release(): React.ReactNode {
                                 </Select>
                             </Form.Item>
                         </Col>
+                        <Col span={12}>
+                            <Form.Item name="description" label="备注">
+                                <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
+                            </Form.Item>
+                        </Col>
                     </Row>
                     <Row>
                         <Col span={12}>
                             <Form.Item name="isPerforate" label="是否钻孔特殊要求">
-                                <Radio.Group  style={{ paddingLeft:"12px", width: "100%" }}  defaultValue={0}>
-                                    <Radio  value={1}>是</Radio>
-                                    <Radio  value={0}>否</Radio>
+                                <Radio.Group style={{ paddingLeft: "12px", width: "100%" }} defaultValue={0}>
+                                    <Radio value={1}>是</Radio>
+                                    <Radio value={0}>否</Radio>
                                 </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="implementStandardName" label="执行标准">
+                                <Input.TextArea maxLength={800} showCount rows={1} disabled />
                             </Form.Item>
                         </Col>
                     </Row>

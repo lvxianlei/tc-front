@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Spin } from 'antd';
-import { SearchTable as Page } from '../../common';
+import { IntgSelect, SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -38,10 +38,10 @@ export default function SetOutList(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
-            key: 'reallyProjectName',
-            title: '项目名称',
+            key: 'projectName',
+            title: '工程名称',
             width: 150,
-            dataIndex: 'reallyProjectName'
+            dataIndex: 'projectName'
         },
         {
             key: 'internalNumber',
@@ -121,7 +121,7 @@ export default function SetOutList(): React.ReactNode {
                         }}>杆塔配段</Link>
                     </Button>
                     {
-                        record.status === 5 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
+                        record.status === 5 || record.status === 6 ? <Deliverables id={record.id} name={record.name} /> : <Button type="link" disabled>交付物</Button>
                     }
                 </>
             )
@@ -163,7 +163,8 @@ export default function SetOutList(): React.ReactNode {
                         <Select.Option value={2} key="2">放样中</Select.Option>
                         <Select.Option value={3} key="3">组焊中</Select.Option>
                         <Select.Option value={4} key="4">配段中</Select.Option>
-                        <Select.Option value={5} key="5">已完成</Select.Option>
+                        <Select.Option value={5} key="5">部分完成</Select.Option>
+                        <Select.Option value={6} key="6">已完成</Select.Option>
                     </Select>
                 </Form.Item>
             },
@@ -181,14 +182,27 @@ export default function SetOutList(): React.ReactNode {
             {
                 name: 'loftingLeader',
                 label: '放样负责人',
-                children: <Form.Item name="loftingLeader" initialValue={location.state?.userId || ""}>
-                    <Select placeholder="请选择" style={{ width: "150px" }}>
-                        <Select.Option value="" key="6">全部</Select.Option>
-                        {checkUser && checkUser.map((item: any) => {
-                            return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                        })}
-                    </Select>
-                </Form.Item>
+                children: <IntgSelect width={200} />
+            },
+            {
+                name: 'taskNum',
+                label: '放样任务编号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'planNumber',
+                label: '计划号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'internalNumber',
+                label: '内部合同编号',
+                children: <Input placeholder='请输入'/>
+            },
+            {
+                name: 'name',
+                label: '塔型',
+                children: <Input placeholder='请输入'/>
             },
             {
                 name: 'fuzzyMsg',
@@ -201,6 +215,9 @@ export default function SetOutList(): React.ReactNode {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+            }
+            if (values.loftingLeader) {
+                values.loftingLeader = values.loftingLeader?.value;
             }
             setFilterValue(values)
             return values;

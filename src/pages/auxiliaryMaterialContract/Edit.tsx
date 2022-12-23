@@ -1,4 +1,4 @@
-import React, {forwardRef, useImperativeHandle, useState, useRef} from "react"
+import React, {forwardRef, useImperativeHandle, useState, useRef, useEffect} from "react"
 import {Button, Modal, Spin, Form, InputNumber, message, Select} from "antd"
 import {BaseInfo, DetailTitle, Attachment, CommonTable, PopTableContent} from "../common"
 import useRequest from '@ahooksjs/use-request'
@@ -18,6 +18,7 @@ import {freightInformation, HandlingChargesInformation} from "./Edit.json";
 interface EditProps {
     id: string
     type: "new" | "edit",
+    visibleP: boolean
 }
 
 interface WeightParams {
@@ -141,7 +142,7 @@ const retain = (num: string, decimal: number) => {
     }
     return parseFloat(num).toFixed(decimal)
 }
-export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
+export default forwardRef(function ({id, type, visibleP}: EditProps, ref): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [isDisabled, setDisabled] = useState<boolean>(true)
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -150,6 +151,7 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
     const [baseForm] = Form.useForm()
     const [freightForm] = Form.useForm()
     const [stevedoringForm] = Form.useForm()
+    const [detail, setDetail] = useState<any>({})
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({
         getDataSource: () => [],
         resetFields: () => {
@@ -217,6 +219,7 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
     const {loading, data} = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialAuxiliaryContract/${id}`)
+            setDetail(result)
             const taxNum = await RequestUtil.get(`/tower-storage/tax`)
             // 辅料列表 -字段对应处理
             let list: any[] = result?.materialAuxiliaryContractDetails || []
@@ -400,70 +403,156 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
         setPopDataList(materialList.filter((item: any) => item.comparisonPriceDetailId !== id))
     }
 
-    useImperativeHandle(ref, () => ({onSubmit, resetFields, setCanEditBaseInfo}), [ref, materialList])
+    useImperativeHandle(ref, () => ({onSubmit, onSubmitApproval, resetFields, setCanEditBaseInfo, onSubmitCancel}), [ref, materialList])
     const setCanEditBaseInfo = () => {
         setDisabled(false)
     }
     const onSubmit = () => new Promise(async (resove, reject) => {
-
         try {
-            const baseInfo = await baseForm.validateFields()
-            const freightInfo = await freightForm.validateFields()
-            const stevedoringInfo = await stevedoringForm.validateFields()
-            // 再次更新计算价格
-            // console.log(popDataList)
-            // console.log(materialList)
-            // debugger
-            let list = updataAllPrice(materialList)
-            setMaterialList(list)
-            setPopDataList(list)
-            // console.log(list)
-            const values = {
-                ...baseInfo,
-                fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorId: AuthUtil.getUserInfo().user_id,
-                supplierId: baseInfo.supplier.id,
-                supplierName: baseInfo.supplier.value,
-                tax: baseInfo.taxRate,
-                transportBear: {
-                    ...freightInfo,
-                    transportTaxPrice:freightInfo.transportBear == 2 ? freightInfo.transportTaxPrice:0,
-                    transportPrice:freightInfo.transportBear == 2 ? freightInfo.transportPrice:0,
-                    transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
-                    transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
-                },
-                unloadBear: {
-                    ...stevedoringInfo,
-                    unloadTaxPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadTaxPrice:0,
-                    unloadPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadPrice:0,
-                    unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
-                    unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
-                },
-                materialAuxiliaryContractDetails: list.map((item: any) => {
-                    let obj = {
-                        ...item,
-                        taxPrice: Number(item.taxOffer).toFixed(6),
-                        price: Number(item.offer).toFixed(6),
-                        totalTaxAmount: Number(item.totalTaxAmount).toFixed(6),
-                        totalAmount: Number(item.totalAmount).toFixed(6),
-                        // taxTotalAmount: item.taxTotalAmount,
-                        // totalAmount: item.totalAmount,
-                        comparisonPriceId: item.comparisonPriceId,
-                        // comparisonPriceDetailId:item.id,
-                        // comparisonPriceNumber:'0123456789'
-                    }
-                    return (obj)
-                })
+            if([undefined, 0,'0',3,'3',4,'4'].includes(detail?.approval)){
+                const baseInfo = await baseForm.validateFields()
+                const freightInfo = await freightForm.validateFields()
+                const stevedoringInfo = await stevedoringForm.validateFields()
+                // 再次更新计算价格
+                // console.log(popDataList)
+                // console.log(materialList)
+                // debugger
+                let list = updataAllPrice(materialList)
+                setMaterialList(list)
+                setPopDataList(list)
+                // console.log(list)
+                const values = {
+                    ...baseInfo,
+                    isApproval: false,
+                    fileIds: attchsRef.current.getDataSource().map(item => item.id),
+                    operatorId: AuthUtil.getUserInfo().user_id,
+                    supplierId: baseInfo.supplier.id,
+                    supplierName: baseInfo.supplier.value,
+                    tax: baseInfo.taxRate,
+                    transportBear: {
+                        ...freightInfo,
+                        transportTaxPrice:freightInfo.transportBear == 2 ? freightInfo.transportTaxPrice:0,
+                        transportPrice:freightInfo.transportBear == 2 ? freightInfo.transportPrice:0,
+                        transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
+                        transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
+                    },
+                    unloadBear: {
+                        ...stevedoringInfo,
+                        unloadTaxPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadTaxPrice:0,
+                        unloadPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadPrice:0,
+                        unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
+                        unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
+                    },
+                    materialAuxiliaryContractDetails: list.map((item: any) => {
+                        let obj = {
+                            ...item,
+                            taxPrice: Number(item.taxOffer).toFixed(6),
+                            price: Number(item.offer).toFixed(6),
+                            totalTaxAmount: Number(item.totalTaxAmount).toFixed(6),
+                            totalAmount: Number(item.totalAmount).toFixed(6),
+                            // taxTotalAmount: item.taxTotalAmount,
+                            // totalAmount: item.totalAmount,
+                            comparisonPriceId: item.comparisonPriceId,
+                            // comparisonPriceDetailId:item.id,
+                            // comparisonPriceNumber:'0123456789'
+                        }
+                        return (obj)
+                    })
+                }
+                await saveRun(values)
+                message.success("保存成功...")
+                resove(true)
+            }else if([2,'2'].includes(detail?.approval)){
+                message.error("当前数据已审批，修改后请重新发起审批！")
+                throw new Error('审批通过数据，修改后只能重新发起审批！！')
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
             }
-            await saveRun(values)
-            message.success("保存成功...")
-            resove(true)
         } catch (error) {
             console.log(error)
             reject(false)
         }
     })
-
+    const onSubmitApproval = () => new Promise(async (resove, reject) => {
+        try {
+            if([undefined,0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseInfo = await baseForm.validateFields()
+                const freightInfo = await freightForm.validateFields()
+                const stevedoringInfo = await stevedoringForm.validateFields()
+                // 再次更新计算价格
+                // console.log(popDataList)
+                // console.log(materialList)
+                // debugger
+                let list = updataAllPrice(materialList)
+                setMaterialList(list)
+                setPopDataList(list)
+                // console.log(list)
+                const values = {
+                    ...baseInfo,
+                    isApproval: true,
+                    fileIds: attchsRef.current.getDataSource().map(item => item.id),
+                    operatorId: AuthUtil.getUserInfo().user_id,
+                    supplierId: baseInfo.supplier.id,
+                    supplierName: baseInfo.supplier.value,
+                    tax: baseInfo.taxRate,
+                    transportBear: {
+                        ...freightInfo,
+                        transportTaxPrice:freightInfo.transportBear == 2 ? freightInfo.transportTaxPrice:0,
+                        transportPrice:freightInfo.transportBear == 2 ? freightInfo.transportPrice:0,
+                        transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
+                        transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
+                    },
+                    unloadBear: {
+                        ...stevedoringInfo,
+                        unloadTaxPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadTaxPrice:0,
+                        unloadPrice:stevedoringInfo.unloadBear == 2 ? stevedoringInfo.unloadPrice:0,
+                        unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
+                        unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
+                    },
+                    materialAuxiliaryContractDetails: list.map((item: any) => {
+                        let obj = {
+                            ...item,
+                            taxPrice: Number(item.taxOffer).toFixed(6),
+                            price: Number(item.offer).toFixed(6),
+                            totalTaxAmount: Number(item.totalTaxAmount).toFixed(6),
+                            totalAmount: Number(item.totalAmount).toFixed(6),
+                            // taxTotalAmount: item.taxTotalAmount,
+                            // totalAmount: item.totalAmount,
+                            comparisonPriceId: item.comparisonPriceId,
+                            // comparisonPriceDetailId:item.id,
+                            // comparisonPriceNumber:'0123456789'
+                        }
+                        return (obj)
+                    })
+                }
+                await saveRun(values)
+                message.success("审批发起成功...")
+                resove(true)
+            }else{
+                message.error("当前不可发起审批！")
+                throw new Error('当前不可发起审批！')
+            }
+        } catch (error) {
+            console.log(error)
+            reject(false)
+        }
+    })
+    const onSubmitCancel = () => new Promise(async (resove, reject) => {
+        try {
+            if([1,'1'].includes(detail?.approval)){
+                await RequestUtil.get(`/tower-supply/workflow/contract/cancel/${id}/2`)
+                message.success("撤销成功...")
+                resove(true)
+            }
+            else{
+                await message.error("不可撤销...")
+                throw new Error('不可撤销')
+            }
+        } catch (error) {
+            reject(false)
+        }
+    })
     const resetFields = () => {
         baseForm.resetFields()
         attchsRef.current?.resetFields()
@@ -657,7 +746,18 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
             })
         }
     }
-
+    useEffect(() => {
+        if(visibleP){
+            baseForm.setFieldsValue({
+                operatorName: AuthUtil.getRealName(),
+                signingTime: moment(),
+                invoiceCharacter: 1,
+                meteringMode: 2,
+                // deliveryMethod: deliveryMethodEnum?.[0]?.value,
+                settlementMode: settlementModeEnum?.[0]?.value,
+            })
+        }
+    },[visibleP])
     return <Spin spinning={loading && taxLoading}>
         <Modal width={addMaterial.width || 520} title={`选择${addMaterial.title}`} destroyOnClose visible={visible}
                onOk={handleAddModalOk} onCancel={() => setVisible(false)}>
@@ -734,14 +834,7 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                         return {...item, disabled: !isDisabled}
                 }
             })}
-            dataSource={{
-                operatorName: AuthUtil.getRealName(),
-                signingTime: moment(),
-                invoiceCharacter: 1,
-                meteringMode: 2,
-                // deliveryMethod: deliveryMethodEnum?.[0]?.value,
-                settlementMode: settlementModeEnum?.[0]?.value,
-            }} edit/>
+            dataSource={{...data}} edit/>
         {/*<DetailTitle title="运费信息" key="b" />*/}
         <p style={{fontSize: '16px', color: '#181818', marginRight: '30px', fontWeight: '700', margin: 0}}>运费信息
             <p style={{fontSize: '14px', color: 'rgba(0, 0, 0, 0.85)', margin: 0}}>
@@ -870,9 +963,9 @@ export default forwardRef(function ({id, type,}: EditProps, ref): JSX.Element {
                                                               onClick={() => handleRemove(records.comparisonPriceDetailId)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={popDataList.map((item: any) => ({
+            dataSource={[...popDataList].map((item: any,index:number) => ({
                 ...item,
-                key: item.id || Math.random() + new Date().getTime()
+                key: item.id || index
             }))}/>
         <Attachment dataSource={data?.attachInfoList || []} edit ref={attchsRef}/>
     </Spin>

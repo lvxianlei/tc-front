@@ -1,5 +1,15 @@
+@import "../../../App.module.less";
+
 .descripForm {
     :global(.ant-form-item) {
         margin-bottom: 0;
+    }
+}
+
+.tableRow{
+    height: @tableRowHeight;
+
+    &:nth-child(odd){
+      background-color: #F8F8F8;
     }
 }

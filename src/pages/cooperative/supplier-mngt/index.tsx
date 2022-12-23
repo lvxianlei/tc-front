@@ -1,6 +1,6 @@
 //供应商管理
 import React, { Key, useRef, useState } from 'react'
-import { Input, Select, Button, Modal, message } from 'antd'
+import { Input, Select, Button, Modal, message, Space, Upload } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { SearchTable as Page } from '../../common'
 import { supplierMngt } from "./supplier.json"
@@ -9,6 +9,8 @@ import Overview from "./Overview"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { qualityAssuranceOptions, supplierTypeOptions, supplyProductsOptions } from '../../../configuration/DictionaryOptions'
+import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate'
+import AuthUtil from '@utils/AuthUtil'
 export default function SupplierMngt(): React.ReactNode {
     const history = useHistory()
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
@@ -16,6 +18,8 @@ export default function SupplierMngt(): React.ReactNode {
     const [detailId, setDetailId] = useState<string>("")
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
+    const [url, setUrl] = useState<string>('');
+    const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const editRef = useRef<{ onSubmit: () => void }>({ onSubmit: () => { } })
     const supplierTypeEnum = supplierTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -125,15 +129,52 @@ export default function SupplierMngt(): React.ReactNode {
                     }
                 }
             ]}
-            extraOperation={<>
+            extraOperation={<Space>
                 <Button
                     type="primary"
                     ghost
                     onClick={() => {
                         setOprationType("new")
                         setEditVisible(true)
-                    }}>创建</Button>
-            </>}
+                }}>创建</Button>
+                <Button
+                    type="primary"
+                    ghost
+                    onClick={() => downloadTemplate('/tower-supply/supplier/export', '供应商管理模板')}
+                >下载模板</Button>
+                
+                <Upload
+                    accept=".xls,.xlsx"
+                    action={() => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl + '/tower-supply/supplier/import'
+                    }}
+                    headers={
+                        {
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={false}
+                    onChange={(info) => {
+                        if (info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        }
+                        if (info.file.response && info.file.response?.success) {
+                            // if (Object.keys(info.file.response?.data).length > 0) {
+                            //     setUrl(info.file.response?.data);
+                            //     setUrlVisible(true);
+                            // } else {
+                                message.success('导入成功！');
+                                history.go(0);
+                            // }
+                        }
+                    }}
+                >
+                    <Button type="primary"  ghost>导入</Button>
+                </Upload>
+            </Space>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {
@@ -176,5 +217,17 @@ export default function SupplierMngt(): React.ReactNode {
                 }
             ]}
         />
+        <Modal
+            visible={urlVisible}
+            onOk={() => {
+                window.open(url);
+                setUrlVisible(false);
+            }}
+            onCancel={() => { setUrlVisible(false); setUrl('') }}
+            title='提示'
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
+        </Modal>
     </>
 }

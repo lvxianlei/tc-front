@@ -152,7 +152,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     marginRight: 12,
                                     color: "#FF8C00"
                                 }}
-                            >{statisticsData?.receivePrice}</span>
+                            >{statisticsData?.receiveTaxPrice}</span>
                             待入库：数量(吨)合计：
                             <span
                                 style={{
@@ -164,7 +164,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 style={{
                                     marginRight: 12,
                                     color: "#FF8C00"
-                                }}>{statisticsData?.waitPrice}</span>
+                                }}>{statisticsData?.waitTaxPrice}</span>
                         </div>
                     </>
                 }

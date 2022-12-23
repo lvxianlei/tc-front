@@ -1,7 +1,7 @@
 // 合同管理-原材料合同管理
 import React, { useState, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
-import { DatePicker, Select, Input, Button, Modal, message, Popconfirm } from 'antd'
+import { DatePicker, Select, Input, Button, Modal, message, Popconfirm, Space } from 'antd'
 import { IntgSelect, SearchTable as Page } from "../common"
 import Edit from "./Edit"
 import Overview from "./Overview"
@@ -19,8 +19,13 @@ export default function ContractMngt(): JSX.Element {
     const [detailId, setDetailId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [filterValue, setFilterValue] = useState<object>({});
-    const editRef = useRef<{ onSubmit: () => void, resetFields: () => void,setCanEditBaseInfo:()=>void}>({ onSubmit: () => { }, resetFields: () => { },setCanEditBaseInfo:()=>{}})
-
+    const editRef = useRef<{ 
+        onSubmit: () => void, 
+        onSubmitApproval: ()=>void, 
+        onSubmitCancel: ()=>void, 
+        resetFields: () => void,
+        setCanEditBaseInfo:()=>void
+    }>({ onSubmit: () => { }, onSubmitApproval: () => { }, resetFields: () => { }, setCanEditBaseInfo:()=>{}, onSubmitCancel: ()=>{} })
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-supply/materialAuxiliaryContract/${id}`)
@@ -30,12 +35,16 @@ export default function ContractMngt(): JSX.Element {
         }
     }), { manual: true })
 
-    const handleEditModalOk = () => new Promise(async (resove, reject) => {
+    const handleEditModalOk = (type: 'save'|'approvalSave'|'cancelSave') => new Promise(async (resove, reject) => {
         try {
-            await editRef.current.onSubmit()
-            message.success("保存成功...")
+            type==='save'&&await editRef.current.onSubmit()
+            type==='approvalSave'&&await editRef.current.onSubmitApproval()
+            type==='cancelSave'&&await editRef.current.onSubmitCancel()
+            // message.success("保存成功...")
             resove(true)
-            history.go(0)
+            type==='save'&&history.go(0)
+            type==='approvalSave'&&history.go(0)
+            type==='cancelSave'&&history.go(0)
         } catch (error) {
             reject(false)
         }
@@ -68,13 +77,30 @@ export default function ContractMngt(): JSX.Element {
                 width={1011}
                 visible={editVisible}
                 okText="保存"
-                onOk={handleEditModalOk}
+                footer={oprationType==='edit'?<Space>
+                    <Button onClick={() => {
+                        editRef.current?.resetFields()
+                        setDetailId("")
+                        setEditVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('save')}>保存</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('cancelSave')}>撤销审批</Button>
+                </Space>:<Space>
+                    <Button onClick={() => {
+                        editRef.current?.resetFields()
+                        setDetailId("")
+                        setEditVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('save')}>保存</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')}>保存并发起审批</Button>
+                </Space>}
                 onCancel={() => {
                     editRef.current?.resetFields()
                     setDetailId("")
                     setEditVisible(false)
                 }}>
-                <Edit id={detailId} type={oprationType} ref={editRef} />
+                <Edit id={detailId} type={oprationType} ref={editRef} visibleP={editVisible}/>
             </Modal>
             <Modal
                 destroyOnClose
@@ -122,7 +148,7 @@ export default function ContractMngt(): JSX.Element {
                         dataIndex: "opration",
                         fixed: "right",
                         render: (_: any, records: any) => <>
-                            <Button type="link" className="btn-operation-link" disabled={records.contractStatus === 3 || records.contractStatus === 4 || records.contractStatus === 5}
+                            <Button type="link" className="btn-operation-link" disabled={records.contractStatus === 3 || records.contractStatus === 4 || records.contractStatus === 5 }
                                     onClick={() => {
                                         setOprationType("edit")
                                         setDetailId(records.id)
@@ -192,6 +218,17 @@ export default function ContractMngt(): JSX.Element {
                         name: 'operatorId',
                         label: '经办人',
                         children: <IntgSelect placeholder="请输入" width={200} />
+                    },
+                    {
+                        name: 'approval',
+                        label: '审批状态',
+                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="0">待发起</Select.Option>
+                            <Select.Option value="1">审批中</Select.Option>
+                            <Select.Option value="2">审批通过</Select.Option>
+                            <Select.Option value="3">审批驳回</Select.Option>
+                            <Select.Option value="4">已撤销</Select.Option>
+                        </Select>
                     },
                     {
                         name: 'fuzzyQuery',

@@ -6,18 +6,23 @@ import { baseInfo } from "./receivingListData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import Edit from "./Edit"
+import EditB from "./EditB"
 import Detail from './Detail';
 import { settlementModeOptions } from "../../../configuration/DictionaryOptions"
 
 export default function Invoicing() {
     const history = useHistory()
     const [visible, setVisible] = useState<boolean>(false)
+    const [visibleB, setVisibleB] = useState<boolean>(false)
     const [visibleSee, setVisibleSee] = useState<boolean>(false);
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailId, setDetailId] = useState<string>("");
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [confirmLoadingB, setConfirmLoadingB] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
+    const editRefB = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
+
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-supply/supplier/list`)
@@ -80,7 +85,21 @@ export default function Invoicing() {
             reject(false)
         }
     })
-
+    const handleModalOkB = () => new Promise(async (resove, reject) => {
+        setConfirmLoadingB(true)
+        try {
+            const isClose = await editRefB.current?.onSubmit()
+            if (isClose) {
+                message.success("材质配料设定成功...")
+                setVisibleB(false)
+                setConfirmLoadingB(false)
+                history.go(0)
+            }
+        } catch (error) {
+            setConfirmLoadingB(false)
+            reject(false)
+        }
+    })
     const handleDelete = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -111,6 +130,19 @@ export default function Invoicing() {
             }}>
             <Edit ref={editRef} id={detailId} type={type} />
         </Modal>
+        <Modal
+            destroyOnClose
+            visible={visibleB}
+            width={'90%'}
+            confirmLoading={confirmLoadingB}
+            title={ "编辑"}
+            onOk={handleModalOkB}
+            onCancel={() => {
+                setVisibleB(false)
+                editRefB.current?.resetFields()
+            }}>
+            <EditB ref={editRefB} id={detailId} type={type} />
+        </Modal>
         {/* 详情 */}
         <Detail
             visible={visibleSee}
@@ -137,15 +169,34 @@ export default function Invoicing() {
                 render: (_: any, record: any) => {
                     return <>
                         <Link className="btn-operation-link" to={`/stock/receiving/detail/${record.id}`}>明细</Link>
-                        <Button
+                        {
+                            record.receiveStatus === 1? <Button
                             type="link"
                             className="btn-operation-link"
-                            disabled={record.receiveStatus === 1}
+                            // disabled={record.receiveStatus === 1}
+                            onClick={() => {
+                                setDetailId(record.id)
+                                setType("edit")
+                                setVisibleB(true)
+                            }}>编辑</Button>: <Button
+                            type="link"
+                            className="btn-operation-link"
+                            // disabled={record.receiveStatus === 1}
                             onClick={() => {
                                 setDetailId(record.id)
                                 setType("edit")
                                 setVisible(true)
                             }}>编辑</Button>
+                        }
+                        {/* <Button
+                            type="link"
+                            className="btn-operation-link"
+                            // disabled={record.receiveStatus === 1}
+                            onClick={() => {
+                                setDetailId(record.id)
+                                setType("edit")
+                                setVisible(true)
+                            }}>编辑</Button> */}
                         <Button type="link" className="btn-operation-link" onClick={() => {
                             setVisibleSee(true);
                             setDetailId(record.id);

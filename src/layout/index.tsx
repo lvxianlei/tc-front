@@ -271,7 +271,7 @@ export default function (): JSX.Element {
         </Menu.Item>)}
     </Menu>)
 
-    return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
+    return <Layout  style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
                 className={styles.logoStyle}
@@ -405,7 +405,14 @@ export default function (): JSX.Element {
                         <Sider
                             width={ctxConfig.layout.width}
                             theme="light"
-                            style={{ backgroundColor: ctxConfig.layout.theme }}
+                            className="sider-menu-content"
+                            style={{
+                                height: "100%",
+                                paddingBottom: 60,
+                                boxSizing: "border-box",
+                                backgroundColor: ctxConfig.layout.theme,
+                                overflowY: "auto"
+                            }}
                             collapsed={isOpend}
                             collapsible
                             onCollapse={value => setIsOpend(value)}

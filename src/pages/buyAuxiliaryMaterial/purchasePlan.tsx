@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Modal, Button, DatePicker, Select, Input, message } from 'antd';
+import { Modal, Button, DatePicker, Select, Input, message, Space } from 'antd';
 import {Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, SearchTable as Page} from '../common'
 import {Link, useHistory, useLocation, useRouteMatch} from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
@@ -11,11 +11,14 @@ import Edit from "./edit";
 interface TaskAssignRef {
     onSubmit: () => void
     resetFields: () => void
+    onSubmitApproval: () => void
+    onSubmitCancel: ()=>void
 }
 export default function PurchasePlan() {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [detailId, setDetailId] = useState<string>("")
+    const [id, setId] = useState<string>("")
+    const [type, setType] = useState<"new" | "edit">("new")
     const location = useLocation<{ state: {} }>();
     const match = useRouteMatch()
     // 导出模态框
@@ -29,11 +32,11 @@ export default function PurchasePlan() {
         inquirer: history.location.state ? sessionStorage.getItem('USER_ID') : "",
         purchaseType:1
     })
-    const editRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { } })
+    const editRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { }, onSubmitApproval: () => { }, onSubmitCancel: () => { }})
     // 模态窗
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
     // 聚焦采购任务
-    const [id, setId] = useState<string>("");//采购任务id
+    // const [id, setId] = useState<string>("");//采购任务id
     const [obj, setObj] = useState<any>({});
     const [rejectionDescription, setRejectionDescription] = useState("");
     // getlist
@@ -47,7 +50,11 @@ export default function PurchasePlan() {
     }), { manual: true })
 
     const handleCancel = () => {
+        // setType('new')
+        editRef.current?.resetFields();
+        setId("")
         setIsModalVisible(false);
+        history.go(0)
     };
 
     // 汇总request
@@ -55,13 +62,10 @@ export default function PurchasePlan() {
         const result: { [key: string]: any } = await RequestUtil.post('/tower-supply/auxiliaryMaterialPurchasePlan/collect',generateIds)
     }
 
-    // 关闭
-    const handleClose = () => {
-        setIsModalVisible(false);
-    }
+
 
     const buttons: {} | null | undefined = [
-        <Button onClick={() => handleClose()} key='close'>关闭</Button>,
+        <Button onClick={() => handleCancel()} key='close'>关闭</Button>,
         <Button type="primary"  onClick={async () =>{
             console.log(generateIds)
             if (!editRef.current) {
@@ -72,10 +76,58 @@ export default function PurchasePlan() {
             // planPurchaseNum
 
             await editRef.current?.onSubmit();
-            handleClose()
-        }} key='submit'>提交</Button>
-    ]
+            setIsModalVisible(false);
+            history.go(0)
+        }} key='submit'>提交</Button>,
+        <Button type="primary"  onClick={async () =>{
+            console.log(generateIds)
+            if (!editRef.current) {
+                message.warning("请先选择辅材...")
+                return
+            }
 
+            // planPurchaseNum
+
+            await editRef.current?.onSubmitApproval();
+            setIsModalVisible(false);
+            history.go(0)
+        }} key='submit'>保存并提交审批</Button>
+    ]
+    const buttonsEdit: {} | null | undefined = [
+        <Button onClick={() => handleCancel()} key='close'>关闭</Button>,
+        <Button type="primary"  onClick={async () =>{
+            console.log(generateIds)
+            if (!editRef.current) {
+                message.warning("请先选择辅材...")
+                return
+            }
+
+            // planPurchaseNum
+
+            await editRef.current?.onSubmit();
+            setIsModalVisible(false);
+            history.go(0)
+        }} key='submit'>提交</Button>,
+        <Button type="primary"  onClick={async () =>{
+            console.log(generateIds)
+            if (!editRef.current) {
+                message.warning("请先选择辅材...")
+                return
+            }
+            await editRef.current?.onSubmitApproval();
+            setIsModalVisible(false);
+            history.go(0)
+        }} key='submit'>保存并提交审批</Button>,
+        <Button type="primary"  onClick={async () =>{
+            console.log(generateIds)
+
+            // planPurchaseNum
+
+            await editRef.current?.onSubmitCancel();
+            setIsModalVisible(false);
+            history.go(0)
+        }} key='submit'>撤销审批</Button>
+    ]
     const onFilterSubmit = (value: any) => {
         console.log(value)
         if (value.createTime) {
@@ -116,17 +168,25 @@ export default function PurchasePlan() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 80,
-                        render: (_: any, records: any) => <>
+                        width: 120,
+                        render: (_: any, records: any) => <Space>
                             <Button type="link" className="btn-operation-link" onClick={
-                                ()=>{setDetailId(records.id)}
+                                ()=>{setId(records.id)}
                             }>
                                 <Link className="btn-operation-link" to={{
                                     pathname: `/buyAuxiliaryMaterial/purchasePlan/${records.id}`,
                                     search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus},${records.collectPurchasePlanNumber?1:0}`
                                 }}>采购清单</Link>
                             </Button>
-                        </>
+                            <Button type="link" className="btn-operation-link" onClick={()=>{
+                                setType('edit')
+                                console.log(records.id)
+                                setId(records.id)
+                                setIsModalVisible(true)
+                            }}>
+                                编辑
+                            </Button>
+                        </Space>
                     }
                 ]}
                 filterValue={filterValue}
@@ -134,6 +194,7 @@ export default function PurchasePlan() {
                 extraOperation={<>
                     <Button type="primary" ghost onClick={() => {
                         editRef.current?.resetFields()
+                        setType('new')
                         setIsModalVisible(true)
                     }}>创建采购计划</Button>
                     <Button type="primary" ghost onClick={() => {
@@ -177,11 +238,27 @@ export default function PurchasePlan() {
                             <Select.Option value={1} key={1}>已汇总</Select.Option>
                         </Select>
                     },
+                    {
+                        name: 'approval',
+                        label: '审批状态',
+                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="0">待发起</Select.Option>
+                            <Select.Option value="1">审批中</Select.Option>
+                            <Select.Option value="2">审批通过</Select.Option>
+                            <Select.Option value="3">审批驳回</Select.Option>
+                            <Select.Option value="4">已撤销</Select.Option>
+                        </Select>
+                    },
                     // todo 申请人字段未返回
                     {
                         name: 'applyName',
                         label: '申请人',
                         children: <IntgSelect width={200} />
+                    },
+                    {
+                        name: 'materialName',
+                        label: '品名',
+                        children: <Input placeholder="请输入品名" style={{ width: 150 }} />
                     },
                     {
                         name: 'fuzzyQuery',
@@ -200,10 +277,10 @@ export default function PurchasePlan() {
                     }
                 }}
             />
-            <Modal width={1011} title="创建采购计划" visible={isModalVisible} footer={buttons} onCancel={handleCancel}
+            <Modal width={1011} title={type==='new'?"创建采购计划":'编辑采购计划'} visible={isModalVisible} footer={type==='new'?buttons:buttonsEdit} onCancel={handleCancel}
              onOk={()=>{}}
             >
-                <Edit ref={editRef} id={detailId} type={'new'}/>
+                <Edit ref={editRef} id={id} type={type} visibleP={isModalVisible}/>
             </Modal>
         </>
     )
