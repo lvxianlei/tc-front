@@ -7,6 +7,7 @@ import Utf8 from 'crypto-js/enc-utf8'
 import Cookies, { CookieAttributes } from 'js-cookie'
 import ctxConfig from "../app-ctx.config.jsonc"
 import RequestUtil from './RequestUtil'
+import useRequest from "@ahooksjs/use-request";
 const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
 const TOKEN_EXPIRES: string = 'SINZETECH_TOKEN_EXPIRES'
@@ -31,7 +32,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets authorization
-     * @returns authorization 
+     * @returns authorization
      */
     public static getAuthorization(): string {
         if (!this.authorization) {
@@ -43,7 +44,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets tenant id
-     * @returns tenant id 
+     * @returns tenant id
      */
     public static getTenantId(): string {
         return Cookies.get(TENANT_ID_KEY) || ''
@@ -61,8 +62,8 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Sets app name
-     * @param appName 
-     * @param [options] 
+     * @param appName
+     * @param [options]
      */
     public static setCurrentAppName(appName: string): void {
         Cookies.set(APP_Name, appName)
@@ -71,8 +72,8 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Sets tenant id
-     * @param tenantId 
-     * @param [options] 
+     * @param tenantId
+     * @param [options]
      */
     public static setTenantId(tenantId: string, options?: CookieAttributes): void {
         Cookies.set(TENANT_ID_KEY, tenantId, options)
@@ -82,7 +83,7 @@ export default abstract class AuthUtil {
      * @static
      * @description Sets tenant name
      * @param tenantName
-     * @param [options] 
+     * @param [options]
      */
     public static setTenantName(tenantName: string): void {
         Cookies.set(TENANT_NAME, tenantName)
@@ -90,7 +91,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets tenant name
-     * @returns tenant name 
+     * @returns tenant name
      */
     public static getTenantName(): string {
         return Cookies.get(TENANT_NAME) || ''
@@ -103,7 +104,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description remove tenant name
-     * @returns tenant name 
+     * @returns tenant name
      */
     public static removeTenantName(): void {
         Cookies.remove(TENANT_NAME)
@@ -112,7 +113,7 @@ export default abstract class AuthUtil {
      * @static
      * @description Sets tenant name
      * @param tenantName
-     * @param [options] 
+     * @param [options]
      */
     public static setTenants(tenants: any[]): void {
         sessionStorage.setItem(TENANT_LISTS, JSON.stringify(tenants))
@@ -120,7 +121,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets tenant name
-     * @returns tenant name 
+     * @returns tenant name
      */
     public static getTenants(): any[] {
         const tenants = sessionStorage.getItem(TENANT_LISTS)
@@ -130,7 +131,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description remove tenant name
-     * @returns tenant name 
+     * @returns tenant name
      */
     public static removeTenants(): void {
         sessionStorage.removeItem(TENANT_LISTS)
@@ -139,10 +140,10 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets sinzetech auth
-     * @returns sinzetech auth 
+     * @returns sinzetech auth
      * @description Remove tenant id
-     * @param tenantId 
-     * @param [options] 
+     * @param tenantId
+     * @param [options]
      */
     public static removeTenantId(): void {
         Cookies.remove(TENANT_ID_KEY);
@@ -151,7 +152,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets sinzetech auth
-     * @returns sinzetech auth 
+     * @returns sinzetech auth
      */
     public static getSinzetechAuth(): string {
         return Cookies.get(TOKEN_KEY) || ''
@@ -160,8 +161,8 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Sets sinzetech auth
-     * @param token 
-     * @param [options] 
+     * @param token
+     * @param [options]
      */
     public static setSinzetechAuth(token: string, refrenshToken: string, expires_in: number): void {
         const expiresInDate = new Date((new Date().getTime() + expires_in * 1000))
@@ -174,8 +175,8 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Remove sinzetech auth
-     * @param token 
-     * @param [options] 
+     * @param token
+     * @param [options]
      */
     public static removeSinzetechAuth(): void {
         Cookies.remove(TOKEN_KEY);
@@ -187,7 +188,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets sinzetech auth
-     * @returns sinzetech auth 
+     * @returns sinzetech auth
      */
     public static getRealName(): string {
         return Cookies.get(REAL_NAME) || '';
@@ -204,8 +205,8 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Sets sinzetech auth
-     * @param token 
-     * @param [options] 
+     * @param token
+     * @param [options]
      */
     public static setRealName(token: string, options?: CookieAttributes): void {
         Cookies.set(REAL_NAME, token, options);
@@ -218,8 +219,8 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Remove sinzetech auth
-     * @param token 
-     * @param [options] 
+     * @param token
+     * @param [options]
      */
     public static removeRealName(): void {
         Cookies.remove(REAL_NAME);
@@ -241,7 +242,7 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Gets sinzetech auth
-     * @returns sinzetech auth 
+     * @returns sinzetech auth
      */
     public static getRefreshToken(): string {
         return sessionStorage.getItem(REFRENSH_TOKEN) || ''
@@ -250,8 +251,8 @@ export default abstract class AuthUtil {
     /**
      * @static
      * @description Sets sinzetech auth
-     * @param token 
-     * @param [options] 
+     * @param token
+     * @param [options]
      */
     public static async refrenshToken(token: string): Promise<void> {
         try {
@@ -270,7 +271,7 @@ export default abstract class AuthUtil {
         }
     }
 
-    /** 
+    /**
      * 清除tdm-token -SINZETECH_TOKEN_KEY
      * */
     public static removeSinzetechToken(): void {
