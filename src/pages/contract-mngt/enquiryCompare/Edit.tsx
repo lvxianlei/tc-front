@@ -281,20 +281,20 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
 
     const handGuaranteChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.supplyIdList) {
-            if (fields.supplyIdList.records.length > 4) {
-                message.error("询比价供应商最多选择四个，请您重新选择！");
-                form.setFieldsValue({
-                    supplyIdList: ""
-                })
-                return false;
-            } else {
+            // if (fields.supplyIdList.records.length > 4) {
+            //     message.error("询比价供应商最多选择四个，请您重新选择！");
+            //     form.setFieldsValue({
+            //         supplyIdList: ""
+            //     })
+            //     return false;
+            // } else {
                 form.setFieldsValue({
                     supplyIdList: {
                         value: fields.supplyIdList.records.map((item: any) => item.supplierName).join(","),
                         records: fields.supplyIdList.records.map((item: any) => ({ ...item, supplierName: item.supplierName }))
                     }
                 })
-            }
+            // }
         }
     }
 
@@ -371,7 +371,7 @@ export default forwardRef(function ({ id, type }: EditProps, ref): JSX.Element {
                         }
                         return res
                     }),
-                    path :`${choosePlanList.path}?usePlanDetailIds = ${popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)||''}&approval=2` ,
+                    path :`${choosePlanList.path}?usePlanDetailIds = ${popDataList&&popDataList.length>0&&popDataList.map(item=>item.purchasePlanDetailId)||''}` ,
                     columns: (choosePlanList as any).columns.map((item: any) => {
                         if (item.dataIndex === "materialStandard") {
                             return ({
