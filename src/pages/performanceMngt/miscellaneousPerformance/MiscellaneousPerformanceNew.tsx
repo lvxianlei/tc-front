@@ -32,6 +32,11 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         }
     }), { manual: type === 'new', refreshDeps: [id, type] })
 
+    const { data: loftingLink } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get(`/tower-science/performance/enable`);
+        resole(result)
+    }), {})
+
     const { data: planNums } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/listAll`);
         resole(nums)
@@ -125,8 +130,8 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                             <Select
                                                 placeholder="请选择放样环节"
                                                 style={{ width: "100%" }}>
-                                                {planNums && planNums?.map((item: any, index: number) => {
-                                                    return <Select.Option key={index} value={item}>{item}</Select.Option>
+                                                {loftingLink && loftingLink?.map((item: any, index: number) => {
+                                                    return <Select.Option key={index} value={item?.id}>{item?.name}</Select.Option>
                                                 })}
                                             </Select>
                                         </Form.Item>

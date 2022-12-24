@@ -104,115 +104,109 @@
     ],
     "itemColumns": [
         {
-            "key": "loftingTaskNumber",
+            "key": "entry",
             "title": "奖励条目",
             "width": 120,
-            "dataIndex": "loftingTaskNumber"
+            "dataIndex": "entry"
         },
         {
-            "key": "productCategoryName",
+            "key": "parameter1",
             "title": "参数1",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "parameter1",
             "width": 80
         },
         {
-            "key": "productTypeName",
+            "key": "parameter2",
             "title": "参数2",
-            "dataIndex": "productTypeName",
+            "dataIndex": "parameter2",
             "width": 80
         },
         {
-            "key": "wasteStructureNum",
+            "key": "parameter3",
             "title": "参数3",
-            "dataIndex": "wasteStructureNum",
+            "dataIndex": "parameter3",
             "width": 120
         },
         {
-            "key": "wasteNum",
+            "key": "parameter4",
             "title": "参数4",
-            "dataIndex": "wasteNum",
+            "dataIndex": "parameter4",
             "width": 120
         },
         {
-            "key": "penaltyAmount",
+            "key": "parameter5",
             "title": "参数5",
-            "dataIndex": "penaltyAmount",
+            "dataIndex": "parameter5",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "parameter6",
             "title": "参数6",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "parameter6",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "parameter7",
             "title": "参数7",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "parameter7",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "parameter8",
             "title": "参数8",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "parameter8",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "parameter9",
             "title": "参数9",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "parameter9",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "parameter10",
             "title": "参数10",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "parameter10",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "parameter11",
             "title": "参数11",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "parameter11",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "parameter12",
             "title": "参数12",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "parameter12",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "amount",
             "title": "奖励金额",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "amount",
             "width": 120,
             "type": "number"
         }
     ],
     "otherColumns": [
         {
-            "key": "loftingTaskNumber",
+            "key": "entry",
             "title": "配置条目",
             "width": 120,
-            "dataIndex": "loftingTaskNumber"
+            "dataIndex": "entry"
         },
         {
-            "key": "productCategoryName",
+            "key": "parameter1",
             "title": "参数1",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "parameter1",
             "width": 80
         },
         {
-            "key": "productTypeName",
+            "key": "parameter2",
             "title": "参数2",
-            "dataIndex": "productTypeName",
+            "dataIndex": "parameter2",
             "width": 80
-        },
-        {
-            "key": "rejectWeight",
-            "title": "状态",
-            "dataIndex": "rejectWeight",
-            "width": 120
         }
     ]
 }
