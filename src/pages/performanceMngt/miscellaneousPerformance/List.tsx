@@ -12,7 +12,7 @@ import { useHistory } from 'react-router-dom';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
 import MiscellaneousPerformanceNew from './MiscellaneousPerformanceNew';
-import {columns}from './miscellaneousPerformance.json'
+import { columns } from './miscellaneousPerformance.json'
 
 interface EditRefProps {
     onSubmit: () => void;
@@ -62,7 +62,7 @@ export default function List(): React.ReactNode {
             title={type === 'new' ? '新增' : type === 'edit' ? '编辑' : '详情'}
             footer={<Space direction="horizontal" size="small">
                 {type === 'detail' ?
-                null
+                    null
                     :
                     <>
                         <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
@@ -74,7 +74,7 @@ export default function List(): React.ReactNode {
                     addRef.current?.resetFields();
                 }}>关闭</Button>
             </Space>}
-            width="40%"
+            width="50%"
             onCancel={() => {
                 setVisible(false);
                 addRef.current?.resetFields();
@@ -82,7 +82,7 @@ export default function List(): React.ReactNode {
             <MiscellaneousPerformanceNew type={type} id={rowId} ref={addRef} />
         </Modal>
         <Page
-            path="/tower-science/trialAssembly"
+            path="/tower-science/sundryConfig/getPage"
             columns={[
                 {
                     key: 'index',
@@ -114,7 +114,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认发起?"
                                 onConfirm={() => {
-                                    RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/launch/${record.id}`).then(res => {
+                                    RequestUtil.post(`/tower-science/sundryConfig/launchSundryMerits?id=${record.id}`).then(res => {
                                         message.success('发起成功');
                                         history.go(0);
                                     });
@@ -128,7 +128,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
-                                    RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/withdraw/${record.id}`).then(res => {
+                                    RequestUtil.post(`/tower-science/sundryConfig/retract/${record.id}`).then(res => {
                                         message.success('撤回成功');
                                         history.go(0);
                                     });
@@ -142,7 +142,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
-                                    RequestUtil.delete(`/tower-science/trialAssembly/trialAssembly/${record.id}`).then(res => {
+                                    RequestUtil.delete(`/tower-science/sundryConfig/${record.id}`).then(res => {
                                         message.success('删除成功');
                                         history.go(0);
                                     });
@@ -169,7 +169,7 @@ export default function List(): React.ReactNode {
                     children: <DatePicker.RangePicker />
                 },
                 {
-                    name: 'fuzzyMsg',
+                    name: 'status',
                     label: '审批状态',
                     children: <Select placeholder="请选择审批状态">
                         <Select.Option value={1} key="1">未发起</Select.Option>

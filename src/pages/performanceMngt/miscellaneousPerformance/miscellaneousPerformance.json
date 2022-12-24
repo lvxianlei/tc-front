@@ -1,142 +1,130 @@
 {
     "columns": [
         {
-            "key": "loftingTaskNumber",
+            "key": "loftingTaskNum",
             "title": "放样任务编号",
             "width": 120,
-            "dataIndex": "loftingTaskNumber"
+            "dataIndex": "loftingTaskNum"
         },
         {
-            "key": "productCategoryName",
+            "key": "projectName",
             "title": "项目名称",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "projectName",
             "width": 80
         },
         {
-            "key": "productTypeName",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "productTypeName",
+            "dataIndex": "planNumber",
             "width": 80
         },
         {
-            "key": "wasteStructureNum",
+            "key": "productCategory",
             "title": "塔型",
-            "dataIndex": "wasteStructureNum",
+            "dataIndex": "productCategory",
             "width": 120
         },
         {
-            "key": "wasteNum",
+            "key": "loftingLink",
             "title": "放样环节",
-            "dataIndex": "wasteNum",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "loftingLink",
+            "width": 120
         },
         {
-            "key": "penaltyAmount",
+            "key": "type",
             "title": "杂项类型",
-            "dataIndex": "penaltyAmount",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "type",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "category",
             "title": "杂项类别",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "category",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "entry",
             "title": "杂项条目",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "entry",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "workHour",
             "title": "工时",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "workHour",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "price",
             "title": "单价",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "price",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "totalAmount",
             "title": "金额",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "totalAmount",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "statusName",
             "title": "审批状态",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "statusName",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "updateStatusTime",
             "title": "状态最新变更时间",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "updateStatusTime",
+            "width": 120
         }
     ],
     "newColumns": [
         {
-            "key": "loftingTaskNumber",
+            "key": "loftingLink",
             "title": "放样环节",
             "width": 120,
-            "dataIndex": "loftingTaskNumber"
+            "dataIndex": "loftingLink"
         },
         {
-            "key": "productCategoryName",
+            "key": "category",
             "title": "杂项类别",
-            "dataIndex": "productCategoryName"
+            "dataIndex": "category"
         },
         {
-            "key": "productTypeName",
+            "key": "type",
             "title": "杂项类型",
-            "dataIndex": "productTypeName"
+            "dataIndex": "type"
         },
         {
-            "key": "wasteStructureNum",
+            "key": "entry",
             "title": "杂项条目",
-            "dataIndex": "wasteStructureNum"
+            "dataIndex": "entry"
         },
         {
-            "key": "wasteNum",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "wasteNum"
+            "dataIndex": "planNumber"
         },
         {
-            "key": "wasteNum",
+            "key": "productCategory",
             "title": "塔型",
-            "dataIndex": "wasteNum"
+            "dataIndex": "productCategory"
         },
         {
-            "key": "penaltyAmount",
+            "key": "workHour",
             "title": "工时",
-            "dataIndex": "penaltyAmount",
-            "type": "number"
+            "dataIndex": "workHour"
         },
         {
-            "key": "rejectWeight",
+            "key": "price",
             "title": "单价",
-            "dataIndex": "rejectWeight",
-            "type": "number"
+            "dataIndex": "price"
         },
         {
-            "key": "rejectWeight",
+            "key": "totalAmount",
             "title": "总金额",
-            "dataIndex": "rejectWeight",
-            "type": "number"
+            "dataIndex": "totalAmount"
         }
     ]
 }
