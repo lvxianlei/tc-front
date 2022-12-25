@@ -1,68 +1,65 @@
 {
     "columns": [
         {
-            "key": "loftingTaskNumber",
+            "key": "simplifyName",
             "title": "奖励简称",
             "width": 120,
-            "dataIndex": "loftingTaskNumber"
+            "dataIndex": "simplifyName"
         },
         {
-            "key": "productCategoryName",
+            "key": "entry",
             "title": "奖励条目",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "entry",
             "width": 200
         },
         {
-            "key": "productTypeName",
+            "key": "amount",
             "title": "奖励金额",
-            "dataIndex": "productTypeName",
+            "dataIndex": "amount",
             "width": 80
         },
         {
-            "key": "wasteStructureNum",
+            "key": "rewardNum",
             "title": "奖励人数",
-            "dataIndex": "wasteStructureNum",
+            "dataIndex": "rewardNum",
             "width": 50
         },
         {
-            "key": "wasteNum",
+            "key": "rewardUserName",
             "title": "符合奖励人员",
-            "dataIndex": "wasteNum",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "rewardUserName",
+            "width": 120
         },
         {
-            "key": "penaltyAmount",
+            "key": "totalAmount",
             "title": "奖励金额-总",
-            "dataIndex": "penaltyAmount",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "totalAmount",
+            "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "description",
             "title": "备注",
-            "dataIndex": "rejectWeight",
-            "width": 120,
-            "type": "number"
+            "dataIndex": "description",
+            "width": 120
         }
     ],
     "detailColumns": [
         {
-            "key": "planNumber",
+            "key": "userName",
             "title": "姓名",
             "width": 80,
-            "dataIndex": "planNumber"
+            "dataIndex": "userName"
         },
         {
-            "key": "loftingTaskNumber",
+            "key": "projectName",
             "title": "工程名称",
             "width": 120,
-            "dataIndex": "loftingTaskNumber"
+            "dataIndex": "projectName"
         },
         {
-            "key": "productCategoryName",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "planNumber",
             "width": 80
         },
         {
@@ -72,33 +69,33 @@
             "width": 80
         },
         {
-            "key": "wasteStructureNum",
+            "key": "voltageGradeName",
             "title": "电压等级",
-            "dataIndex": "wasteStructureNum",
+            "dataIndex": "voltageGradeName",
             "width": 120
         },
         {
-            "key": "wasteNum",
+            "key": "productCategoryName",
             "title": "塔型",
-            "dataIndex": "wasteNum",
+            "dataIndex": "productCategoryName",
             "width": 120
         },
         {
-            "key": "penaltyAmount",
+            "key": "segmentType",
             "title": "段类型",
-            "dataIndex": "penaltyAmount",
+            "dataIndex": "segmentType",
             "width": 120
         },
         {
-            "key": "rejectWeight",
+            "key": "partNum",
             "title": "件号数",
-            "dataIndex": "rejectWeight",
+            "dataIndex": "partNum",
             "width": 120
         },
         {
-            "key": "rejectAmount",
+            "key": "accuracy",
             "title": "正确率%",
-            "dataIndex": "rejectAmount",
+            "dataIndex": "accuracy",
             "width": 120
         }
     ],
