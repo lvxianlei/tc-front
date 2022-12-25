@@ -124,26 +124,16 @@ export default function List(): React.ReactNode {
         });
     }
 
-    const handleOk = () => new Promise(async (resove, reject) => {
-        try {
-            await ref.current?.onSubmit()
-            message.success("保存成功！")
-            setVisible(false)
-            history.go(0)
-            resove(true)
-        } catch (error) {
-            reject(false)
-        }
-    })
-
     return <>
         <Modal
             destroyOnClose
             key='CoefficientPerformance'
             visible={visible}
             title="绩效条目设置"
-            onOk={handleOk}
-            onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
+            footer={<Button onClick={() => {
+                setVisible(false)
+            }}>关闭</Button>}
+            onCancel={() => { setVisible(false) }}>
             <ItemSetting ref={ref} />
         </Modal>
         <Form form={form} className={styles.bottom} layout="inline" onFinish={onSearch}>
