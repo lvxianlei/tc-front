@@ -73,7 +73,8 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
         try {
             const value = await form.validateFields();
             await submitRun({
-                ...value
+                ...value,
+                id: data?.id
             })
             resolve(true);
         } catch (error) {

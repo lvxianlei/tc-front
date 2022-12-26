@@ -840,7 +840,7 @@
     },
     { //合同管理-询比价-询价信息
       "name": "询价信息",
-      "path": "/contract-mngt/enquiryCompare/enquiry/:id",
+      "path": "/contract-mngt/enquiryCompare/enquiry/:id/:approvalStatus",
       "module": "./pages/contract-mngt/enquiryCompare/Overview",
       "exact": true,
       "authority": "tc_erp_sw_contract_comparison_details"
@@ -1351,7 +1351,7 @@
     },
     { //辅材采购管理-询比价-询价信息
       "name": "询价信息",
-      "path": "/buyAuxiliaryMaterial/enquiryCompare/:id",
+      "path": "/buyAuxiliaryMaterial/enquiryCompare/:id/:approvalStatus",
       "module": "./pages/auxiliaryMaterialEnquiryCompare/enquiryCompareInformation",
       "exact": true,
       "authority": "tc_erp_sw_contract_comparison_details"
@@ -2943,6 +2943,13 @@
       "exact": true,
       "authority": ""
     },
+    { // RD-系统设置-杂项条目配置
+      "name": "杂项条目配置",
+      "path": "/baseSetting/miscellaneousItems",
+      "module": "./pages/baseSetting/MiscellaneousItems",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // RD-定额配置
       "name": "定额配置",
       "path": "/baseSetting/quotaConfig",
@@ -3209,6 +3216,41 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // RD-绩效管理-放样塔型绩效汇总
+      "name": "放样塔型绩效汇总",
+      "path": "/performanceMngt/loftingpPerformanceSummary",
+      "module": "./pages/performanceMngt/loftingpPerformanceSummary/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-绩效奖励明细
+      "name": "绩效奖励明细",
+      "path": "/performanceMngt/performanceDetail",
+      "module": "./pages/performanceMngt/performanceDetail/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-杂项绩效管理
+      "name": "杂项绩效管理",
+      "path": "/performanceMngt/miscellaneousPerformance",
+      "module": "./pages/performanceMngt/miscellaneousPerformance/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-杂项绩效管理
+      "name": "杂项绩效管理",
+      "path": "/performanceMngt/miscellaneousPerformance",
+      "module": "./pages/performanceMngt/miscellaneousPerformance/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-人员工资绩效
+      "name": "人员工资绩效",
+      "path": "/performanceMngt/performanceSalary",
+      "module": "./pages/performanceMngt/performanceSalary/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // RD-业务处置管理-试装、免试装申请
       "name": "试装、免试装申请",
       "path": "/businessDisposal/isTrialDress",
@@ -3241,6 +3283,13 @@
       "name": "详情",
       "path": "/businessDisposal/unqualifiedDisposal/detail/:id",
       "module": "./pages/businessDisposal/unqualifiedDisposal/Detail",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-业务处置管理-代料申请
+      "name": "代料申请",
+      "path": "/businessDisposal/generationOfMaterial",
+      "module": "./pages/businessDisposal/generationOfMaterial/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },

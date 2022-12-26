@@ -168,6 +168,16 @@ export default function Invoicing() {
                     children: <IntgSelect width={200} />
                 },
                 {
+                    name: 'executingStatus',
+                    label: '执行状态',
+                    children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                        <Select.Option value="0">正常</Select.Option>
+                        <Select.Option value="1">取消</Select.Option>
+                        <Select.Option value="2">暂停</Select.Option>
+                        <Select.Option value="3">作废</Select.Option>
+                    </Select>
+                },
+                {
                     name: 'fuzzyQuery',
                     label: "模糊查询项",
                     children: <Input placeholder="方案编号/生产批次/下达单/塔型/下达单号" style={{ width: 300 }} />

@@ -1,6 +1,11 @@
 {
     "baseInfo": [
         {
+            "title": "执行状态",
+            "dataIndex": "executingStatusName",
+            "type": "string"
+        },
+        {
             "title": "下达单号",
             "dataIndex": "issuedNumber",
             "type": "string"

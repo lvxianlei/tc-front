@@ -128,6 +128,7 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
     const attchsRef = useRef<{ getDataSource: () => any[], resetFields: () => void }>({ getDataSource: () => [], resetFields: () => { } })
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [detail, setDetail] = useState<any>({});
     const [numData, setNumData] = useState<any>({});
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
@@ -175,6 +176,7 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialContract/${id}`)
+            setDetail(result)
             const taxNum = await RequestUtil.get(`/tower-storage/tax`)
             baseForm.setFieldsValue({
                 ...result,
@@ -289,6 +291,9 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -304,14 +309,17 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -325,8 +333,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setVisible(false)
@@ -338,6 +346,9 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -350,14 +361,17 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setPopDataList([...materialList.map((item: any) => {
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
             return ({
                 ...item,
                 num,
@@ -370,8 +384,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
                     : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
-                taxTotalAmount: (num * taxPrice).toFixed(2),
-                totalAmount: (num * price).toFixed(2)
+                taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
+                totalAmount: (totalWeight * price).toFixed(2)
             })
         })])
         setResultVisible(false)
@@ -404,49 +418,117 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
         }))
     }
 
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, materialList])
+    useImperativeHandle(ref, () => ({ onSubmit, resetFields, onSubmitApproval, onSubmitCancel }), [ref, materialList])
 
     const onSubmit = () => new Promise(async (resove, reject) => {
         try {
-            const baseInfo = await baseForm.validateFields()
-            const freightInfo = await freightForm.validateFields()
-            const stevedoringInfo = await stevedoringForm.validateFields()
-            const values = {
-                ...baseInfo,
-                fileIds: attchsRef.current.getDataSource().map(item => item.id),
-                operatorId: AuthUtil.getUserInfo().user_id,
-                supplierId: baseInfo.supplier.id,
-                supplierName: baseInfo.supplier.value,transportBearDto: {
-                    ...freightInfo,
-                    transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
-                    transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
-                },
-                unloadBearDto: {
-                    ...stevedoringInfo,
-                    unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
-                    unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
-                },
-                materialContractDetailDtos: materialList.map((item: any) => {
-                    delete item.id
-                    return ({
-                        ...item,
-                        taxPrice: item.taxPrice,
-                        price: item.price,
-                        taxTotalAmount: item.taxTotalAmount,
-                        totalAmount: item.totalAmount,
-                        structureTexture: item.structureTexture,
-                        structureTextureId: item.structureTextureId,
+            if([undefined, 0,'0',3,'3',4,'4'].includes(detail?.approval)){
+                const baseInfo = await baseForm.validateFields()
+                const freightInfo = await freightForm.validateFields()
+                const stevedoringInfo = await stevedoringForm.validateFields()
+                const values = {
+                    ...baseInfo,
+                    fileIds: attchsRef.current.getDataSource().map(item => item.id),
+                    operatorId: AuthUtil.getUserInfo().user_id,
+                    supplierId: baseInfo.supplier.id,
+                    supplierName: baseInfo.supplier.value,transportBearDto: {
+                        ...freightInfo,
+                        transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
+                        transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
+                    },
+                    unloadBearDto: {
+                        ...stevedoringInfo,
+                        unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
+                        unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
+                    },
+                    materialContractDetailDtos: materialList.map((item: any) => {
+                        delete item.id
+                        return ({
+                            ...item,
+                            taxPrice: item.taxPrice,
+                            price: item.price,
+                            taxTotalAmount: item.taxTotalAmount,
+                            totalAmount: item.totalAmount,
+                            structureTexture: item.structureTexture,
+                            structureTextureId: item.structureTextureId,
+                        })
                     })
-                })
+                }
+                await saveRun(values)
+                message.success("保存成功...")
+                resove(true)
+            }else if([2,'2'].includes(detail?.approval)){
+                message.error("当前数据已审批，修改后请重新发起审批！")
+                throw new Error('审批通过数据，修改后只能重新发起审批！！')
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
             }
-            await saveRun(values)
-            message.success("保存成功...")
-            resove(true)
         } catch (error) {
             reject(false)
         }
     })
-
+    const onSubmitApproval = () => new Promise(async (resove, reject) => {
+        try {
+            if([undefined, 0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseInfo = await baseForm.validateFields()
+                const freightInfo = await freightForm.validateFields()
+                const stevedoringInfo = await stevedoringForm.validateFields()
+                const values = {
+                    ...baseInfo,
+                    isApproval: 1,
+                    fileIds: attchsRef.current.getDataSource().map(item => item.id),
+                    operatorId: AuthUtil.getUserInfo().user_id,
+                    supplierId: baseInfo.supplier.id,
+                    supplierName: baseInfo.supplier.value,transportBearDto: {
+                        ...freightInfo,
+                        transportCompanyId: freightInfo?.transportCompanyId?.split(',')[0],
+                        transportCompany: freightInfo?.transportCompanyId?.split(',')[1]
+                    },
+                    unloadBearDto: {
+                        ...stevedoringInfo,
+                        unloadCompanyId: stevedoringInfo?.unloadCompanyId?.split(',')[0],
+                        unloadCompany: stevedoringInfo?.unloadCompanyId?.split(',')[1],
+                    },
+                    materialContractDetailDtos: materialList.map((item: any) => {
+                        delete item.id
+                        return ({
+                            ...item,
+                            taxPrice: item.taxPrice,
+                            price: item.price,
+                            taxTotalAmount: item.taxTotalAmount,
+                            totalAmount: item.totalAmount,
+                            structureTexture: item.structureTexture,
+                            structureTextureId: item.structureTextureId,
+                        })
+                    })
+                }
+                await saveRun(values)
+                message.success("审批发起成功...")
+                resove(true)
+            }else{
+                message.error("当前不可发起审批！")
+                throw new Error('当前不可发起审批！')
+            }
+        } catch (error) {
+            reject(false)
+        }
+    })
+    const onSubmitCancel = () => new Promise(async (resove, reject) => {
+        try {
+            if([1,'1'].includes(detail?.approval)){
+                await RequestUtil.get(`/tower-supply/workflow/contract/cancel/${id}/1`)
+                message.success("撤销成功...")
+                resove(true)
+            }
+            else{
+                await message.error("不可撤销...")
+                throw new Error('不可撤销')
+            }
+        } catch (error) {
+            reject(false)
+        }
+    })
     const resetFields = () => {
         baseForm.resetFields()
         attchsRef.current?.resetFields()
@@ -507,8 +589,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 return ({
                     ...item,
                     index: itemIndex,
-                    taxTotalAmount: (value * allData.taxPrice).toFixed(2),
-                    totalAmount: (value * allData.price).toFixed(2),
+                    taxTotalAmount: (allData.totalWeight * allData.taxPrice).toFixed(2),
+                    totalAmount: (allData.totalWeight  * allData.price).toFixed(2),
                     price: (item?.taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                     // totalWeight: calcFun.totalWeight({
                     //     length: item.length,

@@ -24,7 +24,7 @@ export interface modalProps {
 export default function PatchIssued(): React.ReactNode {
     const [form] = Form.useForm();
     const params = useParams<{ id: string, supplyNumber: string }>()
-
+    const [saveLoading, setSaveLoading] = useState<boolean>(false);
     const history = useHistory();
 
     const { loading, data: selectData } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -33,6 +33,8 @@ export default function PatchIssued(): React.ReactNode {
             machiningDemand: data?.supplyBatchEntryVO?.machiningDemand,
             weldingDemand: data?.supplyBatchEntryVO?.weldingDemand,
             galvanizeDemand: data?.supplyBatchEntryVO?.galvanizeDemand,
+            implementStandardName: data?.supplyBatchEntryVO?.implementStandardName,
+            implementStandard: data?.supplyBatchEntryVO?.implementStandard,
             packDemand: data?.supplyBatchEntryVO?.packDemand,
             isPerforate: data?.supplyBatchEntryVO?.isPerforate,
             supplyNumber: params?.supplyNumber
@@ -43,6 +45,7 @@ export default function PatchIssued(): React.ReactNode {
     const save = () => {
         if (form) {
             form.validateFields().then(res => {
+                setSaveLoading(true);
                 let value = form.getFieldsValue(true);
                 RequestUtil.post<any>(`/tower-science/supplyBatch/saveBatchDetail`, {
                     ...value,
@@ -50,7 +53,11 @@ export default function PatchIssued(): React.ReactNode {
                     supplyNumber: value?.supplyNumber,
                     isPerforate: value?.isPerforate || 0
                 }).then(res => {
+                    setSaveLoading(false);
                     history.goBack();
+                }).catch(e => {
+                    console.log(e);
+                    setSaveLoading(false);
                 });
             })
         }
@@ -59,7 +66,7 @@ export default function PatchIssued(): React.ReactNode {
     return <Spin spinning={loading}>
         <DetailContent operation={[
             <Space direction="horizontal" size="small">
-                <Button key="save" type="primary" onClick={save}>保存</Button>
+                <Button key="save" type="primary" loading={saveLoading} onClick={save}>保存</Button>
                 <Button key="cancel" type="ghost" onClick={() => history.goBack()}>取消</Button>
             </Space>
         ]}>
@@ -86,7 +93,6 @@ export default function PatchIssued(): React.ReactNode {
                             <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
                         </Form.Item>
                     </Col>
-
                     <Col span={12}>
                         <Form.Item name="packDemand" label="包装说明" initialValue={selectData?.supplyBatchEntryVO?.packDemand}>
                             <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
@@ -100,6 +106,11 @@ export default function PatchIssued(): React.ReactNode {
                                 <Radio value={1}>是</Radio>
                                 <Radio value={0}>否</Radio>
                             </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="implementStandardName" label="执行标准" initialValue={selectData?.supplyBatchEntryVO?.implementStandardName}>
+                            <Input.TextArea maxLength={800} showCount rows={1} disabled />
                         </Form.Item>
                     </Col>
                 </Row>

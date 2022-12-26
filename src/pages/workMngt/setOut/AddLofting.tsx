@@ -47,11 +47,11 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             const weight = newData?.weightAlgorithm === 3 ?
                 Number(newData?.proportion) :
                 newData?.weightAlgorithm === 2 ?
-                    Number(newData?.proportion) * Number(values[index]?.width || 0) * Number(values[index]?.length || 0) :
-                    Number(newData?.proportion) * Number(values[index]?.length || 0)
+                    Number(newData?.proportion) * Number(values[index]?.width || 0) / 1000 * Number(values[index]?.length || 0) / 1000 :
+                    Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight
+                basicsWeight: weight.toFixed(4)
             }
             form.setFieldsValue({
                 data: [...values]
@@ -67,11 +67,11 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             const weight = newData?.weightAlgorithm === 3 ?
                 Number(newData?.proportion) :
                 newData?.weightAlgorithm === 2 ?
-                    Number(newData?.proportion) * Number(values[index]?.width || 0) * Number(values[index]?.length || 0) :
-                    Number(newData?.proportion) * Number(values[index]?.length || 0)
+                    Number(newData?.proportion) * Number(values[index]?.width || 0) / 1000 * Number(values[index]?.length || 0) / 1000 :
+                    Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight
+                basicsWeight: weight.toFixed(4)
             }
             form.setFieldsValue({
                 data: [...values]
@@ -97,7 +97,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
         const data = form.getFieldsValue(true).data;
         data[index] = {
             ...data[index],
-            totalWeight: Number(e || 0) * Number(data[index].basicsPartNum || 0)
+            totalWeight: (Number(e || 0) * Number(data[index].basicsPartNum || 0)).toFixed(4)
         }
         setTableData([...data])
         form.setFieldsValue({ data: [...data] })
@@ -208,7 +208,20 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     required: true,
                     message: '请输入规格'
                 }]}>
-                    <Input size="small" maxLength={20} onBlur={(e) => weightCalculation(e.target.value, 'structureSpec', index)} />
+                    <Input size="small" maxLength={20} onBlur={(e) => {
+                        let values = form.getFieldsValue(true)?.data;
+                        const data = e.target.value.replace(/L/g, "∠");
+                        const newStructureSpec = data.replace(/X/g, "*");
+                        values[index] = {
+                            ...values[index],
+                            structureSpec: newStructureSpec
+                        }
+                        form.setFieldsValue({
+                            data: [...values]
+                        })
+                        setTableData([...values])
+                        weightCalculation(newStructureSpec, 'structureSpec', index)
+                    }} />
                 </Form.Item>
             )
         },
@@ -230,11 +243,11 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                             const weight = getData?.algorithm === 3 ?
                                 getData?.proportion || 0 :
                                 getData?.algorithm === 2 ?
-                                    Number(getData?.proportion) * Number(values[index]?.width || 0) * Number(e.target?.value || 0) :
-                                    Number(getData?.proportion) * Number(e.target?.value || 0)
+                                    Number(getData?.proportion) * Number(values[index]?.width || 0) / 1000 * Number(e.target?.value || 0) / 1000 :
+                                    Number(getData?.proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight
+                                basicsWeight: weight.toFixed(4)
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -245,11 +258,11 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                             const weight = algorithm === 3 ?
                                 proportion || 0 :
                                 algorithm === 2 ?
-                                    Number(proportion) * Number(values[index]?.width || 0) * Number(e.target?.value || 0) :
-                                    Number(proportion) * Number(e.target?.value || 0)
+                                    Number(proportion) * Number(values[index]?.width || 0) / 1000 * Number(e.target?.value || 0) / 1000 :
+                                    Number(proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight
+                                basicsWeight: weight.toFixed(4)
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -277,10 +290,10 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                         if (!proportion && values[index]?.materialName && values[index]?.structureSpec) {
                             const getData: any = await getProportion(values[index]?.materialName, values[index]?.structureSpec)
                             if (getData?.algorithm == 2) {
-                                const weight = Number(getData?.proportion) * Number(values[index]?.length || 0) * Number(e.target?.value || 0)
+                                const weight = Number(getData?.proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight
+                                    basicsWeight: weight.toFixed(4)
                                 }
                                 form.setFieldsValue({
                                     data: [...values]
@@ -290,10 +303,10 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                             }
                         } else {
                             if (algorithm == 2) {
-                                const weight = Number(proportion) * Number(values[index]?.length || 0) * Number(e.target?.value || 0)
+                                const weight = Number(proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight
+                                    basicsWeight: weight.toFixed(4)
                                 }
                                 form.setFieldsValue({
                                     data: [...values]
@@ -359,7 +372,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                         let list = e.target.value.split(',');
                         let num: number = 0;
                         list.forEach(res => {
-                            num += res.split('*')[0] ? Number(res.split('*')[1] || 1) : 0
+                            const newNums = res?.split('*')
+                            num += newNums[0] ? Number(newNums[newNums?.length - 1] || 1) : 0
                         })
                         const data = form.getFieldsValue(true).data;
                         data[index] = {
@@ -739,7 +753,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'surfaceArea',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "surfaceArea"]} initialValue={_}>
-                    <InputNumber size="small" min={0} max={9999.99} />
+                    <InputNumber size="small" min={0} max={99999999.99} />
                 </Form.Item>
             )
         },

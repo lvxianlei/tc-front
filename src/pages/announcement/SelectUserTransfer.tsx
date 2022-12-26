@@ -4,7 +4,7 @@
  * @description 选择用户穿梭框
 */
 import React from 'react';
-import { Button, Space, Modal, Tree, Table, Col, Row } from 'antd';
+import { Button, Space, Modal, Tree, Table, Col, Row, Switch } from 'antd';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './AnnouncementMngt.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -109,7 +109,10 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                 title="选择员工"
                 footer={<Space>
                     <Button type="ghost" onClick={() => this.modalCancel()}>取消</Button>
-                    <Button type="primary" onClick={() => { this.setState({ visible: false }); this.props.save(this.state.rightData || []) }} ghost>确定</Button>
+                    <Button type="primary" onClick={() => {
+                        this.setState({ visible: false });
+                        this.props.save(this.state.rightData || [])
+                    }} ghost>确定</Button>
                 </Space>}
                 onCancel={() => this.modalCancel()}
                 className={styles.modalcontent}
@@ -173,7 +176,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                         />
                     </Col>
                     <Col className={styles.right} span={11}>
-                        <Table rowKey='id' dataSource={[...(this.state.rightData || [])]} pagination={false} showHeader={false} columns={[
+                        <Table rowKey='id' dataSource={[...(this.state.rightData || [])]} pagination={false} columns={[
                             {
                                 key: 'name',
                                 title: '姓名',
@@ -181,10 +184,28 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                 width: '50%'
                             },
                             {
+                                key: 'signState',
+                                title: '是否签收',
+                                dataIndex: 'signState',
+                                width: 30,
+                                render: (value: 1 | 2, record: Record<string, any>, index: number) => <Switch
+                                    size="small"
+                                    checked={value === 1}
+                                    onChange={(checked: boolean) => {
+                                        const rightData: any[] = [...this.state.rightData || []];
+                                        rightData[index].signState = checked ? 1 : 2
+                                        this.setState({
+                                            rightData: rightData,
+                                            selectedRowKeys: rightData.map(res => { return res.id || '' }),
+                                            selectedRows: rightData
+                                        })
+                                    }} />
+                            },
+                            {
                                 key: 'operation',
                                 title: '操作',
                                 dataIndex: 'operation',
-                                width: '50%',
+                                width: 30,
                                 render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                                     <Button type="link" onClick={() => {
                                         const rightData: IStaff[] = this.state.rightData || [];
