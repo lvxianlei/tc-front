@@ -199,13 +199,13 @@ export default function Drawing(): React.ReactNode {
                                 disabled={![0, 3].includes(record.auditStatus)}
                             >删除</Button>
                         </Popconfirm>
-                        {/*<Button*/}
-                        {/*    type="link"*/}
-                        {/*    size="small"*/}
-                        {/*    style={{ padding: 2 }}*/}
-                        {/*    disabled={record.auditStatus !== 1}*/}
-                        {/*    onClick={() => handleCancel(record.id)}*/}
-                        {/*>撤回</Button>*/}
+                        <Button
+                            type="link"
+                            size="small"
+                            style={{ padding: 2 }}
+                            disabled={record.auditStatus !== 1}
+                            onClick={() => handleCancel(record.id)}
+                        >撤回</Button>
                         {/*<Button*/}
                         {/*    type="link"*/}
                         {/*    size="small"*/}
