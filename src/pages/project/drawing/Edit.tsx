@@ -101,7 +101,7 @@ export default function Edit() {
           if (item.dataIndex === "confirmType") {
             return ({
               ...item,
-              disabled: type === "edit"
+              disabled: true
             })
           }
           return item
