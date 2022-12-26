@@ -46,6 +46,41 @@
             "format": "YYYY-MM-DD"
         },
         {
+            "title": "业务经理",
+            "dataIndex": "serviceManagerName",
+            "type": "popTable",
+            "path": "/tower-system/employee",
+            "value": "name",
+            "rowKey": "userId",
+            "readOnly": true,
+            "dependencies": true,
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择业务经理..."
+                }
+            ],
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "deptName"
+                }
+            ]
+        },
+        {
             "title": "数量",
             "dataIndex": "num",
             "type": "number",

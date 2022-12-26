@@ -24,7 +24,7 @@ const planNameEnum = planNameOptions?.map((item: any) => ({ label: item.name, va
 export default function Edit() {
   const history = useHistory()
   const routerMatch = useRouteMatch<{ type: "new" | "edit" }>("/project/:entry/:type/contract")
-  const params = useParams<{ projectId: string, id: string }>()
+  const params = useParams<{ projectId: string, id: string, contractType: "1" | "2" | "3" }>()
   const [planType, setPlanType] = useState<0 | 1>(0)
   const [when, setWhen] = useState<boolean>(true)
   const [region, setRegion] = useState<string>()
@@ -90,10 +90,13 @@ export default function Edit() {
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
     try {
-
-      const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-market/contract`, {
+      let reqType: "post" | "put" = type === "new" ? "post" : "put";
+      reqType = ["2", "3"].includes(params.contractType) ? "post" : "put";
+      const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
-        id: type === "new" ? "" : params.id,
+        id: reqType === "post" ? "" : params.id,
+        relationId: data?.id,
+        relationInternalNumber: data?.internalNumber,
         projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
@@ -153,10 +156,13 @@ export default function Edit() {
         customerLinkman: baseInfo.customerLinkman,
         customerPhone: baseInfo.customerPhone
       },
-      paymentPlanDtos: editformData.submit?.map((item: any) => ({
-        ...item,
-        contractId: params.id
-      })),
+      paymentPlanDtos: editformData.submit?.map((item: any) => {
+        delete item.id
+        return ({
+          ...item,
+          contractId: data?.id
+        })
+      }),
       fileIds: attchs
     })
     if (result) {
@@ -276,12 +282,110 @@ export default function Edit() {
             default:
               return item
           }
-        })]}
+        }),
+        ...(["2", "3"].includes(params.contractType) ? [{
+          "title": "框架合同",
+          "dataIndex": "",
+          "type": "popTable",
+          "width": 1101,
+          "path": `/tower-market/frameAgreement?projectId=${params.projectId}`,
+          "rowKey": "id",
+          "dependencies": true,
+          "required": true,
+          "search": false,
+          "columns": [
+            {
+              "title": "协议名称",
+              "dataIndex": "frameAgreementName"
+            },
+            {
+              "title": "项目名称",
+              "dataIndex": "projectName"
+            },
+            {
+              "title": "预估总重（吨）",
+              "dataIndex": "contractWeight"
+            },
+            {
+              "title": "预估单价（元）",
+              "dataIndex": "contractMoney"
+            },
+            {
+              "title": "预估总价（元）",
+              "dataIndex": "contractMoneyCount"
+            },
+            {
+              "title": "执行重量（吨）",
+              "dataIndex": "implementWeight"
+            },
+            {
+              "title": "执行金额（元）",
+              "dataIndex": "implementMoney"
+            },
+            {
+              "title": "执行重量百分比",
+              "dataIndex": "implementWeightPro"
+            },
+            {
+              "title": "执行金额百分比",
+              "dataIndex": "implementMoneyPro"
+            },
+            {
+              "title": "签订日期",
+              "dataIndex": "signDate"
+            },
+            {
+              "title": "签订人",
+              "dataIndex": "signUser"
+            },
+            {
+              "title": "交货日期",
+              "dataIndex": "deliveryDate"
+            },
+            {
+              "title": "合同接管人",
+              "dataIndex": "takeOverUser"
+            },
+            {
+              "title": "合同接管日期",
+              "dataIndex": "takeOverTime"
+            },
+            {
+              "title": "是否接收原件",
+              "dataIndex": "isReceivedContract"
+            },
+            {
+              "title": "销售员",
+              "dataIndex": "saleUser"
+            }
+          ]
+        }] : []),
+        ...params.contractType === "2" ? [{
+          "title": "变更原价格",
+          "dataIndex": "changePrice",
+          "type": "select",
+          "enum": [
+            {
+              "label": "是",
+              "value": 1
+            },
+            {
+              "label": "否",
+              "value": 2
+            }
+          ]
+        }] : [],
+        {
+          "title": "备注",
+          "dataIndex": "description",
+          "type": "textarea"
+        }]}
         form={form}
         dataSource={{
           bidBatch: projectData?.bidBatch,
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
           country: projectData?.country || "",
+          contractType: Number(params.contractType) || 1,
           ...data
         } || {
           region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
