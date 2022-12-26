@@ -19,9 +19,9 @@ import moment from 'moment';
 export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
     const [form] = Form.useForm();
+    const [editForm] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
     const [visible, setVisible] = useState<boolean>(false);
-    const [description, setDescription] = useState<string>('');
     const history = useHistory();
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
@@ -111,20 +111,15 @@ export default function List(): React.ReactNode {
                                     title: "编辑",
                                     icon: null,
                                     okText: '保存',
-                                    content: <Row>
-                                        <Col span={4}>备注</Col>
-                                        <Col span={20}>
-                                            <Input.TextArea defaultValue={record?.description} onChange={(e) => {
-                                                console.log(e)
-                                                setDescription(e?.target.value)
-                                            }} maxLength={300} />
-                                        </Col>
-                                    </Row>,
+                                    content: <Form form={editForm}>
+                                        <Form.Item label="备注" name={'description'}>
+                                            <Input.TextArea defaultValue={record?.description} maxLength={300} />
+                                        </Form.Item>
+                                    </Form>,
                                     onOk: () => new Promise(async (resolve, reject) => {
                                         try {
-                                            console.log(description)
                                             RequestUtil.post<any>(`/tower-science/performance/reward`, {
-                                                description: description,
+                                                description: editForm?.getFieldsValue(true)?.description,
                                                 id: record?.id
                                             }).then(res => {
                                                 message.success('编辑成功');
@@ -136,7 +131,7 @@ export default function List(): React.ReactNode {
                                         }
                                     }),
                                     onCancel() {
-                                        setDescription('')
+                                        editForm?.resetFields();
                                     }
                                 })
                             }}>编辑</Button>
