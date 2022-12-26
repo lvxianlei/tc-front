@@ -256,6 +256,11 @@ export default function PurchasePlan() {
                         children: <IntgSelect width={200} />
                     },
                     {
+                        name: 'materialName',
+                        label: '品名',
+                        children: <Input placeholder="请输入品名" style={{ width: 150 }} />
+                    },
+                    {
                         name: 'fuzzyQuery',
                         label: '模糊查询',
                         children: <Input placeholder="采购任务编号/使用部门" style={{ width: 260 }} maxLength={200} />

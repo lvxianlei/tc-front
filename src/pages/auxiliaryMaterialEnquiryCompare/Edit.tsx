@@ -31,7 +31,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         run
     } = useRequest<{ [key: string]: any }>((filterValue) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/collect`, {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryMaterialPurchasePlan/infoList`, {
                 ...filterValue,
                 planStatus: 1,
                 collectType: 1,
@@ -55,8 +55,14 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
             purchaserId: values.purchaserId?.value
         })}>
             <Row gutter={[8, 8]}>
+                <Col><Form.Item label="品名" name="materialName">
+                    <Input />
+                </Form.Item></Col>
+                <Col><Form.Item label="规格" name="structureSpec">
+                    <Input />
+                </Form.Item></Col>
                 <Col><Form.Item label="查询" name="fuzzyQuery">
-                    <Input placeholder="输入汇总计划编号/申请人查询"/>
+                    <Input placeholder="输入汇总计划编号查询"/>
                 </Form.Item></Col>
                 <Col><Form.Item>
                     <Button type="primary" htmlType="submit" style={{marginLeft: 12}}>查询</Button>
@@ -67,7 +73,7 @@ const ChoosePlan: React.ForwardRefExoticComponent<any> = forwardRef((props, ref)
         </Form>
         <CommonTable loading={loading} haveIndex columns={choosePlanList} dataSource={data?.records || []}
                      rowSelection={{
-                         type: "radio",
+                         type: "checkbox",
                          onChange: (_: any, selectedRows: any[]) => {
                              setSelectRows(selectedRows)
                          }
@@ -134,10 +140,12 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
 
     const {run: saveRun} = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const postData = type === "new" ? {...data, purchasePlanId: purchasePlanId} : ({
+            const postData = type === "new" ? {...data, 
+                // purchasePlanId: purchasePlanId
+            } : ({
                 ...data,
                 id,
-                purchasePlanId: purchasePlanId
+                // purchasePlanId: purchasePlanId
             })
             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/auxiliaryComparisonPrice`, postData)
             resole(result)
@@ -164,7 +172,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
             await saveRun({
                 ...baseData,
                 supplyIdList: baseData?.supplyIdList.records.map((item: any) => item.id).join(","),
-                purchasePlanId: purchasePlanId,
+                // purchasePlanId: purchasePlanId,
                 comparisonPriceDetailDtos: materialList.map((item: any) => {
                     return {
                         ...item,
@@ -265,10 +273,10 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
         const chooseData = choosePlanRef.current?.selectRows;
         console.log(chooseData)
         // 根据选择的汇总计划获取 辅材明细列表
-        let data = await getDatailList(chooseData[0].id)
-        console.log(data)
-        setPurchasePlanId(chooseData[0].id);
-        let list = data.records.map((item: any) => ({
+        // let data = await getDatailList(chooseData[0].id)
+        // console.log(data)
+        // setPurchasePlanId(chooseData[0].id);
+        let list =chooseData.map((item: any) => ({
             ...item,
             source: 2,
             num: item.planPurchaseNum,
@@ -372,13 +380,13 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
 
     const handGuaranteChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
         if (fields.supplyIdList) {
-            if (fields.supplyIdList.records.length > 4) {
-                message.error("询比价供应商最多选择四个，请您重新选择！");
-                form.setFieldsValue({
-                    supplyIdList: ""
-                })
-                return false;
-            } else {
+            // if (fields.supplyIdList.records.length > 4) {
+            //     message.error("询比价供应商最多选择四个，请您重新选择！");
+            //     form.setFieldsValue({
+            //         supplyIdList: ""
+            //     })
+            //     return false;
+            // } else {
                 form.setFieldsValue({
                     supplyIdList: {
                         value: fields.supplyIdList.records.map((item: any) => item.supplierName).join(","),
@@ -388,7 +396,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                         }))
                     }
                 })
-            }
+            // }
         }
     }
 

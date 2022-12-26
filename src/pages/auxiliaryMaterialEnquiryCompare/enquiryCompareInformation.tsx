@@ -210,7 +210,7 @@ export default function Overview(): JSX.Element {
                 <Col offset={1} span={5}>中标供应商</Col>
                 <Col offset={1} span={17}>
                     <Select
-                        disabled={data?.comparisonStatus !== 1}
+                        // disabled={data?.comparisonStatus !== 1}
                         onChange={(value: string) => {
                             setSupplier(value)
                         }}
@@ -347,7 +347,7 @@ export default function Overview(): JSX.Element {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange,
                 }}
-                dataSource={materialLists}
+                dataSource={[...materialLists]}
             />
             <DetailTitle title="询价报价信息" />
             <CommonTable

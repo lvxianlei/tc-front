@@ -37,6 +37,7 @@ export default forwardRef(function BatchCreate(props, ref): JSX.Element {
                     ...item,
                     reasonWeight: logicWeight.logicWeight,
                     planCode: logicWeight.planNumbers,
+                    contractId:currentRowData.contractCode?.id,
                     planWeight: currentRowData.contractCode?.records?.[0]?.plannedWeight,
                     projectCode: currentRowData.contractCode?.records?.[0]?.projectNumber,
                     contractName: currentRowData.contractCode?.records?.[0]?.contractName,
