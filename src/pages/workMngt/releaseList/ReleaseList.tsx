@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select, message, Modal, Row, Col } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page } from '../../common';
+import { IntgSelect, Page } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { materialStandardOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
@@ -414,6 +414,9 @@ export default function ReleaseList(): React.ReactNode {
             values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
             values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
         }
+        if (values.createUser) {
+            values.createUser = values.createUser?.value;
+        }
         setAFilterValue(values)
         return values
     }
@@ -574,6 +577,11 @@ export default function ReleaseList(): React.ReactNode {
                         name: 'productionBatchNo',
                         label: '批次号',
                         children: <Input placeholder='请输入' />
+                    },
+                    {
+                        name: 'createUser',
+                        label: '下达人',
+                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'fuzzyMsg',
