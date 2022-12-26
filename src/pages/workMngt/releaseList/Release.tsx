@@ -230,6 +230,8 @@ export default function Release(): React.ReactNode {
                         const submitValue = {
                             galvanizeDemand: value.galvanizeDemand,
                             machiningDemand: value.machiningDemand,
+                            implementStandardName: value.implementStandardName,
+                            implementStandard: value.implementStandard,
                             packDemand: value.packDemand,
                             cancelIssuedNumber: value.cancelIssuedNumber ? value.cancelIssuedNumber.join(',') : "",
                             planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
@@ -369,6 +371,11 @@ export default function Release(): React.ReactNode {
                                     <Radio value={1}>是</Radio>
                                     <Radio value={0}>否</Radio>
                                 </Radio.Group>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="implementStandardName" label="执行标准">
+                                <Input.TextArea maxLength={800} showCount rows={1} disabled />
                             </Form.Item>
                         </Col>
                     </Row>

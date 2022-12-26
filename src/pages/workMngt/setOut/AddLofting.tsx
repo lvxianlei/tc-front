@@ -208,7 +208,20 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     required: true,
                     message: '请输入规格'
                 }]}>
-                    <Input size="small" maxLength={20} onBlur={(e) => weightCalculation(e.target.value, 'structureSpec', index)} />
+                    <Input size="small" maxLength={20} onBlur={(e) => {
+                        let values = form.getFieldsValue(true)?.data;
+                        const data = e.target.value.replace(/L/g, "∠");
+                        const newStructureSpec = data.replace(/X/g, "*");
+                        values[index] = {
+                            ...values[index],
+                            structureSpec: newStructureSpec
+                        }
+                        form.setFieldsValue({
+                            data: [...values]
+                        })
+                        setTableData([...values])
+                        weightCalculation(newStructureSpec, 'structureSpec', index)
+                    }} />
                 </Form.Item>
             )
         },
@@ -740,7 +753,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'surfaceArea',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "surfaceArea"]} initialValue={_}>
-                    <InputNumber size="small" min={0} max={9999.99} />
+                    <InputNumber size="small" min={0} max={99999999.99} />
                 </Form.Item>
             )
         },
