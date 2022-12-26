@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Row, Col, Modal, message } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Select, Row, Col, Modal, message, TablePaginationConfig } from 'antd';
 import styles from './LoftingpPerformanceSummary.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, itemColumns } from "./loftingpPerformanceSummary.json"
@@ -28,15 +28,20 @@ export default function List(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
     const history = useHistory();
+    const [page, setPage] = useState({
+        current: 1,
+        size: 10,
+        total: 0
+    })
 
     useEffect(() => {
         initCharts();
     })
 
-    const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/performance/product/category/list`, { ...filterValue });
-        setDetailData(data[0]?.entryLinkList || [])
-        resole([]);
+    const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get<any>(`/tower-science/performance/product/category/list`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        setDetailData(data?.records[0]?.entryLinkList || [])
+        resole(data?.records);
     }), {})
 
     const onRowChange = async (record: Record<string, any>) => {
@@ -50,7 +55,12 @@ export default function List(): React.ReactNode {
             values.endTime = formatDate[1] + ' 23:59:59';
         }
         setFilterValues(values);
-        run({ ...values });
+        run({},{ ...values });
+    }
+
+    const handleChangePage = (current: number, pageSize: number) => {
+        setPage({ ...page, current: current, size: pageSize });
+        run({ current: current, size: pageSize }, { ...filterValues })
     }
 
     const initCharts = () => {
@@ -167,9 +177,15 @@ export default function List(): React.ReactNode {
                     haveIndex
                     columns={columns}
                     dataSource={data}
-                    pagination={false}
                     scroll={{
                         y: 800
+                    }}
+                    pagination={{
+                        current: page.current,
+                        pageSize: page.size,
+                        total: page?.total,
+                        showSizeChanger: true,
+                        onChange: handleChangePage
                     }}
                     onRow={(record: Record<string, any>) => ({
                         onClick: () => onRowChange(record),
