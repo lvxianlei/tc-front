@@ -434,7 +434,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         "title": "关联工程",
                         "dataIndex": "projectList",
                         "type": "popTable",
-                        "path": "/tower-supply/materialPurchaseTask",
+                        "path": "/tower-supply/materialPurchaseTask?materialSummaryStatus=1&sortRule=2",
                         "width": 1011,
                         "value": "projectList",
                         "selectType": "checkbox",
@@ -485,7 +485,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             },
                             {
                                 "title": "提料完成时间",
-                                "dataIndex": "liftingTime"
+                                "dataIndex": "liftingMaterialTime"
                             }
                         ]
                     }
