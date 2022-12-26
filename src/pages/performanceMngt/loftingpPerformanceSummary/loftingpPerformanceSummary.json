@@ -1,27 +1,27 @@
 {
     "columns": [
         {
-            "key": "taskNum",
+            "key": "productCategoryName",
             "title": "塔型名称",
             "width": 100,
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "taskNum",
+            "title": "放样任务编号",
+            "width": 80,
             "dataIndex": "taskNum"
         },
         {
-            "key": "planNumber",
-            "title": "放样任务编号",
-            "width": 80,
-            "dataIndex": "planNumber"
-        },
-        {
-            "key": "loftingCompleteTime",
+            "key": "projectName",
             "title": "工程名称",
-            "dataIndex": "loftingCompleteTime",
+            "dataIndex": "projectName",
             "width": 80
         },
         {
-            "key": "projectName",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "projectName",
+            "dataIndex": "planNumber",
             "width": 80
         },
         {
@@ -37,15 +37,15 @@
             "width": 80
         },
         {
-            "key": "productCategoryName",
+            "key": "loftingStartTime",
             "title": "放样开始日期",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "loftingStartTime",
             "width": 80
         },
         {
-            "key": "towerAccuracyName",
+            "key": "loftingCompleteTime",
             "title": "放样完成日期",
-            "dataIndex": "towerAccuracyName",
+            "dataIndex": "loftingCompleteTime",
             "width": 80
         },
         {
@@ -56,9 +56,9 @@
             "type": "number"
         },
         {
-            "key": "loftingLeaderName",
+            "key": "performanceAmount",
             "title": "绩效汇总",
-            "dataIndex": "loftingLeaderName",
+            "dataIndex": "performanceAmount",
             "width": 80
         }
     ],
@@ -69,9 +69,9 @@
             "dataIndex": "name"
         },
         {
-            "key": "value",
+            "key": "amount",
             "title": "绩效金额",
-            "dataIndex": "value",
+            "dataIndex": "amount",
             "type": "number"
         }
     ],

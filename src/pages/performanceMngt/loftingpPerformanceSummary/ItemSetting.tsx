@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Button, Form } from 'antd';
+import { Button, message } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -16,11 +16,11 @@ interface modalProps {
 }
 
 export default forwardRef(function CoefficientPerformance({ }: modalProps, ref) {
-   const [itemData, setItemData] = useState<any[]>();
+    const [itemData, setItemData] = useState<any[]>();
 
-    const { loading, data } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-       const result: any = await RequestUtil.get(`/tower-science/performance`)
-       setItemData(result)
+    const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get(`/tower-science/performance`)
+        setItemData(result)
         resole([]);
     }), {})
 
@@ -36,49 +36,38 @@ export default forwardRef(function CoefficientPerformance({ }: modalProps, ref) 
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            await saveRun(value)
+            console.log(itemData)
+            await saveRun(itemData)
             resolve(true);
         } catch (error) {
             reject(false)
         }
     })
 
-    const resetFields = () => {
-        form.resetFields()
-    }
-
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
-
-    const [form] = Form.useForm();
+    useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit]);
 
     return <DetailContent key='CoefficientPerformance'>
         <CommonTable
-         dataSource={itemData || []} 
-         columns={[
-           ...setColumns,
-           {
-               title: '操作',
-               dataIndex: 'operation',
-               fixed: "right",
-               render: (_: undefined, record: any, index: number): React.ReactNode => (
-                   <Button type="link" onClick={() => {
-                       const newData = itemData?.map((res: any, ind: number) => {
-                           if(ind === index) {
-                               return {
-                                   ...res,
-                                   isEnable: res?.isEnable === 0 ? 1 : 0
-                               }
-                           }else {
-                               return res
-                           }
-                       })
-                       console.log(newData)
-                       setItemData(newData)
-                   }}>{ record?.isEnable === 1 ? '启用' : '停用'}</Button>
-               )
-           }
-           ]}
-           pagination={false}/>
+            dataSource={itemData || []}
+            columns={[
+                ...setColumns,
+                {
+                    title: '操作',
+                    dataIndex: 'operation',
+                    fixed: "right",
+                    render: (_: undefined, record: any, index: number): React.ReactNode => (
+                        <Button type="link" onClick={() => {
+                            RequestUtil.post(`/tower-science/performance`, {
+                                id: record?.id,
+                                isEnable: record?.isEnable === 0 ? 1 : 0
+                            }).then(res => {
+                                message.success('状态变更成功！');
+                                run();
+                            })
+                        }}>{record?.isEnable === 1 ? '启用' : '停用'}</Button>
+                    )
+                }
+            ]}
+            pagination={false} />
     </DetailContent>
 })

@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, Input, DatePicker, Button, Form, Select, Row, Col, Modal, message } from 'antd';
+import { Space, Input, DatePicker, Button, Form, Select, Row, Col, Modal, message, TablePaginationConfig } from 'antd';
 import styles from './LoftingpPerformanceSummary.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, itemColumns } from "./loftingpPerformanceSummary.json"
@@ -28,121 +28,39 @@ export default function List(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
     const history = useHistory();
+    const [page, setPage] = useState({
+        current: 1,
+        size: 10,
+        total: 0
+    })
 
     useEffect(() => {
         initCharts();
     })
 
-
-    const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/performance/product/category`, { ...filterValue });
-        if (data.length > 0 && data[0]?.id) {
-            detailRun(data[0]?.id)
-        } else {
-            setDetailData([]);
-        }
-        resole([]);
+    const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get<any>(`/tower-science/performance/product/category/list`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        setDetailData(data?.records[0]?.entryLinkList || [])
+        resole(data?.records);
     }), {})
 
-    const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
-        try {
-            const result = await RequestUtil.get<any>(`/tower-science/wasteProductReceipt/structure/list/${id}`);
-            setDetailData([
-                {
-                    name: '项目对接',
-                    value: 1
-                },
-                {
-                    name: '放样工作',
-                    value: 1
-                },
-                {
-                    name: '放样互审',
-                    value: 1
-                },
-                {
-                    name: '放样高低腿配置编制',
-                    value: 1
-                },
-                {
-                    name: '放样校核',
-                    value: 1
-                },
-                {
-                    name: '放样高低腿配置校核',
-                    value: 1
-                },
-                {
-                    name: '放样挂线板校核',
-                    value: 1
-                },
-                {
-                    name: '辅助出图设计',
-                    value: 1
-                },
-                {
-                    name: '提料工作',
-                    value: 1
-                },
-                {
-                    name: '提料工作校核',
-                    value: 1
-                },
-                {
-                    name: '编程高低腿',
-                    value: 1
-                },
-                {
-                    name: '螺栓工作',
-                    value: 1
-                },
-                {
-                    name: '螺栓工作校核',
-                    value: 1
-                },
-                {
-                    name: '螺栓计划',
-                    value: 1
-                },
-                {
-                    name: '螺栓计划校核',
-                    value: 1
-                },
-                {
-                    name: '小样图上传',
-                    value: 1
-                },
-                {
-                    name: '样板室图纸打印',
-                    value: 1
-                },
-                {
-                    name: '样板室样板打印',
-                    value: 1
-                },
-                {
-                    name: '杂项绩效',
-                    value: 1
-                }
-            ]);
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
-
     const onRowChange = async (record: Record<string, any>) => {
-        detailRun(record.id)
+        setDetailData(record?.entryLinkList || [])
     }
 
     const onSearch = (values: Record<string, any>) => {
         if (values.updateStatusTime) {
             const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-            values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+            values.startTime = formatDate[0] + ' 00:00:00';
+            values.endTime = formatDate[1] + ' 23:59:59';
         }
         setFilterValues(values);
-        run({ ...values });
+        run({},{ ...values });
+    }
+
+    const handleChangePage = (current: number, pageSize: number) => {
+        setPage({ ...page, current: current, size: pageSize });
+        run({ current: current, size: pageSize }, { ...filterValues })
     }
 
     const initCharts = () => {
@@ -216,37 +134,27 @@ export default function List(): React.ReactNode {
         });
     }
 
-    const handleOk = () => new Promise(async (resove, reject) => {
-        try {
-            await ref.current?.onSubmit()
-            message.success("保存成功！")
-            setVisible(false)
-            history.go(0)
-            resove(true)
-        } catch (error) {
-            reject(false)
-        }
-    })
-
     return <>
-    <Modal
-        destroyOnClose
-        key='CoefficientPerformance'
-        visible={visible}
-        title="绩效条目设置"
-        onOk={handleOk}
-        onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
-        <ItemSetting ref={ref} />
-    </Modal>
+        <Modal
+            destroyOnClose
+            key='CoefficientPerformance'
+            visible={visible}
+            title="绩效条目设置"
+            footer={<Button onClick={() => {
+                setVisible(false)
+            }}>关闭</Button>}
+            onCancel={() => { setVisible(false) }}>
+            <ItemSetting ref={ref} />
+        </Modal>
         <Form form={form} className={styles.bottom} layout="inline" onFinish={onSearch}>
             <Form.Item label='日期' name="updateStatusTime">
                 <DatePicker.RangePicker />
             </Form.Item>
-            <Form.Item label='产品类型' name="status" initialValue={''}>
+            <Form.Item label='产品类型' name="productType" initialValue={''}>
                 <Select style={{ width: '200px' }}>
                     <Select.Option value={''} key={0}>全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map((item: any) => {
-                        return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
+                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                     })}
                 </Select>
             </Form.Item>
@@ -261,33 +169,39 @@ export default function List(): React.ReactNode {
             </Form.Item>
         </Form>
         <Button type='primary' onClick={() => {
-            setVisible(true);   
+            setVisible(true);
         }} className={styles.bottom} ghost>绩效条目设置</Button>
         <Row gutter={12} className={styles.bottom}>
             <Col span={18}>
-        <CommonTable
-            haveIndex
-            columns={columns}
-            dataSource={data}
-            pagination={false}
-            scroll={{
-                y: 800
-            }}
-            onRow={(record: Record<string, any>) => ({
-                onClick: () => onRowChange(record),
-                className: styles.tableRow
-            })}
-        />
+                <CommonTable
+                    haveIndex
+                    columns={columns}
+                    dataSource={data}
+                    scroll={{
+                        y: 800
+                    }}
+                    pagination={{
+                        current: page.current,
+                        pageSize: page.size,
+                        total: page?.total,
+                        showSizeChanger: true,
+                        onChange: handleChangePage
+                    }}
+                    onRow={(record: Record<string, any>) => ({
+                        onClick: () => onRowChange(record),
+                        className: styles.tableRow
+                    })}
+                />
             </Col>
             <Col span={6}>
-            <div id={'performancePie'} style={{ width: '100%', height: '300px' }} key={'performancePie'} />
-        <CommonTable
-            columns={itemColumns}
-            dataSource={detailData || []}
-            scroll={{
-                y: 600
-            }}
-            pagination={false} />
+                <div id={'performancePie'} style={{ width: '100%', height: '300px' }} key={'performancePie'} />
+                <CommonTable
+                    columns={itemColumns}
+                    dataSource={detailData || []}
+                    scroll={{
+                        y: 600
+                    }}
+                    pagination={false} />
 
             </Col>
         </Row>
