@@ -19,15 +19,15 @@
             "width": 80
         },
         {
-            "key": "productCategory",
+            "key": "productCategoryName",
             "title": "塔型",
-            "dataIndex": "productCategory",
+            "dataIndex": "productCategoryName",
             "width": 120
         },
         {
-            "key": "loftingLink",
+            "key": "loftingLinkName",
             "title": "放样环节",
-            "dataIndex": "loftingLink",
+            "dataIndex": "loftingLinkName",
             "width": 120
         },
         {
@@ -110,6 +110,54 @@
             "key": "productCategoryId",
             "title": "塔型",
             "dataIndex": "productCategoryId"
+        },
+        {
+            "key": "workHour",
+            "title": "工时",
+            "dataIndex": "workHour"
+        },
+        {
+            "key": "price",
+            "title": "单价",
+            "dataIndex": "price"
+        },
+        {
+            "key": "totalAmount",
+            "title": "总金额",
+            "dataIndex": "totalAmount"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "loftingLinkName",
+            "title": "放样环节",
+            "width": 120,
+            "dataIndex": "loftingLinkName"
+        },
+        {
+            "key": "category",
+            "title": "杂项类别",
+            "dataIndex": "category"
+        },
+        {
+            "key": "type",
+            "title": "杂项类型",
+            "dataIndex": "type"
+        },
+        {
+            "key": "entry",
+            "title": "杂项条目",
+            "dataIndex": "entry"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
         },
         {
             "key": "workHour",

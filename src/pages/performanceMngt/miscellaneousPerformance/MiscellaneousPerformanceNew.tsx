@@ -10,7 +10,7 @@ import { BaseInfo, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './GenerationOfMaterial.module.less';
-import { newColumns } from './miscellaneousPerformance.json'
+import { newColumns, detailColumns } from './miscellaneousPerformance.json'
 
 interface modalProps {
     readonly id?: any;
@@ -26,6 +26,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/sundryConfig/getDetail?id=${id}`)
+            planNumChange(result?.planNumber);
             resole(result)
         } catch (error) {
             reject(error)
@@ -45,9 +46,6 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const planNumChange = async (e: any) => {
         const data: any = await RequestUtil.get(`/tower-science/loftingTask/list/${e}`);
         setTowerSelects(data || [])
-        form.setFieldsValue({
-            productCategoryId: ''
-        });
     }
 
     const { data: items } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -110,7 +108,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
             type === 'detail' ?
                 <BaseInfo
                     dataSource={data || {}}
-                    columns={newColumns}
+                    columns={detailColumns}
                     col={3}
                 />
                 :
@@ -150,7 +148,6 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 style={{ width: "100%" }}
                                                 onChange={(e) => {
                                                     const data = items?.filter((res: any) => res?.name === e);
-                                                    console.log(data)
                                                     setTypes(data[0]?.sundryConfigVOList || [])
                                                     form.setFieldsValue({
                                                         type: '',
@@ -181,7 +178,14 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                     form.setFieldsValue({
                                                         entry: ''
                                                     })
-                                                }}>
+                                                }}
+                                                onDropdownVisibleChange={(open) => {
+                                                    if (open) {
+                                                        const data = items?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.category);
+                                                        setTypes(data[0]?.sundryConfigVOList || [])
+                                                    }
+                                                }}
+                                            >
                                                 {types && types?.map((item: any, index: number) => {
                                                     return <Select.Option key={index} value={item?.name}>{item?.name}</Select.Option>
                                                 })}
@@ -199,7 +203,13 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                         }]}>
                                             <Select
                                                 placeholder="请选择杂项类型"
-                                                style={{ width: "100%" }}>
+                                                style={{ width: "100%" }}
+                                                onDropdownVisibleChange={(open) => {
+                                                    if (open) {
+                                                        const data = types?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.type);
+                                                        setEntrys(data[0]?.sundryConfigVOS || [])
+                                                    }
+                                                }}>
                                                 {entrys && entrys?.map((item: any, index: number) => {
                                                     return <Select.Option key={index} value={item?.name}>{item?.name}</Select.Option>
                                                 })}
@@ -219,7 +229,12 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 filterOption={(input, option) =>
                                                     (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                                 }
-                                                onChange={(e) => planNumChange(e)}>
+                                                onChange={(e) => {
+                                                    planNumChange(e);
+                                                    form.setFieldsValue({
+                                                        productCategoryId: ''
+                                                    });
+                                                }}>
                                                 {planNums && planNums?.map((item: any, index: number) => {
                                                     return <Select.Option key={index} value={item}>{item}</Select.Option>
                                                 })}
@@ -272,7 +287,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                             required: true,
                                             message: '请输入单价'
                                         }]}>
-                                            <InputNumber style={{ width: '100%' }} max={999999} onChange={(e) => {
+                                            <InputNumber style={{ width: '100%' }} min={0} max={999999} onChange={(e) => {
                                                 const workHour = form.getFieldsValue(true)?.workHour || 0;
                                                 form.setFieldsValue({
                                                     totalAmount: Number(workHour) * Number(e)
