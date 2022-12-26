@@ -5,7 +5,7 @@
  */
 
 import React, { forwardRef, useState } from "react";
-import { Button, Form, Input, InputNumber, message, Modal } from 'antd';
+import { Button, Form, Input, InputNumber, message, Modal, Select } from 'antd';
 import { CommonTable, DetailContent, DetailTitle } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -26,6 +26,19 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
             setDetailData(result?.rewardConfigVOList || [])
             setOtherData(result?.otherConfigVOList || [])
             resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
+    const { data: types } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            let resData: any[] = await RequestUtil.get(`/tower-science/config/fixItem`);
+            const list: any[] = [];
+            resData.forEach(res => {
+                list.push(...res?.fixItemConfigList || [])
+            })
+            resole(list)
         } catch (error) {
             reject(error)
         }
@@ -166,16 +179,30 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
                                         required: true,
                                         message: '请输入参数1！'
                                     }]}>
-                                        <Input size="small" disabled suffix={
-                                            <SelectUser
-                                                key={'loftingLeader'}
-                                                selectedKey={[otherForm?.getFieldsValue(true)?.parameter1]}
-                                                onSelect={(selectedRows: Record<string, any>) => {
-                                                    otherForm.setFieldsValue({
-                                                        parameter1: selectedRows[0]?.name
-                                                    })
-                                                }} />
-                                        } />
+                                        {
+                                            record?.entry === '返修单' ?
+                                                <Select placeholder="请选择返修类型">
+                                                    {
+                                                        types && types?.map((item: any, index: number) =>
+                                                            <Select.Option value={item.id} key={index}>
+                                                                {item.fixType}
+                                                            </Select.Option>
+                                                        )
+                                                    }
+                                                </Select>
+                                                :
+                                                <Input size="small" disabled suffix={
+                                                    <SelectUser
+                                                        key={'loftingLeader'}
+                                                        selectedKey={[otherForm?.getFieldsValue(true)?.parameter1]}
+                                                        onSelect={(selectedRows: Record<string, any>) => {
+                                                            otherForm.setFieldsValue({
+                                                                parameter1: selectedRows[0]?.name
+                                                            })
+                                                        }} />
+                                                } />
+                                        }
+
                                     </Form.Item>
                                 </Form>,
                                 onOk: onSubmit,

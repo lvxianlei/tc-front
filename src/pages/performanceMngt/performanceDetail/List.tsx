@@ -126,7 +126,10 @@ export default function List(): React.ReactNode {
                                     onOk: () => new Promise(async (resolve, reject) => {
                                         try {
                                             console.log(description)
-                                            RequestUtil.post<any>(``).then(res => {
+                                            RequestUtil.post<any>(`/tower-science/performance/reward`, {
+                                                description: description,
+                                                id: record?.id
+                                            }).then(res => {
                                                 message.success('编辑成功');
                                                 history.go(0)
                                                 resolve(true)
