@@ -144,7 +144,7 @@ export default function List(): React.ReactNode {
                 <Select style={{ width: '200px' }}>
                     <Select.Option value={''} key={0}>全部</Select.Option>
                     {productTypeOptions && productTypeOptions.map((item: any) => {
-                        return <Select.Option key={item.id} value={item.id + ',' + item.name}>{item.name}</Select.Option>
+                        return <Select.Option key={item.id} value={item.id}>{item.name}</Select.Option>
                     })}
                 </Select>
             </Form.Item>

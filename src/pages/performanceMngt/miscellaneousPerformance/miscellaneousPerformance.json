@@ -107,9 +107,9 @@
             "dataIndex": "planNumber"
         },
         {
-            "key": "productCategory",
+            "key": "productCategoryId",
             "title": "塔型",
-            "dataIndex": "productCategory"
+            "dataIndex": "productCategoryId"
         },
         {
             "key": "workHour",

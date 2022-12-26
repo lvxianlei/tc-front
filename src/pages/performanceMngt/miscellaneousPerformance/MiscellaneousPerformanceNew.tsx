@@ -227,11 +227,11 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                         </Form.Item>
                                     }
                                 })
-                            case "productCategory":
+                            case "productCategoryId":
                                 return ({
                                     ...item,
                                     render: () => {
-                                        return <Form.Item name={'productCategory'}>
+                                        return <Form.Item name={'productCategoryId'}>
                                             <Select
                                                 placeholder="请选择塔型名称"
                                                 style={{ width: "100%" }}

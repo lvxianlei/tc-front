@@ -7,7 +7,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Modal, message, Row, Col } from 'antd';
 import styles from './PerformanceDetail.module.less';
-import { IResponseData } from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
 import { CommonTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -27,19 +26,19 @@ export default function List(): React.ReactNode {
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const lastMonth = new Date().getMonth() > 0 ? new Date().getFullYear() + '-' + new Date().getMonth() : (new Date().getFullYear() - 1) + '-12'
-        const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-science/performance/reward`, { monthDate: lastMonth, ...filterValue });
-        if (data.records.length > 0 && data.records[0]?.id) {
-            detailRun(data.records[0]?.id)
+        const data: any = await RequestUtil.get<any>(`/tower-science/performance/reward`, { monthDate: lastMonth, ...filterValue });
+        if (data.length > 0 && data[0]?.id) {
+            detailRun(data[0]?.id)
         } else {
             setDetailData([]);
         }
         setFilterValues({
-            monthDate: lastMonth
+            monthDate: filterValue?.monthDate ? filterValue?.monthDate : lastMonth
         })
         form.setFieldsValue({
-            monthDate: moment(lastMonth)
+            monthDate: moment(filterValue?.monthDate ? filterValue?.monthDate : lastMonth)
         })
-        resole(data?.records);
+        resole(data);
     }), {})
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
@@ -60,9 +59,7 @@ export default function List(): React.ReactNode {
         if (values.monthDate) {
             values.monthDate = values.monthDate.format("YYYY-MM");
         }
-        console.log(values.monthDate, '...')
         setFilterValues(values);
-        console.log(filterValues)
         run({ ...values });
     }
 

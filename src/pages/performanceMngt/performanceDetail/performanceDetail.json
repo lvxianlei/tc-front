@@ -194,9 +194,9 @@
             "dataIndex": "entry"
         },
         {
-            "key": "parameter1",
+            "key": "parameterName1",
             "title": "参数1",
-            "dataIndex": "parameter1",
+            "dataIndex": "parameterName1",
             "width": 80
         },
         {

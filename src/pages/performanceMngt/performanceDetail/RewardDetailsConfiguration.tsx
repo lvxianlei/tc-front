@@ -48,7 +48,10 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
         try {
             form.validateFields().then(async res => {
                 const values = await form.getFieldsValue(true);
-                console.log(values)
+                await saveRun({
+                    id: values?.id,
+                    amount: values?.amount
+                })
                 resolve(true);
             })
         } catch (error) {
@@ -58,8 +61,11 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
 
     const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: any = await RequestUtil.post(`/tower-science/performance/reward/config`, data)
-            resove(result)
+            await RequestUtil.post(`/tower-science/performance/reward/config`, data).then(res => {
+                message.success('编辑成功！');
+                run();
+                resove(true)
+            })
         } catch (error) {
             reject(error)
         }
@@ -67,11 +73,14 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            await submitRun({
-                ...value
+            otherForm.validateFields().then(async res => {
+                const value = await otherForm.getFieldsValue(true);
+                await submitRun({
+                    id: value?.id,
+                    parameter1: value?.parameter1
+                })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -79,8 +88,11 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
 
     const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
-            const result: any = await RequestUtil.post(`/tower-science/performance/reward/config`, data)
-            resove(result)
+            await RequestUtil.post(`/tower-science/performance/reward/config`, data).then(res => {
+                message.success('编辑成功！');
+                run();
+                resove(true)
+            })
         } catch (error) {
             reject(error)
         }
@@ -172,6 +184,9 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
                     width: 80,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Button type="link" onClick={() => {
+                            otherForm.setFieldsValue({
+                                ...record
+                            })
                             Modal.confirm({
                                 title: '编辑',
                                 content: <Form form={otherForm}>
