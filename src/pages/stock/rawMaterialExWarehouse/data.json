@@ -77,6 +77,11 @@
             "width": 100
         },
         {
+            "title": "用友编码",
+            "dataIndex": "externalCode",
+            "width": 100
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName",
             "width": 100

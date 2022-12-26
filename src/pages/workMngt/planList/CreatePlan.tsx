@@ -257,11 +257,15 @@ export default function CreatePlan(props: any): JSX.Element {
             type==='save'&&saveRun({
                 purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",
+                purchaseTask: baseInfo?.projectList.records.map((item: any) => item.id).join(","),
+                projectName: baseInfo?.projectList.records.map((item: any) => item.orderProjectName).join(","),
                 ...baseInfo
             });
             type==='approvalSave'&&saveRun({
                 purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",
+                purchaseTask: baseInfo?.projectList.records.map((item: any) => item.id).join(","),
+                projectName: baseInfo?.projectList.records.map((item: any) => item.orderProjectName).join(","),
                 isApproval: 1,
                 ...baseInfo
             });
@@ -291,14 +295,37 @@ export default function CreatePlan(props: any): JSX.Element {
             setDetail(result)
             setPopDataList(result?.materials)
             setMaterialList(result?.materials)
+            addCollectionForm.setFieldsValue({
+                ...result,
+                projectList: {
+                    value: result.projectName,
+                    records: result.projectName.split(',')?.map((item: any,index:number) => ({
+                        id: result.purchaseTask.split(',')[index],
+                        orderProjectName: item
+                    })) || []
+                },
+            })
             resole({
                 ...result,
             })
+            
         } catch (error) {
             reject(error)
         }
     }), { ready: props.type !== "create" && props.id && props.visible === true, refreshDeps: [props.visible, props.type, props.id] })
-
+    
+    const handleBaseInfoChange = async (fields: any) => {
+        if (fields.projectList) {
+            // const value:any[] = await RequestUtil.get(`/tower-supply/materialPurchaseTask/material/plan/${fields.supplyIdList.records.map((item: any) => item.id).join(",")}`)
+            // setPopDataList(value)
+            addCollectionForm.setFieldsValue({
+                projectList: {
+                    value: fields.projectList.records.map((item: any) => item.orderProjectName).join(","),
+                    records: fields.projectList.records.map((item: any) => ({ ...item, orderProjectName: item.orderProjectName }))
+                }
+            })
+        }
+    }
     return (
         <Modal
             title={'采购计划'}
@@ -370,6 +397,7 @@ export default function CreatePlan(props: any): JSX.Element {
             <BaseInfo
                 form={addCollectionForm}
                 edit
+                onChange={handleBaseInfoChange}
                 dataSource={data||[]}
                 col={2}
                 classStyle="baseInfo"
@@ -399,6 +427,65 @@ export default function CreatePlan(props: any): JSX.Element {
                             {
                                 "value": 2,
                                 "label": "库存采购"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "关联工程",
+                        "dataIndex": "projectList",
+                        "type": "popTable",
+                        "path": "/tower-supply/materialPurchaseTask",
+                        "width": 1011,
+                        "value": "projectList",
+                        "selectType": "checkbox",
+                        "dependencies": true,
+                        "readOnly": true,
+                        "search": [
+                            {
+                                "title": "下发时间",
+                                "dataIndex": "issuedTime",
+                                "type": "date"
+                            },
+                            {
+                                "title": "客户交货时间",
+                                "dataIndex": "planDeliveryTime",
+                                "type": "date"
+                            },
+                            {
+                                "title": "提料完成时间",
+                                "dataIndex": "liftingTime",
+                                "type": "date"
+                            },
+                            {
+                                "title": "查询",
+                                "dataIndex": "fuzzyQuery",
+                                "placeholder": "计划号/工程名称/内部合同号"
+                            }
+                        ],
+                        "columns": [
+                            {
+                                "title": "计划号",
+                                "dataIndex": "planNumber"
+                            },
+                            {
+                                "title": "工程名称",
+                                "dataIndex": "orderProjectName"
+                            },
+                            {
+                                "title": "内部合同号",
+                                "dataIndex": "contactMan"
+                            },
+                            {
+                                "title": "下发时间",
+                                "dataIndex": "issuedTime"
+                            },
+                            {
+                                "title": "客户交货日期",
+                                "dataIndex": "deliveryTime"
+                            },
+                            {
+                                "title": "提料完成时间",
+                                "dataIndex": "liftingTime"
                             }
                         ]
                     }

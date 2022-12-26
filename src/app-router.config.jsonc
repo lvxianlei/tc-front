@@ -1370,6 +1370,13 @@
       "exact": true,
       "authority": "auth_section"
     },
+    { //采购任务-原材料-用料需求
+      "name": "用料需求",
+      "path": "/buyingTask/index/demand/:id/:status/:planNumber/:projectName",
+      "module": "./pages/buyingTask/Demand",
+      "exact": true,
+      "authority": "tc_erp_sw_purchaseTask_material_list"
+    },
     { // 工作管理-放样列表
       "name": "放样列表",
       "path": "/workMngt/setOutList",
