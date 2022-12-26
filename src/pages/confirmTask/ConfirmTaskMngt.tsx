@@ -183,10 +183,10 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         <Button type='link' disabled={record.status !== 4}>提交任务</Button>
                     </Popconfirm>
                     <Popconfirm
-                        title="确认撤回任务?"
+                        title="确认退回任务?"
                         onConfirm={async () => {
                             await RequestUtil.post(`/tower-science/drawTask/retract/${record.id}`).then(() => {
-                                message.success('撤回成功！');
+                                message.success('退回成功！');
                             }).then(() => {
                                 setRefresh(!refresh)
                             })
@@ -195,7 +195,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         cancelText="取消"
                         disabled={record.status !== 4}
                     >
-                        <Button type='link' disabled={record.status !== 4}>撤回</Button>
+                        <Button type='link' disabled={record.status !== 4}>退回</Button>
                     </Popconfirm>
                 </Space>
             )
