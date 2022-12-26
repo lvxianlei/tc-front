@@ -11,14 +11,15 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './GenerationOfMaterial.module.less';
 import { FixedType } from 'rc-table/lib/interface';
-import SelectUser from "../../common/SelectUser";
 import { itemColumns, otherColumns } from './performanceDetail.json'
+import SelectUser from "../../common/SelectUser";
 
 export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
     const [form] = Form.useForm();
     const [otherForm] = Form.useForm();
     const [detailData, setDetailData] = useState<any>([])
     const [otherData, setOtherData] = useState<any>([])
+    const [visible, setVisible] = useState<boolean>(false)
 
     const { loading, data, run } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -91,6 +92,7 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
             await RequestUtil.post(`/tower-science/performance/reward/config`, data).then(res => {
                 message.success('编辑成功！');
                 run();
+                setVisible(false)
                 resove(true)
             })
         } catch (error) {
@@ -99,6 +101,50 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
     }), { manual: true })
 
     return <DetailContent>
+        <Modal visible={visible} onOk={onSubmit} title="编辑" onCancel={() => {
+            otherForm?.resetFields();
+            setVisible(false)
+        }}>
+            <Form form={otherForm}>
+                {
+                    otherForm?.getFieldsValue(true)?.entry === '返修单' ?
+                        <Form.Item label="参数1" name="parameter1" rules={[{
+                            required: true,
+                            message: '请输入参数1！'
+                        }]}>
+                            <Select placeholder="请选择返修类型">
+                                {
+                                    types && types?.map((item: any, index: number) =>
+                                        <Select.Option value={item.id} key={index}>
+                                            {item.fixType}
+                                        </Select.Option>
+                                    )
+                                }
+                            </Select>
+                        </Form.Item>
+                        :
+                        <Form.Item label="参数1" name="parameterName1" rules={[{
+                            required: true,
+                            message: '请输入参数1！'
+                        }]}>
+                            <Input size="small" disabled suffix={
+                                <SelectUser
+                                    key={'parameter1'}
+                                    selectType="checkbox"
+                                    selectedKey={otherForm?.getFieldsValue(true)?.parameter1?.split(',')}
+                                    onSelect={(selectedRows: Record<string, any>) => {
+                                        const list = selectedRows.map((res: any) => { return res?.userId })
+                                        const nameList = selectedRows.map((res: any) => { return res?.name })
+                                        otherForm.setFieldsValue({
+                                            parameter1: list?.join(","),
+                                            parameterName1: nameList?.join(","),
+                                        })
+                                    }} />
+                            } />
+                        </Form.Item>
+                }
+            </Form>
+        </Modal>
         <CommonTable
             haveIndex
             dataSource={detailData}
@@ -187,44 +233,7 @@ export default forwardRef(function RewardDetailsConfiguration({ }, ref) {
                             otherForm.setFieldsValue({
                                 ...record
                             })
-                            Modal.confirm({
-                                title: '编辑',
-                                content: <Form form={otherForm}>
-                                    <Form.Item label="参数1" name="parameter1" rules={[{
-                                        required: true,
-                                        message: '请输入参数1！'
-                                    }]}>
-                                        {
-                                            record?.entry === '返修单' ?
-                                                <Select placeholder="请选择返修类型">
-                                                    {
-                                                        types && types?.map((item: any, index: number) =>
-                                                            <Select.Option value={item.id} key={index}>
-                                                                {item.fixType}
-                                                            </Select.Option>
-                                                        )
-                                                    }
-                                                </Select>
-                                                :
-                                                <Input size="small" disabled suffix={
-                                                    <SelectUser
-                                                        key={'loftingLeader'}
-                                                        selectedKey={[otherForm?.getFieldsValue(true)?.parameter1]}
-                                                        onSelect={(selectedRows: Record<string, any>) => {
-                                                            otherForm.setFieldsValue({
-                                                                parameter1: selectedRows[0]?.name
-                                                            })
-                                                        }} />
-                                                } />
-                                        }
-
-                                    </Form.Item>
-                                </Form>,
-                                onOk: onSubmit,
-                                onCancel: () => {
-                                    otherForm.resetFields();
-                                }
-                            })
+                            setVisible(true)
                         }}>编辑</Button>
                     )
                 }
