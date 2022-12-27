@@ -124,6 +124,7 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                         onChange={(e: any) => {
                                             const result = dataSource;
                                             result[index].planPurchaseNum = e
+                                            result[index].warehouseOccupy = result[index].num>e?result[index].num-e:0
                                             setDataSource(result.slice(0));
                                             setCout(count + 1);
                                         }}
@@ -132,33 +133,33 @@ export default forwardRef(function PurchasePlan({ ids = [] }: PurchasePlanProps,
                                 }
                             })
                         }
-                        if (item.dataIndex === "warehouseOccupy") {
-                            return ({
-                                ...item,
-                                render: (_: any, record: any, index: number) => {
-                                    return <Input
-                                        value={record.warehouseOccupy || 0}
-                                        key={index}
-                                        // max={999}
-                                        // min={0}
-                                        onChange={(e: any) => {
-                                            const result = dataSource;
-                                            let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
-                                            if ((arg || 0) > (record.availableStock || 0)) {
-                                                message.error("本次占用数量过多，请修改！");
-                                                result[index].warehouseOccupy = ""
-                                                setDataSource(result.slice(0));
-                                            } else {
-                                                result[index].warehouseOccupy = arg
-                                                setDataSource(result.slice(0));
-                                            }
-                                            setCout(count + 1);
-                                        }}
-                                        style={{ width: 80, height: 27 }}
-                                    />
-                                }
-                            })
-                        }
+                        // if (item.dataIndex === "warehouseOccupy") {
+                        //     return ({
+                        //         ...item,
+                        //         render: (_: any, record: any, index: number) => {
+                        //             return <Input
+                        //                 value={record.warehouseOccupy || 0}
+                        //                 key={index}
+                        //                 // max={999}
+                        //                 // min={0}
+                        //                 onChange={(e: any) => {
+                        //                     const result = dataSource;
+                        //                     let arg = e.target.value.replace(/[^\d]/g, ""); // 清除"数字"
+                        //                     if ((arg || 0) > (record.availableStock || 0)) {
+                        //                         message.error("本次占用数量过多，请修改！");
+                        //                         result[index].warehouseOccupy = ""
+                        //                         setDataSource(result.slice(0));
+                        //                     } else {
+                        //                         result[index].warehouseOccupy = arg
+                        //                         setDataSource(result.slice(0));
+                        //                     }
+                        //                     setCout(count + 1);
+                        //                 }}
+                        //                 style={{ width: 80, height: 27 }}
+                        //             />
+                        //         }
+                        //     })
+                        // }
                         return item;
                     })
                 ]}

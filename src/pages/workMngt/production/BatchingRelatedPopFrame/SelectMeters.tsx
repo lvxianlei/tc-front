@@ -30,7 +30,7 @@ export default function SelectMeters(props: EditProps): JSX.Element {
     // 获取所有的仓库
     const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/materialStock/getAvailableInventoryList`);
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/materialStock/getIssuedAvailableInventoryList`);
             let v = [];
             for (let i = 0; i < result.length; i += 1) {
                 v.push(result[i].id);

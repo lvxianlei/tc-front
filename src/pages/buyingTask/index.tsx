@@ -143,9 +143,11 @@ export default function RawMaterial() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 80,
+                        width: 160,
                         render: (_: any, records: any) => <>
                             <Button type="link" className="btn-operation-link" onClick={() => { detail(records.id) }}>任务详情</Button>
+                            <Button type="link" className="btn-operation-link"  onClick={() => history.push(`/buyingTask/index/demand/${records.id}/${records.materialSummaryStatus}/${records.planNumber}/${records.orderProjectName}`)}>用料需求</Button>
+
                             {/* <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
                             <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/detail/${records.planNumber}`)}>用料清单</Button>
                             <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button> */}
@@ -167,6 +169,15 @@ export default function RawMaterial() {
                             <Select.Option value="" key={0}>全部</Select.Option>
                             <Select.Option value={1} key={1}>待完成</Select.Option>
                             <Select.Option value={2} key={2}>已完成</Select.Option>
+                        </Select>
+                    },
+                    {
+                        name: 'materialSummaryStatus',
+                        label: '物料汇总状态',
+                        children: <Select style={{ width: 100 }} defaultValue="">
+                            <Select.Option value="" key={''}>全部</Select.Option>
+                            <Select.Option value={0} key={0}>待完成</Select.Option>
+                            <Select.Option value={1} key={2}>已完成</Select.Option>
                         </Select>
                     },
                     {
