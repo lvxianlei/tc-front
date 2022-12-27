@@ -8,91 +8,7 @@ import { useState } from 'react';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import AuthUtil from '@utils/AuthUtil';
 
-const materialColumns = [
-    { 
-        title: '序号', 
-        dataIndex: 'index', 
-        key: 'index', 
-        render: (_a: any, _b: any, index: number): React.ReactNode => (
-            <span>{index + 1}</span>
-        ) 
-    },
-    { 
-        title: '品名', 
-        dataIndex: 'materialName', 
-        key: 'materialName', 
-    },
-    // { 
-    //     title: '模式', 
-    //     dataIndex: 'patternName', 
-    //     key: 'patternName'
-    // },
-    { 
-        title: '标准', 
-        dataIndex: 'materialStandardName', 
-        key: 'materialStandardName' 
-    },
-    { 
-        title: '材质', 
-        dataIndex: 'structureTexture', 
-        key: 'structureTexture' 
-    },
-    { 
-        title: '规格', 
-        dataIndex: 'structureSpec', 
-        key: 'structureSpec' 
-    },
-    { 
-        title: '长度（mm）', 
-        dataIndex: 'length', 
-        key: 'length' 
-    },
-    { 
-        title: '宽度（mm）', 
-        dataIndex: 'width', 
-        key: 'width', 
-    },
-    { 
-        title: '数量', 
-        dataIndex: 'num', 
-        key: 'num', 
-    },
-    { 
-        title: '重量（吨）', 
-        dataIndex: 'totalWeight', 
-        key: 'totalWeight', 
-    },
-    { 
-        title: '待采购数量', 
-        dataIndex: 'waitPurchaseNum', 
-        key: 'waitPurchaseNum', 
-    },
-    { 
-        title: '待采购重量（吨）', 
-        dataIndex: 'waitPurchaseWeight', 
-        key: 'waitPurchaseWeight' 
-    },
-    { 
-        title: '已采购数量', 
-        dataIndex: 'purchaseNum', 
-        key: 'purchaseNum'
-    },
-    { 
-        title: '已采购重量（吨）', 
-        dataIndex: 'purchaseWeight', 
-        key: 'purchaseWeight' 
-    },
-    { 
-        title: '已到货数量',
-        dataIndex: 'receivedNum', 
-        key: 'receivedNum' 
-    },
-    { 
-        title: '已到货重量（吨）', 
-        dataIndex: 'receivedWeight', 
-        key: 'receivedWeight' 
-    }
-]
+
 export default function PickTowerDetail(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{id:string, projectName: string, status: string, planNumber: string }>();
@@ -111,7 +27,111 @@ export default function PickTowerDetail(): React.ReactNode {
         resole(data)
     }), {});
 
-
+    const materialColumns:any[] = [
+        { 
+            title: '序号', 
+            dataIndex: 'index', 
+            key: 'index', 
+            render: (_a: any, _b: any, index: number): React.ReactNode => (
+                <span>{index + 1}</span>
+            ) 
+        },
+        { 
+            title: '品名', 
+            dataIndex: 'materialName', 
+            key: 'materialName', 
+        },
+        // { 
+        //     title: '模式', 
+        //     dataIndex: 'patternName', 
+        //     key: 'patternName'
+        // },
+        { 
+            title: '标准', 
+            dataIndex: 'materialStandardName', 
+            key: 'materialStandardName' 
+        },
+        { 
+            title: '材质', 
+            dataIndex: 'structureTexture', 
+            key: 'structureTexture' 
+        },
+        { 
+            title: '规格', 
+            dataIndex: 'structureSpec', 
+            key: 'structureSpec' 
+        },
+        { 
+            title: '长度（mm）', 
+            dataIndex: 'length', 
+            key: 'length' 
+        },
+        { 
+            title: '宽度（mm）', 
+            dataIndex: 'width', 
+            key: 'width', 
+        },
+        { 
+            title: '数量', 
+            dataIndex: 'num', 
+            key: 'num', 
+        },
+        { 
+            title: '重量（吨）', 
+            dataIndex: 'totalWeight', 
+            key: 'totalWeight', 
+        },
+        { 
+            title: '待采购数量', 
+            dataIndex: 'waitPurchaseNum', 
+            key: 'waitPurchaseNum', 
+        },
+        { 
+            title: '待采购重量（吨）', 
+            dataIndex: 'waitPurchaseWeight', 
+            key: 'waitPurchaseWeight' 
+        },
+        { 
+            title: '已采购数量', 
+            dataIndex: 'purchaseNum', 
+            key: 'purchaseNum'
+        },
+        { 
+            title: '已采购重量（吨）', 
+            dataIndex: 'purchaseWeight', 
+            key: 'purchaseWeight' 
+        },
+        { 
+            title: '已到货数量',
+            dataIndex: 'receivedNum', 
+            key: 'receivedNum' 
+        },
+        { 
+            title: '已到货重量（吨）', 
+            dataIndex: 'receivedWeight', 
+            key: 'receivedWeight' 
+        },
+        {
+            title: "操作",
+            dataIndex: "opration",
+            fixed: "right",
+            width: 160,
+            render: (_: any, records: any,index:number) => <>
+                <Button type="link" className="btn-operation-link" onClick={async () => { 
+                    await RequestUtil.delete(`/tower-supply/materialPurchaseTask/material/reset/${records?.id}`).then(()=>{
+                        message.success('移除成功！')
+                        history.go(0)
+                    })
+                    // tableDataSource.splice(index,1)
+                    // setTableDataSource([...tableDataSource])
+                 }} disabled={records.sourceForm !==2}>移除</Button>
+    
+                {/* <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 3} onClick={() => { setDetailId(records.id); setIsModalVisible1(true) }}>指派</Button>
+                <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => history.push(`/buyingTask/detail/${records.planNumber}`)}>用料清单</Button>
+                <Button type="link" className="btn-operation-link" disabled={records.taskStatus !== 2} onClick={() => setIsModalVisible2(true)}>提交任务</Button> */}
+            </>
+        }
+    ]
     const handleNumChange = (value: number, id: number) => {
         console.log(value)
         const list = materialDataSource.map((item: any,index:number) => {
@@ -159,8 +179,10 @@ export default function PickTowerDetail(): React.ReactNode {
                                     if (Object.keys(info.file.response?.data).length > 0) {
                                         info.file.response?.data?.downUrl&&setUrl(info.file.response?.data?.downUrl);
                                         info.file.response?.data?.downUrl&&setUrlVisible(true);
-                                        info.file.response?.data?.successData&&message.success('导入成功！');
-                                        info.file.response?.data?.successData&&setTableDataSource(tableDataSource.concat(info.file.response?.data?.successData))
+                                        info.file.response?.data?.successData&&info.file.response?.data?.successData.length>0&&message.success('导入成功！');
+                                        info.file.response?.data?.successData&&info.file.response?.data?.successData.length>0&&history.go(0)
+
+                                        // info.file.response?.data?.successData&&info.file.response?.data?.successData.length>0&&setTableDataSource(tableDataSource.concat(info.file.response?.data?.successData))
                                     }
                                 }
                             }}
