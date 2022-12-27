@@ -52,7 +52,7 @@ export default function Edit() {
       serviceManager: baseData.serviceManager?.value,
       serviceManagerId: baseData.serviceManager?.id,
       saveType,
-      fileIds: attchsRef.current?.getDataSource().map(item => item.id),
+      fileIds: attchsRef.current?.getDataSource().map(item => item.id).filter(item=>item),
       productAssistDrawDTOS: confirmRef.current?.getDataSource()
     })
     await message.success("保存成功,等待跳转...")
@@ -101,7 +101,7 @@ export default function Edit() {
           if (item.dataIndex === "confirmType") {
             return ({
               ...item,
-              disabled: true
+              disabled: type === "edit"
             })
           }
           return item
