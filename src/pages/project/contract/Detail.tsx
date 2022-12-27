@@ -36,7 +36,7 @@ export default function Detail() {
             title={<Button type="primary" onClick={handleNewRecord}>添加回款记录</Button>}
             operation={[
                 <Button key="setting" type="primary" style={{ marginRight: 16 }}
-                onClick={() => history.push(`/project/${entryPath}/edit/contract/${projectId}/${contractId}`)}
+                onClick={() => history.push(`/project/${entryPath}/edit/contract/${projectId}/${contractId}/${data?.contractType}`)}
                 >编辑</Button>,
                 <Button key="default" onClick={() => history.goBack()}>返回</Button>
             ]}>
