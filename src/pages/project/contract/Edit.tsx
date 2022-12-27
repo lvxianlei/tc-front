@@ -89,9 +89,17 @@ export default function Edit() {
   }), { manual: !params.id })
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
-    try {
-      let reqType: "post" | "put" = type === "new" ? "post" : "put";
-      reqType = ["2", "3"].includes(params.contractType) ? "post" : "put";
+      try {
+        let reqType: "post" | "put";
+        if (type === "new") {
+          reqType = "post"
+        } else {
+          if (["2", "3"].includes(params.contractType) && !data?.relationId) {
+            reqType = "post"
+          } else {
+            reqType = "put"
+          }
+        }
       const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
         id: reqType === "post" ? "" : params.id,
