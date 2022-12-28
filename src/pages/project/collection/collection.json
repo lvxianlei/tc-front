@@ -372,6 +372,11 @@
                 "search": true
             },
             {
+                "title": "内部合同编号",
+                "dataIndex": "internalNumber",
+                "search": true
+            },
+            {
                 "title": "合同名称",
                 "dataIndex": "contractName"
             },
