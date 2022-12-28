@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle, forwardRef } from 'react'
+import React, { useState, useImperativeHandle, forwardRef,useEffect } from 'react'
 import { Button, Space, Modal, Form, message } from 'antd'
 import { CommonTable, DetailTitle, BaseInfo, UploadXLSX } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -24,6 +24,7 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
     const [visible, setVisible] = useState<boolean>(false);
     const [rowId, setRowId] = useState<string>();
     const [tableDataSource, setTableDataSource] = useState<object[]>([]);
+    const [weightCount, setWeightCount] = useState<number>(0);
     const [form] = Form.useForm();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([])
     const [edit, setEdit] = useState('添加');
@@ -78,7 +79,18 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
     useImperativeHandle(ref, () => ({
         getDataSource: () => tableDataSource
     }))
+        useEffect(()=>{
+            // 更新总重
+            calcWeightCount()
+        },[tableDataSource])
 
+        const calcWeightCount = ()=>{
+            let count = 0
+            tableDataSource.forEach((item:any)=>{
+                count += item.monomerWeight || 0
+            })
+            setWeightCount(count)
+        }
     const handleLoaded = (data: any) => {
         setTableDataSource([...data.map((item: any, index: number) => ({
             ...item,
@@ -90,12 +102,13 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
             // structureName: item?.structureName?.label,
             // pattern: item?.patternName?.value,
             // patternName: item?.patternName?.label,
+            totalWeight:item?.monomerWeight,
             key: `${(Math.random() * 100000000000).toFixed(12)}-${index}`
         })), ...tableDataSource])
     }
 
     const handleDelete = () => {
-        setTableDataSource(tableDataSource.filter((item: any) => !selectedKeys.includes(item)))
+        setTableDataSource(tableDataSource.filter((item: any) => !selectedKeys.includes(item?.key)))
     }
 
     return <div>
@@ -103,7 +116,7 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
             <Space>
                 <span key="number">总基数：{tableDataSource.length}基</span>
-                <span key="weight">总重量：{ }kg</span>
+                <span key="weight">总重量：{ weightCount }kg</span>
             </Space>
             <Space>
                 <UploadXLSX
@@ -176,7 +189,7 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
                             enum: voltageGradeEnum || []
                         })
                     }
-                    if (item.dataIndex === "structureName") {
+                    if (item.dataIndex === "structure") {
                         return ({
                             ...item,
                             type: "select",
