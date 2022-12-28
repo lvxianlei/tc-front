@@ -228,7 +228,7 @@ export default function List(): React.ReactNode {
             name: 'batchStatus',
             label: '补件下达状态',
             children: <Select style={{ width: '120px' }} placeholder="请选择">
-                <Select.Option value={1} key="1">已下达</Select.Option>
+                <Select.Option value={1} key="1">已取消</Select.Option>
                 <Select.Option value={2} key="2">未下达</Select.Option>
             </Select>
         },
