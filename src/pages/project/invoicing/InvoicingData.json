@@ -104,7 +104,6 @@
         {
             "title": "合同下计划状态",
             "dataIndex": "contractType",
-            "disabled": true,
             "type": "select",
             "enum": []
         },
@@ -448,7 +447,6 @@
             "title": "合同下计划状态",
             "dataIndex": "contractType",
             "type": "select",
-            "disabled": true,
             "enum": []
         },
         {
@@ -743,7 +741,6 @@
             "title": "合同下计划状态",
             "dataIndex": "contractType",
             "type": "select",
-            "disabled": true,
             "enum": []
         },
         {

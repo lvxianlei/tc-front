@@ -645,7 +645,7 @@ export default function Edit() {
                 dataSource={data || {
                     ticketWeight: '0.0000',
                     ticketMoney: '0.00',
-                    ticketType: 1,
+                    ticketType: 2,
                     openTicketType: 1,
                     ticketBasis: 1
                 }} edit/>

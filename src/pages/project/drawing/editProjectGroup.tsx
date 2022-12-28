@@ -171,7 +171,7 @@ export default function ConfirmDetail() {
             <BaseInfo
                 form={form}
                 edit
-                col={6}
+                col={3}
                 columns={productGroupRow.map((item: any) => {
                     if (item.dataIndex === "productTypeName") {
                         return ({
