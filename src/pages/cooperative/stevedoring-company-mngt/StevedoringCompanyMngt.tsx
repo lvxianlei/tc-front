@@ -300,7 +300,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                             "required": true,
                             "message": "请输入银行账号"
                         }, {
-                            pattern: /^([1-9]{1})(\d{14}|\d{18})$/,
+                            pattern: /^([1-9]{1})(\d{15}|\d{18})$/,
                             message: "请输入正确格式的银行账号"
 
                         }]}>
