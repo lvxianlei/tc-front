@@ -101,7 +101,7 @@ export default function List(): React.ReactNode {
                     width: 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type='link' onClick={() => {
+                            <Button type='link' disabled={!(record.status === 1 || record.status === 5)} onClick={() => {
                                 setVisible(true);
                                 setType('edit');
                                 setRowId(record?.id);
