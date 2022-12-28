@@ -189,7 +189,7 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
                             enum: voltageGradeEnum || []
                         })
                     }
-                    if (item.dataIndex === "structureName") {
+                    if (item.dataIndex === "structure") {
                         return ({
                             ...item,
                             type: "select",
