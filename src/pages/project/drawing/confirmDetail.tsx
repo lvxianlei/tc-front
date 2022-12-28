@@ -95,7 +95,7 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
     }
 
     const handleDelete = () => {
-        setTableDataSource(tableDataSource.filter((item: any) => !selectedKeys.includes(item)))
+        setTableDataSource(tableDataSource.filter((item: any) => !selectedKeys.includes(item?.key)))
     }
 
     return <div>
