@@ -316,13 +316,15 @@ export default function CreatePlan(props: any): JSX.Element {
             setPopDataList(result?.materials.map((item:any)=>{
                 return{
                     ...item,
-                    purchaseType: result?.purchaseType
+                    purchaseType: result?.purchaseType,
+                    minNum: item?.planPurchaseNum,
                 }
             }))
             setMaterialList(result?.materials.map((item:any)=>{
                 return{
                     ...item,
-                    purchaseType: result?.purchaseType
+                    purchaseType: result?.purchaseType,
+                    minNum: item?.planPurchaseNum,
                 }
             }))
             
@@ -617,7 +619,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <InputNumber
-                                    min={records?.purchaseType === 1 ? value : 1}
+                                    min={records?.isFromScheme === 1 ? records?.minNum : 1}
                                     precision={0}
                                     value={value || undefined}
                                     onChange={(value: number) => handleNumChange(value, key)}
