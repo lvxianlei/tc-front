@@ -518,7 +518,7 @@
         },
         {
             "title": "开票内容与合同内容不符原因",
-            "dataIndex": "content",
+            "dataIndex": "des",
             "type": "textarea"
         }
     ],

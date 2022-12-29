@@ -66,7 +66,6 @@ export default function Edit() {
                 }
                 // 开票货币类型
                 if(item.dataIndex === "currencyType") {
-                    console.log(currencyTypeOptions)
                     return{
                         ...item,
                         enum: currencyTypeOptions?.map((product: any) => ({
