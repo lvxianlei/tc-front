@@ -1,6 +1,11 @@
 {
     "baseColumn": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "width": 100
+        },
+        {
             "title": "出库单号",
             "dataIndex": "pickingNumber",
             "width": 100
