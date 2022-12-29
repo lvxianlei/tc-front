@@ -104,7 +104,6 @@
         {
             "title": "合同下计划状态",
             "dataIndex": "contractType",
-            "disabled": true,
             "type": "select",
             "enum": []
         },
@@ -197,7 +196,7 @@
         },
         {
             "title": "开票内容与合同内容不符合原因",
-            "dataIndex": "content",
+            "dataIndex": "des",
             "width": 300
         },
         {
@@ -447,7 +446,6 @@
             "title": "合同下计划状态",
             "dataIndex": "contractType",
             "type": "select",
-            "disabled": true,
             "enum": []
         },
         {

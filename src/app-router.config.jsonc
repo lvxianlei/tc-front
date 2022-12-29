@@ -437,6 +437,38 @@
       "exact": true,
       "authority": "tc_erp_sc_drawing_list"
     },
+    // 新增图纸确认
+    {
+      "name": "新增图纸确认",
+      "path": "/project/drawing/:type/create",
+      "module": "./pages/project/drawing/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
+    // 编辑杆塔明细
+    {
+      "name": "编辑杆塔明细",
+      "path": "/project/drawing/projectGroup/:id",
+      "module": "./pages/project/drawing/editProjectGroup",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
+    // 图纸确认详情
+    {
+      "name": "图纸确认详情",
+      "path": "/project/drawing/detail/:id",
+      "module": "./pages/project/drawing/Overview",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
+    // 编辑图纸确认
+    {
+      "name": "编辑图纸确认",
+      "path": "/project/drawing/:type/:id",
+      "module": "./pages/project/drawing/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
     { // 合同详情
       "name": "合同详情",
       "path": "/project/management/detail/contract/:projectId/:id",
@@ -467,14 +499,14 @@
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/management/edit/contract/:projectId/:id",
+      "path": "/project/management/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/contract/edit/contract/:projectId/:id",
+      "path": "/project/contract/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
@@ -2131,11 +2163,11 @@
       "authority": "tc_erp_aps_board_statistics_list"
     },
     { // 计划排产-数据追踪统计
-    "name": "数据追踪统计",
-    "path": "/planPanal/reportStatistics",
-    "module": "./pages/planBaseSetting/reportStatistics/index",
-    "exact": true,
-    "authority": "tc_erp_aps_track_statistics_list"
+      "name": "数据追踪统计",
+      "path": "/planPanal/reportStatistics",
+      "module": "./pages/planBaseSetting/reportStatistics/index",
+      "exact": true,
+      "authority": "tc_erp_aps_track_statistics_list"
     },
     { // 计划排产-试装计划
       "name": "试装计划",
