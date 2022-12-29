@@ -293,8 +293,18 @@ export default function CreatePlan(props: any): JSX.Element {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/detail/${props.id}`)
             setDetail(result)
-            setPopDataList(result?.materials)
-            setMaterialList(result?.materials)
+            setPopDataList(result?.materials.map((item:any)=>{
+                return{
+                    ...item,
+                    purchaseType: result?.purchaseType
+                }
+            }))
+            setMaterialList(result?.materials.map((item:any)=>{
+                return{
+                    ...item,
+                    purchaseType: result?.purchaseType
+                }
+            }))
             addCollectionForm.setFieldsValue({
                 ...result,
                 projectList: {
@@ -423,7 +433,16 @@ export default function CreatePlan(props: any): JSX.Element {
                                 "message": "请选择采购类型"
                             }
                         ],
-                        "enum": [
+                        "enum": props.type !== "create"?[
+                            {
+                                "value": 1,
+                                "label": "配料采购"
+                            },
+                            {
+                                "value": 2,
+                                "label": "库存采购"
+                            }
+                        ]:[
                             {
                                 "value": 2,
                                 "label": "库存采购"
@@ -583,7 +602,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <InputNumber
-                                    min={data?.purchaseType === 1 ? value : 1}
+                                    min={records?.purchaseType === 1 ? value : 1}
                                     precision={0}
                                     value={value || undefined}
                                     onChange={(value: number) => handleNumChange(value, key)}
@@ -594,7 +613,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? value || "0" :<InputNumber
+                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? value || "0" :<InputNumber
                                     min={0}
                                     precision={0}
                                     value={value || 0}
@@ -604,7 +623,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "width") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? value || "0" : <InputNumber
+                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? value || "0" : <InputNumber
                                     min={0}
                                     max={99999}
                                     value={value}
@@ -615,7 +634,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "materialStandard") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? records.materialStandardName : <Select
+                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? records.materialStandardName : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.materialStandard && popDataList[key]?.materialStandard + ',' + popDataList[key]?.materialStandardName}
                                     onChange={(e: string) => {
@@ -639,7 +658,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "structureTexture") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? records.structureTexture : <Select
+                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? records.structureTexture : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
                                     onChange={(e: string) => {
@@ -673,9 +692,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setVisibleNumber(true);
                             }}
                             disabled={(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))}>复制</Button>
-                            <Button type="link" disabled={data?.purchaseType === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
+                            <Button type="link" disabled={records?.purchaseType === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
                                 handleRemove(index)
-                               
                             }}>移除</Button>
                         </>
                     }]}
@@ -719,6 +737,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             code: item.materialCode,
                             materialCategoryId: item.materialCategory,
                             planPurchaseNum: item.planPurchaseNum || 1,
+                            purchaseType: item?.purchaseType?item?.purchaseType:0,
                             source: 2,
                             standardName: item.standardName,
                             length: item.length || 0,
