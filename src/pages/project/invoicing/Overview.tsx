@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '.
 import { baseInfoHeadOverView, invoiceHead, billingHeadOverView, batchHead,saleInvoiceOverView,invoicingStatistics } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { productTypeOptions } from "../../../configuration/DictionaryOptions"
+import {currencyTypeOptions, productTypeOptions} from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
@@ -63,6 +63,16 @@ export default function Edit() {
                             label: product.name
                         }))
                     })
+                }
+                // 开票货币类型
+                if(item.dataIndex === "currencyType") {
+                    return{
+                        ...item,
+                        enum: currencyTypeOptions?.map((product: any) => ({
+                            value: product.id,
+                            label: product.name
+                        }))
+                    }
                 }
                 if (item.dataIndex === "voltage") {
                     return ({
