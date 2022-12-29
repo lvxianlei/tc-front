@@ -523,6 +523,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/batchOutStock`,{
                             outStockDetailId: selectedKeys,
                             outStockId: params.id
+                        }).then(()=>{
+                            message.success('出库成功！')
+                            history.go(0)
                         })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined',null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
