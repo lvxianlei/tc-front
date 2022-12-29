@@ -211,8 +211,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
     return <DetailContent>
         {
             type === 'new' ?
-                <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                    console.log(dataInfo)
+                <Attachment multiple key={uploadData} ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
                     const values = form.getFieldsValue(true).data || []
                     const data = [...dataInfo]?.map(res => {
                         return {
