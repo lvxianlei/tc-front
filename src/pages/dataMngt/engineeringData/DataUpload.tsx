@@ -13,6 +13,7 @@ import styles from './EngineeringData.module.less';
 import { AttachmentRef, FileProps } from "../../common/Attachment";
 import { FixedType } from 'rc-table/lib/interface';
 import { documentTypeOptions, fileTypeOptions } from "../../../configuration/DictionaryOptions";
+import Item from "antd/lib/list/Item";
 
 interface modalProps {
     readonly projectBackupId?: string;
@@ -41,11 +42,16 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
             const result: any = await RequestUtil.get(`/tower-science/projectData/file?id=${id}`)
             setUploadData(result.map((res: any) => {
                 return {
-                    ...res,
+                    ...res
                 }
             }))
             form.setFieldsValue({
-                data: result
+                data: result?.map((res: any) => {
+                    return {
+                        ...res,
+                        planNumber: res?.planNumber?.split(',')
+                    }
+                })
             })
             resole(result)
         } catch (error) {
@@ -106,7 +112,21 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                     required: true,
                     message: '请选择应用计划'
                 }]}>
-                    <Select placeholder="请选择应用计划">
+                    <Select placeholder="请选择应用计划" mode="multiple" onChange={(e: any) => {
+                        if (Array.from(e)?.findIndex(res => res === 'all') !== -1) {
+                            form?.setFieldsValue({
+                                data: form.getFieldsValue(true)?.data?.map((item: any) => {
+                                    return {
+                                        ...item,
+                                        planNumber: ['all', ...planNumbers?.map((e: any) => {
+                                            return e
+                                        }) || []]
+                                    }
+                                })
+                            })
+                        }
+                    }}>
+                        <Select.Option key={0} value={'all'}>全部</Select.Option>
                         {planNumbers && planNumbers.map((item: string, index: number) => {
                             return <Select.Option key={index} value={item}>
                                 {item}
@@ -150,12 +170,15 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async res => {
-
                 const value = await form.getFieldsValue(true)?.data
                 getLoading(true)
-                console.log(value)
+                await saveRun(value?.map((res: any) => {
+                    return {
+                        ...res,
+                        planNumber: res?.planNumber?.filter((e: any) => e !== 'all')?.join(',')
+                    }
+                }))
                 resolve(true);
-                await saveRun(value)
             }).catch(e => {
                 reject(e)
             })
@@ -188,8 +211,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
     return <DetailContent>
         {
             type === 'new' ?
-                <Attachment ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                    console.log(dataInfo)
+                <Attachment multiple key={uploadData} ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
                     const values = form.getFieldsValue(true).data || []
                     const data = [...dataInfo]?.map(res => {
                         return {
@@ -219,7 +241,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
             <CommonTable
                 pagination={false}
                 columns={tableColumns}
-                dataSource={uploadData || []}
+                dataSource={[...uploadData || []]}
             />
         </Form>
     </DetailContent>

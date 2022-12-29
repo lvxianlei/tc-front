@@ -313,6 +313,7 @@ export default function List(): React.ReactNode {
             </Form.Item>
         </Form>
         <CommonTable
+            className={styles?.topTable}
             haveIndex
             columns={columns}
             dataSource={data}
@@ -322,6 +323,11 @@ export default function List(): React.ReactNode {
                 total: page?.total,
                 onChange: handleChangePage
             }}
+            rowClassName={(record: Record<string, any>) =>
+                record?.id === rowData?.id ?
+                    styles.selected :
+                    undefined
+            }
             onRow={(record: Record<string, any>) => ({
                 onClick: () => onRowChange(record),
                 className: styles.tableRow
