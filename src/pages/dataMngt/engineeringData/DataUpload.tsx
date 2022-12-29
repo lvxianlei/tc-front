@@ -275,7 +275,9 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                                 ...item,
                                 fileCategory: item?.fileCategory ? item?.fileCategory : '',
                                 fileType: item?.fileType ? item?.fileType : '',
-                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : []
+                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : ['all', ...planNumbers?.map((e: any) => {
+                                    return e
+                                }) || []]
                             }
                         } else {
                             return {
