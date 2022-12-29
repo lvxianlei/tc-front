@@ -42,21 +42,10 @@ export default function List(): React.ReactNode {
             dataIndex: 'supplyNumber'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '补件下达状态',
             width: 120,
-            dataIndex: 'status',
-            type: 'select',
-            enum: [
-                {
-                    "value": 1,
-                    "label": "已下达"
-                },
-                {
-                    "value": 2,
-                    "label": "已取消"
-                },
-            ]
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',

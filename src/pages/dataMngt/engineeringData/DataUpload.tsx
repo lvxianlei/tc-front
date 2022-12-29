@@ -14,6 +14,7 @@ import { AttachmentRef, FileProps } from "../../common/Attachment";
 import { FixedType } from 'rc-table/lib/interface';
 import { documentTypeOptions, fileTypeOptions } from "../../../configuration/DictionaryOptions";
 import Item from "antd/lib/list/Item";
+import { number } from "echarts";
 
 interface modalProps {
     readonly projectBackupId?: string;
@@ -75,6 +76,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                     message: '请选择文件类别'
                 }]}>
                     <Select placeholder="请选择文件类别">
+                        {index === 0 ? null : <Select.Option key={'ditto'} value={0}>同上</Select.Option>}
                         {documentTypeOptions && documentTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
@@ -94,6 +96,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                     message: '请选择文件类型'
                 }]}>
                     <Select placeholder="请选择文件类型">
+                        {index === 0 ? null : <Select.Option key={'ditto'} value={0}>同上</Select.Option>}
                         {fileTypeOptions && fileTypeOptions.map(({ id, name }, index) => {
                             return <Select.Option key={index} value={id}>
                                 {name}
@@ -115,20 +118,41 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                     <Select placeholder="请选择应用计划" mode="multiple" onChange={(e: any) => {
                         if (Array.from(e)?.findIndex(res => res === 'all') !== -1) {
                             form?.setFieldsValue({
-                                data: form.getFieldsValue(true)?.data?.map((item: any) => {
-                                    return {
-                                        ...item,
-                                        planNumber: ['all', ...planNumbers?.map((e: any) => {
-                                            return e
-                                        }) || []]
+                                data: form.getFieldsValue(true)?.data?.map((item: any, i: number) => {
+                                    if (i === index) {
+                                        return {
+                                            ...item,
+                                            planNumber: ['all', ...planNumbers?.map((e: any) => {
+                                                return e
+                                            }) || []]
+                                        }
+                                    } else {
+                                        return item
+                                    }
+
+                                })
+                            })
+                        }
+                        if (Array.from(e)?.findIndex(res => res === 0) !== -1) {
+                            form?.setFieldsValue({
+                                data: form.getFieldsValue(true)?.data?.map((item: any, i: number) => {
+                                    if (i === index) {
+                                        return {
+                                            ...item,
+                                            planNumber: [0]
+                                        }
+                                    } else {
+                                        return item
+
                                     }
                                 })
                             })
                         }
                     }}>
-                        <Select.Option key={0} value={'all'}>全部</Select.Option>
-                        {planNumbers && planNumbers.map((item: string, index: number) => {
-                            return <Select.Option key={index} value={item}>
+                        {index === 0 ? null : <Select.Option key={'ditto'} value={0}>同上</Select.Option>}
+                        <Select.Option key={'all'} value={'all'}>全部</Select.Option>
+                        {planNumbers && planNumbers.map((item: string, ind: number) => {
+                            return <Select.Option key={ind} value={item}>
                                 {item}
                             </Select.Option>
                         })}
@@ -161,21 +185,42 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
     const delRow = (index: number) => {
         const value = form.getFieldsValue(true)?.data;
         value?.splice(index, 1);
-        setUploadData([...value]);
-        form.setFieldsValue({
-            data: [...value]
-        })
+        if (index === 0) {
+            const newValue = value.map((res: any, i: number) => {
+                return {
+                    ...res,
+                    fileCategory: res?.fileCategory === 0 && i === 0 ? '' : res?.fileCategory,
+                    fileType: res?.fileType === 0 && i === 0 ? '' : res?.fileType,
+                    planNumber: res?.planNumber?.findIndex((res: any) => res === 0) === -1 && i === 0 ? res?.planNumber : []
+                }
+            })
+            setUploadData([...newValue]);
+            form.setFieldsValue({
+                data: [...newValue]
+            })
+        } else {
+            setUploadData([...value]);
+            form.setFieldsValue({
+                data: [...value]
+            })
+        }
+
+
     }
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
             form.validateFields().then(async res => {
-                const value = await form.getFieldsValue(true)?.data
+                const value = await form.getFieldsValue(true)?.data || []
                 getLoading(true)
                 await saveRun(value?.map((res: any) => {
                     return {
                         ...res,
-                        planNumber: res?.planNumber?.filter((e: any) => e !== 'all')?.join(',')
+                        planNumber: res?.planNumber?.findIndex((res: any) => res === 0) !== -1
+                            ? value[value?.findIndex((item: any) => item?.planNumber?.findIndex((res: any) => res === 0) !== -1) - 1].planNumber?.filter((e: any) => e !== 'all')?.join(',')
+                            : res?.planNumber?.filter((e: any) => e !== 'all')?.join(','),
+                        fileCategory: res?.fileCategory === 0 ? value[value?.findIndex((item: any) => item?.fileCategory === 0) - 1].fileCategory : res?.fileCategory,
+                        fileType: res?.fileType === 0 ? value[value?.findIndex((item: any) => item?.fileType === 0) - 1].fileType : res?.fileType,
                     }
                 }))
                 resolve(true);
@@ -221,15 +266,31 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                             projectBackupId: projectBackupId
                         }
                     })
-                    setUploadData([
+                    const newData = [
                         ...values || [],
                         ...data
-                    ]);
+                    ].map((item: any, index: number) => {
+                        if (index === 0) {
+                            return {
+                                ...item,
+                                fileCategory: item?.fileCategory ? item?.fileCategory : '',
+                                fileType: item?.fileType ? item?.fileType : '',
+                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : ['all', ...planNumbers?.map((e: any) => {
+                                    return e
+                                }) || []]
+                            }
+                        } else {
+                            return {
+                                ...item,
+                                fileCategory: item?.fileCategory ? item?.fileCategory : 0,
+                                fileType: item?.fileType ? item?.fileType : 0,
+                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : [0]
+                            }
+                        }
+                    })
+                    setUploadData(newData);
                     form?.setFieldsValue({
-                        data: [
-                            ...values || [],
-                            ...data
-                        ]
+                        data: newData
                     })
                 }}>
                     <Button type="primary" style={{ marginBottom: '16px' }} ghost>上传</Button>
