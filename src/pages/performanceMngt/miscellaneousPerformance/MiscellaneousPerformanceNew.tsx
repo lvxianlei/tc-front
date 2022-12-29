@@ -206,7 +206,8 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 style={{ width: "100%" }}
                                                 onDropdownVisibleChange={(open) => {
                                                     if (open) {
-                                                        const data = types?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.type);
+                                                        const typeList = items?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.category);
+                                                        const data = typeList[0]?.sundryConfigVOList?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.type);
                                                         setEntrys(data[0]?.sundryConfigVOS || [])
                                                     }
                                                 }}>
