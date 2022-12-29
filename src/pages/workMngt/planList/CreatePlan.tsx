@@ -57,6 +57,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...dataCopy,
                 width: 0,
                 length: 0,
+                isFromScheme:0,
                 planPurchaseNum: "",
                 totalWeight: "",
                 id: (ix + 1) + "",
@@ -627,7 +628,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? value || "0" :<InputNumber
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? value || "0" :<InputNumber
                                     min={0}
                                     precision={0}
                                     value={value || 0}
@@ -637,7 +638,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "width") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? value || "0" : <InputNumber
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? value || "0" : <InputNumber
                                     min={0}
                                     max={99999}
                                     value={value}
@@ -648,7 +649,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "materialStandard") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? records.materialStandardName : <Select
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? records.materialStandardName : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.materialStandard && popDataList[key]?.materialStandard + ',' + popDataList[key]?.materialStandardName}
                                     onChange={(e: string) => {
@@ -672,7 +673,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "structureTexture") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => records?.purchaseType === 1 ? records.structureTexture : <Select
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? records.structureTexture : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
                                     onChange={(e: string) => {
@@ -706,7 +707,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setVisibleNumber(true);
                             }}
                             disabled={(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))}>复制</Button>
-                            <Button type="link" disabled={records?.purchaseType === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
+                            <Button type="link" disabled={records?.isFromScheme === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
                                 handleRemove(index)
                             }}>移除</Button>
                         </>
@@ -751,7 +752,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             code: item.materialCode,
                             materialCategoryId: item.materialCategory,
                             planPurchaseNum: item.planPurchaseNum || 1,
-                            purchaseType: item?.purchaseType?item?.purchaseType:0,
+                            isFromScheme: item?.isFromScheme?item?.isFromScheme:0,
                             source: 2,
                             standardName: item.standardName,
                             length: item.length || 0,
