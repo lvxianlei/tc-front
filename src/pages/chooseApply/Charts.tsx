@@ -5,92 +5,92 @@ const DemoRadar = () => {
     const data = [
         {
             name: '回款金额达标率',
-            star: 10371,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '回款金额达标率',
-            star: 10000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '回款客户达标率',
-            star: 7380,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '回款客户达标率',
-            star: 7000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '毛利率',
-            star: 7000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '毛利率',
-            star: 7414,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '纯利率',
-            star: 4000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '纯利率',
-            star: 2140,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '客户投诉率',
-            star: 400,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '客户投诉率',
-            star: 660,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '订单满足率',
-            star: 7000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '订单满足率',
-            star: 885,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '订单执行率',
-            star: 7000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '订单执行率',
-            star: 1626,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '准时交货率',
-            star: 1000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '准时交货率',
-            star: 1626,
+            star: 8371,
             spec: "实际"
         },
         {
             name: '订单响应周期',
-            star: 1000,
+            star: 10371,
             spec: "标准"
         },
         {
             name: '订单响应周期',
-            star: 1626,
+            star: 8371,
             spec: "实际"
         },
     ];

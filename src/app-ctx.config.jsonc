@@ -778,7 +778,7 @@
                         "authority": "tc_erp_rd_order_adjustment"
                     },
                     {
-                        "label": "代料",
+                        "label": "代料申请",
                         "path": "/businessDisposal/generationOfMaterial",
                         "authority": "tc_erp_rd_order_adjustment"
                     },

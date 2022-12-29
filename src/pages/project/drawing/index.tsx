@@ -1,31 +1,20 @@
-import React, { useRef, useState } from 'react'
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form } from 'antd'
+import React, { Fragment, useState } from 'react'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form, Typography } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { SearchTable as Page, PopTableContent } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import { drawing, connectContract } from './drawing.json'
-import Edit from "./Edit"
-import Overview from "./Overview"
-import Subsidiary from './subsidiary'
-
-interface EditRefProps {
-    onSubmit: (type: 1 | 2) => void
-}
+const { Text, Link } = Typography
 export default function Drawing(): React.ReactNode {
     const history = useHistory()
     const location = useLocation<{ auditStatus?: number }>();
     const [filterValue, setFilterValue] = useState<any>({
         ...history.location.state as object
     })
-    const [visible, setVisible] = useState<boolean>(false)
-    const [subsidiary, setSubsidiary] = useState<boolean>(false)
-    const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [connectVisible, setConnectVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
-    const [type, setType] = useState<"new" | "edit">("new")
     const [conenctData, setConenctData] = useState<{ [key: string]: any }>({})
-    const editRef = useRef<EditRefProps>()
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation?id=${id}`)
@@ -38,6 +27,15 @@ export default function Drawing(): React.ReactNode {
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation/withdraw?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: recallRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/drawingConfirmation/reject?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -70,18 +68,6 @@ export default function Drawing(): React.ReactNode {
         return value
     }
 
-    const handleModalOk = (type: 1 | 2) => new Promise(async (resove, reject) => {
-        try {
-            await editRef.current?.onSubmit(type)
-            message.success(`${type === 1 ? "保存" : "保存并提交"}成功...`)
-            setVisible(false)
-            resove(true)
-            history.go(0)
-        } catch (error) {
-            reject(false)
-        }
-    })
-
     const handleCancel = (id: string) => {
         Modal.confirm({
             title: "撤销",
@@ -89,7 +75,23 @@ export default function Drawing(): React.ReactNode {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     resove(await cancelRun(id))
-                    message.success("撤销成功...")
+                    await message.success("撤销成功...")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const handleRecall = (id: string) => {
+        Modal.confirm({
+            title: "驳回",
+            content: "确定驳回此任务吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    resove(await recallRun(id))
+                    await message.success("驳回成功...")
                     history.go(0)
                 } catch (error) {
                     reject(error)
@@ -120,49 +122,30 @@ export default function Drawing(): React.ReactNode {
         >
             <PopTableContent data={connectContract as any} onChange={(records: any) => setConenctData(records[0])} />
         </Modal>
-        <Modal
-            destroyOnClose
-            visible={visible}
-            width={1011}
-            title="图纸确认任务"
-            onCancel={() => {
-                setDetailedId("")
-                setVisible(false)
-            }}
-            footer={[
-                <Button key="save" type="primary" ghost onClick={() => handleModalOk(1)}>保存</Button>,
-                <Button key="saveAndSubmit" type="primary" ghost onClick={() => handleModalOk(2)}>保存并发起</Button>
-            ]}>
-            <Edit type={type} ref={editRef} id={detailedId} />
-        </Modal>
-        <Modal
-            destroyOnClose
-            visible={detailVisible}
-            width={1011}
-            footer={<Button type="primary" onClick={() => setDetailVisible(false)}>确认</Button>}
-            title="图纸确认任务"
-            onCancel={() => {
-                setDetailedId("")
-                setDetailVisible(false)
-            }}>
-            <Overview id={detailedId} />
-        </Modal>
-        <Modal
-            title="明细"
-            visible={subsidiary}
-            width={1101}
-            destroyOnClose
-            onCancel={() => setSubsidiary(false)}
-            footer={
-                <Button type="primary" key="ok" onClick={() => setSubsidiary(false)}>确定</Button>
-            }
-        >
-            <Subsidiary id={detailedId} />
-        </Modal>
         <Page
             path="/tower-market/drawingConfirmation"
             columns={[
-                ...(drawing as any),
+                ...drawing.map((item: any) => {
+                    if (item.dataIndex === "taskNumbers") {
+                        return ({
+                            ...item,
+                            render: (value: string, records: any) => {
+                                const values = value?.split(",")
+                                const paths = records?.taskNoticeIds?.split(",")
+                                return <Text
+                                    style={{ width: "100%" }}
+                                    ellipsis={{
+                                        tooltip: value && !["-1", -1].includes(value) ? value : "-"
+                                    }}>
+                                    {values?.map((item: any, index: number) => <Fragment key={`${item}-${index}`}><Link
+                                        onClick={() => history.push(`/project/salePlan/cat/salesPlan/undefined/${paths[index]}`)}
+                                    >{item}</Link>,</Fragment>)}
+                                </Text>
+                            }
+                        })
+                    }
+                    return item
+                }),
                 {
                     title: "操作",
                     dataIndex: "opration",
@@ -173,20 +156,15 @@ export default function Drawing(): React.ReactNode {
                             type="link"
                             size="small"
                             style={{ padding: 2 }}
-                            onClick={() => {
-                                setDetailedId(record.id)
-                                setDetailVisible(true)
-                            }}>查看</Button>
+                            onClick={() => history.push(`/project/drawing/detail/${record.id}`)}
+                        >查看</Button>
                         <Button
                             type="link"
                             size="small"
                             disabled={![0, 3].includes(record.auditStatus)}
                             style={{ padding: 2 }}
-                            onClick={() => {
-                                setType("edit")
-                                setDetailedId(record.id)
-                                setVisible(true)
-                            }}>编辑</Button>
+                            onClick={() => history.push(`/project/drawing/edit/${record.id}`)}
+                        >编辑信息</Button>
                         <Button
                             type="link"
                             size="small"
@@ -200,11 +178,9 @@ export default function Drawing(): React.ReactNode {
                             type="link"
                             size="small"
                             style={{ padding: 2 }}
-                            onClick={() => {
-                                setDetailedId(record.id)
-                                setSubsidiary(true)
-                            }}>明细</Button>
-
+                            disabled={(record.confirmType !== 2) || (![0, 3].includes(record.auditStatus))}
+                            onClick={() => history.push(`/project/drawing/projectGroup/${record.id}`)}
+                        >编辑明细</Button>
                         <Popconfirm
                             title="确定删除此任务吗？"
                             disabled={![0, 3].includes(record.auditStatus)}
@@ -230,16 +206,19 @@ export default function Drawing(): React.ReactNode {
                             disabled={record.auditStatus !== 1}
                             onClick={() => handleCancel(record.id)}
                         >撤回</Button>
+                        <Button
+                            type="link"
+                            size="small"
+                            style={{ padding: 2 }}
+                            disabled={record.isReject !== 1}
+                            onClick={() => handleRecall(record.id)}
+                        >驳回</Button>
                     </>
                 }]}
             filterValue={filterValue}
             extraOperation={<Button
                 type="primary"
-                onClick={() => {
-                    setType("new")
-                    setDetailedId("")
-                    setVisible(true)
-                }}>新增图纸任务</Button>}
+                onClick={() => history.push("/project/drawing/create/create")}>新增图纸任务</Button>}
             onFilterSubmit={onFilterSubmit}
             searchFormItems={[
                 {

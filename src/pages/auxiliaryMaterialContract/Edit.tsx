@@ -963,9 +963,9 @@ export default forwardRef(function ({id, type, visibleP}: EditProps, ref): JSX.E
                                                               onClick={() => handleRemove(records.comparisonPriceDetailId)}>移除</Button>
                 }]}
             pagination={false}
-            dataSource={popDataList.map((item: any) => ({
+            dataSource={[...popDataList].map((item: any,index:number) => ({
                 ...item,
-                key: item.id || Math.random() + new Date().getTime()
+                key: item.id || index
             }))}/>
         <Attachment dataSource={data?.attachInfoList || []} edit ref={attchsRef}/>
     </Spin>

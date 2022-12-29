@@ -1,7 +1,6 @@
 /**
  * @author zyc
- * @copyright © 2022
- * @description 放样过程管理-补件下达列表
+- * @description 放样过程管理-补件下达列表
  */
 
 import React, { useState } from 'react';

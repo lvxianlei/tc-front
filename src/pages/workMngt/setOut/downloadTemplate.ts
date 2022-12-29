@@ -13,6 +13,16 @@ export function downloadTemplate(
     type: boolean = false,
     requestType: string = ""
 ): Promise<void> {
+    // const [messageApi, contextHolder] = message.useMessage()
+    // messageApi.open({
+    //     type: 'loading',
+    //     content: '模版下载中...',
+    //     duration: 0,
+    // })
+    message.loading({
+        key: "loading",
+        content: '模版拉取中...'
+    })
     return fetch(`${process.env.REQUEST_API_PATH_PREFIX?.replace(/\/*$/, '/') || ''.replace(/\/*$/, '/')}${path.replace(/^\/*/, '')}`, {
         mode: 'cors',
         method: 'POST',
@@ -25,6 +35,8 @@ export function downloadTemplate(
         body: requestType === "array" ? JSON.stringify(requestData || {}) : stringify(requestData || {})
     }).then((res) => {
         if (res.status === 200) {
+            message.destroy("loading")
+            message.success("模版拉取成功,开始下载...")
             return res.blob();
         } else {
             return res.json();

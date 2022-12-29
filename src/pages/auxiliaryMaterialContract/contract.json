@@ -18,10 +18,6 @@
       "dataIndex": "createTime"
     },
     {
-        "title": "审批状态",
-        "dataIndex": "approvalName"
-    },
-    {
       "title": "供应商",
       "dataIndex": "supplierName"
     },

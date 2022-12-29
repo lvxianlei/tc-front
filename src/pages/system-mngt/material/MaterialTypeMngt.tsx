@@ -163,7 +163,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                     {record.level === 1 ? <Button type="link" onClick={() => this.showModal({ firstCode: record.code, parentId: record.id }, 2)}>
                         添加二级类目
                     </Button> : null}
-                    <Button type="link" onClick={() => this.showModal({ ...record, firstCode: record.code?.substring(0, 2), code: record.level === 1 ? record.code : record.code?.substring(2, 4) }, record.level === 1 ? 1 : 3)}>
+                    <Button type="link" onClick={() => this.showModal({ ...record, firstCode: record.code?.substring(0, 2)}, record.level === 1 ? 1 : 3)}>
                         编辑
                     </Button>
                     <ConfirmableButton confirmTitle="要删除该数据吗？" type="link" placement="topRight" onConfirm={() => { this.handleDelete(record) }} >
@@ -337,26 +337,28 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
                         <Form.Item
                             name="code"
                             label="原材料编号"
-                            rules={[{
-                                required: true,
-                                message: '请输入原材料编号！'
-                            },
-                            {
-                                pattern: /^[^\s]*$/,
-                                message: '禁止输入空格',
-                            },
-                            {
-                                pattern: /^[0-9]*$/,
-                                message: '仅可输入数字',
-                            }]}
+                            // rules={[{
+                            //     required: true,
+                            //     message: '请输入原材料编号！'
+                            // },
+                            // {
+                            //     pattern: /^[^\s]*$/,
+                            //     message: '禁止输入空格',
+                            // },
+                            // {
+                            //     pattern: /^[0-9]*$/,
+                            //     message: '仅可输入数字',
+                            // }]}
                             initialValue={defaultData?.code}
                         >
                             {this.state.type === 2 || this.state.type === 3 ? <Input
                                 min={0}
                                 maxLength={2}
-                                addonBefore={defaultData.firstCode || 0}
+                                // addonBefore={defaultData.firstCode || 0}
                                 style={{ width: "100%" }}
-                            /> : <Input maxLength={2} min={0} placeholder="请输入" style={{ width: "100%" }} />}
+                                disabled
+                                placeholder="自动生成"
+                            /> : <Input maxLength={2} min={0} placeholder="自动生成" disabled style={{ width: "100%" }} />}
                         </Form.Item>
                         <Form.Item
                             name="name"

@@ -552,6 +552,18 @@
             "dataIndex": "galvanizeDemand"
         },
         {
+            "title": "执行标准",
+            "dataIndex": "implementStandard",
+            "type": "select",
+            "enum": [],
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择执行标准..."
+                }
+            ]
+        },
+        {
             "title": "结算要求",
             "dataIndex": "payAsk",
             "type": "textarea"
@@ -596,6 +608,10 @@
             "title": "镀锌要求",
             "dataIndex": "galvanizeDemand",
             "type": "textarea"
+        },
+        {
+            "title": "执行标准",
+            "dataIndex": "implementStandardName"
         },
         {
             "title": "结算要求",

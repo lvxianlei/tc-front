@@ -254,27 +254,49 @@
             "title": "审批",
             "dataIndex": "applyPaymentWorkBatchVo",
             "col": 1,
-            "path": "财务管理-请款申请",
+            "path": "审批",
             "icon": "https://dhwy-dev-tc-operation.oss-cn-beijing.aliyuncs.com/tower-erp/sw%E5%B7%A5%E4%BD%9C%E5%8F%B0/%E5%AE%A1%E6%89%B9.png",
             "workbenchItemVos": [
                 {
                     "title": "我发起的",
                     "dataIndex": "startNum",
                     "path": {
-                        "pathname": "/financial/prepare",
+                        "pathname": "/chooseApply",
                         "state": {
-                            "applyStatus": 1
+                            "card": 1
                         }
                     },
                     "authority": ""
                 },
                 {
-                    "title": "我接收的",
+                    "title": "待办事宜",
                     "dataIndex": "completeNum",
                     "path": {
-                        "pathname": "/financial/prepare",
+                        "pathname": "/chooseApply",
                         "state": {
-                            "applyStatus": 4
+                            "card": 2
+                        }
+                    },
+                    "authority": ""
+                },
+                {
+                    "title": "抄送事宜",
+                    "dataIndex": "completeNum",
+                    "path": {
+                        "pathname": "/chooseApply",
+                        "state": {
+                            "card": 3
+                        }
+                    },
+                    "authority": ""
+                },
+                {
+                    "title": "已办事宜",
+                    "dataIndex": "completeNum",
+                    "path": {
+                        "pathname": "/chooseApply",
+                        "state": {
+                            "card": 4
                         }
                     },
                     "authority": ""
