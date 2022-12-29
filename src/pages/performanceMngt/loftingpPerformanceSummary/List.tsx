@@ -40,6 +40,7 @@ export default function List(): React.ReactNode {
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any>(`/tower-science/performance/product/category/list`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
+        console.log(data?.records[0]?.entryLinkList)
         setDetailData(data?.records[0]?.entryLinkList || [])
         resole(data?.records);
     }), {})
@@ -55,7 +56,7 @@ export default function List(): React.ReactNode {
             values.endTime = formatDate[1] + ' 23:59:59';
         }
         setFilterValues(values);
-        run({},{ ...values });
+        run({}, { ...values });
     }
 
     const handleChangePage = (current: number, pageSize: number) => {
@@ -128,7 +129,12 @@ export default function List(): React.ReactNode {
                     labelLine: {
                         show: false
                     },
-                    data: detailData || []
+                    data: (detailData || [])?.map((res: any) => {
+                        return {
+                            value: res?.amount,
+                            name: res?.name
+                        }
+                    })
                 }
             ]
         });
