@@ -116,7 +116,6 @@ let fileType: IDict[] | undefined = [];
 let testType: IDict[] | undefined = [];
 let typeOfChange: IDict[] | undefined = [];
 let implementStandard: IDict[] | undefined = [];
-
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];

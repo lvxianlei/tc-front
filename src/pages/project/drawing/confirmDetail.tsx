@@ -110,7 +110,6 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
     const handleDelete = () => {
         setTableDataSource(tableDataSource.filter((item: any) => !selectedKeys.includes(item?.key)))
     }
-
     return <div>
         <DetailTitle title="确认明细" key="detail_title" />
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
