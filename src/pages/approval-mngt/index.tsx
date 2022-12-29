@@ -173,6 +173,8 @@ export default function Information(): React.ReactNode {
         const postData = await bidingForm.validateFields()
         postData.projectId = postData.projectName?.id || ""
         postData.projectName = postData.projectName?.value || ""
+        postData.serviceManagerId = postData.serviceManagerName?.id || ""
+        postData.serviceManagerName = postData.serviceManagerName?.value || ""
         const result = await run({
             path: "/tower-market/biddingEvaluation/submitAudit",
             data: {

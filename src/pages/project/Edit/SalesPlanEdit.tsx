@@ -6,10 +6,11 @@ import { DetailContent, BaseInfo, DetailTitle, CommonTable, FormItemType } from 
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist, productAssist } from "../managementDetailData.json"
-import { materialStandardOptions } from "../../../configuration/DictionaryOptions"
+import { materialStandardOptions,implementStandardOptions  } from "../../../configuration/DictionaryOptions"
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const implementStandardEnum = implementStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const editMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string, id: string }>("/project/:entryPath/:type/salesPlan/:projectId/:id")
     const newMatch: any = useRouteMatch<{ type: "new" | "edit", projectId: string }>("/project/:entryPath/:type/salesPlan/:projectId")
     const match = editMatch || newMatch
@@ -324,7 +325,17 @@ export default function SalesPlanEdit() {
                 })} dataSource={data || {}} edit col={3} />
             <DetailTitle title="特殊要求" />
             <BaseInfo form={cargoDtoForm}
-                columns={taskNoticeEditSpec.map(item => item.dataIndex === "materialStandard" ? ({ ...item, enum: materialStandardEnum }) : item)}
+                      columns={
+                          taskNoticeEditSpec.map(item =>{
+                              if(item.dataIndex === "materialStandard") {
+                                  return { ...item, enum: materialStandardEnum }
+                              }
+                              if(item.dataIndex === "implementStandard") {
+                                  return { ...item, enum: implementStandardEnum }
+                              }
+                              return item
+                          })
+                      }
                 dataSource={data || {}} edit col={3} />
             <DetailTitle title="杆塔信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
             <Form form={productDetailsForm} onFieldsChange={handleChange}>
