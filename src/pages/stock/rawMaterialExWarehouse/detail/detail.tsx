@@ -31,7 +31,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         label: item.name
     }))
     const history = useHistory();
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, approval: string }>();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
@@ -524,6 +524,24 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             outStockDetailId: selectedKeys,
                             outStockId: params.id
                         })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
+                        <Button type="primary" ghost onClick={async () => { 
+                            if([undefined,'undefined',null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
+                                await RequestUtil.get(`/tower-storage/outStock/workflow/start/${params.id}`)
+                                message.success('审批发起成功！')
+                                history.go(-1)
+                            }else{
+                                message.error("当前不可发起审批！")
+                            }
+                        }} >发起审批</Button>
+                        <Button type="primary" ghost onClick={async () => {
+                            if([1,'1'].includes(params?.approval)){
+                                await RequestUtil.get(`/tower-storage/outStock/workflow/cancel/${params.id}`)
+                                message.success('撤销成功！')
+                                history.go(-1)
+                            }else{
+                                message.error('不可撤销！')
+                            }
+                        }} >撤销审批</Button>
                         <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>

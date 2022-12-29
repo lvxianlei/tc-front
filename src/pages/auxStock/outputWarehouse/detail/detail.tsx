@@ -12,7 +12,7 @@ import { exportDown } from '@utils/Export';
 
 export default function Index(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, approval: string }>();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
@@ -25,7 +25,13 @@ export default function Index(): React.ReactNode {
     const [isApplyModal, setIsApplyModal] = useState<boolean>(false);//出库弹框显示
     const [requirement, setRequirement] = useState<number | string>('');//出库-弹框需求量
     const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框-需要的列表id
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
 
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const supplierColumns = [
         {
             title: '收货单号',
@@ -487,11 +493,40 @@ export default function Index(): React.ReactNode {
                 extraOperation={(data: any) => {
                     return <>
                         {/* <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button> */}
+                        <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/auxiliary/batchOutStock`,{
+                            outStockDetailId: selectedKeys,
+                            outStockId: params.id
+                        })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
+                        <Button type="primary" ghost onClick={async () => { 
+                            if([undefined,'undefined',null,'null', 0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
+                                await RequestUtil.get(`/tower-storage/outStock/auxiliary/workflow/start/${params.id}`)
+                                message.success('发起成功！')
+                                history.go(-1)
+                            }else{
+                                message.error("当前不可发起审批！")
+                            }
+                        }} >发起审批</Button>
+                        <Button type="primary" ghost onClick={async () => {
+                            if([1,'1'].includes(params?.approval)){
+                                await RequestUtil.get(`/tower-storage/outStock/workflow/cancel/${params.id}`)
+                                message.success('撤销成功！')
+                                history.go(-1)
+                            }else{
+                                message.error('不可撤销！')
+                            }
+                        }} >撤销审批</Button>
                         <span style={{ marginLeft: "20px" }}>
                             总数量： {weightData?.totalNum || "0.00"}
                         </span>
                     </>
+                }}
+                tableProps={{
+                    rowSelection: {
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange,
+                        getCheckboxProps: (record: any) => record.outStockItemStatus !== 0
+                    }
                 }}
                 columns={[
                     {
