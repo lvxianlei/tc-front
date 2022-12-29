@@ -292,7 +292,26 @@ export default function CreatePlan(props: any): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/detail/${props.id}`)
-            setDetail(result)
+            setDetail({
+                ...result,
+                projectList: {
+                    value: result.projectName,
+                    records: result.projectName!==null&&result.projectName?result.projectName.split(',')?.map((item: any,index:number) => ({
+                        id: result.purchaseTask.split(',')[index],
+                        orderProjectName: item
+                    })) : []
+                },
+            })
+            // addCollectionForm.setFieldsValue({
+            //     ...result,
+            //     projectList: {
+            //         value: result.projectName,
+            //         records: result.projectName.split(',')?.map((item: any,index:number) => ({
+            //             id: result.purchaseTask.split(',')[index],
+            //             orderProjectName: item
+            //         })) || []
+            //     },
+            // })
             setPopDataList(result?.materials.map((item:any)=>{
                 return{
                     ...item,
@@ -305,16 +324,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     purchaseType: result?.purchaseType
                 }
             }))
-            addCollectionForm.setFieldsValue({
-                ...result,
-                projectList: {
-                    value: result.projectName,
-                    records: result.projectName.split(',')?.map((item: any,index:number) => ({
-                        id: result.purchaseTask.split(',')[index],
-                        orderProjectName: item
-                    })) || []
-                },
-            })
+            
             resole({
                 ...result,
             })
@@ -408,7 +418,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 form={addCollectionForm}
                 edit
                 onChange={handleBaseInfoChange}
-                dataSource={data||[]}
+                dataSource={detail||[]}
                 col={2}
                 classStyle="baseInfo"
                 columns={[
@@ -441,6 +451,10 @@ export default function CreatePlan(props: any): JSX.Element {
                             {
                                 "value": 2,
                                 "label": "库存采购"
+                            },
+                            {
+                                "value": 3,
+                                "label": "缺料采购"
                             }
                         ]:[
                             {
