@@ -594,7 +594,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["num"].includes(item.dataIndex)&&type===0) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                    render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 })
                             }
                             if (["num"].includes(item.dataIndex)&&type===2) {
@@ -715,6 +715,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
                             rawStockId: item.id,
+                            maxNum: item.num,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(5),
