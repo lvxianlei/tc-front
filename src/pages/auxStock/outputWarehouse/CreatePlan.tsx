@@ -293,7 +293,12 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
-                    setMaterialList(fields || [])
+                    setMaterialList(fields.map((item:any)=>{
+                        return{
+                            ...item,
+                            rawStockId: item.id,
+                        }
+                    }) || [])
                 }}
             />
         </Modal>
