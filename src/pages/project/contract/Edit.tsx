@@ -93,22 +93,23 @@ export default function Edit() {
   }), { manual: !params.id })
 
   const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((saveData: any) => new Promise(async (resole, reject) => {
-      try {
-        let reqType: "post" | "put";
-        if (type === "new") {
+    try {
+      let reqType: "post" | "put";
+      if (type === "new") {
+        reqType = "post"
+      } else {
+        console.log(params.contractType, data?.relationId)
+        if (["2", "3"].includes(params.contractType) && !data?.relationId) {
           reqType = "post"
         } else {
-          if (["2", "3"].includes(params.contractType) && !data?.relationId) {
-            reqType = "post"
-          } else {
-            reqType = "put"
-          }
+          reqType = "put"
         }
+      }
       const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
         id: reqType === "post" ? "" : params.id,
         relationId: data?.id,
-        relationInternalNumber: data?.internalNumber,
+        relationInternalNumber: data?.relationInternalNumber,
         projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
@@ -125,14 +126,14 @@ export default function Edit() {
       totalReturnedRate,
       totalReturnedAmount
     } = (editformData.submit || []).reduce((
-      { totalReturnedRate, totalReturnedAmount }: any,
-      item: any
+        { totalReturnedRate, totalReturnedAmount }: any,
+        item: any
     ) => ({
       totalReturnedRate: parseFloat(
-        (Number(item.returnedRate || 0) + Number(totalReturnedRate || 0)).toString()
+          (Number(item.returnedRate || 0) + Number(totalReturnedRate || 0)).toString()
       ).toFixed(2),
       totalReturnedAmount: parseFloat(
-        (Number(item.returnedAmount || 0) + Number(totalReturnedAmount || 0)).toString()
+          (Number(item.returnedAmount || 0) + Number(totalReturnedAmount || 0)).toString()
       ).toFixed(2)
     }), { totalReturnedRate: 0, totalReturnedAmount: 0 })
     // if ((editformData.submit || []).length <= 0) {
@@ -154,8 +155,8 @@ export default function Edit() {
       ...baseInfo,
       signCustomerName: baseInfo.signCustomer.value,
       signCustomerId: baseInfo.signCustomer.id,
-      frameAgreementName: baseInfo.frameAgreementId.value,
-      frameAgreementId: baseInfo.frameAgreementId.id,
+      frameAgreementName: baseInfo.frameAgreementId?.value,
+      frameAgreementId: baseInfo.frameAgreementId?.id,
       payCompanyName: baseInfo.payCompany.value,
       payCompanyId: baseInfo.payCompany.id,
       salesman: baseInfo.salesman.value,
@@ -260,123 +261,124 @@ export default function Edit() {
   }
 
   return <DetailContent
-    when={when}
-    operation={[
-      <Button
-        key="save"
-        type="primary"
-        onClick={handleSubmit}
-        style={{ marginRight: 16 }}
-        loading={saveLoading}
-      >保存</Button>,
-      <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
-    ]}>
+      when={when}
+      operation={[
+        <Button
+            key="save"
+            type="primary"
+            onClick={handleSubmit}
+            style={{ marginRight: 16 }}
+            loading={saveLoading}
+        >保存</Button>,
+        <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
+      ]}>
     <Spin spinning={loading || projectLoading}>
       <DetailTitle title="基础信息" />
       <BaseInfo
-        onChange={handleBaseInfoChange}
-        columns={[...setting.map((item: any) => {
-          switch (item.dataIndex) {
-            case "winBidType":
-              return ({ ...item, enum: winBidTypeEnum })
-            case "saleType":
-              return ({ ...item, enum: saleTypeEnum })
-            case "contractPlanStatus":
-              return ({ ...item, enum: contractPlanStatusEnum })
-            case "receivedContractShape":
-              return ({ ...item, enum: contractFormEnum })
-            case "deliveryWay":
-              return ({ ...item, enum: deliverywayEnum })
-            case "currencyType":
-              return ({ ...item, enum: currencyTypeEnum })
-            case "region":
-              return ({ ...item, enum: addressList })
-            case "country":
-              return ({ ...item, hidden: region !== "其他-国外" })
-            case "frameAgreementId":
-              return ({
-                ...item,
-                path: `${item.path}${params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ''}`
-              })
-            default:
-              return item
-          }
-        }),
-        ...params.contractType === "2" ? [{
-          "title": "变更原价格",
-          "dataIndex": "changePrice",
-          "type": "select",
-          "enum": [
-            {
-              "label": "是",
-              "value": 1
-            },
-            {
-              "label": "否",
-              "value": 2
+          onChange={handleBaseInfoChange}
+          columns={[...setting.map((item: any) => {
+            switch (item.dataIndex) {
+              case "winBidType":
+                return ({ ...item, enum: winBidTypeEnum })
+              case "saleType":
+                return ({ ...item, enum: saleTypeEnum })
+              case "contractPlanStatus":
+                return ({ ...item, enum: contractPlanStatusEnum })
+              case "receivedContractShape":
+                return ({ ...item, enum: contractFormEnum })
+              case "deliveryWay":
+                return ({ ...item, enum: deliverywayEnum })
+              case "currencyType":
+                return ({ ...item, enum: currencyTypeEnum })
+              case "region":
+                return ({ ...item, enum: addressList })
+              case "country":
+                return ({ ...item, hidden: region !== "其他-国外" })
+              case "frameAgreementId":
+                return ({
+                  ...item,
+                  path: `${item.path}${params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ''}`
+                })
+              default:
+                return item
             }
-          ]
-        }] : [],
-        {
-          "title": "备注",
-          "dataIndex": "description",
-          "type": "textarea"
-        }]}
-        form={form}
-        dataSource={{
-          bidBatch: projectData?.bidBatch,
-          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-          country: projectData?.country || "",
-          ...data,
-          contractType: Number(params.contractType) || 1,
-        } || {
-          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-          country: projectData?.country || "",
-          ...data
-        }}
-        edit />
+          }),
+            ...params.contractType === "2" ? [{
+              "title": "变更原价格",
+              "dataIndex": "changePrice",
+              "type": "select",
+              "enum": [
+                {
+                  "label": "是",
+                  "value": 1
+                },
+                {
+                  "label": "否",
+                  "value": 2
+                }
+              ]
+            }] : [],
+            {
+              "title": "备注",
+              "dataIndex": "description",
+              "type": "textarea"
+            }]}
+          form={form}
+          dataSource={{
+            bidBatch: projectData?.bidBatch,
+            region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
+            country: projectData?.country || "",
+            ...data,
+            contractType: Number(params.contractType) || 1,
+          } || {
+            region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
+            country: projectData?.country || "",
+            ...data,
+            contractType: Number(params.contractType) || 1,
+          }}
+          edit />
       <DetailTitle title="回款计划" />
       <EditableTable
-        haveIndex={false}
-        addData={(data: any) => ({
-          period: (data?.[0]?.period || 0) + 1,
-          returnedAmount: 0.00,
-          returnedRate: 0.00
-        })}
-        opration={[
-          <Radio.Group
-            value={planType}
-            key="type"
-            onChange={(event: any) => setPlanType(event.target.value)}
-            options={[
-              { label: "按占比", value: 0 },
-              { label: "按金额", value: 1 }
-            ]} />
-        ]}
-        form={editform}
-        onChange={handleEditableChange}
-        columns={[...payment.map(item => {
-          if (item.dataIndex === "returnedAmount") {
-            return ({
-              ...item,
-              disabled: planType === 0
-            })
-          }
-          if (item.dataIndex === "returnedRate") {
-            return ({
-              ...item,
-              disabled: planType === 1
-            })
-          }
-          if (item.dataIndex === "name") {
-            return ({
-              ...item,
-              enum: planNameEnum
-            })
-          }
-          return item
-        })]}
-        dataSource={data?.paymentPlanVos || []} />
+          haveIndex={false}
+          addData={(data: any) => ({
+            period: (data?.[0]?.period || 0) + 1,
+            returnedAmount: 0.00,
+            returnedRate: 0.00
+          })}
+          opration={[
+            <Radio.Group
+                value={planType}
+                key="type"
+                onChange={(event: any) => setPlanType(event.target.value)}
+                options={[
+                  { label: "按占比", value: 0 },
+                  { label: "按金额", value: 1 }
+                ]} />
+          ]}
+          form={editform}
+          onChange={handleEditableChange}
+          columns={[...payment.map(item => {
+            if (item.dataIndex === "returnedAmount") {
+              return ({
+                ...item,
+                disabled: planType === 0
+              })
+            }
+            if (item.dataIndex === "returnedRate") {
+              return ({
+                ...item,
+                disabled: planType === 1
+              })
+            }
+            if (item.dataIndex === "name") {
+              return ({
+                ...item,
+                enum: planNameEnum
+              })
+            }
+            return item
+          })]}
+          dataSource={data?.paymentPlanVos || []} />
       <Attachment ref={attchmentRef} dataSource={data?.attachVos || []} edit />
     </Spin>
   </DetailContent>
