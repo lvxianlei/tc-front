@@ -496,6 +496,9 @@ export default function Index(): React.ReactNode {
                         <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/auxiliary/batchOutStock`,{
                             outStockDetailId: selectedKeys,
                             outStockId: params.id
+                        }).then(()=>{
+                            message.success(`出库成功！`)
+                            history.go(0)
                         })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <Button type="primary" ghost onClick={async () => { 
