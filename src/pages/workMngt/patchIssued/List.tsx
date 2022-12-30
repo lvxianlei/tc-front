@@ -42,21 +42,10 @@ export default function List(): React.ReactNode {
             dataIndex: 'supplyNumber'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '补件下达状态',
             width: 120,
-            dataIndex: 'status',
-            type: 'select',
-            enum: [
-                {
-                    "value": 1,
-                    "label": "已下达"
-                },
-                {
-                    "value": 2,
-                    "label": "已取消"
-                },
-            ]
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',
@@ -227,8 +216,8 @@ export default function List(): React.ReactNode {
             name: 'batchStatus',
             label: '补件下达状态',
             children: <Select style={{ width: '120px' }} placeholder="请选择">
-                <Select.Option value={1} key="1">已取消</Select.Option>
-                <Select.Option value={2} key="2">未下达</Select.Option>
+                <Select.Option value={1} key="1">已下达</Select.Option>
+                <Select.Option value={2} key="2">已取消</Select.Option>
             </Select>
         },
         {
@@ -286,8 +275,8 @@ export default function List(): React.ReactNode {
     const [status, setStatus] = useState<number>(1);
     const [searchFormItems, setSearchFormItems] = useState<any>(search);
 
-    const { data: count } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/supplyBatch/count`);
+    const { data: count, run: getCount } = useRequest<any>((filter: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/supplyBatch/count`, { ...filter });
         resole(data);
     }), {})
 
@@ -302,6 +291,7 @@ export default function List(): React.ReactNode {
         } else {
             setFilter(values)
         }
+        getCount(values)
     }
 
     return <>

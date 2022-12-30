@@ -402,7 +402,7 @@
       "authority": "tc_erp_sc_pay_apply_list"
     },
     { // 付款申请详情
-      "name": "请款款申请详情",
+      "name": "请款申请详情",
       "path": "/project/payment/detail/:id",
       "module": "./pages/project/payment/Overview",
       "exact": true,
