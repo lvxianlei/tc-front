@@ -594,8 +594,21 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["num"].includes(item.dataIndex)&&type===0) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
-                                })
+                                    render: (value: number, records: any, key: number) => {return <Form.Item 
+                                        name={['list', key, 'num']}
+                                        initialValue={value||undefined}
+                                        rules={[{
+                                            validator: async (rule: any, value: any, callback: (error?: string) => void) => {
+                                                const resData:any = await RequestUtil.get(`/tower-storage/materialStock?current=1&size=10&rawStockId=${records?.rawStockId}`);
+                                                if(resData.records[0]?.num < value)
+                                                return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
+                                                else return Promise.resolve('数量可用');
+                                            }
+                                        }]}>
+                                            <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
+                                        </Form.Item>
+                                    // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                }})
                             }
                             if (["num"].includes(item.dataIndex)&&type===2) {
                                 return ({
