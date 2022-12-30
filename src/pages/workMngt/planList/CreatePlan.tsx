@@ -57,6 +57,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...dataCopy,
                 width: 0,
                 length: 0,
+                isFromScheme:0,
                 planPurchaseNum: "",
                 totalWeight: "",
                 id: (ix + 1) + "",
@@ -257,11 +258,15 @@ export default function CreatePlan(props: any): JSX.Element {
             type==='save'&&saveRun({
                 purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",
+                purchaseTask: baseInfo?.projectList.records.map((item: any) => item.id).join(","),
+                projectName: baseInfo?.projectList.records.map((item: any) => item.orderProjectName).join(","),
                 ...baseInfo
             });
             type==='approvalSave'&&saveRun({
                 purchasePlanDetailDTOS: materialList,
                 purchaserTaskTowerIds: "",
+                purchaseTask: baseInfo?.projectList.records.map((item: any) => item.id).join(","),
+                projectName: baseInfo?.projectList.records.map((item: any) => item.orderProjectName).join(","),
                 isApproval: 1,
                 ...baseInfo
             });
@@ -288,17 +293,62 @@ export default function CreatePlan(props: any): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/materialPurchasePlan/detail/${props.id}`)
-            setDetail(result)
-            setPopDataList(result?.materials)
-            setMaterialList(result?.materials)
+            setDetail({
+                ...result,
+                projectList: {
+                    value: result.projectName,
+                    records: result.projectName!==null&&result.projectName?result.projectName.split(',')?.map((item: any,index:number) => ({
+                        id: result.purchaseTask.split(',')[index],
+                        orderProjectName: item
+                    })) : []
+                },
+            })
+            // addCollectionForm.setFieldsValue({
+            //     ...result,
+            //     projectList: {
+            //         value: result.projectName,
+            //         records: result.projectName.split(',')?.map((item: any,index:number) => ({
+            //             id: result.purchaseTask.split(',')[index],
+            //             orderProjectName: item
+            //         })) || []
+            //     },
+            // })
+            setPopDataList(result?.materials.map((item:any)=>{
+                return{
+                    ...item,
+                    purchaseType: result?.purchaseType,
+                    minNum: item?.planPurchaseNum,
+                }
+            }))
+            setMaterialList(result?.materials.map((item:any)=>{
+                return{
+                    ...item,
+                    purchaseType: result?.purchaseType,
+                    minNum: item?.planPurchaseNum,
+                }
+            }))
+            
             resole({
                 ...result,
             })
+            
         } catch (error) {
             reject(error)
         }
     }), { ready: props.type !== "create" && props.id && props.visible === true, refreshDeps: [props.visible, props.type, props.id] })
-
+    
+    const handleBaseInfoChange = async (fields: any) => {
+        if (fields.projectList) {
+            // const value:any[] = await RequestUtil.get(`/tower-supply/materialPurchaseTask/material/plan/${fields.supplyIdList.records.map((item: any) => item.id).join(",")}`)
+            // setPopDataList(value)
+            addCollectionForm.setFieldsValue({
+                projectList: {
+                    value: fields.projectList.records.map((item: any) => item.orderProjectName).join(","),
+                    records: fields.projectList.records.map((item: any) => ({ ...item, orderProjectName: item.orderProjectName }))
+                }
+            })
+        }
+    }
     return (
         <Modal
             title={'采购计划'}
@@ -370,7 +420,8 @@ export default function CreatePlan(props: any): JSX.Element {
             <BaseInfo
                 form={addCollectionForm}
                 edit
-                dataSource={data||[]}
+                onChange={handleBaseInfoChange}
+                dataSource={detail||[]}
                 col={2}
                 classStyle="baseInfo"
                 columns={[
@@ -395,10 +446,82 @@ export default function CreatePlan(props: any): JSX.Element {
                                 "message": "请选择采购类型"
                             }
                         ],
-                        "enum": [
+                        "enum": props.type !== "create"?[
+                            {
+                                "value": 1,
+                                "label": "配料采购"
+                            },
                             {
                                 "value": 2,
                                 "label": "库存采购"
+                            },
+                            {
+                                "value": 3,
+                                "label": "缺料采购"
+                            }
+                        ]:[
+                            {
+                                "value": 2,
+                                "label": "库存采购"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "关联工程",
+                        "dataIndex": "projectList",
+                        "type": "popTable",
+                        "path": "/tower-supply/materialPurchaseTask?materialSummaryStatus=1&sortRule=2",
+                        "width": 1011,
+                        "value": "projectList",
+                        "selectType": "checkbox",
+                        "dependencies": true,
+                        "readOnly": true,
+                        "search": [
+                            {
+                                "title": "下发时间",
+                                "dataIndex": "issuedTime",
+                                "type": "date"
+                            },
+                            {
+                                "title": "客户交货时间",
+                                "dataIndex": "planDeliveryTime",
+                                "type": "date"
+                            },
+                            {
+                                "title": "提料完成时间",
+                                "dataIndex": "liftingTime",
+                                "type": "date"
+                            },
+                            {
+                                "title": "查询",
+                                "dataIndex": "fuzzyQuery",
+                                "placeholder": "计划号/工程名称/内部合同号"
+                            }
+                        ],
+                        "columns": [
+                            {
+                                "title": "计划号",
+                                "dataIndex": "planNumber"
+                            },
+                            {
+                                "title": "工程名称",
+                                "dataIndex": "orderProjectName"
+                            },
+                            {
+                                "title": "内部合同号",
+                                "dataIndex": "contactMan"
+                            },
+                            {
+                                "title": "下发时间",
+                                "dataIndex": "issuedTime"
+                            },
+                            {
+                                "title": "客户交货日期",
+                                "dataIndex": "deliveryTime"
+                            },
+                            {
+                                "title": "提料完成时间",
+                                "dataIndex": "liftingMaterialTime"
                             }
                         ]
                     }
@@ -496,7 +619,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => <InputNumber
-                                    min={data?.purchaseType === 1 ? value : 1}
+                                    min={records?.isFromScheme === 1 ? records?.minNum : 1}
                                     precision={0}
                                     value={value || undefined}
                                     onChange={(value: number) => handleNumChange(value, key)}
@@ -507,7 +630,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "length") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? value || "0" :<InputNumber
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? value || "0" :<InputNumber
                                     min={0}
                                     precision={0}
                                     value={value || 0}
@@ -517,7 +640,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "width") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? value || "0" : <InputNumber
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? value || "0" : <InputNumber
                                     min={0}
                                     max={99999}
                                     value={value}
@@ -528,7 +651,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "materialStandard") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? records.materialStandardName : <Select
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? records.materialStandardName : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.materialStandard && popDataList[key]?.materialStandard + ',' + popDataList[key]?.materialStandardName}
                                     onChange={(e: string) => {
@@ -552,7 +675,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if (item.dataIndex === "structureTexture") {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => data?.purchaseType === 1 ? records.structureTexture : <Select
+                                render: (value: number, records: any, key: number) => records?.isFromScheme === 1 ? records.structureTexture : <Select
                                     style={{ width: '150px' }}
                                     value={popDataList[key]?.structureTextureId && popDataList[key]?.structureTextureId + ',' + popDataList[key]?.structureTexture}
                                     onChange={(e: string) => {
@@ -586,9 +709,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                 setVisibleNumber(true);
                             }}
                             disabled={(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))}>复制</Button>
-                            <Button type="link" disabled={data?.purchaseType === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
+                            <Button type="link" disabled={records?.isFromScheme === 1||(records.comparePriceId&&!([0,'0'].includes(records.comparePriceId)))} onClick={() => {
                                 handleRemove(index)
-                               
                             }}>移除</Button>
                         </>
                     }]}
@@ -632,6 +754,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             code: item.materialCode,
                             materialCategoryId: item.materialCategory,
                             planPurchaseNum: item.planPurchaseNum || 1,
+                            isFromScheme: item?.isFromScheme?item?.isFromScheme:0,
                             source: 2,
                             standardName: item.standardName,
                             length: item.length || 0,

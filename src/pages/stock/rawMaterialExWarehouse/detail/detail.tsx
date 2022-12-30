@@ -44,7 +44,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [isApplyModal, setIsApplyModal] = useState<boolean>(false);//出库弹框显示
     const [requirement, setRequirement] = useState<number | string>('');//出库-弹框需求量
     const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框-需要的列表id
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
 
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const supplierColumns = [
         {
             title: '收货单号',
@@ -514,6 +520,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 exportFileName="原材料出库明细"
                 extraOperation={(data: any) => {
                     return <>
+                        <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/batchOutStock`,{
+                            outStockDetailId: selectedKeys,
+                            outStockId: params.id
+                        }).then(()=>{
+                            message.success('出库成功！')
+                            history.go(0)
+                        })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
                         <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>
@@ -523,6 +536,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             缺料总重量：{weightData?.excessWeight || "0.00"} 吨
                         </span>
                     </>
+                }}
+                tableProps={{
+                    rowSelection: {
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange,
+                        getCheckboxProps: (record: any) => record.outStockItemStatus !== 0
+                    }
                 }}
                 columns={[
                     {

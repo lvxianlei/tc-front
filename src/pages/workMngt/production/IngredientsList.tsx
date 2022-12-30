@@ -994,7 +994,7 @@ export default function IngredientsList(): React.ReactNode {
         structureSpec: string = ""
     ) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-storage/materialStock/getAvailableInventoryList`, {
+            const result: any = await RequestUtil.get(`/tower-storage/materialStock/getIssuedAvailableInventoryList`, {
                 warehouseId,
                 structureTexture, // 材质
                 structureSpec, // 规格

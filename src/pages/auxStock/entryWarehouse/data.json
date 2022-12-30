@@ -84,6 +84,11 @@
             "width": 150
         },
         {
+            "title": "用友编码",
+            "dataIndex": "externalCode",
+            "width": 80
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName",
             "width": 80

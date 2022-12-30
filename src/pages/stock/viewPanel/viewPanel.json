@@ -61,36 +61,6 @@
         "dataIndex": "usableTotalWeight"
     },
     {
-        "title": "占用数量",
-        "width": 80,
-        "dataIndex": "occupiedNum"
-    },
-    {
-        "title": "占用重量（吨）",
-        "width": 120,
-        "dataIndex": "occupiedTotalWeight"
-    },
-    {
-        "title": "在途可用数量",
-        "width": 120,
-        "dataIndex": "inTransitUsableNum"
-    },
-    {
-        "title": "在途可用重量（吨）",
-        "width": 150,
-        "dataIndex": "inTransitUsableTotalWeight"
-    },
-    {
-        "title": "在途占用数量",
-        "width": 120,
-        "dataIndex": "inTransitOccupiedNum"
-    },
-    {
-        "title": "在途占用重量（吨）",
-        "width": 150,
-        "dataIndex": "inTransitOccupiedTotalWeight"
-    },
-    {
         "title": "安全库存重量（吨）",
         "dataIndex": "safetyStockWeight"
     },
