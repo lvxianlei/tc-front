@@ -126,14 +126,14 @@ export default function Edit() {
       totalReturnedRate,
       totalReturnedAmount
     } = (editformData.submit || []).reduce((
-      { totalReturnedRate, totalReturnedAmount }: any,
-      item: any
+        { totalReturnedRate, totalReturnedAmount }: any,
+        item: any
     ) => ({
       totalReturnedRate: parseFloat(
-        (Number(item.returnedRate || 0) + Number(totalReturnedRate || 0)).toString()
+          (Number(item.returnedRate || 0) + Number(totalReturnedRate || 0)).toString()
       ).toFixed(2),
       totalReturnedAmount: parseFloat(
-        (Number(item.returnedAmount || 0) + Number(totalReturnedAmount || 0)).toString()
+          (Number(item.returnedAmount || 0) + Number(totalReturnedAmount || 0)).toString()
       ).toFixed(2)
     }), { totalReturnedRate: 0, totalReturnedAmount: 0 })
     // if ((editformData.submit || []).length <= 0) {
@@ -261,17 +261,17 @@ export default function Edit() {
   }
 
   return <DetailContent
-    when={when}
-    operation={[
-      <Button
-        key="save"
-        type="primary"
-        onClick={handleSubmit}
-        style={{ marginRight: 16 }}
-        loading={saveLoading}
-      >保存</Button>,
-      <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
-    ]}>
+      when={when}
+      operation={[
+        <Button
+            key="save"
+            type="primary"
+            onClick={handleSubmit}
+            style={{ marginRight: 16 }}
+            loading={saveLoading}
+        >保存</Button>,
+        <Button key="cacel" onClick={() => history.goBack()}>取消</Button>
+      ]}>
     <Spin spinning={loading || projectLoading}>
       <DetailTitle title="基础信息" />
       <BaseInfo
@@ -339,46 +339,46 @@ export default function Edit() {
         edit />
       <DetailTitle title="回款计划" />
       <EditableTable
-        haveIndex={false}
-        addData={(data: any) => ({
-          period: (data?.[0]?.period || 0) + 1,
-          returnedAmount: 0.00,
-          returnedRate: 0.00
-        })}
-        opration={[
-          <Radio.Group
-            value={planType}
-            key="type"
-            onChange={(event: any) => setPlanType(event.target.value)}
-            options={[
-              { label: "按占比", value: 0 },
-              { label: "按金额", value: 1 }
-            ]} />
-        ]}
-        form={editform}
-        onChange={handleEditableChange}
-        columns={[...payment.map(item => {
-          if (item.dataIndex === "returnedAmount") {
-            return ({
-              ...item,
-              disabled: planType === 0
-            })
-          }
-          if (item.dataIndex === "returnedRate") {
-            return ({
-              ...item,
-              disabled: planType === 1
-            })
-          }
-          if (item.dataIndex === "name") {
-            return ({
-              ...item,
-              enum: planNameEnum
-            })
-          }
-          return item
-        })]}
-        dataSource={data?.paymentPlanVos || []} />
+          haveIndex={false}
+          addData={(data: any) => ({
+            period: (data?.[0]?.period || 0) + 1,
+            returnedAmount: 0.00,
+            returnedRate: 0.00
+          })}
+          opration={[
+            <Radio.Group
+                value={planType}
+                key="type"
+                onChange={(event: any) => setPlanType(event.target.value)}
+                options={[
+                  { label: "按占比", value: 0 },
+                  { label: "按金额", value: 1 }
+                ]} />
+          ]}
+          form={editform}
+          onChange={handleEditableChange}
+          columns={[...payment.map(item => {
+            if (item.dataIndex === "returnedAmount") {
+              return ({
+                ...item,
+                disabled: planType === 0
+              })
+            }
+            if (item.dataIndex === "returnedRate") {
+              return ({
+                ...item,
+                disabled: planType === 1
+              })
+            }
+            if (item.dataIndex === "name") {
+              return ({
+                ...item,
+                enum: planNameEnum
+              })
+            }
+            return item
+          })]}
+          dataSource={data?.paymentPlanVos || []} />
       <Attachment ref={attchmentRef} dataSource={data?.attachVos || []} edit />
     </Spin>
   </DetailContent>
