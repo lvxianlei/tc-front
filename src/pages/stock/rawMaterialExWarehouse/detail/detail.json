@@ -298,5 +298,44 @@
             "dataIndex": "remark",
             "width": 120
         }
-    ]
+    ],
+    "addIssuedNumber": {
+        "title": "下达单",
+        "type": "popTable",
+        "path": "/tower-supply/task/issuedList",
+        "width": 1011,
+        "rowKey": "id",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "",
+                "dataIndex": "fuzzyQuery",
+                "width": 200,
+                "placeholder": "查询下达单号/计划号/工程名称/内部合同号/塔型进行查询"
+            }
+        ],
+        "columns": [
+            {
+                "title": "下达单号",
+                "dataIndex": "issuedNumber"
+            },
+            {
+                "title": "计划号",
+                "dataIndex": "planNumber"
+            },
+            {
+                "title": "工程名称",
+                "dataIndex": "orderProjectName"
+            },
+            {
+                "title": "内部合同号",
+                "dataIndex": "internalNumber"
+            },
+            {
+                "title": "塔型",
+                "dataIndex": "productCategoryName"
+            }
+        ]
+    }
 }
