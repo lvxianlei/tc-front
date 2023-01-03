@@ -1,4 +1,4 @@
-import React, {useState, useRef, forwardRef, useImperativeHandle, ChangeEvent} from "react"
+import React, {useState, useRef, forwardRef, useImperativeHandle, ChangeEvent, useEffect} from "react"
 import {Button, Form, message, Spin, Modal,Input, Space, InputNumber} from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable,CommonTable,PopTableContent } from '../common'
 
@@ -249,7 +249,13 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         console.log(changeFiled)
     }
 
-
+    useEffect(() => {
+        if (visibleP) {
+            form.setFieldsValue({
+                isMeasuringTools:1
+            })
+        }
+    }, [visibleP])
     return <Spin spinning={loading }>
         <Modal
             width={1011}
