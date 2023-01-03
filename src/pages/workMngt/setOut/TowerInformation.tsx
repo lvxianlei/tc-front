@@ -32,16 +32,17 @@ export default function TowerInformation(): React.ReactNode {
     const { data: detail } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/productCategory/detail/${params.id}`);
+            loftingQuotaRun(result?.productType)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }), {})
 
-    const { data: loftingQuota } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
-        const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1&productType=${detail?.productType}`);
+    const { data: loftingQuota, run: loftingQuotaRun } = useRequest<any[]>((productType: any) => new Promise(async (resole, reject) => {
+        const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1&productType=${productType}`);
         resole(result?.records || [])
-    }), {})
+    }), { manual: true })
 
     const { data: userList } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
