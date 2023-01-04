@@ -182,16 +182,40 @@ export default function AssemblyWeldingListing(): React.ReactNode {
 
     const { loading } = useRequest<IResponseData>(() => getTableDataSource(page), {});
 
+    const handleOk = () => {
+        RequestUtil.get<boolean>(`/tower-science/welding/getWeldingStructure`, { weldingId: params.id }).then(res => {
+            if (res) {
+                RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
+                    message.success('完成组焊清单成功！')
+                    history.goBack();
+                })
+            } else {
+
+                Modal.confirm({
+                    title: "存在剩余未组合零件，是否完成组焊？",
+                    onOk: async () => new Promise(async (resove, reject) => {
+                        try {
+                            RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
+                                message.success('完成组焊清单成功！')
+                                history.goBack();
+                                resove(true)
+                            })
+                        } catch (error) {
+                            reject(error)
+                        }
+                    })
+                })
+            }
+        })
+    }
+
     return <>
         <Spin spinning={loading}>
             <DetailContent>
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                     <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button>
                     <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板')} ghost>模板下载</Button>
-                    <Button type="primary" disabled={location.state?.status === 3 || params.weldingLeader.split(',').indexOf(userId) === -1} onClick={() => RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
-                        message.success('完成组焊清单成功！')
-                        history.goBack();
-                    })} >完成组焊清单</Button>
+                    <Button type="primary" disabled={location.state?.status === 3 || params.weldingLeader.split(',').indexOf(userId) === -1} onClick={handleOk} >完成组焊清单</Button>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/new`}>
                         <Button type="primary" disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>添加组焊</Button>
                     </Link>

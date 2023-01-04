@@ -134,7 +134,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             if (tabs === 1) {
                                 return (
                                     <>
-                                        <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}`}>明细</Link>
+                                        <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}/${record.approval}`}>明细</Link>
                                         <Button
                                             type="link"
                                             disabled={record?.receiveStatus === 1}
@@ -159,7 +159,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             }
                             return <Button
                                 type="link"
-                                onClick={() => history.push(`/auxStock/entryWarehouse/detail/${record.warehousingEntryId}`)}
+                                onClick={() => history.push(`/auxStock/entryWarehouse/detail/${record.warehousingEntryId}/${record.approval}`)}
                             >所在单据</Button>
                         }
                     }
@@ -215,6 +215,17 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="2">盘点入库</Select.Option>
                             </Select>
                         )
+                    },
+                    {
+                        name: 'approval',
+                        label: '审批状态',
+                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="0">待发起</Select.Option>
+                            <Select.Option value="1">审批中</Select.Option>
+                            <Select.Option value="2">审批通过</Select.Option>
+                            <Select.Option value="3">审批驳回</Select.Option>
+                            <Select.Option value="4">已撤销</Select.Option>
+                        </Select>
                     },
                     {
                         name: 'fuzzyQuery',

@@ -30,7 +30,7 @@ const outStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                <Link to={`/auxStock/outputWarehouse/detail/${record.outStockId}`}>所在单据</Link>
+                <Link to={`/auxStock/outputWarehouse/detail/${record.outStockId}/${record?.approval}`}>所在单据</Link>
             </>
         )
     }
@@ -60,7 +60,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(`/auxStock/outputWarehouse/detail/${record.id}`)}
+                        onClick={() => history.push(`/auxStock/outputWarehouse/detail/${record.id}/${record.approval}`)}
                     >明细</Button>
                     <Button
                         type="link"
@@ -233,6 +233,17 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'fuzzyQuery',
                         label: "关键字",
                         children: <Input placeholder="领料编号/生产批次" style={{ width: 200 }} />
+                    },
+                    {
+                        name: 'approval',
+                        label: '审批状态',
+                        children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                            <Select.Option value="0">待发起</Select.Option>
+                            <Select.Option value="1">审批中</Select.Option>
+                            <Select.Option value="2">审批通过</Select.Option>
+                            <Select.Option value="3">审批驳回</Select.Option>
+                            <Select.Option value="4">已撤销</Select.Option>
+                        </Select>
                     }
                 ]}
             />

@@ -15,7 +15,7 @@ import '../../StockPublicStyle.less';
 import './detail.less';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
-    const params = useParams<{ id: string }>();
+    const params = useParams<{ id: string, approval: string }>();
     const history = useHistory();
     const [filterValue, setFilterValue] = useState<any>({
         fuzzyQuery: "",
@@ -128,6 +128,24 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 ]}
                 extraOperation={() =>
                     <>
+                        <Button type="primary" ghost onClick={async () => { 
+                            if([undefined,'undefined',null,'null', 0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
+                                await RequestUtil.get(`/tower-storage/storage/workflow/entryStock/start/${params.id}/1`)
+                                message.success('审批发起成功！')
+                                history.go(-1)
+                            }else{
+                                message.error("当前不可发起审批！")
+                            }
+                        }} >发起审批</Button>
+                        <Button type="primary" ghost onClick={async () => {
+                            if([1,'1'].includes(params?.approval)){
+                                await RequestUtil.get(`/tower-storage/storage/workflow/entryStock/cancel//${params.id}`)
+                                message.success('撤销成功！')
+                                history.go(-1)
+                            }else{
+                                message.error('不可撤销！')
+                            }
+                        }} >撤销审批</Button>
                         <Button type="primary" ghost onClick={() => handleWarehousingClick()} >批量入库</Button>
                         <Button type="ghost" onClick={() => history.go(-1)}>返回</Button>
                         <div>已收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveWeight}</span>已收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receivePrice}</span> 待收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitWeight}</span>待收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitPrice}</span></div>

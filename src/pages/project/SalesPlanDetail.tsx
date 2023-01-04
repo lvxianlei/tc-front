@@ -5,11 +5,13 @@ import { DetailContent, BaseInfo, DetailTitle, CommonTable, OperationRecord } fr
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../utils/RequestUtil"
 import { taskNoticeEditBaseInfo, taskNoticeDetailSpec, salesAssist } from "./managementDetailData.json"
+import {implementStandardOptions} from "../../configuration/DictionaryOptions";
 export default function SalesPlanEdit() {
     const history = useHistory()
     const match: any = useRouteMatch<{ type: "new" | "edit", id: string }>("/project/:entry/:type/salesPlan/:projectId/:id")
     const [baseInfoForm] = Form.useForm()
     const [cargoDtoForm] = Form.useForm()
+    const implementStandardEnum:any = implementStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/${match.params.id}`)
@@ -34,7 +36,10 @@ export default function SalesPlanEdit() {
             <DetailTitle title="特殊要求" />
             <BaseInfo
                 columns={taskNoticeDetailSpec}
-                dataSource={data || {}} />
+                dataSource={{
+                    ...data,
+                    implementStandardName:implementStandardEnum.find((item:any)=>item.value === data?.implementStandard)?.label
+                } || {}} />
             <DetailTitle title="产品信息" />
             <CommonTable
                 columns={[
