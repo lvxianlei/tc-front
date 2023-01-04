@@ -112,7 +112,7 @@ export default function MaterialMngt(): React.ReactNode {
                             materialCategory: data[0].materialCategory + ',' + data[0].materialCategoryName,
                             // materialCode: data[0].materialCode?.substring(4),
                             proportion: data[0].proportion == -1 ? undefined : data[0].proportion,
-                            structureSpec: data[0].ruleFront?data[0].structureSpec?.split(data[0].ruleFront)[1]:data[0].structureSpec
+                            structureSpec: data[0].ruleFront?data[0].structureSpecSuffix:data[0].structureSpec
                         }
                         setCode(data[0].materialCode?.substring(0, 4) || '')
                         setRuleFront(data[0].ruleFront)
