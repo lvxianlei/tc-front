@@ -497,7 +497,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     setMaterialList([]);
                     setPopDataList([]);
                     setType(0)
-                    props?.handleCreate();
+                    props?.handleCreate({code:1});
                 }}>
                     取消
                 </Button>,
@@ -508,7 +508,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate();
+                    props?.handleCreate({code:1});
                 }}>
                     取消
                 </Button>,
