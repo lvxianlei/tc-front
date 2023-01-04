@@ -57,6 +57,11 @@
             "width": 120
         },
         {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 150
+        },
+        {
             "title": "炉批号",
             "dataIndex": "furnaceBatch",
             "width": 120
