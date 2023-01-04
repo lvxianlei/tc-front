@@ -143,6 +143,20 @@ export default function CreatePlan(props: any): JSX.Element {
         // }
         
     }
+    const handleDescriptionChange = async (value: any, id: string) => {
+            const list = popDataList.map((item: any) => {
+                if (item.id === id) {
+                    return ({
+                        ...item,
+                        remark: value
+                    })
+                }
+                return item
+            })
+            setMaterialList(list.slice(0));
+            setPopDataList(list.slice(0))
+        
+    }
     const handleNumChange = (value: number, id: string) => {
         const list = popDataList.map((item: any) => {
             if (item.id === id) {
@@ -239,8 +253,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCopy = (options: any) => {
         const result = {
             ...options,
-            width: "",
-            length: "",
+            num:'',
             planPurchaseNum: "",
             totalWeight: "",
             id: count + ""
@@ -591,6 +604,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                         </Form.Item>
                                 }})
                             }
+                            
                             if (["num"].includes(item.dataIndex)&&type===0) {
                                 return ({
                                     ...item,
@@ -599,12 +613,14 @@ export default function CreatePlan(props: any): JSX.Element {
                                         initialValue={value||undefined}
                                         rules={[{
                                             validator: async (rule: any, value: any, callback: (error?: string) => void) => {
-                                                const resData:any = await RequestUtil.get(`/tower-storage/materialStock/outDetails?warehouseId=${warehouseId}&current=1&size=10rawStockId=${records?.rawStockId}`);
+                                                console.log(records?.rawStockId)
+                                                const resData:any = await RequestUtil.get(`/tower-storage/materialStock/outDetails?warehouseId=${warehouseId}&current=1&size=10&rawStockId=${records?.rawStockId}`);
                                                 if(resData.records[0]?.num < value)
                                                 return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
                                                 else return Promise.resolve('数量可用');
                                             }
-                                        }]}>
+                                        }]}
+                                        >
                                             <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
                                         </Form.Item>
                                     // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
@@ -676,7 +692,16 @@ export default function CreatePlan(props: any): JSX.Element {
                                             </Select>
                                 })
                             }
-                            
+                            if (["remark"].includes(item.dataIndex)&&type===0) {
+                                return ({
+                                    ...item,
+                                    width: 160,
+                                    render: (value: string, records: any, key: number) => {return <Form.Item 
+                                        name={['list', key, 'remark']}>
+                                            <Input defaultValue={value || undefined}   onBlur={(e:any)=> handleDescriptionChange(e.target.value,records.id)} maxLength={50} />
+                                        </Form.Item>
+                                }})
+                            }
                             return item;
                         }),
                         {
@@ -684,7 +709,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             fixed: "right",
                             dataIndex: "opration",
                             render: (_: any, records: any) => <>
-                                {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)}>复制</Button> */}
+                                <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)} disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)||type!==0}>复制</Button>
                                 <Button type="link" disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)} onClick={() => handleRemove(records.id)}>移除</Button>
                             </>
                         }]}
