@@ -268,7 +268,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                                             callback('手机号格式有误')
                                         }
                                     })
-                                }else{
+                                } else {
                                     callback()
                                 }
                             }
