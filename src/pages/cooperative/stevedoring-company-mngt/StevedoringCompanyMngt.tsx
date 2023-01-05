@@ -307,7 +307,6 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                         // {
                         //     pattern: /^([1-9]{1})(\d{14}|\d{18})$/,
                         //     message: "请输入正确格式的银行账号"
-
                         // }
                         ]}>
                             <Input placeholder="请输入" maxLength={50} bordered={false} disabled={title === '详情'} />
