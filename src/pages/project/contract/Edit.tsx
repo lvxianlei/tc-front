@@ -109,7 +109,7 @@ export default function Edit() {
         ...saveData,
         id: reqType === "post" ? "" : params.id,
         relationId: data?.id,
-        relationInternalNumber: data?.relationInternalNumber,
+        relationInternalNumber:  data?.relationInternalNumber,
         projectId: params.projectId && params.projectId !== "undefined" ? params.projectId : undefined
       })
       resole(result)
@@ -275,68 +275,68 @@ export default function Edit() {
     <Spin spinning={loading || projectLoading}>
       <DetailTitle title="基础信息" />
       <BaseInfo
-          onChange={handleBaseInfoChange}
-          columns={[...setting.map((item: any) => {
-            switch (item.dataIndex) {
-              case "winBidType":
-                return ({ ...item, enum: winBidTypeEnum })
-              case "saleType":
-                return ({ ...item, enum: saleTypeEnum })
-              case "contractPlanStatus":
-                return ({ ...item, enum: contractPlanStatusEnum })
-              case "receivedContractShape":
-                return ({ ...item, enum: contractFormEnum })
-              case "deliveryWay":
-                return ({ ...item, enum: deliverywayEnum })
-              case "currencyType":
-                return ({ ...item, enum: currencyTypeEnum })
-              case "region":
-                return ({ ...item, enum: addressList })
-              case "country":
-                return ({ ...item, hidden: region !== "其他-国外" })
-              case "frameAgreementId":
-                return ({
-                  ...item,
-                  path: `${item.path}${params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ''}`
-                })
-              default:
-                return item
-            }
-          }),
-            ...params.contractType === "2" ? [{
-              "title": "变更原价格",
-              "dataIndex": "changePrice",
-              "type": "select",
-              "enum": [
-                {
-                  "label": "是",
-                  "value": 1
-                },
-                {
-                  "label": "否",
-                  "value": 2
-                }
-              ]
-            }] : [],
+        onChange={handleBaseInfoChange}
+        columns={[...setting.map((item: any) => {
+          switch (item.dataIndex) {
+            case "winBidType":
+              return ({ ...item, enum: winBidTypeEnum })
+            case "saleType":
+              return ({ ...item, enum: saleTypeEnum })
+            case "contractPlanStatus":
+              return ({ ...item, enum: contractPlanStatusEnum })
+            case "receivedContractShape":
+              return ({ ...item, enum: contractFormEnum })
+            case "deliveryWay":
+              return ({ ...item, enum: deliverywayEnum })
+            case "currencyType":
+              return ({ ...item, enum: currencyTypeEnum })
+            case "region":
+              return ({ ...item, enum: addressList })
+            case "country":
+              return ({ ...item, hidden: region !== "其他-国外" })
+            case "frameAgreementId":
+              return ({
+                ...item,
+                path: `${item.path}${params.projectId !== "undefined" ? `?projectId=${params.projectId}` : ''}`
+              })
+            default:
+              return item
+          }
+        }),
+        ...params.contractType === "2" ? [{
+          "title": "变更原价格",
+          "dataIndex": "changePrice",
+          "type": "select",
+          "enum": [
             {
-              "title": "备注",
-              "dataIndex": "description",
-              "type": "textarea"
-            }]}
-          form={form}
-          dataSource={{
-            bidBatch: projectData?.bidBatch,
-            region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-            country: projectData?.country || "",
-            ...data,
-            contractType: Number(params.contractType) || 1,
-          } || {
-            region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
-            country: projectData?.country || "",
-            ...data,
-            contractType: Number(params.contractType) || 1,
-          }}
-          edit />
+              "label": "是",
+              "value": 1
+            },
+            {
+              "label": "否",
+              "value": 2
+            }
+          ]
+        }] : [],
+        {
+          "title": "备注",
+          "dataIndex": "description",
+          "type": "textarea"
+        }]}
+        form={form}
+        dataSource={{
+          bidBatch: projectData?.bidBatch,
+          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
+          country: projectData?.country || "",
+          ...data,
+          contractType: Number(params.contractType) || 1,
+        } || {
+          region: projectData?.address === "其他-国外" ? projectData.address : ((!projectData?.bigRegion && !projectData?.address) ? null : `${projectData.bigRegion || ""}-${projectData.address || null}`),
+          country: projectData?.country || "",
+          ...data,
+          contractType: Number(params.contractType) || 1,
+        }}
+        edit />
       <DetailTitle title="回款计划" />
       <EditableTable
           haveIndex={false}

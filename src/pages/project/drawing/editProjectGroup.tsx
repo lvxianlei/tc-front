@@ -131,7 +131,6 @@ export default function ConfirmDetail() {
                 >模版下载</Button>
                 <Button type='primary' key="add" ghost onClick={() => {
                     setEdit('添加')
-                    form.resetFields()
                     setVisible(true)
                 }}>添加</Button>
                 <Button type='primary' key="batchDelete" onClick={

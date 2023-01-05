@@ -20,7 +20,9 @@ export default function Edit() {
     const [when, setWhen] = useState<boolean>(true)
     const [revisePlanModal, setRevisePlanModal] = useState<boolean>(false)
 
+
     const [baseInfo] = Form.useForm()
+    const [queryForm] = Form.useForm()
     const [invoiceForm] = Form.useForm()
     const [transferForm] = Form.useForm()
 
@@ -37,7 +39,10 @@ export default function Edit() {
     const [planCodeData, setPlanCodeData] = useState<any[]>([])
     const [planSelectedData, setPlanSelectedData] = useState<any[]>([])
 
+ const reSet= ()=>{
+     queryForm.resetFields();
 
+ }
     // 保存销售发票
     const handleRadioChange = async (e: any) => {
 
@@ -162,10 +167,12 @@ export default function Edit() {
     const {
         run: getPlanList
     } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        let queryParams = queryForm.getFieldsValue()
         try {
             let internalNumber = baseInfo.getFieldValue("contractCode")?.value ? baseInfo.getFieldValue("contractCode")?.value : baseInfo.getFieldValue("contractCode")
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice`, {
-                internalNumber
+                internalNumber,
+                ...queryParams
             })
             resole(result)
         } catch (error) {
@@ -470,11 +477,13 @@ export default function Edit() {
         console.log(e)
     }
     const handleModalOk = () => {
-
-        baseInfo.setFieldsValue({
-            planCode:planSelectedData.join(","),
-
-        })
+        reSet()
+        console.log(planSelectedData)
+        if(planSelectedData){
+            baseInfo.setFieldsValue({
+                planCode:planSelectedData.join(","),
+            })
+        }
         // 重新计划计划重量/过磅重量
 
         setPlanSelectedData([])
@@ -500,14 +509,40 @@ export default function Edit() {
             <Modal
                 width={1011}
                 visible={revisePlanModal}
-                title="选择项目"
+                title="选择销售计划"
                 onCancel={() => {
                     // 重置表单输入
                     // modalRef.current?.resetFields()
                     // 关闭模态框
+                    reSet()
                     setRevisePlanModal(false)
                 }}
                 onOk={handleModalOk}>
+                <Form form={queryForm} name="search" layout="inline" style={{marginBottom:"12px"}}>
+                    <Form.Item
+                        name="saleOrderNumber"
+                        label="订单号"
+                    >
+                        <Input placeholder="订单号" />
+                    </Form.Item>
+                    <Form.Item
+                        name="planNumber"
+                        label="销售计划号"
+                    >
+                        <Input placeholder="销售计划号" />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" onClick={()=>getPlanList()}>
+                            查询
+                        </Button>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button htmlType="reset" onClick={reSet}>
+                            重置
+                        </Button>
+                    </Form.Item>
+
+                </Form>
                 <Table
                     size="small"
                     rowKey="planNumber"

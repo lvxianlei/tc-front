@@ -1,18 +1,17 @@
 /**
  * @author zyc
  * @copyright © 2022 
- * @description 工单设置-工单模板管理
+ * @description 工单设置-自动同步
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, Input, Select, Button, Form, TreeSelect, Popconfirm, message, Switch, Modal } from 'antd';
+import { Space, Input, Button, Popconfirm, message, Switch, Modal } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './SetOut.module.less';
+import styles from './FieldSynchronous.module.less';
 import { useHistory } from 'react-router-dom';
-import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import WorkOrderTemplateNew from './WorkOrderTemplateNew';
+import SelfSynchronizingNew from './SelfSynchronizingNew';
 
 export interface EditRefProps {
     onSubmit: () => void
@@ -30,48 +29,37 @@ export default function List(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'templateNumber',
-            title: '模板编号',
-            dataIndex: 'templateNumber'
+            key: 'name',
+            title: '任务名称',
+            dataIndex: 'name'
         },
         {
             key: 'templateName',
-            title: '模板名称（标题名称）',
+            title: '工单模板',
             dataIndex: 'templateName'
         },
         {
-            key: 'templateType',
-            title: '模板类型',
-            dataIndex: 'templateType'
+            key: 'syncField',
+            title: '同步字段',
+            dataIndex: 'syncField'
         },
         {
-            key: 'postName',
-            title: '岗位',
-            dataIndex: 'postName'
+            key: 'node',
+            title: '环节名称',
+            dataIndex: 'node'
         },
         {
             key: 'status',
-            title: '当前状态',
+            title: '状态',
             dataIndex: 'status',
             render: (_: number, record: Record<string, any>): React.ReactNode => (
                 <Switch checkedChildren="启用" unCheckedChildren="关闭" onChange={(checked: boolean) => {
-                    console.log(checked)
-                    RequestUtil.post(`/tower-work/template/status/${record?.id}/${checked ? 1 : 0}`).then(res => {
+                    RequestUtil.post(`/tower-work/fieldSynchroAutomatic/updateStatus/${record?.id}`).then(res => {
                         message.success('状态变更成功');
                         history.go(0);
                     });
                 }} checked={_ === 1} />
             )
-        },
-        {
-            key: 'updateUserName',
-            title: '最近编辑人',
-            dataIndex: 'updateUserName'
-        },
-        {
-            key: 'updateTime',
-            title: '最近编辑时间',
-            dataIndex: 'updateTime'
         },
         {
             key: 'description',
@@ -86,11 +74,6 @@ export default function List(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space size='small'>
                     <Button type="link" onClick={() => {
-                        setType('detail');
-                        setVisible(true)
-                        setRowId(record?.id)
-                    }}>详情</Button>
-                    <Button type="link" onClick={() => {
                         setType('edit');
                         setVisible(true)
                         setRowId(record?.id)
@@ -98,7 +81,7 @@ export default function List(): React.ReactNode {
                     <Popconfirm
                         title="确认删除?"
                         onConfirm={() => {
-                            RequestUtil.delete(`/tower-work/template/${record?.id}`).then(res => {
+                            RequestUtil.delete(`/tower-work/fieldSynchroAutomatic/${record?.id}`).then(res => {
                                 message.success('删除成功');
                                 history.go(0);
                             });
@@ -115,7 +98,7 @@ export default function List(): React.ReactNode {
 
     const history = useHistory();
     const [filterValue, setFilterValue] = useState<any>({});
-    const [type, setType] = useState<'new' | 'edit' | 'detail'>('new');
+    const [type, setType] = useState<'new' | 'edit'>('new');
     const [visible, setVisible] = useState<boolean>(false);
     const ref = useRef<EditRefProps>();
     const [rowId, setRowId] = useState<string>('');
@@ -125,29 +108,11 @@ export default function List(): React.ReactNode {
         setConfirmLoading(confirmLoading);
     }, [confirmLoading])
 
-
-    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        let result: any = await RequestUtil.get<any>(`/tower-work/template/type`);
-        resole(treeNode(result))
-    }), {})
-
-    const treeNode = (nodes: any) => {
-        nodes?.forEach((res: any) => {
-            res.title = res?.name;
-            res.value = res?.id;
-            res.children = res?.children;
-            if (res?.children?.length > 0) {
-                treeNode(res?.children)
-            }
-        })
-        return nodes
-    }
-
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             await ref.current?.onSubmit()
+            setConfirmLoading(false);
             message.success("保存成功！")
-            setConfirmLoading(false)
             setVisible(false)
             history.go(0)
             resove(true)
@@ -159,51 +124,28 @@ export default function List(): React.ReactNode {
     return <>
         <Modal
             destroyOnClose
-            key='workOrderTemplateNew'
+            key='SelfSynchronizingNew'
             visible={visible}
-            width="80%"
             footer={<Space>
-                {type === 'detail' ? null : <Button type='primary' loading={confirmLoading} onClick={handleOk} ghost>完成</Button>}
+                <Button type='primary' loading={confirmLoading} onClick={handleOk} ghost>提交</Button>
                 <Button onClick={() => { setVisible(false); ref.current?.resetFields(); }}>关闭</Button>
             </Space>}
-            title={type === 'new' ? '新建工单模板' : type === 'edit' ? "编辑工单模板" : "详情"}
+            title={type === 'new' ? '新建' : "编辑"}
             onCancel={() => { setVisible(false); ref.current?.resetFields(); }}>
-            <WorkOrderTemplateNew getLoading={(loading) => setConfirmLoading(loading)} rowId={rowId} type={type} ref={ref} />
+            <SelfSynchronizingNew getLoading={(loading) => setConfirmLoading(loading)} rowId={rowId} type={type} ref={ref} />
         </Modal>
         <Page
-            path="/tower-work/template"
+            path="/tower-work/fieldSynchroAutomatic"
             columns={columns}
             filterValue={filterValue}
             extraOperation={
-                <Button type='primary' onClick={() => { setVisible(true); setType('new') }} ghost>新建模板</Button>
+                <Button type='primary' onClick={() => { setVisible(true); setType('new') }} ghost>新建任务</Button>
             }
             searchFormItems={[
                 {
-                    name: 'status',
-                    label: '启用状态',
-                    children: <Form.Item name="status">
-                        <Select style={{ width: '120px' }} placeholder="请选择">
-                            <Select.Option value="" key="6">全部</Select.Option>
-                            <Select.Option value={1} key="1">启用</Select.Option>
-                            <Select.Option value={0} key="2">关闭</Select.Option>
-                        </Select>
-                    </Form.Item>
-                },
-                {
-                    name: 'templateTypeId',
-                    label: '模板类型',
-                    children: <TreeSelect
-                        style={{ width: '400px' }}
-                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                        treeData={data}
-                        placeholder="请选择"
-                        treeDefaultExpandAll
-                    />
-                },
-                {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="模板编号/模板名称/备注" />
+                    children: <Input placeholder="任务名称/工单模板/备注" />
                 }
             ]}
             onFilterSubmit={(values: any) => {
