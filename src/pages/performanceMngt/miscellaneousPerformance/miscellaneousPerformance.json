@@ -31,6 +31,12 @@
             "width": 120
         },
         {
+            "key": "userName",
+            "title": "人员",
+            "dataIndex": "userName",
+            "width": 120
+        },
+        {
             "key": "type",
             "title": "杂项类型",
             "dataIndex": "type",
@@ -125,6 +131,11 @@
             "key": "totalAmount",
             "title": "总金额",
             "dataIndex": "totalAmount"
+        },
+        {
+            "key": "userName",
+            "title": "人员",
+            "dataIndex": "userName"
         }
     ],
     "detailColumns": [
@@ -173,6 +184,11 @@
             "key": "totalAmount",
             "title": "总金额",
             "dataIndex": "totalAmount"
+        },
+        {
+            "key": "userName",
+            "title": "人员",
+            "dataIndex": "userName"
         }
     ]
 }
