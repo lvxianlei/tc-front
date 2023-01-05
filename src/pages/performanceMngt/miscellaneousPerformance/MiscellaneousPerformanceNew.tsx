@@ -11,6 +11,7 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './GenerationOfMaterial.module.less';
 import { newColumns, detailColumns } from './miscellaneousPerformance.json'
+import SelectUser from "../../common/SelectUser";
 
 interface modalProps {
     readonly id?: any;
@@ -55,12 +56,15 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            await saveRun({
-                ...value,
-                id: id
+            form?.validateFields().then(async res => {
+                const value = await form.getFieldsValue(true);
+                await saveRun({
+                    ...value,
+                    id: id
+                })
+                resolve(true);
             })
-            resolve(true);
+
         } catch (error) {
             reject(false)
         }
@@ -77,12 +81,14 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            await submitRun({
-                ...value,
-                id: id
+            form?.validateFields().then(async res => {
+                const value = await form.getFieldsValue(true);
+                await submitRun({
+                    ...value,
+                    id: id
+                })
+                resolve(true);
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -303,6 +309,25 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                     render: () => {
                                         return <Form.Item name={'totalAmount'}>
                                             <Input disabled />
+                                        </Form.Item>
+                                    }
+                                })
+                            case "userName":
+                                return ({
+                                    ...item,
+                                    render: () => {
+                                        return <Form.Item name={'userName'}>
+                                            <Input size="small" disabled suffix={
+                                                <SelectUser
+                                                    key={'userId'}
+                                                    selectedKey={[form?.getFieldsValue(true)?.userId]}
+                                                    onSelect={(selectedRows: Record<string, any>) => {
+                                                        form.setFieldsValue({
+                                                            userId: selectedRows[0]?.userId,
+                                                            userName: selectedRows[0]?.name
+                                                        })
+                                                    }} />
+                                            } />
                                         </Form.Item>
                                     }
                                 })
