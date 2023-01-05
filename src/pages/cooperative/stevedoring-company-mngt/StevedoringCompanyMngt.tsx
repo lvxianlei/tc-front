@@ -296,7 +296,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                                     </Select.Option>
                                 })}
                             </Select> */}
-                            <Input bordered={false} placeholder="请输入" disabled={title === '详情'}/>
+                            <Input bordered={false} placeholder="请输入" disabled={title === '详情'} maxLength={50}/>
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>银行账号<span style={{ color: 'red' }}>*</span></span>}>
