@@ -40,7 +40,7 @@ export default function List(): React.ReactNode {
 
     const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any>(`/tower-science/performance/product/category/list`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
-        console.log(data?.records[0]?.entryLinkList)
+        setPage(data)
         setDetailData(data?.records[0]?.entryLinkList || [])
         resole(data?.records);
     }), {})
