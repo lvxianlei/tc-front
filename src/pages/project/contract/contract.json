@@ -354,6 +354,10 @@
             "dependencies": true,
             "search": [
                 {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
                     "title": "协议名称",
                     "dataIndex": "frameAgreementName"
                 },
@@ -367,6 +371,10 @@
                 }
             ],
             "columns": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
                 {
                     "title": "协议名称",
                     "dataIndex": "frameAgreementName"
@@ -465,7 +473,30 @@
             "dependencies": true,
             "required": true,
             "search": false,
+            "search": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "协议名称",
+                    "dataIndex": "frameAgreementName"
+                },
+                {
+                    "title": "协议编号",
+                    "dataIndex": "frameAgreementCode"
+                },
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                }
+            ],
             "columns": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber",
+
+                },
                 {
                     "title": "协议名称",
                     "dataIndex": "frameAgreementName"
@@ -559,7 +590,30 @@
             "dependencies": true,
             "required": true,
             "search": false,
+            "search": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "协议名称",
+                    "dataIndex": "frameAgreementName"
+                },
+                {
+                    "title": "协议编号",
+                    "dataIndex": "frameAgreementCode"
+                },
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                }
+            ],
             "columns": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber",
+
+                },
                 {
                     "title": "协议名称",
                     "dataIndex": "frameAgreementName"
