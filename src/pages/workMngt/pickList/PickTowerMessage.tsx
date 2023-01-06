@@ -548,8 +548,8 @@ export default function Lofting(): React.ReactNode {
                                     }).map((item: any) => {
                                         return {
                                             ...item,
-                                            projectEntriesId: item?.projectEntriesId.split(',')[0],
-                                            projectEntries: item?.projectEntriesId.split(',')[1],
+                                            projectEntriesId: item?.projectEntriesId?.split(',')[0],
+                                            projectEntries: item?.projectEntriesId?.split(',')[1],
                                             completeStatusTime: item?.completeStatusTime ? moment(item?.completeStatusTime).format('YYYY-MM-DD HH:mm:ss') : '',
                                             productCategory: params.id,
                                             productCategoryName: detailTop?.productCategoryName,
