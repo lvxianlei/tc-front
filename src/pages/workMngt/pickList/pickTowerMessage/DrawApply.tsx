@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Input, message, Select, Space, Spin, TablePaginationConfig } from 'antd';
+import { Button, Form, Input, message, Modal, Select, Space, Spin, TablePaginationConfig } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -83,11 +83,40 @@ export default function LoftingTowerApplication(): React.ReactNode {
             dataIndex: 'operation',
             key: 'operation',
             render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={() => {
-                RequestUtil.post(`/tower-science/drawProductStructure/reuse?productCategoryId=${params?.id}&productSegmentGroupId=${params.productSegmentId}&productSegmentId=${paragraph || ""}&passivityProductSegment=${record.id}`).then(() => {
-                    message.success('套用成功');
-                }).then(() => {
-                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
-                });
+                RequestUtil.post(`/tower-science/drawProductStructure/check/reuse`, {
+                    productSegmentId: paragraph || "",
+                    passivityProductSegment: record.id,
+                    productCategoryId: params?.id
+                }).then(res => {
+                    if (res) {
+                        RequestUtil.post(`/tower-science/drawProductStructure/reuse`, {
+                            passivityProductSegment: record.id,
+                            productCategoryId: params?.id,
+                            productSegmentId: paragraph || ''
+                        }).then(() => {
+                            message.success('套用成功');
+                        }).then(() => {
+                            history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
+                        });
+                    } else {
+                        Modal.confirm({
+                            title: "提示",
+                            content: "套用段已存在相同数据，是否进行覆盖？",
+                            onOk: async () => {
+                                RequestUtil.post(`/tower-science/drawProductStructure/reuse`, {
+                                    passivityProductSegment: record.id,
+                                    productCategoryId: params?.id,
+                                    productSegmentId: paragraph || ''
+                                }).then(() => {
+                                    message.success('套用成功');
+                                }).then(() => {
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
+                                });
+                            }
+                        })
+                    }
+                })
+
             }}>选择套用</Button>)
         }
     ]
