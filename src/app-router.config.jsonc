@@ -893,7 +893,7 @@
     },
     { // 库存管理-原材料入库-详情
       "name": "原材料入库明细",
-      "path": "/stock/rawMaterialWarehousing/detail/:id",
+      "path": "/stock/rawMaterialWarehousing/detail/:id/:approval",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_in_info"
@@ -907,14 +907,14 @@
     },
     { // 库存管理-原材料出-详情
       "name": "原材料出库详情",
-      "path": "/stock/rawMaterialExWarehouse/detail/:id",
+      "path": "/stock/rawMaterialExWarehouse/detail/:id/:approval",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     },
     { // 库存管理-原材料出-回库详情
       "name": "原材料出库详情",
-      "path": "/stock/rawMaterialExWarehouse/backDetail/:id",
+      "path": "/stock/rawMaterialExWarehouse/backDetail/:id/:approval",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detailBack",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
@@ -935,7 +935,7 @@
     },
     { // 库存管理-辅材入库-详情
       "name": "辅材入库明细",
-      "path": "/auxStock/entryWarehouse/detail/:id",
+      "path": "/auxStock/entryWarehouse/detail/:id/:approval",
       "module": "./pages/auxStock/entryWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_auxiliary_material_in_detailList"
@@ -949,7 +949,7 @@
     },
     { // 库存管理-辅材出库-明细
       "name": "辅材出库明细",
-      "path": "/auxStock/outputWarehouse/detail/:id",
+      "path": "/auxStock/outputWarehouse/detail/:id/:approval",
       "module": "./pages/auxStock/outputWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
@@ -1401,6 +1401,13 @@
       "module": "./pages/buyingTask/Overview",
       "exact": true,
       "authority": "auth_section"
+    },
+    { //采购任务-原材料-用料需求
+      "name": "用料需求",
+      "path": "/buyingTask/index/demand/:id/:status/:planNumber/:projectName",
+      "module": "./pages/buyingTask/Demand",
+      "exact": true,
+      "authority": "tc_erp_sw_purchaseTask_material_list"
     },
     { // 工作管理-放样列表
       "name": "放样列表",

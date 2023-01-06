@@ -71,6 +71,11 @@ export default function MaterialMngt(): React.ReactNode {
             dataIndex: 'unit'
         },
         {
+            title: '用友编码',
+            width: 150,
+            dataIndex: 'externalCode'
+        },
+        {
             key: 'description',
             title: '备注',
             dataIndex: 'description',
@@ -496,6 +501,11 @@ export default function MaterialMngt(): React.ReactNode {
                             }]}>
                             <Input maxLength={20} />
                         </Form.Item></Col>
+                    <Col span={11} offset={1}><Form.Item label="用友编码" name="externalCode">
+                        <Input maxLength={30} />
+                    </Form.Item></Col>
+                </Row>
+                <Row>
                     <Col span={11} offset={1}><Form.Item label="备注" name="description">
                         <Input.TextArea maxLength={300} />
                     </Form.Item></Col>

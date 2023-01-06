@@ -17,6 +17,11 @@
             "width": 100
         },
         {
+            "title": "关联工程",
+            "dataIndex": "projectName",
+            "width": 100
+        },
+        {
             "title": "角钢收货量（吨）/总重（吨）",
             "dataIndex": "angleSteelTotal",
             "width": 180,

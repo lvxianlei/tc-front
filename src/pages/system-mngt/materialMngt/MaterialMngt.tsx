@@ -82,6 +82,12 @@ export default function MaterialMngt(): React.ReactNode {
             dataIndex: 'weightAlgorithmName'
         },
         {
+            key: 'externalCode',
+            title: '用友编码',
+            width: 150,
+            dataIndex: 'externalCode'
+        },
+        {
             key: 'description',
             title: '备注',
             dataIndex: 'description',
@@ -106,7 +112,7 @@ export default function MaterialMngt(): React.ReactNode {
                             materialCategory: data[0].materialCategory + ',' + data[0].materialCategoryName,
                             // materialCode: data[0].materialCode?.substring(4),
                             proportion: data[0].proportion == -1 ? undefined : data[0].proportion,
-                            structureSpec: data[0].ruleFront?data[0].structureSpec?.split(data[0].ruleFront)[1]:data[0].structureSpec
+                            structureSpec: data[0].ruleFront?data[0].structureSpecSuffix:data[0].structureSpec
                         }
                         setCode(data[0].materialCode?.substring(0, 4) || '')
                         setRuleFront(data[0].ruleFront)
@@ -384,6 +390,11 @@ export default function MaterialMngt(): React.ReactNode {
                             </Select.Option>
                         </Select>
                     </Form.Item></Col>
+                    <Col span={11} offset={1}><Form.Item label="用友编码" name="externalCode">
+                        <Input maxLength={30} />
+                    </Form.Item></Col>
+                </Row>
+                <Row>
                     <Col span={11} offset={1}><Form.Item label="备注" name="description">
                         <Input.TextArea maxLength={300} />
                     </Form.Item></Col>
