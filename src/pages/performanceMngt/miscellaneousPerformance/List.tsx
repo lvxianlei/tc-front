@@ -13,6 +13,7 @@ import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
 import MiscellaneousPerformanceNew from './MiscellaneousPerformanceNew';
 import { columns } from './miscellaneousPerformance.json'
+import { IntgSelect } from '../../common';
 
 interface EditRefProps {
     onSubmit: () => void;
@@ -181,6 +182,11 @@ export default function List(): React.ReactNode {
                     </Select>
                 },
                 {
+                    name: 'userId',
+                    label: '人员',
+                    children: <IntgSelect width={200} />
+                },
+                {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
                     children: <Input style={{ width: '300px' }} placeholder="任务编号/项目名称/计划号/塔型" />
@@ -192,6 +198,9 @@ export default function List(): React.ReactNode {
                     const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+                }
+                if (values.userId) {
+                    values.userId = values.userId?.value;
                 }
                 setFilterValues(values);
                 return values;

@@ -12,11 +12,12 @@ import {
     addMaterial
 } from "./CreatePlan.json";
 import moment from 'moment';
-import "./CreatePlan.less";
+import styles from "./CreatePlan.module.less";
 import { totalTaxPrice } from '@utils/calcUtil';
 
 export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [addCollectionForm] = Form.useForm();
+    const [form] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -72,7 +73,14 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
         if (fields.pickingUserId) {
             addCollectionForm.setFieldsValue({
-                departmentName: fields.pickingUserId.records[0].deptName
+                departmentName: {
+                    id:fields.pickingUserId.records[0].dept,
+                    records: [{
+                        id:fields.pickingUserId.records[0].dept,
+                        name: fields.pickingUserId.records[0].deptName
+                    }],
+                    value: fields.pickingUserId.records[0].deptName,
+                }
             })
             return;
         }
@@ -94,13 +102,15 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             }
             if (flag) {
                 message.error("请您填写数量！");
-                return false;
+                throw Error('请您填写数量！')
             }
             await saveRun({
                 outStockDetailDTOList: materialList,
                 ...baseInfo,
                 pickingTime: baseInfo.pickingTime+' 00:00:00',
-                pickingUserId: baseInfo?.pickingUserId.id
+                pickingUserId: baseInfo?.pickingUserId.id,
+                departmentId: baseInfo?.departmentName?.id,
+                departmentName: baseInfo?.departmentName?.value
             });
             resove(true)
         } catch (error) {
@@ -140,6 +150,10 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 pickingUserId: {
                     id: result?.applyStaffId,
                     value: result?.applyStaffName
+                },
+                departmentName: {
+                    id: result?.departmentId,
+                    value: result?.departmentName
                 },
                 pickingTime: result?.createTime
             })
@@ -203,7 +217,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
                 }}
                 col={2}
-                classStyle="baseInfo"
+                classStyle={styles.baseInfo}
                 columns={baseInfoColumn.map((item: any) => {
                     if (item.dataIndex === "warehouseId") {
                         return ({
@@ -214,12 +228,21 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                             }))
                         })
                     }
+                    // if (item.dataIndex === "departmentName") {
+                    //     return ({
+                    //         ...item,
+                    //         enum: batchingStrategy?.map((item: any) => ({
+                    //             value: item.id,
+                    //             label: item.name
+                    //         }))
+                    //     })
+                    // }
                     return item
                 })}
                 onChange={performanceBondChange}
             />
             <DetailTitle title="出库明细" />
-            <div className='btnWrapper'>
+            <div className={styles.btnWrapper}>
                 <Button
                     type='primary'
                     key="add"
@@ -228,6 +251,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     disabled={!warehouseId}
                     onClick={() => setVisible(true)}>选择</Button>
             </div>
+            <Form form={form} className={styles.descripForm}>
             <CommonTable
                 style={{ padding: "0" }}
                 columns={[
@@ -246,11 +270,30 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                         }
                     },
                     ...material.map((item: any) => {
+                        // if (["num"].includes(item.dataIndex)) {
+                        //     return ({
+                        //         ...item,
+                        //         render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                        //     })
+                        // }
                         if (["num"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
-                                render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
-                            })
+                                render: (value: number, records: any, key: number) => {return <Form.Item 
+                                    name={['list', key, 'num']}
+                                    initialValue={value||undefined}
+                                    rules={[{
+                                        validator: async (rule: any, value: any, callback: (error?: string) => void) => {
+                                            const resData:any = await RequestUtil.get(`/tower-storage/materialStock/auxiliary?current=1&size=10&rawStockId=${records?.rawStockId}`);
+                                            if(resData.records[0]?.num < value)
+                                            return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
+                                            else return Promise.resolve('数量可用');
+                                        }
+                                    }]}>
+                                        <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
+                                    </Form.Item>
+                                // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                            }})
                         }
                         return item;
                     }),
@@ -265,6 +308,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     }]}
                 pagination={false}
                 dataSource={popDataList} />
+            </Form>
         </Spin>
         <Modal width={1100} title={`选择库存`} destroyOnClose
             visible={visible}
