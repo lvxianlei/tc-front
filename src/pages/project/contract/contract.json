@@ -494,8 +494,7 @@
             "columns": [
                 {
                     "title": "内部合同号",
-                    "dataIndex": "internalNumber",
-
+                    "dataIndex": "internalNumber"
                 },
                 {
                     "title": "协议名称",
@@ -611,8 +610,7 @@
             "columns": [
                 {
                     "title": "内部合同号",
-                    "dataIndex": "internalNumber",
-
+                    "dataIndex": "internalNumber"
                 },
                 {
                     "title": "协议名称",
