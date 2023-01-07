@@ -114,8 +114,6 @@ export default function Edit() {
           reqType = "put"
         }
       }
-      alert(reqType)
-      return
       const result: { [key: string]: any } = await RequestUtil[reqType](`/tower-market/contract`, {
         ...saveData,
         id: reqType === "post" ? "" : params.id,
