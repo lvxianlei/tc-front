@@ -127,11 +127,37 @@ export default function Apply(): React.ReactNode {
         setTowerSelects(data || [])
     }
 
+    /*  delSameObjValue 数组对象相同值相加去重
+    arr 需要处理的数组
+    resultNum 最终计算结果的键名
+    keyName 用于计算判断的键名 
+    keyValue 用于计算结果的键名 --> 对应的键值为number类型*/
+    function delSameObjValue(arr: any[], resultNum: string, keyName: any, keyValue: any) {
+        const warp = new Map();
+        arr.forEach(i => {
+            let str = keyName.map((v: string | number) => i[v]).join('_');
+            i[resultNum] = keyValue.reduce((p: any, c: string | number) => Number(p += i[c]), 0);
+            warp.has(str) ? warp.get(str)[resultNum] += i[resultNum] : warp.set(str, i);
+        });
+        return Array.from(warp).map(([, v]) => v);
+    };
+
+
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
             const data: any = await addRef.current?.onSubmit();
             const newPatchs = [...(patchList || []), ...data]
-            setPatchList([...newPatchs])
+            let finalData = await delSameObjValue(newPatchs, 'summation', ['structureId'], ['basicsPartNum'])
+            finalData = finalData?.map(res => {
+                return {
+                    ...res,
+                    basicsPartNum: res?.summation
+                }
+            })
+            tableForm?.setFieldsValue({
+                data: [...finalData]
+            })
+            setPatchList([...finalData])
             setVisible(false)
             resove(true)
         } catch (error) {
@@ -409,7 +435,7 @@ export default function Apply(): React.ReactNode {
                             />
                         </Col>
                         <Col span={16}>
-                            <Form form={tableForm}>
+                            <Form form={tableForm} className={styles.tableForm}>
                                 <CommonTable
                                     haveIndex
                                     columns={[
@@ -418,20 +444,22 @@ export default function Apply(): React.ReactNode {
                                                 return {
                                                     ...res,
                                                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                                        <InputNumber min={0} max={9999} precision={0} size="small" defaultValue={record.basicsPartNum} onChange={(e) => {
-                                                            const newList = patchList.map((res: any, ind: number) => {
-                                                                if (ind === index) {
-                                                                    return {
-                                                                        ...res,
-                                                                        basicsPartNum: e,
-                                                                        totalWeight: (Number(e) * Number(res?.basicsWeight || 0)).toFixed(2)
+                                                        <Form.Item name={['data', index, 'basicsPartNum']} initialValue={record?.basicsPartNum}>
+                                                            <InputNumber min={0} max={9999} precision={0} size="small" onChange={(e) => {
+                                                                const newList = patchList.map((res: any, ind: number) => {
+                                                                    if (ind === index) {
+                                                                        return {
+                                                                            ...res,
+                                                                            basicsPartNum: e,
+                                                                            totalWeight: (Number(e) * Number(res?.basicsWeight || 0)).toFixed(2)
+                                                                        }
+                                                                    } else {
+                                                                        return res
                                                                     }
-                                                                } else {
-                                                                    return res
-                                                                }
-                                                            })
-                                                            setPatchList([...newList])
-                                                        }} />
+                                                                })
+                                                                setPatchList([...newList])
+                                                            }} />
+                                                        </Form.Item>
                                                     )
                                                 }
                                             }
@@ -439,7 +467,7 @@ export default function Apply(): React.ReactNode {
                                                 return {
                                                     ...res,
                                                     render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (
-                                                        <Select placeholder="请选择杆塔号" size='small' key={index} style={{ width: "150px" }} defaultValue={record.productNumber} onChange={
+                                                        <Select placeholder="请选择杆塔号" size='small' key={index} style={{ width: "150px" }} defaultValue={record?.productNumber} onChange={
                                                             (e) => {
                                                                 const newList = (patchList || [])?.map((res: any, ind: number) => {
                                                                     if (ind === index) {
