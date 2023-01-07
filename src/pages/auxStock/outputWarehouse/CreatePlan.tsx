@@ -284,7 +284,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                     initialValue={value||undefined}
                                     rules={[{
                                         validator: async (rule: any, value: any, callback: (error?: string) => void) => {
-                                            const resData:any = await RequestUtil.get(`/tower-storage/materialStock/auxiliary?current=1&size=10&rawStockId=${records?.rawStockId}`);
+                                            const resData:any = await RequestUtil.get(`/tower-storage/materialStock/outDetails?warehouseId=${warehouseId}&current=1&size=10&rawStockId=${records?.rawStockId}`);
                                             if(resData.records[0]?.num < value)
                                             return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
                                             else return Promise.resolve('数量可用');
