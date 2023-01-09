@@ -233,6 +233,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 showSearch
                                                 placeholder="请选择计划号"
                                                 style={{ width: "100%" }}
+                                                allowClear
                                                 filterOption={(input, option) =>
                                                     (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                                 }
@@ -258,6 +259,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 placeholder="请选择塔型名称"
                                                 style={{ width: "100%" }}
                                                 showSearch
+                                                allowClear
                                                 filterOption={(input, option) =>
                                                     (option!.children as unknown as string).toLowerCase().includes(input.toLowerCase())
                                                 }
