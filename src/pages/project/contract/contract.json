@@ -344,6 +344,104 @@
             ]
         },
         {
+            "title": "框架合同",
+            "dataIndex": "frameAgreementId",
+            "type": "popTable",
+            "width": 1101,
+            "value": "frameAgreementName",
+            "path": "/tower-market/frameAgreement",
+            "rowKey": "id",
+            "dependencies": true,
+            "search": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "协议名称",
+                    "dataIndex": "frameAgreementName"
+                },
+                {
+                    "title": "协议编号",
+                    "dataIndex": "frameAgreementCode"
+                },
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                }
+            ],
+            "columns": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "协议名称",
+                    "dataIndex": "frameAgreementName"
+                },
+                {
+                    "title": "项目名称",
+                    "dataIndex": "projectName"
+                },
+                {
+                    "title": "预估总重（吨）",
+                    "dataIndex": "contractWeight"
+                },
+                {
+                    "title": "预估单价（元）",
+                    "dataIndex": "contractMoney"
+                },
+                {
+                    "title": "预估总价（元）",
+                    "dataIndex": "contractMoneyCount"
+                },
+                {
+                    "title": "执行重量（吨）",
+                    "dataIndex": "implementWeight"
+                },
+                {
+                    "title": "执行金额（元）",
+                    "dataIndex": "implementMoney"
+                },
+                {
+                    "title": "执行重量百分比",
+                    "dataIndex": "implementWeightPro"
+                },
+                {
+                    "title": "执行金额百分比",
+                    "dataIndex": "implementMoneyPro"
+                },
+                {
+                    "title": "签订日期",
+                    "dataIndex": "signDate"
+                },
+                {
+                    "title": "签订人",
+                    "dataIndex": "signUser"
+                },
+                {
+                    "title": "交货日期",
+                    "dataIndex": "deliveryDate"
+                },
+                {
+                    "title": "合同接管人",
+                    "dataIndex": "takeOverUser"
+                },
+                {
+                    "title": "合同接管日期",
+                    "dataIndex": "takeOverTime"
+                },
+                {
+                    "title": "是否接收原件",
+                    "dataIndex": "isReceivedContract"
+                },
+                {
+                    "title": "销售员",
+                    "dataIndex": "saleUser"
+                }
+            ]
+        },
+        {
             "title": "合同类型",
             "dataIndex": "contractType",
             "type": "select",
@@ -375,7 +473,29 @@
             "dependencies": true,
             "required": true,
             "search": false,
+            "search": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "协议名称",
+                    "dataIndex": "frameAgreementName"
+                },
+                {
+                    "title": "协议编号",
+                    "dataIndex": "frameAgreementCode"
+                },
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                }
+            ],
             "columns": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
                 {
                     "title": "协议名称",
                     "dataIndex": "frameAgreementName"
@@ -469,7 +589,29 @@
             "dependencies": true,
             "required": true,
             "search": false,
+            "search": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "协议名称",
+                    "dataIndex": "frameAgreementName"
+                },
+                {
+                    "title": "协议编号",
+                    "dataIndex": "frameAgreementCode"
+                },
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                }
+            ],
             "columns": [
+                {
+                    "title": "内部合同号",
+                    "dataIndex": "internalNumber"
+                },
                 {
                     "title": "协议名称",
                     "dataIndex": "frameAgreementName"

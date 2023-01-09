@@ -1,6 +1,11 @@
 {
     "baseColumn": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "width": 100
+        },
+        {
             "title": "辅材出库单号",
             "dataIndex": "pickingNumber",
             "width": 100
@@ -40,6 +45,16 @@
             "dataIndex": "createTime",
             "type": "date",
             "format": "YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "width": 100
+        },
+        {
+            "title": "用友编码",
+            "dataIndex": "externalCode",
             "width": 100
         },
         {
