@@ -56,7 +56,7 @@ export default function List(): React.ReactNode {
             key='DataArchivingNew'
             visible={visible}
             width="50%"
-            title={type === 'new' ? '上传' : type === 'edit' ? '编辑' : '查看'}
+            title={type === 'new' ? '登记' : type === 'edit' ? '编辑' : '查看'}
             confirmLoading={confirmLoading}
             footer={
                 <Space>
@@ -139,7 +139,7 @@ export default function List(): React.ReactNode {
                 <Button type="primary" onClick={() => {
                     setVisible(true);
                     setType('new');
-                }} ghost>上传</Button>
+                }} ghost>登记</Button>
             </Space>}
             searchFormItems={[
                 {
