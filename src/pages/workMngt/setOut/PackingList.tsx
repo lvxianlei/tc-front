@@ -182,7 +182,7 @@ export default function PackingList(): React.ReactNode {
     return <>
         <Modal
             visible={pageVisible}
-            title="生成PDF-带重量"
+            title="生成PDF-不带重量"
             onOk={GeneratePDFWeight}
             onCancel={() => {
                 setPageVisible(false);
@@ -210,7 +210,7 @@ export default function PackingList(): React.ReactNode {
         </Modal>
         <Modal
             visible={noPageVisible}
-            title="生成PDF-不带重量"
+            title="生成PDF-带重量"
             onOk={GeneratePDF}
             onCancel={() => {
                 setNoPageVisible(false);
