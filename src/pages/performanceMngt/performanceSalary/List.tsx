@@ -238,7 +238,7 @@ export default function List(): React.ReactNode {
                     {
                         name: 'updateStatusTime',
                         label: '最新状态变更时间',
-                        children: <DatePicker.RangePicker />
+                        children: <DatePicker.RangePicker picker="month"/>
                     },
                     {
                         name: 'fuzzyMsg',
@@ -249,9 +249,9 @@ export default function List(): React.ReactNode {
                 filterValue={filterValue}
                 onFilterSubmit={(values: Record<string, any>) => {
                     if (values.updateStatusTime) {
-                        const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                        values.timeStart = formatDate[0] + ' 00:00:00';
-                        values.timeEnd = formatDate[1] + ' 23:59:59';
+                        const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM"));
+                        values.timeStart = formatDate[0];
+                        values.timeEnd = formatDate[1];
                     }
                     setFilterValue(values);
                     return values;
