@@ -13,7 +13,6 @@
         {
             "title": "下达单号",
             "dataIndex": "issuedNumber",
-            "required": true,
             "type": "popTable",
             "width": 1101,
             "readOnly": true,
