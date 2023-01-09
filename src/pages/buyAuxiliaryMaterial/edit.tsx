@@ -252,7 +252,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
     useEffect(() => {
         if (visibleP) {
             form.setFieldsValue({
-                isMeasuringTools:1
+                isMeasuringTools:0
             })
         }
     }, [visibleP])
