@@ -672,7 +672,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: "模糊查询",
-                        children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号/质保书号/轧制批号/备注进行查询" style={{ width: 300 }} />
                     }
                 ]}
             />
