@@ -9,7 +9,7 @@ import { Space, Input, DatePicker } from 'antd';
 import styles from './PerformanceSalary.module.less';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
-import { CommonTable } from '../../common';
+import { CommonTable, IntgSelect } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import { FixedType } from 'rc-table/lib/interface';
 
@@ -241,9 +241,9 @@ export default function List(): React.ReactNode {
                         children: <DatePicker.RangePicker picker="month"/>
                     },
                     {
-                        name: 'fuzzyMsg',
-                        label: '模糊查询项',
-                        children: <Input placeholder="姓名" />
+                        name: 'userId',
+                        label: '姓名',
+                        children: <IntgSelect width={200} />
                     }
                 ]}
                 filterValue={filterValue}
@@ -252,6 +252,9 @@ export default function List(): React.ReactNode {
                         const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM"));
                         values.timeStart = formatDate[0];
                         values.timeEnd = formatDate[1];
+                    }
+                    if (values.userId) {
+                        values.userId = values.userId?.value;
                     }
                     setFilterValue(values);
                     return values;
