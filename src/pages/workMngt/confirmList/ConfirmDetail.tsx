@@ -749,7 +749,9 @@ export default function ConfirmDetail(): React.ReactNode {
                     {
                         params.status === '3' ? <Button type='primary' disabled={selectedKeys.length <= 0 || userId !== params.confirmId} onClick={
                             async () => {
-                                await RequestUtil.delete(`/tower-science/drawProductDetail?ids=${selectedKeys.join(',')}`,)
+                                await RequestUtil.post(`/tower-science/drawProductDetail`, {
+                                    ids: selectedKeys
+                                })
                                 message.success('删除成功！')
                                 run()
                             }

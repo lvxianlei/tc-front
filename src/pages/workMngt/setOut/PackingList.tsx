@@ -276,11 +276,11 @@ export default function PackingList(): React.ReactNode {
             <Button type="primary" onClick={() => {
                 setNoPageVisible(true);
                 printerRun()
-            }} ghost>生成PDF-带重量</Button>
+            }} ghost>生成PDF-不带重量</Button>
             <Button type="primary" onClick={() => {
                 setPageVisible(true);
                 printerRun()
-            }} ghost>生成PDF-不带重量</Button>
+            }} ghost>生成PDF-带重量</Button>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             <Button type="primary" ghost onClick={() => setVisible(true)} disabled={!isShow}>套用包</Button>
             <Button type="primary" disabled={!isShow} onClick={() => {
