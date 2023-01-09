@@ -150,7 +150,7 @@ export default function Lofting(): React.ReactNode {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item
                     name={['data', index, "projectEntriesId"]}
-                    initialValue={record.projectEntriesId}
+                    initialValue={record.projectEntriesId + ',' + record.projectEntries}
                 >
                     <Select onChange={() => rowChange(index)} allowClear>
                         {list && list.map((item: any, index: number) => {
