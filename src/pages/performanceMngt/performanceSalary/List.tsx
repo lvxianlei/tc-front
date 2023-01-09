@@ -9,7 +9,7 @@ import { Space, Input, DatePicker } from 'antd';
 import styles from './PerformanceSalary.module.less';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
-import { CommonTable } from '../../common';
+import { CommonTable, IntgSelect } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import { FixedType } from 'rc-table/lib/interface';
 
@@ -130,10 +130,10 @@ export default function List(): React.ReactNode {
             "dataIndex": "projectName"
         },
         {
-            "key": "planNUmber",
+            "key": "planNumber",
             "title": "计划号",
             "width": 120,
-            "dataIndex": "planNUmber"
+            "dataIndex": "planNumber"
         },
         {
             "key": "productTypeName",
@@ -184,9 +184,9 @@ export default function List(): React.ReactNode {
             "width": 120
         },
         {
-            "key": "salary·                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ",
+            "key": "salary",
             "title": "工资",
-            "dataIndex": "salary·                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ",
+            "dataIndex": "salary",
             "width": 120
         }
     ]
@@ -238,20 +238,23 @@ export default function List(): React.ReactNode {
                     {
                         name: 'updateStatusTime',
                         label: '最新状态变更时间',
-                        children: <DatePicker.RangePicker />
+                        children: <DatePicker.RangePicker picker="month"/>
                     },
                     {
-                        name: 'fuzzyMsg',
-                        label: '模糊查询项',
-                        children: <Input placeholder="姓名" />
+                        name: 'userId',
+                        label: '姓名',
+                        children: <IntgSelect width={200} />
                     }
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={(values: Record<string, any>) => {
                     if (values.updateStatusTime) {
-                        const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-                        values.timeStart = formatDate[0] + ' 00:00:00';
-                        values.timeEnd = formatDate[1] + ' 23:59:59';
+                        const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM"));
+                        values.timeStart = formatDate[0];
+                        values.timeEnd = formatDate[1];
+                    }
+                    if (values.userId) {
+                        values.userId = values.userId?.value;
                     }
                     setFilterValue(values);
                     return values;
