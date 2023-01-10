@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Popconfirm, message, Button } from 'antd';
+import { Space, Input, Select, Popconfirm, message, Button } from 'antd';
 import styles from './PackingList.module.less';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -21,63 +21,63 @@ export default function List(): React.ReactNode {
 
     const columns = [
         {
-            "key": "year",
+            "key": "taskNum",
             "title": "放样任务编号",
             "width": 120,
-            "dataIndex": "year"
+            "dataIndex": "taskNum"
         },
         {
-            "key": "month",
+            "key": "planNumber",
             "title": "计划号",
-            "dataIndex": "month",
+            "dataIndex": "planNumber",
             "width": 200
         },
         {
-            "key": "group",
+            "key": "internalNumber",
             "title": "内部合同编号",
-            "dataIndex": "group",
+            "dataIndex": "internalNumber",
             "width": 80
         },
         {
-            "key": "userName",
+            "key": "name",
             "title": "塔型",
-            "dataIndex": "userName",
+            "dataIndex": "name",
             "width": 50
         },
         {
-            "key": "settleMethod",
+            "key": "projectName",
             "title": "工程名称",
-            "dataIndex": "settleMethod",
+            "dataIndex": "projectName",
             "width": 120
         },
         {
-            "key": "attendance",
+            "key": "num",
             "title": "杆塔（基）",
-            "dataIndex": "attendance",
+            "dataIndex": "num",
             "width": 120
         },
         {
-            "key": "workOvertime",
+            "key": "packageUserName",
             "title": "打包负责人",
-            "dataIndex": "workOvertime",
+            "dataIndex": "packageUserName",
             "width": 120
         },
         {
-            "key": "totalAttendance",
+            "key": "programmingDeliverTime",
             "title": "计划完成时间",
-            "dataIndex": "totalAttendance",
+            "dataIndex": "programmingDeliverTime",
             "width": 120
         },
         {
-            "key": "baseSalary",
+            "key": "packageEndTime",
             "title": "实际完成时间",
-            "dataIndex": "baseSalary",
+            "dataIndex": "packageEndTime",
             "width": 120
         },
         {
-            "key": "pieceSalary",
+            "key": "packageStatusName",
             "title": "任务打包状态",
-            "dataIndex": "pieceSalary",
+            "dataIndex": "packageStatusName",
             "width": 120
         },
         {
@@ -91,7 +91,7 @@ export default function List(): React.ReactNode {
                     <Popconfirm
                         title="确认完成打包?"
                         onConfirm={async () => {
-                            await RequestUtil.get(``).then(() => {
+                            await RequestUtil.get(`/tower-science/packageStructure/submit/all/${record?.id}`).then(() => {
                                 message.success('完成打包成功！')
                             }).then(() => {
                                 history.go(0)
@@ -191,7 +191,8 @@ export default function List(): React.ReactNode {
     return <>
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
             <Page
-                path={"/tower-science/salary"}
+                path={"/tower-science/loftingList"}
+                exportPath="/tower-science/loftingList"
                 columns={[
                     {
                         key: 'index',
@@ -219,30 +220,30 @@ export default function List(): React.ReactNode {
                 headTabs={[]}
                 searchFormItems={[
                     {
-                        name: 'updateStatusTime',
+                        name: 'packageStatus',
                         label: '任务打包状态',
                         children: <Select style={{ width: '120px' }} placeholder="请选择">
                             <Select.Option value="" key="6">全部</Select.Option>
-                            <Select.Option value={1} key="1">完成打包</Select.Option>
-                            <Select.Option value={2} key="2">部分打包</Select.Option>
-                            <Select.Option value={3} key="3">未打包</Select.Option>
+                            <Select.Option value={0} key="0">未打包</Select.Option>
+                            <Select.Option value={1} key="1">部分打包</Select.Option>
+                            <Select.Option value={2} key="2">完成打包</Select.Option>
                         </Select>
                     },
                     {
-                        name: 'userId',
+                        name: 'packageUser',
                         label: '打包负责人',
                         children: <IntgSelect width={200} />
                     },
                     {
-                        name: 'fuzzyMsg',
+                        name: 'packageFuzzyMsg',
                         label: '模糊查询项',
                         children: <Input placeholder="编号/计划号/合同号/塔型/工程名称" />
                     }
                 ]}
                 filterValue={filterValue}
                 onFilterSubmit={(values: Record<string, any>) => {
-                    if (values.userId) {
-                        values.userId = values.userId?.value;
+                    if (values.packageUser) {
+                        values.packageUser = values.packageUser?.value;
                     }
                     setFilterValue(values);
                     return values;

@@ -45,9 +45,9 @@ export default function TowerInformation(): React.ReactNode {
     }), { manual: true })
     
     const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.post(``, {
+        const result: any = await RequestUtil.post(`/tower-science/productSegment/structure/statistics`, {
             ...filter,
-            ...ids
+            segmentIds: ids
         });
         resole(result)
     }), {})
@@ -649,12 +649,12 @@ export default function TowerInformation(): React.ReactNode {
             <span>塔型：{detail?.productCategoryName}</span>
             <span>计划号：{detail?.planNumber}</span>
             <span>模式：{count?.patternName}</span>
-            <span>件号总数：{count?.patternName}</span>
-            <span>总件数：{count?.patternName}</span>
-            <span>总重kg：{count?.patternName}</span>
-            <span>所选件号总数：{count?.patternName}</span>
-            <span>所选总件数：{count?.patternName}</span>
-            <span>所选总重kg：{count?.patternName}</span>
+            <span>件号总数：{count?.structureCodeNum}</span>
+            <span>总件数：{count?.structureNum}</span>
+            <span>总重kg：{count?.totalWeight}</span>
+            <span>所选件号总数：{count?.structureCodePitchNum}</span>
+            <span>所选总件数：{count?.structurePitchNum}</span>
+            <span>所选总重kg：{count?.pitchTotalWeight}</span>
         </Space>
         <Form form={editForm} className={styles.descripForm}>
             <Page

@@ -206,7 +206,9 @@ export default function PoleInformation(): React.ReactNode {
 
     const packagingBatch = () => {
         if (selectedRowKeys?.length > 0) {
-            RequestUtil.post(``).then(res => {
+            RequestUtil.post(`/tower-science/packageStructure/submit`, {
+                productIdList: selectedRowKeys
+            }).then(res => {
                 message?.success("批量打包完成！");
                 history.go(0)
             })
