@@ -545,7 +545,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if(item.dataIndex==='issuedNumber'){
                             return ({
                                 ...item, 
-                                required: addCollectionForm.getFieldValue('outStockType') === 0,
+                                // required: addCollectionForm.getFieldValue('outStockType') === 0,
                                 disabled: addCollectionForm.getFieldValue('outStockType') === 2
                             })
                         }
