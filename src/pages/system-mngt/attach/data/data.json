@@ -1,0 +1,551 @@
+{
+    "table": [
+        {
+            "title": "文档编码",
+            "dataIndex": "code"
+        },
+        {
+            "title": "版本",
+            "dataIndex": "version"
+        },
+        {
+            "title": "文档名称",
+            "dataIndex": "name"
+        },
+        {
+            "title": "文档类型",
+            "dataIndex": "typeName"
+        },
+        {
+            "title": "文档标签",
+            "dataIndex": "tag"
+        },
+        {
+            "title": "文档状态",
+            "dataIndex": "docStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "新建",
+                    "value": 1
+                },
+                {
+                    "label": "评审",
+                    "value": 2
+                },
+                {
+                    "label": "发布",
+                    "value": 3
+                },
+                {
+                    "label": "撤回",
+                    "value": 4
+                }
+            ]
+        },
+        {
+            "title": "关联项目",
+            "dataIndex": "projectName"
+        },
+        {
+            "title": "接受人员",
+            "dataIndex": "receiveNames"
+        },
+        {
+            "title": "使用范围",
+            "dataIndex": "useDeptNames"
+        },
+        {
+            "title": "原件位置",
+            "dataIndex": "originalPosition"
+        },
+        {
+            "title": "是否要审核",
+            "dataIndex": "isApprovalName"
+        },
+        {
+            "title": "归档日期--",
+            "dataIndex": "",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "执行日期",
+            "dataIndex": "executionTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "到期时间",
+            "dataIndex": "expiryDate",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "过期日期--",
+            "dataIndex": "",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "排序",
+            "dataIndex": "sort"
+        },
+        {
+            "title": "起草时间--",
+            "dataIndex": "",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "起草人",
+            "dataIndex": "drafterName"
+        },
+        {
+            "title": "修改时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "修改人",
+            "dataIndex": "updateName"
+        }
+    ],
+    "edit": {
+        "base": [
+            {
+                "title": "文档编码",
+                "dataIndex": "code"
+            },
+            {
+                "title": "版本",
+                "dataIndex": "version",
+                "disabled": true
+            },
+            {
+                "title": "文档状态",
+                "dataIndex": "docStatus",
+                "disabled": true
+            },
+            {
+                "title": "文档名称",
+                "dataIndex": "name"
+            },
+            {
+                "title": "文件类型",
+                "dataIndex": "typeCode",
+                "type": "fetchSelect",
+                "path": "/tower-system/docType"
+            },
+            {
+                "title": "文档标签",
+                "dataIndex": "tag",
+                "type": "fetchSelect",
+                "path": "/tower-system/doc/tag",
+                "mode": "tags",
+                "tokenSeparators": [
+                    ","
+                ]
+            },
+            {
+                "title": "关联项目",
+                "dataIndex": "projectName"
+            },
+            {
+                "title": "关联合同",
+                "dataIndex": "contractName"
+            },
+            {
+                "title": "关联销售计划",
+                "dataIndex": "taskNoticeName"
+            },
+            {
+                "title": "起草人",
+                "dataIndex": "drafterId",
+                "type": "popTable",
+                "width": 1101,
+                "path": "/tower-system/employee",
+                "rowKey": "userId",
+                "readOnly": true,
+                "dependencies": true,
+                "value": "name",
+                "columns": [
+                    {
+                        "title": "部门",
+                        "dataIndex": "deptName"
+                    },
+                    {
+                        "title": "姓名",
+                        "dataIndex": "name"
+                    },
+                    {
+                        "title": "账号",
+                        "dataIndex": "account"
+                    },
+                    {
+                        "title": "手机号",
+                        "dataIndex": "phone"
+                    },
+                    {
+                        "title": "角色",
+                        "dataIndex": "roleName"
+                    },
+                    {
+                        "title": "工号",
+                        "dataIndex": "number"
+                    },
+                    {
+                        "title": "邮箱",
+                        "dataIndex": "email"
+                    }
+                ],
+                "search": [
+                    {
+                        "title": "",
+                        "dataIndex": "fuzzyQuery",
+                        "width": 200,
+                        "placeholder": "账号/手机号/姓名/工号/邮箱"
+                    }
+                ]
+            },
+            {
+                "title": "接收人员",
+                "dataIndex": "receiveIds",
+                "type": "chooseUser"
+            },
+            {
+                "title": "使用部门",
+                "dataIndex": "useDept",
+                "type": "popTable",
+                "path": "/tower-system/department",
+                "width": 1011,
+                "rowKey": "id",
+                "value": "name",
+                "dependencies": true,
+                "readOnly": true,
+                "selectType": "checkbox",
+                "columns": [
+                    {
+                        "title": "部门名称",
+                        "dataIndex": "name"
+                    },
+                    {
+                        "title": "类型",
+                        "dataIndex": "classification"
+                    },
+                    {
+                        "title": "简介",
+                        "dataIndex": "description"
+                    }
+                ]
+            },
+            {
+                "title": "原件位置",
+                "dataIndex": "originalPosition"
+            },
+            {
+                "title": "执行日期",
+                "dataIndex": "executionTime",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "到期时间",
+                "dataIndex": "expiryDate",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "是否要审核",
+                "dataIndex": "isApproval",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "是",
+                        "value": 1
+                    },
+                    {
+                        "label": "否",
+                        "value": 0
+                    }
+                ]
+            },
+            {
+                "title": "审核流程",
+                "dataIndex": "approvalProcessCode",
+                "type": "fetchSelect",
+                "path": "/tower-system/docApproval"
+            },
+            {
+                "title": "排序",
+                "dataIndex": "sort",
+                "type": "number",
+                "precision": 0,
+                "min": 0,
+                "step": 1
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description",
+                "type": "textarea"
+            }
+        ],
+        "messageWarn": [
+            {
+                "title": "提醒时间",
+                "dataIndex": "reminderTime",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "提醒内容",
+                "dataIndex": "reminderContent",
+                "type": "text"
+            },
+            {
+                "title": "提醒类型",
+                "dataIndex": "reminderType",
+                "type": "addUser"
+            },
+            {
+                "title": "提醒人",
+                "dataIndex": "reminderNames",
+                "readOnly": true
+            },
+            {
+                "title": "是否签收",
+                "dataIndex": "isSign",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "是",
+                        "value": 1
+                    },
+                    {
+                        "label": "否",
+                        "value": 0
+                    }
+                ]
+            },
+            {
+                "title": "通知渠道",
+                "dataIndex": "noticeChannel",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "平台信息",
+                        "value": 1
+                    },
+                    {
+                        "label": "站内信息",
+                        "value": 2
+                    }
+                ]
+            }
+        ]
+    },
+    "detail": {
+        "base": [
+            {
+                "title": "文档编码",
+                "dataIndex": "code"
+            },
+            {
+                "title": "版本",
+                "dataIndex": "version",
+                "disabled": true
+            },
+            {
+                "title": "文档状态",
+                "dataIndex": "docStatus",
+                "disabled": true
+            },
+            {
+                "title": "文档名称",
+                "dataIndex": "name"
+            },
+            {
+                "title": "文件类型",
+                "dataIndex": "typeName"
+            },
+            {
+                "title": "文档标签",
+                "dataIndex": "tag"
+            },
+            {
+                "title": "关联项目",
+                "dataIndex": "projectName"
+            },
+            {
+                "title": "关联合同",
+                "dataIndex": "contractName"
+            },
+            {
+                "title": "关联销售计划",
+                "dataIndex": "taskNoticeName"
+            },
+            {
+                "title": "起草人",
+                "dataIndex": "drafterName"
+            },
+            {
+                "title": "接收人员",
+                "dataIndex": "receiveNames"
+            },
+            {
+                "title": "使用部门",
+                "dataIndex": "useDeptName"
+            },
+            {
+                "title": "原件位置",
+                "dataIndex": "originalPosition"
+            },
+            {
+                "title": "执行日期",
+                "dataIndex": "executionTime",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "到期时间",
+                "dataIndex": "expiryDate",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "是否要审核",
+                "dataIndex": "isApprovalName"
+            },
+            {
+                "title": "审核流程",
+                "dataIndex": "approvalProcessName"
+            },
+            {
+                "title": "排序",
+                "dataIndex": "sort",
+                "type": "number",
+                "precision": 0,
+                "min": 0,
+                "step": 1
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description",
+                "type": "textarea"
+            }
+        ]
+    },
+    "signIn": [
+        {
+            "title": "签收人姓名",
+            "dataIndex": "staffName"
+        },
+        {
+            "title": "签收状态",
+            "dataIndex": "state",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未读",
+                    "value": 0
+                },
+                {
+                    "label": "已读",
+                    "value": 1
+                },
+                {
+                    "label": "签收",
+                    "value": 3
+                }
+            ]
+        },
+        {
+            "title": "发送时间",
+            "dataIndex": "sendTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "签收时间",
+            "dataIndex": "signInTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "累计时长",
+            "dataIndex": ""
+        }
+    ],
+    "examine": [],
+    "userSetting": {
+        "jobsMngt": [
+            {
+                "title": "岗位名称",
+                "dataIndex": "stationName"
+            }
+        ],
+        "staffMngt": [
+            {
+                "title": "账号",
+                "width": 100,
+                "dataIndex": "account"
+            },
+            {
+                "title": "手机号",
+                "width": 100,
+                "dataIndex": "phone"
+            },
+            {
+                "title": "角色",
+                "width": 150,
+                "dataIndex": "roleName"
+            },
+            {
+                "title": "姓名",
+                "width": 100,
+                "dataIndex": "name"
+            },
+            {
+                "title": "部门",
+                "width": 150,
+                "dataIndex": "deptName"
+            },
+            {
+                "title": "工号",
+                "dataIndex": "number",
+                "width": 120
+            },
+            {
+                "title": "员工类型",
+                "width": 100,
+                "dataIndex": "categoryName"
+            },
+            {
+                "title": "岗位",
+                "width": 150,
+                "dataIndex": "stationName"
+            },
+            {
+                "title": "邮箱",
+                "width": 150,
+                "dataIndex": "email"
+            },
+            {
+                "title": "状态",
+                "width": 50,
+                "dataIndex": "statusName"
+            }
+        ],
+        "roles": [
+            {
+                "title": "角色名称",
+                "dataIndex": "name"
+            }
+        ]
+    }
+}
