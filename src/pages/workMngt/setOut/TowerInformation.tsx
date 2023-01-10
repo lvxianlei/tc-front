@@ -43,6 +43,14 @@ export default function TowerInformation(): React.ReactNode {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1&productType=${productType}`);
         resole(result?.records || [])
     }), { manual: true })
+    
+    const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.post(``, {
+            ...filter,
+            ...ids
+        });
+        resole(result)
+    }), {})
 
     const { data: userList } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -517,6 +525,7 @@ export default function TowerInformation(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        getCount(filterValue, selectedRowKeys)
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
@@ -612,6 +621,7 @@ export default function TowerInformation(): React.ReactNode {
                 value.personnel = value.personnel?.value;
             }
             setFilterValue(value)
+            getCount(value, selectedKeys)
             setRefresh(!refresh);
         }}>
             <Form.Item label='最新状态变更时间' name='updateStatusTime'>
@@ -635,6 +645,17 @@ export default function TowerInformation(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
+        <Space size="large">
+            <span>塔型：{detail?.productCategoryName}</span>
+            <span>计划号：{detail?.planNumber}</span>
+            <span>模式：{count?.patternName}</span>
+            <span>件号总数：{count?.patternName}</span>
+            <span>总件数：{count?.patternName}</span>
+            <span>总重kg：{count?.patternName}</span>
+            <span>所选件号总数：{count?.patternName}</span>
+            <span>所选总件数：{count?.patternName}</span>
+            <span>所选总重kg：{count?.patternName}</span>
+        </Space>
         <Form form={editForm} className={styles.descripForm}>
             <Page
                 path={`/tower-science/productSegment`}
@@ -645,8 +666,6 @@ export default function TowerInformation(): React.ReactNode {
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={
                     <>
-                        <span>塔型：<span>{detail?.productCategoryName}</span></span>
-                        <span>计划号：<span>{detail?.planNumber}</span></span>
                         <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                             <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
                             <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>

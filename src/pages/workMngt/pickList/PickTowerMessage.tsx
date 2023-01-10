@@ -57,6 +57,14 @@ export default function Lofting(): React.ReactNode {
         resole(data)
     }), {})
 
+    const { data: count, run: getCount } = useRequest((filter: any, ids: any) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.post(``, {
+            ...filter,
+            ...ids
+        });
+        resole(result)
+    }), {})
+
     const { run: getUserList } = useRequest(() => new Promise(async (resole, reject) => {
         const users: any = await RequestUtil.get(`/tower-science/drawProductSegment/leader/${params.id}`)
         setUser(users?.materialLeaders && Array.isArray(users?.materialLeaders) && users?.materialLeaders.length > 0 ? users?.materialLeaders : [])
@@ -229,6 +237,90 @@ export default function Lofting(): React.ReactNode {
         },
         {
             key: 'statusName',
+            title: '件号数',
+            width: 200,
+            dataIndex: 'statusName',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "status"]}
+                        initialValue={record?.status}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
+            key: 'statusName',
+            title: '件数',
+            width: 200,
+            dataIndex: 'statusName',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "status"]}
+                        initialValue={record?.status}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
+            key: 'statusName',
+            title: '图纸重kg',
+            width: 200,
+            dataIndex: 'statusName',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "status"]}
+                        initialValue={record?.status}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
+            key: 'statusName',
+            title: '理算重kg',
+            width: 200,
+            dataIndex: 'statusName',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "status"]}
+                        initialValue={record?.status}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
+            key: 'statusName',
             title: '提料状态',
             width: 200,
             dataIndex: 'statusName',
@@ -290,6 +382,7 @@ export default function Lofting(): React.ReactNode {
         }
         setFilterValue(value)
 
+        getCount(value, selectedKeys)
         setRefresh(!refresh);
         return value
     }
@@ -300,6 +393,7 @@ export default function Lofting(): React.ReactNode {
     }
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        getCount(filterValue, selectedRowKeys)
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
@@ -426,6 +520,17 @@ export default function Lofting(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
+        <Space size="large">
+            <span>塔型：{detailTop?.productCategoryName}</span>
+            <span>计划号：{detailTop?.planNumber}</span>
+            <span>模式：{detailTop?.patternName}</span>
+            <span>件号总数：{detailTop?.patternName}</span>
+            <span>总件数：{detailTop?.patternName}</span>
+            <span>总重kg：{detailTop?.patternName}</span>
+            <span>所选件号总数：{detailTop?.patternName}</span>
+            <span>所选总件数：{detailTop?.patternName}</span>
+            <span>所选总重kg：{detailTop?.patternName}</span>
+        </Space>
         <Form
             form={formRef}
             className={styles.descripForm}
@@ -603,9 +708,6 @@ export default function Lofting(): React.ReactNode {
                         }
                         {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
-                        <span>塔型：{detailTop?.productCategoryName}</span>
-                        <span>计划号：{detailTop?.planNumber}</span>
-                        <span>模式：{detailTop?.patternName}</span>
                     </Space>
                 }
                 searchFormItems={[]}

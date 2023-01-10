@@ -2,6 +2,12 @@
     "columns": [
         {
             "key": "trialAssembleName",
+            "title": "试装/免试装编号",
+            "dataIndex": "trialAssembleName",
+            "width": 100
+        },
+        {
+            "key": "trialAssembleName",
             "title": "单据类型",
             "dataIndex": "trialAssembleName",
             "width": 100

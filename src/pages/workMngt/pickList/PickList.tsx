@@ -67,6 +67,12 @@ export default function PickList(): React.ReactNode {
         },
         {
             key: 'num',
+            title: '标准',
+            width: 100,
+            dataIndex: 'num'
+        },
+        {
+            key: 'num',
             title: '杆塔（基）',
             width: 100,
             dataIndex: 'num'

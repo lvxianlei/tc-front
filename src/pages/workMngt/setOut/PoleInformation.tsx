@@ -11,9 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
 import WithSectionModal from './WithSectionModal';
-import { TreeNode } from 'antd/lib/tree-select';
 import RequestUtil from '../../../utils/RequestUtil';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import useRequest from '@ahooksjs/use-request';
 import AuthUtil from '../../../utils/AuthUtil';
 import Modal from 'antd/lib/modal/Modal';
@@ -150,6 +148,8 @@ export default function PoleInformation(): React.ReactNode {
     const [loftingStatus, setLoftingStatus] = useState<number>(0);
     const [visible, setVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
+    const [selectRows, setSelectRows] = useState<any>([]);
 
     useEffect(() => {
         setConfirmLoading(confirmLoading);
@@ -183,21 +183,6 @@ export default function PoleInformation(): React.ReactNode {
         }
     })
 
-    // const handleModalOk = () => new Promise(async (resove, reject) => {
-    //     try {
-    //         setButtonName('保存')
-    //         await onTip();
-    //         await editRef.current?.onSave();
-    //         message.success('保存成功！');
-    //         setTipVisible(false);
-    //         setAllotVisible(false);
-    //         setRefresh(!refresh);
-    //         resove(true);
-    //     } catch (error) {
-    //         reject(false)
-    //     }
-    // })
-
     const handleModalsubmit = () => new Promise(async (resove, reject) => {
         try {
             setButtonName('提交')
@@ -214,6 +199,21 @@ export default function PoleInformation(): React.ReactNode {
         }
     })
 
+    const handleChange = (selectedRowKeys: any[], selectRows: any[]) => {
+        setSelectedRowKeys(selectedRowKeys)
+        setSelectRows(selectRows)
+    }
+
+    const packagingBatch = () => {
+        if (selectedRowKeys?.length > 0) {
+            RequestUtil.post(``).then(res => {
+                message?.success("批量打包完成！");
+                history.go(0)
+            })
+        } else {
+            message?.warning("请选择需要操作的数据！");
+        }
+    }
     return <>
         <Modal
             // destroyOnClose
@@ -277,6 +277,7 @@ export default function PoleInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
+                <Button type='primary' onClick={packagingBatch} ghost>批量打包完成</Button>
                 <Button type='primary' onClick={() => setVisible(true)} ghost>电焊件验证</Button>
                 <WithSectionModal type="batch" productCategoryId={params.id} updateList={() => setRefresh(!refresh)} />
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
@@ -294,7 +295,6 @@ export default function PoleInformation(): React.ReactNode {
                         <Select.Option value={""} key="5">全部</Select.Option>
                         <Select.Option value={1} key="1">待开始</Select.Option>
                         <Select.Option value={2} key="2">待配段</Select.Option>
-                        <Select.Option value={3} key="3">待出单</Select.Option>
                         <Select.Option value={4} key="4">已完成 </Select.Option>
                     </Select>
                 },
@@ -314,6 +314,14 @@ export default function PoleInformation(): React.ReactNode {
                     values.productCategory = values.productCategory?.value;
                 }
                 return values;
+            }}
+            tableProps={{
+
+                rowSelection: {
+                    selectedRowKeys: selectedRowKeys,
+                    type: "checkbox",
+                    onChange: handleChange
+                }
             }}
         />
     </>
