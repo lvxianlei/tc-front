@@ -1,0 +1,49 @@
+{
+    "table": [
+        {
+            "title": "文档审批类型编码",
+            "dataIndex": "code"
+        },
+        {
+            "title": "文档审批类型名称",
+            "dataIndex": "name"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        },
+        {
+            "title": "创建时间",
+            "dataIndex": "createTime"
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "creatName"
+        },
+        {
+            "title": "修改时间",
+            "dataIndex": "updateTime"
+        },
+        {
+            "title": "修改人",
+            "dataIndex": "updateName"
+        }
+    ],
+    "edit": {
+        "base": [
+            {
+                "title": "文档审批类型编码",
+                "dataIndex": "code"
+            },
+            {
+                "title": "文档审批类型名称",
+                "dataIndex": "name"
+            },
+            {
+                "title": "备注",
+                "dataIndex": "description",
+                "type": "textarea"
+            }
+        ]
+    }
+}

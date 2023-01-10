@@ -61,8 +61,10 @@ export default function PaymentNew() {
             customerName: baseData.customerName.value,
             customerId: baseData.customerName.id,
             name: baseData.period.value,
-            period: baseData.period.id,
-            paymentPlanId: baseData.paymentPlan?.records?.[0]?.paymentPlanId,
+            // period: baseData.period.id,
+            // paymentPlanId: baseData.paymentPlan?.records?.[0]?.paymentPlanId,
+            paymentPlanId: baseData.period.id,
+            period: baseData.period?.records?.[0]?.period,
             contractId: id
         })
         if (result) {

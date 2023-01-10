@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import DetailTitle from "./DetailTitle"
 import CommonTable from "./CommonTable"
 import RequestUtil from "../../utils/RequestUtil"

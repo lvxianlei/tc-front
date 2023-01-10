@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Form, Select } from 'antd';
+import { Form, message, Select } from 'antd';
 import { BaseInfo, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -79,12 +79,18 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         try {
             editForm.validateFields().then(async res => {
                 const value = editForm.getFieldsValue(true);
-                await saveRun({
-                    ...value,
-                    id: id,
-                    productCategoryName: detailData?.productCategoryName
-                })
-                resolve(true);
+                if (!(value?.changeMaterialStandard || value?.structureTexture || value?.changeStructureTexture)) {
+                    message?.warning('代料后标准，代料前材质，代料后材质至少填写一项！')
+                    reject(false)
+                } else {
+                    await saveRun({
+                        ...value,
+                        id: id,
+                        productCategoryName: detailData?.productCategoryName
+                    })
+                    resolve(true);
+                }
+
             })
         } catch (error) {
             reject(false)
@@ -288,13 +294,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                 return ({
                                     ...item,
                                     render: () => {
-                                        return <Form.Item name={'changeMaterialStandard'} rules={[
-                                            {
-                                                "required": true,
-                                                "message": "请选择原材料品名"
-                                            }
-                                        ]}>
+                                        return <Form.Item name={'changeMaterialStandard'}>
                                             <Select
+                                                allowClear
                                                 style={{ width: "100%" }}
                                                 placeholder="请选择代料后标准"
                                                 showSearch
@@ -363,13 +365,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                 return ({
                                     ...item,
                                     render: () => {
-                                        return <Form.Item name={'structureTexture'} rules={[
-                                            {
-                                                "required": true,
-                                                "message": "请选择代料前材质"
-                                            }
-                                        ]}>
+                                        return <Form.Item name={'structureTexture'}>
                                             <Select
+                                                allowClear
                                                 placeholder="请选择代料前材质"
                                                 style={{ width: "100%" }}
                                                 showSearch
@@ -391,13 +389,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                 return ({
                                     ...item,
                                     render: () => {
-                                        return <Form.Item name={'changeStructureTexture'} rules={[
-                                            {
-                                                "required": true,
-                                                "message": "请选择代料后材质"
-                                            }
-                                        ]}>
+                                        return <Form.Item name={'changeStructureTexture'}>
                                             <Select
+                                                allowClear
                                                 placeholder="请选择代料后材质"
                                                 style={{ width: "100%" }}
                                                 showSearch

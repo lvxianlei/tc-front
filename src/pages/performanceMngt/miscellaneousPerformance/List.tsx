@@ -12,7 +12,8 @@ import { useHistory } from 'react-router-dom';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
 import MiscellaneousPerformanceNew from './MiscellaneousPerformanceNew';
-import {columns}from './miscellaneousPerformance.json'
+import { columns } from './miscellaneousPerformance.json'
+import { IntgSelect } from '../../common';
 
 interface EditRefProps {
     onSubmit: () => void;
@@ -62,7 +63,7 @@ export default function List(): React.ReactNode {
             title={type === 'new' ? '新增' : type === 'edit' ? '编辑' : '详情'}
             footer={<Space direction="horizontal" size="small">
                 {type === 'detail' ?
-                null
+                    null
                     :
                     <>
                         <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
@@ -74,7 +75,7 @@ export default function List(): React.ReactNode {
                     addRef.current?.resetFields();
                 }}>关闭</Button>
             </Space>}
-            width="40%"
+            width="50%"
             onCancel={() => {
                 setVisible(false);
                 addRef.current?.resetFields();
@@ -82,7 +83,7 @@ export default function List(): React.ReactNode {
             <MiscellaneousPerformanceNew type={type} id={rowId} ref={addRef} />
         </Modal>
         <Page
-            path="/tower-science/trialAssembly"
+            path="/tower-science/sundryConfig/getPage"
             columns={[
                 {
                     key: 'index',
@@ -101,7 +102,7 @@ export default function List(): React.ReactNode {
                     width: 150,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
-                            <Button type='link' onClick={() => {
+                            <Button type='link' disabled={!(record.status === 1 || record.status === 5)} onClick={() => {
                                 setVisible(true);
                                 setType('edit');
                                 setRowId(record?.id);
@@ -114,7 +115,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认发起?"
                                 onConfirm={() => {
-                                    RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/launch/${record.id}`).then(res => {
+                                    RequestUtil.post(`/tower-science/sundryConfig/launchSundryMerits?id=${record.id}`).then(res => {
                                         message.success('发起成功');
                                         history.go(0);
                                     });
@@ -128,7 +129,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认撤回?"
                                 onConfirm={() => {
-                                    RequestUtil.post(`/tower-science/trialAssembly/trialAssembly/withdraw/${record.id}`).then(res => {
+                                    RequestUtil.post(`/tower-science/sundryConfig/retract/${record.id}`).then(res => {
                                         message.success('撤回成功');
                                         history.go(0);
                                     });
@@ -142,7 +143,7 @@ export default function List(): React.ReactNode {
                             <Popconfirm
                                 title="确认删除?"
                                 onConfirm={() => {
-                                    RequestUtil.delete(`/tower-science/trialAssembly/trialAssembly/${record.id}`).then(res => {
+                                    RequestUtil.delete(`/tower-science/sundryConfig/${record.id}`).then(res => {
                                         message.success('删除成功');
                                         history.go(0);
                                     });
@@ -169,7 +170,7 @@ export default function List(): React.ReactNode {
                     children: <DatePicker.RangePicker />
                 },
                 {
-                    name: 'fuzzyMsg',
+                    name: 'status',
                     label: '审批状态',
                     children: <Select placeholder="请选择审批状态">
                         <Select.Option value={1} key="1">未发起</Select.Option>
@@ -179,6 +180,11 @@ export default function List(): React.ReactNode {
                         <Select.Option value={5} key="5">已撤回</Select.Option>
                         <Select.Option value={0} key="6">已拒绝</Select.Option>
                     </Select>
+                },
+                {
+                    name: 'userId',
+                    label: '人员',
+                    children: <IntgSelect width={200} />
                 },
                 {
                     name: 'fuzzyMsg',
@@ -192,6 +198,9 @@ export default function List(): React.ReactNode {
                     const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                     values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+                }
+                if (values.userId) {
+                    values.userId = values.userId?.value;
                 }
                 setFilterValues(values);
                 return values;
