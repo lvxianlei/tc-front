@@ -237,7 +237,7 @@ export default function List(): React.ReactNode {
                 searchFormItems={[
                     {
                         name: 'updateStatusTime',
-                        label: '最新状态变更时间',
+                        label: '年月',
                         children: <DatePicker.RangePicker picker="month"/>
                     },
                     {
