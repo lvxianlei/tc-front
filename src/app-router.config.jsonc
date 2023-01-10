@@ -610,13 +610,6 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view_task_notice"
     },
-    { // 计划变更
-      "label": "计划变更",
-      "path": "/project/planChange",
-      "module": "./pages/project/planChange/index",
-      "exact": true,
-      "authority": "tc_erp_sc_project_view_task_notice"
-    },
     { // 项目管理成本评估编辑
       "name": "成本评估编辑",
       "path": "/project/management/new/cost/:projectId",
@@ -1849,13 +1842,6 @@
       "name": "工作台",
       "path": "/workBench/workBenchMngt",
       "module": "./pages/workBench/rd/WorkBenchMngt",
-      "exact": true,
-      "authority": "tc_erp_rd_workbench_work"
-    },
-    { // 数字门户-个人
-      "name": "数字门户-个人",
-      "path": "/workBench/gatewayPersonal",
-      "module": "./pages/workBench/rd/GatewayPersonal",
       "exact": true,
       "authority": "tc_erp_rd_workbench_work"
     },
@@ -3388,13 +3374,6 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
-    { // WO-工单设置-自动同步
-      "name": "自动同步",
-      "path": "/worksheetSetting/selfSynchronizing",
-      "module": "./pages/worksheetSetting/selfSynchronizing/List",
-      "exact": true,
-      "authority": "tc_erp_rd_fix_item_config_list"
-    },
     { // WO-工单管理-工单管理
       "name": "工单管理",
       "path": "/worksheetMngt/management",
@@ -3420,6 +3399,48 @@
       "name": "流程设计",
       "path": "/journal/workflow",
       "module": "./pages/system-mngt/workflow/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 文档审批类型管理
+      "label": "文档审批类型管理",
+      "path": "/attach/approval",
+      "module": "./pages/system-mngt/attach/approval/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 文档分类管理
+      "name": "文档分类管理",
+      "path": "/attach/class",
+      "module": "./pages/system-mngt/attach/class/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 文档数据管理
+      "name": "文档数据管理",
+      "path": "/attach/data",
+      "module": "./pages/system-mngt/attach/data/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 个人文档列表
+      "name": "个人文档列表",
+      "path": "/attach/user",
+      "module": "./pages/system-mngt/attach/user/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 单位分类
+      "name": "单位分类",
+      "path": "/commCenter/unitClass",
+      "module": "./pages/system-mngt/commCenter/unitClass/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 单位管理
+      "name": "单位管理",
+      "path": "/commCenter/unitMngt",
+      "module": "./pages/system-mngt/commCenter/unitMngt/index",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
@@ -3471,13 +3492,6 @@
       "module": "./pages/stock/rawMaterialAllocation/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_list"
-    },
-    { // RD-业务处置管理-明细变更申请
-      "name": "明细变更申请",
-      "path": "/businessDisposal/requestForChange",
-      "module": "./pages/businessDisposal/requestForChange/List",
-      "exact": true,
-      "authority": "tc_erp_rd_fix_item_config_list"
     }
   ]
 }

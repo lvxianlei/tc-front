@@ -33,7 +33,7 @@
         "description": "包含提料、放样等",
         "iconFont": "icon-yanfazhongxin2", // iconfont
         "color": "#FF8C00", // iconfont的颜色
-        "path": "/workBench/gatewayPersonal",
+        "path": "/workBench/workBenchMngt",
         "appName": "RD"
     },
     {
@@ -52,7 +52,6 @@
         "iconFont": "icon-zhijianzhongxin2", // iconfont
         "color": "#9D45FF", // iconfont的颜色
         "path": "/qualityInspection/disposition",
-        "corsWeb": true,
         "appName": "QMS"
     },
     {
