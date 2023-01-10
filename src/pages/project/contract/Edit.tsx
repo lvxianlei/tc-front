@@ -100,7 +100,16 @@ export default function Edit() {
       } else {
         console.log(params.contractType, data?.relationId)
         if (["2", "3"].includes(params.contractType) && !data?.relationId) {
-          reqType = "post"
+          // 另外判断内容不合同号是否发生了变化 没变化需要调用 put
+          // projectData?.internalNumber
+          // console.log(data?.internalNumber)
+          // console.log(saveData?.internalNumber)
+          if(data?.internalNumber === saveData?.internalNumber){
+            reqType = "put"
+          }else{
+            reqType = "post"
+          }
+
         } else {
           reqType = "put"
         }
