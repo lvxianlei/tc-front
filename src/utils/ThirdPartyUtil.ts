@@ -13,14 +13,14 @@ export default abstract class ThirdPartyUtil {
             'Tenant-Id': AuthUtil.getTenantId()
         })
         result = result ? result : {}
-        sessionStorage.setItem(MES_BASE_INFO, JSON.stringify(result))
+        sessionStorage.setItem(MES_BASE_INFO + key, JSON.stringify(result))
     }
 
     /**
      * 获取第三方应用配置信息（mes）
      */
-    public static getMesBaseInfo(): any {
-        const mesBaseInfo = sessionStorage.getItem(MES_BASE_INFO);
+    public static getMesBaseInfo(key: string): any {
+        const mesBaseInfo = sessionStorage.getItem(MES_BASE_INFO + key);
         return mesBaseInfo ? JSON.parse(mesBaseInfo) : {};
     }
 }
