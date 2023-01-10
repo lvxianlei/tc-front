@@ -1,11 +1,10 @@
 /**
  * @author zyc
- * @copyright © 2022
- * @description 放样过程管理-补件下达列表
+- * @description 放样过程管理-补件下达列表
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, message, Popconfirm, Form, TablePaginationConfig, Radio, RadioChangeEvent } from 'antd';
+import { Space, Input, DatePicker, Select, Button, message, Popconfirm, Form, TablePaginationConfig, Radio, RadioChangeEvent, Row, Col } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchIssued.module.less';
 import { Link, useHistory } from 'react-router-dom';
@@ -43,21 +42,10 @@ export default function List(): React.ReactNode {
             dataIndex: 'supplyNumber'
         },
         {
-            key: 'status',
+            key: 'statusName',
             title: '补件下达状态',
             width: 120,
-            dataIndex: 'status',
-            type: 'select',
-            enum: [
-                {
-                    "value": 1,
-                    "label": "已下达"
-                },
-                {
-                    "value": 2,
-                    "label": "已取消"
-                },
-            ]
+            dataIndex: 'statusName'
         },
         {
             key: 'updateStatusTime',
@@ -229,7 +217,7 @@ export default function List(): React.ReactNode {
             label: '补件下达状态',
             children: <Select style={{ width: '120px' }} placeholder="请选择">
                 <Select.Option value={1} key="1">已下达</Select.Option>
-                <Select.Option value={2} key="2">未下达</Select.Option>
+                <Select.Option value={2} key="2">已取消</Select.Option>
             </Select>
         },
         {
@@ -287,8 +275,13 @@ export default function List(): React.ReactNode {
     const [status, setStatus] = useState<number>(1);
     const [searchFormItems, setSearchFormItems] = useState<any>(search);
 
+    const { data: count, run: getCount } = useRequest<any>((filter: Record<string, any>) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/supplyBatch/count`, { ...filter });
+        resole(data);
+    }), {})
+
     const onFinish = (values: Record<string, any>) => {
-        if(status === 1) {
+        if (status === 1) {
             if (values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
@@ -298,6 +291,7 @@ export default function List(): React.ReactNode {
         } else {
             setFilter(values)
         }
+        getCount(values)
     }
 
     return <>
@@ -317,23 +311,36 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
-            setStatus(event.target.value);
-            setSearchFormItems(event.target.value === 1 ? search : itemSearch);
-            if(event.target.value === 1) {
-                setFilterValues({})
-            } else {
-                setFilter({})
-            }
-            searchForm.resetFields();
-        }}>
-            <Radio.Button value={1} key="1">补件下达</Radio.Button>
-            <Radio.Button value={2} key="2">补件条目</Radio.Button>
-        </Radio.Group>
+        <Space>
+            <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
+                setStatus(event.target.value);
+                setSearchFormItems(event.target.value === 1 ? search : itemSearch);
+                if (event.target.value === 1) {
+                    setFilterValues({})
+                } else {
+                    setFilter({})
+                }
+                searchForm.resetFields();
+            }}>
+                <Radio.Button value={1} key="1">补件下达</Radio.Button>
+                <Radio.Button value={2} key="2">补件条目</Radio.Button>
+            </Radio.Group>
+            <Row gutter={12}>
+                <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber || 0}</span></Col>
+                <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber || 0}</span></Col>
+                <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight || 0}</span></Col>
+                <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight || 0}</span></Col>
+                <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight || 0}</span></Col>
+                <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight || 0}</span></Col>
+                <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight || 0}</span></Col>
+                <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight || 0}</span></Col>
+            </Row>
+        </Space>
         {
             status === 1 ?
                 <Page
                     path="/tower-science/supplyBatch/batchPage"
+                    exportPath='/tower-science/supplyBatch/batchPage'
                     columns={columns}
                     headTabs={[]}
                     searchFormItems={[]}
@@ -342,6 +349,7 @@ export default function List(): React.ReactNode {
                 :
                 <Page
                     path="/tower-science/supplyBatch/getEntryPage"
+                    exportPath='/tower-science/supplyBatch/getEntryPage'
                     columns={[
                         {
                             key: 'index',

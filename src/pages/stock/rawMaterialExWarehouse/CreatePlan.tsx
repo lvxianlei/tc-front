@@ -171,9 +171,9 @@ export default function CreatePlan(props: any): JSX.Element {
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) / 1000 / 1000).toFixed(3)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                             : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1)) * (-1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0) * (-1) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * (-1)/ 1000).toFixed(3)
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(value || 1) * Number(item.num || 1))  / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(value || 1) * Number(item.width || 0)* Number(item.num || 1)  / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1)/ 1000).toFixed(3)
                 })
             }
             return item
@@ -190,9 +190,9 @@ export default function CreatePlan(props: any): JSX.Element {
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(value || 0) / 1000 / 1000 / 1000).toFixed(3)
                             : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (-1) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(value || 0) * (-1) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) * (-1) / 1000).toFixed(3)
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)* Number(item.num || 1))  / 1000 / 1000).toFixed(3)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(value || 0) * Number(item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
+                            : (Number(item?.proportion || 1)  / 1000).toFixed(3)
                 })
             }
             return item
@@ -497,7 +497,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     setMaterialList([]);
                     setPopDataList([]);
                     setType(0)
-                    props?.handleCreate();
+                    props?.handleCreate({code:1});
                 }}>
                     取消
                 </Button>,
@@ -508,7 +508,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
-                    props?.handleCreate();
+                    props?.handleCreate({code:1});
                 }}>
                     取消
                 </Button>,
@@ -532,7 +532,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         if(item.dataIndex==='issuedNumber'){
                             return ({
                                 ...item, 
-                                require: addCollectionForm.getFieldValue('outStockType') === 0,
+                                required: addCollectionForm.getFieldValue('outStockType') === 0,
                                 disabled: addCollectionForm.getFieldValue('outStockType') === 2
                             })
                         }
@@ -594,8 +594,21 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["num"].includes(item.dataIndex)&&type===0) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
-                                })
+                                    render: (value: number, records: any, key: number) => {return <Form.Item 
+                                        name={['list', key, 'num']}
+                                        initialValue={value||undefined}
+                                        rules={[{
+                                            validator: async (rule: any, value: any, callback: (error?: string) => void) => {
+                                                const resData:any = await RequestUtil.get(`/tower-storage/materialStock?current=1&size=10&rawStockId=${records?.rawStockId}`);
+                                                if(resData.records[0]?.num < value)
+                                                return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
+                                                else return Promise.resolve('数量可用');
+                                            }
+                                        }]}>
+                                            <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
+                                        </Form.Item>
+                                    // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                }})
                             }
                             if (["num"].includes(item.dataIndex)&&type===2) {
                                 return ({
@@ -714,6 +727,8 @@ export default function CreatePlan(props: any): JSX.Element {
                     onChange={(fields: any[]) => {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
+                            rawStockId: item.id,
+                            maxNum: item.num,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(5),

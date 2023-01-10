@@ -1,0 +1,194 @@
+{
+    "columns": [
+        {
+            "key": "loftingTaskNum",
+            "title": "放样任务编号",
+            "width": 120,
+            "dataIndex": "loftingTaskNum"
+        },
+        {
+            "key": "projectName",
+            "title": "项目名称",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 80
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 120
+        },
+        {
+            "key": "loftingLinkName",
+            "title": "放样环节",
+            "dataIndex": "loftingLinkName",
+            "width": 120
+        },
+        {
+            "key": "userName",
+            "title": "人员",
+            "dataIndex": "userName",
+            "width": 120
+        },
+        {
+            "key": "type",
+            "title": "杂项类型",
+            "dataIndex": "type",
+            "width": 120
+        },
+        {
+            "key": "category",
+            "title": "杂项类别",
+            "dataIndex": "category",
+            "width": 120
+        },
+        {
+            "key": "entry",
+            "title": "杂项条目",
+            "dataIndex": "entry",
+            "width": 120
+        },
+        {
+            "key": "workHour",
+            "title": "工时",
+            "dataIndex": "workHour",
+            "width": 120
+        },
+        {
+            "key": "price",
+            "title": "单价",
+            "dataIndex": "price",
+            "width": 120
+        },
+        {
+            "key": "totalAmount",
+            "title": "金额",
+            "dataIndex": "totalAmount",
+            "width": 120
+        },
+        {
+            "key": "statusName",
+            "title": "审批状态",
+            "dataIndex": "statusName",
+            "width": 120
+        },
+        {
+            "key": "updateStatusTime",
+            "title": "状态最新变更时间",
+            "dataIndex": "updateStatusTime",
+            "width": 120
+        }
+    ],
+    "newColumns": [
+        {
+            "key": "loftingLink",
+            "title": "放样环节",
+            "width": 120,
+            "dataIndex": "loftingLink"
+        },
+        {
+            "key": "category",
+            "title": "杂项类别",
+            "dataIndex": "category"
+        },
+        {
+            "key": "type",
+            "title": "杂项类型",
+            "dataIndex": "type"
+        },
+        {
+            "key": "entry",
+            "title": "杂项条目",
+            "dataIndex": "entry"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryId",
+            "title": "塔型",
+            "dataIndex": "productCategoryId"
+        },
+        {
+            "key": "workHour",
+            "title": "工时",
+            "dataIndex": "workHour"
+        },
+        {
+            "key": "price",
+            "title": "单价",
+            "dataIndex": "price"
+        },
+        {
+            "key": "totalAmount",
+            "title": "总金额",
+            "dataIndex": "totalAmount"
+        },
+        {
+            "key": "userName",
+            "title": "人员",
+            "dataIndex": "userName"
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "loftingLinkName",
+            "title": "放样环节",
+            "width": 120,
+            "dataIndex": "loftingLinkName"
+        },
+        {
+            "key": "category",
+            "title": "杂项类别",
+            "dataIndex": "category"
+        },
+        {
+            "key": "type",
+            "title": "杂项类型",
+            "dataIndex": "type"
+        },
+        {
+            "key": "entry",
+            "title": "杂项条目",
+            "dataIndex": "entry"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber"
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName"
+        },
+        {
+            "key": "workHour",
+            "title": "工时",
+            "dataIndex": "workHour"
+        },
+        {
+            "key": "price",
+            "title": "单价",
+            "dataIndex": "price"
+        },
+        {
+            "key": "totalAmount",
+            "title": "总金额",
+            "dataIndex": "totalAmount"
+        },
+        {
+            "key": "userName",
+            "title": "人员",
+            "dataIndex": "userName"
+        }
+    ]
+}

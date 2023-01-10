@@ -402,7 +402,7 @@
       "authority": "tc_erp_sc_pay_apply_list"
     },
     { // 付款申请详情
-      "name": "请款款申请详情",
+      "name": "请款申请详情",
       "path": "/project/payment/detail/:id",
       "module": "./pages/project/payment/Overview",
       "exact": true,
@@ -437,6 +437,38 @@
       "exact": true,
       "authority": "tc_erp_sc_drawing_list"
     },
+    // 新增图纸确认
+    {
+      "name": "新增图纸确认",
+      "path": "/project/drawing/:type/create",
+      "module": "./pages/project/drawing/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
+    // 编辑杆塔明细
+    {
+      "name": "编辑杆塔明细",
+      "path": "/project/drawing/projectGroup/:id",
+      "module": "./pages/project/drawing/editProjectGroup",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
+    // 图纸确认详情
+    {
+      "name": "图纸确认详情",
+      "path": "/project/drawing/detail/:id",
+      "module": "./pages/project/drawing/Overview",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
+    // 编辑图纸确认
+    {
+      "name": "编辑图纸确认",
+      "path": "/project/drawing/:type/:id",
+      "module": "./pages/project/drawing/Edit",
+      "exact": true,
+      "authority": "tc_erp_sc_drawing_list"
+    },
     { // 合同详情
       "name": "合同详情",
       "path": "/project/management/detail/contract/:projectId/:id",
@@ -467,14 +499,14 @@
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/management/edit/contract/:projectId/:id",
+      "path": "/project/management/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
     },
     { // 编辑合同
       "name": "编辑合同",
-      "path": "/project/contract/edit/contract/:projectId/:id",
+      "path": "/project/contract/edit/contract/:projectId/:id/:contractType",
       "module": "./pages/project/contract/Edit",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract_edit"
@@ -861,7 +893,7 @@
     },
     { // 库存管理-原材料入库-详情
       "name": "原材料入库明细",
-      "path": "/stock/rawMaterialWarehousing/detail/:id",
+      "path": "/stock/rawMaterialWarehousing/detail/:id/:approval",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_in_info"
@@ -875,14 +907,14 @@
     },
     { // 库存管理-原材料出-详情
       "name": "原材料出库详情",
-      "path": "/stock/rawMaterialExWarehouse/detail/:id",
+      "path": "/stock/rawMaterialExWarehouse/detail/:id/:approval",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     },
     { // 库存管理-原材料出-回库详情
       "name": "原材料出库详情",
-      "path": "/stock/rawMaterialExWarehouse/backDetail/:id",
+      "path": "/stock/rawMaterialExWarehouse/backDetail/:id/:approval",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detailBack",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
@@ -903,7 +935,7 @@
     },
     { // 库存管理-辅材入库-详情
       "name": "辅材入库明细",
-      "path": "/auxStock/entryWarehouse/detail/:id",
+      "path": "/auxStock/entryWarehouse/detail/:id/:approval",
       "module": "./pages/auxStock/entryWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_auxiliary_material_in_detailList"
@@ -917,7 +949,7 @@
     },
     { // 库存管理-辅材出库-明细
       "name": "辅材出库明细",
-      "path": "/auxStock/outputWarehouse/detail/:id",
+      "path": "/auxStock/outputWarehouse/detail/:id/:approval",
       "module": "./pages/auxStock/outputWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
@@ -1369,6 +1401,13 @@
       "module": "./pages/buyingTask/Overview",
       "exact": true,
       "authority": "auth_section"
+    },
+    { //采购任务-原材料-用料需求
+      "name": "用料需求",
+      "path": "/buyingTask/index/demand/:id/:status/:planNumber/:projectName",
+      "module": "./pages/buyingTask/Demand",
+      "exact": true,
+      "authority": "tc_erp_sw_purchaseTask_material_list"
     },
     { // 工作管理-放样列表
       "name": "放样列表",
@@ -2131,11 +2170,11 @@
       "authority": "tc_erp_aps_board_statistics_list"
     },
     { // 计划排产-数据追踪统计
-    "name": "数据追踪统计",
-    "path": "/planPanal/reportStatistics",
-    "module": "./pages/planBaseSetting/reportStatistics/index",
-    "exact": true,
-    "authority": "tc_erp_aps_track_statistics_list"
+      "name": "数据追踪统计",
+      "path": "/planPanal/reportStatistics",
+      "module": "./pages/planBaseSetting/reportStatistics/index",
+      "exact": true,
+      "authority": "tc_erp_aps_track_statistics_list"
     },
     { // 计划排产-试装计划
       "name": "试装计划",
@@ -3213,6 +3252,41 @@
       "name": "不合格处置单考核",
       "path": "/performanceMngt/unqualifiedCheck",
       "module": "./pages/performanceMngt/unqualifiedCheck/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-放样塔型绩效汇总
+      "name": "放样塔型绩效汇总",
+      "path": "/performanceMngt/loftingpPerformanceSummary",
+      "module": "./pages/performanceMngt/loftingpPerformanceSummary/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-绩效奖励明细
+      "name": "绩效奖励明细",
+      "path": "/performanceMngt/performanceDetail",
+      "module": "./pages/performanceMngt/performanceDetail/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-杂项绩效管理
+      "name": "杂项绩效管理",
+      "path": "/performanceMngt/miscellaneousPerformance",
+      "module": "./pages/performanceMngt/miscellaneousPerformance/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-杂项绩效管理
+      "name": "杂项绩效管理",
+      "path": "/performanceMngt/miscellaneousPerformance",
+      "module": "./pages/performanceMngt/miscellaneousPerformance/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // RD-绩效管理-人员工资绩效
+      "name": "人员工资绩效",
+      "path": "/performanceMngt/performanceSalary",
+      "module": "./pages/performanceMngt/performanceSalary/List",
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },

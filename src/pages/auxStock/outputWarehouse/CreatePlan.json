@@ -165,6 +165,11 @@
                 "dataIndex": "locatorId",
                 "type":"tree"
                 
+            },
+            {
+                "title": "物料编码",
+                "dataIndex": "materialCode",
+                "type": "string"
             }
         ],
         "columns": [

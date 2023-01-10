@@ -25,6 +25,10 @@
             "dataIndex": "orderProjectName"
         },
         {
+            "title": "物料汇总状态",
+            "dataIndex": "materialSummaryStatusName"
+        },
+        {
             "title": "下发时间",
             "dataIndex": "issuedTime"
         },

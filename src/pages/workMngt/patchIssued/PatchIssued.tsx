@@ -33,6 +33,8 @@ export default function PatchIssued(): React.ReactNode {
             machiningDemand: data?.supplyBatchEntryVO?.machiningDemand,
             weldingDemand: data?.supplyBatchEntryVO?.weldingDemand,
             galvanizeDemand: data?.supplyBatchEntryVO?.galvanizeDemand,
+            implementStandardName: data?.supplyBatchEntryVO?.implementStandardName,
+            implementStandard: data?.supplyBatchEntryVO?.implementStandard,
             packDemand: data?.supplyBatchEntryVO?.packDemand,
             isPerforate: data?.supplyBatchEntryVO?.isPerforate,
             supplyNumber: params?.supplyNumber
@@ -91,7 +93,6 @@ export default function PatchIssued(): React.ReactNode {
                             <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
                         </Form.Item>
                     </Col>
-
                     <Col span={12}>
                         <Form.Item name="packDemand" label="包装说明" initialValue={selectData?.supplyBatchEntryVO?.packDemand}>
                             <Input.TextArea placeholder="请输入" maxLength={800} showCount rows={1} />
@@ -105,6 +106,11 @@ export default function PatchIssued(): React.ReactNode {
                                 <Radio value={1}>是</Radio>
                                 <Radio value={0}>否</Radio>
                             </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="implementStandardName" label="执行标准" initialValue={selectData?.supplyBatchEntryVO?.implementStandardName}>
+                            <Input.TextArea maxLength={800} showCount rows={1} disabled />
                         </Form.Item>
                     </Col>
                 </Row>

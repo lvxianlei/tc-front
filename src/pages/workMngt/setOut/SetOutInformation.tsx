@@ -65,6 +65,8 @@ const tableColumns = [
                 case 4:
                     return '配段中';
                 case 5:
+                    return '部分完成';
+                case 6:
                     return '已完成';
             }
         }

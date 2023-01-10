@@ -1,6 +1,11 @@
 {
     "baseColumn": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "width": 100
+        },
+        {
             "title": "入库单号",
             "dataIndex": "warehousingEntryNumber",
             "width": 150
@@ -98,6 +103,11 @@
             "dataIndex": "entryTime",
             "type": "date",
             "format":"YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "用友编码",
+            "dataIndex": "externalCode",
             "width": 100
         },
         {
