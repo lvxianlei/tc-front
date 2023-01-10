@@ -37,7 +37,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
             ...item,
             title: item.required ? <><span style={{ color: "#ff4d4f", padding: "0px 4px" }}>*</span>{item.title}</> : item.title,
             code: item.dataIndex,
-            render: (value: any, _record: any, index: number) => {
+            render: item.render || ((value: any, _record: any, index: number) => {
                 return item.edit === false ? <>
                     {value}
                     <Form.Item
@@ -53,7 +53,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
                     name={['submit', index, item.dataIndex]}>
                     <FormItemType data={{ ...item, title: "", width: "100%" }} type={item.type} />
                 </Form.Item>
-            }
+            })
         })
     })
     haveIndex && newColumns.unshift({
@@ -78,7 +78,6 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
             }
         }]
 }
-
 
 export default function EditableTable({
     columns, dataSource = [], onChange, form, haveNewButton = true, addData = {},
