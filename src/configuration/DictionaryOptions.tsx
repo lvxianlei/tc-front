@@ -58,6 +58,7 @@ export enum DictionaryEnums {
     DOCUMENT_TYPE = 1014,
     FILE_TYPE = 1015,
     IMPLEMENT_STANDARD = 1233,
+    INVOICE_SOURCE= 119,
 }
 
 let productType: IDict[] | undefined = [];
@@ -103,7 +104,7 @@ let tenderDeliveryMethod: IDict[] | undefined = [];
 let compoundType: IDict[] | undefined = [];
 let factoryType: IDict[] | undefined = [];
 let componentType: IDict[] | undefined = [];
-
+let invoiceSource: IDict[] | undefined = [];
 let unloadMode: IDict[] | undefined = [];
 let settlementMode: IDict[] | undefined = [];
 let planName: IDict[] | undefined = [];
@@ -172,6 +173,7 @@ if (dictionary) {
     testType = dictionary[DictionaryEnums.TEST_TYPE];
     typeOfChange = dictionary[DictionaryEnums.TYPE_OF_CHANGE];
     implementStandard = dictionary[DictionaryEnums.IMPLEMENT_STANDARD];
+    invoiceSource = dictionary[DictionaryEnums.INVOICE_SOURCE];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -228,3 +230,4 @@ export const fileTypeOptions = fileType; // 文件类型
 export const testTypeOptions = testType; //检验类型
 export const typeOfChangeOptions = typeOfChange; // 变更类型
 export const implementStandardOptions = implementStandard; //执行标准
+export const invoiceSourceOptions = invoiceSource; //发票来源

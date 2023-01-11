@@ -1,5 +1,5 @@
 import React, {useState, useRef, forwardRef, useImperativeHandle, ChangeEvent, useEffect} from "react"
-import {Button, Form, message, Spin, Modal,Input, Space, InputNumber} from 'antd'
+import {Button, Form, message, Spin, Modal,Input, Space, InputNumber, Upload} from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable,CommonTable,PopTableContent } from '../common'
 
 import RequestUtil from '../../utils/RequestUtil'
@@ -9,6 +9,8 @@ import { BasicInformation, editCargoDetails } from "./edit.json"
 import Dept from "../asm/calendar/Dept";
 import {addMaterial} from "./addAuxiliaryMaterial.json";
 import {useHistory} from "react-router-dom";
+import { downloadTemplate } from "../workMngt/setOut/downloadTemplate"
+import AuthUtil from "@utils/AuthUtil"
 
 interface EditProps {
     id: string,
@@ -31,6 +33,8 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
     const [editForm] = Form.useForm()
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [select, setSelect] = useState<any[]>([])
+    const [visibleB, setVisibleB] = useState<boolean>(false)
+    const [url, setUrl] = useState<string>('')
 
 
     const { loading: warehouseLoading, data: warehouseData } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
@@ -320,6 +324,65 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         <DetailTitle
             title="辅材明细"
             operation={[
+                <Button type="primary" style={{ marginRight: 8 }} onClick={() => downloadTemplate('/tower-supply/auxiliaryMaterialPurchasePlan/masterplate/export', '采购清单数据模板')} ghost>模板下载</Button>,
+                <Upload
+                    accept=".xls,.xlsx"
+                    action={() => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl + '/tower-supply/auxiliaryMaterialPurchasePlan/masterplate/import'
+                    }}
+                    headers={
+                        {
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    // data={{
+                    //     // segmentId:params.productSegmentId==='all'?'':params.productSegmentId,
+                    //     productCategoryId: params.id,
+                    // }}
+                    showUploadList={false}
+                    onChange={(info:any) => {
+                        console.log(info.file.response)
+                        if (info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        } else if (info.file.response && info.file.response?.success) {
+                            if (info.file.response?.data?.downloadUrl) {
+                                setUrl(info.file.response?.data?.downloadUrl);
+                                setVisibleB(true);
+                            } else {
+                                message.success('导入成功！');
+                                setPopDataList(info.file.response?.data?.purchasePlanListDTOS.map((item:any)=>{
+                                    return{
+                                        ...item,
+                                        weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                                        totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
+                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                                : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
+                
+                                    }
+                                }))
+                                // setMaterialList(info.file.response?.data?.purchasePlanDetailDTOS.map((item:any)=>{
+                                //     return{
+                                //         ...item,
+                                //         weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
+                                //             : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) / 1000 / 1000 / 1000).toFixed(3)
+                                //                 : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                                //         totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
+                                //             : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
+                                //                 : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
+                
+                                //     }
+                                // }))
+                            }
+                        }
+                    }}
+                >
+                    <Button type="primary" ghost  style={{ marginRight: 8 }}>导入</Button>
+                </Upload>,
                 <Button
                     type="primary"
                     key="choose"
@@ -405,5 +468,17 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 key: item.id || `item-${index}`
             }))}
         />
+        <Modal
+            visible={visibleB}
+            onOk={() => {
+                window.open(url);
+                setVisible(false);
+            }}
+            onCancel={() => { setVisibleB(false); setUrl('') }}
+            title='提示'
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
+        </Modal>
     </Spin>
 })
