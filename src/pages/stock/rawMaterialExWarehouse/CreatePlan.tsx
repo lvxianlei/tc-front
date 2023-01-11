@@ -253,10 +253,12 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCopy = (options: any) => {
         const result = {
             ...options,
+            ids: options.id,
             num:'',
             planPurchaseNum: "",
             totalWeight: "",
-            id: count + ""
+            id: count + "",
+            
         }
         setCount(count + 1)
         setMaterialList([
@@ -316,7 +318,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 return false;
             }
             saveRun({
-                outStockDetailDTOList: popDataList,
+                outStockDetailDTOList: popDataList.map((item:any)=>{
+                    return{
+                        ...item,
+                        id: item?.ids?item.ids:item.id
+                    }
+                }),
                 ...baseInfo,
                 materialType: 1,
                 pickingUserId: baseInfo?.pickingUserId.id
@@ -390,7 +397,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         ...item,
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
-                        warehouseItemId: item?.locatorId
+                        warehouseItemId: item?.locatorId,
+                        id: item?.ids?item.ids:item.id
                     }
                 }),
                 ...baseInfo,
@@ -403,7 +411,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         ...item,
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
-                        warehouseItemId: item?.locatorId
+                        warehouseItemId: item?.locatorId,
+                        id: item?.ids?item.ids:item.id
                     }
                 }),
                 ...baseInfo,
