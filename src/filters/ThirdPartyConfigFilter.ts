@@ -21,7 +21,6 @@ export default class ThirdPartyConfigFilter implements IFilter {
             if (accessable) {
                 ThirdPartyUtil.setMesBaseInfo("mes");
                 ThirdPartyUtil.setMesBaseInfo("qms");
-
             }
         }
         return true;
