@@ -13,6 +13,12 @@
             "width": 100
         },
         {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 100
+        },
+        {
             "key": "materialCategory",
             "title": "原材料类型",
             "dataIndex": "materialCategory",

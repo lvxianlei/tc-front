@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Form, Input, message, Select, Space, Spin, TablePaginationConfig } from 'antd';
+import { Button, Form, Input, message, Modal, Select, Space, Spin, TablePaginationConfig } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { DetailContent, CommonTable, DetailTitle } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -19,118 +19,141 @@ interface IResponseData {
 export default function LoftingTowerApplication(): React.ReactNode {
 
     const towerColumns = [
-        { 
-            title: '序号', 
-            dataIndex: 'index', 
-            key: 'index', 
+        {
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
             render: (_a: any, _b: any, index: number): React.ReactNode => (
                 <span>{index + 1}</span>
-            ) 
+            )
         },
-        { 
-            title: '塔型', 
-            dataIndex: 'productCategoryName', 
+        {
+            title: '塔型',
+            dataIndex: 'productCategoryName',
             key: 'productCategoryName'
         },
-        { 
-            title: '塔型钢印号', 
-            dataIndex: 'steelProductShape', 
-            key: 'steelProductShape' 
+        {
+            title: '塔型钢印号',
+            dataIndex: 'steelProductShape',
+            key: 'steelProductShape'
         },
-        { 
+        {
             title: '任务单号',
-            dataIndex: 'taskNum', 
-            key: 'taskNum' 
-            },
-        { 
-            title: '呼高', 
-            dataIndex: 'basicHeight', 
-            key: 'basicHeight' 
+            dataIndex: 'taskNum',
+            key: 'taskNum'
+        },
+        {
+            title: '呼高',
+            dataIndex: 'basicHeight',
+            key: 'basicHeight'
         },
     ]
 
     const paragraphColumns = [
-        { 
-            title: '序号', 
-            dataIndex: 'index', 
-            key: 'index', 
+        {
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
             render: (_a: any, _b: any, index: number): React.ReactNode => (
                 <span>{index + 1}</span>
-            ) 
+            )
         },
-        { 
-            title: '段号', 
-            dataIndex: 'name', 
+        {
+            title: '段号',
+            dataIndex: 'name',
             key: 'name'
         },
-        { 
-            title: '单段件号数', 
-            dataIndex: 'singleNumberCount', 
-            key: 'singleNumberCount' 
+        {
+            title: '单段件号数',
+            dataIndex: 'singleNumberCount',
+            key: 'singleNumberCount'
         },
-        { 
-            title: '单段件数', 
-            dataIndex: 'singleCount', 
-            key: 'singleCount' 
+        {
+            title: '单段件数',
+            dataIndex: 'singleCount',
+            key: 'singleCount'
         },
-        { 
-            title: '单段重量', 
-            dataIndex: 'singleWeight', 
-            key: 'singleWeight' 
+        {
+            title: '单段重量',
+            dataIndex: 'singleWeight',
+            key: 'singleWeight'
         },
-        { 
-            title: '备注', 
-            dataIndex: 'description', 
-            key: 'description' 
+        {
+            title: '备注',
+            dataIndex: 'description',
+            key: 'description'
         },
-        { 
-            title: '操作', 
-            dataIndex: 'operation', 
-            key:'operation', 
-            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={ () => {
-                if(paragraph){
-                    RequestUtil.post(`/tower-science/productStructure/reuse?productSegmentId=${paragraph}&passivityProductSegment=${record.id}`).then(() => {
-                        message.success('套用成功'); 
-                    }).then(()=>{
-                        history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
-                    });
-                }else{
-                    message.error('未选择段落，不可选择套用！')
-                }
-                
-            } }>选择套用</Button>)
+        {
+            title: '操作',
+            dataIndex: 'operation',
+            key: 'operation',
+            render: (_: any, record: Record<string, any>, index: number): React.ReactNode => (<Button type='link' onClick={() => {
+                RequestUtil.post(`/tower-science/productStructure/check/reuse`, {
+                    productSegmentId: paragraph || "",
+                    passivityProductSegment: record.id,
+                    productCategoryId: params?.id
+                }).then(res => {
+                    if (res) {
+                        RequestUtil.post(`/tower-science/productStructure/reuse`, {
+                            passivityProductSegment: record.id,
+                            productCategoryId: params?.id,
+                            productSegmentId: paragraph || ''
+                        }).then(() => {
+                            message.success('套用成功');
+                        }).then(() => {
+                            history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
+                        });
+                    } else {
+                        Modal.confirm({
+                            title: "提示",
+                            content: "套用段已存在相同数据，是否进行覆盖？",
+                            onOk: async () => {
+                                RequestUtil.post(`/tower-science/productStructure/reuse`, {
+                                    passivityProductSegment: record.id,
+                                    productCategoryId: params?.id,
+                                    productSegmentId: paragraph || ''
+                                }).then(() => {
+                                    message.success('套用成功');
+                                }).then(() => {
+                                    history.push(`/workMngt/pickList/pickTowerMessage/${params.id}/${params.status}/${params.materialLeader}/pick/${params.productSegmentId}`)
+                                });
+                            }
+                        })
+                    }
+                })
+            }}>选择套用</Button>)
         }
     ]
 
-    const [ form ] = useForm();
+    const [form] = useForm();
     const history = useHistory();
-    const [ paragraphData, setParagraphData ] = useState([] as undefined | any);
-    const params = useParams<{ 
-        id: string, 
-        productSegmentId: string, 
-        status: string, 
-        materialLeader: string 
+    const [paragraphData, setParagraphData] = useState([] as undefined | any);
+    const params = useParams<{
+        id: string,
+        productSegmentId: string,
+        status: string,
+        materialLeader: string
     }>();
     const page = {
         current: 1,
         pageSize: 10
     };
-    const [ detailData, setDetailData ] = useState<IResponseData | undefined>(undefined);
-    const [ externalTaskNum, setExternalTaskNum ] = useState<string>('');
-    const [ productCategoryName, setProductCategoryName ] = useState<string>('');
-    const [ steelProductShape, setSteelProductShape ] = useState<string>('');
-    const [ paragraph, setParagraph ] = useState<string>('');
+    const [detailData, setDetailData] = useState<IResponseData | undefined>(undefined);
+    const [externalTaskNum, setExternalTaskNum] = useState<string>('');
+    const [productCategoryName, setProductCategoryName] = useState<string>('');
+    const [steelProductShape, setSteelProductShape] = useState<string>('');
+    const [paragraph, setParagraph] = useState<string>('');
 
     const getTableDataSource = (pagination: TablePaginationConfig, filterValues: Record<string, any>) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/productCategory`, { ...pagination, ...filterValues });
         setDetailData(data);
         resole(data);
     });
-    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => { 
-        const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`,{                                
+    const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
+        const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`, {
             // segmentId:params.productSegmentId ==='all'?'':params.productSegmentId,
-            productCategory:params?.id
-        }); 
+            productCategory: params?.id
+        });
         getTableDataSource(page, {})
         resole(data);
     }), {})
@@ -144,40 +167,40 @@ export default function LoftingTowerApplication(): React.ReactNode {
     }
 
     return <>
-        <Spin spinning={ loading }>
+        <Spin spinning={loading}>
             <DetailContent operation={[
-                <Button key="goback" onClick={ () => history.goBack() }>关闭</Button>
+                <Button key="goback" onClick={() => history.goBack()}>关闭</Button>
             ]}>
                 <DetailTitle title="套用" />
-                <Form form={ form } onFinish={ onFinish } layout="inline"  className={ styles.topForm }>
+                <Form form={form} onFinish={onFinish} layout="inline" className={styles.topForm}>
                     <Form.Item name="externalTaskNum" label="放样任务单号">
-                        <Input placeholder="请输入"/>
+                        <Input placeholder="请输入" />
                     </Form.Item>
                     <Form.Item name="productCategoryName" label="塔型名称">
-                        <Input placeholder="请输入"/>
+                        <Input placeholder="请输入" />
                     </Form.Item>
                     <Form.Item name="steelProductShape" label="塔型钢印号">
                         <Input placeholder="请输入" />
                     </Form.Item>
-                    <Space direction="horizontal" className={ styles.btnRight }>
+                    <Space direction="horizontal" className={styles.btnRight}>
                         <Button type="primary" htmlType="submit">搜索</Button>
                         <Button type="ghost" htmlType="reset">重置</Button>
                     </Space>
                 </Form>
-                <CommonTable 
-                    dataSource={ detailData?.records } 
-                    columns={ towerColumns }
-                    onRow={ (record: Record<string, any>, index: number) => ({
-                            onClick: async () => { 
-                                const resData: [] = await RequestUtil.get(`/tower-science/productSegment/reuse/productCategory`, { productCategoryId: record.id });
-                                setParagraphData([...resData]);
-                            },
-                            className: styles.tableRow
-                        })
+                <CommonTable
+                    dataSource={detailData?.records}
+                    columns={towerColumns}
+                    onRow={(record: Record<string, any>, index: number) => ({
+                        onClick: async () => {
+                            const resData: [] = await RequestUtil.get(`/tower-science/productSegment/reuse/productCategory`, { productCategoryId: record.id });
+                            setParagraphData([...resData]);
+                        },
+                        className: styles.tableRow
+                    })
                     }
-                    onChange={ (pagination: TablePaginationConfig) => { 
+                    onChange={(pagination: TablePaginationConfig) => {
                         getTableDataSource(pagination, { externalTaskNum: externalTaskNum, productCategoryName: productCategoryName, steelProductShape: steelProductShape });
-                    } }
+                    }}
                     pagination={{
                         current: detailData?.current || 0,
                         pageSize: detailData?.size || 0,
@@ -185,28 +208,28 @@ export default function LoftingTowerApplication(): React.ReactNode {
                         showSizeChanger: false
                     }}
                 />
-                <span style={{marginRight:'10px'}}>套用至段落</span>
-                <Select 
-                    placeholder="请选择" 
-                    onChange={ (e: string) => {
+                <span style={{ marginRight: '10px' }}>套用至段落</span>
+                <Select
+                    placeholder="请选择"
+                    onChange={(e: string) => {
                         setParagraph(e);
-                    } } 
-                    style={{width:'120px'}}
+                    }}
+                    style={{ width: '120px' }}
                 >
-                    { paragraphList.map((item: any) => {
-                        return <Select.Option 
-                                    key={ item.id } 
-                                    value={ item.id }
-                                >
-                                    { item.segmentName }
-                                </Select.Option>
-                    }) }
+                    {paragraphList.map((item: any) => {
+                        return <Select.Option
+                            key={item.id}
+                            value={item.id}
+                        >
+                            {item.segmentName}
+                        </Select.Option>
+                    })}
                 </Select>
-                <p className={ styles.title }>段落信息</p>
-                <CommonTable 
-                    dataSource={ paragraphData } 
-                    columns={ paragraphColumns } 
-                    pagination={ false }
+                <p className={styles.title}>段落信息</p>
+                <CommonTable
+                    dataSource={paragraphData}
+                    columns={paragraphColumns}
+                    pagination={false}
                 />
             </DetailContent>
         </Spin>

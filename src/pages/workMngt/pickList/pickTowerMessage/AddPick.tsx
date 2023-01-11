@@ -241,7 +241,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "structureSpec"]} initialValue={_} rules={[{ required: true, message: '请输入规格' }, {
 
-                    pattern: /^[0-9-∠L*φ\/]*$/,
+                    pattern: /^[0-9-∠LX*φ\/]*$/,
                     message: '仅可输入数字/-/*/L/X/∠/φ',
 
                 }]}>

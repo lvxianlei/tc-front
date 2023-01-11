@@ -472,6 +472,11 @@
             "width": 100
         },
         {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "width": 100
+        },
+        {
             "title": "轧制批号",
             "dataIndex": "rollingNumber",
             "width": 100

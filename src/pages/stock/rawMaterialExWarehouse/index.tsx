@@ -231,6 +231,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="0">正常出库</Select.Option>
                                 <Select.Option value="1">盘点出库</Select.Option>
                                 <Select.Option value="2">余料回库</Select.Option>
+                                <Select.Option value="4">销售出库</Select.Option>
                             </Select>
                         )
                     },
@@ -302,7 +303,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: "模糊查询",
-                        children: <Input placeholder="请输入炉批号/质保书号/下达单号/计划号/工程名称/内部合同号/塔型进行查询" style={{ width: 200 }} />
+                        children: <Input placeholder="请输入炉批号/质保书号/下达单号/计划号/工程名称/内部合同号/塔型/备注进行查询" style={{ width: 200 }} />
                     }
                 ]}
             />
