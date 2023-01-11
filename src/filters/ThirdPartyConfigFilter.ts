@@ -19,8 +19,7 @@ export default class ThirdPartyConfigFilter implements IFilter {
         if (props.location.pathname !== '/login') {
             accessable = !!(AuthUtil.getAuthorization() && AuthUtil.getSinzetechAuth() && AuthUtil.getTenantId());
             if (accessable) {
-                ThirdPartyUtil.setMesBaseInfo("mes");
-                ThirdPartyUtil.setMesBaseInfo("qms");
+                ThirdPartyUtil.setMesBaseInfo();
             }
         }
         return true;
