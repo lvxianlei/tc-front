@@ -718,7 +718,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             fixed: "right",
                             dataIndex: "opration",
                             render: (_: any, records: any) => <>
-                                <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)} disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)||type!==0}>复制</Button>
+                                <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)} disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)}>复制</Button>
                                 <Button type="link" disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)} onClick={() => handleRemove(records.id)}>移除</Button>
                             </>
                         }]}
