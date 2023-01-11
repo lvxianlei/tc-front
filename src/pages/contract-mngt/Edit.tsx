@@ -95,24 +95,24 @@ export const calcFun = {
      */
     weight: ({ length, width, weightAlgorithm, proportion }: WeightParams) => {
         if ([1, "1"].includes(weightAlgorithm)) {
-            return ((Number(proportion || 1) * Number(length || 1)) * 0.000001).toFixed(3)
+            return ((Number(proportion || 1) * Number(length || 1)) * 0.000001).toFixed(5)
         }
         if ([2, "2"].includes(weightAlgorithm)) {
-            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * 0.000000001).toFixed(3)
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * 0.000000001).toFixed(5)
         }
-        return (Number(proportion || 1) / 1000).toFixed(3)
+        return (Number(proportion || 1) / 1000).toFixed(5)
     },
     /**
      * 总重量
      */
     totalWeight: ({ length, width, weightAlgorithm, proportion, num }: TotalWeightParmas) => {
         if ([1, "1"].includes(weightAlgorithm)) {
-            return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(3)
+            return ((Number(proportion || 1) * Number(length || 1)) * Number(num || 1) / 1000 / 1000).toFixed(5)
         }
         if ([2, "2"].includes(weightAlgorithm)) {
-            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(3)
+            return (Number(proportion || 1) * Number(length || 1) * Number(width || 0) * Number(num || 1) / 1000 / 1000 / 1000).toFixed(5)
         }
-        return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(3)
+        return (Number(proportion || 1) * Number(num || "1") / 1000).toFixed(5)
     }
 }
 
@@ -291,9 +291,9 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
-            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
-            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
-            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(5))
             return ({
                 ...item,
                 num,
@@ -303,12 +303,12 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 // price: (taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6),
                 spec: item.structureSpec,
                 width: item?.width||0,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(5),
                 taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                 totalAmount: (totalWeight * price).toFixed(2)
             })
@@ -317,9 +317,9 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
-            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
-            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
-            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(5))
             return ({
                 ...item,
                 num,
@@ -327,12 +327,12 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                 price,
                 spec: item.structureSpec,
                 width: item?.width||0,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                    : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(5),
                 taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                 totalAmount: (totalWeight * price).toFixed(2)
             })
@@ -346,21 +346,21 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
-            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
-            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
-            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(5))
             return ({
                 ...item,
                 num,
                 taxPrice,
                 price,
                 spec: item.structureSpec,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(5),
                 taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                 totalAmount: (totalWeight * price).toFixed(2)
             })
@@ -369,21 +369,21 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             const num = parseFloat(item.num || "1")
             const taxPrice = parseFloat(item.taxOffer || "1.00")
             const price = parseFloat((taxPrice / (taxData?.materialTax / 100 + 1)).toFixed(6))
-            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3))
-            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3))
-            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(3))
+            const totalWeight =item?.weightAlgorithm === 1 ? parseFloat(((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5))
+            : item?.weightAlgorithm === 2 ? parseFloat((Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5))
+            : parseFloat((Number(item?.proportion || 1) * num / 1000).toFixed(5))
             return ({
                 ...item,
                 num,
                 taxPrice,
                 price,
                 spec: item.structureSpec,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(3)
-                    : (Number(item?.proportion || 1) * num / 1000).toFixed(3),
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * num / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * num / 1000 / 1000 / 1000).toFixed(5)
+                    : (Number(item?.proportion || 1) * num / 1000).toFixed(5),
                 taxTotalAmount: (totalWeight * taxPrice).toFixed(2),
                 totalAmount: (totalWeight * price).toFixed(2)
             })
@@ -797,8 +797,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                     fields.map((element: any, index: number) => {
                         if (element.structureSpec) {
                             element["spec"] = element.structureSpec;
-                            element["weight"] = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(3);
-                            element["totalWeight"] = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(3);
+                            element["weight"] = ((Number(element?.proportion || 1) * Number(element.length || 1)) / 1000).toFixed(5);
+                            element["totalWeight"] = ((Number(element?.proportion || 1) * Number(element.length || 1) * (element.planPurchaseNum || 1)) / 1000).toFixed(5);
                         }
                     });
                     setMaterialList(fields.map((item: any) => ({
@@ -816,8 +816,8 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
                         materialStandard: item?.materialStandard ? item?.materialStandard : (materialStandardOptions && materialStandardOptions.length > 0) ? materialStandardOptions[0]?.id : "",
                         structureTextureId: item?.structureTextureId ? item?.structureTextureId : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.id : "",
                         structureTexture: item?.structureTexture ? item?.structureTexture : (materialTextureOptions && materialTextureOptions.length > 0) ? materialTextureOptions[0]?.name : "",
-                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(3),
-                        totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(3),
+                        weight: ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000).toFixed(5),
+                        totalWeight: ((Number(item?.proportion || 1) * Number(item.length || 1) * (item.planPurchaseNum || 1)) / 1000).toFixed(5),
                     })))
                 }} />
         </Modal>
@@ -957,7 +957,7 @@ export default forwardRef(function ({ id, type, visibleP }: EditProps, ref): JSX
             数量合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.totalNum||0}</span>
             重量合计(吨)：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.totalWeight||0}</span>
             含税金额合计(元)：<span style={{ color: "#FF8C00", marginRight: 12 }}>{numData?.taxPrice||0}</span>
-            不合计金额合计（元）：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ numData?.unTaxPrice ||0}</span>
+            不含税金额合计（元）：<span style={{ color: "#FF8C00", marginRight: 12 }}>{ numData?.unTaxPrice ||0}</span>
         </span>
         <CommonTable
             style={{ padding: "0" }}
