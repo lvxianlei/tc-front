@@ -930,29 +930,29 @@ export default forwardRef(function ({id, type, visibleP}: EditProps, ref): JSX.E
                             render: (value: number, records: any, key: number) => numInputDoneRender(value, records, key, item)
                         })
                     }
-                    // 含税单价 展示格式化 仅展示两位小数
-                    if (item.dataIndex === "taxOffer") {
-                        return ({
-                            ...item,
-                            render: (value: number, records: any, key: number) => (
-                                <span key={key}>{retain(records.taxOffer, 2)}</span>)
-                            // <InputNumber
-                            // min={1} value={value || 1}
-                            // disabled={records.isReceiveStockRef === 2}
-                            // onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex,records.id)} key={key} />
-                        })
-                    }
-                    // 不含税单价
-                    if (item.dataIndex === "offer") {
-                        return ({
-                            ...item,
-                            render: (value: number, records: any, key: number) => (
-                                <span key={key}>{retain(records.offer, 2)}</span>)
-                            // (value: number, records: any, key: number) => <InputNumber
-                            // min={1} value={value || 1}
-                            // onChange={(value: number) => handleNumChange(value, records.offer, item.dataIndex,records.id)} key={key} />
-                        })
-                    }
+                    // // 含税单价 展示格式化 仅展示两位小数
+                    // if (item.dataIndex === "taxOffer") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (value: number, records: any, key: number) => (
+                    //             <span key={key}>{retain(records.taxOffer, 2)}</span>)
+                    //         // <InputNumber
+                    //         // min={1} value={value || 1}
+                    //         // disabled={records.isReceiveStockRef === 2}
+                    //         // onChange={(value: number) => handleNumChange(value, records.taxOffer, item.dataIndex,records.id)} key={key} />
+                    //     })
+                    // }
+                    // // 不含税单价
+                    // if (item.dataIndex === "offer") {
+                    //     return ({
+                    //         ...item,
+                    //         render: (value: number, records: any, key: number) => (
+                    //             <span key={key}>{retain(records.offer, 2)}</span>)
+                    //         // (value: number, records: any, key: number) => <InputNumber
+                    //         // min={1} value={value || 1}
+                    //         // onChange={(value: number) => handleNumChange(value, records.offer, item.dataIndex,records.id)} key={key} />
+                    //     })
+                    // }
                     return item
                 }),
                 {

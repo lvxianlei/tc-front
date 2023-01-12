@@ -78,16 +78,16 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const handleDetailAddModalOk = () => {
-        let flag = false;
-        for (let i = 0; i < materialList.length; i += 1) {
-            if (materialList[i].issuedNumber!== materialList[0].issuedNumber) {
-                flag = true;
-            }
-        }
-        if (flag) {
-            message.error("请选择同一下达单下的明细！");
-            return false;
-        }
+        // let flag = false;
+        // for (let i = 0; i < materialList.length; i += 1) {
+        //     if (materialList[i].issuedNumber!== materialList[0].issuedNumber) {
+        //         flag = true;
+        //     }
+        // }
+        // if (flag) {
+        //     message.error("请选择同一下达单下的明细！");
+        //     return false;
+        // }
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
         //     for (let p = 0; p < materialList.length; p += 1) {
@@ -102,12 +102,12 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)
             })
         })])
         setDetailVisible(false)
@@ -253,7 +253,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCopy = (options: any) => {
         const result = {
             ...options,
-            ids: options.id,
+            ids: options.ids?options.ids:options.id,
             num:'',
             planPurchaseNum: "",
             totalWeight: "",
@@ -509,7 +509,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 setMaterialList([]);
                 setPopDataList([]);
                 setType(0)
-                props?.handleCreate();
+                props?.handleCreate({code:1});
                 
             }}
             maskClosable={false}
@@ -718,7 +718,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             fixed: "right",
                             dataIndex: "opration",
                             render: (_: any, records: any) => <>
-                                <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)} disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)||type!==0}>复制</Button>
+                                <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)} disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)}>复制</Button>
                                 <Button type="link" disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)} onClick={() => handleRemove(records.id)}>移除</Button>
                             </>
                         }]}
