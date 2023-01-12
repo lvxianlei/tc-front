@@ -964,11 +964,11 @@
     "material": [
         {
             "title": "入库单号",
-            "dataIndex": "receiveStockNumber"
+            "dataIndex": "warehousingEntryNumber"
         },
         {
             "title": "入库日期",
-            "dataIndex": "receiveTime"
+            "dataIndex": "entryTime"
         },
         {
             "title": "收货批次",
