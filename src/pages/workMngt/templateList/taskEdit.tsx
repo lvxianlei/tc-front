@@ -485,26 +485,32 @@ export default function TaskNew(props: any) {
                             <Row>
                                 <Col span={15}>
                                     <Form.Item name="planNumber" label="计划号" rules={[{ required: true, message: '请选择计划号' }]}>
-                                        <Select style={{ width: '100%' }} onChange={async (value) => {
-                                            const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
-                                            setTower(towerData);
-                                            setRead(false)
-                                            formRef.setFieldsValue({
-                                                print: {
-                                                    printSpecifications: ''
-                                                },
-                                                printSpecialProcess: ''
-                                            });
-                                            form.setFieldsValue({
-                                                planNumber: value,
-                                                productCategoryId: '',
-                                                productTypeName: '',
-                                                print: '',
-                                                structureNumber: '',
-                                                drawLeaderDepartment: '',
-                                                drawLeader: ''
-                                            })
-                                        }}>
+                                        <Select
+                                            style={{ width: '100%' }}
+                                            filterOption={(input, option) =>
+                                                option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                            }
+                                            showSearch
+                                            onChange={async (value) => {
+                                                const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
+                                                setTower(towerData);
+                                                setRead(false)
+                                                formRef.setFieldsValue({
+                                                    print: {
+                                                        printSpecifications: ''
+                                                    },
+                                                    printSpecialProcess: ''
+                                                });
+                                                form.setFieldsValue({
+                                                    planNumber: value,
+                                                    productCategoryId: '',
+                                                    productTypeName: '',
+                                                    print: '',
+                                                    structureNumber: '',
+                                                    drawLeaderDepartment: '',
+                                                    drawLeader: ''
+                                                })
+                                            }}>
                                             {planData && planData.map(({ planNumber }: any, index: string | number | undefined) => {
                                                 return <Select.Option key={index} value={planNumber}>
                                                     {planNumber}
